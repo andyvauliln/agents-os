@@ -2072,6 +2072,27 @@
     "server/server.py"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261012-stage1",
+   "at": "2026-10-12",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-12-claude-md-stage-one.md",
+   "chars": 2700,
+   "categories": [
+    "docs",
+    "structure",
+    "ui",
+    "skills",
+    "process"
+   ],
+   "summary": "CLAUDE.md in the system folder; docs at every level written fresh; README in ASD-STE100 too; tabs only for real metadata files; prediction-market emptied to folders.",
+   "processed_into": [
+    "plans/2026-10-12-claude-md-stage-one.md"
+   ],
+   "answered": false
   }
  ]
 }

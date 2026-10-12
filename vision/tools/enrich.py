@@ -757,7 +757,7 @@ for x in out_nodes:
                                         "body": "| " + " | ".join(cols) + " |\n|" + "---|" * len(cols)}
 # drafts that already exist in the project folder
 # the knowledge base in vision/docs/ is the planning copy of agents/system/docs/ [2] (D-033)
-DOCS_DIR = "/mnt/project-files/vision/docs"
+DOCS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs")   # vision/docs next to these scripts
 DRAFTS = {"53.2.1": "README.md", "2.3": "overview.md", "2.4": "glossary.md", "2.5": "roadmap.md",
           "2.6": "decisions.md", "2.7": "conventions.md", "2.8": "safety.md", "2.9": "changelog.md", "2.10.2": "inputs/index.json",
           "2.10.3": "inputs/README.md", "2.12": "feature-map.md", "2.13": "file-tree.md", "2.14": "data-schemas.md", "2.15": "flows.md",
@@ -780,8 +780,7 @@ DRAFTS.update({"19.6.5": PM + "trading-overview.md", "19.6.6": PM + "trading-arc
                "19.6.16.3": PM + "common/strategy-si-templates.md",
                "19.6.17.1": PM + "how-to/create-strategy-or-variant.md", "19.6.17.2": PM + "how-to/go-live-with-money.md",
                "19.6.17.3": PM + "how-to/add-trading-account.md", "19.6.17.4": PM + "how-to/stop-trading-agent.md",
-               "19.6.18.1": PM + "index/accounts.md",
-               "56.1.1": "trading/README.md", "56.1.2": "trading/vision.md", "56.1.3": "trading/rebuild-prompt.md"})
+               "19.6.18.1": PM + "index/accounts.md"})   # the trading docs are real files in agents/trading/docs/ (D-064)
 DRAFTS = {k: v for k, v in DRAFTS.items() if os.path.exists(f"{DOCS_DIR}/{v}")}
 for x in out_nodes:
     if x["num"] in DRAFTS:
@@ -972,6 +971,41 @@ for _x in list(out_nodes):
         _scan(_x)
 json.dump(REAL_FILES, open(os.path.join(os.path.dirname(os.path.abspath(OUT)), "real-files.json"), "w"), ensure_ascii=False)
 print("real files listed:", sum(1 for x in out_nodes if x.get("scanned")))
+
+# ---- the extra tabs are real files next to the item (owner, 2026-10-12, D-064): a tab shows only when its file exists.
+# Example: x.example.md (for a .env file: .env.example); Questions: x.questions.md; ASD-STE100: README.asd.md beside README.md.
+def _extra(rel):
+    f = os.path.join(REPO, rel)
+    if os.path.isfile(f):
+        try:
+            return open(f, encoding="utf-8").read()
+        except (UnicodeDecodeError, OSError):
+            return None
+    return None
+for x in out_nodes:
+    if not x["path"].startswith("agent-os/"):
+        continue
+    rel = x["path"][len("agent-os/"):].replace("|", "-").rstrip("/")
+    if x["type"] == "folder":
+        home, fam = rel, (os.path.basename(rel) or "agent-os")
+    else:
+        home, base = os.path.dirname(rel), os.path.basename(rel)
+        fam = x.get("fam") or (base if base.startswith(".") else os.path.splitext(base)[0])
+    j = lambda name: os.path.join(home, name) if home else name
+    ex_rel = j(".env.example") if x["name"] == ".env" else j(fam + ".example.md")
+    ex = _extra(ex_rel) if x["type"] == "file" else None
+    if ex is not None:
+        x["example"] = {"lang": "dotenv" if x["name"] == ".env" else "markdown", "title": os.path.basename(ex_rel), "body": ex, "file": ex_rel}
+    elif x.get("example") and not x.get("example", {}).get("file"):
+        x["example"] = None
+    q_rel = j(fam + ".questions.md")
+    q = _extra(q_rel)
+    if q is not None:
+        x["questions_md"], x["questions_file"] = q, q_rel
+    if x["type"] == "file" and x["name"] == "README.md":
+        a = _extra(j("README.asd.md"))
+        if a is not None:
+            x["asd_md"], x["asd_file"] = a, j("README.asd.md")
 
 retired = [{"nums": r["nums"], "heading": r["heading"],
             "text": " ".join(i["text"] for i in r["items"])} for r in P["retired"]]

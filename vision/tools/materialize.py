@@ -11,10 +11,16 @@ planned should be already real files"). Run it after enrich.py, then run enrich.
 - A folder with nothing in it gets a .gitkeep, because git does not keep empty folders.
 - Each item's How it works (.index.md) and Details (.meta.json) files are copied next to it (inside a folder,
   beside a file), so the disk shows them like the page does. The copy in vision/ stays the source while we plan.
+- Every other file and folder outside vision/ gets an empty x.index.md and x.meta.json too, when it has none
+  (owner, 2026-10-12: metadata for all files). The prediction-market domain is stage two: only its folders exist.
 - The keys folder .secrets/ and its notes are created and go in git (owner, 2026-10-12). A .env keys file is
   created empty only when it is missing, is never read or overwritten, and git ignores it.
 """
 import json, os, sys
+from collections import Counter
+
+STAGE_TWO = "agents/trading/prediction-market/"   # stage two (owner, 2026-10-12): only its folders exist, nothing is made inside
+META_ENDS = (".index.md", ".meta.json", ".gitkeep", ".example.md", ".questions.md", ".env.example")   # metadata and tab files have none of their own
 
 REPO = os.path.abspath(os.environ.get("REPO_DIR") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 
@@ -48,6 +54,65 @@ def copy_meta(n, rel):
     return changed
 
 
+def scanned_meta(nodes):
+    """An empty .index.md and .meta.json for every found file and folder outside vision/ that has none."""
+    made = 0
+    found = [n for n in nodes if n.get("scanned")]
+    by_dir = {}
+    for n in found:
+        rel = n["path"][len("agent-os/"):].rstrip("/")
+        if rel.startswith(("vision/", STAGE_TWO)) or rel == "vision" or n["name"].rstrip("/").endswith(META_ENDS) or n["name"] == ".env":
+            continue
+        by_dir.setdefault(os.path.dirname(rel), []).append((n, rel))
+    for d, items in by_dir.items():
+        fams = Counter(os.path.splitext(os.path.basename(r))[0] for n, r in items if n["type"] == "file")
+        for n, rel in items:
+            base = os.path.basename(rel)
+            if n["type"] == "folder":
+                home, fam = os.path.join(REPO, rel), base
+            else:
+                stem = os.path.splitext(base)[0] or base
+                home, fam = os.path.dirname(os.path.join(REPO, rel)), (base if fams[stem] > 1 else stem)
+            for ext, text in ((".index.md", ""), (".meta.json", "{}\n")):
+                f = os.path.join(home, fam + ext)
+                if not os.path.exists(f):
+                    with open(f, "w", encoding="utf-8") as fh:
+                        fh.write(text)
+                    made += 1
+    return made
+
+
+def plain_tree():
+    """docs/file-tree.md: every path in the repository, plain, without metadata files (owner, 2026-10-12).
+    vision/ is the planning area and shows as one line."""
+    import subprocess
+    out = subprocess.run(["git", "-C", REPO, "ls-files", "--cached", "--others", "--exclude-standard"], capture_output=True, text=True).stdout.split("\n")
+    paths = set()
+    for f in out:
+        f = f.strip()
+        if not f or not os.path.exists(os.path.join(REPO, f)) or os.path.basename(f).endswith(META_ENDS):
+            continue
+        if f.startswith("vision/"):
+            paths.add("vision/"); continue
+        parts = f.split("/")
+        for i in range(1, len(parts)):
+            paths.add("/".join(parts[:i]) + "/")
+        paths.add(f)
+    lines = ["# File tree", "",
+             "Every file and folder in the repository, one path per line, folders ending with `/`. The metadata files",
+             "(`.index.md`, `.meta.json`, `.example.md`, `.questions.md`, `.gitkeep`) are left out, and `vision/`, the planning",
+             "area, is one line. Built by the IDE build every round; never edit it by hand.", "", "```text"]
+    lines += sorted(paths, key=lambda p: [s.lower() for s in p.rstrip("/").split("/")])
+    lines += ["```", ""]
+    text = "\n".join(lines)
+    f = os.path.join(REPO, "docs", "file-tree.md")
+    if not os.path.isfile(f) or open(f, encoding="utf-8").read() != text:
+        os.makedirs(os.path.dirname(f), exist_ok=True)
+        with open(f, "w", encoding="utf-8") as fh:
+            fh.write(text)
+    return len(paths)
+
+
 def main(data_file):
     nodes = json.load(open(data_file, encoding="utf-8"))["nodes"]
     nodes = nodes.values() if isinstance(nodes, dict) else nodes
@@ -58,7 +123,10 @@ def main(data_file):
             continue
         rel = disk(path[len("agent-os/"):])
         full = os.path.join(REPO, rel.rstrip("/"))
-        metas += copy_meta(n, rel)
+        if rel.startswith(STAGE_TWO) and n["type"] == "file":
+            continue
+        if not rel.startswith(STAGE_TWO):
+            metas += copy_meta(n, rel)
         if n["type"] == "folder":
             if rel:
                 os.makedirs(full, exist_ok=True)
@@ -81,6 +149,7 @@ def main(data_file):
             with open(full, "w", encoding="utf-8") as f:
                 f.write("{}\n" if full.endswith(".json") else "")
             made += 1
+    empty = scanned_meta(nodes)
     kept = 0
     for d in folders:
         if not os.path.isdir(d):
@@ -91,7 +160,9 @@ def main(data_file):
             kept += 1
         elif other and os.path.exists(os.path.join(d, ".gitkeep")):   # not needed once the folder holds a file
             os.remove(os.path.join(d, ".gitkeep"))
-    print(f"materialize: {copied} files copied from drafts, {made} empty files made, {kept} .gitkeep files, {metas} metadata files copied")
+    listed = plain_tree()
+    print(f"docs/file-tree.md: {listed} paths")
+    print(f"materialize: {copied} files copied from drafts, {made} empty files made, {kept} .gitkeep files, {metas} metadata files copied, {empty} empty metadata files for found files")
 
 
 if __name__ == "__main__":

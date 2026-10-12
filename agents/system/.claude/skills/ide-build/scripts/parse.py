@@ -1,7 +1,8 @@
 """Parse vision/docs/file-tree.md (+ feature-map.md, decisions.md) into a node list. Enrichment lives in enrich.py."""
 import re, json, sys
 
-VISION = "/mnt/project-files/vision"
+import os
+VISION = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # the vision/ folder this script sits in
 DOCS = f"{VISION}/docs"      # knowledge base (D-033); file-tree.md and feature-map.md moved here
 md = open(f"{DOCS}/file-tree.md", encoding="utf-8").read()
 fm = open(f"{DOCS}/feature-map.md", encoding="utf-8").read()

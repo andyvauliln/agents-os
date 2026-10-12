@@ -757,7 +757,7 @@ for x in out_nodes:
                                         "body": "| " + " | ".join(cols) + " |\n|" + "---|" * len(cols)}
 # drafts that already exist in the project folder
 # the knowledge base in vision/docs/ is the planning copy of agents/system/docs/ [2] (D-033)
-DOCS_DIR = "/mnt/project-files/vision/docs"
+DOCS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs")   # vision/docs next to these scripts
 DRAFTS = {"53.2.1": "README.md", "2.3": "overview.md", "2.4": "glossary.md", "2.5": "roadmap.md",
           "2.6": "decisions.md", "2.7": "conventions.md", "2.8": "safety.md", "2.9": "changelog.md", "2.10.2": "inputs/index.json",
           "2.10.3": "inputs/README.md", "2.12": "feature-map.md", "2.13": "file-tree.md", "2.14": "data-schemas.md", "2.15": "flows.md",
@@ -780,8 +780,7 @@ DRAFTS.update({"19.6.5": PM + "trading-overview.md", "19.6.6": PM + "trading-arc
                "19.6.16.3": PM + "common/strategy-si-templates.md",
                "19.6.17.1": PM + "how-to/create-strategy-or-variant.md", "19.6.17.2": PM + "how-to/go-live-with-money.md",
                "19.6.17.3": PM + "how-to/add-trading-account.md", "19.6.17.4": PM + "how-to/stop-trading-agent.md",
-               "19.6.18.1": PM + "index/accounts.md",
-               "56.1.1": "trading/README.md", "56.1.2": "trading/vision.md", "56.1.3": "trading/rebuild-prompt.md"})
+               "19.6.18.1": PM + "index/accounts.md"})   # the trading docs are real files in agents/trading/docs/ (D-064)
 DRAFTS = {k: v for k, v in DRAFTS.items() if os.path.exists(f"{DOCS_DIR}/{v}")}
 for x in out_nodes:
     if x["num"] in DRAFTS:

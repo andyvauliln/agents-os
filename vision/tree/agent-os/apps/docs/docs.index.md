@@ -1,8 +1,10 @@
 ---
-about: agent-os/apps/docs/docs/
+about: agent-os/apps/docs/
 node: n-43.1
+basis: 89ec62798614
 written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # docs/
 

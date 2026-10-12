@@ -1,8 +1,10 @@
 ---
 about: agent-os/docs/README.asd.md
 node: n-57.3
+basis: 5324dc0846f3
 written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # README.asd.md
 

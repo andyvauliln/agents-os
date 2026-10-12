@@ -1,8 +1,10 @@
 ---
 about: agent-os/agents/trading/docs/vision.md
 node: n-56.1.2
+basis: 147765503685
 written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # vision.md
 

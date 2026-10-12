@@ -58,8 +58,10 @@ also make one more skill and one more type of documentation document  ASD-STE100
 
 ## Answer
 ~~~text
-Plan written: plans/2026-10-12-claude-md-stage-one.md. Waiting for the owner's go on the plan and its defaults.
+Plan written: plans/2026-10-12-claude-md-stage-one.md. Built on the recommended defaults while the owner's answer on them is open (rebuild-prompt.md name, current prediction-market folder names, docs/ at the top).
+Done 2026-10-12: agents/system/CLAUDE.md (stage one, reading order, rules, round, doc-update table); vision, README, README.asd and rebuild prompt written fresh at five levels (docs/, agents/system/docs/, agents/trading/docs/, apps/docs/, apps/project-IDE/docs/), each with How it works, Details, Example and Questions files; skills vision-doc, readme-doc, rebuild-prompt-doc, file-index revised, readme-asd-doc and claude-md-doc new; docs/file-tree.md built plain; every found file outside vision/ has its two metadata files; prediction-market emptied to folders (files moved to vision/archive/2026-10-12/prediction-market/, not deleted); older docs moved to vision/archive/2026-10-12/; page tabs show only for real files, new ASD-STE100 tab. Page v62, data v57.
 ~~~
 
 ## Processed into
-- plans/2026-10-12-claude-md-stage-one.md (proposed)
+- plans/2026-10-12-claude-md-stage-one.md (built on defaults)
+- D-064

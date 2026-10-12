@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "about": "The prompt an AI coding agent follows to build apps/ again: tree, metadata format, clone and fork rules, build order, checks, and each app's own prompt.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent (rebuild-prompt-doc)",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "an AI coding agent rebuilding the repository",
+    "an agent checking apps/ against its spec",
+    "the owner"
+  ],
+  "changes_when": "the design of apps/ changes: an app, a rule for outside code, the metadata format or the build order; last of the four apps docs",
+  "related": [
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "calls it in its build order"
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.md",
+      "how": "points down to it"
+    },
+    {
+      "path": "apps/docs/README.md",
+      "how": "same names and parts"
+    },
+    {
+      "path": ".gitignore",
+      "how": "must ignore apps/temp/*/repo/"
+    },
+    {
+      "path": "agents/system/.claude/skills/rebuild-prompt-doc/SKILL.md",
+      "how": "written with (app outline)"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-041",
+      "D-043",
+      "D-045",
+      "D-055",
+      "D-058",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261005-1517",
+      "in-20261006-1016",
+      "in-20261006-2206",
+      "in-20261012-stage1"
+    ],
+    "notes": [
+      "conv-apps",
+      "apps-docs-clones-forks",
+      "human-docs-style"
+    ]
+  },
+  "update_with": [
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "its apps step points here; keep the order consistent"
+    },
+    {
+      "path": "vision/tree/agent-os/apps/docs/rebuild-prompt.index.md",
+      "how": "How it works refreshed"
+    }
+  ],
+  "inherits": [
+    "conv-apps"
+  ],
+  "features": [
+    "Apps and outside code",
+    "Rebuild from prompts"
+  ],
+  "views": [],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  },
+  "tree_number": "43.1.4"
+}

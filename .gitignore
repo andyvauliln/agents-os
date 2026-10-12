@@ -30,3 +30,6 @@ __pycache__/
 # Cursor local state
 .cursor/
 
+
+# Research clones stay out of git
+apps/temp/*/repo/

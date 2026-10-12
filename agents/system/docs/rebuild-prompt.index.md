@@ -2,50 +2,39 @@
 about: agent-os/agents/system/docs/rebuild-prompt.md
 node: n-2.22
 basis: f6ea621dc9a1
-written: 2026-10-07T08:58:18Z
+written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T09:57:03Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # rebuild-prompt.md
 
 ## What it is
 
-A prompt for an AI coding agent, such as Claude Code. Given this file and an empty repository, the agent builds the top of the repository and the system's own folder exactly: the same folders and files, formats, settings, scripts, helpers, safety rules and project IDE. It then runs the rebuild prompts of the levels below in order, starting with trading's, which lists the prediction-market domain's. It holds nothing about trading itself.
+The prompt an AI coding agent follows to build the system domain, `agents/system/`, from nothing. It gives the task and the limits, the system in brief, the ground rules, the exact tree, the conventions, every part with its formats, scripts and check, the build order, the acceptance checks and the list of things not to build. It builds only `agents/system/` and points to the prompts below it.
 
 ## Who looks after it
 
-The knowledge base agent writes and keeps it, following the rebuild prompt skill (`rebuild-prompt-doc`), which sets its sections, its length and how it is written for AI. The owner can also change it on this page; the agent then folds the change in.
+The knowledge base agent writes it with the `rebuild-prompt-doc` skill. The owner can also change it on the File Tree page.
 
 ## When and how it changes
 
-- After every change to the system's design, last of all the docs, once the vision and the README are updated.
-- The agent finds the sections the change touches and rewrites them, always checking the tree, the build order, the acceptance checks and the list of what not to build.
-- A point the owner decides leaves "Do not build" and goes into its part, the tree and the build order.
-- Every path and format is taken from the tree notes, never from memory.
+It changes when a name, a format, the tree, a script's behaviour, the build order or a check changes, and when an open point is settled. The agent edits the part it touches and the matching checks, after the vision, the README and its ASD-STE100 version are in line.
 
 ## Who uses it, and when
 
-- An AI agent rebuilding the system, or a part of it, from nothing.
-- An agent checking whether the system still matches its spec.
-- The owner, to check that nothing important is missing.
+An AI rebuilding the system reads it top to bottom and follows it. The owner reads it to check what "the same system" means. The project's rebuild prompt sends the builder here after it builds the root.
 
 ## Where it is mentioned
 
-- The knowledge base agent's instructions and the rebuild prompt skill.
-- The vision and README skills, whose last steps bring it in line.
-- The README's description of the knowledge base and the docs.
-- This file tree.
+The project's rebuild prompt (`docs/rebuild-prompt.md`) lists it among the child prompts; the system's README names it among the system's docs; `CLAUDE.md` names its skill in the table of docs.
 
 ## Related knowledge
 
-- The vision gives the purpose; the prompt's short description of the system uses its words.
-- The README describes the same parts for reading; the prompt gives them as exact instructions.
-- The tree notes and the topic notes on conventions, data and safety are where every exact name and format comes from.
+The level above is `docs/rebuild-prompt.md` (root, keys, docs, apps, planning area); the level below is `agents/trading/docs/rebuild-prompt.md`; the IDE's own build is `apps/project-IDE/docs/rebuild-prompt.md`. Its facts come from the system's README.
 
 ## Keep in mind
 
-- When the design changes, update the prompt in the same round, last.
-- When a detail is open, list it under "Do not build"; never let the AI guess it.
-- When you write about a key, write its name only, never its value.
-- When you name a file, copy its path from the tree notes character for character.
-- When a domain's, strategy's or agent's own docs change, check whether this doc needs the change too: updates climb to the top.
+- When you add a part, add its check and, if needed, a build-order step.
+- When a point is still open, list it under "Do not build"; never settle it here.
+- When you give an example config, mark choices the owner has not made as defaults.
+- When you mention keys, write key names only.

@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-12T14:32:06Z",
+ "built": "2026-10-12T15:44:55Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "977992447bc2",
+   "hash": "1d872ca4d146",
    "entries": []
   },
   "conventions.md": {
@@ -147,7 +147,7 @@
   },
   "decisions.md": {
    "title": "Agent OS: Decisions (v1.13)",
-   "hash": "b6d09cff3e4d",
+   "hash": "89f5a5573908",
    "entries": [
     "d-001",
     "d-002",
@@ -211,7 +211,8 @@
     "d-060",
     "d-061",
     "d-062",
-    "d-063"
+    "d-063",
+    "d-064"
    ]
   },
   "feature-map.md": {
@@ -6165,6 +6166,38 @@
    "nodes": [],
    "inherited_by": [],
    "chars": 694
+  },
+  "d-064": {
+   "id": "d-064",
+   "doc": "decisions.md",
+   "heading": "D-064: Stage one; CLAUDE.md in the system folder; the docs at five levels; README in ASD-STE100; tabs only for real files",
+   "level": 3,
+   "line": 637,
+   "applies_raw": [
+    "[10.20]",
+    "[57]",
+    "[2]",
+    "[56.1]",
+    "[43.1]",
+    "[53.4]",
+    "[19]"
+   ],
+   "sources": [
+    "in-20261012-stage1"
+   ],
+   "status": "decided",
+   "hash": "faa045ab7c90",
+   "nodes": [
+    "n-10.20",
+    "n-19",
+    "n-2",
+    "n-43.1",
+    "n-53.4",
+    "n-56.1",
+    "n-57"
+   ],
+   "inherited_by": [],
+   "chars": 1957
   },
   "fm-data-collection-workers": {
    "id": "fm-data-collection-workers",
@@ -20175,8 +20208,8 @@
     "vis-q-hosting"
    ],
    "inherited": [],
-   "basis": "87909599389c",
-   "summary_state": "stale"
+   "basis": "68e208adc1ff",
+   "summary_state": "fresh"
   },
   "n-48": {
    "num": "48",
@@ -20225,11 +20258,12 @@
    "same_as": null,
    "direct": [
     "arch-docs",
+    "d-064",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "2286471611d3",
-   "summary_state": "missing"
+   "basis": "b3f59fec5849",
+   "summary_state": "fresh"
   },
   "n-57.1": {
    "num": "57.1",
@@ -20243,7 +20277,7 @@
    "direct": [],
    "inherited": [],
    "basis": "a06257745242",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-57.2": {
    "num": "57.2",
@@ -20257,7 +20291,7 @@
    "direct": [],
    "inherited": [],
    "basis": "86a79d3273b7",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-57.3": {
    "num": "57.3",
@@ -20271,7 +20305,7 @@
    "direct": [],
    "inherited": [],
    "basis": "5324dc0846f3",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-57.4": {
    "num": "57.4",
@@ -20285,7 +20319,7 @@
    "direct": [],
    "inherited": [],
    "basis": "0cac8276f67e",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-57.5": {
    "num": "57.5",
@@ -20299,7 +20333,7 @@
    "direct": [],
    "inherited": [],
    "basis": "ee97d1330373",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-47": {
    "num": "47",
@@ -20340,7 +20374,7 @@
    ],
    "inherited": [],
    "basis": "73e2cf681785",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-47.1": {
    "num": "47.1",
@@ -20616,8 +20650,8 @@
     "idx-agents"
    ],
    "inherited": [],
-   "basis": "a9bfdf8c1b95",
-   "summary_state": "stale"
+   "basis": "e5911902aa15",
+   "summary_state": "fresh"
   },
   "n-10.20": {
    "num": "10.20",
@@ -20631,6 +20665,7 @@
    "direct": [
     "conv-claude-folder",
     "schema-claude-md-files",
+    "d-064",
     "term-claude-md",
     "safe-untrusted-input",
     "common-prompt-composition",
@@ -20646,8 +20681,8 @@
     "tr-common-prompt-safety"
    ],
    "inherited": [],
-   "basis": "a2ba2b55db84",
-   "summary_state": "stale"
+   "basis": "910e05691f8f",
+   "summary_state": "fresh"
   },
   "n-10.1": {
    "num": "10.1",
@@ -20687,7 +20722,7 @@
    ],
    "inherited": [],
    "basis": "b4f9183027f0",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-10.1.6": {
    "num": "10.1.6",
@@ -20789,6 +20824,8 @@
     "n-10.1.2.3",
     "n-10.1.2.4",
     "n-10.1.2.7",
+    "n-10.1.2.9",
+    "n-10.1.2.10",
     "n-10.1.2.8",
     "n-10.1.2.5",
     "n-10.1.2.6",
@@ -20804,7 +20841,7 @@
     "road-q-shared-skills"
    ],
    "inherited": [],
-   "basis": "497dd8edb52e",
+   "basis": "e64e5d527469",
    "summary_state": "fresh"
   },
   "n-10.1.2.1": {
@@ -20911,6 +20948,34 @@
    ],
    "inherited": [],
    "basis": "7131f2517688",
+   "summary_state": "fresh"
+  },
+  "n-10.1.2.9": {
+   "num": "10.1.2.9",
+   "path": "agents/system/.claude/skills/readme-asd-doc/SKILL.md",
+   "name": "readme-asd-doc/SKILL.md",
+   "type": "file",
+   "parent": "n-10.1.2",
+   "children": [],
+   "file_doc": null,
+   "same_as": null,
+   "direct": [],
+   "inherited": [],
+   "basis": "75d84fa39827",
+   "summary_state": "fresh"
+  },
+  "n-10.1.2.10": {
+   "num": "10.1.2.10",
+   "path": "agents/system/.claude/skills/claude-md-doc/SKILL.md",
+   "name": "claude-md-doc/SKILL.md",
+   "type": "file",
+   "parent": "n-10.1.2",
+   "children": [],
+   "file_doc": null,
+   "same_as": null,
+   "direct": [],
+   "inherited": [],
+   "basis": "7d2c7cdbe50b",
    "summary_state": "fresh"
   },
   "n-10.1.2.8": {
@@ -21487,6 +21552,7 @@
     "d-049",
     "d-052",
     "d-056",
+    "d-064",
     "fm-docs-and-self-support",
     "flow-user-input",
     "term-docs-pattern",
@@ -21498,8 +21564,8 @@
     "howto-process-an-input-checks"
    ],
    "inherited": [],
-   "basis": "802da917b1de",
-   "summary_state": "stale"
+   "basis": "0ce9b58830db",
+   "summary_state": "fresh"
   },
   "n-2.2": {
    "num": "2.2",
@@ -21615,7 +21681,7 @@
     "howto-process-an-input-checks"
    ],
    "basis": "7c324332c1f9",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-2.20": {
    "num": "2.20",
@@ -23089,7 +23155,7 @@
    ],
    "inherited": [],
    "basis": "917ffe481ade",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-10.5": {
    "num": "10.5",
@@ -23106,7 +23172,7 @@
    ],
    "inherited": [],
    "basis": "5be976bbdb56",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-10.6": {
    "num": "10.6",
@@ -23131,7 +23197,7 @@
    ],
    "inherited": [],
    "basis": "0065476dc2de",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-10.7": {
    "num": "10.7",
@@ -23155,7 +23221,7 @@
    ],
    "inherited": [],
    "basis": "98cc77824e9f",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-56": {
    "num": "56",
@@ -23177,7 +23243,7 @@
     "term-domain"
    ],
    "inherited": [],
-   "basis": "2887bce64511",
+   "basis": "d58d060eca40",
    "summary_state": "fresh"
   },
   "n-56.2": {
@@ -23269,11 +23335,12 @@
    "direct": [
     "arch-docs",
     "d-059",
+    "d-064",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "4d9ccecc6a5b",
-   "summary_state": "stale"
+   "basis": "9c4909c8090e",
+   "summary_state": "fresh"
   },
   "n-56.1.1": {
    "num": "56.1.1",
@@ -23329,7 +23396,7 @@
    "direct": [],
    "inherited": [],
    "basis": "62c33cc1380e",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-19": {
    "num": "19",
@@ -23364,6 +23431,7 @@
     "d-056",
     "d-058",
     "d-059",
+    "d-064",
     "fm-subscriptions-and-triggers",
     "fm-agent-creation",
     "term-level-agent",
@@ -23388,8 +23456,8 @@
     "vis-q-mvp"
    ],
    "inherited": [],
-   "basis": "46cffef4006a",
-   "summary_state": "stale"
+   "basis": "cd7a28057d81",
+   "summary_state": "fresh"
   },
   "n-19.1": {
    "num": "19.1",
@@ -23422,7 +23490,7 @@
    ],
    "inherited": [],
    "basis": "fd6a49fbccb7",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.1.8": {
    "num": "19.1.8",
@@ -23439,7 +23507,7 @@
    ],
    "inherited": [],
    "basis": "314775554546",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.1.2": {
    "num": "19.1.2",
@@ -23456,7 +23524,7 @@
    ],
    "inherited": [],
    "basis": "d585e54b2384",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.1.9": {
    "num": "19.1.9",
@@ -23473,7 +23541,7 @@
    ],
    "inherited": [],
    "basis": "137c0275ec48",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.1.1": {
    "num": "19.1.1",
@@ -23499,7 +23567,7 @@
    ],
    "inherited": [],
    "basis": "cdd7764501b2",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.1.10": {
    "num": "19.1.10",
@@ -23516,7 +23584,7 @@
    ],
    "inherited": [],
    "basis": "f50130a6e5c3",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.1.11": {
    "num": "19.1.11",
@@ -23533,7 +23601,7 @@
    ],
    "inherited": [],
    "basis": "d65b2a15cd6d",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.1.12": {
    "num": "19.1.12",
@@ -23558,7 +23626,7 @@
    ],
    "inherited": [],
    "basis": "fb7ce33e59b2",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.1.13": {
    "num": "19.1.13",
@@ -23598,7 +23666,7 @@
    ],
    "inherited": [],
    "basis": "e6c3ca066d4f",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.2.2": {
    "num": "19.2.2",
@@ -23674,7 +23742,7 @@
    ],
    "inherited": [],
    "basis": "49850e9eda29",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-14.3": {
    "num": "14.3",
@@ -24054,7 +24122,7 @@
    ],
    "inherited": [],
    "basis": "8bca72a320d4",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.6.16": {
    "num": "19.6.16",
@@ -24068,7 +24136,7 @@
    "direct": [],
    "inherited": [],
    "basis": "f4a39f76bf6d",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.6.17": {
    "num": "19.6.17",
@@ -24082,7 +24150,7 @@
    "direct": [],
    "inherited": [],
    "basis": "c9ff38915d51",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.6.18": {
    "num": "19.6.18",
@@ -24096,7 +24164,7 @@
    "direct": [],
    "inherited": [],
    "basis": "502ff6153ac2",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.6.1": {
    "num": "19.6.1",
@@ -24195,7 +24263,7 @@
    ],
    "inherited": [],
    "basis": "825bb7120551",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.12.2": {
    "num": "19.12.2",
@@ -24212,7 +24280,7 @@
    ],
    "inherited": [],
    "basis": "28c02b8fc8c4",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.12.3": {
    "num": "19.12.3",
@@ -24300,7 +24368,7 @@
    ],
    "inherited": [],
    "basis": "1e3768748dc4",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-19.13.2": {
    "num": "19.13.2",
@@ -24453,7 +24521,7 @@
    ],
    "inherited": [],
    "basis": "e64635dd66ac",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.1": {
    "num": "21.1",
@@ -24486,7 +24554,7 @@
    ],
    "inherited": [],
    "basis": "0ce8607b931e",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.1.8": {
    "num": "21.1.8",
@@ -24503,7 +24571,7 @@
    ],
    "inherited": [],
    "basis": "314775554546",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.1.2": {
    "num": "21.1.2",
@@ -24520,7 +24588,7 @@
    ],
    "inherited": [],
    "basis": "d585e54b2384",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.1.9": {
    "num": "21.1.9",
@@ -24537,7 +24605,7 @@
    ],
    "inherited": [],
    "basis": "137c0275ec48",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.1.1": {
    "num": "21.1.1",
@@ -24563,7 +24631,7 @@
    ],
    "inherited": [],
    "basis": "cdd7764501b2",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.1.10": {
    "num": "21.1.10",
@@ -24580,7 +24648,7 @@
    ],
    "inherited": [],
    "basis": "f50130a6e5c3",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.1.11": {
    "num": "21.1.11",
@@ -24597,7 +24665,7 @@
    ],
    "inherited": [],
    "basis": "d65b2a15cd6d",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.1.12": {
    "num": "21.1.12",
@@ -24622,7 +24690,7 @@
    ],
    "inherited": [],
    "basis": "3b33dbbbb09f",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.1.13": {
    "num": "21.1.13",
@@ -24667,7 +24735,7 @@
    ],
    "inherited": [],
    "basis": "52e3b0a6c01d",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.2.2": {
    "num": "21.2.2",
@@ -24743,7 +24811,7 @@
    ],
    "inherited": [],
    "basis": "44319bea9936",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.3.1": {
    "num": "21.3.1",
@@ -25020,7 +25088,7 @@
    ],
    "inherited": [],
    "basis": "ba4ee7d8be02",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.6.1": {
    "num": "21.6.1",
@@ -25122,7 +25190,7 @@
    ],
    "inherited": [],
    "basis": "825bb7120551",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.12.2": {
    "num": "21.12.2",
@@ -25139,7 +25207,7 @@
    ],
    "inherited": [],
    "basis": "28c02b8fc8c4",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.12.3": {
    "num": "21.12.3",
@@ -25235,7 +25303,7 @@
    ],
    "inherited": [],
    "basis": "21daee702d3e",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-21.13.2": {
    "num": "21.13.2",
@@ -25399,7 +25467,7 @@
    ],
    "inherited": [],
    "basis": "8c825da98b16",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-24": {
    "num": "24",
@@ -25436,7 +25504,7 @@
    ],
    "inherited": [],
    "basis": "2f6340fe75e3",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-24.8": {
    "num": "24.8",
@@ -25454,7 +25522,7 @@
    ],
    "inherited": [],
    "basis": "4e299c9b8833",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-25": {
    "num": "25",
@@ -25474,7 +25542,7 @@
    ],
    "inherited": [],
    "basis": "ec209a71f4a0",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-24.9": {
    "num": "24.9",
@@ -25491,7 +25559,7 @@
    ],
    "inherited": [],
    "basis": "137c0275ec48",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-26": {
    "num": "26",
@@ -25516,7 +25584,7 @@
    ],
    "inherited": [],
    "basis": "c5f46fbcbd85",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-24.10": {
    "num": "24.10",
@@ -25533,7 +25601,7 @@
    ],
    "inherited": [],
    "basis": "f50130a6e5c3",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-24.11": {
    "num": "24.11",
@@ -25550,7 +25618,7 @@
    ],
    "inherited": [],
    "basis": "d65b2a15cd6d",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-24.12": {
    "num": "24.12",
@@ -25569,7 +25637,7 @@
    ],
    "inherited": [],
    "basis": "2f309a0d4064",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-24.13": {
    "num": "24.13",
@@ -25613,7 +25681,7 @@
    ],
    "inherited": [],
    "basis": "d20fab2892a0",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-30": {
    "num": "30",
@@ -25640,7 +25708,7 @@
    ],
    "inherited": [],
    "basis": "bb190656b20e",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-34": {
    "num": "34",
@@ -25695,7 +25763,7 @@
    ],
    "inherited": [],
    "basis": "6ba23f181b6e",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-35": {
    "num": "35",
@@ -25749,7 +25817,7 @@
    ],
    "inherited": [],
    "basis": "6ffe72c4542c",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-35.2": {
    "num": "35.2",
@@ -25809,7 +25877,7 @@
    ],
    "inherited": [],
    "basis": "bd7074701086",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-49": {
    "num": "49",
@@ -25856,7 +25924,7 @@
    ],
    "inherited": [],
    "basis": "7c87ff6123f0",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-49.2": {
    "num": "49.2",
@@ -25873,7 +25941,7 @@
    ],
    "inherited": [],
    "basis": "48f80f585980",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-50": {
    "num": "50",
@@ -25902,7 +25970,7 @@
    ],
    "inherited": [],
    "basis": "d262bedc1bdc",
-   "summary_state": "stale"
+   "summary_state": "fresh"
   },
   "n-50.2": {
    "num": "50.2",
@@ -25953,8 +26021,8 @@
     "vis-q-polymarket-suite"
    ],
    "inherited": [],
-   "basis": "015795a73a32",
-   "summary_state": "stale"
+   "basis": "d7f24ab16886",
+   "summary_state": "fresh"
   },
   "n-43.1": {
    "num": "43.1",
@@ -25972,11 +26040,12 @@
    "same_as": null,
    "direct": [
     "arch-docs",
+    "d-064",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "ddb0fdceabc1",
-   "summary_state": "missing"
+   "basis": "89ec62798614",
+   "summary_state": "fresh"
   },
   "n-43.1.1": {
    "num": "43.1.1",
@@ -25990,7 +26059,7 @@
    "direct": [],
    "inherited": [],
    "basis": "fda20e2e2095",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-43.1.2": {
    "num": "43.1.2",
@@ -26004,7 +26073,7 @@
    "direct": [],
    "inherited": [],
    "basis": "55fae34026c3",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-43.1.3": {
    "num": "43.1.3",
@@ -26018,7 +26087,7 @@
    "direct": [],
    "inherited": [],
    "basis": "cf6b61d15087",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-43.1.4": {
    "num": "43.1.4",
@@ -26032,7 +26101,7 @@
    "direct": [],
    "inherited": [],
    "basis": "5afb6d54bdd8",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-53": {
    "num": "53",
@@ -26063,7 +26132,7 @@
     "ov-parts-ui-apps"
    ],
    "inherited": [],
-   "basis": "34701421636a",
+   "basis": "f32e916f3143",
    "summary_state": "fresh"
   },
   "n-53.4": {
@@ -26084,11 +26153,12 @@
     "arch-docs",
     "conv-apps",
     "d-055",
+    "d-064",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "1e854455f633",
-   "summary_state": "stale"
+   "basis": "6dc578c86afb",
+   "summary_state": "fresh"
   },
   "n-53.4.1": {
    "num": "53.4.1",
@@ -26150,7 +26220,7 @@
    "direct": [],
    "inherited": [],
    "basis": "28f6d03ddab0",
-   "summary_state": "missing"
+   "summary_state": "fresh"
   },
   "n-53.1": {
    "num": "53.1",
@@ -29123,7 +29193,9 @@
    "processed_into": [
     "plans/2026-10-12-claude-md-stage-one.md"
    ],
-   "entries": []
+   "entries": [
+    "d-064"
+   ]
   }
  },
  "problems": [
@@ -30034,6 +30106,8 @@
   "node n-57.3 (docs/README.asd.md) has no file doc and no knowledge",
   "node n-57.4 (docs/rebuild-prompt.md) has no file doc and no knowledge",
   "node n-57.5 (docs/file-tree.md) has no file doc and no knowledge",
+  "node n-10.1.2.9 (agents/system/.claude/skills/readme-asd-doc/SKILL.md) has no file doc and no knowledge",
+  "node n-10.1.2.10 (agents/system/.claude/skills/claude-md-doc/SKILL.md) has no file doc and no knowledge",
   "node n-10.8.2.2 (agents/system/tests/scripts/[test-id].test.[js|py]) has no file doc and no knowledge",
   "node n-56.1.4 (agents/trading/docs/README.asd.md) has no file doc and no knowledge",
   "node n-43.1.1 (apps/docs/vision.md) has no file doc and no knowledge",

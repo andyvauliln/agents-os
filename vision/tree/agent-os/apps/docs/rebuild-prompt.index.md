@@ -1,8 +1,10 @@
 ---
 about: agent-os/apps/docs/rebuild-prompt.md
 node: n-43.1.4
+basis: 5afb6d54bdd8
 written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # rebuild-prompt.md
 

@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/system/requirements.txt
 node: n-10.5
-basis: 95e29c8cadd9
+basis: 5be976bbdb56
 written: 2026-10-01T01:01:42Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # requirements.txt
 

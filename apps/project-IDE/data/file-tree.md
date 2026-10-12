@@ -34,6 +34,8 @@ agent-os/                                   # [0] repo/workspace root
 │   │   │   │   ├── vision-doc/SKILL.md       # [10.1.2.3] how to write vision.md, the top-level doc, the same sections at every level (D-034, D-048)
 │   │   │   │   ├── readme-doc/SKILL.md       # [10.1.2.4] how to write README.md, every part exactly with the path to its docs (D-034, D-048)
 │   │   │   │   ├── rebuild-prompt-doc/SKILL.md # [10.1.2.7] how to write rebuild-prompt.md, the spec an AI rebuilds the system from (D-048)
+│   │   │   │   ├── readme-asd-doc/SKILL.md # [10.1.2.9] how to write README.asd.md, the README again in ASD-STE100 to compare with it (owner, 2026-10-12, D-064)
+│   │   │   │   ├── claude-md-doc/SKILL.md  # [10.1.2.10] how to write and keep agents/system/CLAUDE.md: the project, its stage, the reading list, the rules, the round (owner, 2026-10-12, D-064)
 │   │   │   │   ├── change-plan/SKILL.md      # [10.1.2.8] a plan for every change request: write, show, build, move its knowledge home, archive (D-051)
 │   │   │   │   ├── ide-build/                # [10.1.2.5] builds the File Tree page from the repo, checks it and publishes it; its scripts live inside it (D-041)
 │   │   │   │   │   ├── SKILL.md              # [10.1.2.5.1] the steps: parse, enrich, map, test, publish

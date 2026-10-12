@@ -192,7 +192,7 @@ Check: the file parses as an agent definition and names both skills.
 
 ### The docs: `docs/`
 
-`vision.md`, `README.md`, `README.asd.md` and `rebuild-prompt.md`, written by the knowledge base agent with the `vision-doc`, `readme-doc`, the ASD-STE100 README skill and `rebuild-prompt-doc` skills, in that order, each with its `.index.md`, `.meta.json`, `.example.md` and `.questions.md`.
+`vision.md`, `README.md`, `README.asd.md` and `rebuild-prompt.md`, written by the knowledge base agent with the `vision-doc`, `readme-doc`, `readme-asd-doc` and `rebuild-prompt-doc` skills, in that order, each with its `.index.md`, `.meta.json`, `.example.md` and `.questions.md`.
 
 ## Build order
 

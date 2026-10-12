@@ -1,19 +1,21 @@
 ---
-about: agent-os/agents/system/.claude/CLAUDE.md
-node: n-10.1.5
-basis: 9e16f6cffae1
-written: 2026-10-07T19:01:11Z
-by: knowledge-base-agent
+about: agent-os/agents/system/CLAUDE.md
+node: n-10.20
+basis: 910e05691f8f
+written: 2026-10-12T16:10:00Z
+by: project-ide-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # CLAUDE.md
 
 ## Summary
 
-The first file any AI session reads when it works on the project, and the system manager's instructions. Claude Code loads it by itself in the system folder; a session started at the top of the repository reads it first by hand. It says what the Agent OS is for, what to read first, where things are, the rules and how a round works, and ends with the system manager's job: oversee the domains, the system's health and its development.
+The first file Claude Code reads when the owner starts it in agents/system/, and the system manager's instructions. It says what the Agent OS is and that the project is at stage one (finish the project IDE, make every metadata file correct, finish the docs at the project, system, trading and apps levels; prediction-market waits for stage two). It gives the docs to read in order: project vision and README, system vision and README, the plain file tree, the IDE README. Then the rules from memory, the steps after every input or update, and a table of which change makes which doc stale and which skill writes it. It is kept with the skill claude-md-doc.
 
 ## Keep in mind
 
 - When the layout, the read order, the rules or the way of syncing change, update this file in the same round.
 - When you add a rule that limits outside actions, put the hard limit in code, in the scripts that act, not only in this prompt.
 - When you change something every level should follow (role, read order, rules, safety), change the common prompt too, not just this file.
+- When the stage changes, rewrite the stage section first; the reading list follows it.
 - When a request asks for a change, write its plan first; only questions and small fixes go without one.

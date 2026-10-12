@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/strategy-1-agent/research/
 node: n-21.13
-basis: d6a6e38de5bf
+basis: 21daee702d3e
 written: 2026-10-01T00:59:34Z
 by: summary-worker
-confirmed: 2026-10-07T19:05:50Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # research/
 

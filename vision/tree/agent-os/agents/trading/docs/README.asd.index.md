@@ -1,8 +1,10 @@
 ---
 about: agent-os/agents/trading/docs/README.asd.md
 node: n-56.1.4
+basis: 62c33cc1380e
 written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # README.asd.md
 

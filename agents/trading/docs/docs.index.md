@@ -1,18 +1,38 @@
 ---
 about: agent-os/agents/trading/docs/
 node: n-56.1
-basis: cd8604d9ab82
-written: 2026-10-09T09:55:29Z
+basis: 9c4909c8090e
+written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T10:30:32Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # docs/
 
-## Summary
+## What it is
 
-Trading's own docs for people, real Markdown files: `vision.md` (why trading has its own folder and what every trading domain shares), `README.md` (trading's parts and domains, with the path to each domain's docs) and `rebuild-prompt.md` (how to rebuild this folder). They sit between the system's docs above and each trading domain's docs below.
+Trading's own docs, for people and for AI: `vision.md` (why trading has its own place and what every trading domain shares), `README.md` (every part of trading exactly, with each part's docs path), `README.asd.md` (the README again in ASD-STE100) and `rebuild-prompt.md` (how an AI builds `agents/trading/` again). Each doc has its How it works, Details, Example and Questions files next to it.
+
+## Who looks after it
+
+The knowledge base agent, with one skill per doc: `vision-doc`, `readme-doc`, the planned `readme-asd-doc` and `rebuild-prompt-doc`. The owner can change any doc on the File Tree page.
+
+## When and how it changes
+
+After an input or a decision that touches what every trading domain shares, the docs are rewritten in a fixed order: the vision, the README, its ASD-STE100 version, then the rebuild prompt. A change here then climbs to the system's docs above.
+
+## Who uses it, and when
+
+The owner and anyone new to trading, first; every trading domain agent as background; an AI rebuilding trading.
+
+## Where it is mentioned
+
+The system's README and rebuild prompt, the folder `agents/trading/`, and every trading domain's docs, which build on these.
+
+## Related knowledge
+
+They sit between the system's docs in `agents/system/docs/` and each trading domain's docs. The trading rules in full are in the kept trading notes in `vision/docs/prediction-market-agents/` until the prediction-market domain is written again in stage two.
 
 ## Keep in mind
 
-- When you change one of the three docs, bring the other two in line; the README's In short uses the vision's words.
-- When you write here, describe only what every trading domain shares; a single domain's detail stays in its own docs.
+- When you change one doc here, bring the others in line in the order vision, README, README.asd, rebuild prompt.
+- When you write here, describe only what every trading domain shares.

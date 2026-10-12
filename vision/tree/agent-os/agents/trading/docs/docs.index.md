@@ -1,8 +1,10 @@
 ---
 about: agent-os/agents/trading/docs/
 node: n-56.1
+basis: 9c4909c8090e
 written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # docs/
 

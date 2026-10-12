@@ -972,6 +972,41 @@ for _x in list(out_nodes):
 json.dump(REAL_FILES, open(os.path.join(os.path.dirname(os.path.abspath(OUT)), "real-files.json"), "w"), ensure_ascii=False)
 print("real files listed:", sum(1 for x in out_nodes if x.get("scanned")))
 
+# ---- the extra tabs are real files next to the item (owner, 2026-10-12, D-064): a tab shows only when its file exists.
+# Example: x.example.md (for a .env file: .env.example); Questions: x.questions.md; ASD-STE100: README.asd.md beside README.md.
+def _extra(rel):
+    f = os.path.join(REPO, rel)
+    if os.path.isfile(f):
+        try:
+            return open(f, encoding="utf-8").read()
+        except (UnicodeDecodeError, OSError):
+            return None
+    return None
+for x in out_nodes:
+    if not x["path"].startswith("agent-os/"):
+        continue
+    rel = x["path"][len("agent-os/"):].replace("|", "-").rstrip("/")
+    if x["type"] == "folder":
+        home, fam = rel, (os.path.basename(rel) or "agent-os")
+    else:
+        home, base = os.path.dirname(rel), os.path.basename(rel)
+        fam = x.get("fam") or (base if base.startswith(".") else os.path.splitext(base)[0])
+    j = lambda name: os.path.join(home, name) if home else name
+    ex_rel = j(".env.example") if x["name"] == ".env" else j(fam + ".example.md")
+    ex = _extra(ex_rel) if x["type"] == "file" else None
+    if ex is not None:
+        x["example"] = {"lang": "dotenv" if x["name"] == ".env" else "markdown", "title": os.path.basename(ex_rel), "body": ex, "file": ex_rel}
+    elif x.get("example") and not x.get("example", {}).get("file"):
+        x["example"] = None
+    q_rel = j(fam + ".questions.md")
+    q = _extra(q_rel)
+    if q is not None:
+        x["questions_md"], x["questions_file"] = q, q_rel
+    if x["type"] == "file" and x["name"] == "README.md":
+        a = _extra(j("README.asd.md"))
+        if a is not None:
+            x["asd_md"], x["asd_file"] = a, j("README.asd.md")
+
 retired = [{"nums": r["nums"], "heading": r["heading"],
             "text": " ".join(i["text"] for i in r["items"])} for r in P["retired"]]
 

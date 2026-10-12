@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/strategy-1-agent/tests/scripts/
 node: n-21.12.2
-basis: 4d787c32d3a0
+basis: 28c02b8fc8c4
 written: 2026-10-01T00:58:25Z
 by: summary-worker
-confirmed: 2026-10-07T19:05:50Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # scripts/
 

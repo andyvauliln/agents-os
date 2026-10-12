@@ -1,9 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/strategy-1-agent/configs/
 node: n-21.2
-basis: bf8410188cb5
+basis: 52e3b0a6c01d
 written: 2026-10-07T19:03:05Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # configs/
 

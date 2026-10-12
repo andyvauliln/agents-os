@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/tests/agents/
 node: n-49.1
-basis: 7504e1a575e6
+basis: 7c87ff6123f0
 written: 2026-10-01T01:02:00Z
 by: summary-worker
-confirmed: 2026-10-07T19:05:50Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # agents/
 

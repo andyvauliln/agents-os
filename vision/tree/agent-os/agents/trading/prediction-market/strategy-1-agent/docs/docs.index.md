@@ -1,9 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/strategy-1-agent/docs/
 node: n-21.6
-basis: b3ba4784df15
+basis: ba4ee7d8be02
 written: 2026-10-07T19:03:05Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # docs/
 

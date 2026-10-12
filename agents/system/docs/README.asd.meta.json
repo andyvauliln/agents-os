@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "about": "The system's README again in ASD-STE100 Simplified Technical English, same content and order; README.md is the source.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent, right after the README (planned skill readme-asd-doc)"
+  ],
+  "readers": [
+    "the owner, to compare with the README"
+  ],
+  "changes_when": "every time README.md changes",
+  "related": [
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "source"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-062",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261009-0940",
+      "in-20261012-tree",
+      "in-20261012-real",
+      "in-20261012-secrets",
+      "in-20261012-metadisk",
+      "in-20261012-stage1"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/docs/README.asd.example.md",
+      "how": "keep the outline in step"
+    },
+    {
+      "path": "agents/system/docs/README.asd.questions.md",
+      "how": "keep the open questions in step"
+    }
+  ],
+  "inherits": [
+    "README.md in this folder"
+  ],
+  "features": [
+    "Knowledge base"
+  ],
+  "views": [
+    "doc (shared view)"
+  ],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  },
+  "tree_number": "2.24"
+}

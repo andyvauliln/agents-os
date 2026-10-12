@@ -141,7 +141,7 @@ The page has three areas:
 - **All and Changed.** All shows the full tree. Changed shows only the items that are changed since the last sync. Each item shows the reason.
 - **The metadata switch.** When the switch is on, each file shows its two metadata files as rows below it. These are the How it works file (`vision.index.md` for `vision.md`) and the Details file (`vision.meta.json`). Each folder shows its two metadata files first, in the folder. When you click a metadata row, the related tab of its item opens. When the switch is off, the tree does not show metadata files. This includes the real metadata files on the disk. The switch is on by default.
 - **The planned switch.** When the switch is off, the tree shows only the files in git. When the switch is on, the tree also shows the planned items that are not on the disk. The switch is off by default.
-- **The rows.** Each row has an icon, the name, a "changed" tag if applicable, and the number of the item in the tree notes if it has a number. The icon shows a folder, a file or a link. When you click a closed folder one time, it opens and you select it. The arrow keys move in the tree. They also open and close folders. The browser keeps the open folders and the selected item. The address of the page contains the selected item. Thus a link opens the same item.
+- **The rows.** Each row has an icon and the name. If applicable, a row also has a "changed" tag and the number of the item in the tree notes. The icon shows a folder, a file or a link. When you click a closed folder one time, it opens and you select it. The arrow keys move in the tree. They also open and close folders. The browser keeps the open folders and the selected item. The address of the page contains the selected item. Thus a link opens the same item.
 - **Deleted items.** A deleted item stays in its location until the next sync. A line goes through its name.
 
 ### The sheet of an item
@@ -181,7 +181,15 @@ The first tab is always How it works. The last tab is always Details. Between th
   - For a settings file, the tab shows a full example. It also shows a table of all fields, with the permitted values, an example and the purpose of each field.
   - A jobs file or a links file makes its example from its own table. The example includes the edits that are not saved.
 - **Questions.** This tab shows the open questions about the item. Each question has a Discuss button. This button starts a conversation in the ask box. The tab also shows the questions that have an answer on the page, with their answers. A folder also shows the open questions of the files in it.
-- **Details.** This tab shows the Details file of the item, `vision.meta.json`, as it is. The Details file contains these data: what the item is, its state, if it is in git, if it is secret, if a script makes it, who writes it and who reads it, when it changes, its related items, what must change with it, what it gets from the levels above, its sources, features and views, and its number in the tree. Now most Details files are empty templates.
+- **Details.** This tab shows the Details file of the item, `vision.meta.json`, as it is. The Details file contains these data:
+  - What the item is, and its state.
+  - If it is in git, if it is secret, and if a script makes it.
+  - Who writes it, who reads it, and when it changes.
+  - Its related items, and what must change with it.
+  - What it gets from the levels above.
+  - Its sources, features and views, and its number in the tree.
+
+  Now most Details files are empty templates.
 - **More tabs.**
   - The folder of an agent has Overview and Agents. Overview tells what the agent does. Agents shows the agents, workers and skills below it.
   - A jobs file has Jobs. This is a table of all jobs, with the switch, schedule, location, platform and model of each job.
@@ -270,7 +278,7 @@ When you push "Delete and clean up", these things occur:
 
 - **On the server of the owner,** Claude Code starts immediately, in the conversation of that item.
   1. It deletes that item and its metadata files. It does not ask for a second click for this step.
-  2. It removes the item from the project: its line and section in the tree notes, each link to it, each reference to it in other files, the How it works of the parent, and the knowledge map.
+  2. It removes the item from these parts of the project: the tree notes, the links to it, the references to it in other files, the How it works of the parent, and the knowledge map.
   3. It obeys the note.
   4. It records the deletion and commits the change.
 - **On claude.ai,** the page marks the item as deleted immediately. The agent removes the item from the project at the next sync.
@@ -570,7 +578,7 @@ In the final layout, Claude Code starts in `agents/system/`. Thus it loads the `
 - `build_map.py` must tell you that all How it works files are fresh, none are missing, and there are no orphans.
 - With the planned switch off, the tree must be equal to the files in git.
 - After a sync, each new input from the page must be in the inputs folder with its answer. Each How it works edit must be in its file, word for word. The store must contain only the history and the items that the agent kept intentionally.
-- We tested the server on a copy of the repository. We tested the store as files, the write to the files, a real Claude Code request, Allow and Refuse, a deletion with a note, and a restore.
+- We tested the server on a copy of the repository. We tested these functions: the store as files, the write to the files, a real Claude Code request, Allow and Refuse, a deletion with a note, and a restore.
 
 ## Where each part's docs are
 

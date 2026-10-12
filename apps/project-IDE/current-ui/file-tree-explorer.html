@@ -623,7 +623,7 @@ const onDisk = n => !!(n && (n.exists || n.scanned));   // show each item's meta
 const famName = n => n.fam || (n.type === "folder" ? String(n.name || "agent-os/").replace(/\/$/, "") : String(n.name || "").replace(/(.)\.[^./]+$/, "$1"));
 const idxName = n => famName(n) + ".index.md";
 const metaName = n => famName(n) + ".meta.json";
-const hasIdx = n => !/\.(index\.md|meta\.json)$/.test(n.name || "");   // a metadata file has no metadata files of its own
+const hasIdx = n => !/\.(index\.md|meta\.json|example\.md|questions\.md)$|^\.env\.example$/.test(n.name || "");   // a metadata file has no metadata files of its own
 let side = store.get("ftx-side") === "changed" ? "changed" : "all";
 let CHANGED = {}, REMOVED_KIDS = {};   // node id -> why it is changed (CHG_WHY); parent id -> removed child ids
 let expanded = new Set(JSON.parse(store.get("ftx-open") || "null") || []);
@@ -792,7 +792,8 @@ function renderTree() {
   // a metadata file found on disk follows the same switch; when the switch is on and its item already shows it as a metadata row, it is not shown twice
   const famOf = (s, c, nm) => s && showFam(c) && (idxName(s) === nm || metaName(s) === nm);
   const famShown = n => { const p = NODES[n.parent]; return !!p && (famOf(p, n.parent, n.name) || p.children.some(c => c !== n.id && famOf(NODES[c], c, n.name))); };
-  const hideScannedMeta = n => hidePlanned(n) || (n.scanned && !hasIdx(n) && (!showIdx || changedMode || famShown(n)));
+  const isTabFile = n => /\.(example|questions)\.md$|^\.env\.example$/.test(n.name || "");   // Example and Questions tab files: rows only with the metadata switch on
+  const hideScannedMeta = n => hidePlanned(n) || (n.scanned && (isTabFile(n) ? (!showIdx || changedMode) : !hasIdx(n) && (!showIdx || changedMode || famShown(n))));
   const walk = (id, depth) => {
     const n = NODES[id]; if (!n || (keep && !keep.has(id)) || hideScannedMeta(n)) return;
     const kids = n._deleted ? [] : kidsOf(id);   // a deleted item stays, struck through, until the sync
@@ -842,9 +843,11 @@ function select(id) {
 /* ---------- sheet: header + tabs ---------- */
 function tabsFor(n) {
   const q = { id: "questions", label: "Questions", n: (n.open_questions || []).length + (n.qa || []).length };
+  // a metadata tab shows only when its file exists next to the item (owner, 2026-10-12): Example, Questions, ASD-STE100
+  const hasQ = !!n.questions_file, hasEx = !!(n.example && n.example.file) || !!jobsTabOf(n) || !!linksTabOf(n);
   const t = n.type === "folder"
-    ? [{ id: "file", label: "Contents" }, q]
-    : [{ id: "file", label: "File" }, { id: "example", label: "Example" }, q];
+    ? [{ id: "file", label: "Contents" }, ...(hasQ ? [q] : [])]
+    : [{ id: "file", label: "File" }, ...(n.asd_file ? [{ id: "asd", label: "ASD-STE100" }] : []), ...(hasEx ? [{ id: "example", label: "Example" }] : []), ...(hasQ ? [q] : [])];
   const js = jobsScope(n);
   if (js) t.unshift({ id: "jobs", label: js.label, n: js.files.reduce((a, f) => a + jobRowsOf(f).length, 0) });
   if (n.agent) t.unshift({ id: "overview", label: "Overview" }, { id: "agents", label: "Agents" });
@@ -917,6 +920,7 @@ function panelHTML(n) {
   if (tab === "example") return exampleTab(n);
   if (tab === "how") return howTab(n);
   if (tab === "questions") return questionsTab(n);
+  if (tab === "asd") return blk("", `<div class="howfile"><div class="filebar solo"><span class="mono">${esc(n.asd_file)}</span><span class="src">The README again in ASD-STE100, to compare with README.md</span></div><div class="howbody">${md(n.asd_md || "")}</div></div>`);
   if (tab.startsWith("c:")) return customTab(n, tab.slice(2));
   if (tab === "overview") return overviewTab(n);
   if (tab === "agents") return agentsTab(n);
@@ -1199,6 +1203,7 @@ function fileTab(n) {
 function exampleTab(n) {
   const ex = jobsTabOf(n) ? codebox({ lang: "json", title: `${n.name}, built from the Jobs tab${TABLE_EDIT[n.id + "|jobs"] ? " (includes unsaved edits)" : ""}`, body: jobsJSON(n), note: n.example && n.example.note })
     : linksTabOf(n) ? codebox({ lang: "json", title: `${n.name}, built from the Links tab${TABLE_EDIT[n.id + "|links"] ? " (includes unsaved edits)" : ""}`, body: linksJSON(n), note: n.example && n.example.note })
+    : n.example && n.example.file && n.example.lang === "markdown" ? `<div class="howfile"><div class="filebar solo"><span class="mono">${esc(n.example.file)}</span></div><div class="howbody">${md(n.example.body)}</div></div>`
     : n.example ? codebox(n.example) : "";
   const f = (n.fields || []).length ? `<div class="fieldtbl-wrap"><table class="tbl"><thead><tr><th>Field</th><th>Values</th><th>Example</th><th>What it is for</th></tr></thead><tbody>${n.fields.map(r => `<tr><td class="k">${esc(r.key)}</td><td class="v">${esc(r.values || "")}</td><td class="ex">${esc(r.example || "")}</td><td>${inline(r.meaning || "")}</td></tr>`).join("")}</tbody></table></div>` : "";
   if (n.example && n.example.kind === "outline" && !jobsTabOf(n) && !linksTabOf(n))
@@ -1334,6 +1339,10 @@ function howTab(n) {
 }
 
 function questionsTab(n) {
+  const qf = n.questions_file ? blk("", `<div class="howfile"><div class="filebar solo"><span class="mono">${esc(n.questions_file)}</span></div><div class="howbody">${md(n.questions_md || "")}</div></div>`) : "";
+  return qf + questionsTabOld(n);
+}
+function questionsTabOld(n) {
   const oq = (n.open_questions || []);
   const open = oq.length ? `<div class="openq">${oq.map((q, i) => `<div class="item"><span>${inline(q)}</span><button class="btn" type="button" data-discuss="${i}">Discuss</button></div>`).join("")}</div>` : `<p class="note-muted">No open questions.</p>`;
   const qa = (n.qa || []).slice().reverse();

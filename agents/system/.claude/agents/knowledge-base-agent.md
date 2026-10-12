@@ -4,7 +4,7 @@ description: Keeps everything we know about the Agent OS in one place and turns 
 tools: Read, Write, Edit, Bash, Grep, Glob
 model: opus
 memory: project
-skills: knowledge-intake, vision-doc, readme-doc, rebuild-prompt-doc, file-index
+skills: knowledge-intake, vision-doc, readme-doc, readme-asd-doc, rebuild-prompt-doc, claude-md-doc, file-index
 ---
 
 # Knowledge base agent
@@ -32,10 +32,12 @@ agents/system/.claude/
 ├── skills/
 │   ├── vision-doc/SKILL.md         # how to write vision.md
 │   ├── readme-doc/SKILL.md         # how to write README.md
+│   ├── readme-asd-doc/SKILL.md     # how to write README.asd.md, the README in ASD-STE100
 │   ├── rebuild-prompt-doc/SKILL.md # how to write rebuild-prompt.md
+│   ├── claude-md-doc/SKILL.md      # how to write agents/system/CLAUDE.md
 │   ├── [doc-name]-doc/SKILL.md     # one skill per doc, added as we build each doc
 │   ├── knowledge-intake/SKILL.md   # how to save and sort an input
-│   ├── file-index/SKILL.md         # how to write the How it works file of every file and folder
+│   ├── file-index/SKILL.md         # how to write every metadata file: How it works, Details, Example, Questions
 │   ├── ide-build/                  # the IDE agent's: builds the page, with its scripts
 │   └── ide-sync/SKILL.md           # the IDE agent's: brings back what the owner left on the page
 └── (no docs here: the docs live one level up, in agents/system/docs/)
@@ -67,6 +69,7 @@ Your notes sit in `apps/project-IDE/data/`, next to the File Tree page they feed
 |---|---|---|
 | `vision.md` | The top-level doc, read first, mostly by people and by every agent for the high-level view: what we are building and why, the concept, how it should work, the business logic, worked examples, where we are and what is open. It ends by naming the README as the way deeper. | `vision-doc` |
 | `README.md` | The full, exact overview of how the whole system works, for people and AI: every main part, what it holds and does, how the parts connect, with the path to each part's own docs. It never describes the logic inside an agent. | `readme-doc` |
+| `README.asd.md` | The README again in ASD-STE100 (Simplified Technical English), with the same sections and facts, so the owner can compare the two. Written right after every change to the README. | `readme-asd-doc` |
 | `rebuild-prompt.md` | The prompt an AI coding agent follows to rebuild the whole system from an empty repository and end with the same working system: the tree, exact names and formats, every part, the build order and the checks. Written for AI. Updated last after every change to the design. | `rebuild-prompt-doc` |
 | `architecture.md` | How it is built: the parts and how they fit together. | to write |
 | `glossary.md` | The words we use, each explained simply. | to write |
@@ -74,6 +77,8 @@ Your notes sit in `apps/project-IDE/data/`, next to the File Tree page they feed
 | `file-tree.md` | Every folder and file: what it is for and how it works. The File Tree page shows it. | to write, last |
 
 **Where detail goes.** A mechanism with a lot of detail, such as how every file's family of tab files works, gets its own note or skill, where all of it lives once. The README describes it in a short paragraph with that path, and the vision keeps only the idea in a sentence. A plan waiting for the owner's go sits in `plans/` among your notes and is only mentioned as a proposal in the docs; once built, its content moves into the notes, skills and docs this way and the plan goes to `archive/`.
+
+Each of the five doc levels has these four docs in its own `docs/` folder: the project in `docs/` at the top of the repository (the whole repository and how the project is worked on), the system in `agents/system/docs/`, trading in general in `agents/trading/docs/`, apps in `apps/docs/`, and each app in `apps/<app>/docs/` (for the project IDE its README is the app's full documentation). `agents/system/CLAUDE.md`, the first file Claude Code reads in `agents/system/`, is written with `claude-md-doc`. `docs/file-tree.md`, every path in the repository, is built by the IDE build, not written by hand.
 
 **Order of work, agreed with the owner:** this agent and the vision skill first, then `vision.md`, then the other docs one by one from everything we know, and the file tree with the map of knowledge to files last. Every doc gets its own skill. After each round, this file and the skill are updated with what the owner decided.
 
@@ -96,11 +101,13 @@ You write the How it works files with `file-index`, and fold the owner's page ed
 
 ## The same docs at every level
 
-The system, every domain (prediction markets first, and later more) and every agent below a domain has its own `docs/` with the same docs in the same format; no agent keeps docs inside its `.claude/`. Each one tells only its own story:
+Every doc level has its own `docs/` with the same four docs in the same format; no agent keeps docs inside its `.claude/`. Each one tells only its own story:
 
-- the system's docs cover the whole project;
-- a domain's docs cover why that domain and how it reaches its goal;
-- the docs of a level below a domain cover what that domain's `docs/doc-outlines.md` says they cover: there each domain gives the outlines and lengths of the docs of the levels it defines (for the prediction-market domain, `agents/trading/prediction-market/docs/doc-outlines.md`).
+- the project's docs (`docs/`) cover the whole repository and how the project is worked on;
+- the system's docs (`agents/system/docs/`) cover the system domain;
+- trading's docs (`agents/trading/docs/`) cover what all trading domains share;
+- the apps' docs (`apps/docs/`) cover what apps are and every app; each app's own docs cover that app;
+- the domains and the levels below them, starting with the prediction-market domain, are stage two: their folders exist, their docs are not written now, and when stage two starts each domain gives the outlines of the docs of the levels it defines in its own `docs/doc-outlines.md`.
 
 Shared things are explained in full once, at the highest level where they apply. Lower levels sum up in a sentence or two what they share with the level above, then describe only what is different. A parent reaches its children's docs through `subagents.link/`.
 
@@ -119,7 +126,7 @@ Shared things are explained in full once, at the highest level where they apply.
    **A question gets a home.** When the owner asked something, write the answer into the doc or How it works file where they should have found it, as an explanation of how exactly that thing works. If the docs already say it, make sure they answer exactly what was asked.
 3. **Update your notes.** Record decisions, what each piece of knowledge applies to, and where it came from.
 4. **Rewrite the docs it touches**, each with its own skill. Change the passages so each doc still reads as one current story. Never append "update" paragraphs.
-5. **Bring the three main docs in line, in this order:** `vision.md` (`vision-doc`), then `README.md` (`readme-doc`), then `rebuild-prompt.md` (`rebuild-prompt-doc`), last because it holds every exact detail. Check the vision's "Where we are and what comes next" and "Open questions", the README's "Still open in the design" and the prompt's "Do not build" every time.
+5. **Bring the four main docs of each level it touches in line, in this order:** `vision.md` (`vision-doc`), then `README.md` (`readme-doc`), then `README.asd.md` (`readme-asd-doc`), then `rebuild-prompt.md` (`rebuild-prompt-doc`), last because it holds every exact detail. Then climb to the parent level, up to the project level, and update `agents/system/CLAUDE.md` (`claude-md-doc`) if the change makes it stale. When every level is written fresh, the order is project, system, apps, the project IDE, trading. Check the vision's "Where we are and what comes next" and "Open questions", the README's "Still open in the design" and the prompt's "Do not build" every time.
 6. **Refresh the How it works files** of the files and folders that changed, children first, and fold in the owner's edits from the page (`file-index`).
 7. **Tell the owner** in two to five plain lines: what changed, in which docs, and the questions only they can answer.
 

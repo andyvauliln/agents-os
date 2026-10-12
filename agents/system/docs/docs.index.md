@@ -1,18 +1,39 @@
 ---
 about: agent-os/agents/system/docs/
 node: n-2
-basis: 47793c6459f8
-written: 2026-10-07T19:01:11Z
+basis: 0ce9b58830db
+written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T19:51:44Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # docs/
 
-## Summary
+## What it is
 
-The system's docs, for people and for every agent. The three main docs come first: the vision, read first; the README, every part of the system with the path to its docs; and the rebuild prompt, the spec an AI rebuilds the system from. Beside them, the inputs vision lists every requirement from the owner's own messages by scope, with only the newest form of each, in Simplified Technical English. Next to them are the topic notes agents read while they work: overview, architecture, conventions, safety, data schemas, flows, metrics, glossary, roadmap and feature map, the runbooks in `how-to/`, the common knowledge in `common/` and the lists in `index/`. Each domain adds its own notes in its own `docs/`, such as the prediction-market domain's `trading-` notes, reached through `subagents.link/`. The project's records live in `apps/project-IDE/data/`.
+The system domain's docs: four docs about the system, read in order. `vision.md` says why and how the system should work; `README.md` maps every part exactly with the path to its docs; `README.asd.md` is the README again in ASD-STE100 for the owner to compare; `rebuild-prompt.md` is the spec an AI rebuilds `agents/system/` from. Next to each sit its notes, an outline (`x.example.md`) and its open questions (`x.questions.md`). `subagents.link/` holds one folder link per domain's docs.
+
+## Who looks after it
+
+The knowledge base agent writes the four docs and their notes; the owner can edit them on the File Tree page; `relink` makes the child links.
+
+## When and how it changes
+
+After every owner input or change that touches the system, the docs are updated in the order vision, README, README.asd, rebuild prompt, then the notes of each changed doc.
+
+## Who uses it, and when
+
+The owner, every Claude that works on the system (through `CLAUDE.md`'s reading list), and the system manager when it reads its domains' docs through `subagents.link/`.
+
+## Where it is mentioned
+
+`agents/system/CLAUDE.md` (Read first, and the table of docs); the project's README; the rebuild prompts of the project and of the system.
+
+## Related knowledge
+
+The project's docs are in `docs/`; trading's in `agents/trading/docs/`; the apps' in `apps/docs/` and `apps/project-IDE/docs/`. The records and topic notes the docs are built from are in the planning area, `vision/docs/`.
 
 ## Keep in mind
 
-- When anything changes (an owner message, an answer, a file), run it through the knowledge base agent so every doc stays current.
-- When a lower level's docs change, check the docs above it, up to the system's, in the order vision, README, rebuild prompt.
+- When a lower level's docs change, check these four, then the project's.
+- When you add a doc here, add its notes and list it in the README and the rebuild prompt.
+- When you write for people, use no reference numbers, ids or decision codes.

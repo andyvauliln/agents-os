@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/tests/agents/
 node: n-19.12.1
-basis: 294cd0d2ab1c
+basis: 825bb7120551
 written: 2026-10-01T00:58:18Z
 by: summary-worker
-confirmed: 2026-10-07T18:57:42Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # agents/
 

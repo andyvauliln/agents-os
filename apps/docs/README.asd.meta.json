@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "about": "The apps README again in ASD-STE100 Simplified Technical English, same content and section order, to compare with README.md.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent, from README.md",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "the owner, to compare with README.md",
+    "readers who prefer controlled English",
+    "agents"
+  ],
+  "changes_when": "README.md changes; always in the same change",
+  "related": [
+    {
+      "path": "apps/docs/README.md",
+      "how": "built from; the source, which wins"
+    },
+    {
+      "path": "vision/archive/2026-10-12/claude-docs/inputs-vision.md",
+      "how": "model for the ASD-STE100 style"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-055",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261012-stage1"
+    ],
+    "notes": [
+      "conv-apps"
+    ]
+  },
+  "update_with": [
+    {
+      "path": "apps/docs/README.md",
+      "how": "never changed alone: this file follows it"
+    },
+    {
+      "path": "vision/tree/agent-os/apps/docs/README.asd.index.md",
+      "how": "How it works refreshed"
+    }
+  ],
+  "inherits": [
+    "conv-apps"
+  ],
+  "features": [
+    "Apps and outside code"
+  ],
+  "views": [],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  },
+  "tree_number": "43.1.3"
+}

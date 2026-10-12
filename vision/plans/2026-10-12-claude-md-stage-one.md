@@ -1,7 +1,7 @@
 # Plan: CLAUDE.md for the system, the docs at every level, stage one
 
 - Input: in-20261012-stage1 (2026-10-12), word for word in `docs/inputs/2026-10-12-claude-md-stage-one.md`
-- Status: proposed, waiting for the owner's go
+- Status: built 2026-10-12 on the defaults below; the defaults wait for the owner's word
 - Paths are from the top of the repository (the owner's `agent-oss/`).
 
 ## What the owner wants

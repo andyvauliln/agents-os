@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/strategy-1-agent/.claude/agents/
 node: n-21.1.1
-basis: 3d67b0da8e21
+basis: cdd7764501b2
 written: 2026-10-01T10:43:38Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T09:57:03Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # agents/
 

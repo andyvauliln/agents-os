@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/system/.claude/skills/
 node: n-10.1.2
-basis: 497dd8edb52e
+basis: e64e5d527469
 written: 2026-10-06T21:55:22Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # skills/
 

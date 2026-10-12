@@ -1,8 +1,10 @@
 ---
 about: agent-os/apps/docs/vision.md
 node: n-43.1.1
+basis: fda20e2e2095
 written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # vision.md
 

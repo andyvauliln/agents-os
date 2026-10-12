@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/.claude/workflows/
 node: n-19.1.10
-basis: 73daa31ce2ea
+basis: f50130a6e5c3
 written: 2026-10-01T00:53:39Z
 by: summary-worker
-confirmed: 2026-10-07T18:57:42Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # workflows/
 

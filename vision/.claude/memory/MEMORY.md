@@ -3,6 +3,7 @@
 - Name and subject: the Agent OS, root `agent-os/` (renamed from trading-os 2026-10-07), for agents of any kind (D-054, D-056). GitHub repo keeps the name trading-oss until the owner renames it.
 - [Trading lives in the prediction-market domain](agent-os-trading-domain.md): system level general; later trading domains copy pm; copy trading dropped (D-056, D-058, done 2026-10-07).
 - Done 2026-10-09 (D-059, page v48): `agents/trading/` holds `prediction-market/` (copytrading later) and `docs/` with its 3 docs (planning copies vision/docs/trading/); system README and rebuild prompt general; removed trading text in vision/archive/2026-10-09/*-trading-parts.md for pm's own docs later.
+- [Stage one](stage-one.md): CLAUDE.md in agents/system; docs at five levels with README.asd twins; prediction-market folders only until stage two (D-064, 2026-10-12).
 - Repository: https://github.com/andyvauliln/trading-oss ONLY (not social_media_app).
 - Published 2026-10-07: whole project pushed to branch `claude/project-thread-dj0xqs` under `vision/`, with `HANDOFF.md` at top, for continuing from another account. Keep token use low.
 - [Planned items are real files](planned-items-are-real-files.md): materialize.py each build; PR #4 merged 2026-10-12.

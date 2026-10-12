@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/.claude/rules/
 node: n-19.1.8
-basis: 6c239476e438
+basis: 314775554546
 written: 2026-10-01T00:53:39Z
 by: summary-worker
-confirmed: 2026-10-07T18:57:42Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # rules/
 

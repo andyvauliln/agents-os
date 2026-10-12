@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-09T15:08:50Z",
+ "built": "2026-10-12T11:30:36Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "d5c1f64df638",
+   "hash": "24c643f902e5",
    "entries": []
   },
   "conventions.md": {
@@ -147,7 +147,7 @@
   },
   "decisions.md": {
    "title": "Agent OS: Decisions (v1.13)",
-   "hash": "af740bd745b7",
+   "hash": "069d0c0d0d9a",
    "entries": [
     "d-001",
     "d-002",
@@ -209,7 +209,8 @@
     "d-058",
     "d-059",
     "d-060",
-    "d-061"
+    "d-061",
+    "d-062"
    ]
   },
   "feature-map.md": {
@@ -2771,7 +2772,6 @@
     "n-10.8.1.2",
     "n-10.8.2",
     "n-10.8.2.1",
-    "n-10.8.2.2",
     "n-10.9",
     "n-10.9.1",
     "n-10.9.2",
@@ -2781,7 +2781,6 @@
     "n-19.12.1.2",
     "n-19.12.2",
     "n-19.12.2.1",
-    "n-19.12.2.2",
     "n-19.13",
     "n-19.13.1",
     "n-19.13.2",
@@ -2791,7 +2790,6 @@
     "n-21.12.1.2",
     "n-21.12.2",
     "n-21.12.2.1",
-    "n-21.12.2.2",
     "n-21.13",
     "n-21.13.1",
     "n-21.13.2",
@@ -2802,7 +2800,6 @@
     "n-49.1.2",
     "n-49.2",
     "n-49.2.1",
-    "n-49.2.2",
     "n-50",
     "n-50.1",
     "n-50.2"
@@ -3271,6 +3268,7 @@
     "n-2.2",
     "n-2.21",
     "n-2.22",
+    "n-2.23",
     "n-2.3",
     "n-2.4",
     "n-2.5",
@@ -4705,13 +4703,9 @@
    "hash": "24cf8abc12bc",
    "nodes": [
     "n-10.8.1.2",
-    "n-10.8.2.2",
     "n-19.12.1.2",
-    "n-19.12.2.2",
     "n-21.12.1.2",
-    "n-21.12.2.2",
-    "n-49.1.2",
-    "n-49.2.2"
+    "n-49.1.2"
    ],
    "inherited_by": [],
    "chars": 755
@@ -6837,6 +6831,26 @@
    ],
    "inherited_by": [],
    "chars": 1413
+  },
+  "d-062": {
+   "id": "d-062",
+   "doc": "decisions.md",
+   "heading": "D-062: An inputs vision: every owner requirement by scope, in ASD-STE100",
+   "level": 3,
+   "line": 620,
+   "applies_raw": [
+    "[2.23]"
+   ],
+   "sources": [
+    "in-20261009-1938"
+   ],
+   "status": "decided",
+   "hash": "cec9016f148c",
+   "nodes": [
+    "n-2.23"
+   ],
+   "inherited_by": [],
+   "chars": 952
   },
   "fm-data-collection-workers": {
    "id": "fm-data-collection-workers",
@@ -14206,7 +14220,6 @@
     "n-10.8.1.2",
     "n-10.8.1.3",
     "n-10.8.2.1",
-    "n-10.8.2.2",
     "n-10.8.2.3",
     "n-14.1",
     "n-19.12",
@@ -14214,7 +14227,6 @@
     "n-19.12.1.2",
     "n-19.12.1.3",
     "n-19.12.2.1",
-    "n-19.12.2.2",
     "n-19.12.2.3",
     "n-2.11.7",
     "n-21.12",
@@ -14222,7 +14234,6 @@
     "n-21.12.1.2",
     "n-21.12.1.3",
     "n-21.12.2.1",
-    "n-21.12.2.2",
     "n-21.12.2.3",
     "n-30.2",
     "n-34.2",
@@ -14231,7 +14242,6 @@
     "n-49.1.2",
     "n-49.1.3",
     "n-49.2.1",
-    "n-49.2.2",
     "n-49.2.3"
    ],
    "inherited_by": [],
@@ -14595,6 +14605,7 @@
     "n-2.20.1",
     "n-2.21",
     "n-2.22",
+    "n-2.23",
     "n-2.3",
     "n-2.4",
     "n-2.5",
@@ -14664,6 +14675,7 @@
     "n-2.20.1",
     "n-2.21",
     "n-2.22",
+    "n-2.23",
     "n-2.3",
     "n-2.4",
     "n-2.5",
@@ -20318,6 +20330,16 @@
    "status": "file-doc",
    "hash": "7ea77bd5d60a"
   },
+  "ft-2.23": {
+   "id": "ft-2.23",
+   "doc": "file-tree.md",
+   "heading": "[2.23] `docs/inputs-vision.md` (owner, 2026-10-09, D-062)",
+   "nums": [
+    "2.23"
+   ],
+   "status": "file-doc",
+   "hash": "f8d3cfe4a7d5"
+  },
   "ft-2.3": {
    "id": "ft-2.3",
    "doc": "file-tree.md",
@@ -22414,7 +22436,7 @@
     "idx-agents"
    ],
    "inherited": [],
-   "basis": "1515b9c3b881",
+   "basis": "9334cbf7b822",
    "summary_state": "fresh"
   },
   "n-10.1": {
@@ -23274,6 +23296,7 @@
     "n-2.2",
     "n-2.1",
     "n-2.22",
+    "n-2.23",
     "n-2.3",
     "n-2.21",
     "n-2.4",
@@ -23320,7 +23343,7 @@
     "howto-process-an-input-checks"
    ],
    "inherited": [],
-   "basis": "e086bf7a362e",
+   "basis": "47793c6459f8",
    "summary_state": "fresh"
   },
   "n-2.2": {
@@ -23418,6 +23441,26 @@
     "howto-process-an-input-checks"
    ],
    "basis": "f6ea621dc9a1",
+   "summary_state": "fresh"
+  },
+  "n-2.23": {
+   "num": "2.23",
+   "path": "agents/system/docs/inputs-vision.md",
+   "name": "inputs-vision.md",
+   "type": "file",
+   "parent": "n-2",
+   "children": [],
+   "file_doc": "ft-2.23",
+   "same_as": null,
+   "direct": [
+    "conv-docs-format",
+    "d-062"
+   ],
+   "inherited": [
+    "howto-process-an-input-steps",
+    "howto-process-an-input-checks"
+   ],
+   "basis": "888506bd8399",
    "summary_state": "fresh"
   },
   "n-2.3": {
@@ -25534,19 +25577,15 @@
   "n-10.8.2.2": {
    "num": "10.8.2.2",
    "path": "agents/system/tests/scripts/[test-id].test.[js|py]",
-   "name": "[test-id].test.[js|py]",
+   "name": "[test-id].test.[js-py]",
    "type": "file",
    "parent": "n-10.8.2",
    "children": [],
    "file_doc": null,
    "same_as": null,
-   "direct": [
-    "conv-tests-research",
-    "schema-test-files",
-    "howto-add-or-run-tests-steps"
-   ],
+   "direct": [],
    "inherited": [],
-   "basis": "9045f3c4a378",
+   "basis": "33c78a830ca8",
    "summary_state": "fresh"
   },
   "n-10.8.2.3": {
@@ -28037,19 +28076,15 @@
   "n-19.12.2.2": {
    "num": "19.12.2.2",
    "path": "agents/trading/prediction-market/tests/scripts/[test-id].test.[js|py]",
-   "name": "[test-id].test.[js|py]",
+   "name": "[test-id].test.[js-py]",
    "type": "file",
    "parent": "n-19.12.2",
    "children": [],
    "file_doc": null,
    "same_as": null,
-   "direct": [
-    "conv-tests-research",
-    "schema-test-files",
-    "howto-add-or-run-tests-steps"
-   ],
+   "direct": [],
    "inherited": [],
-   "basis": "9045f3c4a378",
+   "basis": "33c78a830ca8",
    "summary_state": "fresh"
   },
   "n-19.12.2.3": {
@@ -29731,19 +29766,15 @@
   "n-21.12.2.2": {
    "num": "21.12.2.2",
    "path": "agents/trading/prediction-market/strategy-1-agent/tests/scripts/[test-id].test.[js|py]",
-   "name": "[test-id].test.[js|py]",
+   "name": "[test-id].test.[js-py]",
    "type": "file",
    "parent": "n-21.12.2",
    "children": [],
    "file_doc": null,
    "same_as": null,
-   "direct": [
-    "conv-tests-research",
-    "schema-test-files",
-    "howto-add-or-run-tests-steps"
-   ],
+   "direct": [],
    "inherited": [],
-   "basis": "9045f3c4a378",
+   "basis": "33c78a830ca8",
    "summary_state": "fresh"
   },
   "n-21.12.2.3": {
@@ -32027,19 +32058,15 @@
   "n-49.2.2": {
    "num": "49.2.2",
    "path": "agents/trading/prediction-market/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/tests/scripts/[test-id].test.[js|py]",
-   "name": "[test-id].test.[js|py]",
+   "name": "[test-id].test.[js-py]",
    "type": "file",
    "parent": "n-49.2",
    "children": [],
    "file_doc": null,
    "same_as": null,
-   "direct": [
-    "conv-tests-research",
-    "schema-test-files",
-    "howto-add-or-run-tests-steps"
-   ],
+   "direct": [],
    "inherited": [],
-   "basis": "9045f3c4a378",
+   "basis": "33c78a830ca8",
    "summary_state": "fresh"
   },
   "n-49.2.3": {
@@ -35157,7 +35184,155 @@
    "entries": [
     "d-061"
    ]
+  },
+  "in-20261009-1455": {
+   "at": "2026-10-09T14:55:12Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-09-1455-merge-pr-2.md",
+   "categories": [
+    "process"
+   ],
+   "summary": "The owner asks Claude to merge the open pull request (PR #2) without waiting for them.",
+   "processed_into": [
+    "PR #2 merged (merge b3ca51b)"
+   ],
+   "entries": []
+  },
+  "in-20261009-1458": {
+   "at": "2026-10-09T14:58:02Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-09-1458-where-is-vision.md",
+   "categories": [
+    "question",
+    "structure"
+   ],
+   "summary": "The owner asks where the vision/ folder went.",
+   "processed_into": [
+    "answered in chat; led to in-20261009-1459"
+   ],
+   "entries": []
+  },
+  "in-20261009-1459": {
+   "at": "2026-10-09T14:59:30Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-09-1459-real-tree-always.md",
+   "categories": [
+    "ui",
+    "structure"
+   ],
+   "summary": "The owner restates the rule: the File Tree page must always show the real file tree on disk, so vision/ must be on it.",
+   "processed_into": [
+    "D-061 (updated)",
+    "tools/enrich.py (scan of every folder)",
+    "page v52",
+    "PR #3"
+   ],
+   "entries": []
+  },
+  "in-20261009-1714": {
+   "at": "2026-10-09T17:14:45Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-09-1714-metadata-switch-real-files.md",
+   "categories": [
+    "ui",
+    "question"
+   ],
+   "summary": "The owner asks why real .meta.json files stay in the tree when the metadata switch is off.",
+   "processed_into": [
+    "explorer/file-tree-explorer.html",
+    "page v53",
+    "changelog 2026-10-09"
+   ],
+   "entries": []
+  },
+  "in-20261009-1938": {
+   "at": "2026-10-09T19:38:58Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-09-1938-inputs-check-and-inputs-vision.md",
+   "categories": [
+    "docs-knowledge",
+    "process"
+   ],
+   "summary": "The owner asks to check that every one of their inputs is stored as a file, then write system/docs/inputs-vision.md: a detailed overview of the project from all their inputs, without repeated or overruled logic, divided by scope (system agent, common file rules and so on), in ASD-STE100 style.",
+   "processed_into": [
+    "D-062",
+    "vision/.claude/docs/inputs-vision.md"
+   ],
+   "entries": [
+    "d-062"
+   ]
+  },
+  "in-20261009-2005": {
+   "at": "2026-10-09T20:05:16Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-09-2005-edit-in-read-view.md",
+   "categories": [
+    "ui"
+   ],
+   "summary": "The owner wants to edit files directly in the Read view of the File tab.",
+   "processed_into": [
+    "explorer/file-tree-explorer.html",
+    "inputs-vision.md TAB-17",
+    "page v55"
+   ],
+   "entries": []
+  },
+  "in-20261009-2219": {
+   "at": "2026-10-09T22:19:59Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-09-2219-project-ide-on-server.md",
+   "categories": [
+    "question",
+    "ui"
+   ],
+   "summary": "The owner asks whether starting the project IDE now works the same as the page on claude.ai.",
+   "processed_into": [
+    "server/server.py",
+    "server.config.json",
+    "tools/enrich.py"
+   ],
+   "entries": []
+  },
+  "in-20261012-tree": {
+   "at": "2026-10-12",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-12-pull-tree-mismatch.md",
+   "categories": [
+    "ui",
+    "structure"
+   ],
+   "summary": "After a pull, the files on disk differ from the page's tree.",
+   "processed_into": [
+    "explorer/file-tree-explorer.html",
+    "tools/enrich.py",
+    ".gitignore"
+   ],
+   "entries": []
+  },
+  "in-20261012-real": {
+   "at": "2026-10-12",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-12-planned-are-real-files.md",
+   "categories": [
+    "structure",
+    "ui"
+   ],
+   "summary": "Everything planned on the page should already be real files.",
+   "processed_into": [
+    "tools/materialize.py",
+    "tools/enrich.py",
+    "server/server.py"
+   ],
+   "entries": []
   }
  },
- "problems": []
+ "problems": [
+  "conventions.md:196 conv-tests-research: applies 'name:[test-id].test.[js|py]' matches nothing",
+  "data-schemas.md:609 schema-test-files: applies 'name:[test-id].test.[js|py]' matches nothing",
+  "how-to/add-or-run-tests.md:5 howto-add-or-run-tests-steps: applies 'name:[test-id].test.[js|py]' matches nothing",
+  "node n-10.8.2.2 (agents/system/tests/scripts/[test-id].test.[js|py]) has no file doc and no knowledge",
+  "node n-19.12.2.2 (agents/trading/prediction-market/tests/scripts/[test-id].test.[js|py]) has no file doc and no knowledge",
+  "node n-21.12.2.2 (agents/trading/prediction-market/strategy-1-agent/tests/scripts/[test-id].test.[js|py]) has no file doc and no knowledge",
+  "node n-49.2.2 (agents/trading/prediction-market/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/tests/scripts/[test-id].test.[js|py]) has no file doc and no knowledge"
+ ]
 }

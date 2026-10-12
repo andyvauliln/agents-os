@@ -466,6 +466,7 @@ The project IDE lets the owner manage, analyse and monitor the system. It gives 
 | UI-06 | A "metadata" switch shows or hides all metadata files. |
 | UI-07 | If a folder contains real files, the folder is real. |
 | UI-08 | The page shows only one status for now: "changed". Show it after each page request. |
+| UI-09 | Every planned file and folder exists in the repository. The tree shows only the files in git. Only the keys folder is not in git. |
 
 ### 15.2 Tabs of a file
 

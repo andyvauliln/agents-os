@@ -1991,6 +1991,46 @@
     "tools/enrich.py"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261012-tree",
+   "at": "2026-10-12",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-12-pull-tree-mismatch.md",
+   "chars": 94,
+   "categories": [
+    "ui",
+    "structure"
+   ],
+   "summary": "After a pull, the files on disk differ from the page's tree.",
+   "processed_into": [
+    "explorer/file-tree-explorer.html",
+    "tools/enrich.py",
+    ".gitignore"
+   ],
+   "answered": true
+  },
+  {
+   "id": "in-20261012-real",
+   "at": "2026-10-12",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-12-planned-are-real-files.md",
+   "chars": 145,
+   "categories": [
+    "structure",
+    "ui"
+   ],
+   "summary": "Everything planned on the page should already be real files.",
+   "processed_into": [
+    "tools/materialize.py",
+    "tools/enrich.py",
+    "server/server.py"
+   ],
+   "answered": true
   }
  ]
 }

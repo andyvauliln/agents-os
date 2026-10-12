@@ -182,6 +182,11 @@ class WriteThrough:
             with open(p, "w", encoding="utf-8") as f:
                 f.write(text)
             done.append(os.path.relpath(p, self.repo))
+            real = self._safe(n["real_file"]) if n.get("real_file") else None   # the real file made from this draft
+            if real and real != p:
+                with open(real, "w", encoding="utf-8") as f:
+                    f.write(text)
+                done.append(os.path.relpath(real, self.repo))
         how = fields.get("how_md")
         p = self.index_of(n) if isinstance(how, str) and how.strip() and how != old.get("how_md") else None
         if p:

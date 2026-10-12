@@ -822,12 +822,18 @@ for x in out_nodes:
         x["content_source"] = f"draft in the project folder: vision/docs/{DRAFTS[x['num']]}"
         x["src_file"] = f"vision/docs/{DRAFTS[x['num']]}"   # where an edit on the owner's server is written (server.py)
     rel = x["path"][len("agent-os/"):] if x["path"].startswith("agent-os/") else None
-    if rel and x["type"] == "file" and "[" not in rel and os.path.isfile(os.path.join(REPO, rel)):
-        x["content"] = open(os.path.join(REPO, rel), encoding="utf-8").read()
-        x["content_source"] = f"repo andyvauliln/trading-oss, main: {rel}"
-        x["src_file"] = rel
+    if rel is not None:
+        rel = rel.replace("|", "-")   # the name on disk (materialize.py): '|' is not allowed in Windows file names
+    if rel and x["type"] == "file" and os.path.isfile(os.path.join(REPO, rel)):
         x["exists"] = True
-    if rel is not None and x["type"] == "folder" and "[" not in rel and os.path.isdir(os.path.join(REPO, rel.rstrip("/"))):
+        x["name"] = x["name"].replace("|", "-")   # show the name it has on disk
+        if x.get("src_file"):          # a planned file made from its draft (materialize.py): the draft stays the source
+            x["real_file"] = rel
+        else:
+            x["content"] = open(os.path.join(REPO, rel), encoding="utf-8").read()
+            x["content_source"] = f"repo andyvauliln/trading-oss, main: {rel}"
+            x["src_file"] = rel
+    if rel is not None and x["type"] == "folder" and os.path.isdir(os.path.join(REPO, rel.rstrip("/"))):
         x["exists"] = True
     if x["num"] in VISION_FILES:   # other drafts in vision/ (D-041): the build scripts, the page data's overrides
         f = os.path.join(os.path.dirname(DOCS_DIR.rstrip("/")), VISION_FILES[x["num"]])
@@ -835,6 +841,7 @@ for x in out_nodes:
             x["content"] = open(f, encoding="utf-8").read()
             x["content_source"] = f"draft in the project folder: vision/{VISION_FILES[x['num']]}"
             x["src_file"] = f"vision/{VISION_FILES[x['num']]}"
+            if rel and os.path.isfile(os.path.join(REPO, rel)): x["real_file"] = rel
     if x["num"] == "53.1.1" and x["content"] is not None:   # the page shows its own source (owner, 2026-10-05 14:21)
         x["content_source"] = "the source of this page, as published: vision/explorer/file-tree-explorer.html"
     if x["num"] == "53.1.2":   # the data cannot hold itself: the page shows the data file it loaded (owner, 2026-10-05 14:21)
@@ -847,6 +854,7 @@ for x in out_nodes:
             x["content"] = open(f, encoding="utf-8").read()
             x["content_source"] = f"draft in the project folder: vision/{CLAUDE_DRAFTS[x['num']]}"
             x["src_file"] = f"vision/{CLAUDE_DRAFTS[x['num']]}"
+            if rel and os.path.isfile(os.path.join(REPO, rel)): x["real_file"] = rel
             x["example"] = None
     if x["num"] in DOC_SKILLS:   # a doc's Example is the outline in its skill (owner, 2026-10-05)
         f = os.path.join(os.path.dirname(DOCS_DIR.rstrip("/")), DOC_SKILLS[x["num"]])
@@ -908,17 +916,25 @@ print("knowledge:", len(KNOWLEDGE), "entries;", sum(1 for x in out_nodes if x["h
 # (owner, 2026-10-09 14:59: "we always should have real represention of file tree on a disk and on ui").
 SCAN_SKIP = {".git", "__pycache__", "node_modules", ".secrets", ".DS_Store"}
 REAL_FILES = {}   # id -> text of a scanned file; written to real-files.json, which the page loads when one is opened
+import subprocess
+try:   # files git ignores (.env.*, logs, local settings) never reach the owner's clone, so the tree leaves them out too
+    _IN_GIT = set(subprocess.run(["git", "-C", REPO, "ls-files", "--cached", "--others", "--exclude-standard"], capture_output=True, text=True, check=True).stdout.split("\n"))
+except (OSError, subprocess.CalledProcessError):
+    _IN_GIT = None
 def _scan(parent):
     rel = parent["path"][len("agent-os/"):]
     d = os.path.join(REPO, rel)
     if not os.path.isdir(d):
         return
-    have = {c["path"] for c in out_nodes if c.get("parent") == parent["id"]}
+    have = {c["path"].replace("|", "-") for c in out_nodes if c.get("parent") == parent["id"]}
     for name in sorted(os.listdir(d)):
-        if name in SCAN_SKIP:
+        if name in SCAN_SKIP and (name != ".secrets" or parent["path"] == "agent-os/"):   # only the real keys folder at the top is left out
             continue
         full = os.path.join(d, name)
         isdir = os.path.isdir(full)
+        relp = os.path.relpath(full, REPO)
+        if _IN_GIT is not None and (relp not in _IN_GIT if not isdir else not any(f.startswith(relp + "/") for f in _IN_GIT)):
+            continue
         path = parent["path"] + name + ("/" if isdir else "")
         if path in have:
             continue
@@ -944,7 +960,7 @@ def _scan(parent):
         if isdir:
             _scan(x)
 for _x in list(out_nodes):
-    if _x["type"] == "folder" and _x.get("exists") and not _x.get("scanned") and not _x.get("link") and "[" not in _x["path"] \
+    if _x["type"] == "folder" and _x.get("exists") and not _x.get("scanned") \
             and _x["path"].startswith("agent-os/"):
         _scan(_x)
 json.dump(REAL_FILES, open(os.path.join(os.path.dirname(os.path.abspath(OUT)), "real-files.json"), "w"), ensure_ascii=False)

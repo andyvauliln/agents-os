@@ -89,7 +89,7 @@ The system itself has its own business logic (test first, versions that compete,
 
 ## Where we are and what comes next
 
-The project is in its first stage. The repository already has the shape of the whole system: every planned file and folder exists, written or still empty, each with its metadata files beside it. The File Tree page works on claude.ai and on the owner's server, shows exactly the files on disk, and lets the owner edit, ask, delete and apply changes. The helpers that keep the knowledge and the page, and the skills that write each kind of doc, are written as drafts. Research on ways to make money on prediction markets, on agents that improve themselves and on how trading agents are built is in the repository. None of the system's agents is built yet.
+The project is in its first stage. The repository already has the shape of the whole system: every planned file and folder exists, written or still empty, each with its metadata files beside it. The File Tree page works on claude.ai and on the owner's server, shows exactly the files on disk, and lets the owner edit, ask, delete and apply changes. The helpers that keep the knowledge and the page, and the skills that write the docs and the metadata, are written as drafts. Research on ways to make money on prediction markets, on agents that improve themselves and on how trading agents are built is in the repository. None of the system's agents is built yet.
 
 Stage one, now:
 

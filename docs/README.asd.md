@@ -10,7 +10,7 @@ The system operates many small agents at the same time. Each agent has one clear
 
 The owner builds the system by vibecoding. The owner tells the AI what to do in plain words. The AI writes the plans, the docs and, later, the code. The owner monitors and controls all the work through the project IDE.
 
-The system does not operate yet. The project is in stage one. In stage one, we complete the project IDE, we make all metadata correct, and we write the docs of the project, the system, trading and the apps. The prediction-market domain is in stage two.
+The system does not operate yet. The project is in stage one. In stage one, we complete the project IDE and we make all metadata correct. We also write the docs of the project, the system, trading and the apps. The prediction-market domain is in stage two.
 
 This document gives a full and exact description of the repository. It tells each part, the contents of each part and the connections between the parts. It tells the steps of a round of work. It gives the location of the docs of each part. The vision, `docs/vision.md`, tells why the project exists, its concept and its rules.
 
@@ -53,7 +53,7 @@ The parts connect in these steps:
 1. The owner gives an input in a chat, by voice or on the File Tree page.
 2. The knowledge base agent keeps the input word for word in the planning area.
 3. The knowledge base agent writes a plan.
-4. After the owner approves the plan, the knowledge base agent updates the docs and the metadata files of each level that the change touches.
+4. The owner approves the plan. Then the knowledge base agent updates the docs and metadata files of each level that the change touches.
 5. The project IDE agent builds the page again from the repository.
 6. The build reads the tree notes and the knowledge in the planning area.
 7. The build copies the drafts and the metadata files to their locations in the tree.
@@ -131,7 +131,7 @@ Each doc has its How it works file and its Details file next to it. The four wri
 - `x.example.md` gives the outline of the doc: the headings and one line about the content of each heading.
 - `x.questions.md` gives the open questions for the owner about the doc.
 
-The knowledge base agent writes these docs with its doc skills: `vision-doc`, `readme-doc`, `rebuild-prompt-doc` and a skill for the ASD-STE100 version. The docs change when an input changes the full project. Examples are a change to the levels, the folders, the method of work or the stage.
+The knowledge base agent writes these docs with its doc skills: `vision-doc`, `readme-doc`, `readme-asd-doc` and `rebuild-prompt-doc`. The docs change when an input changes the full project. Examples are a change to the levels, the folders, the method of work or the stage.
 
 Its docs: `docs/docs.index.md`.
 
@@ -160,7 +160,7 @@ Its docs: `agents/agents.index.md`.
 - There is no `CLAUDE.md` at the top of the repository.
 - `agents/system/.claude/` contains the Claude Code setup of the system: `settings.json`, the helper agents in `agents/` and the skills in `skills/`.
 - The helper agents are the knowledge base agent, the project IDE agent and the self-improvement helper of the system.
-- The skills are `knowledge-intake`, `change-plan`, `file-index`, `vision-doc`, `readme-doc`, `rebuild-prompt-doc`, `ide-build` and `ide-sync`. The build scripts are in `ide-build/scripts/`.
+- The skills are `knowledge-intake`, `change-plan`, `file-index`, `vision-doc`, `readme-doc`, `readme-asd-doc`, `rebuild-prompt-doc`, `claude-md-doc`, `ide-build` and `ide-sync`. The skills `readme-asd-doc` and `claude-md-doc` are new in this stage. The build scripts are in `ide-build/scripts/`.
 - `agents/system/configs/` contains the settings of the system: `system.config.json`, `system.workers.json`, `models.config.json` and `system.links.json`. `system.workers.json` lists all jobs of the system. All jobs are off now.
 - `agents/system/docs/` contains the four docs of the system.
 - `scripts/`, `logs/`, `data/`, `tests/` and `research/` follow the standard folder. Most of their files are planned and empty.

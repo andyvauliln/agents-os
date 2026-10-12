@@ -255,7 +255,7 @@ Check: `git ls-files .secrets` lists no file named `.env`; `grep '=.' .secrets/*
 
 ### docs/
 
-Write the project docs in this order, each with its own skill when the skills exist (`vision-doc`, `readme-doc`, the ASD-STE100 README skill, `rebuild-prompt-doc`):
+Write the project docs in this order, each with its own skill when the skills exist (`vision-doc`, `readme-doc`, `readme-asd-doc`, `rebuild-prompt-doc`):
 
 1. `docs/vision.md`: what the Agent OS project is and why; the way of working (vibecoding, the project IDE as the owner's window); the concept (the system, the levels of docs, metadata next to everything, the way of working, the IDE, the planning area); a round of work as a story; the rules the project follows; examples; what the owner sees and does; the stages; principles; ideas still weighed; open questions; and last, the path `docs/README.md`. Plain prose, no paths except that one.
 2. `docs/README.md`: every part of the repository exactly, with the path to each part's own docs: the front page and handoff, the project docs, agents, the system with `agents/system/CLAUDE.md`, trading, apps, the project IDE, keys, metadata files, the planning area; then how a round of work goes, the stages, a table of every part's docs, and what is still open.

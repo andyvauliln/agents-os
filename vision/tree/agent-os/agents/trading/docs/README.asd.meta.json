@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "about": "Trading's README again in ASD-STE100 Simplified Technical English, to compare with README.md.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent with the readme-asd-doc skill (planned)",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "the owner, to compare with README.md",
+    "readers who prefer simple sentences",
+    "agents"
+  ],
+  "changes_when": "README.md changes",
+  "related": [
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "built from; the source when they disagree"
+    },
+    {
+      "path": "agents/system/docs/README.asd.md",
+      "how": "same format as"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-062",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261012-stage1",
+      "in-20261009-1938"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/docs/README.asd.example.md",
+      "how": "keep the outline in step with README.md"
+    },
+    {
+      "path": "agents/trading/docs/README.asd.questions.md",
+      "how": "keep the open questions in step"
+    }
+  ],
+  "inherits": [
+    "ASD-STE100 rules from the inputs vision"
+  ],
+  "features": [
+    "Docs in ASD-STE100"
+  ],
+  "views": [
+    "doc (shared view)"
+  ],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  },
+  "tree_number": "56.1.4"
+}

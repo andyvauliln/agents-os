@@ -106,7 +106,7 @@ Its docs: `README.index.md` and `HANDOFF.index.md`.
 
 Every doc has its How it works and Details files beside it. The four written docs also have `x.example.md`, the outline of the doc (its headings and one line on what goes under each), and `x.questions.md`, the open questions for the owner about it.
 
-The knowledge base agent writes them with its doc skills: `vision-doc`, `readme-doc`, `rebuild-prompt-doc`, and a skill for the ASD-STE100 version. They change whenever an input changes the project as a whole: its levels, its folders, its way of working, its stage.
+The knowledge base agent writes them with its doc skills: `vision-doc`, `readme-doc`, `readme-asd-doc` and `rebuild-prompt-doc`. They change whenever an input changes the project as a whole: its levels, its folders, its way of working, its stage.
 
 Its docs: `docs/docs.index.md`.
 
@@ -123,7 +123,7 @@ Its docs: `agents/agents.index.md`.
 `agents/system/` is the system agent's folder: it looks after the whole Agent OS and holds everything every agent shares, whatever its domain.
 
 - `agents/system/CLAUDE.md` is Claude Code's entry point for the whole project. Claude Code started in `agents/system/`, as it is on the owner's server, loads it first. It says what the project is and which stage it is in, what to read and in which order (the project vision and README, the system vision and README, `docs/file-tree.md`, the project IDE's README), the rules, what to do after every input, and when and how each doc is updated. There is no `CLAUDE.md` at the top of the repository.
-- `agents/system/.claude/` holds the system's Claude Code setup: `settings.json`, the helper agents in `agents/` (the knowledge base agent, the project IDE agent and the system's self-improvement helper) and the skills in `skills/` (`knowledge-intake`, `change-plan`, `file-index`, `vision-doc`, `readme-doc`, `rebuild-prompt-doc`, `ide-build` with its build scripts in `ide-build/scripts/`, and `ide-sync`).
+- `agents/system/.claude/` holds the system's Claude Code setup: `settings.json`, the helper agents in `agents/` (the knowledge base agent, the project IDE agent and the system's self-improvement helper) and the skills in `skills/` (`knowledge-intake`, `change-plan`, `file-index`, `vision-doc`, `readme-doc`, `readme-asd-doc`, `rebuild-prompt-doc`, `claude-md-doc`, `ide-build` with its build scripts in `ide-build/scripts/`, and `ide-sync`; `readme-asd-doc` and `claude-md-doc` are new this stage).
 - `agents/system/configs/` holds the system's settings: `system.config.json`, `system.workers.json` (every job the system runs, all switched off for now), `models.config.json` and `system.links.json`.
 - `agents/system/docs/` holds the system's four docs.
 - `scripts/`, `logs/`, `data/`, `tests/` and `research/` follow the standard folder; most of their files are planned and still empty.

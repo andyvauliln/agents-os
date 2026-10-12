@@ -2,6 +2,9 @@
 
 System-level history: what changed in the OS design, when, and from which decision. Newest first. Per-agent changes stay in each agent's own `docs/changes.md` [46]. The knowledge agent adds one line per processed input or system change (knowledge-intake, step 6).
 
+## 2026-10-12
+- **The page's tree is exactly the files on disk.** The owner pulled main and found a different tree than on the page: the page also showed about 400 planned items that are not on disk yet. A "planned" switch, off by default, now hides them, and the made-up metadata rows of planned items show only with it. Files git ignores are left out of the scan, and `.gitignore` no longer hides the How it works and Details notes of the keys files (`/.secrets/` is now only the top folder; `!.env.index.md`, `!.env.meta.json`). Checked path by path against git: no difference.
+
 ## 2026-10-09
 - **The project IDE runs from the repository as it is now.** The owner asked whether starting the project IDE works like the page here. It did not: the server looked for `apps/project-IDE/` and `agents/system/`, which the repository does not have yet. While we plan, it now runs from `vision/` (`python3 vision/server/server.py`): the page from `vision/explorer/`, an edit saved into the file the page showed (each item now carries `src_file`), How it works edits into the item's `.index.md`, the real files' texts read fresh from disk, Claude Code started in `vision/`; an edit to a planned file nobody has written waits in the page store. Tested on a copy of the repository.
 - **Edit in the Read view.** The owner asked to edit files in the view mode. In the File tab's Read view, a double-click (or double-tap) on a paragraph, heading, list or table opens its Markdown in place; Save or Ctrl+Enter writes only those lines to the file, the same save as the Edit button. Page v55.

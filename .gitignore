@@ -2,6 +2,9 @@
 .env
 .env.*
 !.env.example
+# How it works and Details files of a keys file hold no keys, so they stay in git
+!.env.index.md
+!.env.meta.json
 
 # Dependencies and build output
 node_modules/
@@ -27,4 +30,4 @@ __pycache__/
 .cursor/
 
 # Keys files never go in git
-.secrets/
+/.secrets/

@@ -908,6 +908,11 @@ print("knowledge:", len(KNOWLEDGE), "entries;", sum(1 for x in out_nodes if x["h
 # (owner, 2026-10-09 14:59: "we always should have real represention of file tree on a disk and on ui").
 SCAN_SKIP = {".git", "__pycache__", "node_modules", ".secrets", ".DS_Store"}
 REAL_FILES = {}   # id -> text of a scanned file; written to real-files.json, which the page loads when one is opened
+import subprocess
+try:   # files git ignores (.env.*, logs, local settings) never reach the owner's clone, so the tree leaves them out too
+    _IN_GIT = set(subprocess.run(["git", "-C", REPO, "ls-files", "--cached", "--others", "--exclude-standard"], capture_output=True, text=True, check=True).stdout.split("\n"))
+except (OSError, subprocess.CalledProcessError):
+    _IN_GIT = None
 def _scan(parent):
     rel = parent["path"][len("agent-os/"):]
     d = os.path.join(REPO, rel)
@@ -915,10 +920,13 @@ def _scan(parent):
         return
     have = {c["path"] for c in out_nodes if c.get("parent") == parent["id"]}
     for name in sorted(os.listdir(d)):
-        if name in SCAN_SKIP:
+        if name in SCAN_SKIP and (name != ".secrets" or parent["path"] == "agent-os/"):   # only the real keys folder at the top is left out
             continue
         full = os.path.join(d, name)
         isdir = os.path.isdir(full)
+        relp = os.path.relpath(full, REPO)
+        if _IN_GIT is not None and (relp not in _IN_GIT if not isdir else not any(f.startswith(relp + "/") for f in _IN_GIT)):
+            continue
         path = parent["path"] + name + ("/" if isdir else "")
         if path in have:
             continue

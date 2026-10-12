@@ -2053,6 +2053,25 @@
     "explorer/file-tree-explorer.html"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261012-metadisk",
+   "at": "2026-10-12",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-12-metadata-on-disk.md",
+   "chars": 41,
+   "categories": [
+    "structure",
+    "ui"
+   ],
+   "summary": "Is each file's metadata in the real tree on disk?",
+   "processed_into": [
+    "tools/materialize.py",
+    "server/server.py"
+   ],
+   "answered": true
   }
  ]
 }

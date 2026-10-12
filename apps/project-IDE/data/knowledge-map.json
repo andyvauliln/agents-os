@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-12T11:48:43Z",
+ "built": "2026-10-12T12:09:11Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "774ce1e54706",
+   "hash": "977992447bc2",
    "entries": []
   },
   "conventions.md": {
@@ -35363,6 +35363,21 @@
    "entries": [
     "d-063"
    ]
+  },
+  "in-20261012-metadisk": {
+   "at": "2026-10-12",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-12-metadata-on-disk.md",
+   "categories": [
+    "structure",
+    "ui"
+   ],
+   "summary": "Is each file's metadata in the real tree on disk?",
+   "processed_into": [
+    "tools/materialize.py",
+    "server/server.py"
+   ],
+   "entries": []
   }
  },
  "problems": [

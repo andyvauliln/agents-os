@@ -6,11 +6,11 @@ Apps are the programs that sit next to the agents of the Agent OS and help peopl
 
 ## What apps are for, and who uses them
 
-The agents do the work of the system. Apps are the tools around that work: the screens where the owner watches and steers the project, and the outside programs the agents or the owner rely on.
+Apps are the tools around the agents' work: screens where the owner watches and steers the project, and outside programs the project relies on.
 
 - **The owner** uses apps to see the project, change it and approve what only they can approve.
 - **Every AI** that works on the project uses the same apps to find the context it needs before it changes anything.
-- **Agents** may later use outside apps as tools, for example a ready-made library or service an agent calls while it does its job.
+- **Agents** may later use outside apps as tools.
 
 ## Why the system has apps
 
@@ -32,7 +32,7 @@ So the system knows three kinds of app:
 
 ## The apps today
 
-- **The project IDE** is our own and the most important app. It shows the whole project as a clickable tree where every file and folder explains itself, lets the owner edit, comment, ask questions and delete items, and carries those changes back into the files. It runs as a published page and, on the owner's server, with Claude Code behind its request box. It has its own full set of docs.
+- **The project IDE** is our own and the most important app. It shows the whole project as a clickable tree where every file and folder explains itself, lets the owner edit, comment, ask questions and delete items, and carries those changes back into the files. It runs as a published page and on the owner's server, with Claude Code behind its request box.
 - **The prediction-market dashboard** is a place kept for that domain's own screen, where the owner would watch its trading agents and approve their live actions. It is empty, belongs to the second stage of the project, and may never be built.
 - **Research copies:** none yet. **Apps we use from outside:** none yet.
 
@@ -42,7 +42,7 @@ The rules for apps are decided, and the project IDE is built and in daily use. T
 
 ## Ideas we are still weighing
 
-- **Keeping the fork as a linked copy.** Problem: our project must record exactly which version of an outside app it uses. The idea: keep the fork inside the project as a linked copy that points at one exact version. It would make the version visible and reproducible, at the cost of a slightly more involved setup.
+- **Keeping the fork as a linked copy.** Problem: the project must record exactly which version of an outside app it uses. The idea: keep the fork inside the project as a linked copy pinned to one version, which makes the version visible and reproducible.
 - **Updating outside apps on a schedule.** Problem: updates from the original author are easy to forget. The idea: a job that checks for new versions and tells the owner. For now updates happen only when we ask.
 - **Adopting an app fully.** Problem: an outside app explains itself only through three docs. The idea: a helper skill that gives it the full treatment every part of the system gets. It is written only on the owner's request.
 

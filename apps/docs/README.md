@@ -106,7 +106,7 @@ Its docs: each app's own `apps/<name>/docs/README.md`, once it exists
 
 ### The list of apps
 
-Every app has one row in the list of apps: its name, its kind (`ours`, `fork` or `research`), its source, our fork and its branches, the commit in use, its last update from the source, and who uses it. The system's notes planned that list as a separate index file; it was moved out with the other topic notes and is empty. We propose that, until the owner decides where it lives, the table below is that list.
+Every app has one row in the list of apps: its name, its kind (`ours`, `fork` or `research`), its source, our fork and its branches, the commit in use, its last update from the source, and who uses it. The list has no file of its own at the moment. We propose that, until the owner decides where it lives, the table below is that list.
 
 | App | Kind | Source | Fork and branches | Commit in use | Last update from source | Used by |
 |---|---|---|---|---|---|---|
@@ -139,7 +139,7 @@ Its docs: this file
 - **Forks:** submodule (proposed) or a clone that git ignores for `repo/`; where the forks live on GitHub (the owner's account is proposed); how often to update from the source (on request for now; a scheduled check is an idea).
 - **Research clones:** whether agents may clone a repository on their own.
 - **First outside app:** whether the earlier Polymarket tools come in as a fork.
-- **The list of apps:** where it lives now that the topic notes moved out.
+- **The list of apps:** where it lives: in this README, as now proposed, or in a file of its own.
 - **Ignore rule:** `.gitignore` does not yet hold the line `apps/temp/*/repo/`; it must be added before the first clone.
 - **The dashboard:** whether it is needed at all; if so, files or an API layer, and how it is reached; when it gets its own `docs/`.
 - **Shared views:** the proposed `apps/project-IDE/views/` folder and its `views.json`.

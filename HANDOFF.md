@@ -1,26 +1,35 @@
 # Handoff: continue the Agent OS planning in Claude Code
 
-Everything from the planning project is in `vision/` (copied 2026-10-07 from the project's shared folder). Nothing is built yet; this is the plan.
+Updated 2026-10-12. Nothing of the system is built yet; this repository is the plan in its final shape. Every planned file and folder exists on disk: files with a draft carry its text, the rest are empty, and every item's How it works (`.index.md`) and Details (`.meta.json`) file sits next to it. The planning sources are still in `vision/`.
 
 ## Start here
 
-1. Open Claude Code in this repo and ask it to read, in order:
-   - `vision/.claude/memory/MEMORY.md` and the notes it links (project memory: decisions, rules, how we work)
-   - `vision/.claude/CLAUDE.md` (draft rules for every AI session)
+1. `git pull` on `main`. Open Claude Code in this repo and ask it to read, in order:
+   - `vision/.claude/memory/MEMORY.md` and the notes it links (decisions, rules, how we work)
+   - `vision/.claude/CLAUDE.md` (rules for every AI session; its real place is `agents/system/.claude/CLAUDE.md`)
+   - `vision/.claude/docs/inputs-vision.md` (every requirement from the owner's inputs, by scope)
    - `vision/docs/README.md` (how the knowledge base is laid out)
-   - the newest plan: `vision/plans/2026-10-09-0940-trading-folder.md`
-2. The File Tree page source is `vision/explorer/file-tree-explorer.html` with `vision/explorer/file-tree.data.json`; open it in a browser from that folder (a local web server: `python3 -m http.server` in `vision/explorer/`).
-3. Rebuild after any change (from `vision/tools/`, see its README): `python3 parse.py /tmp/parsed.json`, `DATA_VERSION=N python3 enrich.py /tmp/parsed.json /tmp/ftd.json`, copy the output to `vision/file-tree.data.json` and `vision/explorer/`, then `python3 build_map.py --stale` until it is clean.
+   - the newest entries of `vision/docs/changelog.md` and `vision/docs/decisions.md` (D-001 to D-063)
+2. The project IDE: `python3 vision/server/server.py` from the repo top serves the File Tree page with edits written back to the files (see `vision/server/README.md`). The request box needs `claude-agent-sdk` and a signed-in Claude Code; the mic needs `GROQ_API_KEY` in `.secrets/test/.env`. The same page is on claude.ai: https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs (version 60).
+3. Rebuild after any change, from `vision/tools/` (see its README and the `ide-build` skill), with `S` a scratch folder and `R` the repo:
+   - `python3 parse.py $S/parsed.json`
+   - `REPO_DIR=$R DATA_VERSION=N python3 enrich.py $S/parsed.json $S/ftd.json`, then copy it to `vision/file-tree.data.json` and `vision/explorer/`, and `$S/real-files.json` to `vision/explorer/`
+   - `REPO_DIR=$R python3 materialize.py ../file-tree.data.json` (puts planned items, drafts and metadata files onto disk; run enrich again if it made new files)
+   - `python3 build_map.py --stale` until it is clean (`--confirm <ids>` for each stale one), and `node check_page.js <page folder> -` must print "page ok"
+   - Check: the page tree must list exactly the files in git (`git ls-files --cached --others --exclude-standard`), plus the two local-only `.env` files.
 
 ## Where things stand
 
-- Done: the name Agent OS; metadata files (`x.index.md`, empty `x.meta.json`); trading moved into the prediction-market domain (D-056 to D-058); all How it works files fresh; the system vision rewritten in general terms (`vision/.claude/docs/vision.md`).
-- Done 2026-10-09 (D-061): `researches/` moved to `agents/trading/researches/`; the page build lists every real file in the repo (run `enrich.py` with `REPO_DIR` set to a fresh clone).
-- Done 2026-10-09 (D-059): `agents/trading/` holds `prediction-market/` (copy trading next) and `docs/` with trading's vision, README and rebuild prompt (planning copies `vision/docs/trading/`); the system README and rebuild prompt rewritten in general terms. The trading text removed from them is in `vision/archive/2026-10-09/*-trading-parts.md`, for the prediction-market domain's own docs, which are next when the owner asks.
-- Owner's words go into `vision/docs/inputs/` word for word (skill `knowledge-intake`); decisions into `vision/docs/decisions.md`.
+- Done: the name Agent OS; trading lives in the prediction-market domain (`agents/trading/prediction-market/`); the system vision, README and rebuild prompt in general terms; all How it works files fresh.
+- Done 2026-10-09: the page lists every real file; edit in the Read view (double-click a paragraph); the inputs vision (D-062); the project IDE runs from `vision/`.
+- Done 2026-10-12: the page tree is exactly the files in git; every planned item is a real file (`materialize.py`); each item's metadata files sit next to it on disk; `.secrets/` and its metadata are in git, and only the `.env` files with the keys stay out (D-063).
+- Waiting for the owner: merge PR #5 (keys folder and metadata on disk). Open questions: scheduler machine (D-029), symlinks or rebuild for link files (D-031), v[N] placement (D-032), model defaults, jobs, D-058 defaults.
+- Not done (optional): make the real files the source and retire the drafts in `vision/` (the "full layout" move into `apps/project-IDE/` and `agents/system/`). Until then, edit the draft in `vision/`; the build copies it into place.
 
 ## Rules to keep
 
-- Never write secret values anywhere; key names only. `.secrets/` never goes in git.
+- Never write a key value anywhere; key names only. `.env` files never go in git, and the page never reads or shows them.
+- Every owner input goes into `vision/docs/inputs/` word for word (skill `knowledge-intake`); decisions into `vision/docs/decisions.md`; plan every change first (skill `change-plan`).
+- The page tree must always equal the real file tree on disk.
 - Call the owner "the owner" (they/them); docs for people are plain prose without ids or codes.
-- Ask the owner before restructuring beyond what they asked.
+- Ask the owner before restructuring beyond what they asked, and before merging into `main`.

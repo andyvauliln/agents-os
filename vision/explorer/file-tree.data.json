@@ -10,8 +10,8 @@
    "vision/tree/ (every node's {name}.index.md)"
   ]
  },
- "generated": "2026-10-12T12:09:12Z",
- "data_version": 54,
+ "generated": "2026-10-12T12:24:41Z",
+ "data_version": 55,
  "sync": "Built by the ide-build scripts from the tree notes and the knowledge (apps/project-IDE/data/ and agents/system/docs/ in the repository; vision/docs/ while we plan) and every item's .index.md. The page saves straight away into its own store (collections inputs, nodes, changes); at a sync (\"sync the file tree\") the project IDE agent saves them word for word, writes edits into their files, hands the knowledge to the knowledge base agent and rebuilds this file.",
  "status_legend": {
   "decided": "agreed by the owner: the whole tree as it stood on 2026-10-05, and every decision since",
@@ -66279,7 +66279,8 @@
     "r-vision-.claude-memory-general-system-plan.md",
     "r-vision-.claude-memory-github-sync-plan.md",
     "r-vision-.claude-memory-human-docs-style.md",
-    "r-vision-.claude-memory-knowledge-intake-every-input.md"
+    "r-vision-.claude-memory-knowledge-intake-every-input.md",
+    "r-vision-.claude-memory-planned-items-are-real-files.md"
    ],
    "status": "decided",
    "summary": "Found in the repository; the folder's How it works describes it.",
@@ -66890,6 +66891,54 @@
    "scanned": true,
    "content_source": "repo andyvauliln/trading-oss: vision/.claude/memory/knowledge-intake-every-input.md",
    "src_file": "vision/.claude/memory/knowledge-intake-every-input.md",
+   "content_lazy": true
+  },
+  {
+   "id": "r-vision-.claude-memory-planned-items-are-real-files.md",
+   "num": null,
+   "name": "planned-items-are-real-files.md",
+   "path": "agent-os/vision/.claude/memory/planned-items-are-real-files.md",
+   "type": "file",
+   "link": false,
+   "placeholder": false,
+   "parent": "r-vision-.claude-memory",
+   "children": [],
+   "status": "decided",
+   "summary": "Found in the repository; the folder's How it works describes it.",
+   "purpose": null,
+   "link_target": null,
+   "details": [],
+   "writers_readers": null,
+   "updated_when": null,
+   "open_questions": [],
+   "rules": [],
+   "concepts": [],
+   "decisions": [
+    "D-061"
+   ],
+   "features": [],
+   "example": null,
+   "same_as": null,
+   "section_heading": null,
+   "exists": true,
+   "fields": [],
+   "custom_tabs": [],
+   "agent": null,
+   "qa": [],
+   "content": null,
+   "how": null,
+   "how_md": null,
+   "how_file": null,
+   "fam": null,
+   "meta_file": null,
+   "meta": null,
+   "knowledge": {
+    "direct": [],
+    "inherited": []
+   },
+   "scanned": true,
+   "content_source": "repo andyvauliln/trading-oss: vision/.claude/memory/planned-items-are-real-files.md",
+   "src_file": "vision/.claude/memory/planned-items-are-real-files.md",
    "content_lazy": true
   },
   {

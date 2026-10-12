@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-12T11:30:35Z",
+ "built": "2026-10-12T11:48:43Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "24c643f902e5",
+   "hash": "774ce1e54706",
    "entries": []
   },
   "conventions.md": {
@@ -147,7 +147,7 @@
   },
   "decisions.md": {
    "title": "Agent OS: Decisions (v1.13)",
-   "hash": "069d0c0d0d9a",
+   "hash": "b6d09cff3e4d",
    "entries": [
     "d-001",
     "d-002",
@@ -210,7 +210,8 @@
     "d-059",
     "d-060",
     "d-061",
-    "d-062"
+    "d-062",
+    "d-063"
    ]
   },
   "feature-map.md": {
@@ -6851,6 +6852,24 @@
    ],
    "inherited_by": [],
    "chars": 952
+  },
+  "d-063": {
+   "id": "d-063",
+   "doc": "decisions.md",
+   "heading": "D-063: The keys folder is in git; only the .env files are not",
+   "level": 3,
+   "line": 629,
+   "applies_raw": [
+    "[3]"
+   ],
+   "sources": [
+    "in-20261012-secrets"
+   ],
+   "status": "decided",
+   "hash": "86238be5c972",
+   "nodes": [],
+   "inherited_by": [],
+   "chars": 694
   },
   "fm-data-collection-workers": {
    "id": "fm-data-collection-workers",
@@ -35324,11 +35343,32 @@
     "server/server.py"
    ],
    "entries": []
+  },
+  "in-20261012-secrets": {
+   "at": "2026-10-12",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-12-secrets-in-tree.md",
+   "categories": [
+    "security",
+    "structure",
+    "ui"
+   ],
+   "summary": "Show .secrets and its metadata in the tree and in git; only the real .env files stay out.",
+   "processed_into": [
+    ".gitignore",
+    "tools/materialize.py",
+    "tools/enrich.py",
+    "explorer/file-tree-explorer.html"
+   ],
+   "entries": [
+    "d-063"
+   ]
   }
  },
  "problems": [
   "conventions.md:196 conv-tests-research: applies 'name:[test-id].test.[js|py]' matches nothing",
   "data-schemas.md:609 schema-test-files: applies 'name:[test-id].test.[js|py]' matches nothing",
+  "decisions.md:629 d-063: applies '[3]' matches nothing",
   "how-to/add-or-run-tests.md:5 howto-add-or-run-tests-steps: applies 'name:[test-id].test.[js|py]' matches nothing",
   "node n-10.8.2.2 (agents/system/tests/scripts/[test-id].test.[js|py]) has no file doc and no knowledge",
   "node n-19.12.2.2 (agents/trading/prediction-market/tests/scripts/[test-id].test.[js|py]) has no file doc and no knowledge",

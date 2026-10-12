@@ -9,7 +9,8 @@ planned should be already real files"). Run it after enrich.py, then run enrich.
 - Any other planned file is created empty ("{}" for a .json file), to be filled when the work reaches it.
 - Placeholder names such as [skill-name] are created as they are written: they are the templates.
 - A folder with nothing in it gets a .gitkeep, because git does not keep empty folders.
-- The keys folder (.secrets/) is never created here: it is git-ignored and holds real keys only on the machine.
+- The keys folder .secrets/ and its notes are created and go in git (owner, 2026-10-12). A .env keys file is
+  created empty only when it is missing, is never read or overwritten, and git ignores it.
 """
 import json, os, sys
 
@@ -27,7 +28,7 @@ def main(data_file):
     made, copied, folders = 0, 0, set()
     for n in nodes:
         path = n.get("path") or ""
-        if not path.startswith("agent-os/") or n.get("scanned") or ".secrets" in path:
+        if not path.startswith("agent-os/") or n.get("scanned"):
             continue
         rel = disk(path[len("agent-os/"):])
         full = os.path.join(REPO, rel.rstrip("/"))
@@ -38,6 +39,10 @@ def main(data_file):
             continue
         os.makedirs(os.path.dirname(full), exist_ok=True)
         folders.add(os.path.dirname(full))
+        if os.path.basename(full) == ".env":   # a keys file: created empty when missing, never read or written over
+            if not os.path.exists(full):
+                open(full, "w").close(); made += 1
+            continue
         src = n.get("src_file") or ""
         if src.startswith("vision/") and os.path.isfile(os.path.join(REPO, src)):
             text = open(os.path.join(REPO, src), encoding="utf-8").read()
@@ -51,7 +56,7 @@ def main(data_file):
             made += 1
     kept = 0
     for d in folders:
-        if os.path.isdir(d) and not os.listdir(d):
+        if os.path.isdir(d) and all(f == ".env" for f in os.listdir(d)):   # git keeps no empty folder, and ignores .env
             open(os.path.join(d, ".gitkeep"), "w").close()
             kept += 1
     print(f"materialize: {copied} files copied from drafts, {made} empty files made, {kept} .gitkeep files")

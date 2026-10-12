@@ -776,7 +776,7 @@ function renderTree() {
     }
   }
   const showFam = id => showIdx && showPlanned && !changedMode && !NODES[id]._deleted && hasIdx(NODES[id]);
-  const hidePlanned = n => !showPlanned && !changedMode && !onDisk(n);
+  const hidePlanned = n => !showPlanned && !changedMode && !onDisk(n) && !(n && n.local_only);   // a keys file is real on the machine, git leaves it out
   const showIdxOf = id => showFam(id) && (!keep || (idxHits && idxHits.has(id)));
   const showMetaOf = id => showFam(id) && (!keep || (metaHits && metaHits.has(id)));
   // a deleted item keeps its place among its siblings until the sync

@@ -1,4 +1,4 @@
-# Secrets and local env
+# Keys files never go in git: every .env (the keys folder .secrets/ itself and its notes do)
 .env
 .env.*
 !.env.example
@@ -29,5 +29,3 @@ __pycache__/
 # Cursor local state
 .cursor/
 
-# Keys files never go in git
-/.secrets/

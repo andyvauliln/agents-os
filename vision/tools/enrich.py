@@ -824,6 +824,13 @@ for x in out_nodes:
     rel = x["path"][len("agent-os/"):] if x["path"].startswith("agent-os/") else None
     if rel is not None:
         rel = rel.replace("|", "-")   # the name on disk (materialize.py): '|' is not allowed in Windows file names
+    if rel and x["type"] == "file" and os.path.basename(rel) == ".env":   # a keys file: shown, never read (git ignores it)
+        x["local_only"] = True
+        x["exists"] = os.path.isfile(os.path.join(REPO, rel))
+        x["content"] = None
+        x["content_source"] = "a keys file: it stays on the machine, git ignores it and the page never shows what is in it"
+        x["readonly"] = "Keys are never shown or edited here. Write them in the file on the machine."
+        rel = None
     if rel and x["type"] == "file" and os.path.isfile(os.path.join(REPO, rel)):
         x["exists"] = True
         x["name"] = x["name"].replace("|", "-")   # show the name it has on disk
@@ -928,7 +935,7 @@ def _scan(parent):
         return
     have = {c["path"].replace("|", "-") for c in out_nodes if c.get("parent") == parent["id"]}
     for name in sorted(os.listdir(d)):
-        if name in SCAN_SKIP and (name != ".secrets" or parent["path"] == "agent-os/"):   # only the real keys folder at the top is left out
+        if name in SCAN_SKIP and name != ".secrets":   # the keys folder is listed; git leaves its .env files out
             continue
         full = os.path.join(d, name)
         isdir = os.path.isdir(full)

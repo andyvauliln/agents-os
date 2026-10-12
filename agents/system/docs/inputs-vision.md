@@ -239,7 +239,7 @@ A job is a script, an agent, a sub-agent, a skill or a workflow. A job runs on a
 | ID | Rule |
 |---|---|
 | SEC-01 | Keep private keys in the `.secrets/` folder at the root. |
-| SEC-02 | Do not put `.secrets/` in git. |
+| SEC-02 | Put the `.secrets/` folder, its metadata files and the key names in git. Do not put a `.env` file in git. |
 | SEC-03 | Keep test keys in `.secrets/test/.env`. Keep live keys in `.secrets/live/.env`. |
 | SEC-04 | `live/.env` must have the same structure as `test/.env`. |
 | SEC-05 | The Variables view must show the current content of the file. Do not show example values. |

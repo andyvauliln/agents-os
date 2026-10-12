@@ -625,3 +625,11 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - **Status:** decided. Ours: rule codes per scope (`SYS-01` and so on), a terms table, an "Open subjects" list, and the knowledge base agent keeping it current after each input.
 - **Changed:** file-tree.md [2.23]; vision/.claude/docs/inputs-vision.md with its metadata files; docs/inputs (5 files added).
 
+
+### D-063: The keys folder is in git; only the .env files are not
+<!-- k: id=d-063 applies=[3] sources=in-20261012-secrets status=decided -->
+- **Decision:** the `.secrets/` folder, its subfolders, its How it works and Details files and `secrets.index.json` (key names only) are in git and show in the tree. Every `.env` file, which holds the key values, stays out of git. The page lists the `.env` files as local-only and never reads, shows or edits their text.
+- **Date:** 2026-10-12
+- **Why:** the owner wants to see the keys folder and its metadata files like every other part of the tree.
+- **Status:** decided. Changes D-023 and D-027 only in what goes in git; key values still never leave the machine.
+- **Changed:** .gitignore; tools/materialize.py, tools/enrich.py; explorer page; CLAUDE.md; inputs-vision.md SEC-02; changelog.

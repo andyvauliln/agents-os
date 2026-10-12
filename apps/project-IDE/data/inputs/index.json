@@ -2031,6 +2031,28 @@
     "server/server.py"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261012-secrets",
+   "at": "2026-10-12",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-12-secrets-in-tree.md",
+   "chars": 127,
+   "categories": [
+    "security",
+    "structure",
+    "ui"
+   ],
+   "summary": "Show .secrets and its metadata in the tree and in git; only the real .env files stay out.",
+   "processed_into": [
+    ".gitignore",
+    "tools/materialize.py",
+    "tools/enrich.py",
+    "explorer/file-tree-explorer.html"
+   ],
+   "answered": true
   }
  ]
 }

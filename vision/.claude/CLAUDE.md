@@ -36,7 +36,7 @@ Before you touch a file or folder, read its How it works file: `vision.index.md`
 | This project's records: every input word for word, decisions, changelog, the tree notes, the knowledge map, the notes behind each doc, page edits, working notes, plans, retired files | `apps/project-IDE/data/` |
 | The page build scripts | `agents/system/.claude/skills/ide-build/scripts/` |
 | The prediction-market domain's dashboard, empty for now and maybe never needed | `apps/trading-ui/` |
-| Keys | `.secrets/` on the machine only, never in git |
+| Keys | `.secrets/`: the folder, its notes and the key names are in git; the `.env` files with the keys stay on the machine, never in git |
 
 ## Every round
 

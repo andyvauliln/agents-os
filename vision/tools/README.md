@@ -12,7 +12,7 @@ python3 parse.py /tmp/parsed.json                       # tree + [n] sections + 
 DATA_VERSION=<next> python3 enrich.py /tmp/parsed.json ../file-tree.data.json
 ```
 
-- `enrich.py` adds concepts, rules and example file contents, then the tab data from `tabs.py` (field guides, custom tables such as the .env Variables table, fake-value .env examples), reads real file contents from the repo checkout (`REPO_DIR`, read only; clone the latest repo first, or the real files are missing from the page), lists every real file under a folder that exists in the repo as a "scanned" item with no How it works of its own (D-061; `vision/` and git files left out; `build_map.py` skips scanned items), and finally applies `overrides.json`.
+- `enrich.py` adds concepts, rules and example file contents, then the tab data from `tabs.py` (field guides, custom tables such as the .env Variables table, fake-value .env examples), reads real file contents from the repo checkout (`REPO_DIR`, read only; clone the latest repo first, or the real files are missing from the page), lists every real file under a folder that exists in the repo as a "scanned" item with no How it works of its own (D-061; only `.git/` and `.secrets/` are left out; their texts go to `real-files.json` next to the data, which the page loads when one is opened and which is published with it; `build_map.py` skips scanned items), and finally applies `overrides.json`.
 - `overrides.json` holds owner edits folded in from the explorer page, keyed by `[n]` (fields replace the parsed ones). Keep it: rebuilding without it loses those edits.
 
 ## Where the page lives

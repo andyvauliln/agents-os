@@ -58,6 +58,7 @@ agent-os/                                   # [0] repo/workspace root
 │   │   │   ├── vision.md                     # [2.2] the top-level doc, read first: why, the concept, how it should work, the business logic, examples (D-034, D-048)
 │   │   │   ├── README.md                     # [2.1] every part of the system exactly, how the parts connect, and the path to each part's own docs; read after the vision (D-034, D-048)
 │   │   │   ├── rebuild-prompt.md             # [2.22] the prompt an AI follows to rebuild the whole system the same: the tree, names, formats, build order, checks (D-048)
+│   │   │   ├── inputs-vision.md              # [2.23] every owner requirement from all inputs, newest wins, by scope, in ASD-STE100 (D-062)
 │   │   │   ├── overview.md                   # [2.3] how the whole OS works, with diagrams
 │   │   │   ├── architecture.md               # [2.21] how it is built: levels, folders, links, jobs, configs (D-033)
 │   │   │   ├── glossary.md                   # [2.4] shared vocabulary for owner and agents
@@ -494,6 +495,12 @@ Each object lists its **purpose**, **contents**, **writers / readers** and **ope
 - **Rules:** written for AI: instructions, exact paths and formats; no reference numbers, decision codes or history; never a secret value; decided things are built, our proposals are built and marked as defaults, ideas and open questions are listed under "Do not build".
 - **Name and place (proposed):** the name `rebuild-prompt.md` and its place next to the vision and the README are our defaults. Every level has its own (owner, D-053): every domain [19.6.4], strategy [21.6.4] and trading agent [46.4], and every app [53.4.3] (D-055). A lower level's prompt builds only its own folder, assumes the levels above exist, and lists its children's prompts in build order; the system's lists the domains' and the apps'.
 - **Draft:** `/mnt/project-files/vision/.claude/docs/rebuild-prompt.md` (planning copy; it goes to `agents/system/docs/` at the GitHub sync).
+
+### [2.23] `docs/inputs-vision.md` (owner, 2026-10-09, D-062)
+- **Purpose:** a detailed overview of the project made only from the owner's inputs: repeated points once, overruled points left out, the newest input wins. Divided by scope of logic (system, levels, common file rules, configs, jobs, runs, self-improvement, modes, tests, models, trading, docs and knowledge, project IDE, apps, approvals, open subjects). Written in ASD-STE100 (Simplified Technical English), one rule per line with a code such as `FILE-01`.
+- **Writers / readers:** the knowledge base agent [10.1.1.2] updates it after every owner input that changes how the system should be. People and AI read it for the owner's wishes; the vision, README and rebuild prompt are checked against it.
+- **Rules:** only the owner's words, never Claude's defaults or proposals; no key values.
+- **Draft:** `/mnt/project-files/vision/.claude/docs/inputs-vision.md` (planning copy; it goes to `agents/system/docs/` at the GitHub sync).
 
 ### [2.3] `docs/overview.md` (D-041; today's `overview.md`)
 - **Purpose:** how the whole OS works end to end: the "how" behind the vision, with diagrams.

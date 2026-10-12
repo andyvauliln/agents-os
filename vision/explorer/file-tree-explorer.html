@@ -294,6 +294,15 @@ details.kentry .kbody { padding: 2px 12px 10px; font-size: 13.5px; display: flex
 .reader.rs-s { --rd-fs: 15.5px; }
 .reader.rs-l { --rd-fs: 19.5px; }
 .reader ::selection { background: var(--rd-accent-soft); color: var(--rd-head); }
+/* editing in the Read view: double-click a block, edit its Markdown in place (owner, 2026-10-09) */
+.reader.rd-editable .rd-doc [data-l] { border-radius: 6px; transition: box-shadow .12s; }
+.reader.rd-editable .rd-doc [data-l]:hover { box-shadow: 0 0 0 4px var(--rd-accent-soft); cursor: text; }
+.rd-blockedit { margin: 1em -8px; padding: 8px; border: 1px solid var(--rd-accent); border-radius: 8px; background: var(--rd-bg); display: grid; gap: 8px; }
+.rd-blockedit textarea { width: 100%; box-sizing: border-box; min-height: 4.5em; resize: vertical; border: 0; outline: 0; background: var(--rd-code-bg); color: var(--rd-code-fg); border-radius: 6px; padding: 10px 12px; font: 14px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.rd-blockedit .acts { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font: 13px/1.4 var(--f-body, sans-serif); color: var(--rd-muted); }
+.rd-blockedit button { font: 600 13px/1 var(--f-body, sans-serif); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--rd-rule); background: var(--rd-th); color: var(--rd-head); cursor: pointer; }
+.rd-blockedit button.go { background: var(--rd-accent); border-color: var(--rd-accent); color: var(--rd-bg); }
+.rd-blockedit button:disabled { opacity: .55; cursor: default; }
 .rd-wrap { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .filebar.solo { border-bottom: 1px solid var(--line); border-radius: 8px; }
 .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; padding: 2px; gap: 2px; background: var(--panel); }
@@ -776,11 +785,15 @@ function renderTree() {
   const metaRow = (n, id, depth) => `<div class="row idx${id === selected && tab === "meta" ? " on" : ""}" role="treeitem" data-id="${esc(id)}" data-meta="1" title="Details of ${esc(n.name)}" style="padding-left:${14 + depth * 16}px">${guidesFor(depth)}
       <span class="tw"></span><span class="ic">${ICON.file}</span><span class="nm">${markName(metaName(n), matcher && matcher.mark)}</span><span class="num"></span></div>`;
   const out = [];
+  // a metadata file found on disk follows the same switch; when the switch is on and its item already shows it as a metadata row, it is not shown twice
+  const famOf = (s, c, nm) => s && showFam(c) && (idxName(s) === nm || metaName(s) === nm);
+  const famShown = n => { const p = NODES[n.parent]; return !!p && (famOf(p, n.parent, n.name) || p.children.some(c => c !== n.id && famOf(NODES[c], c, n.name))); };
+  const hideScannedMeta = n => n.scanned && !hasIdx(n) && (!showIdx || changedMode || famShown(n));
   const walk = (id, depth) => {
-    const n = NODES[id]; if (!n || (keep && !keep.has(id))) return;
+    const n = NODES[id]; if (!n || (keep && !keep.has(id)) || hideScannedMeta(n)) return;
     const kids = n._deleted ? [] : kidsOf(id);   // a deleted item stays, struck through, until the sync
     const folderIdx = n.type === "folder" && showIdxOf(id), folderMeta = n.type === "folder" && showMetaOf(id);
-    const isOpen = keep ? true : expanded.has(id), hasKids = (keep ? kids.some(k => keep.has(k)) : kids.length > 0) || folderIdx || folderMeta;
+    const isOpen = keep ? true : expanded.has(id), hasKids = kids.some(k => NODES[k] && (!keep || keep.has(k)) && !hideScannedMeta(NODES[k])) || folderIdx || folderMeta;
     const icon = n.link ? ICON.link : (n.type === "folder" ? ICON.folder : ICON.file);
     const guides = guidesFor(depth);
     const chg = CHANGED[id];
@@ -843,6 +856,18 @@ function tabsFor(n) {
 function ancestors(id) { const a = []; let c = NODES[id]?.parent; while (c) { a.unshift(c); c = NODES[c].parent; } return a; }
 let pendingRender = false;
 function rerender() { const a = document.activeElement; if (a && $("#dscroll").contains(a)) a.blur(); renderSheet(); }
+/* real files found in the repository keep their text in real-files.json, loaded the first time one is opened (D-061) */
+const REAL = { p: null, map: null, err: "" };
+function fillReal() { let k = 0; for (const [id, text] of Object.entries(REAL.map || {})) if (NODES[id] && NODES[id].content == null) { NODES[id].content = text; k++; } return k; }
+function loadRealFiles() {
+  if (REAL.map) { if (fillReal()) setTimeout(() => renderSheet()); else if (!REAL.err) REAL.err = "this file is not in the repository copy"; return REAL.p; }   // the tree was reloaded: fill it again
+  if (REAL.p) return REAL.p;
+  REAL.p = fetch("real-files.json", { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(map => { REAL.map = map; fillReal(); })
+    .catch(e => { REAL.err = e.message || String(e); })
+    .then(() => renderSheet());
+  return REAL.p;
+}
 function renderSheet(reset) {
   const n = NODES[selected]; const el = $("#dscroll"); if (!n) { el.innerHTML = ""; return; }
   const a = document.activeElement;
@@ -948,12 +973,12 @@ function rdInline(t) {
   return s;
 }
 function mdDoc(src, prefix) {
-  let text = String(src ?? "").replace(/\r\n?/g, "\n").replace(/<!--[\s\S]*?-->/g, "");
-  const toc = [], used = new Set(); let front = "";
+  let text = String(src ?? "").replace(/\r\n?/g, "\n").replace(/<!--[\s\S]*?-->/g, m => m.replace(/[^\n]/g, ""));   // keep the line count, so each block knows its source lines
+  const toc = [], used = new Set(); let front = "", skip = 0;
   const fm = text.match(/^---\n([\s\S]*?)\n---[ \t]*(\n|$)/);
   if (fm) {
     const rows = fm[1].split("\n").map(l => l.match(/^([\w-]+):\s*(.*)$/)).filter(Boolean);
-    if (rows.length) { text = text.slice(fm[0].length); front = `<dl class="rd-front">${rows.map(r => `<dt>${esc(r[1])}</dt><dd>${rdInline(r[2])}</dd>`).join("")}</dl>`; }
+    if (rows.length) { text = text.slice(fm[0].length); skip = fm[0].replace(/\n$/, "").split("\n").length; front = `<dl class="rd-front" data-l="1-${skip}">${rows.map(r => `<dt>${esc(r[1])}</dt><dd>${rdInline(r[2])}</dd>`).join("")}</dl>`; }
   }
   const words = (text.replace(/(```|~~~)[\s\S]*?\1/g, " ").match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) || []).length;
   const LI = /^(\s*)([-*+]|\d{1,3}[.)])\s+/, FENCE = /^(\s*)(```+|~~~+)\s*([\w+#.-]*)/, HEAD = /^(#{1,6})\s+(.*?)\s*#*\s*$/, HR = /^\s{0,3}([-*_])(\s*\1){2,}\s*$/;
@@ -962,11 +987,13 @@ function mdDoc(src, prefix) {
   const starts = l => FENCE.test(l) || HEAD.test(l) || HR.test(l) || /^\s*>/.test(l) || isTblRow(l);
   const slug = t => { const s = t.toLowerCase().replace(/<[^>]+>/g, "").replace(/&[a-z#0-9]+;/g, "").replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "") || "section"; let k = s, i = 2; while (used.has(k)) k = s + "-" + i++; used.add(k); return prefix + k; };
   const cells = r => r.trim().replace(/^\|/, "").replace(/\|$/, "").split(/(?<!\\)\|/).map(c => c.trim().replace(/\\\|/g, "|"));
-  function blocks(L) {
-    const out = []; let i = 0;
+  function blocks(L, base) {
+    const out = []; let i = 0, i0 = 0, n0 = 0;
+    const mark = () => { if (base == null) return; for (let k = n0; k < out.length; k++) out[k] = out[k].replace(/^<(\w+)/, `<$1 data-l="${base + i0 + 1}-${base + i}"`); };
     while (i < L.length) {
+      mark(); i0 = i; n0 = out.length;
       const l = L[i];
-      if (!l.trim()) { i++; continue; }
+      if (!l.trim()) { i++; n0 = out.length; continue; }
       let m;
       if ((m = l.match(FENCE))) {
         const mark = m[2], pad = m[1].length, lang = m[3], buf = []; i++;
@@ -1000,6 +1027,7 @@ function mdDoc(src, prefix) {
       while (i < L.length && L[i].trim() && !starts(L[i]) && !(buf.length && LI.test(L[i]))) buf.push(L[i++]);
       out.push(`<p>${buf.map((x, k) => rdInline(x.trim()) + (k < buf.length - 1 ? (/(\s{2}|\\)$/.test(x) ? "<br>" : " ") : "")).join("")}</p>`);
     }
+    mark();
     return out.join("");
   }
   function list(L, i) {
@@ -1032,7 +1060,7 @@ function mdDoc(src, prefix) {
     }).join("")}</${tag}>`;
     return { html, i };
   }
-  const html = front + blocks(text.split("\n"));
+  const html = front + blocks(text.split("\n"), skip);
   const h2 = toc.filter(h => h.level === 2).length;
   const shown = toc.length <= 40 ? toc : toc.filter(h => h.level === 2);
   return { html, toc: h2 >= 3 || shown.length >= 4 ? shown : [], words };
@@ -1047,8 +1075,9 @@ function readerHTML(n, full) {
     ${rdTypeMenu()}<div class="rd-seg" role="group" aria-label="Reading theme"><button type="button" data-rtheme="light" aria-pressed="${th === "light"}" title="White page">${RD_ICON.sun}<span class="rd-label">Light</span></button><button type="button" data-rtheme="dark" aria-pressed="${th === "dark"}" title="Black page">${RD_ICON.moon}<span class="rd-label">Dark</span></button></div>
     ${full ? `<button class="rd-btn" type="button" id="rd-close" title="Close (Esc)">${RD_ICON.close}<span class="rd-label">Close</span></button><span class="rd-progress" id="rd-progress"></span>`
            : `<button class="rd-btn" type="button" id="rd-open" title="Read full screen">${RD_ICON.expand}<span class="rd-label">Full screen</span></button>`}</div>`;
-  if (!full) return `<article class="reader rd-${th} rf-${rdFont()} rs-${rdSize()}" aria-label="${esc(n.name)}, read view">${top}<div class="rd-body">${tocBox("")}<div class="rd-doc">${doc.html}</div></div></article>`;
-  return `<div class="reader rd-full rd-${th} rf-${rdFont()} rs-${rdSize()}" role="dialog" aria-modal="true" aria-label="${esc(n.name)}">${top}<div class="rd-scroll" id="rd-scroll"><div class="rd-layout">${doc.toc.length ? `<nav class="rd-side" aria-label="Contents"><div class="rd-side-h">Contents</div>${tocList}</nav>` : ""}<div class="rd-main">${tocBox("rd-toc-inline")}<div class="rd-doc">${doc.html}</div></div></div></div></div>`;
+  const editable = !n.readonly && !!db ? " rd-editable" : "";
+  if (!full) return `<article class="reader${editable} rd-${th} rf-${rdFont()} rs-${rdSize()}" aria-label="${esc(n.name)}, read view">${top}<div class="rd-body">${tocBox("")}<div class="rd-doc">${doc.html}</div></div></article>`;
+  return `<div class="reader${editable} rd-full rd-${th} rf-${rdFont()} rs-${rdSize()}" role="dialog" aria-modal="true" aria-label="${esc(n.name)}">${top}<div class="rd-scroll" id="rd-scroll"><div class="rd-layout">${doc.toc.length ? `<nav class="rd-side" aria-label="Contents"><div class="rd-side-h">Contents</div>${tocList}</nav>` : ""}<div class="rd-main">${tocBox("rd-toc-inline")}<div class="rd-doc">${doc.html}</div></div></div></div></div>`;
 }
 const RD_FONTS = { sans: "Sans", legible: "Legible", serif: "Serif" }, RD_SIZES = { s: "S", m: "M", l: "L" };
 const rdFont = () => { const f = store.get("ftx-rfont"); return RD_FONTS[f] ? f : "sans"; };
@@ -1132,6 +1161,10 @@ function fileTab(n) {
   }
   const bar = (extra, solo) => `<div class="filebar${solo ? " solo" : ""}"><span class="mono">${rel}</span><span class="src">${esc(src)}</span><span class="grow"></span>${extra}</div>`;
   const commentBtn = `<button class="btn quiet" type="button" id="fe-comment-file">Comment on the file</button>`;
+  if (n.content == null && n.content_lazy) {   // a real file found in the repository: its text comes from real-files.json (D-061)
+    loadRealFiles();
+    return linkNote + `<div>${bar(commentBtn)}<div class="codeview" style="padding:22px 16px;font-family:var(--f-body);color:var(--muted)">${REAL.err ? "The file's text could not be loaded: " + esc(REAL.err) : "Loading the file from the repository copy…"}</div></div>`;
+  }
   if (n.content == null) {
     const btns = `<button class="btn primary" type="button" id="fe-write">Write it</button>${n.example && n.example.body ? '<button class="btn" type="button" id="fe-example">Start from the example</button>' : ""}${commentBtn}`;
     return linkNote + `<div>${bar(btns)}<div class="codeview" style="padding:22px 16px;font-family:var(--f-body);color:var(--muted)">Not created yet.${n.writers_readers ? " Written by: " + inline(n.writers_readers) : ""}</div></div>` + commentsBlock(n, cs.map(c => [c, !!c.line]));
@@ -1153,7 +1186,7 @@ function fileTab(n) {
   const seg = asDoc ? `<div class="seg" role="group" aria-label="How to show the file"><button type="button" data-mdmode="read" aria-pressed="${MD_MODE === "read"}">Read</button><button type="button" data-mdmode="source" aria-pressed="${MD_MODE === "source"}">Source</button></div>` : "";
   if (asDoc && MD_MODE === "read")
     return warn + linkNote + `<div class="rd-wrap">${bar(`${seg}<button class="btn" type="button" id="fe-edit">Edit</button>${commentBtn}`, true)}${readerHTML(n, false)}</div>
-    <p class="note-muted" style="margin:0">To comment on one line, switch to Source and click its number.</p>` + commentsBlock(n, cs.map(c => [c, false]));
+    <p class="note-muted" style="margin:0">${n.readonly || !db ? "" : "Double-click (or double-tap) any paragraph, heading, list or table to edit it right here. "}To comment on one line, switch to Source and click its number.</p>` + commentsBlock(n, cs.map(c => [c, false]));
   return warn + linkNote + empty + roNote + `<div>${bar(`<span>${lines.length.toLocaleString("en")} line${lines.length === 1 ? "" : "s"}</span>${size}${seg}${editBtn}${commentBtn}`)}<div class="codeview">${rows}</div></div>
     <p class="note-muted" style="margin:0">Click a line number to comment on that line.</p>` + commentsBlock(n, general);
 }
@@ -2365,7 +2398,36 @@ $("#dscroll").addEventListener("input", ev => { if (ev.target.id === "del-note" 
 $("#tier").value = ["complex", "default", "quick"].includes(store.get("ftx-tier")) ? store.get("ftx-tier") : "complex";
 $("#tier").addEventListener("change", ev => store.set("ftx-tier", ev.target.value));
 $("#tree").tabIndex = 0;
-document.addEventListener("keydown", ev => { if (ev.key === "Escape" && $("#rdfull")) { ev.preventDefault(); closeReaderFull(); } });
+document.addEventListener("keydown", ev => { if (ev.key === "Escape" && $("#rdfull") && !ev.target.closest(".rd-blockedit")) { ev.preventDefault(); closeReaderFull(); } });
+/* Edit in the Read view: double-click a block to edit its Markdown lines in place; Save writes the file like the Edit button does */
+let rdTap = null;   // two taps on the same block count as a double-click, for phones that send no dblclick
+document.addEventListener("click", ev => { const el = ev.target.closest && ev.target.closest(".reader.rd-editable .rd-doc [data-l]"); if (!el) { rdTap = null; return; }
+  if (rdTap && rdTap.el === el && Date.now() - rdTap.t < 400) { rdTap = null; editBlock(ev, el); } else rdTap = { el, t: Date.now() }; });
+document.addEventListener("dblclick", ev => editBlock(ev, ev.target.closest(".reader.rd-editable .rd-doc [data-l]")));
+function editBlock(ev, el) {
+  if (!el || !el.isConnected || el.closest(".rd-blockedit") || ev.target.closest("a, button")) return;
+  const n = NODES[selected]; if (!n || n.content == null || n.readonly || !db) return;
+  const [a, b] = el.dataset.l.split("-").map(Number), L = n.content.replace(/\r\n?/g, "\n").split("\n");
+  if (!(a >= 1 && b >= a && b <= L.length)) return;
+  ev.preventDefault(); const sel = getSelection(); sel && sel.removeAllRanges();
+  const box = document.createElement("div"); box.className = "rd-blockedit";
+  box.innerHTML = `<textarea spellcheck="true" aria-label="Edit lines ${a} to ${b}"></textarea><div class="acts"><button class="go" type="button" data-be="save">Save</button><button type="button" data-be="cancel">Cancel</button><span>Lines ${a}${b > a ? "–" + b : ""} · Ctrl+Enter saves, Esc cancels</span></div>`;
+  const ta = box.querySelector("textarea"), before = L.slice(a - 1, b).join("\n");
+  ta.value = before; el.replaceWith(box);
+  const fit = () => { ta.style.height = "auto"; ta.style.height = Math.min(ta.scrollHeight + 4, innerHeight * 0.7) + "px"; };
+  fit(); ta.addEventListener("input", fit); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+  const done = () => { if ($("#rdfull")) { closeReaderFull(true); rerender(); openReaderFull(); } else rerender(); };
+  const save = () => {
+    const now = ta.value; if (now === before) { done(); return; }
+    const text = [...L.slice(0, a - 1), ...(now === "" ? [] : now.split("\n")), ...L.slice(b)].join("\n");
+    box.querySelectorAll("button").forEach(x => x.disabled = true); box.querySelector(".acts span").textContent = "Saving…";
+    applyChanges([{ node_id: n.id, set: { content: text } }], "Edited " + n.name, "")
+      .then(items => { done(); ripple(items, "Edited the file's content in the Read view", n.id); })
+      .catch(e => { box.querySelectorAll("button").forEach(x => x.disabled = false); box.querySelector(".acts span").textContent = "Could not save (" + ((e && e.code) || "error") + "). Your text is still here."; });
+  };
+  box.addEventListener("click", e => { const k = e.target.dataset.be; if (k === "save") save(); else if (k === "cancel") done(); });
+  ta.addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); save(); } else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); done(); } });
+}
 $("#tree").addEventListener("keydown", ev => {
   const rows = [...document.querySelectorAll("#tree .row:not(.idx)")]; const i = rows.findIndex(r => r.dataset.id === selected); if (!rows.length) return;
   if (ev.key === "ArrowDown" || ev.key === "ArrowUp") { ev.preventDefault(); const r = rows[Math.max(0, Math.min(rows.length - 1, i + (ev.key === "ArrowDown" ? 1 : -1)))]; select(r.dataset.id); }

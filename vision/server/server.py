@@ -110,8 +110,9 @@ class Store:
 class WriteThrough:
     """Writes the owner's page edits of a file's text or its How it works into the repository."""
 
-    def __init__(self, repo, data_file, never):
+    def __init__(self, repo, data_file, never, planning=None):
         self.repo, self.data_file, self.never = repo, data_file, never
+        self.planning = planning   # while we plan, the folder that holds the drafts and How it works files ("vision")
         self._nodes, self._mtime = {}, None
 
     def nodes(self):
@@ -135,6 +136,10 @@ class WriteThrough:
         return p if inside and not any(b in rel for b in self.never) else None
 
     def file_of(self, node):
+        if node.get("src_file"):             # the file the page showed: a draft, a repository file or a real file found on disk
+            return self._safe(node["src_file"])
+        if self.planning:                    # a planned file nobody has written: the edit waits in the page store for the sync
+            return None
         segs = self._segs(node)[1:]          # drop the root name "agent-os"
         if node.get("type") != "file" or not segs or any("[" in s for s in segs):
             return None
@@ -158,6 +163,8 @@ class WriteThrough:
         return self._safe("/".join(where + [self.family(node, segs[-1]) + ending]))
 
     def index_of(self, node):
+        if self.planning:                    # How it works files sit in the planning folder (next to a draft, or in its mirror tree)
+            return self._safe(os.path.join(self.planning, node["how_file"])) if node.get("how_file") else None
         return self.metadata_of(node, ".index.md")
 
     def apply(self, node_id, doc, before=None):
@@ -168,7 +175,8 @@ class WriteThrough:
         if not n:
             return done
         text = fields.get("content")
-        p = self.file_of(n) if isinstance(text, str) and text != old.get("content") else None
+        cut = isinstance(text, str) and "…(cut for the page" in text   # never write back a text the page only showed in part
+        p = self.file_of(n) if isinstance(text, str) and not cut and text != old.get("content") else None
         if p and (not os.path.isfile(p) or open(p, encoding="utf-8").read() != text):
             os.makedirs(os.path.dirname(p), exist_ok=True)
             with open(p, "w", encoding="utf-8") as f:
@@ -202,12 +210,32 @@ class App:
         self.data = self.cfg.get("data", "file-tree.data.json")
         self.store = Store(os.path.join(self.repo, self.cfg.get("store_dir", "apps/project-IDE/data/page-store")))
         never = self.cfg.get("claude", {}).get("never", [".secrets"])
-        self.write = WriteThrough(self.repo, os.path.join(self.page_dir, self.data), never) if self.cfg.get("write_through", True) else None
+        self.write = WriteThrough(self.repo, os.path.join(self.page_dir, self.data), never, self.cfg.get("planning_dir")) if self.cfg.get("write_through", True) else None
         secrets = load_secrets(self.cfg, self.repo)
         self.voice = voice.Voice(self.cfg, secrets)
         # Claude Code gets only its own keys, never the voice key
         vkey = self.voice.cfg["key"]
         self.bridge = claude_bridge.Bridge(self.cfg, self.repo, {k: v for k, v in secrets.items() if k != vkey})
+
+    def real_files(self):
+        """id -> text of every real file the build found on disk ("scanned"), read now, so the page shows what is on disk."""
+        out, never = {}, self.cfg.get("claude", {}).get("never", [".secrets"])
+        try:
+            nodes = json.load(open(os.path.join(self.page_dir, self.data), encoding="utf-8")).get("nodes", [])
+        except (OSError, ValueError):
+            return out
+        for n in nodes:
+            if not n.get("content_lazy") or not str(n.get("path", "")).startswith("agent-os/"):
+                continue
+            rel = n["path"][len("agent-os/"):]
+            p = os.path.realpath(os.path.join(self.repo, rel))
+            if not p.startswith(self.repo + os.sep) or any(b in rel for b in never) or not os.path.isfile(p):
+                continue
+            try:
+                out[n["id"]] = open(p, encoding="utf-8").read()
+            except (UnicodeDecodeError, OSError):
+                pass
+        return out
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -255,6 +283,8 @@ class Handler(BaseHTTPRequestHandler):
         if not parts:
             return self._send(302, b"", extra={"Location": "/" + a.page})
         if parts[0] != "api":
+            if parts == ["real-files.json"]:   # the texts of the real files, read fresh from the repository
+                return self._send(200, json.dumps(a.real_files(), ensure_ascii=False).encode(), "application/json; charset=utf-8")
             if len(parts) == 1 and parts[0] in (a.page, a.data):
                 ctype = "text/html; charset=utf-8" if parts[0].endswith(".html") else "application/json; charset=utf-8"
                 return self._send(200, open(os.path.join(a.page_dir, parts[0]), "rb").read(), ctype)

@@ -587,7 +587,7 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - **Decision:** the repository's top-level `researches/` moves to `agents/trading/researches/` [56.2], with its three studies: prediction-market research [54.1], self-improving agents [54.2] and trading-agent architectures [54.3]. The File Tree page marks every item that exists in the repository and lists every real file under such a folder, read from the repository at each build.
 - **Date:** 2026-10-09
 - **Why:** the owner's message: "get last version from github there will be researches folder move it to trading/researches folder, and make sync that current file tree represent real file tree in a project".
-- **Status:** decided. Our defaults: the folder keeps the owner's name `researches/` (every agent's own folder is `research/`); all three studies move, the self-improving-agents study included, as the owner moved the whole folder; the planning copy `vision/` is not shown as part of the tree (it becomes the project IDE's data); real files found by the scan get no How it works file of their own, their folder's describes them.
+- **Status:** decided. Our defaults: the folder keeps the owner's name `researches/` (every agent's own folder is `research/`); all three studies move, the self-improving-agents study included, as the owner moved the whole folder; every real file is shown, the planning copy `vision/` included (owner, 2026-10-09 14:59: "we always should have real represention of file tree on a disk and on ui"); the texts of real files load when one is opened (`real-files.json`), so the page stays small; real files found by the scan get no How it works file of their own, their folder's describes them.
 - **Sources:** in-20261009-1230, D-045, D-059
 - **Changed:** the repository (the move), the tree notes ([56], new [56.2], [54], [54.1]-[54.3]), the page build (`enrich.py` lists real files), the mirror tree.
 
@@ -617,3 +617,11 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - v0.3 (2026-10-01): D-034 added.
 - v0.2 (2026-09-30): D-033 added.
 - v0.1 (2026-09-30): created from file-tree.md v1.15, vision.md v0.19 and the owner inputs (D-033). The seed list D-001 to D-031 that stood in file-tree.md [2.6] moved here.
+### D-062: An inputs vision: every owner requirement by scope, in ASD-STE100
+<!-- k: id=d-062 applies=[2.23] sources=in-20261009-1938 status=decided -->
+- **Decision:** `agents/system/docs/inputs-vision.md` [2.23] holds a detailed overview of the project from all of the owner's inputs only. Repeated logic appears once; logic a newer input contradicts is left out. It is divided by scope of logic (for example the system agent and common file rules) and written in ASD-STE100 style. Before it was written, every owner message in the project chat, its reply threads and this thread was checked against `docs/inputs/`; five messages from 2026-10-09 were missing and are now filed.
+- **Date:** 2026-10-09
+- **Why:** the owner wants one systematic, documentation-style view of everything they asked for.
+- **Status:** decided. Ours: rule codes per scope (`SYS-01` and so on), a terms table, an "Open subjects" list, and the knowledge base agent keeping it current after each input.
+- **Changed:** file-tree.md [2.23]; vision/.claude/docs/inputs-vision.md with its metadata files; docs/inputs (5 files added).
+

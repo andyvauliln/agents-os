@@ -1857,6 +1857,140 @@
     "page v51"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261009-1455",
+   "at": "2026-10-09T14:55:12Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": "cmsg_01Sk8xdkWKCz34CUCfVMyQbxBA9SBinpXkfEpALikghwv8",
+   "file": "2026-10-09-1455-merge-pr-2.md",
+   "chars": 20,
+   "categories": [
+    "process"
+   ],
+   "summary": "The owner asks Claude to merge the open pull request (PR #2) without waiting for them.",
+   "processed_into": [
+    "PR #2 merged (merge b3ca51b)"
+   ],
+   "answered": true
+  },
+  {
+   "id": "in-20261009-1458",
+   "at": "2026-10-09T14:58:02Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": "cmsg_01Sk8xdkWKCz34CUCfVMyQbxRkVDZz6tfbupi4WZrNauQX",
+   "file": "2026-10-09-1458-where-is-vision.md",
+   "chars": 50,
+   "categories": [
+    "question",
+    "structure"
+   ],
+   "summary": "The owner asks where the vision/ folder went.",
+   "processed_into": [
+    "answered in chat; led to in-20261009-1459"
+   ],
+   "answered": true
+  },
+  {
+   "id": "in-20261009-1459",
+   "at": "2026-10-09T14:59:30Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": "cmsg_01Sk8xdkWKCz34CUCfVMyQbxUpGo999gnv8GqrM5PiHDLe",
+   "file": "2026-10-09-1459-real-tree-always.md",
+   "chars": 117,
+   "categories": [
+    "ui",
+    "structure"
+   ],
+   "summary": "The owner restates the rule: the File Tree page must always show the real file tree on disk, so vision/ must be on it.",
+   "processed_into": [
+    "D-061 (updated)",
+    "tools/enrich.py (scan of every folder)",
+    "page v52",
+    "PR #3"
+   ],
+   "answered": true
+  },
+  {
+   "id": "in-20261009-1714",
+   "at": "2026-10-09T17:14:45Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": "cmsg_01Sk8xdkWKCz34CUCfVMyQbxPGCtozZt3LZS1MLo4qYDLT",
+   "file": "2026-10-09-1714-metadata-switch-real-files.md",
+   "chars": 70,
+   "categories": [
+    "ui",
+    "question"
+   ],
+   "summary": "The owner asks why real .meta.json files stay in the tree when the metadata switch is off.",
+   "processed_into": [
+    "explorer/file-tree-explorer.html",
+    "page v53",
+    "changelog 2026-10-09"
+   ],
+   "answered": true
+  },
+  {
+   "id": "in-20261009-1938",
+   "at": "2026-10-09T19:38:58Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": "cmsg_01Sk8xdkWKCz34CUCfVMyQbx9gB73nq96MomYs4qBYpvp1",
+   "file": "2026-10-09-1938-inputs-check-and-inputs-vision.md",
+   "chars": 587,
+   "categories": [
+    "docs-knowledge",
+    "process"
+   ],
+   "summary": "The owner asks to check that every one of their inputs is stored as a file, then write system/docs/inputs-vision.md: a detailed overview of the project from all their inputs, without repeated or overruled logic, divided by scope (system agent, common file rules and so on), in ASD-STE100 style.",
+   "processed_into": [
+    "D-062",
+    "vision/.claude/docs/inputs-vision.md"
+   ],
+   "answered": false
+  },
+  {
+   "id": "in-20261009-2005",
+   "at": "2026-10-09T20:05:16Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": "cmsg_01Sk8xdkWKCz34CUCfVMyQbxCo1CLNQcU1443z5tsauknc",
+   "file": "2026-10-09-2005-edit-in-read-view.md",
+   "chars": 41,
+   "categories": [
+    "ui"
+   ],
+   "summary": "The owner wants to edit files directly in the Read view of the File tab.",
+   "processed_into": [
+    "explorer/file-tree-explorer.html",
+    "inputs-vision.md TAB-17",
+    "page v55"
+   ],
+   "answered": true
+  },
+  {
+   "id": "in-20261009-2219",
+   "at": "2026-10-09T22:19:59Z",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": "cmsg_01Sk8xdkWKCz34CUCfVMyQbxLNAyMPm2NpbfD1PSw417sX",
+   "file": "2026-10-09-2219-project-ide-on-server.md",
+   "chars": 78,
+   "categories": [
+    "question",
+    "ui"
+   ],
+   "summary": "The owner asks whether starting the project IDE now works the same as the page on claude.ai.",
+   "processed_into": [
+    "server/server.py",
+    "server.config.json",
+    "tools/enrich.py"
+   ],
+   "answered": true
   }
  ]
 }

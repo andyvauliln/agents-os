@@ -164,6 +164,20 @@
    ],
    "created": "2026-10-09",
    "updated": "2026-10-09"
+  },
+  {
+   "id": "2026-10-09-1938-inputs-vision",
+   "file": "2026-10-09-1938-inputs-vision.md",
+   "title": "Check all owner inputs; write the inputs vision",
+   "status": "done",
+   "inputs": [
+    "in-20261009-1938"
+   ],
+   "decisions": [
+    "D-062"
+   ],
+   "created": "2026-10-09",
+   "updated": "2026-10-09"
   }
  ]
 }

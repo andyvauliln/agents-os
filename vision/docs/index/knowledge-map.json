@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-09T12:43:28Z",
+ "built": "2026-10-09T15:08:50Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "296bbd5a3189",
+   "hash": "d5c1f64df638",
    "entries": []
   },
   "conventions.md": {
@@ -147,7 +147,7 @@
   },
   "decisions.md": {
    "title": "Agent OS: Decisions (v1.13)",
-   "hash": "90bab630f36b",
+   "hash": "af740bd745b7",
    "entries": [
     "d-001",
     "d-002",
@@ -6827,7 +6827,7 @@
     "D-059"
    ],
    "status": "decided",
-   "hash": "e9250eadbb15",
+   "hash": "f41127e74f61",
    "nodes": [
     "n-54.1",
     "n-54.2",
@@ -6836,7 +6836,7 @@
     "n-56.2"
    ],
    "inherited_by": [],
-   "chars": 1251
+   "chars": 1413
   },
   "fm-data-collection-workers": {
    "id": "fm-data-collection-workers",
@@ -25874,7 +25874,7 @@
     "term-domain"
    ],
    "inherited": [],
-   "basis": "486e801d005b",
+   "basis": "2887bce64511",
    "summary_state": "fresh"
   },
   "n-56.2": {
@@ -25894,7 +25894,7 @@
     "d-061"
    ],
    "inherited": [],
-   "basis": "3ce89d963373",
+   "basis": "7745c0e2cd70",
    "summary_state": "fresh"
   },
   "n-54.1": {
@@ -25911,7 +25911,7 @@
     "d-061"
    ],
    "inherited": [],
-   "basis": "069d4cff4c89",
+   "basis": "8c6585d2b919",
    "summary_state": "fresh"
   },
   "n-54.2": {
@@ -25928,7 +25928,7 @@
     "d-061"
    ],
    "inherited": [],
-   "basis": "fb8819fd359f",
+   "basis": "69977f2d15cc",
    "summary_state": "fresh"
   },
   "n-54.3": {
@@ -25946,7 +25946,7 @@
     "d-061"
    ],
    "inherited": [],
-   "basis": "f22f45786d63",
+   "basis": "c71d3071ad81",
    "summary_state": "fresh"
   },
   "n-56.1": {
@@ -35148,7 +35148,12 @@
     "page-sync"
    ],
    "summary": "The owner asks to pull the latest repository, move its researches/ folder to trading/researches/, and make the File Tree page show the project's real file tree.",
-   "processed_into": "in progress",
+   "processed_into": [
+    "D-061",
+    "file-tree.md v1.34",
+    "tools/enrich.py",
+    "page v51"
+   ],
    "entries": [
     "d-061"
    ]

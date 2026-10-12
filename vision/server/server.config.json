@@ -1,14 +1,14 @@
 {
- "_about": "Settings of the project IDE server (apps/project-IDE/server/). Paths are relative to the top of the repository. No secret values here: the keys are named, and their values stay in the keys file on this machine.",
- "repo": "../../..",
+ "_about": "Settings of the project IDE server. Paths are relative to the top of the repository. While we plan, the server runs from the planning folder vision/ (the page in vision/explorer/, the drafts and How it works files in vision/); when the repository gets apps/project-IDE/ and agents/system/, these paths change to them. No secret values here: the keys are named, and their values stay in the keys file on this machine.",
+ "repo": "../..",
  "host": "127.0.0.1",
  "port": 8765,
- "page_dir": "apps/project-IDE/current-ui",
+ "page_dir": "vision/explorer",
  "page": "file-tree-explorer.html",
  "data": "file-tree.data.json",
- "store_dir": "apps/project-IDE/data/page-store",
+ "store_dir": "vision/page-store",
  "write_through": true,
- "log_dir": "agents/system/logs/subagents/project-ide-agent",
+ "log_dir": "vision/logs/project-ide-agent",
  "secrets": {
   "file": ".secrets/test/.env",
   "keys": [
@@ -28,7 +28,7 @@
   "language": null
  },
  "claude": {
-  "cwd": "agents/system",
+  "cwd": "vision",
   "model": null,
   "max_turns": 80,
   "max_budget_usd": 3,
@@ -96,5 +96,6 @@
   "never": [
    ".secrets"
   ]
- }
+ },
+ "planning_dir": "vision"
 }

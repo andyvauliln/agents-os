@@ -52,6 +52,7 @@ DRAFTS = {"2.1": ".claude/docs/README.md",
           "10.1.2.3": ".claude/skills/vision-doc/SKILL.md",
           "10.1.2.4": ".claude/skills/readme-doc/SKILL.md",
           "2.22": ".claude/docs/rebuild-prompt.md",
+          "2.23": ".claude/docs/inputs-vision.md",
           "10.1.2.7": ".claude/skills/rebuild-prompt-doc/SKILL.md",
           "10.1.2.8": ".claude/skills/change-plan/SKILL.md"}
 DRAFT_DIRS = {"10.1": ".claude/", "10.1.1": ".claude/agents/", "10.1.2": ".claude/skills/",

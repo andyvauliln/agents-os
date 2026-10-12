@@ -3,6 +3,7 @@
 System-level history: what changed in the OS design, when, and from which decision. Newest first. Per-agent changes stay in each agent's own `docs/changes.md` [46]. The knowledge agent adds one line per processed input or system change (knowledge-intake, step 6).
 
 ## 2026-10-12
+- **Every planned item is now a real file.** The owner said that everything planned should already be real files. The 398 planned items missing from the repository are now created by a new build step, `tools/materialize.py`: 87 files with their draft text, 144 empty (`{}` for .json), a `.gitkeep` in each empty folder, placeholder names as written, `|` written as `-`. While we plan, the draft in `vision/` stays the source; every build copies it again, and the owner's server writes an edit into both (`real_file`). Only `.secrets/` is not created. Page tree and git: 1,977 paths each, no difference.
 - **The page's tree is exactly the files on disk.** The owner pulled main and found a different tree than on the page: the page also showed about 400 planned items that are not on disk yet. A "planned" switch, off by default, now hides them, and the made-up metadata rows of planned items show only with it. Files git ignores are left out of the scan, and `.gitignore` no longer hides the How it works and Details notes of the keys files (`/.secrets/` is now only the top folder; `!.env.index.md`, `!.env.meta.json`). Checked path by path against git: no difference.
 
 ## 2026-10-09

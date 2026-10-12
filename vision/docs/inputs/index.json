@@ -2011,6 +2011,26 @@
     ".gitignore"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261012-real",
+   "at": "2026-10-12",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-12-planned-are-real-files.md",
+   "chars": 145,
+   "categories": [
+    "structure",
+    "ui"
+   ],
+   "summary": "Everything planned on the page should already be real files.",
+   "processed_into": [
+    "tools/materialize.py",
+    "tools/enrich.py",
+    "server/server.py"
+   ],
+   "answered": true
   }
  ]
 }

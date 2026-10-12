@@ -1,8 +1,10 @@
 ---
 about: agent-os/agents/system/docs/inputs-vision.md
 node: n-2.23
+basis: 888506bd8399
 written: 2026-10-09T19:45:20Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T11:22:56Z
 ---
 # inputs-vision.md
 

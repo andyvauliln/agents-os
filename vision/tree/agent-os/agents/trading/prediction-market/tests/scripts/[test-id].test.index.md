@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/tests/scripts/[test-id].test.[js|py]
 node: n-19.12.2.2
-basis: 9045f3c4a378
+basis: 33c78a830ca8
 written: 2026-10-01T00:57:42Z
 by: summary-worker
-confirmed: 2026-10-07T18:57:42Z
+confirmed: 2026-10-12T11:29:26Z
 ---
 # [test-id].test.[js|py]
 

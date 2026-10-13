@@ -1,9 +1,10 @@
 ---
 about: agent-os/agents/system/data/
 node: n-16
-basis: 66c4adae2f3e
+basis: 583bccb1ee1f
 written: 2026-10-07T19:01:11Z
 by: knowledge-base-agent
+confirmed: 2026-10-13T11:51:08Z
 ---
 # data/
 

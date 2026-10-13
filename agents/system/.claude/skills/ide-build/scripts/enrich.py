@@ -927,6 +927,21 @@ try:   # files git ignores (.env.*, logs, local settings) never reach the owner'
     _IN_GIT = set(subprocess.run(["git", "-C", REPO, "ls-files", "--cached", "--others", "--exclude-standard"], capture_output=True, text=True, check=True).stdout.split("\n"))
 except (OSError, subprocess.CalledProcessError):
     _IN_GIT = None
+_BY_ID = {x["id"]: x for x in out_nodes}
+def _adopt(folder):
+    """A planned item written with a folder in its name ("vision-doc/SKILL.md" under skills/) moves into the found
+    folder of that name, under its own last name, so the tree lists it once (owner, 2026-10-13: no item twice)."""
+    for n in out_nodes:
+        if n.get("scanned") or n["parent"] == folder["id"] or not n["path"].startswith(folder["path"]) or n["path"] == folder["path"]:
+            continue
+        rest = n["path"][len(folder["path"]):].rstrip("/")
+        if "/" in rest:
+            continue
+        old = _BY_ID.get(n["parent"])
+        if old and n["id"] in old.get("children", []):
+            old["children"].remove(n["id"])
+        n["parent"] = folder["id"]; n["name"] = rest + ("/" if n["type"] == "folder" else "")
+        folder.setdefault("children", []).append(n["id"])
 def _scan(parent):
     rel = parent["path"][len("agent-os/"):]
     d = os.path.join(REPO, rel)
@@ -961,9 +976,10 @@ def _scan(parent):
                     x["content"] = None; x["content_lazy"] = True
                 except (UnicodeDecodeError, OSError):
                     x["content"] = None; x["content_source"] += " (not a text file)"
-        out_nodes.append(x)
+        out_nodes.append(x); _BY_ID[x["id"]] = x
         parent.setdefault("children", []).append(x["id"])
         if isdir:
+            _adopt(x)
             _scan(x)
 for _x in list(out_nodes):
     if _x["type"] == "folder" and _x.get("exists") and not _x.get("scanned") \

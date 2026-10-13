@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-13T07:28:20Z",
+ "built": "2026-10-13T11:51:46Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "e960c9f9a688",
+   "hash": "cc227dd18e3e",
    "entries": []
   },
   "conventions.md": {
@@ -20842,7 +20842,7 @@
    ],
    "inherited": [],
    "basis": "e64e5d527469",
-   "summary_state": "fresh"
+   "summary_state": "stale"
   },
   "n-10.1.2.1": {
    "num": "10.1.2.1",
@@ -21481,7 +21481,7 @@
    ],
    "inherited": [],
    "basis": "c0cefc10fb2d",
-   "summary_state": "fresh"
+   "summary_state": "stale"
   },
   "p-agent-os-agents-system-.claude-agent-memory-subagent-name-MEMORY.md": {
    "num": null,
@@ -22341,7 +22341,7 @@
    ],
    "inherited": [],
    "basis": "028276481506",
-   "summary_state": "fresh"
+   "summary_state": "stale"
   },
   "n-15.1": {
    "num": "15.1",
@@ -22549,7 +22549,7 @@
    ],
    "inherited": [],
    "basis": "66c4adae2f3e",
-   "summary_state": "fresh"
+   "summary_state": "stale"
   },
   "n-16.1": {
    "num": "16.1",
@@ -23865,7 +23865,7 @@
    ],
    "inherited": [],
    "basis": "3dfb39f6061b",
-   "summary_state": "fresh"
+   "summary_state": "stale"
   },
   "n-19.4.2": {
    "num": "19.4.2",
@@ -29205,6 +29205,20 @@
     "ui"
    ],
    "summary": "Edit a Read-view block as it looks, not as Markdown source.",
+   "processed_into": [
+    "plans/2026-10-12-claude-md-stage-one.md"
+   ],
+   "entries": []
+  },
+  "in-20261013-planned-logic": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-planned-logic.md",
+   "categories": [
+    "structure",
+    "ui"
+   ],
+   "summary": "What logic decides planned and not planned files, outside vision/.",
    "processed_into": [
     "plans/2026-10-12-claude-md-stage-one.md"
    ],

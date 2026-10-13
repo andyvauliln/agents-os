@@ -3,6 +3,7 @@
 System-level history: what changed in the OS design, when, and from which decision. Newest first. Per-agent changes stay in each agent's own `docs/changes.md` [46]. The knowledge agent adds one line per processed input or system change (knowledge-intake, step 6).
 
 ## 2026-10-13
+- **The IDE on a server after the move.** The owner asked if the IDE works on another server as it does here. Yes; only the server settings change. A full server test after the move is added to the leave-vision plan.
 - **No memory folder in git (D-066).** The owner asked why the new version needs memory notes when agents should use the docs and metadata. Checked: nearly all is in the docs already; the few missing wishes, rules and open questions go into CLAUDE.md, the trading README and the questions files; cloud-only facts stay in the cloud project memory.
 - **How the tree follows the disk, and the memory notes.** The owner asked how the tree syncs with the disk and why the memory notes are needed. Answered step by step; proposed to keep only the notes that are still rules and fold the history notes into the decisions and the changelog.
 - **The tree is the files on disk (D-065).** The owner asked to remove all logic about planned items. The page leaves out anything that is only in the tree notes, the build creates nothing from the plan, and the "planned" switch is gone. Files with nothing written in them are marked "empty", and an "empty" filter lists only them (30 outside `vision/`).

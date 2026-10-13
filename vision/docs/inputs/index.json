@@ -2217,6 +2217,23 @@
     "apps/project-IDE/data/plans/2026-10-13-leave-vision-files.md"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261013-ide-on-server",
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-13-ide-on-server.md",
+   "chars": 84,
+   "categories": [
+    "ide"
+   ],
+   "summary": "Will the IDE work on another server the same way after the vision move.",
+   "processed_into": [
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md"
+   ],
+   "answered": true
   }
  ]
 }

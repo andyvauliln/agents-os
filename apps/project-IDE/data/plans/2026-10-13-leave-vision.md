@@ -39,13 +39,13 @@ This is the biggest step. Everything else is moving files and changing paths.
 
 ## Steps
 
-1. Move the records (inputs, decisions, changelog, plans, memory) to `apps/project-IDE/data/` and point knowledge-intake, change-plan and CLAUDE.md at them.
+1. Move the records (inputs, decisions, changelog, plans) to `apps/project-IDE/data/` and point knowledge-intake, change-plan and CLAUDE.md at them. Put the few missing memory parts into CLAUDE.md, the trading README and the system README questions (D-066).
 2. Make the real skills, agents and metadata files the source: drop the draft lists and the metadata copying in the build.
 3. Move the build tools into `ide-build/scripts/` with paths to the real places; the page source and its data into `apps/project-IDE/current-ui/`; fix the server settings.
 4. Teach `enrich.py` to build the tree from disk plus each item's metadata, without the tree notes; carry the [n] numbers and decisions of every item into its Details file first.
 5. Move `how-to/` and the prediction-market notes to their real docs; archive the rest.
 6. Rebuild, check the page against git, publish, and check the server starts from `apps/project-IDE/server/`.
-7. Remove `vision/` from the repository, update CLAUDE.md, every README, HANDOFF.md and memory.
+7. Remove `vision/` from the repository, update CLAUDE.md, every README, HANDOFF.md, and remove `apps/project-IDE/data/memory/`.
 
 ## Open for the owner
 

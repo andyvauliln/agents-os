@@ -8,10 +8,10 @@
 
 | What happens | Files |
 |---|---|
-| Deleted: old versions, backups, pointers, caches, empty files. Git history keeps them. | 614 |
+| Deleted: old versions, backups, pointers, caches, empty files. Git history keeps them. | 628 |
 | Kept for stage two: prediction-market files with text and their metadata, in the IDE sources. | 472 |
 | Deleted here, because the same file already sits at its real place (most are How it works and Details files next to their items). | 353 |
-| Moved to its real place: no copy there yet. | 198 |
+| Moved to its real place: no copy there yet. | 184 |
 | Deleted: the older system and trading docs, replaced by the new docs at five levels. | 106 |
 | Made by the build at the new place; deleted here. | 3 |
 | Its content goes into other files first, then it moves. | 1 |
@@ -19,7 +19,7 @@
 
 ## Where things go
 
-- `apps/project-IDE/data/`: inputs, decisions, changelog, plans, memory, overrides. Its `sources/` folder holds the knowledge notes the docs were written from, and the prediction-market files and metadata for stage two.
+- `apps/project-IDE/data/`: inputs, decisions, changelog, plans, overrides. No memory folder (in-20261013-no-memory-folder): the few owner wishes go into the rules in agents/system/CLAUDE.md, open questions into the questions files of the docs, and the memory/ template folder is removed. Its `sources/` folder holds the knowledge notes the docs were written from, and the prediction-market files and metadata for stage two.
 - `apps/project-IDE/current-ui/`: the page. `apps/project-IDE/server/`: the server.
 - `agents/system/.claude/`: skills and helper agents. `agents/system/.claude/skills/ide-build/scripts/`: the build tools.
 - `agents/system/docs/how-to/`: the how-to guides.
@@ -48,20 +48,20 @@
     │   │       ├── rebuild-prompt.md  —  move → apps/project-IDE/data/sources/rebuild-prompt.md
     │   │       └── vision.md  —  move → apps/project-IDE/data/sources/vision.md
     │   ├── memory/
-    │   │   ├── agent-os-trading-domain.md  —  move → apps/project-IDE/data/memory/agent-os-trading-domain.md
-    │   │   ├── apps-docs-clones-forks.md  —  move → apps/project-IDE/data/memory/apps-docs-clones-forks.md
-    │   │   ├── claude-folder-docs-layout.md  —  move → apps/project-IDE/data/memory/claude-folder-docs-layout.md
-    │   │   ├── file-family-plan.md  —  move → apps/project-IDE/data/memory/file-family-plan.md
-    │   │   ├── file-tree-explorer-sync.md  —  move → apps/project-IDE/data/memory/file-tree-explorer-sync.md
-    │   │   ├── full-context-for-ai.md  —  move → apps/project-IDE/data/memory/full-context-for-ai.md
-    │   │   ├── general-system-plan.md  —  move → apps/project-IDE/data/memory/general-system-plan.md
-    │   │   ├── github-sync-plan.md  —  move → apps/project-IDE/data/memory/github-sync-plan.md
-    │   │   ├── human-docs-style.md  —  move → apps/project-IDE/data/memory/human-docs-style.md
-    │   │   ├── knowledge-intake-every-input.md  —  move → apps/project-IDE/data/memory/knowledge-intake-every-input.md
-    │   │   ├── MEMORY.md  —  move → apps/project-IDE/data/memory/MEMORY.md
-    │   │   ├── planned-items-are-real-files.md  —  move → apps/project-IDE/data/memory/planned-items-are-real-files.md
-    │   │   ├── README.md  —  move → apps/project-IDE/data/memory/README.md
-    │   │   └── stage-one.md  —  move → apps/project-IDE/data/memory/stage-one.md
+    │   │   ├── agent-os-trading-domain.md  —  delete · its rule "system text general, money and markets in prediction-market" goes into agents/trading/docs/README.md
+    │   │   ├── apps-docs-clones-forks.md  —  delete · already in apps/docs/README.md
+    │   │   ├── claude-folder-docs-layout.md  —  delete · history, in decisions D-047, D-048
+    │   │   ├── file-family-plan.md  —  delete · history, in decisions D-049, D-050
+    │   │   ├── file-tree-explorer-sync.md  —  delete · cloud project only, stays in the cloud project memory
+    │   │   ├── full-context-for-ai.md  —  delete · already in docs/vision.md and agents/system/docs/vision.md
+    │   │   ├── general-system-plan.md  —  delete · history, in decision D-051 and the plans
+    │   │   ├── github-sync-plan.md  —  delete · history, in decisions D-041, D-043
+    │   │   ├── human-docs-style.md  —  delete · already a rule in agents/system/CLAUDE.md
+    │   │   ├── knowledge-intake-every-input.md  —  delete · already step 2 of the round in agents/system/CLAUDE.md
+    │   │   ├── MEMORY.md  —  delete · the index of the notes, not needed
+    │   │   ├── planned-items-are-real-files.md  —  delete · replaced by D-065, a rule in agents/system/CLAUDE.md
+    │   │   ├── README.md  —  delete · explains the notes, not needed
+    │   │   └── stage-one.md  —  delete · already in agents/system/CLAUDE.md
     │   ├── skills/
     │   │   ├── change-plan/
     │   │   │   ├── SKILL.index.md  —  delete · same copy already at agents/system/.claude/skills/change-plan/SKILL.index.md (then fix its vision/ paths)

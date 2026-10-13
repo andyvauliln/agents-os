@@ -14,4 +14,10 @@ Agreed: checked the 13 notes against the docs; almost all is already in CLAUDE.m
 ~~~
 
 ## Processed into
-- apps/project-IDE/data/plans/2026-10-13-leave-vision.md (memory row, proposed)
+- apps/project-IDE/data/plans/2026-10-13-leave-vision.md (memory row, D-066)
+
+## Follow-up 2026-10-13
+~~~text
+yes and print me update filee with what new or will be updated
+~~~
+Recorded as D-066. The files plan now deletes the 14 notes (no move) and says where each part goes; counts: delete 628, move 184.

@@ -649,3 +649,11 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - **Why:** the owner: "remove all logic related to planned, all already created files on disk should represent the current tree on the UI; empty files are files that have nothing yet, with a filter on the UI to see them".
 - **Status:** decided.
 - **Changed:** tools/enrich.py, tools/materialize.py, the page, IDE README and README.asd, ide-build skill, CLAUDE.md, HANDOFF.md.
+
+### D-066: No memory folder in git; agents use the docs and the metadata
+<!-- k: id=d-066 applies=[53.4] sources=in-20261013-no-memory-folder status=decided -->
+- **Decision:** the new version keeps no memory notes in git. `vision/.claude/memory/` is deleted when `vision/` goes, not moved, and the template folder `apps/project-IDE/data/memory/` is removed. What the notes held that the docs did not: the owner's wishes (answers in ASD-STE100 when asked, low token use) go into the rules in `agents/system/CLAUDE.md`; the rule "system text stays general, money and markets go to prediction-market" goes into `agents/trading/docs/README.md`; the open questions not yet in a questions file (where `v[N]` sits in a variant name, the model defaults, the jobs) go into `agents/system/docs/README.questions.md`. History stays in the decisions and the changelog. Facts about the cloud project only stay in the cloud project memory.
+- **Date:** 2026-10-13
+- **Why:** the owner: agents should use the documentation and index files, not keep that much in a memory; most of it is already in the docs.
+- **Status:** decided. Built with the leave-vision plan.
+- **Changed:** apps/project-IDE/data/plans/2026-10-13-leave-vision.md, 2026-10-13-leave-vision-files.md.

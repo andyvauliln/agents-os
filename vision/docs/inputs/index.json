@@ -2212,7 +2212,9 @@
    ],
    "summary": "No memory folder in the new version: agents use the docs and metadata.",
    "processed_into": [
-    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md"
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md",
+    "decisions.md#d-066",
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision-files.md"
    ],
    "answered": true
   }

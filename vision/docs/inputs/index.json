@@ -2198,6 +2198,23 @@
     "apps/project-IDE/data/plans/2026-10-13-leave-vision.md"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261013-no-memory-folder",
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-13-no-memory-folder.md",
+   "chars": 331,
+   "categories": [
+    "structure"
+   ],
+   "summary": "No memory folder in the new version: agents use the docs and metadata.",
+   "processed_into": [
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md"
+   ],
+   "answered": true
   }
  ]
 }

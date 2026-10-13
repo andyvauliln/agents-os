@@ -8,8 +8,8 @@
 
 | What happens | Files |
 |---|---|
-| Deleted: old versions, backups, pointers, caches, empty files. Git history keeps them. | 628 |
-| Kept for stage two: prediction-market files with text and their metadata, in the IDE sources. | 472 |
+| Deleted: old versions, backups, pointers, caches, empty files. Git history keeps them. | 626 |
+| Kept for stage two: prediction-market files with text and their metadata, in the IDE sources. | 474 |
 | Deleted here, because the same file already sits at its real place (most are How it works and Details files next to their items). | 353 |
 | Moved to its real place: no copy there yet. | 184 |
 | Deleted: the older system and trading docs, replaced by the new docs at five levels. | 106 |
@@ -607,7 +607,10 @@
     │   ├── 2026-10-05/  —  delete · 10 files (old versions; git history keeps them)
     │   ├── 2026-10-06/  —  delete · 12 files (old versions; git history keeps them)
     │   ├── 2026-10-07/  —  delete · 5 files (old versions; git history keeps them)
-    │   └── 2026-10-09/  —  delete · 4 files (old versions; git history keeps them)
+    │   └── 2026-10-09/
+    │       ├── README-trading-parts.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/README-trading-parts.md (the trading text taken out of the system README, for pm's own docs)
+    │       ├── rebuild-prompt-trading-parts.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/rebuild-prompt-trading-parts.md (the same, from the rebuild prompt)
+    │       └── (the rest)  —  delete · 2 files (README and rebuild prompt before they were made general; git history keeps them)
     ├── docs/
     │   ├── common/
     │   │   ├── agent-architecture.md  —  move → apps/project-IDE/data/sources/common/agent-architecture.md

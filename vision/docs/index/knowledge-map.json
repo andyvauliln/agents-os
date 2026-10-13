@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-12T15:48:04Z",
+ "built": "2026-10-13T07:25:40Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "1d872ca4d146",
+   "hash": "a798bec7badc",
    "entries": []
   },
   "conventions.md": {
@@ -29196,6 +29196,19 @@
    "entries": [
     "d-064"
    ]
+  },
+  "in-20261013-wysiwyg": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-edit-block-in-place.md",
+   "categories": [
+    "ui"
+   ],
+   "summary": "Edit a Read-view block as it looks, not as Markdown source.",
+   "processed_into": [
+    "plans/2026-10-12-claude-md-stage-one.md"
+   ],
+   "entries": []
   }
  },
  "problems": [

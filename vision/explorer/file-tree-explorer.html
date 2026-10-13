@@ -303,6 +303,9 @@ details.kentry .kbody { padding: 2px 12px 10px; font-size: 13.5px; display: flex
 .rd-blockedit button { font: 600 13px/1 var(--f-body, sans-serif); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--rd-rule); background: var(--rd-th); color: var(--rd-head); cursor: pointer; }
 .rd-blockedit button.go { background: var(--rd-accent); border-color: var(--rd-accent); color: var(--rd-bg); }
 .rd-blockedit button:disabled { opacity: .55; cursor: default; }
+.rd-blockedit.rd-wys { margin: .6em -8px; }
+.rd-blockedit.rd-wys > :first-child { margin-top: 0; }
+.rd-blockedit.rd-wys [contenteditable="true"] { outline: 0; caret-color: var(--rd-accent); }
 .rd-wrap { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .filebar.solo { border-bottom: 1px solid var(--line); border-radius: 8px; }
 .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; padding: 2px; gap: 2px; background: var(--panel); }
@@ -2414,13 +2417,90 @@ $("#tier").value = ["complex", "default", "quick"].includes(store.get("ftx-tier"
 $("#tier").addEventListener("change", ev => store.set("ftx-tier", ev.target.value));
 $("#tree").tabIndex = 0;
 document.addEventListener("keydown", ev => { if (ev.key === "Escape" && $("#rdfull") && !ev.target.closest(".rd-blockedit")) { ev.preventDefault(); closeReaderFull(); } });
-/* Edit in the Read view: double-click a block to edit its Markdown lines in place; Save writes the file like the Edit button does */
+/* Edit in the Read view: double-click a block and type in it as it looks (owner, 2026-10-13); Save turns it back into Markdown and writes the file
+   like the Edit button does. "Markdown" switches that block to its source lines; the front matter always opens as source. */
 let rdTap = null;   // two taps on the same block count as a double-click, for phones that send no dblclick
 document.addEventListener("click", ev => { const el = ev.target.closest && ev.target.closest(".reader.rd-editable .rd-doc [data-l]"); if (!el) { rdTap = null; return; }
   if (rdTap && rdTap.el === el && Date.now() - rdTap.t < 400) { rdTap = null; editBlock(ev, el); } else rdTap = { el, t: Date.now() }; });
 document.addEventListener("dblclick", ev => editBlock(ev, ev.target.closest(".reader.rd-editable .rd-doc [data-l]")));
+const WYS = /^(P|H[1-6]|UL|OL|BLOCKQUOTE)$/;
+const wysOk = el => WYS.test(el.tagName) || el.matches("figure.rd-code, div.rd-tbl");
+function wysInline(node, flat) {   // rendered inline HTML back to Markdown
+  let out = "";
+  for (const c of node.childNodes) {
+    if (c.nodeType === 3) { out += c.nodeValue.replace(/\u00a0/g, " "); continue; }
+    if (c.nodeType !== 1) continue;
+    const t = c.tagName, inner = () => wysInline(c, flat), wrap = (m, x) => x.trim() ? x.replace(/^(\s*)([\s\S]*?)(\s*)$/, `$1${m}$2${m}$3`) : x;
+    if (t === "BR") out += flat ? " " : "\n";
+    else if (t === "STRONG" || t === "B") out += wrap("**", inner());
+    else if (t === "EM" || t === "I") out += wrap("*", inner());
+    else if (t === "S" || t === "DEL" || t === "STRIKE") out += wrap("~~", inner());
+    else if (t === "CODE") out += c.textContent ? "`" + c.textContent + "`" : "";
+    else if (t === "A") out += `[${inner()}](${c.getAttribute("href") || ""})`;
+    else if (c.classList.contains("rd-xref")) out += `[${inner()}](${c.title || ""})`;
+    else if (t === "DIV" || t === "P") out += (out && !out.endsWith("\n") ? (flat ? " " : "\n") : "") + inner();
+    else if (t === "UL" || t === "OL") continue;
+    else out += inner();
+  }
+  return out;
+}
+function wysList(el, pad, marker) {
+  const ordered = el.tagName === "OL", start = +(el.getAttribute("start") || 1), lines = [];
+  [...el.children].filter(li => li.tagName === "LI").forEach((li, k) => {
+    const m = ordered ? (start + k) + "." : marker, sub = " ".repeat(m.length + 1);
+    const text = wysInline(li).trim().split("\n").map((x, j) => (j ? pad + sub : "") + x.trim()).join("\n");
+    lines.push(pad + m + " " + text);
+    for (const kid of li.children) if (kid.tagName === "UL" || kid.tagName === "OL") lines.push(wysList(kid, pad + sub, marker));
+  });
+  return lines.join("\n");
+}
+function wysMarkdown(el, before) {   // the whole block back to Markdown; "before" is its source, for markers and fences
+  const first = before.split("\n")[0], t = el.tagName;
+  if (/^H[1-6]$/.test(t)) return (first.match(/^#{1,6}/) || ["#".repeat(+t[1])])[0] + " " + wysInline(el, true).trim();
+  if (t === "P") return wysInline(el).split("\n").map(x => x.trim()).filter(Boolean).join("\n");
+  if (t === "UL" || t === "OL") { const m = first.match(/^\s*([-*+])\s/); return wysList(el, "", m ? m[1] : "-"); }
+  if (t === "BLOCKQUOTE") return [...el.children].map(k => k.tagName === "UL" || k.tagName === "OL" ? wysList(k, "", "-") : wysInline(k).trim()).join("\n\n").split("\n").map(x => x ? "> " + x : ">").join("\n");
+  if (el.matches("figure.rd-code")) { const L = before.split("\n"), code = el.querySelector("code").innerText.replace(/\n$/, ""); return [L[0], code, L[L.length - 1]].join("\n"); }
+  if (el.matches("div.rd-tbl")) {
+    const sep = before.split("\n").find(l => /^\s*\|?\s*:?-{2,}/.test(l)), rows = [...el.querySelectorAll("tr")];
+    const line = tr => "| " + [...tr.children].map(c => wysInline(c, true).trim().replace(/\|/g, "\\|")).join(" | ") + " |";
+    return rows.map((tr, k) => line(tr) + (k === 0 && sep && el.querySelector("thead") ? "\n" + sep : "")).join("\n");
+  }
+  return before;
+}
 function editBlock(ev, el) {
   if (!el || !el.isConnected || el.closest(".rd-blockedit") || ev.target.closest("a, button")) return;
+  if (!wysOk(el)) return editBlockMd(ev, el);
+  const n = NODES[selected]; if (!n || n.content == null || n.readonly || !db) return;
+  const [a, b] = el.dataset.l.split("-").map(Number), L = n.content.replace(/\r\n?/g, "\n").split("\n");
+  if (!(a >= 1 && b >= a && b <= L.length)) return;
+  ev.preventDefault();
+  const before = L.slice(a - 1, b).join("\n"), box = document.createElement("div"); box.className = "rd-blockedit rd-wys";
+  box.innerHTML = `<div class="acts"><button class="go" type="button" data-be="save">Save</button><button type="button" data-be="cancel">Cancel</button><button type="button" data-be="md">Markdown</button><span>Ctrl+B bold, Ctrl+I italic · Ctrl+Enter saves, Esc cancels</span></div>`;
+  el.replaceWith(box); box.prepend(el);
+  const area = el.matches("figure.rd-code") ? el.querySelector("code") : el;
+  area.contentEditable = "true"; area.spellcheck = true; const html0 = area.innerHTML;
+  area.focus(); const sel = getSelection(); if (sel) { const r = document.createRange(); r.selectNodeContents(area); r.collapse(false); sel.removeAllRanges(); sel.addRange(r); }
+  const done = () => { if ($("#rdfull")) { closeReaderFull(true); rerender(); openReaderFull(); } else rerender(); };
+  const save = () => {
+    if (area.innerHTML === html0) { done(); return; }
+    const now = wysMarkdown(el, before); if (now === before) { done(); return; }
+    const text = [...L.slice(0, a - 1), ...(now === "" ? [] : now.split("\n")), ...L.slice(b)].join("\n");
+    area.contentEditable = "false"; box.querySelectorAll("button").forEach(x => x.disabled = true); box.querySelector(".acts span").textContent = "Saving…";
+    applyChanges([{ node_id: n.id, set: { content: text } }], "Edited " + n.name, "")
+      .then(items => { done(); ripple(items, "Edited the file's content in the Read view", n.id); })
+      .catch(e => { area.contentEditable = "true"; box.querySelectorAll("button").forEach(x => x.disabled = false); box.querySelector(".acts span").textContent = "Could not save (" + ((e && e.code) || "error") + "). Your text is still here."; });
+  };
+  box.addEventListener("click", e => { const k = e.target.dataset.be; if (k === "save") save(); else if (k === "cancel") done(); else if (k === "md") { box.replaceWith(el); area.contentEditable = "false"; area.innerHTML = html0; editBlockMd(e, el); } });
+  area.addEventListener("keydown", e => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); save(); }
+    else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); done(); }
+    else if (e.key === "Enter" && /^(P|H[1-6])$/.test(el.tagName)) { e.preventDefault(); if (el.tagName === "P") document.execCommand("insertLineBreak"); }
+  });
+  area.addEventListener("paste", e => { const t = e.clipboardData && e.clipboardData.getData("text/plain"); if (t == null) return; e.preventDefault(); document.execCommand("insertText", false, t); });
+}
+function editBlockMd(ev, el) {
+  if (!el || !el.isConnected || (ev.target.closest && ev.target.closest("a")) ) return;
   const n = NODES[selected]; if (!n || n.content == null || n.readonly || !db) return;
   const [a, b] = el.dataset.l.split("-").map(Number), L = n.content.replace(/\r\n?/g, "\n").split("\n");
   if (!(a >= 1 && b >= a && b <= L.length)) return;

@@ -8,8 +8,8 @@
 
 | What happens | Files |
 |---|---|
-| Deleted: old versions, backups, pointers, caches, empty files. Git history keeps them. | 626 |
-| Kept for stage two: prediction-market files with text and their metadata, in the IDE sources. | 474 |
+| Deleted: old versions, backups, pointers, caches, empty files. Git history keeps them. | 676 |
+| Kept for stage two: prediction-market files with text and their metadata, in the IDE sources. | 424 |
 | Deleted here, because the same file already sits at its real place (most are How it works and Details files next to their items). | 353 |
 | Moved to its real place: no copy there yet. | 184 |
 | Deleted: the older system and trading docs, replaced by the new docs at five levels. | 106 |
@@ -225,80 +225,80 @@
     │   │   │   └── vision.md  —  delete · older system and trading docs, replaced by the docs at five levels
     │   │   ├── prediction-market/
     │   │   │   ├── .claude/
-    │   │   │   │   ├── settings.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/.claude/settings.json
-    │   │   │   │   └── settings.local.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/.claude/settings.local.json
+    │   │   │   │   ├── settings.json  —  delete · empty, only {}
+    │   │   │   │   └── settings.local.json  —  delete · empty, only {}
     │   │   │   ├── configs/
-    │   │   │   │   ├── prediction-market-agents.config.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/configs/prediction-market-agents.config.json
-    │   │   │   │   ├── prediction-market-agents.links.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/configs/prediction-market-agents.links.json
-    │   │   │   │   └── prediction-market-agents.workers.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/configs/prediction-market-agents.workers.json
+    │   │   │   │   ├── prediction-market-agents.config.json  —  delete · empty, only {}
+    │   │   │   │   ├── prediction-market-agents.links.json  —  delete · empty, only {}
+    │   │   │   │   └── prediction-market-agents.workers.json  —  delete · empty, only {}
     │   │   │   ├── docs/
     │   │   │   │   ├── common/
-    │   │   │   │   │   ├── strategy-si-templates.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/common/strategy-si-templates.md
-    │   │   │   │   │   ├── trading-agent-architecture.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/common/trading-agent-architecture.md
-    │   │   │   │   │   └── trading-prompt.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/common/trading-prompt.md
+    │   │   │   │   │   ├── strategy-si-templates.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   │   ├── trading-agent-architecture.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   │   └── trading-prompt.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
     │   │   │   │   ├── how-to/
-    │   │   │   │   │   ├── add-trading-account.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/how-to/add-trading-account.md
-    │   │   │   │   │   ├── create-strategy-or-variant.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/how-to/create-strategy-or-variant.md
-    │   │   │   │   │   ├── go-live-with-money.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/how-to/go-live-with-money.md
-    │   │   │   │   │   └── stop-trading-agent.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/how-to/stop-trading-agent.md
+    │   │   │   │   │   ├── add-trading-account.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   │   ├── create-strategy-or-variant.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   │   ├── go-live-with-money.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   │   └── stop-trading-agent.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
     │   │   │   │   ├── index/
-    │   │   │   │   │   └── accounts.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/index/accounts.md
-    │   │   │   │   ├── doc-outlines.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/doc-outlines.md
-    │   │   │   │   ├── trading-architecture.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/trading-architecture.md
-    │   │   │   │   ├── trading-conventions.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/trading-conventions.md
-    │   │   │   │   ├── trading-data-schemas.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/trading-data-schemas.md
-    │   │   │   │   ├── trading-feature-map.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/trading-feature-map.md
-    │   │   │   │   ├── trading-flows.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/trading-flows.md
-    │   │   │   │   ├── trading-glossary.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/trading-glossary.md
-    │   │   │   │   ├── trading-metrics.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/trading-metrics.md
-    │   │   │   │   ├── trading-overview.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/trading-overview.md
-    │   │   │   │   ├── trading-roadmap.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/trading-roadmap.md
-    │   │   │   │   └── trading-safety.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/docs/trading-safety.md
+    │   │   │   │   │   └── accounts.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   ├── doc-outlines.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   ├── trading-architecture.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   ├── trading-conventions.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   ├── trading-data-schemas.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   ├── trading-feature-map.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   ├── trading-flows.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   ├── trading-glossary.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   ├── trading-metrics.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   ├── trading-overview.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   ├── trading-roadmap.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   └── trading-safety.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
     │   │   │   ├── research/
-    │   │   │   │   └── index.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/research/index.json
+    │   │   │   │   └── index.json  —  delete · empty, only {}
     │   │   │   ├── strategy-1-agent/
     │   │   │   │   ├── .claude/
-    │   │   │   │   │   ├── settings.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/.claude/settings.json
-    │   │   │   │   │   └── settings.local.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/.claude/settings.local.json
+    │   │   │   │   │   ├── settings.json  —  delete · empty, only {}
+    │   │   │   │   │   └── settings.local.json  —  delete · empty, only {}
     │   │   │   │   ├── configs/
-    │   │   │   │   │   ├── strategy-1-agent.links.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/configs/strategy-1-agent.links.json
-    │   │   │   │   │   └── strategy-1-agent.workers.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/configs/strategy-1-agent.workers.json
+    │   │   │   │   │   ├── strategy-1-agent.links.json  —  delete · empty, only {}
+    │   │   │   │   │   └── strategy-1-agent.workers.json  —  delete · empty, only {}
     │   │   │   │   ├── pm-strategy-1.momentum-v1.opus55-test/
     │   │   │   │   │   ├── .claude/
-    │   │   │   │   │   │   ├── settings.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/.claude/settings.json
-    │   │   │   │   │   │   └── settings.local.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/.claude/settings.local.json
+    │   │   │   │   │   │   ├── settings.json  —  delete · empty, only {}
+    │   │   │   │   │   │   └── settings.local.json  —  delete · empty, only {}
     │   │   │   │   │   ├── configs/
-    │   │   │   │   │   │   ├── models.config.link.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/configs/models.config.link.json
-    │   │   │   │   │   │   ├── pm-strategy-1.momentum-v1.opus55-test.config.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/configs/pm-strategy-1.momentum-v1.opus55-test.config.json
-    │   │   │   │   │   │   ├── pm-strategy-1.momentum-v1.opus55-test.links.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/configs/pm-strategy-1.momentum-v1.opus55-test.links.json
-    │   │   │   │   │   │   ├── pm-strategy-1.momentum-v1.opus55-test.workers.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/configs/pm-strategy-1.momentum-v1.opus55-test.workers.json
-    │   │   │   │   │   │   ├── prediction-market-agents.config.link.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/configs/prediction-market-agents.config.link.json
-    │   │   │   │   │   │   └── system.config.link.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/configs/system.config.link.json
+    │   │   │   │   │   │   ├── models.config.link.json  —  delete · empty, only {}
+    │   │   │   │   │   │   ├── pm-strategy-1.momentum-v1.opus55-test.config.json  —  delete · empty, only {}
+    │   │   │   │   │   │   ├── pm-strategy-1.momentum-v1.opus55-test.links.json  —  delete · empty, only {}
+    │   │   │   │   │   │   ├── pm-strategy-1.momentum-v1.opus55-test.workers.json  —  delete · empty, only {}
+    │   │   │   │   │   │   ├── prediction-market-agents.config.link.json  —  delete · empty, only {}
+    │   │   │   │   │   │   └── system.config.link.json  —  delete · empty, only {}
     │   │   │   │   │   ├── data/
-    │   │   │   │   │   │   ├── markets-catalog.link.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/data/markets-catalog.link.json
-    │   │   │   │   │   │   └── polymarket-prices.link.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/data/polymarket-prices.link.json
+    │   │   │   │   │   │   ├── markets-catalog.link.json  —  delete · empty, only {}
+    │   │   │   │   │   │   └── polymarket-prices.link.json  —  delete · empty, only {}
     │   │   │   │   │   ├── research/
-    │   │   │   │   │   │   └── index.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/research/index.json
+    │   │   │   │   │   │   └── index.json  —  delete · empty, only {}
     │   │   │   │   │   ├── tests/
     │   │   │   │   │   │   ├── agents/
-    │   │   │   │   │   │   │   └── tests.config.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/tests/agents/tests.config.json
+    │   │   │   │   │   │   │   └── tests.config.json  —  delete · empty, only {}
     │   │   │   │   │   │   └── scripts/
-    │   │   │   │   │   │       └── tests.config.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/tests/scripts/tests.config.json
-    │   │   │   │   │   └── package.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/package.json
+    │   │   │   │   │   │       └── tests.config.json  —  delete · empty, only {}
+    │   │   │   │   │   └── package.json  —  delete · empty, only {}
     │   │   │   │   ├── research/
-    │   │   │   │   │   └── index.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/research/index.json
+    │   │   │   │   │   └── index.json  —  delete · empty, only {}
     │   │   │   │   ├── tests/
     │   │   │   │   │   ├── agents/
-    │   │   │   │   │   │   └── tests.config.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/tests/agents/tests.config.json
+    │   │   │   │   │   │   └── tests.config.json  —  delete · empty, only {}
     │   │   │   │   │   └── scripts/
-    │   │   │   │   │       └── tests.config.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/tests/scripts/tests.config.json
-    │   │   │   │   └── package.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/strategy-1-agent/package.json
+    │   │   │   │   │       └── tests.config.json  —  delete · empty, only {}
+    │   │   │   │   └── package.json  —  delete · empty, only {}
     │   │   │   ├── tests/
     │   │   │   │   ├── agents/
-    │   │   │   │   │   └── tests.config.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/tests/agents/tests.config.json
+    │   │   │   │   │   └── tests.config.json  —  delete · empty, only {}
     │   │   │   │   └── scripts/
-    │   │   │   │       └── tests.config.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/tests/scripts/tests.config.json
-    │   │   │   ├── package.json  —  stage two → apps/project-IDE/data/sources/prediction-market/files/package.json
+    │   │   │   │       └── tests.config.json  —  delete · empty, only {}
+    │   │   │   ├── package.json  —  delete · empty, only {}
     │   │   │   └── (the rest)  —  delete · 501 files (empty prediction-market file or its empty metadata)
     │   │   ├── trading-docs/
     │   │   │   ├── README.md  —  delete · older system and trading docs, replaced by the docs at five levels

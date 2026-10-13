@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-13T11:51:46Z",
+ "built": "2026-10-13T12:02:19Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "cc227dd18e3e",
+   "hash": "fc00a2c0cdd5",
    "entries": []
   },
   "conventions.md": {
@@ -147,7 +147,7 @@
   },
   "decisions.md": {
    "title": "Agent OS: Decisions (v1.13)",
-   "hash": "89f5a5573908",
+   "hash": "4d95407790f7",
    "entries": [
     "d-001",
     "d-002",
@@ -212,7 +212,8 @@
     "d-061",
     "d-062",
     "d-063",
-    "d-064"
+    "d-064",
+    "d-065"
    ]
   },
   "feature-map.md": {
@@ -6198,6 +6199,28 @@
    ],
    "inherited_by": [],
    "chars": 1957
+  },
+  "d-065": {
+   "id": "d-065",
+   "doc": "decisions.md",
+   "heading": "D-065: The tree is the files on disk; no planned items; an empty-files filter",
+   "level": 3,
+   "line": 645,
+   "applies_raw": [
+    "[53.1.1]",
+    "[53.4]"
+   ],
+   "sources": [
+    "in-20261013-disk-tree"
+   ],
+   "status": "decided",
+   "hash": "15501e5e3c0a",
+   "nodes": [
+    "n-53.1.1",
+    "n-53.4"
+   ],
+   "inherited_by": [],
+   "chars": 1107
   },
   "fm-data-collection-workers": {
    "id": "fm-data-collection-workers",
@@ -26154,10 +26177,11 @@
     "conv-apps",
     "d-055",
     "d-064",
+    "d-065",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "6dc578c86afb",
+   "basis": "377d763e090d",
    "summary_state": "fresh"
   },
   "n-53.4.1": {
@@ -26254,10 +26278,11 @@
     "d-044",
     "d-046",
     "d-057",
-    "d-060"
+    "d-060",
+    "d-065"
    ],
    "inherited": [],
-   "basis": "bbd24314cede",
+   "basis": "7a4622c46f3b",
    "summary_state": "fresh"
   },
   "n-53.1.2": {
@@ -29223,6 +29248,22 @@
     "plans/2026-10-12-claude-md-stage-one.md"
    ],
    "entries": []
+  },
+  "in-20261013-disk-tree": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-disk-tree-empty-filter.md",
+   "categories": [
+    "structure",
+    "ui"
+   ],
+   "summary": "Remove planned logic: the tree is the files on disk; a filter for empty files.",
+   "processed_into": [
+    "plans/2026-10-12-claude-md-stage-one.md"
+   ],
+   "entries": [
+    "d-065"
+   ]
   }
  },
  "problems": [

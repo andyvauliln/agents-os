@@ -641,3 +641,11 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - **Why:** the owner wants a fresh Claude Code to know the project and its stage at once, and docs they can trust and compare.
 - **Status:** decided. Ours (proposed): the name `rebuild-prompt.md` kept for "reverse-prompt", the prediction-market folder names kept, the project docs in a top-level `docs/`, deletions done as moves into the archive.
 - **Changed:** file-tree.md (tree), agents/system/CLAUDE.md, the docs at five levels, skills, tools (materialize, enrich, parse, index_files), the page, .gitignore.
+
+### D-065: The tree is the files on disk; no planned items; an empty-files filter
+<!-- k: id=d-065 applies=[53.1.1],[53.4] sources=in-20261013-disk-tree status=decided -->
+- **Decision:** the page and the build know only the files on disk. An item in the tree notes that is not on disk is left out of the page (enrich.py), and nothing is created from the plan any more (materialize.py now only copies drafts over their real files, copies metadata next to items, gives other items empty metadata files, keeps `.gitkeep` in empty folders and writes `docs/file-tree.md`). The page's "planned" switch and its virtual metadata rows are gone; metadata rows are the real files. A file with nothing written in it yet (0 bytes, or only `{}` / `[]`) is marked "empty", and an "empty" filter shows only those files with their folders. `vision/`, `.gitkeep` and `.env` files are never marked.
+- **Date:** 2026-10-13
+- **Why:** the owner: "remove all logic related to planned, all already created files on disk should represent the current tree on the UI; empty files are files that have nothing yet, with a filter on the UI to see them".
+- **Status:** decided.
+- **Changed:** tools/enrich.py, tools/materialize.py, the page, IDE README and README.asd, ide-build skill, CLAUDE.md, HANDOFF.md.

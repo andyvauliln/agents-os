@@ -73,6 +73,7 @@ header.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px
 .row.ctx .nm { color: var(--muted); }
 .row.removed .nm { text-decoration: line-through; color: var(--danger); }
 .row mark { background: var(--warn-soft); color: inherit; border-radius: 2px; padding: 0 1px; }
+.etag { font: 600 9.5px var(--f-body); text-transform: uppercase; letter-spacing: .05em; padding: 1px 5px; border-radius: 4px; flex: none; background: var(--neutral-soft); color: var(--muted); }
 .chg { font: 600 9.5px var(--f-body); text-transform: uppercase; letter-spacing: .05em; padding: 1px 5px; border-radius: 4px; flex: none; background: var(--warn-soft); color: var(--warn); }
 .detail { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; }
 .dscroll { flex: 1 1 auto; overflow: auto; min-height: 0; }
@@ -573,7 +574,7 @@ del.w { background: var(--danger-soft); }
         <button class="tab" type="button" role="tab" data-side="all" aria-selected="true">All</button>
         <button class="tab" type="button" role="tab" data-side="changed" aria-selected="false">Changed<span class="n" id="chgcount">0</span></button>
         <button class="tab idxtog" type="button" id="idxtog" data-idxtog="1" aria-pressed="true" title="Show or hide the metadata files of every file and folder: How it works (.index.md) and Details (.meta.json)">☑ metadata</button>
-        <button class="tab idxtog" type="button" id="plantog" data-plantog="1" aria-pressed="false" title="Show or hide the planned files and folders that are not on disk yet. Off, the tree is exactly the files on disk.">☐ planned</button>
+        <button class="tab idxtog" type="button" id="emptytog" data-emptytog="1" aria-pressed="false" title="Show only the empty files: files on disk with nothing written in them yet">☐ empty</button>
       </div>
       <div class="treeinfo" id="treeinfo" hidden></div>
       <nav class="tree" id="tree" aria-label="File tree"><div class="empty">Loading the tree…</div></nav>
@@ -620,13 +621,13 @@ const whenDb = () => dbReady ? Promise.resolve(db) : new Promise(r => { dbWaiter
 function dbArrived(d) { db = d; dbReady = true; dbWaiters.splice(0).forEach(r => r(db)); renderSheet(); renderChat(); }
 let selected = null, query = "", tab = store.get("ftx-tab2") || "how";
 let showIdx = store.get("ftx-idx") !== "0";
-let showPlanned = store.get("ftx-planned") === "1";   // off: the tree is exactly what is on disk (owner, 2026-10-12); on: the planned items too
-const onDisk = n => !!(n && (n.exists || n.scanned));   // show each item's metadata files (How it works .index.md, Details .meta.json) as their own rows
+let emptyOnly = store.get("ftx-empty") === "1";   // the tree is the files on disk (owner, 2026-10-13); this filter shows only the empty files in it
 /* metadata files are named after their item without its extension (owner, 2026-10-07): vision.md -> vision.index.md, vision.meta.json */
 const famName = n => n.fam || (n.type === "folder" ? String(n.name || "agent-os/").replace(/\/$/, "") : String(n.name || "").replace(/(.)\.[^./]+$/, "$1"));
 const idxName = n => famName(n) + ".index.md";
 const metaName = n => famName(n) + ".meta.json";
 const hasIdx = n => !/\.(index\.md|meta\.json|example\.md|questions\.md)$|^\.env\.example$/.test(n.name || "");   // a metadata file has no metadata files of its own
+const hideMeta = n => !hasIdx(n) && (!showIdx || side === "changed");   // metadata files are rows only with the metadata switch on
 let side = store.get("ftx-side") === "changed" ? "changed" : "all";
 let CHANGED = {}, REMOVED_KIDS = {};   // node id -> why it is changed (CHG_WHY); parent id -> removed child ids
 let expanded = new Set(JSON.parse(store.get("ftx-open") || "null") || []);
@@ -761,47 +762,21 @@ function renderTree() {
   renderApply();
   document.querySelectorAll("[data-side]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.side === side)));
   let keep = null, hits = null;
-  if (matcher || changedMode) {
+  if (matcher || changedMode || emptyOnly) {
     keep = new Set(); hits = new Set();
     const pool = changedMode ? Object.keys(CHANGED) : Object.keys(NODES).filter(alive);
-    for (const id of pool) { const n = NODES[id]; if (!n || (matcher && !matcher.test(n))) continue; hits.add(id); let c = id; while (c && !keep.has(c)) { keep.add(c); c = NODES[c].parent; } }
+    for (const id of pool) { const n = NODES[id]; if (!n || (matcher && !matcher.test(n)) || (emptyOnly && !n.empty) || (emptyOnly && hideMeta(n))) continue; hits.add(id); let c = id; while (c && !keep.has(c)) { keep.add(c); c = NODES[c].parent; } }
   }
-  let idxHits = null, metaHits = null;   // under a filter, an item's metadata rows show when their own names match (".index", "README.meta")
-  const famPath = (n, nm) => n.type === "folder" ? n.path.replace(/\/?$/, "/") + nm : n.path.replace(/[^/]*$/, "") + nm;
-  if (matcher && !changedMode && showIdx) {
-    idxHits = new Set(); metaHits = new Set();
-    for (const id of Object.keys(NODES).filter(alive)) {
-      const n = NODES[id]; if (!hasIdx(n)) continue;
-      for (const [set, nm, key] of [[idxHits, idxName(n), "idx:"], [metaHits, metaName(n), "meta:"]]) {
-        if (!matcher.test({ ...n, num: null, name: nm, path: famPath(n, nm) })) continue;
-        set.add(id); hits.add(key + id); let c = id; while (c && !keep.has(c)) { keep.add(c); c = NODES[c].parent; }
-      }
-    }
-  }
-  const showFam = id => showIdx && showPlanned && !changedMode && !NODES[id]._deleted && hasIdx(NODES[id]);
-  const hidePlanned = n => !showPlanned && !changedMode && !onDisk(n) && !(n && n.local_only);   // a keys file is real on the machine, git leaves it out
-  const showIdxOf = id => showFam(id) && (!keep || (idxHits && idxHits.has(id)));
-  const showMetaOf = id => showFam(id) && (!keep || (metaHits && metaHits.has(id)));
   // a deleted item keeps its place among its siblings until the sync
   const kidsOf = id => { const n = NODES[id], rm = REMOVED_KIDS[id] || []; if (!rm.length) return n.children;
     const all = new Set([...n.children, ...rm]), out = ((BASE[id] && BASE[id].children) || []).filter(c => all.has(c));
     for (const c of all) if (!out.includes(c)) out.push(c); return out; };
   const guidesFor = depth => Array.from({ length: depth }, (_, i) => `<span class="guide" style="left:${21 + i * 16}px"></span>`).join("");
-  const idxRow = (n, id, depth) => `<div class="row idx${id === selected && tab === "how" ? " on" : ""}" role="treeitem" data-id="${esc(id)}" data-idx="1" title="How it works of ${esc(n.name)}" style="padding-left:${14 + depth * 16}px">${guidesFor(depth)}
-      <span class="tw"></span><span class="ic">${ICON.file}</span><span class="nm">${markName(idxName(n), matcher && matcher.mark)}</span><span class="num"></span></div>`;
-  const metaRow = (n, id, depth) => `<div class="row idx${id === selected && tab === "meta" ? " on" : ""}" role="treeitem" data-id="${esc(id)}" data-meta="1" title="Details of ${esc(n.name)}" style="padding-left:${14 + depth * 16}px">${guidesFor(depth)}
-      <span class="tw"></span><span class="ic">${ICON.file}</span><span class="nm">${markName(metaName(n), matcher && matcher.mark)}</span><span class="num"></span></div>`;
   const out = [];
-  // a metadata file found on disk follows the same switch; when the switch is on and its item already shows it as a metadata row, it is not shown twice
-  const famOf = (s, c, nm) => s && showFam(c) && (idxName(s) === nm || metaName(s) === nm);
-  const famShown = n => { const p = NODES[n.parent]; return !!p && (famOf(p, n.parent, n.name) || p.children.some(c => c !== n.id && famOf(NODES[c], c, n.name))); };
-  const isTabFile = n => /\.(example|questions)\.md$|^\.env\.example$/.test(n.name || "");   // Example and Questions tab files: rows only with the metadata switch on
-  const hideScannedMeta = n => hidePlanned(n) || (n.scanned && (isTabFile(n) ? (!showIdx || changedMode) : !hasIdx(n) && (!showIdx || changedMode || famShown(n))));
   const walk = (id, depth) => {
-    const n = NODES[id]; if (!n || (keep && !keep.has(id)) || hideScannedMeta(n)) return;
+    const n = NODES[id]; if (!n || (keep && !keep.has(id)) || hideMeta(n)) return;
     const kids = n._deleted ? [] : kidsOf(id);   // a deleted item stays, struck through, until the sync
-    const folderIdx = n.type === "folder" && showIdxOf(id), folderMeta = n.type === "folder" && showMetaOf(id);
-    const isOpen = keep ? true : expanded.has(id), hasKids = kids.some(k => NODES[k] && (!keep || keep.has(k)) && !hideScannedMeta(NODES[k])) || folderIdx || folderMeta;
+    const isOpen = keep ? true : expanded.has(id), hasKids = kids.some(k => NODES[k] && (!keep || keep.has(k)) && !hideMeta(NODES[k]));
     const icon = n.link ? ICON.link : (n.type === "folder" ? ICON.folder : ICON.file);
     const guides = guidesFor(depth);
     const chg = CHANGED[id];
@@ -809,26 +784,24 @@ function renderTree() {
     out.push(`<div class="${cls}" role="treeitem" data-id="${esc(id)}" aria-selected="${id === selected}" ${hasKids ? `aria-expanded="${isOpen}"` : ""} style="padding-left:${14 + depth * 16}px">${guides}
       <span class="tw">${hasKids ? (isOpen ? "▾" : "▸") : ""}</span><span class="ic">${icon}</span>
       <span class="nm">${markName(n.name, matcher && matcher.mark)}</span>
-      ${chgTag(id)}
+      ${n.empty ? '<span class="etag" title="Empty file: nothing written in it yet">empty</span>' : ""}${chgTag(id)}
       <span class="num">${n.num ? "[" + esc(n.num) + "]" : ""}</span></div>`);
-    if (n.type !== "folder" && showIdxOf(id)) out.push(idxRow(n, id, depth));
-    if (n.type !== "folder" && showMetaOf(id)) out.push(metaRow(n, id, depth));
-    if (hasKids && isOpen) { if (folderIdx) out.push(idxRow(n, id, depth + 1)); if (folderMeta) out.push(metaRow(n, id, depth + 1)); kids.forEach(c => walk(c, depth + 1)); }
+    if (hasKids && isOpen) kids.forEach(c => walk(c, depth + 1));
   };
   walk(DATA.root, 0);
   el.setAttribute("role", "tree");
   const tg = $("#idxtog"); if (tg) { tg.setAttribute("aria-pressed", String(showIdx)); tg.textContent = (showIdx ? "☑" : "☐") + " metadata"; }
-  const pg = $("#plantog"); if (pg) { pg.setAttribute("aria-pressed", String(showPlanned)); pg.textContent = (showPlanned ? "☑" : "☐") + " planned"; }
+  const eg = $("#emptytog"); if (eg) { eg.setAttribute("aria-pressed", String(emptyOnly)); eg.textContent = (emptyOnly ? "☑" : "☐") + " empty"; }
   const info = $("#treeinfo");
-  if (matcher || changedMode) {
-    const count = hits.size;   // index rows that match count too
-    const what = changedMode ? (matcher ? `${count} of ${nChanged} changed match` : `${count} changed since the last sync`) : `${count} match${count === 1 ? "" : "es"}`;
+  if (matcher || changedMode || emptyOnly) {
+    const count = hits.size, e = emptyOnly ? " empty" : "";
+    const what = changedMode ? (matcher ? `${count}${e} of ${nChanged} changed match` : `${count}${e} changed since the last sync`) : matcher ? `${count}${e} match${count === 1 ? "" : "es"}` : `${count} empty file${count === 1 ? "" : "s"}`;
     info.innerHTML = `<span>${esc(what)}</span>${query ? '<button class="btn quiet" type="button" id="clearq">Clear filter</button>' : ""}`;
     info.hidden = false;
   } else info.hidden = true;
   el.innerHTML = out.length ? out.join("") : changedMode && !nChanged
     ? `<div class="empty">Nothing changed since the last sync. Everything a request from this page touches shows up here until the next sync: edits, notes, new and deleted items, requests in the box, and files Claude Code changed for you.</div>`
-    : `<div class="empty">Nothing matches “${esc(query)}”.</div>`;
+    : emptyOnly && !matcher ? `<div class="empty">No empty files.</div>` : `<div class="empty">Nothing matches “${esc(query)}”.</div>`;
 }
 const saveOpen = () => store.set("ftx-open", JSON.stringify([...expanded]));
 function revealPath(id) { let c = NODES[id]?.parent; while (c) { expanded.add(c); c = NODES[c].parent; } saveOpen(); }
@@ -1161,7 +1134,7 @@ function fileTab(n) {
   const rel = esc(relPath(n));
   const edited = contentEdited(n.id);
   const src = edited ? (SERVER && SERVER.write_through ? "Edited on this page and written into the file" : "Edited on this page, not in the repo yet") : n.content != null ? (n.content_source || "") : "Not created yet";
-  const warn = n.num === "48" && !edited ? `<div class="warnbox">The real file differs from the plan: it does not ignore <code>.secrets/</code>, <code>.claude/settings.local.json</code> or <code>.claude/agent-memory-local/</code> yet. The planned version is on the Example tab.</div>` : "";
+  const warn = "";
   const linkNote = n.link ? `<p class="prose note-muted" style="margin:0">This is a link: it shows the target's content. Usually you edit the target${n.link_target ? ", " + inline(n.link_target) : ""}.</p>` : "";
   if (FILE_EDIT[n.id] != null) {
     const text = FILE_EDIT[n.id];
@@ -1962,7 +1935,7 @@ function buildPrompt(n, msg, c) {
   const draft = currentDraft(c);
   const convo = c.msgs.slice(-12).map(m => m.who === "me" ? "Owner: " + m.text : "Claude: " + (m.text || "") + (m.draft ? ` [draft: ${m.draft.title}; ${m.draft.state}]` : "")).join("\n");
   const parent = n.parent ? NODES[n.parent] : null;
-  return `You help the owner shape "Agent OS", an agentic trading system (prediction-market and copy-trading agents at system, domain and strategy level, with workers, sub-agents, self-improvement and a UI). Its planned file tree is a set of nodes, one per folder or file. The owner is looking at ONE node and wrote a message. Decide what the message is:
+  return `You help the owner shape "Agent OS", an agentic trading system (prediction-market and copy-trading agents at system, domain and strategy level, with workers, sub-agents, self-improvement and a UI). Its file tree is a set of nodes, one per folder or file. The owner is looking at ONE node and wrote a message. Decide what the message is:
 
 - "answer": a question, or a request to explain. Answer in "reply" in plain words (short paragraphs; the owner may not be a developer). Also put a compact record in "qa": {"q": the question in one line, "a": the answer in 1-4 sentences}. It is saved on this node as information. Do not change anything.
 - "draft": a request to change, add, decide, rename, remove or write something. Put the COMPLETE draft in "changes" (if a draft already exists below, revise it and return the whole draft after this message, not only the new part). In "reply" say in 1-3 sentences what the draft does. Give it a short "title".
@@ -2112,7 +2085,7 @@ function ripplePrompt(items, instruction) {
   const ids = [...new Set(items.map(i => i.node_id))].filter(id => NODES[id]);
   const saved = items.map(i => i.kind === "set" ? { path: i.path, kind: "edited", fields: Object.fromEntries(Object.entries(i.fields || {}).map(([k, v]) => [k, { before: clip(v.before, 1500), after: clip(v.after, 3000) }])) } : { path: i.path, kind: i.kind === "new" ? "added" : i.kind === "remove" ? "removed" : i.kind });
   const parents = [...new Set(ids.map(id => NODES[id].parent).filter(Boolean))].map(pid => ({ id: pid, path: NODES[pid].path, summary: NODES[pid].summary, purpose: NODES[pid].purpose, rules: NODES[pid].rules, open_questions: NODES[pid].open_questions }));
-  return `The owner just saved a change to the planned file tree of "Agent OS" (an agentic trading system: prediction-market and copy-trading agents at system, domain and strategy level, with workers, sub-agents, self-improvement and a UI). Keep everything related consistent with it.
+  return `The owner just saved a change to the file tree of "Agent OS" (an agentic trading system: prediction-market and copy-trading agents at system, domain and strategy level, with workers, sub-agents, self-improvement and a UI). Keep everything related consistent with it.
 
 What was saved:
 ${JSON.stringify(saved, null, 1)}
@@ -2222,7 +2195,7 @@ async function explainText(n, signal, onText) {
   const big = n.id === DATA.root || !!n.agent || isAgentFolder(n) || /^(agents\/|apps\/)$/.test(n.name);
   const words = n.type === "folder" ? (big ? 200 : 130) : 80;
   const kids = n.children.filter(alive).map(c => { const x = NODES[c]; return { name: x.name, num: x.num, type: x.type, how: howText(x) || plain(x.purpose || x.summary || "").slice(0, 300) }; });
-  const prompt = `You write the "How it works" summary of one ${n.type} in the planned file tree of "Agent OS" (an agentic trading system: system, domain and strategy level agents plus trading variants, with workers, jobs, links, self-improvement and a UI). The owner, who may not be a developer, reads it as the main view of this ${n.type}; agents read it to understand this part fast. It describes how things work now.
+  const prompt = `You write the "How it works" summary of one ${n.type} in the file tree of "Agent OS" (an agentic trading system: system, domain and strategy level agents plus trading variants, with workers, jobs, links, self-improvement and a UI). The owner, who may not be a developer, reads it as the main view of this ${n.type}; agents read it to understand this part fast. It describes how things work now.
 
 Build it from the material below: the node's own notes, the knowledge from the docs that applies to it${n.type === "folder" ? ", and the summaries of what is inside it" : ""}.
 - Start with what it is and what it is for, in one sentence.
@@ -2372,7 +2345,7 @@ document.addEventListener("click", ev => {
       .catch(e => { t.disabled = false; if (st) st.textContent = (e && e.code) === "busy" ? "Claude Code is still working on another request. Delete this when it is done." : "Could not delete (" + ((e && e.code) || "error") + ")."; });
     return;
   }
-  if (d.plantog) { showPlanned = !showPlanned; store.set("ftx-planned", showPlanned ? "1" : "0"); renderTree(); return; }
+  if (d.emptytog) { emptyOnly = !emptyOnly; store.set("ftx-empty", emptyOnly ? "1" : "0"); renderTree(); return; }
   if (d.idxtog) { showIdx = !showIdx; store.set("ftx-idx", showIdx ? "1" : "0"); renderTree(); return; }
   if (d.tab) { tab = d.tab; store.set("ftx-tab2", tab); renderSheet(true); renderTree(); return; }
   if (d.jdetail != null) { const k = selected + "|" + d.jdetail; JOB_OPEN.has(k) ? JOB_OPEN.delete(k) : JOB_OPEN.add(k); rerender(); return; }

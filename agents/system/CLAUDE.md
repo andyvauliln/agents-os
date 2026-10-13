@@ -4,7 +4,7 @@ You are working in the repository of the Agent OS: the owner's personal system t
 
 ## Where the project is now: stage one
 
-Nothing of the system runs yet. The repository already has its final shape: every planned file and folder exists, files with a draft carry its text, the rest are empty, and every item's metadata files sit next to it.
+Nothing of the system runs yet. The files on disk are the tree: what exists is the project, files with nothing written yet are empty (the page's "empty" filter lists them), and every item's metadata files sit next to it.
 
 **Stage one, the current work:**
 
@@ -47,7 +47,7 @@ Every `README.md` has an ASD-STE100 twin, `README.asd.md`, next to it. Read the 
 - Docs for people are plain and book-like, with no reference numbers, ids or decision codes. The notes for agents keep the ids.
 - Never change the owner's words in a stored input, and never drop their words from a How it works file they edited on the page.
 - Plan every change that alters the system, its structure, code or docs (skill `change-plan`), show the plan to the owner, then build it. Small fixes need no plan.
-- The page tree always equals the files on disk. Every planned item is a real file or folder.
+- The page tree always equals the files on disk. There is no separate plan of files: to add a file or folder, create it.
 - Every file and folder outside `vision/` has an `x.index.md` and an `x.meta.json`. The extra tab files (`x.example.md`, `x.questions.md`, `README.asd.md`) exist only where they are written; the page shows a tab only when its file exists.
 - One job per code file. Group related ones in a folder, each with its own How it works.
 - Generated files are rebuilt, never merged by hand: the page data, the knowledge map, `docs/file-tree.md`.

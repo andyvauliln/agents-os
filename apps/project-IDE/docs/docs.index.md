@@ -1,10 +1,10 @@
 ---
 about: agent-os/apps/project-IDE/docs/
 node: n-53.4
-basis: 6dc578c86afb
+basis: 377d763e090d
 written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-13T12:02:18Z
 ---
 # docs/
 

@@ -37,7 +37,7 @@ This document is the full manual of the IDE: every part of the page and how to u
 | The page | The tree, the tabs, editing, notes, questions, the ask box | `vision/explorer/file-tree-explorer.html` | `apps/project-IDE/current-ui/file-tree-explorer.html` |
 | The page data | Everything the page shows, built from the repository | `vision/file-tree.data.json`, copied to `vision/explorer/` | `apps/project-IDE/current-ui/file-tree.data.json` |
 | The real files' texts | The text of every real file, loaded when one is opened | `vision/explorer/real-files.json` | next to the page data |
-| The build scripts | Build the data, make planned items real, check the page | `vision/tools/` | `agents/system/.claude/skills/ide-build/scripts/` |
+| The build scripts | Build the data, keep files in step with their drafts and metadata, check the page | `vision/tools/` | `agents/system/.claude/skills/ide-build/scripts/` |
 | The owner's page edits kept in the data | Values the owner set on the page that the build applies on top | `vision/tools/overrides.json` | `apps/project-IDE/data/overrides.json` |
 | The tree notes and the knowledge | One section per file and folder; topic notes, decisions, inputs, changelog | `vision/docs/` | `apps/project-IDE/data/` and `agents/system/docs/` |
 | How it works and Details files | One explanation and one details file per item | `vision/tree/agent-os/...`, copied next to each item on disk | next to each item |
@@ -97,7 +97,7 @@ The page is one HTML file, `file-tree-explorer.html`, that reads one data file, 
 
 - **All and Changed.** All shows the whole tree. Changed shows only the items marked changed since the last sync, with the reason on each.
 - **The metadata switch.** On, every file shows its two metadata files as rows right under it, its How it works file (`vision.index.md` for `vision.md`) and its Details file (`vision.meta.json`), and every folder shows its own first inside it. Clicking one opens that tab of its item. Off, they are hidden, including the real ones found on disk. It is on by default.
-- **The planned switch.** Off, the tree is exactly the files in git. On, it also shows planned items that do not exist on disk yet. It is off by default.
+- **The empty filter.** On, the tree shows only the files with nothing written in them yet, each marked "empty", with the folders that hold them. The tree itself is always the files on disk; nothing that is only planned is shown.
 - **The rows.** A folder icon, a file icon or a link icon, the name, a "changed" tag when it applies, and the item's number in the tree notes when it has one. A first click on a closed folder opens it and selects it. The arrow keys move through the tree and open or close folders. The open folders and the selected item are remembered in the browser, and the address of the page carries the selected item, so a link opens the same item.
 - **Deleted items** stay in their place, struck through, until the next sync.
 
@@ -209,7 +209,7 @@ The `ide-build` skill turns the repository into the page data, checks it and pub
 | `parse.py` | Reads the tree notes, the feature map and the decisions into a list of items. |
 | `enrich.py` | Adds the drafts, examples, knowledge, How it works and Details files and the extra tabs, lists every real file in git under each folder that exists, applies the owner's kept page edits, and writes the page data and `real-files.json`. It is given the next data version. |
 | `tabs.py` | The field guides and the extra tables (keys, jobs, links, tests, capabilities), used by `enrich.py`. |
-| `materialize.py` | Makes every planned item a real file or folder in the repository: a draft's text where there is one, an empty file otherwise (`{}` for JSON), a `.gitkeep` in an empty folder, and each item's How it works and Details files next to it. It creates the keys folder and its notes, and an empty `.env` only when one is missing, never reading or overwriting it. The prediction-market domain is stage two: only its folders exist. |
+| `materialize.py` | Keeps files on disk in step with their sources in `vision/`: copies drafts over their real files, copies each item's How it works and Details next to it, gives every other file and folder empty metadata files, keeps a `.gitkeep` in empty folders, writes `docs/file-tree.md`. It makes nothing from the plan. |
 | `index_files.py` | Knows where every How it works and Details file lives, reads and writes them, and makes missing Details files. |
 | `build_map.py` | Builds the knowledge map and checks the How it works files: which are missing or stale (children first), the context for writing one, confirming one, writing many at once, and orphans whose item is gone. |
 | `check_page.js` | Opens the page at a desktop width and a phone width with a stand-in for the artifact runtime and fails on a page error, a missing tab or a page wider than the phone. Needs Node and Playwright with Chromium. |
@@ -222,7 +222,7 @@ The build, in order:
 4. Copy the data next to the page.
 5. Run `build_map.py` until it reports every How it works file fresh, none missing, no orphans; hand stale ones to the knowledge base agent's `file-index` skill.
 6. Run `check_page.js` on the top item, the README and every item the round changed, and look at the screenshots of anything changed on the page itself. It must print "page ok".
-7. Check that the tree equals the files in git: with the planned switch off, the page's items are exactly the paths `git ls-files` lists, plus the local `.env` files. Today this is checked path by path when the tree changes; there is no script for it yet.
+7. Check that the tree equals the files in git: the page's items are exactly the paths `git ls-files` lists, plus the local `.env` files. Today this is checked path by path when the tree changes; there is no script for it yet.
 8. Publish at the same link, with the data and `real-files.json` next to the page.
 9. Report in plain words what the owner will see changed.
 
@@ -315,7 +315,7 @@ While we plan, the settings point at `vision/`: the page in `vision/explorer/`, 
 
 - `check_page.js` must print "page ok" at a desktop and a phone width before every publish.
 - `build_map.py` must report every How it works file fresh, none missing, no orphans.
-- With the planned switch off, the tree must equal the files in git.
+- The tree must equal the files in git.
 - After a sync, every new input from the page is in the inputs folder with its answer, every How it works edit is in its file word for word, and the store holds only the history and what was kept on purpose.
 - The server was tested on a copy of the repository: the store as files, write-through, a real Claude Code request, Allow and Refuse, a delete with a note and a bring-back.
 

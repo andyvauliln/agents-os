@@ -1,6 +1,6 @@
 # Handoff: continue the Agent OS planning in Claude Code
 
-Updated 2026-10-12. Nothing of the system is built yet; this repository is the plan in its final shape. Every planned file and folder exists on disk: files with a draft carry its text, the rest are empty, and every item's How it works (`.index.md`) and Details (`.meta.json`) file sits next to it. The planning sources are still in `vision/`.
+Updated 2026-10-12. Nothing of the system is built yet; this repository is the plan in its final shape. The files on disk are the tree (nothing is shown or made from a plan any more, 2026-10-13): files with a draft carry its text, empty files are marked on the page, and every item's How it works (`.index.md`) and Details (`.meta.json`) file sits next to it. The planning sources are still in `vision/`.
 
 ## Start here
 
@@ -9,7 +9,7 @@ Updated 2026-10-12. Nothing of the system is built yet; this repository is the p
 3. Rebuild after any change, from `vision/tools/` (see its README and the `ide-build` skill), with `S` a scratch folder and `R` the repo:
    - `python3 parse.py $S/parsed.json`
    - `REPO_DIR=$R DATA_VERSION=N python3 enrich.py $S/parsed.json $S/ftd.json`, then copy it to `vision/file-tree.data.json` and `vision/explorer/`, and `$S/real-files.json` to `vision/explorer/`
-   - `REPO_DIR=$R python3 materialize.py ../file-tree.data.json` (puts planned items, drafts and metadata files onto disk; run enrich again if it made new files)
+   - `REPO_DIR=$R python3 materialize.py ../file-tree.data.json` (copies drafts and metadata files onto the files on disk; run enrich again if it changed anything)
    - `python3 build_map.py --stale` until it is clean (`--confirm <ids>` for each stale one), and `node check_page.js <page folder> -` must print "page ok"
    - Check: the page tree must list exactly the files in git (`git ls-files --cached --others --exclude-standard`), plus the two local-only `.env` files.
 

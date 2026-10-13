@@ -1026,6 +1026,32 @@ for x in out_nodes:
 retired = [{"nums": r["nums"], "heading": r["heading"],
             "text": " ".join(i["text"] for i in r["items"])} for r in P["retired"]]
 
+# ---- the tree is the files on disk (owner, 2026-10-13: "remove all logic related to planned"): an item in the tree
+# notes that is not on disk is left out; a file with nothing written in it yet is marked empty (the page filters on it)
+_gone = {x["id"] for x in out_nodes if x["path"].startswith("agent-os/") and x["id"] != out_nodes[0]["id"] and not (x.get("exists") or x.get("scanned"))}
+if _gone:
+    out_nodes = [x for x in out_nodes if x["id"] not in _gone]
+    for x in out_nodes:
+        x["children"] = [c for c in x.get("children", []) if c not in _gone]
+print("left out, not on disk:", len(_gone))
+for x in out_nodes:
+    if x["type"] != "file" or not x["path"].startswith("agent-os/") or x["path"].startswith("agent-os/vision/") \
+            or x["name"] == ".gitkeep" or x.get("local_only"):   # the planning area, folder keepers and keys files are left out
+        continue
+    f = os.path.join(REPO, x["path"][len("agent-os/"):].replace("|", "-"))
+    if not os.path.isfile(f):
+        continue
+    if os.path.getsize(f) == 0:
+        x["empty"] = True
+    elif os.path.getsize(f) > 64:   # a big file is not empty
+        continue
+    else:
+        try:
+            x["empty"] = open(f, encoding="utf-8").read().strip() in ("", "{}", "[]")
+        except (UnicodeDecodeError, OSError):
+            pass
+print("empty files:", sum(1 for x in out_nodes if x.get("empty")))
+
 data = {
  "schema_version": 1,
  "title": "Agent OS file tree",

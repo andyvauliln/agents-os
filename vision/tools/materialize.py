@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-"""Makes every planned item of the tree a real file or folder in the repository (owner, 2026-10-12: "all what was
-planned should be already real files"). Run it after enrich.py, then run enrich.py again so the page sees them.
+"""Keeps the files on disk in step with their sources in vision/ (owner, 2026-10-13: the tree is the files on disk;
+nothing is made from the plan any more). Run it after enrich.py, then run enrich.py again if it changed anything.
 
     REPO_DIR=/path/to/repo python3 materialize.py file-tree.data.json
 
-- A planned file with a draft (src_file under vision/) gets the draft's text. The draft stays the source while we
-  plan: every build copies it again, and the owner's server writes an edit into both.
-- Any other planned file is created empty ("{}" for a .json file), to be filled when the work reaches it.
-- Placeholder names such as [skill-name] are created as they are written: they are the templates.
-- A folder with nothing in it gets a .gitkeep, because git does not keep empty folders.
-- Each item's How it works (.index.md) and Details (.meta.json) files are copied next to it (inside a folder,
-  beside a file), so the disk shows them like the page does. The copy in vision/ stays the source while we plan.
-- Every other file and folder outside vision/ gets an empty x.index.md and x.meta.json too, when it has none
-  (owner, 2026-10-12: metadata for all files). The prediction-market domain is stage two: only its folders exist.
-- The keys folder .secrets/ and its notes are created and go in git (owner, 2026-10-12). A .env keys file is
-  created empty only when it is missing, is never read or overwritten, and git ignores it.
+- A file on disk whose source is a draft in vision/ (src_file) gets the draft's text again. The draft stays the
+  source while we plan, and the owner's server writes an edit into both.
+- Each item's How it works (.index.md) and Details (.meta.json) files are copied from vision/ next to it (inside
+  a folder, beside a file). The copy in vision/ stays the source while we plan.
+- Every other file and folder outside vision/ gets an empty x.index.md and x.meta.json when it has none
+  (owner, 2026-10-12: metadata for all files). The prediction-market domain is stage two: nothing is made inside.
+- A folder with nothing in it keeps a .gitkeep, because git does not keep empty folders; it goes once the folder
+  holds a file. A .env keys file is never made, read or written.
+- docs/file-tree.md is written again: every path in git, plain.
 """
 import json, os, sys
 from collections import Counter
@@ -116,44 +114,29 @@ def plain_tree():
 def main(data_file):
     nodes = json.load(open(data_file, encoding="utf-8"))["nodes"]
     nodes = nodes.values() if isinstance(nodes, dict) else nodes
-    made, copied, metas, folders = 0, 0, 0, set()
+    copied, metas, folders = 0, 0, set()
     for n in nodes:
         path = n.get("path") or ""
         if not path.startswith("agent-os/") or n.get("scanned"):
             continue
         rel = disk(path[len("agent-os/"):])
         full = os.path.join(REPO, rel.rstrip("/"))
-        if rel.startswith(STAGE_TWO) and n["type"] == "file":
+        if not os.path.exists(full) or rel.startswith(STAGE_TWO):   # only what is on disk; stage two stays as it is
             continue
-        if not rel.startswith(STAGE_TWO):
-            metas += copy_meta(n, rel)
+        metas += copy_meta(n, rel)
         if n["type"] == "folder":
-            if rel:
-                os.makedirs(full, exist_ok=True)
-                folders.add(full)
-            continue
-        os.makedirs(os.path.dirname(full), exist_ok=True)
-        folders.add(os.path.dirname(full))
-        if os.path.basename(full) == ".env":   # a keys file: created empty when missing, never read or written over
-            if not os.path.exists(full):
-                open(full, "w").close(); made += 1
+            folders.add(full)
             continue
         src = n.get("src_file") or ""
-        if src.startswith("vision/") and os.path.isfile(os.path.join(REPO, src)):
+        if os.path.basename(full) != ".env" and src.startswith("vision/") and os.path.isfile(os.path.join(REPO, src)):
             text = open(os.path.join(REPO, src), encoding="utf-8").read()
-            if not os.path.isfile(full) or open(full, encoding="utf-8").read() != text:
+            if open(full, encoding="utf-8").read() != text:
                 with open(full, "w", encoding="utf-8") as f:
                     f.write(text)
                 copied += 1
-        elif not os.path.exists(full):
-            with open(full, "w", encoding="utf-8") as f:
-                f.write("{}\n" if full.endswith(".json") else "")
-            made += 1
     empty = scanned_meta(nodes)
     kept = 0
     for d in folders:
-        if not os.path.isdir(d):
-            continue
         other = [f for f in os.listdir(d) if f not in (".env", ".gitkeep")]
         if not other and not os.path.exists(os.path.join(d, ".gitkeep")):   # git keeps no empty folder, and ignores .env
             open(os.path.join(d, ".gitkeep"), "w").close()
@@ -162,7 +145,7 @@ def main(data_file):
             os.remove(os.path.join(d, ".gitkeep"))
     listed = plain_tree()
     print(f"docs/file-tree.md: {listed} paths")
-    print(f"materialize: {copied} files copied from drafts, {made} empty files made, {kept} .gitkeep files, {metas} metadata files copied, {empty} empty metadata files for found files")
+    print(f"materialize: {copied} files copied from drafts, {kept} .gitkeep files, {metas} metadata files copied, {empty} empty metadata files for found files")
 
 
 if __name__ == "__main__":

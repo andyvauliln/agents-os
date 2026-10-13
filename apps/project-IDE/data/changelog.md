@@ -3,6 +3,7 @@
 System-level history: what changed in the OS design, when, and from which decision. Newest first. Per-agent changes stay in each agent's own `docs/changes.md` [46]. The knowledge agent adds one line per processed input or system change (knowledge-intake, step 6).
 
 ## 2026-10-13
+- **The tree is the files on disk (D-065).** The owner asked to remove all logic about planned items. The page leaves out anything that is only in the tree notes, the build creates nothing from the plan, and the "planned" switch is gone. Files with nothing written in them are marked "empty", and an "empty" filter lists only them (30 outside `vision/`).
 - **No item twice in the tree.** The owner asked what logic decides planned and not planned files. Checking it found 30 items listed twice: a planned item written with its folder in the name (`vision-doc/SKILL.md` under `skills/`) and the same file found on disk inside the found folder. `enrich.py` now moves the planned item into the found folder under its own name.
 - **Edit a block as it looks.** The owner asked that a double-click in the Read view not switch the block to Markdown. The block itself is now editable (paragraphs, headings, lists, tables, code blocks, quotes); Save turns it back into Markdown and writes only its lines. A Markdown button still opens the source; the front matter always opens as source. A click outside the block saves it and closes it; Esc closes without saving.
 

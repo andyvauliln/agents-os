@@ -1,10 +1,10 @@
 ---
 about: agent-os/apps/project-IDE/current-ui/file-tree-explorer.html
 node: n-53.1.1
-basis: bbd24314cede
+basis: 7a4622c46f3b
 written: 2026-10-07T09:33:30Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T10:30:32Z
+confirmed: 2026-10-13T12:02:18Z
 ---
 # file-tree-explorer.html
 

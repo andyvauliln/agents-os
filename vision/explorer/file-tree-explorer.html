@@ -2481,17 +2481,21 @@ function editBlock(ev, el) {
   const area = el.matches("figure.rd-code") ? el.querySelector("code") : el;
   area.contentEditable = "true"; area.spellcheck = true; const html0 = area.innerHTML;
   area.focus(); const sel = getSelection(); if (sel) { const r = document.createRange(); r.selectNodeContents(area); r.collapse(false); sel.removeAllRanges(); sel.addRange(r); }
-  const done = () => { if ($("#rdfull")) { closeReaderFull(true); rerender(); openReaderFull(); } else rerender(); };
+  const outside = e => { if (box.isConnected && !box.contains(e.target)) save(); };   // a click outside the block saves it and closes it (owner, 2026-10-13)
+  document.addEventListener("pointerdown", outside, true);
+  const done = () => { document.removeEventListener("pointerdown", outside, true); if ($("#rdfull")) { closeReaderFull(true); rerender(); openReaderFull(); } else rerender(); };
+  let saving = false;
   const save = () => {
+    if (saving) return;
     if (area.innerHTML === html0) { done(); return; }
     const now = wysMarkdown(el, before); if (now === before) { done(); return; }
     const text = [...L.slice(0, a - 1), ...(now === "" ? [] : now.split("\n")), ...L.slice(b)].join("\n");
-    area.contentEditable = "false"; box.querySelectorAll("button").forEach(x => x.disabled = true); box.querySelector(".acts span").textContent = "Saving…";
+    saving = true; area.contentEditable = "false"; box.querySelectorAll("button").forEach(x => x.disabled = true); box.querySelector(".acts span").textContent = "Saving…";
     applyChanges([{ node_id: n.id, set: { content: text } }], "Edited " + n.name, "")
       .then(items => { done(); ripple(items, "Edited the file's content in the Read view", n.id); })
-      .catch(e => { area.contentEditable = "true"; box.querySelectorAll("button").forEach(x => x.disabled = false); box.querySelector(".acts span").textContent = "Could not save (" + ((e && e.code) || "error") + "). Your text is still here."; });
+      .catch(e => { saving = false; area.contentEditable = "true"; box.querySelectorAll("button").forEach(x => x.disabled = false); box.querySelector(".acts span").textContent = "Could not save (" + ((e && e.code) || "error") + "). Your text is still here."; });
   };
-  box.addEventListener("click", e => { const k = e.target.dataset.be; if (k === "save") save(); else if (k === "cancel") done(); else if (k === "md") { box.replaceWith(el); area.contentEditable = "false"; area.innerHTML = html0; editBlockMd(e, el); } });
+  box.addEventListener("click", e => { const k = e.target.dataset.be; if (k === "save") save(); else if (k === "cancel") done(); else if (k === "md") { document.removeEventListener("pointerdown", outside, true); box.replaceWith(el); area.contentEditable = "false"; area.innerHTML = html0; editBlockMd(e, el); } });
   area.addEventListener("keydown", e => {
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); save(); }
     else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); done(); }
@@ -2511,14 +2515,19 @@ function editBlockMd(ev, el) {
   ta.value = before; el.replaceWith(box);
   const fit = () => { ta.style.height = "auto"; ta.style.height = Math.min(ta.scrollHeight + 4, innerHeight * 0.7) + "px"; };
   fit(); ta.addEventListener("input", fit); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
-  const done = () => { if ($("#rdfull")) { closeReaderFull(true); rerender(); openReaderFull(); } else rerender(); };
+  const outside = e => { if (box.isConnected && !box.contains(e.target)) save(); };
+  document.addEventListener("pointerdown", outside, true);
+  const done = () => { document.removeEventListener("pointerdown", outside, true); if ($("#rdfull")) { closeReaderFull(true); rerender(); openReaderFull(); } else rerender(); };
+  let saving = false;
   const save = () => {
+    if (saving) return;
     const now = ta.value; if (now === before) { done(); return; }
+    saving = true;
     const text = [...L.slice(0, a - 1), ...(now === "" ? [] : now.split("\n")), ...L.slice(b)].join("\n");
     box.querySelectorAll("button").forEach(x => x.disabled = true); box.querySelector(".acts span").textContent = "Saving…";
     applyChanges([{ node_id: n.id, set: { content: text } }], "Edited " + n.name, "")
       .then(items => { done(); ripple(items, "Edited the file's content in the Read view", n.id); })
-      .catch(e => { box.querySelectorAll("button").forEach(x => x.disabled = false); box.querySelector(".acts span").textContent = "Could not save (" + ((e && e.code) || "error") + "). Your text is still here."; });
+      .catch(e => { saving = false; box.querySelectorAll("button").forEach(x => x.disabled = false); box.querySelector(".acts span").textContent = "Could not save (" + ((e && e.code) || "error") + "). Your text is still here."; });
   };
   box.addEventListener("click", e => { const k = e.target.dataset.be; if (k === "save") save(); else if (k === "cancel") done(); });
   ta.addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); save(); } else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); done(); } });

@@ -208,7 +208,7 @@ A Markdown file opens as a page of a book, on white paper or black paper. The pa
 - **Aa.** This control sets the font (Sans, Legible or Serif) and the size (S, M or L).
 - **Light and Dark.** This control sets the paper, white or black. The browser keeps the selection.
 - **Full screen.** The document fills the screen. On a wide screen, the Contents list is in a column on the side. A line at the top shows the progress. To close, push Close or Esc.
-- **Edit in place.** Double-click a paragraph, a heading, a list or a table. On a phone, tap the block two times. You can then type in the block. The block keeps its appearance. Ctrl+B makes text bold and Ctrl+I makes text italic. To write only those lines into the file, push Save or Ctrl+Enter. The page changes the block back to Markdown. To see the Markdown source of the block, push Markdown. To stop without a change, push Esc or Cancel. This also operates in full screen.
+- **Edit in place.** Double-click a paragraph, a heading, a list or a table. On a phone, tap the block two times. You can then type in the block. The block keeps its appearance. Ctrl+B makes text bold and Ctrl+I makes text italic. To write only those lines into the file, push Save or Ctrl+Enter, or click outside the block. The page changes the block back to Markdown. To see the Markdown source of the block, push Markdown. To stop without a change, push Esc or Cancel. This also operates in full screen.
 - **Edit.** This button opens the full file in an editor with numbered lines. Long lines go onto the next line at the edge of the screen. To save, push Save file or Ctrl+S. To stop, push Cancel.
 
 The page records each save with the old text. Thus you can undo the save from How it works.

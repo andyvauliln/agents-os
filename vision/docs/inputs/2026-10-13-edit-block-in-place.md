@@ -16,3 +16,13 @@ Done: a double-click in the Read view now makes the block itself editable, looki
 ## Processed into
 - vision/explorer/file-tree-explorer.html (editBlock, wysMarkdown)
 - apps/project-IDE/docs/README.md and README.asd.md (Edit in place)
+
+## Follow-up (2026-10-13)
+~~~text
+after edit if i click ouside the block close it
+~~~
+
+## Answer
+~~~text
+Done: a click outside the block saves it (only if something changed) and closes it, in both the rich edit and the Markdown edit. Esc still closes without saving.
+~~~

@@ -14,7 +14,7 @@ Today `vision/` is the source for most things and the build copies them into the
 |---|---|---|---|
 | `tools/` (parse, enrich, build_map, index_files, materialize, tabs, check_page, overrides.json) | Builds the page data, checks the page | `agents/system/.claude/skills/ide-build/scripts/` (copies already there, `materialize.py` missing) | Point every path at the real places. Drop the parts that read the old tree notes and drafts (see "The tree notes" below). `materialize.py` shrinks to: write `docs/file-tree.md`, keep `.gitkeep`, give new files empty metadata. |
 | `explorer/` (the page, its data, real-files.json) | The page itself | `apps/project-IDE/current-ui/` (a copy is there; its data file is still `{}`) | Build writes the data and real-files.json there; publish from there. |
-| `server/` | The page on your server | `apps/project-IDE/server/` (a copy is there) | Fix `server.config.json`: `repo` must be `../../..`, page folder `apps/project-IDE/current-ui`, store `apps/project-IDE/data/page-store`, logs in `agents/system/logs/`. Claude Code starts in `agents/system/`. |
+| `server/` | The page on your server | `apps/project-IDE/server/` (a copy is there) | Fix `server.config.json`: `repo` must be `../../..`, page folder `apps/project-IDE/current-ui`, store `apps/project-IDE/data/page-store`, logs in `agents/system/logs/`, `planning_dir` empty (then an edit to How it works goes into the `x.index.md` next to the item; the code already has this path), Claude Code starts in `agents/system/`. Drop the planning words from `server.py` and `claude_bridge.py`. |
 | `.claude/skills/`, `.claude/agents/` | Drafts of the system's skills and the two helper agents | `agents/system/.claude/skills/`, `agents/system/.claude/agents/` (copies already there, the same text) | Make the real files the source: drop the draft lists in the build (DRAFTS, CLAUDE_DRAFTS, VISION_FILES). Fix the paths inside the skills that still say `vision/`. |
 | `tree/agent-os/...` (481 How it works and Details files) | The source of every item's metadata; the build copies them next to items | Already next to every item on disk | Make the files next to items the source; stop copying. `build_map.py` and `index_files.py` read and write them there. |
 | `docs/inputs/` (116 inputs + index.json) | Every owner input word for word | `apps/project-IDE/data/inputs/` | Move; the knowledge-intake skill writes there. |
@@ -44,7 +44,7 @@ This is the biggest step. Everything else is moving files and changing paths.
 3. Move the build tools into `ide-build/scripts/` with paths to the real places; the page source and its data into `apps/project-IDE/current-ui/`; fix the server settings.
 4. Teach `enrich.py` to build the tree from disk plus each item's metadata, without the tree notes; carry the [n] numbers and decisions of every item into its Details file first.
 5. Move `how-to/` and the prediction-market notes to their real docs; archive the rest.
-6. Rebuild, check the page against git, publish, and check the server starts from `apps/project-IDE/server/`.
+6. Rebuild, check the page against git, publish. Then test the server from `apps/project-IDE/server/` on a copy of the repository, the same tests as on 2026-10-05: the page opens, an edit goes into the file and a How it works edit into its `x.index.md`, a request runs with Allow and Refuse, a delete and a bring-back, and the microphone with the key present.
 7. Remove `vision/` from the repository, update CLAUDE.md, every README, HANDOFF.md, and remove `apps/project-IDE/data/memory/`.
 
 ## Open for the owner

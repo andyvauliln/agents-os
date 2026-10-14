@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "about": "The system domain's four docs (vision, README, README.asd, rebuild prompt) with their notes, and the child links to each domain's docs.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent",
+    "the owner, on the File Tree page",
+    "relink (subagents.link/)"
+  ],
+  "readers": [
+    "the owner",
+    "every Claude working on the system",
+    "the system manager, reading domains' docs"
+  ],
+  "changes_when": "a doc is added, removed or rewritten, or a domain is added",
+  "related": [
+    {
+      "path": "docs/",
+      "how": "project docs above"
+    },
+    {
+      "path": "agents/trading/docs/",
+      "how": "trading docs below"
+    },
+    {
+      "path": "vision/docs/",
+      "how": "records and topic notes the docs are built from"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-048",
+      "D-053",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261009-0940",
+      "in-20261012-tree",
+      "in-20261012-real",
+      "in-20261012-secrets",
+      "in-20261012-metadisk",
+      "in-20261012-stage1"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "reading list and table of docs"
+    }
+  ],
+  "inherits": [],
+  "features": [
+    "Knowledge base"
+  ],
+  "views": [],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "about": "Trading's README: every part of agents/trading/ and what every trading domain holds, with the path to each part's docs.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent with the readme-doc skill",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "readers after the vision",
+    "the owner after each round",
+    "every agent before it works on a part of trading"
+  ],
+  "changes_when": "a part of trading changes: a domain, a study, names, accounts, test and live, metrics or a settled design point",
+  "related": [
+    {
+      "path": "agents/trading/docs/vision.md",
+      "how": "same words in In short"
+    },
+    {
+      "path": "agents/trading/docs/README.asd.md",
+      "how": "rewritten from it in ASD-STE100"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "parent README; its Domains part points here"
+    },
+    {
+      "path": "agents/trading/researches/",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/trading/prediction-market/",
+      "how": "documented in"
+    },
+    {
+      "path": "vision/docs/prediction-market-agents/",
+      "how": "built from"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-048",
+      "D-053",
+      "D-054",
+      "D-056",
+      "D-058",
+      "D-059",
+      "D-061",
+      "D-064",
+      "D-030",
+      "D-032",
+      "D-035",
+      "D-063"
+    ],
+    "inputs": [
+      "in-20261009-0940",
+      "in-20261012-stage1",
+      "in-20261007-0904",
+      "in-20261009-1230"
+    ],
+    "notes": [
+      "tr-ov-parts-levels",
+      "tr-conv-variant-name-format",
+      "tr-conv-script-kinds",
+      "tr-safe-live-gate",
+      "tr-safe-secrets-store",
+      "metric-pnl",
+      "metric-drawdown",
+      "metric-calibration"
+    ]
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/docs/README.asd.md",
+      "how": "rewrite the changed sections, same headings"
+    },
+    {
+      "path": "agents/trading/docs/rebuild-prompt.md",
+      "how": "update the tree, parts and checks"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "update its summary of trading's domains"
+    },
+    {
+      "path": "agents/trading/docs/README.example.md",
+      "how": "keep the outline in step"
+    },
+    {
+      "path": "agents/trading/docs/README.questions.md",
+      "how": "keep the open questions in step"
+    }
+  ],
+  "inherits": [
+    "the system's README: the standard agent folder, child links, keys by name only"
+  ],
+  "features": [
+    "Trading domains",
+    "Research",
+    "Test and live with money",
+    "Metrics"
+  ],
+  "views": [
+    "doc (shared view)"
+  ],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  }
+}

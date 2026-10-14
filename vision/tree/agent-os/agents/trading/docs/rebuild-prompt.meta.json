@@ -1,1 +1,91 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The prompt an AI follows to build agents/trading/ again, assuming the system exists; its domains get their own prompts in stage two.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent with the rebuild-prompt-doc skill",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "an AI coding agent rebuilding trading",
+    "an agent checking trading against its spec",
+    "the owner"
+  ],
+  "changes_when": "trading's design changes: a new file or folder, a metadata rule, a settled open point, a new trading domain",
+  "related": [
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "parent prompt; lists this one in its build order"
+    },
+    {
+      "path": "agents/trading/docs/vision.md",
+      "how": "same names"
+    },
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "builds what it describes"
+    },
+    {
+      "path": "agents/trading/prediction-market/docs/rebuild-prompt.md",
+      "how": "child prompt, stage two"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-048",
+      "D-053",
+      "D-054",
+      "D-056",
+      "D-058",
+      "D-059",
+      "D-061",
+      "D-064",
+      "D-055",
+      "D-057",
+      "D-063"
+    ],
+    "inputs": [
+      "in-20261009-0940",
+      "in-20261012-stage1",
+      "in-20261007-0904"
+    ],
+    "notes": [
+      "tr-conv-variant-name-format",
+      "tr-conv-level-ids",
+      "tr-conv-script-kinds"
+    ]
+  },
+  "update_with": [
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "keep this prompt in its build order"
+    },
+    {
+      "path": "agents/trading/docs/rebuild-prompt.example.md",
+      "how": "keep the outline in step"
+    },
+    {
+      "path": "agents/trading/docs/rebuild-prompt.questions.md",
+      "how": "keep the open questions in step"
+    }
+  ],
+  "inherits": [
+    "file-index: metadata file names and formats",
+    "the system's ground rules: keys by name only, test first"
+  ],
+  "features": [
+    "Rebuild from the docs"
+  ],
+  "views": [
+    "doc (shared view)"
+  ],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  }
+}

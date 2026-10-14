@@ -625,3 +625,67 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - **Status:** decided. Ours: rule codes per scope (`SYS-01` and so on), a terms table, an "Open subjects" list, and the knowledge base agent keeping it current after each input.
 - **Changed:** file-tree.md [2.23]; vision/.claude/docs/inputs-vision.md with its metadata files; docs/inputs (5 files added).
 
+
+### D-063: The keys folder is in git; only the .env files are not
+<!-- k: id=d-063 applies=[3] sources=in-20261012-secrets status=decided -->
+- **Decision:** the `.secrets/` folder, its subfolders, its How it works and Details files and `secrets.index.json` (key names only) are in git and show in the tree. Every `.env` file, which holds the key values, stays out of git. The page lists the `.env` files as local-only and never reads, shows or edits their text.
+- **Date:** 2026-10-12
+- **Why:** the owner wants to see the keys folder and its metadata files like every other part of the tree.
+- **Status:** decided. Changes D-023 and D-027 only in what goes in git; key values still never leave the machine.
+- **Changed:** .gitignore; tools/materialize.py, tools/enrich.py; explorer page; CLAUDE.md; inputs-vision.md SEC-02; changelog.
+
+### D-064: Stage one; CLAUDE.md in the system folder; the docs at five levels; README in ASD-STE100; tabs only for real files
+<!-- k: id=d-064 applies=[10.20],[57],[2],[56.1],[43.1],[53.4],[19] sources=in-20261012-stage1 status=decided -->
+- **Decision:** Claude Code started in `agents/system/` reads `agents/system/CLAUDE.md`: what the project is, its stage, the reading list (project vision and README in `docs/`, system vision and README, the plain file tree `docs/file-tree.md`, the IDE docs), the current stage's work, the rules from memory, what to do after every input, and when and how each doc is updated. Every level has `docs/` with vision.md, README.md, README.asd.md (the README in ASD-STE100) and rebuild-prompt.md: the project (`docs/`), the system, trading in general, the apps, the project IDE (its README is the full IDE documentation). They are written fresh from all information and are real files, not drafts; the other docs and old drafts moved into `vision/` (`vision/docs/` and `vision/archive/2026-10-12/`). Every file and folder outside `vision/` has an `.index.md` and a `.meta.json`; the extra tab files (`x.example.md`, `x.questions.md`, `README.asd.md`; `.env.example` for a keys file) exist for the main docs and the `.env` files for now, and the page shows a tab only when its file exists. Stage one: finish the IDE, custom views, correct metadata, the docs at the project, system, trading and apps levels. Stage two: the prediction-market domain; its files moved to `vision/archive/2026-10-12/prediction-market/`, only its folders remain. New skills `readme-asd-doc` and `claude-md-doc`; the doc skills and `file-index` revised.
+- **Date:** 2026-10-12
+- **Why:** the owner wants a fresh Claude Code to know the project and its stage at once, and docs they can trust and compare.
+- **Status:** decided. Ours (proposed): the name `rebuild-prompt.md` kept for "reverse-prompt", the prediction-market folder names kept, the project docs in a top-level `docs/`, deletions done as moves into the archive.
+- **Changed:** file-tree.md (tree), agents/system/CLAUDE.md, the docs at five levels, skills, tools (materialize, enrich, parse, index_files), the page, .gitignore.
+
+### D-065: The tree is the files on disk; no planned items; an empty-files filter
+<!-- k: id=d-065 applies=[53.1.1],[53.4] sources=in-20261013-disk-tree status=decided -->
+- **Decision:** the page and the build know only the files on disk. An item in the tree notes that is not on disk is left out of the page (enrich.py), and nothing is created from the plan any more (materialize.py now only copies drafts over their real files, copies metadata next to items, gives other items empty metadata files, keeps `.gitkeep` in empty folders and writes `docs/file-tree.md`). The page's "planned" switch and its virtual metadata rows are gone; metadata rows are the real files. A file with nothing written in it yet (0 bytes, or only `{}` / `[]`) is marked "empty", and an "empty" filter shows only those files with their folders. `vision/`, `.gitkeep` and `.env` files are never marked.
+- **Date:** 2026-10-13
+- **Why:** the owner: "remove all logic related to planned, all already created files on disk should represent the current tree on the UI; empty files are files that have nothing yet, with a filter on the UI to see them".
+- **Status:** decided.
+- **Changed:** tools/enrich.py, tools/materialize.py, the page, IDE README and README.asd, ide-build skill, CLAUDE.md, HANDOFF.md.
+
+### D-066: No memory folder in git; agents use the docs and the metadata
+<!-- k: id=d-066 applies=[53.4] sources=in-20261013-no-memory-folder status=decided -->
+- **Decision:** the new version keeps no memory notes in git. `vision/.claude/memory/` is deleted when `vision/` goes, not moved, and the template folder `apps/project-IDE/data/memory/` is removed. What the notes held that the docs did not: the owner's wishes (answers in ASD-STE100 when asked, low token use) go into the rules in `agents/system/CLAUDE.md`; the rule "system text stays general, money and markets go to prediction-market" goes into `agents/trading/docs/README.md`; the open questions not yet in a questions file (where `v[N]` sits in a variant name, the model defaults, the jobs) go into `agents/system/docs/README.questions.md`. History stays in the decisions and the changelog. Facts about the cloud project only stay in the cloud project memory.
+- **Date:** 2026-10-13
+- **Why:** the owner: agents should use the documentation and index files, not keep that much in a memory; most of it is already in the docs.
+- **Status:** decided. Built with the leave-vision plan.
+- **Changed:** apps/project-IDE/data/plans/2026-10-13-leave-vision.md, 2026-10-13-leave-vision-files.md.
+
+### D-067: The trading notes live in the prediction-market docs; the metadata logic is a top-level doc
+<!-- k: id=d-067 applies=[19.6],[57] sources=in-20261014-metadata-logic status=decided -->
+- **Decision:** all the trading knowledge the project has sits now in `agents/trading/prediction-market/docs/`: the ten `trading-*.md` notes, `doc-outlines.md`, `trading-vision-notes.md`, `common/`, `how-to/`, `index/accounts.md`, and `README-trading-parts.md` and `rebuild-prompt-trading-parts.md` (the trading text taken out of the system docs). They are real files with their metadata, like any item; the rest of the domain stays stage two. The full logic of the metadata files, in ASD-STE100, is `docs/metadata.md`, read by every agent before it writes a metadata file and kept in step with the `file-index` skill. A found item shows its own How it works and Details on the page, read from the files next to it.
+- **Date:** 2026-10-14
+- **Why:** the owner: "for trading all current available information we need put in a docs"; "detailed full explanation in asd style for the metadata logic, all logic related to it in a new system, add this to the top level docs".
+- **Status:** decided.
+- **Changed:** docs/metadata.md, the project, system and trading docs, CLAUDE.md, file-index, materialize.py, enrich.py, the leave-vision files plan.
+
+### D-068: Two types of questions; the owner's questions improve the docs
+<!-- k: id=d-068 applies=[57] sources=in-20261014-1004,in-20261014-1006 status=decided -->
+- **Decision:** every Questions file has two parts. "Open questions for the owner" holds what only the owner can answer; it is written by `change-plan` (each choice of a plan), by the new `make-questions` skill (gaps, contradictions, unapproved defaults, waiting proposals, stale answers), while a doc is written and while an item is changed; an answered question leaves it. "The owner's questions" holds each question the owner asked about the item, word for word, with its answer; it stays, and the answer is updated when it stops being true. Each owner question is also analysed for why the docs did not answer it (missing, hard to find, unclear, wrong, asked before), the docs that should have answered it are improved, and a "Docs improved" line names them (`knowledge-intake` step 6).
+- **Date:** 2026-10-14
+- **Why:** the owner: "for question i think we need 2 types one we should record mine in metadata ... (with an answer) ... questions created when we do plan, or by skill to analyse and make questions"; "also mine questions should be analysed and improve related documentations".
+- **Status:** decided.
+- **Changed:** docs/metadata.md section 18, the skills change-plan, knowledge-intake, ide-sync, file-index and make-questions, agents/system/CLAUDE.md, every Questions file, the docs named in the "Docs improved" lines.
+
+### D-069: Questions are written in ASD-STE100; How it works and Questions tabs read like a file
+<!-- k: id=d-069 applies=[57],[53] sources=in-20261014-1047 status=decided -->
+- **Decision:** everything in a Questions file is written in ASD-STE100 (open questions, reasons, recommendations, titles and answers); only the owner's own question stays word for word. The skills file-index, make-questions, change-plan and knowledge-intake and the knowledge base agent say so. On the page, How it works and Questions show their file like a Markdown file on the File tab: Read or Source, the reader controls and Full screen.
+- **Date:** 2026-10-14
+- **Why:** the owner: "can we make question and how it works tab same like file, that i can pick lick mode, can make full screen, also all question should be made with a asd style".
+- **Status:** decided.
+- **Changed:** the page, apps/project-IDE/docs/README.md and its ASD twin, docs/metadata.md, the four skills and the knowledge base agent (both copies), every Questions file.
+
+### D-070: The extra knowledge notes are kept but not referenced; tree numbers and node ids go
+<!-- k: id=d-070 applies=[57] sources=in-20261014-1241 status=decided -->
+- **Decision:** the topic notes (overview, architecture, conventions, safety, flows, data schemas, glossary, metrics, roadmap, feature map, common, index lists) move to `apps/project-IDE/data/sources/`, and the trading notes stay in `agents/trading/prediction-market/docs/`, but no doc, skill or agent refers to them; whether to use them is decided later. Knowledge goes into the level docs, CLAUDE.md, metadata.md and each item's metadata files. The tree numbers and node ids of the old tree notes are not needed once the path is the id: `tree_number` is removed from every Details file now; the numbers and ids leave the How it works front matter, the knowledge tags and the page in the move out of `vision/`.
+- **Date:** 2026-10-14
+- **Why:** the owner: "i don't want that we anywhere make references to them now, addditional knowledge files ll be considered later"; "if we no need file tree number we can remove it".
+- **Status:** decided.
+- **Changed:** the skills and agents (both copies), CLAUDE.md, the level docs, every Details file, docs/metadata.md, the rebuild prompts, the leave-vision plan.

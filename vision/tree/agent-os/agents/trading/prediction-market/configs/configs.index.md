@@ -1,9 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/configs/
 node: n-19.2
-basis: ac22135c860d
+basis: e6c3ca066d4f
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # configs/
 

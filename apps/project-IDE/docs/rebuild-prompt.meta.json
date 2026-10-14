@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "about": "The prompt an AI coding agent follows to build the project IDE again exactly: tree, page features, data and store formats, scripts, sync, server, agent, build order, checks.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge base agent (rebuild-prompt-doc skill)"
+  ],
+  "readers": [
+    "an AI agent rebuilding or checking the IDE",
+    "the project IDE agent",
+    "the owner, to check it"
+  ],
+  "changes_when": "the IDE's design changes: the page, a script, the sync, the server, the formats or the layout",
+  "related": [
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "same parts, described for people"
+    },
+    {
+      "path": "vision/explorer/file-tree-explorer.html",
+      "how": "specified (the page)"
+    },
+    {
+      "path": "vision/tools/",
+      "how": "specified (the build scripts)"
+    },
+    {
+      "path": "vision/server/",
+      "how": "specified (the server)"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "specified"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-sync/SKILL.md",
+      "how": "specified"
+    },
+    {
+      "path": "agents/system/.claude/agents/project-ide-agent.md",
+      "how": "specified"
+    },
+    {
+      "path": "apps/docs/rebuild-prompt.md",
+      "how": "the apps level lists it"
+    },
+    {
+      "path": "agents/system/.claude/skills/rebuild-prompt-doc/SKILL.md",
+      "how": "written with"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-038",
+      "D-039",
+      "D-040",
+      "D-041",
+      "D-042",
+      "D-043",
+      "D-044",
+      "D-045",
+      "D-046",
+      "D-048",
+      "D-049",
+      "D-055",
+      "D-057",
+      "D-060",
+      "D-061",
+      "D-063"
+    ],
+    "inputs": [
+      "in-20260929-2044",
+      "in-20261005-1043",
+      "in-20261005-1433",
+      "in-20261005-1452",
+      "in-20261005-1517",
+      "in-20261005-1545",
+      "in-20261006-1017",
+      "in-20261006-1611",
+      "in-20261006-2047",
+      "in-20261009-1019",
+      "in-20261009-1459",
+      "in-20261009-1714",
+      "in-20261009-2005",
+      "in-20261009-2219",
+      "in-20261012-tree",
+      "in-20261012-real",
+      "in-20261012-secrets",
+      "in-20261012-metadisk",
+      "in-20261012-stage1"
+    ],
+    "notes": [
+      "vision/.claude/memory/file-tree-explorer-sync.md",
+      "vision/plans/file-set.md",
+      "vision/plans/server-ide.md",
+      "vision/plans/2026-10-12-claude-md-stage-one.md",
+      "vision/tools/README.md",
+      "vision/server/README.md"
+    ]
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.example.md",
+      "how": "if the outline changed"
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.questions.md",
+      "how": "remove settled questions, add new ones"
+    },
+    {
+      "path": "apps/docs/rebuild-prompt.md",
+      "how": "if the IDE's place in the build order changes"
+    }
+  ],
+  "inherits": [
+    "the rebuild-prompt-doc skill's rules",
+    "never a secret value",
+    "build only what is decided; open points under Do not build"
+  ],
+  "features": [
+    "Project IDE"
+  ],
+  "views": [
+    "doc (Read view)"
+  ],
+  "how_it_works": {
+    "file": "vision/tree/agent-os/apps/project-IDE/docs/rebuild-prompt.index.md",
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  }
+}

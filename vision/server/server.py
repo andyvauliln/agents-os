@@ -204,6 +204,15 @@ class WriteThrough:
                 with open(p, "w", encoding="utf-8") as f:
                     f.write(body)
                 done.append(os.path.relpath(p, self.repo))
+            path = (n.get("path") or "").replace("|", "-")   # the copy next to the item on disk (materialize.py)
+            if self.planning and path.startswith("agent-os/") and not n.get("scanned"):
+                rel = path[len("agent-os/"):]
+                home = rel.rstrip("/") if n.get("type") == "folder" else os.path.dirname(rel)
+                real = self._safe(os.path.join(home, os.path.basename(p))) if home else self._safe(os.path.basename(p))
+                if real and real != p and (not os.path.isfile(real) or open(real, encoding="utf-8").read() != body):
+                    with open(real, "w", encoding="utf-8") as f:
+                        f.write(body)
+                    done.append(os.path.relpath(real, self.repo))
         return done
 
 

@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/.claude/commands/
 node: n-19.1.9
-basis: 03dbc5088bc3
+basis: 137c0275ec48
 written: 2026-10-01T00:53:39Z
 by: summary-worker
-confirmed: 2026-10-07T18:57:42Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # commands/
 

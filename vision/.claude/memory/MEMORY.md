@@ -3,8 +3,11 @@
 - Name and subject: the Agent OS, root `agent-os/` (renamed from trading-os 2026-10-07), for agents of any kind (D-054, D-056). GitHub repo keeps the name trading-oss until the owner renames it.
 - [Trading lives in the prediction-market domain](agent-os-trading-domain.md): system level general; later trading domains copy pm; copy trading dropped (D-056, D-058, done 2026-10-07).
 - Done 2026-10-09 (D-059, page v48): `agents/trading/` holds `prediction-market/` (copytrading later) and `docs/` with its 3 docs (planning copies vision/docs/trading/); system README and rebuild prompt general; removed trading text in vision/archive/2026-10-09/*-trading-parts.md for pm's own docs later.
+- [Stage one](stage-one.md): CLAUDE.md in agents/system; docs at five levels with README.asd twins; prediction-market folders only until stage two (D-064, 2026-10-12).
 - Repository: https://github.com/andyvauliln/trading-oss ONLY (not social_media_app).
 - Published 2026-10-07: whole project pushed to branch `claude/project-thread-dj0xqs` under `vision/`, with `HANDOFF.md` at top, for continuing from another account. Keep token use low.
+- [Planned items are real files](planned-items-are-real-files.md): materialize.py each build; PR #4 merged 2026-10-12.
+- Project IDE on the owner's server (PR #3 merged to main 2026-10-12): `git pull`, then `python3 vision/server/server.py` from the repo top; serves the same page as the claude.ai artifact from the planning files. Request box/Apply changes need `claude-agent-sdk` + Claude Code signed in; mic needs GROQ_API_KEY in `.secrets/test/.env`. Full move into apps/project-IDE/ + agents/system/ not done (optional).
 
 ## Knowledge base (/mnt/project-files/vision/docs/, D-033)
 - Start at docs/README.md (layers, tag format, flow). Layers: inputs/ (owner inputs word for word + index.json), file-tree.md (one section per [n] object), topic notes (overview, architecture, flows, data-schemas, conventions, safety, glossary, metrics, roadmap, how-to/, common/, feature-map; pm's trading- notes in docs/prediction-market-agents/), history (decisions.md D-001..D-059, changelog.md), index/ (lists; knowledge-map.json).

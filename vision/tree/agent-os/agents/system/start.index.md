@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/system/start.sh
 node: n-10.7
-basis: 73bc89eb32e3
+basis: 98cc77824e9f
 written: 2026-10-01T01:01:42Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # start.sh
 

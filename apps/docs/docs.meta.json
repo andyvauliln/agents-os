@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "about": "The docs for all apps: vision, README, its ASD-STE100 version and the rebuild prompt of apps/, with their metadata.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent (vision-doc, readme-doc, rebuild-prompt-doc, file-index)",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "the owner",
+    "everyone new",
+    "every agent before working in apps/",
+    "an AI rebuilding the repository"
+  ],
+  "changes_when": "an app is added, changed, updated or removed, or the rules for outside code change",
+  "related": [
+    {
+      "path": "apps/docs/vision.md",
+      "how": "contains"
+    },
+    {
+      "path": "apps/docs/README.md",
+      "how": "contains"
+    },
+    {
+      "path": "apps/docs/README.asd.md",
+      "how": "contains"
+    },
+    {
+      "path": "apps/docs/rebuild-prompt.md",
+      "how": "contains"
+    },
+    {
+      "path": "apps/project-IDE/docs/",
+      "how": "the docs of the app below"
+    },
+    {
+      "path": "docs/",
+      "how": "the project docs above"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-055",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261006-2206",
+      "in-20261012-stage1"
+    ],
+    "notes": [
+      "conv-apps",
+      "apps-docs-clones-forks"
+    ]
+  },
+  "update_with": [
+    {
+      "path": "vision/tree/agent-os/apps/apps.index.md",
+      "how": "the apps folder's How it works mentions its docs"
+    }
+  ],
+  "inherits": [
+    "conv-apps",
+    "human-docs-style"
+  ],
+  "features": [
+    "Apps and outside code"
+  ],
+  "views": [],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  }
+}

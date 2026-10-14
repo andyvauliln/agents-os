@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/system/package.json
 node: n-10.4
-basis: 2cad17d78c58
+basis: 917ffe481ade
 written: 2026-10-01T01:01:42Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # package.json
 

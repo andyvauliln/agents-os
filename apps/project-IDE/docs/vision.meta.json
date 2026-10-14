@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "about": "The project IDE's vision: what the IDE is for, why it exists, how it should work for the owner, where it stands and what is open.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge base agent (vision-doc skill)",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "the owner",
+    "anyone new to the IDE",
+    "the project IDE agent",
+    "the knowledge base agent before the IDE's other docs",
+    "every AI working on the page"
+  ],
+  "changes_when": "an owner input changes what the IDE is for, how it should behave, its plans, a principle or an open question",
+  "related": [
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "goes deeper; same words in In short"
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.md",
+      "how": "must agree with it"
+    },
+    {
+      "path": "apps/docs/vision.md",
+      "how": "the apps level above"
+    },
+    {
+      "path": "agents/system/.claude/skills/vision-doc/SKILL.md",
+      "how": "written with (outline for an app)"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-038",
+      "D-039",
+      "D-040",
+      "D-041",
+      "D-042",
+      "D-043",
+      "D-044",
+      "D-045",
+      "D-046",
+      "D-048",
+      "D-049",
+      "D-055",
+      "D-057",
+      "D-060",
+      "D-061",
+      "D-063"
+    ],
+    "inputs": [
+      "in-20260929-2044",
+      "in-20261005-1043",
+      "in-20261005-1433",
+      "in-20261005-1452",
+      "in-20261005-1517",
+      "in-20261005-1545",
+      "in-20261006-1017",
+      "in-20261006-1611",
+      "in-20261006-2047",
+      "in-20261009-1019",
+      "in-20261009-1459",
+      "in-20261009-1714",
+      "in-20261009-2005",
+      "in-20261009-2219",
+      "in-20261012-tree",
+      "in-20261012-real",
+      "in-20261012-secrets",
+      "in-20261012-metadisk",
+      "in-20261012-stage1"
+    ],
+    "notes": [
+      "vision/.claude/memory/file-tree-explorer-sync.md",
+      "vision/plans/file-set.md",
+      "vision/plans/server-ide.md",
+      "vision/plans/2026-10-12-claude-md-stage-one.md",
+      "vision/tools/README.md",
+      "vision/server/README.md"
+    ]
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "bring In short and every part in line, after the vision"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.asd.md",
+      "how": "rewrite the changed sections in ASD-STE100"
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.md",
+      "how": "last: the spec and Do not build"
+    },
+    {
+      "path": "apps/project-IDE/docs/vision.example.md",
+      "how": "if the outline changed"
+    },
+    {
+      "path": "apps/project-IDE/docs/vision.questions.md",
+      "how": "remove answered questions, add new ones"
+    }
+  ],
+  "inherits": [
+    "the vision-doc skill's rules for an app",
+    "human-docs-style: plain prose, no reference codes",
+    "decided means the owner decided"
+  ],
+  "features": [
+    "Project IDE"
+  ],
+  "views": [
+    "doc (Read view)"
+  ],
+  "how_it_works": {
+    "file": "vision/tree/agent-os/apps/project-IDE/docs/vision.index.md",
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  }
+}

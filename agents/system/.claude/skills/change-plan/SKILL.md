@@ -45,7 +45,7 @@ The parts of the system it touches, as they are now, briefly.
 One section per part of the change: what it is, names and formats, a worked example.
 
 ## Choices for the owner
-Each open choice with the options and the recommended default. The build follows the defaults unless the owner says otherwise.
+Each open choice with the options and the recommended default. The build follows the defaults unless the owner says otherwise. Each choice is also written as an open question in the Questions file of the item it is about (see step 2).
 
 ## Steps
 Numbered, in build order, each with the check that shows it is done.
@@ -63,9 +63,9 @@ For each piece of knowledge: the file that will own it (a feature, a note, a ski
 ## Steps
 
 1. **Save the request.** Run `knowledge-intake` step 1 for the owner's message, so their words are stored before anything else.
-2. **Write the plan** with status `draft`. Read the context of everything it touches first (`build_map.py --context <node>`, the levels above included). Add its row to `plans/index.json`.
+2. **Write the plan** with status `draft`. Read the context of everything it touches first (`build_map.py --context <node>`, the levels above included). Add its row to `plans/index.json`. Write each choice for the owner as an open question in the Questions file of the item it concerns (`x.questions.md`, part "Open questions for the owner"), with one sentence on why it matters and "From the plan: <plan title>", written in ASD-STE100 (Simplified Technical English, like `docs/metadata.md`): short sentences, one statement each, active voice, simple common words, articles kept, lists for steps and choices. If the plan has no single item, use the plan file's own Questions file.
 3. **Show it.** Set `waiting`. Tell the owner in a few lines what it changes, with a link to the plan; put each choice that changes their goal on a decision card with your recommendation. For a big change, show one worked example first.
-4. **On the owner's go,** set `approved` and record the decisions in `decisions.md` with the plan named in their status.
+4. **On the owner's go,** set `approved` and record the decisions in `decisions.md` with the plan named in their status. Remove each answered choice from the open questions; when the owner asked something back, record it under "The owner's questions" with the answer.
 5. **Build** step by step. Run each step's check before the next. Tick the step and add a log line. Set `building`, then `built`.
 6. **Distribute.** Move every piece of knowledge to the home the plan names, with `knowledge-intake` (write, ripple, record), refresh the How it works files with `file-index`, then the vision, the README and the rebuild prompt, in that order, at the level that changed and every level above it. Set `distributed`.
 7. **Archive** the plan to `archive/plans/` and update its row. From now on the knowledge lives only in its homes.

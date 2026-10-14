@@ -1,1 +1,64 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Trading's own docs: vision, README, README in ASD-STE100 and rebuild prompt.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "the owner",
+    "every trading domain agent",
+    "an AI rebuilding trading"
+  ],
+  "changes_when": "a doc is added, removed or rewritten",
+  "related": [
+    {
+      "path": "agents/system/docs/",
+      "how": "parent docs"
+    },
+    {
+      "path": "agents/trading/prediction-market/docs/",
+      "how": "child docs, stage two"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-048",
+      "D-053",
+      "D-059",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261009-0940",
+      "in-20261012-stage1"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/trading.index.md",
+      "how": "sum up the docs folder"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "names trading's docs"
+    }
+  ],
+  "inherits": [
+    "the docs hierarchy: vision, README, rebuild prompt at every level"
+  ],
+  "features": [
+    "Docs at every level"
+  ],
+  "views": [],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  }
+}

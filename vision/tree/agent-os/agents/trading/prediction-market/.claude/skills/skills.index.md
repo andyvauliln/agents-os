@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/.claude/skills/
 node: n-19.1.2
-basis: d55d05b77ebc
+basis: d585e54b2384
 written: 2026-10-01T00:53:39Z
 by: summary-worker
-confirmed: 2026-10-07T18:57:42Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # skills/
 

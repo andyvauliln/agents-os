@@ -1,9 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/scripts/
 node: n-30
-basis: ac0a3c0fb0ea
+basis: bb190656b20e
 written: 2026-10-07T19:03:05Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # scripts/
 

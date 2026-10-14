@@ -2,7 +2,7 @@
 about: agent-os/agents/system/configs/system.workers.json
 node: n-11.10
 basis: 7c1542d4df4a
-written: 2026-10-07T19:01:11Z
+written: 2026-10-14T12:00:00Z
 by: knowledge-base-agent
 confirmed: 2026-10-09T10:48:55Z
 ---
@@ -33,6 +33,7 @@ The jobs files of every other agent, which use the same format; the list of all 
 - A live job needs the owner's approval and an agent on the live list.
 - Jobs that run in the cloud, on the desktop or on GitHub get no keys and never act live.
 - The exact fields are a proposal.
+- Claude Code itself can also run work on a schedule: `/loop` in an open session, cloud routines kept in the Claude account, scheduled tasks of the desktop app, GitHub Actions with a `schedule:` line, or the machine's cron or systemd timer running `claude -p`. In the Agent OS none of these holds the list: every job is written in its agent's jobs file, and the one scheduler, planned to run on the owner's server, starts it.
 
 ## Keep in mind
 

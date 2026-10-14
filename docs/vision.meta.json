@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "about": "The top doc of the project: what the Agent OS is and why, the way of working, the rules, the stages and what is open.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent (vision-doc skill)",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "the owner and people they share the project with",
+    "Claude Code started in agents/system/ (first doc it reads)",
+    "knowledge-base-agent, before the other project docs"
+  ],
+  "changes_when": "an input changes the project's goals, way of working, levels, stage, a rule, an idea or an open question",
+  "related": [
+    {
+      "path": "docs/README.md",
+      "how": "goes deeper; same words"
+    },
+    {
+      "path": "docs/README.asd.md",
+      "how": "follows the README"
+    },
+    {
+      "path": "docs/rebuild-prompt.md",
+      "how": "states it as instructions"
+    },
+    {
+      "path": "agents/system/docs/vision.md",
+      "how": "the system vision below it"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "reads it first"
+    },
+    {
+      "path": "agents/system/.claude/skills/vision-doc/SKILL.md",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-034",
+      "D-048",
+      "D-049",
+      "D-051",
+      "D-053",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261012-stage1"
+    ],
+    "notes": [
+      "plans/2026-10-12-claude-md-stage-one.md",
+      "archive/2026-10-12/claude-docs/inputs-vision.md",
+      "memory/human-docs-style.md",
+      "knowledge/sources/vision.md"
+    ]
+  },
+  "update_with": [
+    {
+      "path": "docs/README.md",
+      "how": "its In short uses the same words; bring it in line next"
+    },
+    {
+      "path": "docs/README.asd.md",
+      "how": "rewrite after the README"
+    },
+    {
+      "path": "docs/rebuild-prompt.md",
+      "how": "bring in line last"
+    },
+    {
+      "path": "docs/vision.example.md",
+      "how": "the outline, when a section is added or renamed"
+    },
+    {
+      "path": "docs/vision.questions.md",
+      "how": "when an open question is added or answered"
+    }
+  ],
+  "inherits": [
+    "safe-secrets-never",
+    "conv-docs",
+    "conv-docs-format",
+    "conv-docs-one-fact",
+    "conv-metadata-names"
+  ],
+  "features": [
+    "Docs and self-support"
+  ],
+  "views": [
+    "Read view",
+    "Example",
+    "Questions"
+  ],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  }
+}

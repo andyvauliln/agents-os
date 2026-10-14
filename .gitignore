@@ -1,10 +1,11 @@
-# Secrets and local env
+# Keys files never go in git: every .env (the keys folder .secrets/ itself and its notes do)
 .env
 .env.*
 !.env.example
 # How it works and Details files of a keys file hold no keys, so they stay in git
 !.env.index.md
 !.env.meta.json
+!.env.questions.md
 
 # Dependencies and build output
 node_modules/
@@ -29,5 +30,6 @@ __pycache__/
 # Cursor local state
 .cursor/
 
-# Keys files never go in git
-/.secrets/
+
+# Research clones stay out of git
+apps/temp/*/repo/

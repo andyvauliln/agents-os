@@ -757,7 +757,7 @@ for x in out_nodes:
                                         "body": "| " + " | ".join(cols) + " |\n|" + "---|" * len(cols)}
 # drafts that already exist in the project folder
 # the knowledge base in vision/docs/ is the planning copy of agents/system/docs/ [2] (D-033)
-DOCS_DIR = "/mnt/project-files/vision/docs"
+DOCS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs")   # vision/docs next to these scripts
 DRAFTS = {"53.2.1": "README.md", "2.3": "overview.md", "2.4": "glossary.md", "2.5": "roadmap.md",
           "2.6": "decisions.md", "2.7": "conventions.md", "2.8": "safety.md", "2.9": "changelog.md", "2.10.2": "inputs/index.json",
           "2.10.3": "inputs/README.md", "2.12": "feature-map.md", "2.13": "file-tree.md", "2.14": "data-schemas.md", "2.15": "flows.md",
@@ -780,8 +780,7 @@ DRAFTS.update({"19.6.5": PM + "trading-overview.md", "19.6.6": PM + "trading-arc
                "19.6.16.3": PM + "common/strategy-si-templates.md",
                "19.6.17.1": PM + "how-to/create-strategy-or-variant.md", "19.6.17.2": PM + "how-to/go-live-with-money.md",
                "19.6.17.3": PM + "how-to/add-trading-account.md", "19.6.17.4": PM + "how-to/stop-trading-agent.md",
-               "19.6.18.1": PM + "index/accounts.md",
-               "56.1.1": "trading/README.md", "56.1.2": "trading/vision.md", "56.1.3": "trading/rebuild-prompt.md"})
+               "19.6.18.1": PM + "index/accounts.md"})   # the trading docs are real files in agents/trading/docs/ (D-064)
 DRAFTS = {k: v for k, v in DRAFTS.items() if os.path.exists(f"{DOCS_DIR}/{v}")}
 for x in out_nodes:
     if x["num"] in DRAFTS:
@@ -824,6 +823,13 @@ for x in out_nodes:
     rel = x["path"][len("agent-os/"):] if x["path"].startswith("agent-os/") else None
     if rel is not None:
         rel = rel.replace("|", "-")   # the name on disk (materialize.py): '|' is not allowed in Windows file names
+    if rel and x["type"] == "file" and os.path.basename(rel) == ".env":   # a keys file: shown, never read (git ignores it)
+        x["local_only"] = True
+        x["exists"] = os.path.isfile(os.path.join(REPO, rel))
+        x["content"] = None
+        x["content_source"] = "a keys file: it stays on the machine, git ignores it and the page never shows what is in it"
+        x["readonly"] = "Keys are never shown or edited here. Write them in the file on the machine."
+        rel = None
     if rel and x["type"] == "file" and os.path.isfile(os.path.join(REPO, rel)):
         x["exists"] = True
         x["name"] = x["name"].replace("|", "-")   # show the name it has on disk
@@ -921,6 +927,21 @@ try:   # files git ignores (.env.*, logs, local settings) never reach the owner'
     _IN_GIT = set(subprocess.run(["git", "-C", REPO, "ls-files", "--cached", "--others", "--exclude-standard"], capture_output=True, text=True, check=True).stdout.split("\n"))
 except (OSError, subprocess.CalledProcessError):
     _IN_GIT = None
+_BY_ID = {x["id"]: x for x in out_nodes}
+def _adopt(folder):
+    """A planned item written with a folder in its name ("vision-doc/SKILL.md" under skills/) moves into the found
+    folder of that name, under its own last name, so the tree lists it once (owner, 2026-10-13: no item twice)."""
+    for n in out_nodes:
+        if n.get("scanned") or n["parent"] == folder["id"] or not n["path"].startswith(folder["path"]) or n["path"] == folder["path"]:
+            continue
+        rest = n["path"][len(folder["path"]):].rstrip("/")
+        if "/" in rest:
+            continue
+        old = _BY_ID.get(n["parent"])
+        if old and n["id"] in old.get("children", []):
+            old["children"].remove(n["id"])
+        n["parent"] = folder["id"]; n["name"] = rest + ("/" if n["type"] == "folder" else "")
+        folder.setdefault("children", []).append(n["id"])
 def _scan(parent):
     rel = parent["path"][len("agent-os/"):]
     d = os.path.join(REPO, rel)
@@ -928,7 +949,7 @@ def _scan(parent):
         return
     have = {c["path"].replace("|", "-") for c in out_nodes if c.get("parent") == parent["id"]}
     for name in sorted(os.listdir(d)):
-        if name in SCAN_SKIP and (name != ".secrets" or parent["path"] == "agent-os/"):   # only the real keys folder at the top is left out
+        if name in SCAN_SKIP and name != ".secrets":   # the keys folder is listed; git leaves its .env files out
             continue
         full = os.path.join(d, name)
         isdir = os.path.isdir(full)
@@ -955,9 +976,10 @@ def _scan(parent):
                     x["content"] = None; x["content_lazy"] = True
                 except (UnicodeDecodeError, OSError):
                     x["content"] = None; x["content_source"] += " (not a text file)"
-        out_nodes.append(x)
+        out_nodes.append(x); _BY_ID[x["id"]] = x
         parent.setdefault("children", []).append(x["id"])
         if isdir:
+            _adopt(x)
             _scan(x)
 for _x in list(out_nodes):
     if _x["type"] == "folder" and _x.get("exists") and not _x.get("scanned") \
@@ -966,8 +988,87 @@ for _x in list(out_nodes):
 json.dump(REAL_FILES, open(os.path.join(os.path.dirname(os.path.abspath(OUT)), "real-files.json"), "w"), ensure_ascii=False)
 print("real files listed:", sum(1 for x in out_nodes if x.get("scanned")))
 
+# ---- the extra tabs are real files next to the item (owner, 2026-10-12, D-064): a tab shows only when its file exists.
+# Example: x.example.md (for a .env file: .env.example); Questions: x.questions.md; ASD-STE100: README.asd.md beside README.md.
+META_TAB_ENDS = (".index.md", ".meta.json", ".example.md", ".questions.md", ".gitkeep", ".env.example")   # metadata and tab files have none of their own
+def _extra(rel):
+    f = os.path.join(REPO, rel)
+    if os.path.isfile(f):
+        try:
+            return open(f, encoding="utf-8").read()
+        except (UnicodeDecodeError, OSError):
+            return None
+    return None
+for x in out_nodes:
+    if not x["path"].startswith("agent-os/"):
+        continue
+    rel = x["path"][len("agent-os/"):].replace("|", "-").rstrip("/")
+    if x["type"] == "folder":
+        home, fam = rel, (os.path.basename(rel) or "agent-os")
+    else:
+        home, base = os.path.dirname(rel), os.path.basename(rel)
+        fam = x.get("fam") or (base if base.startswith(".") else os.path.splitext(base)[0])
+    j = lambda name: os.path.join(home, name) if home else name
+    if x.get("scanned") and not x["name"].rstrip("/").endswith(META_TAB_ENDS):
+        # a found item's own How it works and Details sit next to it (owner, 2026-10-14: the metadata logic holds for
+        # every item); a file whose name would clash keeps its extension
+        if x["type"] == "file" and os.path.isfile(os.path.join(REPO, j(base + ".index.md"))):
+            fam = base
+        x["fam"] = fam
+        how_rel, meta_rel = j(fam + ".index.md"), j(fam + ".meta.json")
+        how = _extra(how_rel)
+        if how is not None:
+            body = re.sub(r"^---\n.*?\n---[ \t]*\n?", "", how, count=1, flags=re.S).strip()
+            x["how_md"] = body + "\n" if body else None
+        x["how_file"] = os.path.relpath(how_rel, "vision")   # like every How it works path: relative to vision/
+        x["meta_file"] = os.path.relpath(meta_rel, "vision")
+        try:
+            x["meta"] = json.load(open(os.path.join(REPO, meta_rel), encoding="utf-8"))
+        except (OSError, ValueError):
+            x["meta"] = None
+    ex_rel =j(".env.example") if x["name"] == ".env" else j(fam + ".example.md")
+    ex = _extra(ex_rel) if x["type"] == "file" else None
+    if ex is not None:
+        x["example"] = {"lang": "dotenv" if x["name"] == ".env" else "markdown", "title": os.path.basename(ex_rel), "body": ex, "file": ex_rel}
+    elif x.get("example") and not x.get("example", {}).get("file"):
+        x["example"] = None
+    q_rel = j(fam + ".questions.md")
+    q = _extra(q_rel)
+    if q is not None:
+        x["questions_md"], x["questions_file"] = q, q_rel
+    if x["type"] == "file" and x["name"] == "README.md":
+        a = _extra(j("README.asd.md"))
+        if a is not None:
+            x["asd_md"], x["asd_file"] = a, j("README.asd.md")
+
 retired = [{"nums": r["nums"], "heading": r["heading"],
             "text": " ".join(i["text"] for i in r["items"])} for r in P["retired"]]
+
+# ---- the tree is the files on disk (owner, 2026-10-13: "remove all logic related to planned"): an item in the tree
+# notes that is not on disk is left out; a file with nothing written in it yet is marked empty (the page filters on it)
+_gone = {x["id"] for x in out_nodes if x["path"].startswith("agent-os/") and x["id"] != out_nodes[0]["id"] and not (x.get("exists") or x.get("scanned"))}
+if _gone:
+    out_nodes = [x for x in out_nodes if x["id"] not in _gone]
+    for x in out_nodes:
+        x["children"] = [c for c in x.get("children", []) if c not in _gone]
+print("left out, not on disk:", len(_gone))
+for x in out_nodes:
+    if x["type"] != "file" or not x["path"].startswith("agent-os/") or x["path"].startswith("agent-os/vision/") \
+            or x["name"] == ".gitkeep" or x.get("local_only"):   # the planning area, folder keepers and keys files are left out
+        continue
+    f = os.path.join(REPO, x["path"][len("agent-os/"):].replace("|", "-"))
+    if not os.path.isfile(f):
+        continue
+    if os.path.getsize(f) == 0:
+        x["empty"] = True
+    elif os.path.getsize(f) > 64:   # a big file is not empty
+        continue
+    else:
+        try:
+            x["empty"] = open(f, encoding="utf-8").read().strip() in ("", "{}", "[]")
+        except (UnicodeDecodeError, OSError):
+            pass
+print("empty files:", sum(1 for x in out_nodes if x.get("empty")))
 
 data = {
  "schema_version": 1,

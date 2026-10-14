@@ -40,21 +40,18 @@ FIXED = ["What it is", "Who looks after it", "When and how it changes", "Who use
 KEEP = "Keep in mind"
 META_KEYS = ["about", "node", "basis", "written", "by", "confirmed"]
 # nodes whose draft already exists in vision/ (by [n]): their index file sits next to the draft, not in the mirror
-DRAFTS = {"2.1": ".claude/docs/README.md",
-          "2.2": ".claude/docs/vision.md",
-          "10.1.1.2": ".claude/agents/knowledge-base-agent.md",
+DRAFTS = {"10.1.1.2": ".claude/agents/knowledge-base-agent.md",
           "10.1.1.3": ".claude/agents/project-ide-agent.md",
           "10.1.2.5.1": ".claude/skills/ide-build/SKILL.md",
           "10.1.2.6": ".claude/skills/ide-sync/SKILL.md",
-          "10.1.5": ".claude/CLAUDE.md",
           "10.1.2.1": ".claude/skills/knowledge-intake/SKILL.md",
           "10.1.2.2": ".claude/skills/file-index/SKILL.md",
           "10.1.2.3": ".claude/skills/vision-doc/SKILL.md",
           "10.1.2.4": ".claude/skills/readme-doc/SKILL.md",
-          "2.22": ".claude/docs/rebuild-prompt.md",
-          "2.23": ".claude/docs/inputs-vision.md",
           "10.1.2.7": ".claude/skills/rebuild-prompt-doc/SKILL.md",
-          "10.1.2.8": ".claude/skills/change-plan/SKILL.md"}
+          "10.1.2.8": ".claude/skills/change-plan/SKILL.md",
+          "10.1.2.9": ".claude/skills/readme-asd-doc/SKILL.md",
+          "10.1.2.10": ".claude/skills/claude-md-doc/SKILL.md"}
 DRAFT_DIRS = {"10.1": ".claude/", "10.1.1": ".claude/agents/", "10.1.2": ".claude/skills/",
               "10.1.2.5": ".claude/skills/ide-build/"}
 
@@ -136,7 +133,7 @@ def meta_file(node):
 META_FIELDS = {"schema_version": 1, "about": "", "kind": "", "state": "", "status": "", "git": "", "secret": None,
                "generated_by": None, "writers": [], "readers": [], "changes_when": "", "related": [],
                "sources": {"decisions": [], "inputs": [], "notes": []}, "update_with": [], "inherits": [],
-               "features": [], "views": [], "how_it_works": {}, "tree_number": ""}
+               "features": [], "views": [], "how_it_works": {}}
 
 
 def ensure_meta(nodes):

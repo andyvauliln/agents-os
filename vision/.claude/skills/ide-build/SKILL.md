@@ -12,7 +12,7 @@ The File Tree page shows the owner every folder and file of the Agent OS, with i
 | Input | Where in the repository | While we plan (`vision/`) |
 |---|---|---|
 | The tree notes: the numbered tree and one section per file and folder | `apps/project-IDE/data/file-tree.md` | `docs/file-tree.md` |
-| The knowledge: topic notes with knowledge tags, decisions, inputs | `agents/system/docs/`, `apps/project-IDE/data/` | `docs/` |
+| The knowledge: decisions, inputs | `apps/project-IDE/data/` | `docs/` |
 | The drafts: docs for people, agents, skills, scripts | their own places in the tree | `.claude/` (with `CLAUDE.md`), `tools/` |
 | How it works of every file and folder | `vision.index.md` next to `vision.md` (the name without its extension), `f/f.index.md` inside each folder; the Details files the same with `.meta.json` | next to the drafts, otherwise `tree/agent-os/...` |
 | The owner's page edits kept in the data | `apps/project-IDE/data/overrides.json` | `tools/overrides.json` |
@@ -26,7 +26,7 @@ The output is `apps/project-IDE/current-ui/file-tree.data.json` (while we plan: 
 |---|---|
 | `parse.py` | Reads the tree notes into a list of items with their sections, the decisions and the feature map. |
 | `enrich.py` | Adds drafts, examples, knowledge, How it works and tabs, applies the overrides, and writes the page data. Set `DATA_VERSION` to the next number. |
-| `materialize.py` | Makes every planned item a real file or folder in the repository: drafts copied, the rest empty, a .gitkeep in empty folders. Never .secrets/. |
+| `materialize.py` | Keeps files on disk in step with vision/: drafts copied over their real files, metadata copied next to items, empty metadata for the rest, .gitkeep in empty folders, docs/file-tree.md. Makes nothing from the plan (owner, 2026-10-13). |
 | `tabs.py` | The field guides and extra tabs: settings fields, jobs, links, tests, key names. Used by `enrich.py`. |
 | `build_map.py` | Builds the knowledge map, and checks the How it works files: `--stale`, `--orphans`, `--context <id>`, `--confirm <id> ...`, `--set <file.json>`. |
 | `index_files.py` | Knows where each How it works (`.index.md`) and Details (`.meta.json`) file lives; reads and writes them; `ensure_meta` makes the empty Details files. |
@@ -42,7 +42,7 @@ While we plan, in the cloud project (`T` is a scratch folder outside the shared 
 cd /mnt/project-files/vision/tools
 python3 parse.py $T/parsed.json
 DATA_VERSION=N python3 enrich.py $T/parsed.json ../file-tree.data.json
-python3 materialize.py ../file-tree.data.json   # every planned item a real file (only new ones need a second enrich run)
+python3 materialize.py ../file-tree.data.json   # drafts and metadata onto the files on disk (run enrich again if it changed anything)
 cp ../file-tree.data.json ../explorer/file-tree.data.json
 python3 build_map.py                  # must end "... fresh, 0 missing or stale, 0 orphans"
 node check_page.js ../explorer $T/shots n-0 n-2.1 <the items this round changed>
@@ -72,4 +72,5 @@ The page source is `file-tree-explorer.html`. The page shows its own source on i
 
 - `build_map.py` reports every How it works file fresh, none missing, no orphans.
 - `check_page.js` prints "page ok".
+- The page tree lists exactly the files in git (`git ls-files --cached --others --exclude-standard`), plus the two local-only `.env` files. This is how the page stays in step with the disk.
 - The data version on the page is the new one, and the items the round changed show what the round changed.

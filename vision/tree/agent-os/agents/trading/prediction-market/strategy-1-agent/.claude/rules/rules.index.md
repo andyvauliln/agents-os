@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/strategy-1-agent/.claude/rules/
 node: n-21.1.8
-basis: 65eb1ce5813a
+basis: 314775554546
 written: 2026-10-01T00:53:12Z
 by: summary-worker
-confirmed: 2026-10-07T19:05:50Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # rules/
 

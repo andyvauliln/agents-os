@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "about": "The system's vision: why the Agent OS has a system domain, the concept, how the system should work, its business logic, examples, the stage, principles and open questions.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent with the vision-doc skill",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "the owner",
+    "people new to the system",
+    "every Claude working on the system (CLAUDE.md reading list)",
+    "knowledge-base-agent before the system's other docs"
+  ],
+  "changes_when": "an input or decision changes the system's goals, concept, behaviour, business rules, stage, an idea or an open question",
+  "related": [
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "describes the same parts exactly"
+    },
+    {
+      "path": "docs/vision.md",
+      "how": "parent vision"
+    },
+    {
+      "path": "agents/trading/docs/vision.md",
+      "how": "child vision"
+    },
+    {
+      "path": "vision/docs/overview.md",
+      "how": "built from"
+    },
+    {
+      "path": "vision/docs/safety.md",
+      "how": "built from"
+    },
+    {
+      "path": "vision/docs/roadmap.md",
+      "how": "built from"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-048",
+      "D-053",
+      "D-054",
+      "D-056",
+      "D-059",
+      "D-063",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261009-0940",
+      "in-20261012-tree",
+      "in-20261012-real",
+      "in-20261012-secrets",
+      "in-20261012-metadisk",
+      "in-20261012-stage1"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "bring In short and every changed fact in line"
+    },
+    {
+      "path": "agents/system/docs/README.asd.md",
+      "how": "follows the README"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "update the brief and Do not build"
+    },
+    {
+      "path": "agents/system/docs/vision.example.md",
+      "how": "keep the outline in step"
+    },
+    {
+      "path": "agents/system/docs/vision.questions.md",
+      "how": "keep the open questions in step"
+    }
+  ],
+  "inherits": [
+    "the project's vision: the Agent OS, test and live, the owner's approval"
+  ],
+  "features": [
+    "Agents and domains",
+    "Test and live",
+    "Self-improvement",
+    "Knowledge base"
+  ],
+  "views": [
+    "doc (shared view)"
+  ],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  }
+}

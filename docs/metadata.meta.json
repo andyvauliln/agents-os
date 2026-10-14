@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "about": "The full logic of the metadata files, in ASD-STE100.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent with file-index"
+  ],
+  "readers": [
+    "the owner",
+    "every agent",
+    "Claude Code started in agents/system/"
+  ],
+  "changes_when": "a rule of the metadata files changes: a file, a field, a name, the build or the page; the way status, inputs, decisions or questions work; the state of the Details fields",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/file-index/SKILL.md",
+      "how": "same format as"
+    },
+    {
+      "path": "docs/README.md",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "read by"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-057",
+      "D-064",
+      "D-065",
+      "D-067"
+    ],
+    "inputs": [
+      "in-20261014-metadata-logic",
+      "in-20261014-status-inputs-fields"
+    ],
+    "notes": [
+      "agents/system/.claude/skills/file-index/SKILL.md"
+    ]
+  },
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/file-index/SKILL.md",
+      "how": "the same rule, as steps for an agent"
+    },
+    {
+      "path": "docs/README.md",
+      "how": "the Metadata files part, if what the files are changes"
+    },
+    {
+      "path": "docs/rebuild-prompt.md",
+      "how": "the list of its sections"
+    }
+  ],
+  "inherits": [],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

@@ -1,9 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/scripts/
 node: n-19.3
-basis: a1dd1bc815c6
+basis: 49850e9eda29
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-12T15:40:56Z
 ---
 # scripts/
 

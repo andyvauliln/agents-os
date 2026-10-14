@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "about": "agent-os/agents/system/.claude/skills/claude-md-doc/SKILL.md",
+  "kind": "skill",
+  "state": "",
+  "status": "",
+  "git": "",
+  "secret": null,
+  "generated_by": null,
+  "writers": [],
+  "readers": [],
+  "changes_when": "",
+  "related": [],
+  "sources": {
+    "decisions": [
+      "D-064"
+    ],
+    "inputs": [],
+    "notes": []
+  },
+  "update_with": [],
+  "inherits": [],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

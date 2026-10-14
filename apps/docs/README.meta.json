@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "about": "Every app in apps/ exactly: kind, place, state, layout, the rules for outside code, the list of apps and the path to each app's docs.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent (vision-doc, readme-doc, rebuild-prompt-doc, file-index)",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "readers after the vision",
+    "the owner after a round of changes",
+    "every agent before working on an app"
+  ],
+  "changes_when": "an app is added, changed, updated from its source or removed, or the rules for outside code change",
+  "related": [
+    {
+      "path": "apps/docs/vision.md",
+      "how": "the why; same words"
+    },
+    {
+      "path": "apps/docs/README.asd.md",
+      "how": "its ASD-STE100 twin, built from it"
+    },
+    {
+      "path": "apps/docs/rebuild-prompt.md",
+      "how": "builds what it describes"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the IDE's own README, linked"
+    },
+    {
+      "path": "apps/trading-ui/trading-ui.index.md",
+      "how": "linked as the dashboard's docs"
+    },
+    {
+      "path": "apps/temp/temp.index.md",
+      "how": "linked as the research clones' docs"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "system README's apps and IDE parts must agree"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-041",
+      "D-043",
+      "D-045",
+      "D-055",
+      "D-058",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261005-1517",
+      "in-20261006-1016",
+      "in-20261006-2206",
+      "in-20261012-stage1"
+    ],
+    "notes": [
+      "conv-apps",
+      "apps-docs-clones-forks",
+      "human-docs-style"
+    ]
+  },
+  "update_with": [
+    {
+      "path": "apps/docs/README.asd.md",
+      "how": "rewrite the changed sections in ASD-STE100 in the same change"
+    },
+    {
+      "path": "apps/docs/rebuild-prompt.md",
+      "how": "tree, parts and checks follow"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "its part on apps says the same"
+    },
+    {
+      "path": "vision/tree/agent-os/apps/docs/README.index.md",
+      "how": "How it works refreshed"
+    }
+  ],
+  "inherits": [
+    "conv-apps",
+    "human-docs-style"
+  ],
+  "features": [
+    "Apps and outside code",
+    "Project IDE",
+    "List of apps"
+  ],
+  "views": [],
+  "how_it_works": {
+    "written": "2026-10-12T00:00:00Z",
+    "by": "knowledge-base-agent"
+  }
+}

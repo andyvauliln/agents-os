@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/trading/prediction-market/strategy-1-agent/.claude/output-styles/
 node: n-21.1.11
-basis: 22cbec24cd27
+basis: d65b2a15cd6d
 written: 2026-10-01T00:54:10Z
 by: summary-worker
-confirmed: 2026-10-07T19:05:50Z
+confirmed: 2026-10-12T15:40:56Z
 ---
 # output-styles/
 

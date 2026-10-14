@@ -1,29 +1,80 @@
 {
   "schema_version": 1,
-  "about": "The make-questions skill: analyse items and write the owner's open questions.",
-  "kind": "",
-  "state": "",
-  "status": "proposed",
-  "git": "",
-  "secret": null,
+  "about": "The skill that finds what only the owner can answer and writes it into each item's Questions file, with a recommended answer.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
+  "writers": [
+    "the owner",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "knowledge-base-agent",
+    "change-plan",
+    "every AI that finishes a doc or a plan"
+  ],
+  "changes_when": "The owner changes how open questions are found, written or answered.",
   "related": [
-    "agents/system/.claude/skills/knowledge-intake/SKILL.md",
-    "agents/system/.claude/skills/change-plan/SKILL.md",
-    "docs/metadata.md"
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/change-plan/SKILL.md",
+      "how": "read by"
+    },
+    {
+      "path": "docs/metadata.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "read by"
+    }
   ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-068",
+      "D-069"
+    ],
+    "inputs": [
+      "in-20261014-1004",
+      "in-20261014-1006",
+      "in-20261014-1047"
+    ],
     "notes": []
   },
   "update_with": [
-    "vision/.claude/skills/make-questions/SKILL.md"
+    {
+      "path": "vision/.claude/skills/make-questions/SKILL.md",
+      "how": "the planning copy: change both together until the move out of vision/"
+    },
+    {
+      "path": "vision/.claude/skills/make-questions/SKILL.md",
+      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
+    },
+    {
+      "path": "agents/system/.claude/skills/make-questions/SKILL.index.md",
+      "how": "if what the skill does or when it runs changes"
+    },
+    {
+      "path": "docs/metadata.md",
+      "how": "section 18, if the question logic changes"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "the table 'When and how to update each doc'"
+    }
   ],
-  "inherits": [],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The knowledge base and the docs"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

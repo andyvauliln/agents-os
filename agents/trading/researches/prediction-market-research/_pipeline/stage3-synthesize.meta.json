@@ -1,1 +1,60 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Workflow script for survey stage 3 (not run yet): cross-file audit, 00-overview.md with the comparison matrix, a three-ranker panel, 99-conclusions.md and a final critic.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the Polymarket strategy survey session that built the pipeline"
+  ],
+  "readers": [
+    "a session that resumes the survey (runs it after all studies are written)",
+    "the owner"
+  ],
+  "changes_when": "A session changes the audit, ranking or conclusion steps before stage 3 runs.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/args.json",
+      "how": "reads"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/rows/",
+      "how": "reads"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/",
+      "how": "reads"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "Describe the change to stage 3."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

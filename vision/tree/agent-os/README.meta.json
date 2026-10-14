@@ -1,23 +1,72 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The front page of the repository that GitHub shows: what the project is and where to start; empty until the owner decides what it says.",
+  "kind": "file",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent (readme-doc)"
+  ],
+  "readers": [
+    "the owner",
+    "people who open the repository on GitHub"
+  ],
+  "changes_when": "The owner decides what the front page says, or the project README's In short changes after that.",
+  "related": [
+    {
+      "path": "docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "docs/vision.md",
+      "how": "links to"
+    },
+    {
+      "path": "docs/rebuild-prompt.md",
+      "how": "documented in"
+    },
+    {
+      "path": "README.index.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041",
+      "D-045",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20260930-0832",
+      "in-20261005-1254",
+      "in-20261006-1013",
+      "in-20261012-stage1"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "docs/README.md",
+      "how": "Update the part on the front page and the handoff."
+    },
+    {
+      "path": "docs/rebuild-prompt.md",
+      "how": "Update the root files part, which now says to create it empty."
+    },
+    {
+      "path": "README.index.md",
+      "how": "Say what the front page now says."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#The front page and the handoff"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

@@ -1,1 +1,71 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Study of selling data, analytics, API and infrastructure products around Polymarket.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the survey's stage 2 writer agent",
+    "the survey's cite-check and skeptic reviewer agents",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage3-synthesize.js"
+  ],
+  "changes_when": "Only when a survey session re-verifies or corrects it (as file 57 corrected file 31); a study is not changed after the fact otherwise.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/strategies/33-data-analytics-api-products.json",
+      "how": "built from"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/",
+      "how": "built from"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/rows/33-data-analytics-api-products.json",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S0-index.md",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/rows/33-data-analytics-api-products.json",
+      "how": "Keep maturity, flags, capital and expected results in step with the study."
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S0-index.md",
+      "how": "Update its line if the name, category or one-line summary changes."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

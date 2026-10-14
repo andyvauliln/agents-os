@@ -1,23 +1,64 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The machinery's own log: scheduler runs and restarts, relink and link checks, keys loaded or refused by name, errors and AI costs.",
+  "kind": "folder",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the scheduler, relink, check-links and load-secret (planned shared scripts)"
+  ],
+  "readers": [
+    "the system agent",
+    "sys-self-improvement-agent",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "At run time, whenever the shared machinery does something; the folder itself changes only when its format changes.",
+  "related": [
+    {
+      "path": "agents/system/scripts/system/",
+      "how": "written by"
+    },
+    {
+      "path": "agents/system/docs/README.md#Logs",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/logs/",
+      "how": "summed up in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-009",
+      "D-029",
+      "D-031"
+    ],
+    "inputs": [
+      "in-20260929-1545",
+      "in-20260930-0938",
+      "in-20260930-1153"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/logs/logs.index.md",
+      "how": "keep the folder summary in step"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "update the part on logs if the sources change"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Logs",
+    "agents/system/docs/README.md#Keys and secrets"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

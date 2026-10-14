@@ -1,23 +1,46 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Name pattern: one folder link per strategy, named after its folder, pointing at that strategy's docs/.",
+  "kind": "folder link",
+  "state": "name pattern",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "relink (stage two script)"
+  ],
+  "readers": [
+    "the prediction-market domain agent (stage two)"
+  ],
+  "changes_when": "In stage two, relink makes a real link when a strategy is created and removes it when the strategy is stopped.",
+  "related": [
+    {
+      "path": "agents/trading/prediction-market/strategy-1-agent/docs/",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-030",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261012-stage1"
+    ],
     "notes": []
   },
   "update_with": [],
-  "inherits": [],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#Where the project is now: stage one",
+    "agents/trading/docs/README.md#The trading domains",
+    "agents/system/docs/rebuild-prompt.md#Child links"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

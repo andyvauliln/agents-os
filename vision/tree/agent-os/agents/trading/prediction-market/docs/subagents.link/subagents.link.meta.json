@@ -1,23 +1,53 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The domain's child links: one folder link per strategy, to that strategy's docs/ (stage two; holds only its placeholder).",
+  "kind": "folder",
+  "state": "stage two",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "relink (stage two script)"
+  ],
+  "readers": [
+    "the prediction-market domain agent (stage two)"
+  ],
+  "changes_when": "In stage two, relink adds or removes an entry when a strategy is created or stopped.",
+  "related": [
+    {
+      "path": "agents/system/docs/subagents.link/",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/trading/prediction-market/strategy-1-agent/docs/",
+      "how": "links to"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-030",
+      "D-059",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261009-0940",
+      "in-20261012-stage1"
+    ],
     "notes": []
   },
   "update_with": [],
-  "inherits": [],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#Where the project is now: stage one",
+    "agents/trading/docs/README.md#The trading domains",
+    "agents/system/docs/README.md#How a level reaches its children",
+    "agents/system/docs/rebuild-prompt.md#Child links"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

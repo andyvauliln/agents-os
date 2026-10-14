@@ -1,23 +1,79 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The prediction-market trading domain (Polymarket first); stage two: only its folders and the earlier notes in docs/ exist.",
+  "kind": "folder",
+  "state": "stage two",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent"
+  ],
+  "changes_when": "The owner starts stage two; until then nothing is added here.",
+  "related": [
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/trading/docs/rebuild-prompt.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/trading/docs/vision.md",
+      "how": "documented in"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "summed up in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-056",
+      "D-058",
+      "D-059",
+      "D-064",
+      "D-067",
+      "D-070",
+      "D-071"
+    ],
+    "inputs": [
+      "in-20261007-0904",
+      "in-20261009-0940",
+      "in-20261012-stage1",
+      "in-20261014-metadata-logic",
+      "in-20261014-1439"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "Update The trading domains part."
+    },
+    {
+      "path": "agents/trading/docs/rebuild-prompt.md",
+      "how": "Update the tree it builds."
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "Rebuild it with the ide-build skill when a path changes."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#Where the project is now: stage one",
+    "agents/trading/docs/README.md#The trading domains",
+    "agents/trading/docs/README.md#What every trading domain holds",
+    "agents/trading/docs/vision.md#What every trading domain shares"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

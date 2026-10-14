@@ -1,23 +1,53 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The system-level history: what changed in the project, when and why, newest first.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "knowledge-base-agent",
+    "knowledge-intake"
+  ],
+  "readers": [
+    "the owner",
+    "every AI session on the project",
+    "agents/system/.claude/skills/ide-build/scripts/enrich.py"
+  ],
+  "changes_when": "Every round adds an entry; until the move out of vision/, the build copies it here from its planning draft.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/decisions.md",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "written by"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-033",
+      "D-041"
+    ],
+    "inputs": [
+      "in-20260930-1533",
+      "in-20261005-1043"
+    ],
     "notes": []
   },
   "update_with": [],
-  "inherits": [],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/CLAUDE.md#After every input or update"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

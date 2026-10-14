@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The project docs: the whole repository and the way it is worked on, read first.",
+  "about": "The project docs: the vision, the README and its ASD-STE100 twin, the rebuild prompt, the plain file tree and the metadata logic, read first.",
   "kind": "folder",
   "state": "written",
   "status": "decided",
@@ -18,76 +18,60 @@
     "every agent",
     "an AI rebuilding the repository"
   ],
-  "changes_when": "an input changes the project as a whole: its levels, top folders, way of working, stage or rules; file-tree.md every round",
+  "changes_when": "An input changes the project as a whole: its levels, top folders, way of working, stage or rules; file-tree.md every round.",
   "related": [
     {
       "path": "agents/system/CLAUDE.md",
-      "how": "lists it in its reading order"
-    },
-    {
-      "path": "README.md",
-      "how": "the front page points to it"
+      "how": "read by"
     },
     {
       "path": "agents/system/docs/",
-      "how": "the system level below it"
-    },
-    {
-      "path": "agents/trading/docs/",
-      "how": "the trading level below it"
+      "how": "summed up in"
     },
     {
       "path": "apps/docs/",
-      "how": "the apps level below it"
+      "how": "links to"
     },
     {
-      "path": "apps/project-IDE/docs/",
-      "how": "the project IDE level below it"
+      "path": "agents/trading/docs/",
+      "how": "links to"
     }
   ],
   "sources": {
     "decisions": [
       "D-048",
       "D-053",
-      "D-064"
+      "D-064",
+      "D-067"
     ],
     "inputs": [
-      "in-20261012-stage1"
+      "in-20261006-1259",
+      "in-20261006-2143",
+      "in-20261012-stage1",
+      "in-20261014-metadata-logic"
     ],
-    "notes": [
-      "plans/2026-10-12-claude-md-stage-one.md",
-      "archive/2026-10-12/claude-docs/inputs-vision.md",
-      "memory/human-docs-style.md"
-    ]
+    "notes": []
   },
   "update_with": [
     {
       "path": "agents/system/CLAUDE.md",
-      "how": "the reading list names these docs; a renamed or new doc goes there"
+      "how": "The reading list names these docs; add a new or renamed doc there."
     },
     {
-      "path": "vision/docs/file-tree.md",
-      "how": "the tree notes list every doc of this folder"
+      "path": "docs/docs.index.md",
+      "how": "Name the docs the folder holds now."
     },
     {
-      "path": "agents/system/docs/vision.md",
-      "how": "the system vision sums up the project level"
+      "path": "docs/README.md",
+      "how": "Update the project docs part."
     }
   ],
   "inherits": [
-    "safe-secrets-never",
-    "conv-docs",
-    "conv-docs-format",
-    "conv-docs-one-fact",
-    "conv-metadata-names"
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#The project docs"
   ],
-  "features": [
-    "Docs and self-support",
-    "UI: monitoring and control"
-  ],
+  "features": [],
   "views": [],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "how_it_works": {}
 }

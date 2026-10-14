@@ -1,1 +1,59 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Evidence pack E5 (2026-09-20): other venues for cross-platform arbitrage and comparable data, with their fees.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the survey's stage 1 evidence agent for this pack"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)",
+    "the survey's stage 2 writer and reviewer agents",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage3-synthesize.js"
+  ],
+  "changes_when": "Not changed after 2026-09-20; facts found later that supersede it are recorded in _pipeline/HANDOFF.md and in the studies instead.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "links to"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "Record any fact that supersedes the pack, since the pack itself is not edited."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

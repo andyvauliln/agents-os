@@ -1,1 +1,68 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Workflow script for survey stage 2: for each item, write its study from the brief and evidence packs, cite-check it, run a practitioner-skeptic pass and save its comparison row.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the Polymarket strategy survey session that built the pipeline"
+  ],
+  "readers": [
+    "a session that resumes the survey (runs it with the Workflow tool)",
+    "the owner"
+  ],
+  "changes_when": "A session changes the writer or verifier prompts (the verifier lessons of each batch are added to them).",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/args.json",
+      "how": "reads"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/strategies/",
+      "how": "reads"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/",
+      "how": "reads"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/",
+      "how": "writes"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/rows/",
+      "how": "writes"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "Describe the new recipe or prompt change."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

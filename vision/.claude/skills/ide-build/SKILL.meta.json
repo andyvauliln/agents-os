@@ -1,23 +1,100 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The skill that builds the File Tree page from the repository, checks it and publishes it at the same link.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "project-ide-agent",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "project-ide-agent",
+    "ide-sync (its last step)"
+  ],
+  "changes_when": "A build step, script, check or the way the page is published changes.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/current-ui/file-tree.data.json",
+      "how": "writes"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "writes"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-sync/SKILL.md",
+      "how": "read by"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041",
+      "D-043",
+      "D-045",
+      "D-065"
+    ],
+    "inputs": [
+      "in-20261005-1041",
+      "in-20261005-1254",
+      "in-20261005-1421",
+      "in-20261013-disk-tree"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "vision/.claude/skills/ide-build/SKILL.md",
+      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.index.md",
+      "how": "if what the skill does or when it runs changes"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
+      "how": "if the steps or how to run the scripts change"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the part 'How the page is built and checked'"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.asd.md",
+      "how": "write it again after the IDE README"
+    },
+    {
+      "path": "docs/metadata.md",
+      "how": "section 11, the same steps in ASD-STE100"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "the part 'The project IDE', if what it says about this item changes"
+    },
+    {
+      "path": "agents/system/docs/README.asd.md",
+      "how": "write it again with readme-asd-doc right after the system README changes"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

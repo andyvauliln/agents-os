@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The apps README again in ASD-STE100 Simplified Technical English, same content and section order, to compare with README.md.",
+  "about": "The apps README again in ASD-STE100, with the same content and section order, to compare with README.md.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -8,23 +8,26 @@
   "secret": false,
   "generated_by": null,
   "writers": [
-    "knowledge-base-agent, from README.md",
+    "knowledge-base-agent (readme-asd-doc)",
     "the owner, on the File Tree page"
   ],
   "readers": [
-    "the owner, to compare with README.md",
-    "readers who prefer controlled English",
-    "agents"
+    "the owner, to compare with the README",
+    "any reader or AI that wants short, simple sentences"
   ],
-  "changes_when": "README.md changes; always in the same change",
+  "changes_when": "apps/docs/README.md changes; it is written again in the same change.",
   "related": [
     {
       "path": "apps/docs/README.md",
-      "how": "built from; the source, which wins"
+      "how": "built from"
     },
     {
-      "path": "vision/archive/2026-10-12/claude-docs/inputs-vision.md",
-      "how": "model for the ASD-STE100 style"
+      "path": "agents/system/.claude/skills/readme-asd-doc/SKILL.md",
+      "how": "written by"
+    },
+    {
+      "path": "apps/docs/README.asd.example.md",
+      "how": "same format as"
     }
   ],
   "sources": {
@@ -35,29 +38,29 @@
     "inputs": [
       "in-20261012-stage1"
     ],
-    "notes": [
-      "conv-apps"
-    ]
+    "notes": []
   },
   "update_with": [
     {
       "path": "apps/docs/README.md",
-      "how": "never changed alone: this file follows it"
+      "how": "Never change this file alone: a change that is not in README.md goes there first."
     },
     {
-      "path": "vision/tree/agent-os/apps/docs/README.asd.index.md",
-      "how": "How it works refreshed"
+      "path": "apps/docs/README.asd.example.md",
+      "how": "Update the outline when the README's outline changes."
+    },
+    {
+      "path": "apps/docs/README.asd.questions.md",
+      "how": "Add or settle a question about the ASD-STE100 version."
     }
   ],
   "inherits": [
-    "conv-apps"
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#Apps",
+    "apps/docs/README.md#The apps docs"
   ],
-  "features": [
-    "Apps and outside code"
-  ],
+  "features": [],
   "views": [],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "how_it_works": {}
 }

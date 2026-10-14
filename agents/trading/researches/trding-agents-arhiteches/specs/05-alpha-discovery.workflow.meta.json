@@ -1,1 +1,56 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Archify workflow spec for 'Agentic Alpha Discovery Loop' (showcase profile), the source of diagrams/05-alpha-discovery.html.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the trading-agent architecture research session"
+  ],
+  "readers": [
+    "the archify renderer",
+    "the owner"
+  ],
+  "changes_when": "The architecture's diagram is changed.",
+  "related": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/diagrams/05-alpha-discovery.html",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/README.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/diagrams/05-alpha-discovery.html",
+      "how": "Render it again with archify deliver."
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/diagrams/05-alpha-discovery.visual-check.json",
+      "how": "Run archify visual-check again."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

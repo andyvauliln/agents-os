@@ -1,23 +1,79 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The system's settings folder: the global settings, the models file, the system's own jobs and links files, and one link per domain's settings.",
+  "kind": "folder",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the system's helpers, for the shared settings",
+    "the owner",
+    "relink (planned shared script in agents/system/scripts/system/), for subagents.link/"
+  ],
+  "readers": [
+    "every agent at the start of each run, through file links",
+    "the scheduler (planned)",
+    "relink (planned)",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "A settings file is added or removed, or a domain is added or removed and its link changes.",
+  "related": [
+    {
+      "path": "agents/system/docs/README.md#Settings and AI models",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/trading/prediction-market/configs/",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/system.index.md",
+      "how": "summed up in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-006",
+      "D-014",
+      "D-015",
+      "D-030"
+    ],
+    "inputs": [
+      "in-20260929-1537",
+      "in-20260929-1616",
+      "in-20260930-1045"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/configs/configs.index.md",
+      "how": "rewrite the folder summary from its children"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "update the part on settings and AI models"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "update the tree and the part on settings"
+    },
+    {
+      "path": "agents/system/system.index.md",
+      "how": "keep the summary of configs/ in step"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "rebuild with the ide-build skill when an item here is added, moved or removed"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Settings and AI models"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

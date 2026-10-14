@@ -1,23 +1,82 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The File Tree page as the owner uses it now: the page file and the one data file it loads.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "project-ide-agent",
+    "ide-build"
+  ],
+  "readers": [
+    "the owner",
+    "apps/project-IDE/server/server.py",
+    "project-ide-agent"
+  ],
+  "changes_when": "The page or its data is built again; until the move out of vision/, the build copies the page here from its planning source.",
+  "related": [
+    {
+      "path": "apps/project-IDE/current-ui/file-tree-explorer.html",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/current-ui/file-tree.data.json",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/server/server.py",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "written by"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041",
+      "D-046",
+      "D-065"
+    ],
+    "inputs": [
+      "in-20261005-1043",
+      "in-20261005-1421",
+      "in-20261006-1017",
+      "in-20261013-disk-tree"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "Change \"How it is laid out\" and \"What the page reads\" if a file is added or moved."
+    },
+    {
+      "path": "apps/project-IDE/docs/README.asd.md",
+      "how": "Write the changed sections again in ASD-STE100, in the same order."
+    },
+    {
+      "path": "apps/project-IDE/project-IDE.index.md",
+      "how": "Change the summary of current-ui/ if it is no longer true."
+    },
+    {
+      "path": "apps/project-IDE/current-ui/current-ui.questions.md",
+      "how": "Remove answered questions and add new ones."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "apps/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#The three places the page runs"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

@@ -1,1 +1,62 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The logs of the system's helpers, one folder per helper, including the requests sent from the File Tree page.",
+  "kind": "folder",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the system's helpers, at run time",
+    "the File Tree page's server, for its requests"
+  ],
+  "readers": [
+    "the system agent",
+    "sys-self-improvement-agent",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "A system helper is added or removed.",
+  "related": [
+    {
+      "path": "agents/system/.claude/agents/",
+      "how": "written by"
+    },
+    {
+      "path": "agents/system/docs/README.md#Logs",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/logs/",
+      "how": "summed up in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-008",
+      "D-009"
+    ],
+    "inputs": [
+      "in-20260929-1545"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/logs/logs.index.md",
+      "how": "keep the folder summary in step"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "rebuild with the ide-build skill when an item here is added, moved or removed"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Logs"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

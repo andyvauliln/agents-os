@@ -1,1 +1,56 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The detailed list of what happens to every file in vision/ in the move: deleted, kept for stage two, moved, or made by the build.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent",
+    "change-plan"
+  ],
+  "readers": [
+    "the owner",
+    "every AI session that does the move"
+  ],
+  "changes_when": "The leave-vision plan changes, or a file in vision/ is moved or deleted.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/plans/2026-10-13-leave-vision.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/change-plan/SKILL.md",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-066",
+      "D-067",
+      "D-070",
+      "D-071"
+    ],
+    "inputs": [
+      "in-20261013-vision-files",
+      "in-20261014-1241",
+      "in-20261014-1439"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/plans/2026-10-13-leave-vision.md",
+      "how": "Keep the steps and the places the same as this list."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

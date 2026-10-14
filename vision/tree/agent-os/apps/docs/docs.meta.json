@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The docs for all apps: vision, README, its ASD-STE100 version and the rebuild prompt of apps/, with their metadata.",
+  "about": "The docs for all apps: the vision, the README and its ASD-STE100 twin, and the rebuild prompt of apps/.",
   "kind": "folder",
   "state": "written",
   "status": "decided",
@@ -8,7 +8,7 @@
   "secret": false,
   "generated_by": null,
   "writers": [
-    "knowledge-base-agent (vision-doc, readme-doc, rebuild-prompt-doc, file-index)",
+    "knowledge-base-agent (vision-doc, readme-doc, readme-asd-doc, rebuild-prompt-doc, file-index)",
     "the owner, on the File Tree page"
   ],
   "readers": [
@@ -17,31 +17,19 @@
     "every agent before working in apps/",
     "an AI rebuilding the repository"
   ],
-  "changes_when": "an app is added, changed, updated or removed, or the rules for outside code change",
+  "changes_when": "An app is added, changed, updated or removed, or the rules for outside code change.",
   "related": [
     {
-      "path": "apps/docs/vision.md",
-      "how": "contains"
-    },
-    {
-      "path": "apps/docs/README.md",
-      "how": "contains"
-    },
-    {
-      "path": "apps/docs/README.asd.md",
-      "how": "contains"
-    },
-    {
-      "path": "apps/docs/rebuild-prompt.md",
-      "how": "contains"
+      "path": "docs/",
+      "how": "summed up in"
     },
     {
       "path": "apps/project-IDE/docs/",
-      "how": "the docs of the app below"
+      "how": "links to"
     },
     {
-      "path": "docs/",
-      "how": "the project docs above"
+      "path": "agents/system/CLAUDE.md",
+      "how": "read by"
     }
   ],
   "sources": {
@@ -53,27 +41,25 @@
       "in-20261006-2206",
       "in-20261012-stage1"
     ],
-    "notes": [
-      "conv-apps",
-      "apps-docs-clones-forks"
-    ]
+    "notes": []
   },
   "update_with": [
     {
-      "path": "vision/tree/agent-os/apps/apps.index.md",
-      "how": "the apps folder's How it works mentions its docs"
+      "path": "apps/apps.index.md",
+      "how": "The apps folder's How it works names its docs."
+    },
+    {
+      "path": "docs/README.md",
+      "how": "Update the Apps part and where each part's docs are."
     }
   ],
   "inherits": [
-    "conv-apps",
-    "human-docs-style"
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#Apps",
+    "apps/docs/README.md#The apps docs"
   ],
-  "features": [
-    "Apps and outside code"
-  ],
+  "features": [],
   "views": [],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "how_it_works": {}
 }

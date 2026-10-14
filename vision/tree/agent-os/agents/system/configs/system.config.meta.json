@@ -1,23 +1,80 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The one global settings file for every agent: defaults, test or live with the live list and the stop switch, schedule defaults, restart rules and notifications.",
+  "kind": "file",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the system's helpers",
+    "the owner, who approves changes to the modes, the stop switch and the live list"
+  ],
+  "readers": [
+    "every agent at the start of each run, through a file link",
+    "every script that acts, before each action",
+    "load-secret (planned shared script)",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "A setting that holds for the whole system is added or changed.",
+  "related": [
+    {
+      "path": "agents/system/configs/models.config.json",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/configs/system.workers.json",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/docs/README.md#Actions: test and live",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/README.md#Settings and AI models",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md#7. Settings and AI models",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-006",
+      "D-035",
+      "D-041",
+      "D-058"
+    ],
+    "inputs": [
+      "in-20260929-1537",
+      "in-20261001-1037",
+      "in-20261007-0904"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "update the parts on settings and on test and live"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "update the settings part and its checks"
+    },
+    {
+      "path": "agents/system/configs/configs.index.md",
+      "how": "keep the folder summary in step"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Settings and AI models",
+    "agents/system/docs/README.md#Actions: test and live",
+    "docs/vision.md"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

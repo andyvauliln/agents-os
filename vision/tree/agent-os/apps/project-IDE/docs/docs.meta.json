@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The project IDE's own docs: vision, the full manual (README), its ASD-STE100 version, and the rebuild prompt.",
+  "about": "The project IDE's own docs: its vision, its README (the full manual), the README in ASD-STE100 and its rebuild prompt.",
   "kind": "folder",
   "state": "written",
   "status": "decided",
@@ -8,101 +8,78 @@
   "secret": false,
   "generated_by": null,
   "writers": [
-    "knowledge base agent (vision-doc, readme-doc, readme-asd-doc, rebuild-prompt-doc skills)",
-    "the owner, on the File Tree page"
+    "knowledge-base-agent",
+    "vision-doc",
+    "readme-doc",
+    "readme-asd-doc",
+    "rebuild-prompt-doc",
+    "the owner"
   ],
   "readers": [
     "the owner",
-    "the project IDE agent",
-    "every AI working on the IDE",
-    "Claude Code started in agents/system/"
+    "project-ide-agent",
+    "every AI session that works on the IDE"
   ],
-  "changes_when": "an owner input or a change touches the IDE's purpose, the page, the build, the sync, the server or where its parts live",
+  "changes_when": "An owner input or a change touches what the IDE is for, the page, the build, the sync, the server or where its parts live.",
   "related": [
     {
-      "path": "apps/project-IDE/project-IDE.index.md",
-      "how": "the parent folder's How it works"
+      "path": "apps/project-IDE/docs/vision.md",
+      "how": "links to"
     },
     {
-      "path": "apps/docs/",
-      "how": "the apps level docs above"
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.asd.md",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.md",
+      "how": "links to"
+    },
+    {
+      "path": "apps/docs/README.md",
+      "how": "summed up in"
     },
     {
       "path": "agents/system/CLAUDE.md",
-      "how": "points to the IDE docs"
+      "how": "read by"
     }
   ],
   "sources": {
     "decisions": [
-      "D-038",
-      "D-039",
-      "D-040",
-      "D-041",
-      "D-042",
-      "D-043",
-      "D-044",
-      "D-045",
-      "D-046",
       "D-048",
-      "D-049",
+      "D-053",
       "D-055",
-      "D-057",
-      "D-060",
-      "D-061",
-      "D-063"
+      "D-064"
     ],
     "inputs": [
-      "in-20260929-2044",
-      "in-20261005-1043",
-      "in-20261005-1433",
-      "in-20261005-1452",
-      "in-20261005-1517",
-      "in-20261005-1545",
-      "in-20261006-1017",
-      "in-20261006-1611",
-      "in-20261006-2047",
-      "in-20261009-1019",
-      "in-20261009-1459",
-      "in-20261009-1714",
-      "in-20261009-2005",
-      "in-20261009-2219",
-      "in-20261012-tree",
-      "in-20261012-real",
-      "in-20261012-secrets",
-      "in-20261012-metadisk",
+      "in-20261006-1243",
+      "in-20261006-1259",
+      "in-20261006-2143",
+      "in-20261006-2206",
       "in-20261012-stage1"
     ],
-    "notes": [
-      "vision/.claude/memory/file-tree-explorer-sync.md",
-      "vision/plans/file-set.md",
-      "vision/plans/server-ide.md",
-      "vision/plans/2026-10-12-claude-md-stage-one.md",
-      "vision/tools/README.md",
-      "vision/server/README.md"
-    ]
+    "notes": []
   },
   "update_with": [
     {
       "path": "apps/project-IDE/project-IDE.index.md",
-      "how": "if what the docs say about the IDE changes its summary"
+      "how": "Change the line on docs/ if a doc is added or removed."
     },
     {
       "path": "apps/docs/README.md",
-      "how": "if the project IDE's summary there no longer matches"
+      "how": "Change the project IDE part if its summary is no longer true."
     }
   ],
   "inherits": [
-    "every app has its own vision, README and rebuild prompt",
-    "a README.asd.md next to every README.md",
-    "human-docs-style"
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "docs/metadata.md",
+    "apps/docs/README.md#The project IDE"
   ],
-  "features": [
-    "Project IDE"
-  ],
+  "features": [],
   "views": [],
-  "how_it_works": {
-    "file": "vision/tree/agent-os/apps/project-IDE/docs/docs.index.md",
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "how_it_works": {}
 }

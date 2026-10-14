@@ -1,23 +1,71 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The owner's guide to the server page: what it needs, how to start it and reach it through an SSH tunnel, what waits for the owner, and every setting.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "project-ide-agent"
+  ],
+  "readers": [
+    "the owner"
+  ],
+  "changes_when": "A setting, a start step or a safety rule of the server changes; until the move out of vision/, the build copies it here from its planning draft.",
+  "related": [
+    {
+      "path": "apps/project-IDE/server/server.config.json",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/server/server.py",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/server/voice.py",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "same format as"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-043",
+      "D-044",
+      "D-046",
+      "D-060"
+    ],
+    "inputs": [
+      "in-20261005-1517",
+      "in-20261009-1019",
+      "in-20261013-ide-on-server"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "Change the section \"The server\"."
+    },
+    {
+      "path": "apps/project-IDE/docs/README.asd.md",
+      "how": "Write the changed sections again in ASD-STE100, in the same order."
+    },
+    {
+      "path": "apps/project-IDE/server/README.questions.md",
+      "how": "Remove answered questions and add new ones."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "apps/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#The server"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

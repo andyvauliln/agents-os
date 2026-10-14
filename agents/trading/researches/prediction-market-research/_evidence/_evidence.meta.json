@@ -1,1 +1,57 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The survey's evidence: nine evidence packs (E1-E9), the strategy lists and index, one brief per planned strategy and one comparison row per written study.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the Polymarket strategy survey sessions (2026-09-20 to 2026-09-29)",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_established.py",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage3-synthesize.js"
+  ],
+  "changes_when": "A survey session writes a study and its row, corrects a brief, or rebuilds the lists from stage 1.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/prediction-market-research.index.md",
+      "how": "Keep the summary of the evidence in step."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

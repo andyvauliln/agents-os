@@ -1,23 +1,68 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The ide-build skill with its build scripts inside it.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "project-ide-agent",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "project-ide-agent",
+    "ide-sync (its last step)"
+  ],
+  "changes_when": "A file is added to or removed from the skill or its scripts folder.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/",
+      "how": "summed up in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041",
+      "D-043",
+      "D-045",
+      "D-065"
+    ],
+    "inputs": [
+      "in-20261005-1041",
+      "in-20261005-1254",
+      "in-20261005-1421",
+      "in-20261013-disk-tree"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/skills.index.md",
+      "how": "if the skill is renamed, added or removed"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "rebuilt by ide-build when the item is added, moved or removed; never edited by hand"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

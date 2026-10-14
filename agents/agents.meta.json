@@ -1,23 +1,84 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Every agent of the Agent OS, one folder per domain: the system domain and the trading domains.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent",
+    "project-ide-agent (ide-sync)"
+  ],
+  "readers": [
+    "the owner",
+    "every agent",
+    "Claude Code started in agents/system/"
+  ],
+  "changes_when": "A domain or an agent level is added, moved or removed.",
+  "related": [
+    {
+      "path": "docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "summed up in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-013",
+      "D-022",
+      "D-041",
+      "D-054",
+      "D-056",
+      "D-059"
+    ],
+    "inputs": [
+      "in-20260929-1455",
+      "in-20260929-1616",
+      "in-20260929-1703",
+      "in-20261005-1254",
+      "in-20261007-0904",
+      "in-20261009-0940"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/agents.index.md",
+      "how": "Write the summary again from the How it works files of its domains."
+    },
+    {
+      "path": "docs/README.md",
+      "how": "Update the Agents part."
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "Update the agents and their levels part."
+    },
+    {
+      "path": "docs/rebuild-prompt.md",
+      "how": "Update the repository tree."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#Agents",
+    "agents/system/docs/README.md#Agents and their levels"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

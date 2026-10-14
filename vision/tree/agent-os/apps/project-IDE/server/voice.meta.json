@@ -1,1 +1,76 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Voice input for the server page's boxes: sends a recording to Groq's speech-to-text models in order and returns the text.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "project-ide-agent"
+  ],
+  "readers": [
+    "apps/project-IDE/server/server.py"
+  ],
+  "changes_when": "A Groq model is retired or added, or the voice flow changes; until the move out of vision/, the build copies it here from its planning source.",
+  "related": [
+    {
+      "path": "apps/project-IDE/server/server.py",
+      "how": "read by"
+    },
+    {
+      "path": "apps/project-IDE/server/server.config.json",
+      "how": "reads"
+    },
+    {
+      "path": ".secrets/test/.env",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/server/README.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-060"
+    ],
+    "inputs": [
+      "in-20261009-1019"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/server/README.md",
+      "how": "Change the steps or the settings the owner reads."
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "Change the section \"The server\"."
+    },
+    {
+      "path": "apps/project-IDE/docs/README.asd.md",
+      "how": "Write the changed sections again in ASD-STE100, in the same order."
+    },
+    {
+      "path": "apps/project-IDE/server/server.config.json",
+      "how": "Keep the list of models and the key name the same."
+    },
+    {
+      "path": "apps/project-IDE/server/voice.questions.md",
+      "how": "Remove answered questions and add new ones."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "apps/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#The server",
+    "agents/system/docs/README.md#Keys and secrets"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

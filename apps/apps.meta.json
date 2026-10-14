@@ -1,23 +1,82 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Every app of the Agent OS: our own apps, outside apps we use and repositories cloned only to study them, each with its own docs.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent",
+    "project-ide-agent (ide-sync)"
+  ],
+  "readers": [
+    "the owner",
+    "every agent before working on an app",
+    "an AI rebuilding the repository"
+  ],
+  "changes_when": "An app is added, updated from its source or removed, or the rules for outside code change.",
+  "related": [
+    {
+      "path": "apps/docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "apps/docs/vision.md",
+      "how": "documented in"
+    },
+    {
+      "path": "apps/docs/rebuild-prompt.md",
+      "how": "built from"
+    },
+    {
+      "path": "docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041",
+      "D-043",
+      "D-045",
+      "D-055",
+      "D-058",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261005-1517",
+      "in-20261006-1009",
+      "in-20261006-2206",
+      "in-20261012-stage1"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/apps.index.md",
+      "how": "Write the summary again from the How it works files of its apps."
+    },
+    {
+      "path": "apps/docs/README.md",
+      "how": "Update the apps at a glance and the list of apps."
+    },
+    {
+      "path": "docs/README.md",
+      "how": "Update the Apps part."
+    },
+    {
+      "path": "apps/docs/rebuild-prompt.md",
+      "how": "Update the repository tree."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "apps/docs/README.md",
+    "docs/README.md#Apps"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

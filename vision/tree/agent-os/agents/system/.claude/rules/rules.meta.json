@@ -1,23 +1,59 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The system level's topic rules, loaded only when matching files are read; only the pattern for now.",
+  "kind": "folder",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent, through change-plan"
+  ],
+  "readers": [
+    "Claude Code started in agents/system/"
+  ],
+  "changes_when": "The first real rule is added, or the standard .claude/ layout changes.",
+  "related": [
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-024"
+    ],
+    "inputs": [
+      "in-20260929-2025"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "the part 'Each agent's AI setup', if what it says about this item changes"
+    },
+    {
+      "path": "agents/system/docs/README.asd.md",
+      "how": "write it again with readme-asd-doc right after the system README changes"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "the part 'The standard .claude/ folder', if names, formats or the tree change"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Each agent's AI setup",
+    "agents/system/docs/rebuild-prompt.md#The standard .claude/ folder"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

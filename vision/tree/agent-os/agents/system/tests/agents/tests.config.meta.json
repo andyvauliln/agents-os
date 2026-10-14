@@ -1,23 +1,65 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The list of every test of the system's instructions and helpers: each with its switch and schedule, and the last result run-tests writes back.",
+  "kind": "file",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the system agent or sys-self-improvement-agent, when it adds a test",
+    "the owner, who switches tests on or off",
+    "run-tests (planned), for the results"
+  ],
+  "readers": [
+    "run-tests (planned shared script)",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "A test is added, switched on or off, or run.",
+  "related": [
+    {
+      "path": "agents/system/tests/agents/run-tests.system.link.js",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/tests/scripts/tests.config.json",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/docs/README.md#Tests",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md#11. Tests",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-025"
+    ],
+    "inputs": [
+      "in-20260929-2036",
+      "in-20260929-2059"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/tests/agents/agents.index.md",
+      "how": "keep the folder summary in step if the fields change"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "update the tests part if the fields change"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Tests"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

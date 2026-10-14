@@ -1,23 +1,61 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Repositories cloned from GitHub only to study them, each in its own folder with the clone in repo/, never committed.",
+  "kind": "folder",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the agent or session that studies an outside repository",
+    "the owner"
+  ],
+  "readers": [
+    "the agent or session that studies an outside repository",
+    "the owner"
+  ],
+  "changes_when": "A repository is cloned to study it, gets its docs on the owner's request, or is deleted when the research is done.",
+  "related": [
+    {
+      "path": ".gitignore",
+      "how": "checked by"
+    },
+    {
+      "path": "apps/docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "apps/docs/rebuild-prompt.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-055"
+    ],
+    "inputs": [
+      "in-20261006-2206"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": ".gitignore",
+      "how": "Must keep apps/temp/*/repo/ out of git."
+    },
+    {
+      "path": "apps/docs/README.md",
+      "how": "Update the research clones part and the list of apps."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "apps/docs/README.md",
+    "docs/README.md#Apps",
+    "apps/docs/README.md#Research clones"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

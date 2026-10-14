@@ -1,68 +1,63 @@
 {
   "schema_version": 1,
-  "about": "A plain list of every path in the repository, one per line, with no metadata; built every round.",
+  "about": "A plain list of every path in the repository, one per line, with no metadata; written again every round.",
   "kind": "file",
-  "state": "built",
+  "state": "written",
   "status": "decided",
   "git": "tracked",
   "secret": false,
-  "generated_by": "ide-build (project-ide-agent)",
+  "generated_by": "agents/system/.claude/skills/ide-build/scripts/materialize.py",
   "writers": [
-    "ide-build, every round; never by hand"
+    "agents/system/.claude/skills/ide-build/scripts/materialize.py",
+    "project-ide-agent (ide-build)"
   ],
   "readers": [
-    "Claude Code started in agents/system/ (reading list)",
+    "Claude Code started in agents/system/, from the reading list",
     "the owner",
-    "every agent looking for a file"
+    "every agent that looks for a file"
   ],
-  "changes_when": "every round, when the page is built",
+  "changes_when": "Every round, when the page is built and a file or folder was added, moved or removed.",
   "related": [
     {
-      "path": "apps/project-IDE/current-ui/file-tree.data.json",
-      "how": "lists the same paths"
-    },
-    {
-      "path": "vision/docs/file-tree.md",
-      "how": "a different file: the planned tree notes with one section per item"
-    },
-    {
-      "path": "agents/system/CLAUDE.md",
-      "how": "reads it"
+      "path": "agents/system/.claude/skills/ide-build/scripts/materialize.py",
+      "how": "written by"
     },
     {
       "path": "agents/system/.claude/skills/ide-build/SKILL.md",
-      "how": "built by"
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "read by"
+    },
+    {
+      "path": "docs/README.md",
+      "how": "documented in"
     }
   ],
   "sources": {
     "decisions": [
-      "D-064"
+      "D-064",
+      "D-065"
     ],
     "inputs": [
-      "in-20261012-stage1"
+      "in-20261012-stage1",
+      "in-20261013-disk-tree"
     ],
-    "notes": [
-      "plans/2026-10-12-claude-md-stage-one.md"
-    ]
+    "notes": []
   },
   "update_with": [
     {
-      "path": "agents/system/.claude/skills/ide-build/scripts/",
-      "how": "the build step that writes it; change it there, never in the file"
+      "path": "agents/system/.claude/skills/ide-build/scripts/materialize.py",
+      "how": "Change the build to change the file; never edit the file by hand."
     }
   ],
   "inherits": [
-    "flow-user-file-tree-page",
-    "conv-metadata-names"
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#The project docs"
   ],
-  "features": [
-    "UI: monitoring and control"
-  ],
-  "views": [
-    "Read view"
-  ],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "features": [],
+  "views": [],
+  "how_it_works": {}
 }

@@ -8,43 +8,51 @@
   "secret": false,
   "generated_by": null,
   "writers": [
-    "knowledge-base-agent (vision-doc, readme-doc, rebuild-prompt-doc, file-index)",
+    "knowledge-base-agent (readme-doc)",
     "the owner, on the File Tree page"
   ],
   "readers": [
-    "readers after the vision",
-    "the owner after a round of changes",
-    "every agent before working on an app"
+    "the owner",
+    "every agent before working on an app",
+    "readers after the apps vision"
   ],
-  "changes_when": "an app is added, changed, updated from its source or removed, or the rules for outside code change",
+  "changes_when": "An app is added, changed, updated from its source or removed, or the rules for outside code change.",
   "related": [
     {
       "path": "apps/docs/vision.md",
-      "how": "the why; same words"
+      "how": "built from"
     },
     {
       "path": "apps/docs/README.asd.md",
-      "how": "its ASD-STE100 twin, built from it"
+      "how": "read by"
     },
     {
       "path": "apps/docs/rebuild-prompt.md",
-      "how": "builds what it describes"
+      "how": "read by"
     },
     {
       "path": "apps/project-IDE/docs/README.md",
-      "how": "the IDE's own README, linked"
+      "how": "links to"
     },
     {
       "path": "apps/trading-ui/trading-ui.index.md",
-      "how": "linked as the dashboard's docs"
+      "how": "links to"
     },
     {
       "path": "apps/temp/temp.index.md",
-      "how": "linked as the research clones' docs"
+      "how": "links to"
     },
     {
-      "path": "agents/system/docs/README.md",
-      "how": "system README's apps and IDE parts must agree"
+      "path": "docs/README.md",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/system/.claude/skills/readme-doc/SKILL.md",
+      "how": "written by"
+    },
+    {
+      "path": "apps/docs/README.example.md",
+      "how": "same format as"
     }
   ],
   "sources": {
@@ -58,46 +66,45 @@
     ],
     "inputs": [
       "in-20261005-1517",
-      "in-20261006-1016",
+      "in-20261006-1009",
       "in-20261006-2206",
       "in-20261012-stage1"
     ],
-    "notes": [
-      "conv-apps",
-      "apps-docs-clones-forks",
-      "human-docs-style"
-    ]
+    "notes": []
   },
   "update_with": [
     {
       "path": "apps/docs/README.asd.md",
-      "how": "rewrite the changed sections in ASD-STE100 in the same change"
+      "how": "Write the changed sections again in ASD-STE100 in the same change."
     },
     {
       "path": "apps/docs/rebuild-prompt.md",
-      "how": "tree, parts and checks follow"
+      "how": "Bring the tree, parts and checks in line."
+    },
+    {
+      "path": "docs/README.md",
+      "how": "Its Apps part says the same in short."
     },
     {
       "path": "agents/system/docs/README.md",
-      "how": "its part on apps says the same"
+      "how": "Its project IDE part says the same."
     },
     {
-      "path": "vision/tree/agent-os/apps/docs/README.index.md",
-      "how": "How it works refreshed"
+      "path": "apps/docs/README.example.md",
+      "how": "Update the outline when a part is added or renamed."
+    },
+    {
+      "path": "apps/docs/README.questions.md",
+      "how": "Add or settle a design question."
     }
   ],
   "inherits": [
-    "conv-apps",
-    "human-docs-style"
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#Apps",
+    "apps/docs/README.md#The apps docs"
   ],
-  "features": [
-    "Apps and outside code",
-    "Project IDE",
-    "List of apps"
-  ],
+  "features": [],
   "views": [],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "how_it_works": {}
 }

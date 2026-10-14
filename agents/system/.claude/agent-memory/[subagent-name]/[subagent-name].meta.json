@@ -1,1 +1,57 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Name pattern for one helper's memory folder, named after the helper agent.",
+  "kind": "folder",
+  "state": "name pattern",
+  "status": "proposed",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the helper agent it is named after, when it first saves a memory"
+  ],
+  "readers": [
+    "the same helper agent"
+  ],
+  "changes_when": "The memory layout of a helper agent changes, or a real helper folder replaces the pattern.",
+  "related": [
+    {
+      "path": "agents/system/.claude/agent-memory/[subagent-name]/MEMORY.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/agents/",
+      "how": "read by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-018",
+      "D-024"
+    ],
+    "inputs": [
+      "in-20260929-2025"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/.claude/agent-memory/agent-memory.index.md",
+      "how": "the folder's How it works, if the layout changes"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "the part 'The standard .claude/ folder', if names, formats or the tree change"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Each agent's AI setup",
+    "agents/system/docs/rebuild-prompt.md#The standard .claude/ folder",
+    "agents/system/docs/README.md#Self-improvement helpers"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

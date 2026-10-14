@@ -1,23 +1,74 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
-  "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "about": "The page's only data: every item with its tabs and metadata, plus the decisions, inputs and docs, built by enrich.py.",
+  "kind": "file",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
+  "writers": [
+    "agents/system/.claude/skills/ide-build/scripts/enrich.py"
+  ],
+  "readers": [
+    "apps/project-IDE/current-ui/file-tree-explorer.html",
+    "apps/project-IDE/server/server.py"
+  ],
+  "changes_when": "The build runs after a round that changed the tree, a doc or a metadata file; today it is an empty placeholder until the build writes here after the move out of vision/.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
+      "how": "written by"
+    },
+    {
+      "path": "apps/project-IDE/current-ui/file-tree-explorer.html",
+      "how": "read by"
+    },
+    {
+      "path": "apps/project-IDE/data/file-tree.md",
+      "how": "built from"
+    },
+    {
+      "path": "apps/project-IDE/data/overrides.json",
+      "how": "built from"
+    },
+    {
+      "path": "apps/project-IDE/data/knowledge-map.json",
+      "how": "built from"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-039",
+      "D-041",
+      "D-065"
+    ],
+    "inputs": [
+      "in-20261005-1043",
+      "in-20261005-1421",
+      "in-20261012-tree"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "If the data format changed, change the section \"What the page reads\"."
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.md",
+      "how": "Change the exact spec of the same part, last."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "apps/project-IDE/docs/README.md#What the page reads"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

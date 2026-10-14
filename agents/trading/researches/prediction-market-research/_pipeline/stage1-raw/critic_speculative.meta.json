@@ -1,1 +1,57 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Stage 1 critic output on the speculative list: missing strategies, merges or splits, misclassified and weakest entries.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+  "writers": [
+    "the survey's stage 1 critic agent",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py (copies it from the run journal)"
+  ],
+  "readers": [
+    "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+    "the owner"
+  ],
+  "changes_when": "Only if stage 1 is run again.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/consolidate_speculative.json",
+      "how": "built from"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/critic_established.json",
+      "how": "same format as"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S0-strategy-list-speculative.json",
+      "how": "Rebuild it with the build script."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

@@ -1,23 +1,54 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The guide to the inputs archive: how it works and the categories an owner input can be filed under.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "knowledge-base-agent",
+    "knowledge-intake"
+  ],
+  "changes_when": "The file format of an input or the list of categories changes; until the move out of vision/, the build copies it here from its planning draft.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "read by"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-033",
+      "D-041"
+    ],
+    "inputs": [
+      "in-20260930-1533"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "Keep the categories at its top the same as here."
+    },
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "Keep the file format of an input the same."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md#16. Owner inputs"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

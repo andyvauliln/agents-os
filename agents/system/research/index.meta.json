@@ -1,23 +1,60 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The list of every research item of the system: its question, status, results, the decisions it led to and the files it used.",
+  "kind": "file",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "sys-self-improvement-agent",
+    "the owner",
+    "any agent that starts or closes a research item"
+  ],
+  "readers": [
+    "sys-self-improvement-agent, before it starts new research",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "A research item is started, changes status or is closed.",
+  "related": [
+    {
+      "path": "agents/system/research/[research-id]-[slug]/",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/system/docs/README.md#Research",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md#12. Research",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-025"
+    ],
+    "inputs": [
+      "in-20260929-2036"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/research/research.index.md",
+      "how": "keep the folder summary in step if the fields change"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "update the research part if the fields change"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Research"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

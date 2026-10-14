@@ -1,1 +1,68 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Folder of the ide-sync skill.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the owner",
+    "project-ide-agent",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "project-ide-agent",
+    "the server's Claude Code session"
+  ],
+  "changes_when": "A file is added to or removed from the skill folder, or the skill is renamed.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-sync/SKILL.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/",
+      "how": "summed up in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-041",
+      "D-043",
+      "D-044",
+      "D-046",
+      "D-068"
+    ],
+    "inputs": [
+      "in-20261005-1041",
+      "in-20261005-1254",
+      "in-20261005-1545",
+      "in-20261006-1017",
+      "in-20261014-1004"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/skills.index.md",
+      "how": "if the skill is renamed, added or removed"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "rebuilt by ide-build when the item is added, moved or removed; never edited by hand"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked",
+    "apps/project-IDE/docs/README.md#How the owner's work comes back"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

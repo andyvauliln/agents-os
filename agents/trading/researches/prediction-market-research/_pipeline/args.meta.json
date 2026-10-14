@@ -1,1 +1,62 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Ready-made arguments for the stage 2 and 3 scripts: item slices, audit chunks, all items, and the items each session finished with its notes.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+  "writers": [
+    "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py (makes the first version)",
+    "survey sessions (add the done lists and rebuild the remaining slices)"
+  ],
+  "readers": [
+    "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js (its items)",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage3-synthesize.js (its chunks)",
+    "a session that resumes the survey"
+  ],
+  "changes_when": "A survey session finishes a batch and rebuilds the remaining slices.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+      "how": "written by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage3-synthesize.js",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "Note the finished batch and the next one."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

@@ -1,1 +1,64 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Stage 1 list of the speculative strategies (band 50 and up): each with name, category, scope and sub-variants, plus the critic's notes and the dropped ideas.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+  "writers": [
+    "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)"
+  ],
+  "changes_when": "build_all.py is run again on new stage 1 outputs.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+      "how": "written by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/consolidate_speculative.json",
+      "how": "built from"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/critic_speculative.json",
+      "how": "built from"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S1-discovery-candidates.json",
+      "how": "built from"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S0-strategy-list-established.json",
+      "how": "same format as"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/strategies/",
+      "how": "Rebuild the briefs with build_all.py."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

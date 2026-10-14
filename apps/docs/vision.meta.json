@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "Why the Agent OS has apps, the three kinds of app, how they should work for us, the apps today and what is open.",
+  "about": "Why the Agent OS has apps, the kinds of app, how they should work for us, the apps today and what is open.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -15,29 +15,33 @@
     "the owner",
     "everyone new to the project",
     "every agent before working in apps/",
-    "knowledge-base-agent before writing the apps README"
+    "knowledge-base-agent, before the apps README"
   ],
-  "changes_when": "an input changes what apps are for, the rules for outside code, the apps that exist, the stage, or an open question about apps",
+  "changes_when": "An input changes what apps are for, the rules for outside code, the apps that exist, the stage or an open question about apps.",
   "related": [
     {
       "path": "apps/docs/README.md",
-      "how": "describes the same apps exactly; same words"
+      "how": "read by"
     },
     {
       "path": "apps/docs/rebuild-prompt.md",
-      "how": "builds what it describes"
+      "how": "read by"
     },
     {
       "path": "apps/project-IDE/docs/vision.md",
-      "how": "goes deeper into the IDE"
+      "how": "links to"
     },
     {
       "path": "docs/vision.md",
-      "how": "project vision above it"
+      "how": "summed up in"
     },
     {
       "path": "agents/system/.claude/skills/vision-doc/SKILL.md",
-      "how": "written with (app outline)"
+      "how": "written by"
+    },
+    {
+      "path": "apps/docs/vision.example.md",
+      "how": "same format as"
     }
   ],
   "sources": {
@@ -51,45 +55,41 @@
     ],
     "inputs": [
       "in-20261005-1517",
-      "in-20261006-1016",
+      "in-20261006-1009",
       "in-20261006-2206",
       "in-20261012-stage1"
     ],
-    "notes": [
-      "conv-apps",
-      "apps-docs-clones-forks",
-      "human-docs-style"
-    ]
+    "notes": []
   },
   "update_with": [
     {
       "path": "apps/docs/README.md",
-      "how": "same words for the same apps; its In short follows this one"
+      "how": "Use the same words for the same apps; its In short follows this one."
     },
     {
       "path": "apps/docs/README.asd.md",
-      "how": "follows the README"
+      "how": "Write again after the README."
     },
     {
       "path": "apps/docs/rebuild-prompt.md",
-      "how": "names and Do not build follow the vision's decided and open points"
+      "how": "Bring names and Do not build in line last."
     },
     {
-      "path": "vision/tree/agent-os/apps/docs/vision.index.md",
-      "how": "How it works refreshed"
+      "path": "apps/docs/vision.example.md",
+      "how": "Update the outline when a section is added or renamed."
+    },
+    {
+      "path": "apps/docs/vision.questions.md",
+      "how": "Add or settle an open question."
     }
   ],
   "inherits": [
-    "conv-apps",
-    "human-docs-style"
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#Apps",
+    "apps/docs/README.md#The apps docs"
   ],
-  "features": [
-    "Apps and outside code",
-    "Project IDE"
-  ],
+  "features": [],
   "views": [],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "how_it_works": {}
 }

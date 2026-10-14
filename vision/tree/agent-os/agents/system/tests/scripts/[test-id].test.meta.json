@@ -1,23 +1,57 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The pattern of one test of a shared script: a node or pytest file on prepared data, with no network and no keys.",
+  "kind": "file",
+  "state": "name pattern",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the system agent or sys-self-improvement-agent, when it adds a test",
+    "the owner"
+  ],
+  "readers": [
+    "run-tests (planned shared script)",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "A test of a shared script is added or the script it checks changes.",
+  "related": [
+    {
+      "path": "agents/system/scripts/system/",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/tests/scripts/tests.config.json",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/system/docs/README.md#Tests",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-025",
+      "D-050"
+    ],
+    "inputs": [
+      "in-20260929-2036",
+      "in-20261006-2104"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/tests/scripts/tests.config.json",
+      "how": "add or change the test's entry"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Tests"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

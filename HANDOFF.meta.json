@@ -1,1 +1,65 @@
-{}
+{
+  "schema_version": 1,
+  "about": "A planning-time note that tells a new session how to pick the planning work up, where things stand and the rules to keep.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the agent that ends a planning stretch",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "whoever picks the work up in a new session, person or AI",
+    "the owner"
+  ],
+  "changes_when": "A planning stretch ends, or the way to start a session, run the page or rebuild it changes.",
+  "related": [
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "links to"
+    },
+    {
+      "path": "docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "docs/README.asd.md",
+      "how": "documented in"
+    },
+    {
+      "path": "docs/rebuild-prompt.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-065"
+    ],
+    "inputs": [
+      "in-20261007-1947",
+      "in-20261013-disk-tree"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "When they disagree, CLAUDE.md is right; bring this note in line."
+    },
+    {
+      "path": "docs/README.md",
+      "how": "Update the part on the front page and the handoff if its job changes."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#The front page and the handoff"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

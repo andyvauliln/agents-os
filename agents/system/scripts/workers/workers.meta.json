@@ -1,23 +1,77 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The shared workers: *.worker.py|js scripts that collect information for agents in more than one domain; none exists yet.",
+  "kind": "folder",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the system's helpers",
+    "the workers helper (planned)"
+  ],
+  "readers": [
+    "the scheduler and run-job (planned), through the system's jobs file",
+    "the owner"
+  ],
+  "changes_when": "A worker that agents of several domains use is added, changed or removed.",
+  "related": [
+    {
+      "path": "agents/system/data/workers/",
+      "how": "writes"
+    },
+    {
+      "path": "agents/system/logs/workers/",
+      "how": "writes"
+    },
+    {
+      "path": "agents/system/docs/README.md#Workers and data",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md#4. Workers and data",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/scripts/",
+      "how": "summed up in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-007",
+      "D-035"
+    ],
+    "inputs": [
+      "in-20260929-1545",
+      "in-20261001-1037"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/scripts/scripts.index.md",
+      "how": "keep the folder summary in step"
+    },
+    {
+      "path": "agents/system/configs/system.workers.json",
+      "how": "add, change or remove the worker's job"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "update the part on workers and data"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "rebuild with the ide-build skill when an item here is added, moved or removed"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Workers and data"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

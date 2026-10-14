@@ -1,23 +1,81 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The system agent's jobs file: everything the system runs, each job with its switch, schedule, place, platform and model; every job is off for now.",
+  "kind": "file",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner, on the File Tree page",
+    "the system's helpers (propose changes)",
+    "create-agent (planned), the first version"
+  ],
+  "readers": [
+    "the scheduler (planned shared script)",
+    "run-job (planned shared script)",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "A job is added, changed, switched on or off, or removed.",
+  "related": [
+    {
+      "path": "agents/system/configs/models.config.json",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/configs/system.links.json",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/scripts/system/",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/docs/README.md#Jobs and the scheduler",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md#5. Jobs and the scheduler",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-029",
+      "D-033",
+      "D-035"
+    ],
+    "inputs": [
+      "in-20260930-0919",
+      "in-20260930-0938",
+      "in-20261009-1040"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/configs/system.workers.questions.md",
+      "how": "record the owner's questions about it with their answers"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "update the list of system jobs"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "update the jobs part and its fields"
+    },
+    {
+      "path": "agents/system/configs/configs.index.md",
+      "how": "keep the folder summary in step"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Jobs and the scheduler"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

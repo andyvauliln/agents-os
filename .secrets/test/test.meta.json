@@ -1,23 +1,59 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The test side of the keys store: one .env with every test key, which agents may read and update.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner"
+  ],
+  "readers": [
+    "the owner",
+    "load-secret (the proposed shared loader, not written yet)"
+  ],
+  "changes_when": "A file is added to or removed from the test side of the keys store.",
+  "related": [
+    {
+      "path": ".secrets/live/",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-023",
+      "D-027",
+      "D-063"
+    ],
+    "inputs": [
+      "in-20260929-1706",
+      "in-20260929-2147",
+      "in-20261012-secrets"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": ".secrets/test/test.index.md",
+      "how": "Say what the folder holds now."
+    },
+    {
+      "path": ".secrets/.secrets.index.md",
+      "how": "Update the summary of the store."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#Keys and secrets",
+    "agents/system/docs/README.md#Keys and secrets"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

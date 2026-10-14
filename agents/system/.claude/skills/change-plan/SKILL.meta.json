@@ -1,23 +1,81 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The main development skill: every change request gets a stored plan, shown to the owner, before anything is built.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "every AI that changes the system",
+    "knowledge-base-agent",
+    "Claude Code started in agents/system/"
+  ],
+  "changes_when": "The owner changes how changes are planned, approved, built or archived, or what a plan must contain.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/plans/",
+      "how": "writes"
+    },
+    {
+      "path": "agents/system/.claude/skills/make-questions/SKILL.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-051",
+      "D-068",
+      "D-069"
+    ],
+    "inputs": [
+      "in-20261006-2143",
+      "in-20261014-1004",
+      "in-20261014-1047"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "vision/.claude/skills/change-plan/SKILL.md",
+      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
+    },
+    {
+      "path": "agents/system/.claude/skills/change-plan/SKILL.index.md",
+      "how": "if what the skill does or when it runs changes"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "the rule 'Plan every change', if the planning rule changes"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "the part 'The knowledge base and the docs', if what it says about this item changes"
+    },
+    {
+      "path": "agents/system/docs/README.asd.md",
+      "how": "write it again with readme-asd-doc right after the system README changes"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The knowledge base and the docs"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

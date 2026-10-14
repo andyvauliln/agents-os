@@ -8,40 +8,47 @@
   "secret": false,
   "generated_by": null,
   "writers": [
-    "knowledge-base-agent (readme-doc skill)",
+    "knowledge-base-agent (readme-doc)",
     "the owner, on the File Tree page"
   ],
   "readers": [
-    "readers after the vision",
-    "the owner after each round",
-    "Claude Code, second doc it reads",
+    "the owner",
+    "Claude Code started in agents/system/, second doc it reads",
     "every agent before working on an unknown part"
   ],
-  "changes_when": "after every input or change that touches a top part of the repository, after the vision and before README.asd.md and the rebuild prompt",
+  "changes_when": "An input or a change touches a top part of the repository; written after the vision and before README.asd.md and the rebuild prompt.",
   "related": [
     {
       "path": "docs/vision.md",
-      "how": "uses its words"
+      "how": "built from"
     },
     {
       "path": "docs/README.asd.md",
-      "how": "its ASD-STE100 version, built from it"
+      "how": "read by"
     },
     {
       "path": "docs/rebuild-prompt.md",
-      "how": "must agree"
-    },
-    {
-      "path": "README.md",
-      "how": "the front page follows its In short"
+      "how": "read by"
     },
     {
       "path": "agents/system/docs/README.md",
-      "how": "the system README below it"
+      "how": "links to"
+    },
+    {
+      "path": "apps/docs/README.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "links to"
     },
     {
       "path": "agents/system/.claude/skills/readme-doc/SKILL.md",
       "how": "written by"
+    },
+    {
+      "path": "docs/README.example.md",
+      "how": "same format as"
     }
   ],
   "sources": {
@@ -53,57 +60,41 @@
       "D-064"
     ],
     "inputs": [
+      "in-20261005-0735",
+      "in-20261006-1259",
+      "in-20261006-2143",
       "in-20261012-stage1"
     ],
-    "notes": [
-      "plans/2026-10-12-claude-md-stage-one.md",
-      "archive/2026-10-12/claude-docs/inputs-vision.md",
-      "memory/human-docs-style.md",
-      "knowledge/sources/readme.md"
-    ]
+    "notes": []
   },
   "update_with": [
     {
       "path": "docs/README.asd.md",
-      "how": "rewrite the changed sections right after"
+      "how": "Write the changed sections again in ASD-STE100 right after."
     },
     {
       "path": "docs/rebuild-prompt.md",
-      "how": "tree, parts and checks"
+      "how": "Bring the tree, parts and checks in line."
     },
     {
       "path": "README.md",
-      "how": "the front page, if In short changed"
+      "how": "Bring the front page in line with the In short, once the front page is written."
     },
     {
       "path": "docs/README.example.md",
-      "how": "the outline, when a part is added or renamed"
+      "how": "Update the outline when a part is added or renamed."
     },
     {
       "path": "docs/README.questions.md",
-      "how": "when a design point is opened or settled"
+      "how": "Add or settle a design question."
     }
   ],
   "inherits": [
-    "safe-secrets-never",
-    "conv-docs",
-    "conv-docs-format",
-    "conv-docs-one-fact",
-    "conv-metadata-names"
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#The project docs"
   ],
-  "features": [
-    "Docs and self-support",
-    "UI: monitoring and control",
-    "Safety"
-  ],
-  "views": [
-    "Read view",
-    "Example",
-    "Questions",
-    "ASD-STE100"
-  ],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "features": [],
+  "views": [],
+  "how_it_works": {}
 }

@@ -12,35 +12,35 @@
     "the owner, on the File Tree page"
   ],
   "readers": [
-    "an AI rebuilding the system",
+    "an AI coding agent that rebuilds the system",
     "the owner, to check what the same system means",
     "the project's rebuild prompt, which sends the builder here"
   ],
-  "changes_when": "a name, format, the tree, a script's behaviour, the build order or a check changes, or an open point is settled",
+  "changes_when": "A name, a format, the tree, a script's behaviour, the build order or a check changes, or an open point is settled.",
   "related": [
     {
       "path": "agents/system/docs/README.md",
-      "how": "source of the facts"
+      "how": "built from"
     },
     {
       "path": "docs/rebuild-prompt.md",
-      "how": "parent prompt"
+      "how": "same format as"
     },
     {
       "path": "agents/trading/docs/rebuild-prompt.md",
-      "how": "child prompt"
+      "how": "same format as"
     },
     {
       "path": "apps/project-IDE/docs/rebuild-prompt.md",
-      "how": "the IDE's own prompt"
+      "how": "same format as"
     },
     {
-      "path": "vision/docs/conventions.md",
-      "how": "built from"
+      "path": "agents/system/.claude/skills/rebuild-prompt-doc/",
+      "how": "written by"
     },
     {
-      "path": "vision/docs/data-schemas.md",
-      "how": "built from"
+      "path": "agents/system/docs/rebuild-prompt.example.md",
+      "how": "documented in"
     }
   ],
   "sources": {
@@ -52,11 +52,8 @@
       "D-064"
     ],
     "inputs": [
-      "in-20261009-0940",
-      "in-20261012-tree",
-      "in-20261012-real",
-      "in-20261012-secrets",
-      "in-20261012-metadisk",
+      "in-20261006-1259",
+      "in-20261007-0852",
       "in-20261012-stage1"
     ],
     "notes": []
@@ -76,22 +73,12 @@
     }
   ],
   "inherits": [
-    "the project's rebuild prompt: root, .gitignore, .secrets/, docs, apps, vision/"
+    "docs/rebuild-prompt.md",
+    "docs/metadata.md",
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc"
   ],
-  "features": [
-    "Agents and domains",
-    "Jobs and scheduler",
-    "Links",
-    "Keys",
-    "Tests",
-    "Self-improvement",
-    "Project IDE"
-  ],
-  "views": [
-    "doc (shared view)"
-  ],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "features": [],
+  "views": [],
+  "how_it_works": {}
 }

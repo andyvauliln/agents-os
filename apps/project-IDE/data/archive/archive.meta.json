@@ -1,23 +1,50 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Retired files kept for history, one folder per date: old drafts, replaced notes and metadata files whose item is gone.",
+  "kind": "folder",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "knowledge-base-agent",
+    "file-index"
+  ],
+  "readers": [
+    "the owner",
+    "every AI session that looks back"
+  ],
+  "changes_when": "An item is retired, or `build_map.py --orphans` finds a metadata file whose item is gone and it is moved here.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/build_map.py",
+      "how": "written by"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041"
+    ],
+    "inputs": [
+      "in-20261005-1043"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "Change the data part of \"How it is laid out\" if its job changes."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md#9. How the build finds stale How it works files"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

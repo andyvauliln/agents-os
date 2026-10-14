@@ -15,7 +15,7 @@
     "the owner",
     "every AI session that builds a change"
   ],
-  "changes_when": "A change request gets a plan, or a plan's status changes; the move out of vision/ moves the other plans here.",
+  "changes_when": "A change request gets a plan, or a plan's status changes.",
   "related": [
     {
       "path": "agents/system/.claude/skills/change-plan/SKILL.md",

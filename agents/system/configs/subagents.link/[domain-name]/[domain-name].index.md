@@ -1,7 +1,7 @@
 ---
 about: agent-os/agents/system/configs/subagents.link/[domain-name]/
 basis: 981c7ce4dc3d
-written: 2026-10-07T19:01:11Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
@@ -21,7 +21,7 @@ Only when a domain is added or removed. Relink then makes or deletes the link; i
 
 ## Who uses it, and when
 
-The system agent, the dashboard and the self-improvement helpers, whenever they read the settings or jobs of one domain. They read through it and never write.
+The system agent, the File Tree page and the self-improvement helpers, whenever they read the settings or jobs of one domain. They read through it and never write.
 
 ## Where it is mentioned
 

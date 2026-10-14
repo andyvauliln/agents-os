@@ -46,10 +46,9 @@ When every level is written fresh, take the levels in this order: project, syste
 
 ## What to read before writing
 
-- **The notes:** every owner input word for word, the decisions, the changelog and the answers we gave. While we plan they are in `vision/docs/` (`inputs/`, `decisions.md`, `changelog.md`, `file-tree.md`). Newest wins when they disagree.
-- **The owner's requirements by scope:** the inputs vision, kept in `vision/archive/2026-10-12/claude-docs/inputs-vision.md`. It is the best single summary of what the owner wants.
-- **The current doc** (often an older draft) and the earlier drafts in `vision/archive/`.
-- **What exists today:** the real repository (`git ls-files`, leaving out `vision/archive/`), the File Tree page, the other docs of this level.
+- **The notes:** every owner input word for word, the decisions, the changelog and the answers we gave. They are in `apps/project-IDE/data/` (`inputs/`, `decisions.md`, `changelog.md`). Newest wins when they disagree.
+- **The current doc** and its earlier versions in git history.
+- **What exists today:** the real repository (`git ls-files`), the File Tree page, the other docs of this level.
 - **The level above:** its `vision.md`, so this one agrees with it and does not repeat it.
 
 ## Outline

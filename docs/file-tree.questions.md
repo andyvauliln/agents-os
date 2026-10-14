@@ -14,7 +14,7 @@ The first layout put the file tree in `agents/docs`. Thus the agent moved it int
 
 Today `docs/file-tree.md` is one of the project docs. It is a plain list of all paths in the repository, one path on each line. The IDE build writes it each round. Nobody writes it by hand.
 
-This changed later: the old tree with its notes became the tree notes in the planning area, `vision/docs/file-tree.md`. `docs/file-tree.md` became the plain list.
+This changed later: the old tree with its notes became the tree notes in the planning area, `vision/docs/file-tree.md`. `docs/file-tree.md` became the plain list. On 2026-10-14 the tree notes left the build: each item's metadata files are now its only notes.
 
 Docs improved: none, the answer was already in docs/file-tree.index.md.
 

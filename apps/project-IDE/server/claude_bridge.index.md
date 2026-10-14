@@ -1,15 +1,35 @@
 ---
 about: agent-os/apps/project-IDE/server/claude_bridge.py
 basis: 5d6eeab0d1f2
-written: 2026-10-07T14:21:32Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
 # claude_bridge.py
 
-## Summary
+## What it is
 
 Runs each request typed on the server page as a Claude Code session through the Claude Agent SDK, started in `agents/system/`, so the system's `CLAUDE.md`, agents and skills load as its own. A follow-up in the same box continues the same session. Before every step it checks: nothing may touch the keys folder; a file outside the repository, and any tool or command not on the allow list in `server.config.json` (push, delete, installs, network tools), waits for the owner's Allow or Refuse on the page. When the owner pressed Delete on the page, the request carries that item, and one command that deletes exactly it and its How it works and Details files goes ahead without a second click; Claude Code then cleans the project of it as the sync skill says, keeping the owner's note in mind. It streams the text, the steps, the questions and the result with its cost and time, tells the page every file the request changed, even when Claude Code committed them, so the page marks them changed, and logs each request, with every step that waited for the owner in full, in the project IDE agent's log folder.
+
+## Who looks after it
+
+It is written by project-ide-agent.
+
+## When and how it changes
+
+It changes when a rule on what Claude Code may do, the start folder or the request flow changes.
+
+## Who uses it, and when
+
+It is read by `apps/project-IDE/server/server.py`.
+
+## Where it is mentioned
+
+It is described in `apps/project-IDE/server/README.md` and its folder's How it works file `apps/project-IDE/server/server.index.md`.
+
+## Related knowledge
+
+It is read by `apps/project-IDE/server/server.py`. It reads `apps/project-IDE/server/server.config.json` and `agents/system/CLAUDE.md`. It writes `agents/system/logs/subagents/`. The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `docs/metadata.md`, `apps/docs/README.md` (section "The project IDE"), `apps/project-IDE/docs/README.md` (section "The server") and `agents/system/docs/README.md` (section "Keys and secrets").
 
 ## Keep in mind
 

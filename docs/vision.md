@@ -34,7 +34,7 @@ The project has two halves that grow together: the system being built, and the w
 
 **The project IDE.** The owner's window on the project is the File Tree page: a clickable map of every folder and file in the repository, with its text, its How it works and its other tabs, a box to ask the AI a question or for a change, and a button that carries everything the owner left on the page into the files. The same page runs on claude.ai and on the owner's own server, where Claude Code works behind its request box. The IDE serves every AI too: before it changes a file, an AI sees what the file is for, how it works, what depends on it and which rules reach it from the levels above.
 
-**The planning area.** While the project is planned, one folder holds everything used to plan it: the knowledge base with every input and decision, the plans, the build tools, the page and its server, and the archive of retired texts. It is the workshop; the rest of the repository is the system as designed.
+**One source for every text.** Every file is its own only source and is edited where it lives. The records of the work, every input word for word, the decisions, the changelog and the plans, are kept with the IDE, and the IDE is built from the files on disk and their metadata alone.
 
 ## How it should work
 
@@ -89,7 +89,7 @@ The system itself has its own business logic (test first, versions that compete,
 
 ## Where we are and what comes next
 
-The project is in its first stage. The repository already has the shape of the whole system: every planned file and folder exists, written or still empty, each with its metadata files beside it. The File Tree page works on claude.ai and on the owner's server, shows exactly the files on disk, and lets the owner edit, ask, delete and apply changes. The helpers that keep the knowledge and the page, and the skills that write the docs and the metadata, are written as drafts. Research on ways to make money on prediction markets, on agents that improve themselves and on how trading agents are built is in the repository. None of the system's agents is built yet.
+The project is in its first stage. The repository already has the shape of the whole system: every planned file and folder exists, written or still empty, each with its metadata files beside it. The File Tree page works on claude.ai and on the owner's server, shows exactly the files on disk, and lets the owner edit, ask, delete and apply changes. The helpers that keep the knowledge and the page, and the skills that write the docs and the metadata, are written. Research on ways to make money on prediction markets, on agents that improve themselves and on how trading agents are built is in the repository. None of the system's agents is built yet.
 
 Stage one, now:
 
@@ -118,8 +118,6 @@ Later: building the system's machinery, starting the first strategy chosen by th
 **Stages keep the work small.** Only the current stage's work is done; later work waits as empty folders, not half-written files.
 
 ## Ideas we are still weighing
-
-**One source for every text.** The problem: while the project is planned, some texts exist twice, once in the planning area and once in their place in the repository, and the build copies one over the other. Two copies can drift apart. The idea: make the file in its real place the only source and retire the planning copies, moving the knowledge base, the page and its tools into the IDE's own folders and the helpers into the system's folder. What it would change: one copy of everything, and the planning area left only as an archive.
 
 **A plain file tree that grows.** The plain list of every path is kept without metadata for now. The idea: add a little information to each line later, such as what the item is for. What it would change: a fast overview for people and for AI, at the cost of a longer file to keep current.
 

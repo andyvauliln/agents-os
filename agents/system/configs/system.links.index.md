@@ -1,7 +1,7 @@
 ---
 about: agent-os/agents/system/configs/system.links.json
 basis: 0b926e7a68a1
-written: 2026-10-07T19:01:11Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
@@ -21,7 +21,7 @@ When the agent needs a file from somewhere else, or no longer needs one. Relink 
 
 ## Who uses it, and when
 
-Relink and the link check read it every time they run; the index of all links and the dashboard show who links what.
+Relink and the link check read it every time they run; the index of all links and the File Tree page show who links what.
 
 ## Where it is mentioned
 

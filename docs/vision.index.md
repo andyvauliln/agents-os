@@ -1,7 +1,7 @@
 ---
 about: agent-os/docs/vision.md
 basis: 31f242e105c5
-written: 2026-10-12T00:00:00Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
@@ -29,7 +29,7 @@ The owner and anyone they share the project with, first. Claude Code started in 
 
 ## Related knowledge
 
-The project README describes every part it names by what it does, with exact paths; the rebuild prompt states it as instructions; the system vision goes deeper into how the agents work. The owner's inputs, the decisions and the stage-one plan in `vision/` are what it rests on.
+The project README describes every part it names by what it does, with exact paths; the rebuild prompt states it as instructions; the system vision goes deeper into how the agents work. The owner's inputs and the decisions in `apps/project-IDE/data/` are what it rests on.
 
 ## Keep in mind
 

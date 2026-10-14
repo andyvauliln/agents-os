@@ -16,7 +16,7 @@
     "project-ide-agent",
     "every AI session on the project"
   ],
-  "changes_when": "The way knowledge is kept changes; until the move out of vision/, the build copies it here from its planning draft.",
+  "changes_when": "The way knowledge is kept changes.",
   "related": [
     {
       "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
@@ -24,10 +24,6 @@
     },
     {
       "path": "apps/project-IDE/data/inputs/README.md",
-      "how": "links to"
-    },
-    {
-      "path": "apps/project-IDE/data/knowledge-map.json",
       "how": "links to"
     },
     {

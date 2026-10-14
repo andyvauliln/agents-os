@@ -20,10 +20,6 @@
   "changes_when": "The rule for a fresh How it works file changes, or an option is added.",
   "related": [
     {
-      "path": "apps/project-IDE/data/knowledge-map.json",
-      "how": "writes"
-    },
-    {
       "path": "agents/system/.claude/skills/ide-build/scripts/index_files.py",
       "how": "reads"
     },

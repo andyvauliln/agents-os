@@ -18,7 +18,7 @@
     "agents/system/.claude/skills/ide-build/scripts/check_page.js",
     "agents/system/.claude/skills/ide-build/scripts/enrich.py"
   ],
-  "changes_when": "The owner asks for a change to the page; until the move out of vision/, the build copies the page here from its planning source.",
+  "changes_when": "The owner asks for a change to the page.",
   "related": [
     {
       "path": "apps/project-IDE/current-ui/file-tree.data.json",

@@ -1,15 +1,35 @@
 ---
 about: agent-os/apps/
 basis: 532c70bc16f8
-written: 2026-10-07T14:21:32Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
 # apps/
 
-## Summary
+## What it is
 
-Applications and projects: our own apps, the outside apps we use and repositories cloned only to study them. Today it holds the owner's project IDE in `project-IDE/` (the File Tree page, its server and this project's knowledge) and the prediction-market domain's trading dashboard in `trading-ui/`, empty for now, and `temp/` for research clones. Every app has its own `docs/` with a vision, a README and a rebuild prompt, like the system; for an outside app these three docs are all its metadata for now. An outside app we use is forked on GitHub and gets its own folder with `docs/` and `repo/`, the fork: its `main` branch holds our changes and is what runs, and its `upstream` branch follows the source and is merged into `main` from time to time. None is brought in yet, and every app has a row in the apps list. Later, when the owner asks, a skill will turn an app fully into the system's way. Still open: whether agents may clone on their own, whether the earlier Polymarket tools come in as a forked app, and how the fork sits in the repository.
+Applications and projects: our own apps, the outside apps we use and repositories cloned only to study them. Today it holds `docs/` (the apps vision, README, README twin and rebuild prompt), the owner's project IDE in `project-IDE/` (the File Tree page, its server and this project's records), the prediction-market domain's trading dashboard in `trading-ui/`, empty and waiting for stage two, and `temp/` for research clones. Every app has its own `docs/`. An outside app we use is meant to be forked on GitHub and get its own folder with `docs/` and `repo/`: `main` holds our changes, `upstream` follows the source. None is brought in yet. Still open: whether agents may clone on their own and how a fork sits in the repository.
+
+## Who looks after it
+
+It is written by the owner, knowledge-base-agent and project-ide-agent (ide-sync).
+
+## When and how it changes
+
+It changes when an app is added, updated from its source or removed, or the rules for outside code change.
+
+## Who uses it, and when
+
+It is read by the owner, every agent before working on an app and an AI rebuilding the repository.
+
+## Where it is mentioned
+
+It is described in `apps/docs/README.md`, `apps/docs/vision.md`, `docs/README.md` and its folder's How it works file `agent-os.index.md`.
+
+## Related knowledge
+
+It is built from `apps/docs/rebuild-prompt.md`. The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `docs/metadata.md`, `apps/docs/README.md` and `docs/README.md` (section "Apps").
 
 ## Keep in mind
 

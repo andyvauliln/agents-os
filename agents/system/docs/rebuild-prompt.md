@@ -4,7 +4,7 @@
 
 You are an AI coding agent, such as Claude Code, working in a git repository of the Agent OS. Build the system domain, the folder `agents/system/`, so that it ends up holding the same working parts as the original: the same folders, file names, formats and settings, the same scripts doing the same jobs, the same helpers and skills with the same instructions in substance, and the same safety rules. "The same" means every check under "Acceptance checks" passes.
 
-This prompt builds only `agents/system/`. It assumes the level above already exists: the project's own prompt, `docs/rebuild-prompt.md`, builds the repository root, `.gitignore`, the front page `README.md`, the keys folder `.secrets/`, the project docs in `docs/`, the apps in `apps/` and the planning area `vision/`. Before you start, check that `.gitignore` and `.secrets/` exist; if they do not, stop and follow the project's prompt first. The levels below the system have their own prompts, and "Build order" tells you when to follow them: `agents/trading/docs/rebuild-prompt.md` for trading in general, which in turn lists the prompt of each trading domain. Never build a lower level's parts from guesses.
+This prompt builds only `agents/system/`. It assumes the level above already exists: the project's own prompt, `docs/rebuild-prompt.md`, builds the repository root, `.gitignore`, the front page `README.md`, the keys folder `.secrets/`, the project docs in `docs/` and the apps in `apps/`, with the records in `apps/project-IDE/data/`. Before you start, check that `.gitignore` and `.secrets/` exist; if they do not, stop and follow the project's prompt first. The levels below the system have their own prompts, and "Build order" tells you when to follow them: `agents/trading/docs/rebuild-prompt.md` for trading in general, which in turn lists the prompt of each trading domain. Never build a lower level's parts from guesses.
 
 The project is in its first stage. Nothing of the system runs yet. Build the machinery and every file the design defines, and leave each open point as this file says.
 
@@ -90,14 +90,15 @@ agents/system/                                        # the system domain: the s
 │   │   ├── rebuild-prompt-doc/SKILL.md               # how to write rebuild-prompt.md at every level
 │   │   ├── change-plan/SKILL.md                      # a plan for every change request: write, show, build, move its knowledge home, archive
 │   │   ├── ide-build/                                # builds, checks and publishes the File Tree page
-│   │   │   ├── SKILL.md                              # the steps: parse, enrich, materialise, map, check, publish
+│   │   │   ├── SKILL.md                              # the steps: materialise, map, enrich, check, publish
 │   │   │   └── scripts/                              # the build scripts (Python, standard library) and a page check
 │   │   │       ├── README.md                         # what each script does and how to run them
-│   │   │       ├── parse.py                          # reads the tree notes into a list of items
-│   │   │       ├── enrich.py                         # adds drafts, real files, knowledge, notes and tabs; writes the page data
+│   │   │       ├── materialize.py                    # empty metadata files for new items, .gitkeep, docs/file-tree.md
+│   │   │       ├── enrich.py                         # reads every item and its metadata files; writes the page data and real-files.json
 │   │   │       ├── tabs.py                           # field guides and extra tabs (jobs, links, tests, key names)
-│   │   │       ├── build_map.py                      # the knowledge map; stale or orphaned notes; context; confirm; write
-│   │   │       ├── index_files.py                    # where each How it works and Details file lives; reads and writes them
+│   │   │       ├── build_map.py                      # stale, missing, empty or orphaned How it works files; context; confirm; write
+│   │   │       ├── index_files.py                    # the items from git; where each How it works and Details file lives; reads and writes them
+│   │   │       ├── check_tree.py                     # the page tree equals the files in git
 │   │   │       └── check_page.js                     # smoke test of the page at desktop and phone width
 │   │   ├── ide-sync/SKILL.md                         # the way back: page notes, edits and requests -> files
 │   │   └── [skill-name]/SKILL.md                     # one skill per folder (placeholder)
@@ -114,11 +115,12 @@ agents/system/                                        # the system domain: the s
 │   ├── agent-memory/                                 # `memory: project` helper memory, committed
 │   │   └── [subagent-name]/MEMORY.md                 # one helper's memory (placeholder)
 │   └── agent-memory-local/                           # `memory: local`; meant to stay local
-├── docs/                                             # the system's four docs + subagents.link/
+├── docs/                                             # the system's four docs + how-to/ + subagents.link/
 │   ├── vision.md                                     # read first: why, the concept, how it works, the business logic
 │   ├── README.md                                     # every part exactly, how they connect, where their docs are
 │   ├── README.asd.md                                 # the README again in ASD-STE100, to compare
 │   ├── rebuild-prompt.md                             # this prompt
+│   ├── how-to/                                       # the earlier runbooks, one per task; copied as handed
 │   └── subagents.link/                               # one folder link per domain
 │       └── [domain-name]/                            # -> that domain's docs/
 ├── configs/                                          # shared configs (JSON) + subagents.link/
@@ -168,7 +170,7 @@ agents/system/                                        # the system domain: the s
 └── start.sh                                          # starts the scheduler and the system's session
 ```
 
-What the system reads from elsewhere, built by other prompts: `.secrets/` (`test/.env`, `live/`, `secrets.index.json`, the `.env.example` files), `.gitignore`, the planning area `vision/` (the records the helpers read and write, and while it exists the source of the helpers, skills and build scripts), `apps/project-IDE/` (the page the build writes into), and `agents/trading/` with its domains (the system's children).
+What the system reads from elsewhere, built by other prompts: `.secrets/` (`test/.env`, `live/`, `secrets.index.json`, the `.env.example` files), `.gitignore`, the records in `apps/project-IDE/data/` (the inputs, decisions, changelog and plans the helpers read and write), `apps/project-IDE/` (the page the build writes into), and `agents/trading/` with its domains (the system's children).
 
 ## Conventions
 
@@ -291,9 +293,9 @@ Name every machinery script `[name].system.js` in `agents/system/scripts/system/
 
 1. Intro: the repository of the Agent OS, the owner's personal system that runs AI agents of any kind; how the file is loaded; all paths are from the top of the repository.
 2. Where the project is now: the current stage and its work, in order (stage one: finish the project IDE; go through every file and folder, write custom views and make every file's notes correct; finish the docs of the project, the system domain, trading in general and the apps); and what waits (stage two: the prediction-market domain and everything under it; do not touch it).
-3. Read first, in this order: `docs/vision.md`, `docs/README.md`, `agents/system/docs/vision.md`, `agents/system/docs/README.md`, `docs/file-tree.md`, `apps/project-IDE/docs/README.md`, the newest entries of `vision/docs/changelog.md` with `git log --oneline -20`; every `README.md` has its `README.asd.md` twin for the owner to compare; before changing a file, read its How it works file.
-4. Where things are: a table of the project docs, the system domain, its helpers and skills, trading, the apps, the planning area `vision/` and the keys folder; and where to edit while the planning area exists (the docs of the four levels and this file in place; everything else at its source in `vision/`, which the build copies into place).
-5. Rules: decided only on the owner's word; never a key value, never read a `.env` file; docs for people without reference numbers or codes; never change or drop the owner's words; plan every change with `change-plan`; the page tree equals the files on disk; every file and folder outside `vision/` has its two notes, and the extra notes exist only where written; one job per code file; generated files are rebuilt, never merged by hand; ask before anything hard to undo; what you learn goes into the docs; "the owner", "they".
+3. Read first, in this order: `docs/vision.md`, `docs/README.md`, `agents/system/docs/vision.md`, `agents/system/docs/README.md`, `docs/file-tree.md`, `apps/project-IDE/docs/README.md`, the newest entries of `apps/project-IDE/data/changelog.md` with `git log --oneline -20`; every `README.md` has its `README.asd.md` twin for the owner to compare; before changing a file, read its How it works file.
+4. Where things are: a table of the project docs, the system domain, its helpers and skills, trading, the apps, the records in `apps/project-IDE/data/`, the build tools and the keys folder; and where to edit: every file where it is, since the build copies nothing.
+5. Rules: decided only on the owner's word; never a key value, never read a `.env` file; docs for people without reference numbers or codes; never change or drop the owner's words; plan every change with `change-plan`; the page tree equals the files on disk; every file and folder has its two notes, and the extra notes exist only where written; one job per code file; generated files are rebuilt, never merged by hand; ask before anything hard to undo; what you learn goes into the docs; "the owner", "they".
 6. After every input or update: pull; file the input word for word (`knowledge-intake`); plan (`change-plan`); record decisions and the changelog; update the docs it touches, level by level, in the order vision, README, README.asd, rebuild prompt; update the notes of every changed file (`file-index`); rebuild and check the page (`ide-build`); commit and push, and merge only on the owner's word. In this rebuild you do not push.
 7. When and how to update each doc: a table of which change makes which doc stale and the skill that writes it (`vision-doc`, `readme-doc`, `readme-asd-doc`, `rebuild-prompt-doc`, `file-index`, `claude-md-doc`, `ide-build`), and the order of levels: the lowest level that changed first, then each level above it.
 8. The File Tree page: where it is published and served, and that Apply changes or "sync the file tree" runs `ide-sync`, then `ide-build`, then a commit.
@@ -604,16 +606,16 @@ The knowledge base agent keeps every input and turns it into the docs. Copy the 
 
 **Skills** in `agents/system/.claude/skills/`, each `SKILL.md` with `name` and `description`:
 
-- `knowledge-intake`: store the input word for word (an id, a file `vision/docs/inputs/YYYY-MM-DD-HHMM-<topic>.md` with header lines At, Where, Source, Categories, Summary, `## Raw input` in a `~~~text` fence, `## Answer` when it was a question, `## Processed into`; a row in `inputs/index.json`); extract each item with its kind and status; find where it lives (`build_map.py --context`, grep); write it there; ripple it to everything related; record (decision, changelog, `processed_into`); rebuild the map and run `file-index`; report.
+- `knowledge-intake`: store the input word for word (an id, a file `apps/project-IDE/data/inputs/YYYY-MM-DD-HHMM-<topic>.md` with header lines At, Where, Source, Categories, Summary, `## Raw input` in a `~~~text` fence, `## Answer` when it was a question, `## Processed into`; a row in `inputs/index.json`); extract each item with its kind and status; find where it lives (`build_map.py --context`, grep); write it there; ripple it to everything related; record (decision, changelog, `processed_into`); run `file-index`; report.
 - `file-index`: the How it works format below, where each note goes, the steps with `build_map.py --stale`, `--context`, `--confirm` and `--set`, the owner's page edits kept word for word, lengths, and checks.
 - `vision-doc`, `readme-doc`, `rebuild-prompt-doc`: each doc's outline, how lower levels and apps get their own, lengths per level (for the system: the vision about 2,500 to 4,000 words, the README about 6,000 to 10,000, the rebuild prompt about 8,000 to 15,000), how to write it, build and update steps, its page on the File Tree, and checks.
-- `change-plan`, the main development skill, followed by every AI for every change request (not for questions or small fixes): one plan per request in `vision/plans/YYYY-MM-DD-HHMM-<subject>.md`; `vision/plans/index.json` with `id`, `title`, `status`, `inputs`, `decisions`, `files`, `created`, `updated`; statuses `draft`, `waiting`, `approved`, `building`, `built`, `distributed`, then archived, or `dropped`; the outline The request, What it is for, What exists today, The change, Choices for the owner, Steps (each with its check), What it touches, Where the knowledge goes once built, Log; the steps save the request, write, show, record the owner's go, build, distribute the knowledge, archive.
+- `change-plan`, the main development skill, followed by every AI for every change request (not for questions or small fixes): one plan per request in `apps/project-IDE/data/plans/YYYY-MM-DD-HHMM-<subject>.md`; `apps/project-IDE/data/plans/index.json` with `id`, `title`, `status`, `inputs`, `decisions`, `files`, `created`, `updated`; statuses `draft`, `waiting`, `approved`, `building`, `built`, `distributed`, then archived, or `dropped`; the outline The request, What it is for, What exists today, The change, Choices for the owner, Steps (each with its check), What it touches, Where the knowledge goes once built, Log; the steps save the request, write, show, record the owner's go, build, distribute the knowledge, archive.
 
 **The docs** in `agents/system/docs/`, written in this order every round: `vision.md` (In short, Why we are building it, The concept, How it should work, The business logic, Examples, What the owner sees and does, Where we are and what comes next, Principles, Ideas we are still weighing, Open questions, Going deeper; it names no files except in its last section), `README.md` (In short, The system at a glance, How the project is laid out, the parts in the order of this file, each ending "Its docs: `path`", Where each part's docs are, Still open in the design), `README.asd.md` (the same content and section order in ASD-STE100: a first line saying it is the ASD-STE100 version and `README.md` is the source; one topic per sentence; descriptive sentences at most 25 words, procedural at most 20; active voice; present tense; the README's names exactly; numbered steps for procedures; paragraphs of at most 6 sentences) and `rebuild-prompt.md` (this file). Next to each sits its `x.example.md` (its outline, one line per section) and `x.questions.md` (its open questions for the owner, or "None open."). Copy the owner's docs if handed over.
 
-**The records** are not part of `agents/system/`: while the planning area exists they are in `vision/` (`vision/docs/` with `inputs/`, `decisions.md`, `changelog.md`, `file-tree.md`; `vision/plans/`; `vision/.claude/memory/`), built by the project's prompt, with a copy of the records in `apps/project-IDE/data/`. The helpers read and write them there.
+**The records** are not part of `agents/system/`: they are in `apps/project-IDE/data/` (`inputs/`, `decisions.md`, `changelog.md`, `plans/`), built by the project IDE's prompt. The helpers read and write them there. There is no memory folder.
 
-**Whole context for every change.** `build_map.py --context <id>` prints, for any item, its section in the tree notes, the knowledge that applies to it directly and from every folder above it, and its children. Every agent runs it before it changes a file; after the change it brings every related file, agent, skill, doc and list in line in the same round. What a session learns is filed as an input even when no file changed, and every owner question gets its answer written where the owner should have found it.
+**Whole context for every change.** `build_map.py --context <path>` prints, for any item, what is needed to write its How it works: the item, its metadata files and its children's How it works, and the How it works of the folders above it. Every agent runs it before it changes a file; after the change it brings every related file, agent, skill, doc and list in line in the same round. What a session learns is filed as an input even when no file changed, and every owner question gets its answer written where the owner should have found it.
 
 **How it works file format:**
 
@@ -648,40 +650,42 @@ The app, `apps/project-IDE/`, is built by its own prompt, `apps/project-IDE/docs
 
 **`agents/system/.claude/agents/project-ide-agent.md`**: frontmatter `name: project-ide-agent`, a `description` (looks after the File Tree page: builds and publishes it, brings back what the owner left on it, runs page requests; use it on "sync the file tree", after every round that changed the tree, a doc or a How it works file, and when a page request asks for work), `tools: Read, Write, Edit, Bash, Grep, Glob`, `model: opus`, `memory: project`, `skills: ide-build, ide-sync, file-index`. Its job: build and publish the page, bring the owner's page work back into the files, run its requests, delete cleanly; the files and notes win over the page. Rules: never lose the owner's words, never edit or merge the page data by hand, never a key value, ask before anything hard to undo. The split with the knowledge base agent: that agent owns the knowledge and the docs; this one owns the page and the way into and out of it, and hands every message that carries knowledge to `knowledge-intake`.
 
-**`ide-build`** (`SKILL.md` plus `scripts/`, Python standard library except `check_page.js`). While the planning area exists the scripts' source is `vision/tools/` and the build runs from there with `REPO_DIR` set to the repository root:
+**`ide-build`** (`SKILL.md` plus `scripts/`, Python standard library except `check_page.js`). The files on disk are the only source: the build reads every item and its metadata files and copies nothing. It runs from the top of the repository (`REPO_DIR` points it at another checkout):
 
 ```bash
-python3 parse.py $T/parsed.json                                   # T: a temporary folder
-REPO_DIR=$R DATA_VERSION=N python3 enrich.py $T/parsed.json $T/ftd.json   # R: the repository, N: the next data version
-REPO_DIR=$R python3 materialize.py <page data>                    # every planned item onto disk, with its notes
-python3 build_map.py --stale                                      # until it prints nothing; --confirm <ids> for each
-node check_page.js <page folder> -                                # must print "page ok"
+S=agents/system/.claude/skills/ide-build/scripts
+python3 $S/materialize.py                       # empty metadata files for new items, .gitkeep, docs/file-tree.md
+python3 $S/build_map.py --stale                 # until it prints nothing; --confirm <path> ... for each file still right
+DATA_VERSION=N python3 $S/enrich.py             # N: the next data version
+python3 $S/build_map.py                         # "... fresh, 0 missing or stale, 0 orphans ..."
+python3 $S/check_tree.py                        # must print "tree ok"
+node $S/check_page.js apps/project-IDE/current-ui -   # must print "page ok"
 ```
 
-- `parse.py`: reads the tree notes (each tree line as an item with parent, path, number and comment; each item's section; the retired items; the decisions; the feature map) into one JSON file.
-- `enrich.py`: adds status, examples, the text of drafts and of every real file, the tabs from `tabs.py`, the knowledge map, each item's notes and the owner's overrides; leaves out what git ignores; the version comes from `DATA_VERSION`.
+- `index_files.py`: lists the items (every file git keeps, the folders that hold them, the local `.env` files, listed but never read), with the path as each item's id and `agent-os` as the top; knows where each How it works and Details file lives; reads and writes them with their front matter.
+- `materialize.py`: gives every new item outside stage two its empty How it works and Details files, keeps a `.gitkeep` in every empty folder, writes `docs/file-tree.md`; copies nothing, and never creates or opens a `.env` file.
+- `enrich.py`: writes `apps/project-IDE/current-ui/file-tree.data.json` and `real-files.json`: each item with its metadata files, its Example, Questions and ASD-STE100 tabs where they exist, the tabs from `tabs.py`, the owner's kept edits from `apps/project-IDE/data/overrides.json`, the decisions from `apps/project-IDE/data/decisions.md`, and the empty files marked; the version comes from `DATA_VERSION`.
 - `tabs.py`: the field guides of settings files and the extra tabs (an agent's overview, jobs, links, tests, a keys file's key names, never values).
-- `build_map.py`: builds the knowledge map from the tags and the tree; `--stale`, `--orphans`, `--context <id>`, `--confirm <id> ...`, `--set <file.json>`.
-- `index_files.py`: where each How it works and Details file lives; reads and writes them with their front matter; makes the empty Details files.
-- `check_page.js`: opens the page with a stand-in for the artifact runtime at a desktop and a phone width, opens How it works and File for the given items, and prints "page ok" or fails on a page error, a missing tab or a page wider than the phone. Needs Node and Playwright with Chromium.
+- `build_map.py`: checks each How it works file against a basis made from its item's content and, for a folder, its items' names and How it works texts; `--stale`, `--empty`, `--orphans`, `--context <path>`, `--confirm <path> ...`, `--set <file.json>`.
+- `check_tree.py`: the page tree lists exactly the files in git and their folders, plus the local `.env` files.
+- `check_page.js`: opens the page with a stand-in for the artifact runtime at a desktop and a phone width, opens each given item by its path and its How it works and File tabs, and prints "page ok" or fails on a page error, a missing tab, an address that does not open its item, or a page wider than the phone. Needs Node and Playwright with Chromium.
 - `README.md`: what each script does and how to run them.
-- `materialize.py` lives only in the planning area's tools for now: it creates every planned item on disk, copies each draft into place and each item's notes next to it, and never creates or opens a `.env` file.
 
 The build also writes the plain list of every path, `docs/file-tree.md`. The final check: the page tree lists exactly the files `git ls-files --cached --others --exclude-standard` lists, plus the local-only `.env` files. Publishing is at https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs, by the owner's go only.
 
-**`ide-sync`**: the page's store has `inputs` (a message with its kind: question, answer, change, discard, `delete`, `restore`, `apply`; its answer; `status` `new` until filed), `nodes` (per touched item: edited fields such as `content` and `how_md`, comments, questions, new items, deletions with the owner's note) and `changes` (the history, never deleted). Steps: save each waiting item as an input; write file edits into their files and How it works edits word for word with `by: owner`, then `--confirm`; add new items to the tree notes; clean a deleted item out of the project (its files and notes, its tree line and section, link and job entries, mentions, the parent's How it works, the map); fold other fields into the overrides; run requests; hand the inputs to the knowledge base agent; rebuild with `ide-build`; clear what was folded, the `apply` input last; report.
+**`ide-sync`**: the page's store has `inputs` (a message with its kind: question, answer, change, discard, `delete`, `restore`, `apply`; its answer; `status` `new` until filed), `nodes` (per touched item: edited fields such as `content` and `how_md`, comments, questions, new items, deletions with the owner's note) and `changes` (the history, never deleted). Steps: save each waiting item as an input; write file edits into their files and How it works edits word for word with `by: owner`, then `--confirm`; create new items on disk with their notes; clean a deleted item out of the project (its files and notes, link and job entries, mentions, the parent's How it works); fold edits of the extra tables into the overrides; run requests; hand the inputs to the knowledge base agent; rebuild with `ide-build`; clear what was folded, the `apply` input last; report.
 
 **Check:** `ide-build` ends with `--stale` printing nothing and "page ok" (if Playwright or Chromium is missing, ask the owner; never install it globally); the page tree equals the files in git; nothing is published.
 
 ### 17. The server
 
-The page's server is part of the IDE and is built by its prompt. The system's side: every request typed on the page runs as a Claude Code session started in `agents/system/`, so `agents/system/CLAUDE.md`, the helpers and the skills load as its own; it logs to `agents/system/logs/subagents/project-ide-agent/`; nothing from the page may open `.secrets/` or any `.env` file; pushing, deleting anything but the item deleted on the page, installs, network tools and anything outside the repository wait for the owner's Allow or Refuse. While the planning area exists the server is started from the top of the repository with `python3 vision/server/server.py` and listens only on `127.0.0.1`.
+The page's server is part of the IDE and is built by its prompt. The system's side: every request typed on the page runs as a Claude Code session started in `agents/system/`, so `agents/system/CLAUDE.md`, the helpers and the skills load as its own; it logs to `agents/system/logs/subagents/project-ide-agent/`; nothing from the page may open `.secrets/` or any `.env` file; pushing, deleting anything but the item deleted on the page, installs, network tools and anything outside the repository wait for the owner's Allow or Refuse. The server is started from the top of the repository with `python3 apps/project-IDE/server/server.py` and listens only on `127.0.0.1`.
 
 **Check:** with the server running in a temporary copy, a request "list your skills" names the eight skills of part 15 and 16, and its log line lands in `agents/system/logs/subagents/project-ide-agent/`.
 
 ## Build order
 
-1. Check what the levels above built: `.gitignore`, `.secrets/` with its folders and `secrets.index.json`, and `vision/`. Check: they exist; `git ls-files .secrets | grep -E '\.env$'` prints nothing.
+1. Check what the levels above built: `.gitignore`, `.secrets/` with its folders and `secrets.index.json`. Check: they exist; `git ls-files .secrets | grep -E '\.env$'` prints nothing.
 2. Create every folder of the tree, with a `.gitkeep` in every folder under `logs/` and `data/`, every placeholder, and every empty file. Check: every path of the tree exists; the `git check-ignore` check of part 4.
 3. Write the configs (parts 5, 6, 7) and the registry row (part 1). Check: every JSON file parses and starts with `"schema_version": 1`.
 4. Write the machinery scripts in this order: `relink`, `check-links`, `load-secret`, `check-secrets-index`, `run-agent`, `run-job`, `scheduler`, `notifier`, `run-tests`, `create-agent`. Check: `node --check`, `bash -n` or `python3 -m py_compile` passes for each.
@@ -734,7 +738,6 @@ Leave each as stated, and list it in your report.
 - The scheduler's machine and OS service; cloud, desktop and GitHub jobs: nothing.
 - How `triggers.important` combines with `on_change`; how a test's own schedule reaches the scheduler: nothing.
 - Read cursors, a JSON registry, JSON Schema files: none.
-- Where the records live once the planning area `vision/` is retired: leave them in `vision/`.
 - The skills `readme-asd-doc` and `claude-md-doc`: planned for this stage; create their folders only when the owner hands over their `SKILL.md`.
 - Splitting the IDE build scripts into one-job files, custom views and the other files of the file-set plan: nothing.
 - Anything under `agents/trading/prediction-market/` beyond its folders: nothing; it is the second stage.

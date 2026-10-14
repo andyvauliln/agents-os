@@ -1,7 +1,7 @@
 ---
 about: agent-os/apps/docs/vision.md
 basis: ed2f5718d050
-written: 2026-10-12T00:00:00Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
@@ -25,11 +25,11 @@ The owner and anyone new read it first to understand apps. Every agent reads it 
 
 ## Where it is mentioned
 
-The apps README names it in its first section; the apps rebuild prompt uses its words; the project docs and the system docs point to the apps docs; the tree notes list it.
+The apps README names it in its first section; the apps rebuild prompt uses its words; the project docs and the system docs point to the apps docs; `docs/file-tree.md` lists it.
 
 ## Related knowledge
 
-The apps README describes the same apps exactly, with paths. The project IDE's own vision goes deeper into the IDE. The conventions for apps and outside code and the decision on app docs, clones and forks are the notes behind it.
+The apps README describes the same apps exactly, with paths. The project IDE's own vision goes deeper into the IDE. The owner's inputs and decisions in `apps/project-IDE/data/` are behind it.
 
 ## Keep in mind
 

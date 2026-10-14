@@ -26,9 +26,9 @@ The vision tells why the IDE exists and how it must operate. The vision is `apps
 
 ```text
           the repository (git)
-   tree notes · docs · drafts · every real file · How it works and Details files
+   every file · the How it works, Details and other metadata files next to it
                     │
-                    │  ide-build: parse, enrich, materialize, check, publish
+                    │  ide-build: materialize, check, enrich, check the tree, publish
                     ▼
    file-tree.data.json + real-files.json ──►  THE PAGE  file-tree-explorer.html
                                                │      │        │
@@ -46,18 +46,18 @@ The vision tells why the IDE exists and how it must operate. The vision is `apps
           the repository again, then ide-build
 ```
 
-| Part | What it is for | Where it is now, while we plan | Where it goes in the final layout |
-|---|---|---|---|
-| The page | The tree, the tabs, edits, notes, questions, the ask box | `vision/explorer/file-tree-explorer.html` | `apps/project-IDE/current-ui/file-tree-explorer.html` |
-| The page data | All the data that the page shows. The build makes it from the repository. | `vision/file-tree.data.json`, with a copy in `vision/explorer/` | `apps/project-IDE/current-ui/file-tree.data.json` |
-| The text of the real files | The text of each real file. The page loads it when the owner opens the file. | `vision/explorer/real-files.json` | Next to the page data |
-| The build scripts | They make the data, keep the files the same as their drafts and metadata, and examine the page | `vision/tools/` | `agents/system/.claude/skills/ide-build/scripts/` |
-| The kept page edits | Values that the owner set on the page. The build applies them. | `vision/tools/overrides.json` | `apps/project-IDE/data/overrides.json` |
-| The tree notes and the knowledge | One section for each file and folder; decisions, inputs, changelog | `vision/docs/` | `apps/project-IDE/data/` |
-| The How it works files and the Details files | One explanation file and one details file for each item | `vision/tree/agent-os/...`, with a copy next to each item on the disk | Next to each item |
-| The server | The page on the machine of the owner, with Claude Code behind it | `vision/server/` | `apps/project-IDE/server/` |
-| The page store on the server | The notes, edits and messages of the owner, as JSON files | `vision/page-store/` | `apps/project-IDE/data/page-store/` |
-| The project IDE agent and its skills | They build the page and put the work of the owner back into the files | `vision/.claude/agents/`, `vision/.claude/skills/ide-build/`, `ide-sync/` | `agents/system/.claude/agents/`, `agents/system/.claude/skills/` |
+| Part | What it is for | Where it is |
+|---|---|---|
+| The page | The tree, the tabs, edits, notes, questions, the ask box | `apps/project-IDE/current-ui/file-tree-explorer.html` |
+| The page data | All the data that the page shows. The build makes it from the repository. | `apps/project-IDE/current-ui/file-tree.data.json` |
+| The text of the files | The text of each file. The page loads it when the owner opens the file. | `apps/project-IDE/current-ui/real-files.json` |
+| The build scripts | They make the data, give metadata files to new items, and examine the How it works files, the tree and the page | `agents/system/.claude/skills/ide-build/scripts/` |
+| The kept edits of the extra tables | Values that the owner set on the page. The build applies them. | `apps/project-IDE/data/overrides.json` |
+| The records | Each owner input, the decisions, the changelog and the plans | `apps/project-IDE/data/` |
+| The How it works files and the Details files | One explanation file and one details file for each item | Next to each item |
+| The server | The page on the machine of the owner, with Claude Code behind it | `apps/project-IDE/server/` |
+| The page store on the server | The notes, edits and messages of the owner, as JSON files | `apps/project-IDE/data/page-store/` |
+| The project IDE agent and its skills | They build the page and put the work of the owner back into the files | `agents/system/.claude/agents/`, `agents/system/.claude/skills/` |
 
 The parts connect in one loop:
 
@@ -73,7 +73,7 @@ On the server of the owner, the loop is shorter. The edits go into the files imm
 
 ## How it is laid out
 
-While we plan the system, the IDE operates from the planning folder `vision/`. The build makes the copies of its files in other locations of the repository. This is the final layout:
+Each file of the IDE is its own source. Edit it where it is. This is the layout:
 
 ```text
 apps/project-IDE/
@@ -84,35 +84,24 @@ apps/project-IDE/
 │   └── rebuild-prompt.md         how an AI builds the IDE again exactly
 ├── current-ui/                   the page, as published on claude.ai
 │   ├── file-tree-explorer.html   the page itself, one file
-│   └── file-tree.data.json       its data; built, never edited or merged by hand
+│   ├── file-tree.data.json       its data; built, never edited or merged by hand
+│   └── real-files.json           the text of every file; built
 ├── server/                       the same page on the owner's server
 │   ├── README.md                 how to start it and reach it safely
 │   ├── server.py                 the web service: page, store, write-through, request box
 │   ├── claude_bridge.py          runs each request as a Claude Code session
 │   ├── voice.py                  turns a recording into text through Groq
 │   └── server.config.json        address, paths, limits, what Claude Code may do
-└── data/                         this project's knowledge and what the page is built from
-    ├── README.md                 how the knowledge is kept
-    ├── file-tree.md              the tree notes: one numbered section per file and folder
+└── data/                         this project's records
+    ├── README.md                 what the records are and how they are kept
     ├── inputs/                   every owner input, word for word, with index.json
     ├── decisions.md, changelog.md
-    ├── knowledge-map.json        which knowledge applies to which item
-    ├── sources/                  earlier knowledge notes; kept, not used now
+    ├── plans/, archive/          change plans with index.json, retired files
     ├── page-store/               on the server: the page's notes, edits and messages
-    ├── overrides.json            the owner's page edits kept in the page data
-    ├── memory/, plans/, archive/ working notes, change plans, retired files
+    └── overrides.json            the owner's kept edits of the extra tables
 ```
 
 Each file and each folder in this layout has its How it works file and its Details file next to it. This rule applies to all the repository. The project IDE agent and its two skills are in `agents/system/.claude/`, with the other helpers of the system. The build scripts are in the `ide-build` skill.
-
-Now the repository has these folders. It also has copies of the page, the server files and the build scripts. But the working sources are still in `vision/`:
-
-- The page is in `vision/explorer/`.
-- The scripts are in `vision/tools/`.
-- The server is in `vision/server/`.
-- The tree notes and the knowledge are in `vision/docs/`.
-
-The copy of the page data in `apps/project-IDE/current-ui/` is empty. The build does not write to it yet. When the planning stops, the sources move into the final layout. Then the paths in the server settings and in the scripts change.
 
 ## The page
 
@@ -126,10 +115,9 @@ The page has three areas:
 
 ### The header
 
-- **The title and the version line.** The version line shows the version of the tree notes and the number of items. Then it shows where the page operates: "on your server", "view only", or no text on claude.ai.
+- **The title and the version line.** The version line shows the version of the page data and the number of items. Then it shows where the page operates: "on your server", "view only", or no text on claude.ai.
 - **Apply changes.** This button shows when the page has changed items. It shows the number of changed items. It opens a short confirmation. Then it puts all the changes into the files (refer to "The changed mark and Apply changes"). While a request waits, the button shows "Applying changes", and you cannot push it again.
 - **The filter.** When you type, the tree shows only the items that agree with the text:
-  - A number, for example `27` or `[27]`, finds items by their number in the tree notes.
   - A text with `*` finds names that agree with the pattern, for example `*.json`.
   - A text with `/` finds paths, for example `agents/system/`.
   - Other text finds a part of a name. For example, `.md` finds all Markdown files.
@@ -141,7 +129,7 @@ The page has three areas:
 - **All and Changed.** All shows the full tree. Changed shows only the items that are changed since the last sync. Each item shows the reason.
 - **The metadata switch.** When the switch is on, each file shows its two metadata files as rows below it. These are the How it works file (`vision.index.md` for `vision.md`) and the Details file (`vision.meta.json`). Each folder shows its two metadata files first, in the folder. When you click a metadata row, the related tab of its item opens. When the switch is off, the tree does not show metadata files. This includes the real metadata files on the disk. The switch is on by default.
 - **The empty filter.** When the filter is on, the tree shows only the files that have no text yet. Each of these files has the mark "empty". The tree always shows the files on the disk.
-- **The rows.** Each row has an icon and the name. If applicable, a row also has a "changed" tag and the number of the item in the tree notes. The icon shows a folder, a file or a link. When you click a closed folder one time, it opens and you select it. The arrow keys move in the tree. They also open and close folders. The browser keeps the open folders and the selected item. The address of the page contains the selected item. Thus a link opens the same item.
+- **The rows.** Each row has an icon and the name. If applicable, a row also has a "changed" tag. The icon shows a folder, a file or a link. When you click a closed folder one time, it opens and you select it. The arrow keys move in the tree. They also open and close folders. The browser keeps the open folders and the selected item. The address of the page contains the selected item. Thus a link opens the same item.
 - **Deleted items.** A deleted item stays in its location until the next sync. A line goes through its name.
 
 ### The sheet of an item
@@ -149,7 +137,7 @@ The page has three areas:
 The top of the sheet shows these data:
 
 - The path, with a link to each folder above the item.
-- The number and the name of the item.
+- The name of the item.
 - A "Changed" chip with the reason, if the item is changed.
 - The type of the item: file, folder, file link or folder link.
 - A Delete button. All items have it, but not the top item.
@@ -163,7 +151,7 @@ The first tab is always How it works. The last tab is always Details. Between th
 
 - **How it works.** This tab shows the explanation of the item. The page reads it from the file of the item: `vision.index.md` next to `vision.md`, or `configs/configs.index.md` in a folder. The name of that file is at the top, with an Edit button. The tab shows the file in the Read view, like a Markdown file on the File tab. It has Read and Source, and Full screen. To change the text, push Edit.
   - Items in the new format show fixed headings: What it is, Who looks after it, When and how it changes, Who uses it and when, Where it is mentioned, Related knowledge. Then they show a short "Keep in mind" list.
-  - Items in the old format show one Summary. They also show the knowledge that applies to the item directly and from the folders above. They show the notes of the item from the tree notes, and the owner inputs that had an effect on the item.
+  - Items in the old format show one Summary.
   - Below the explanation, the tab shows the messages of the owner about the item that wait for the next sync. It also shows each change that the owner made on the page to the item. Each change has an "Undo this change" button.
   - On claude.ai, if an item below this item changed on the page, the page can write a new summary immediately ("Update it now"). The knowledge base agent examines it at the next sync.
 - **File.** This tab shows the file as it is now. The page reads the text from the repository. The tab shows the text also when the file is empty. It shows the path and the source of the text.
@@ -180,16 +168,16 @@ The first tab is always How it works. The last tab is always Details. Between th
   - For a document, the tab shows the structure of the file: each heading and what goes below it. The page takes this structure from the outline in the skill that writes that type of document.
   - For a settings file, the tab shows a full example. It also shows a table of all fields, with the permitted values, an example and the purpose of each field.
   - A jobs file or a links file makes its example from its own table. The example includes the edits that are not saved.
-- **Questions.** This tab shows the Questions file of the item. It shows the file in the Read view, with Read and Source, and Full screen. The file has two parts: the open questions for the owner, and the questions of the owner with their answers. All text is in ASD-STE100. Only the words of the owner stay as the owner wrote them. Below the file, the tab shows the open questions that are still in the tree notes. Each question has a Discuss button. This button starts a conversation in the ask box. The tab also shows the questions that have an answer on the page, with their answers. A folder also shows the open questions of the files in it.
+- **Questions.** This tab shows the Questions file of the item. It shows the file in the Read view, with Read and Source, and Full screen. The file has two parts: the open questions for the owner, and the questions of the owner with their answers. All text is in ASD-STE100. Only the words of the owner stay as the owner wrote them. Below the file, the tab shows the questions that have an answer on the page, with their answers. A folder also shows the open questions of the files in it.
 - **Details.** This tab shows the Details file of the item, `vision.meta.json`, as it is. The Details file contains these data:
   - What the item is, and its state.
   - If it is in git, if it is secret, and if a script makes it.
   - Who writes it, who reads it, and when it changes.
   - Its related items, and what must change with it.
   - What it gets from the levels above.
-  - Its sources, features and views, and its number in the tree.
+  - Its sources, features and views.
 
-  Now most Details files are empty templates.
+  The Details file of a new item is empty until somebody writes it.
 - **More tabs.**
   - The folder of an agent has Overview and Agents. Overview tells what the agent does. Agents shows the agents, workers and skills below it.
   - A jobs file has Jobs. This is a table of all jobs, with the switch, schedule, location, platform and model of each job.
@@ -268,7 +256,7 @@ The Contents tab of a folder has "Add a file or folder". To add an item, do thes
 4. Type one or two sentences about what the item is for.
 5. Push Add.
 
-The new item shows in the tree immediately. The page marks it as changed. At the sync, the item gets its number, its section in the tree notes and its How it works file. The item stays proposed until the owner agrees.
+The new item shows in the tree immediately. The page marks it as changed. At the sync, the agent makes the item on the disk, with its How it works file and its Details file. The item stays proposed until the owner agrees.
 
 ### Deleting and bringing back
 
@@ -278,7 +266,7 @@ When you push "Delete and clean up", these things occur:
 
 - **On the server of the owner,** Claude Code starts immediately, in the conversation of that item.
   1. It deletes that item and its metadata files. It does not ask for a second click for this step.
-  2. It removes the item from these parts of the project: the tree notes, the links to it, the references to it in other files, the How it works of the parent, and the knowledge map.
+  2. It removes the item from these parts of the project: the links to it, the references to it in other files, and the How it works of the parent.
   3. It obeys the note.
   4. It records the deletion and commits the change.
 - **On claude.ai,** the page marks the item as deleted immediately. The agent removes the item from the project at the next sync.
@@ -359,64 +347,58 @@ The page asks for four runtime capabilities:
 
 The top level of the data contains:
 
-- The version of the data and the version of the tree notes.
+- The version of the data.
 - The time of the build.
 - The top item.
 - The decisions.
-- The knowledge entries, each with the items that it applies to.
-- The owner inputs, by identifier.
-- The docs, the feature areas and the retired numbers.
 - The list of items.
 
 Each item contains:
 
-- Its identifier. An item in the tree notes has an identifier like `n-53.4.2`. A real file that the build found on the disk has an identifier like `r-...`.
-- Its number, name, path, type, parent and children.
-- If it is a link. If it is on the disk, or if the scan found it.
-- What it is for, and its summary.
-- Its How it works text and the path of its How it works file.
+- Its identifier. The identifier is the path of the item from the top of the repository, for example `docs/README.md`. The identifier of the top is `agent-os`.
+- Its name, path, type, parent and children.
+- If it is a link, and its status.
+- What it is for, from its Details file.
+- Its How it works text, the state of that file and its path.
 - Its Details and the path of its Details file.
-- The family name for its metadata files.
-- Its text, or a note that the text loads later, and the source file of the text.
+- A note that its text loads later, and the source file of the text.
 - Its example, its field guide and its other tabs.
-- Its open questions and the questions with answers.
-- The knowledge that applies to it.
 
-`real-files.json` is next to the data. It contains the text of each real file that the build found on the disk. The page loads it the first time that you open such a file. Thus the page stays small. On the server, the server reads the text from the disk again for each request.
+`real-files.json` is next to the data. It contains the text of each file. The page loads it the first time that you open such a file. Thus the page stays small. On the server, the server reads the text from the disk again for each request.
 
 ## How the page is built and checked
 
-The `ide-build` skill makes the page data from the repository, examines it and publishes it. It operates at these times:
+The `ide-build` skill makes the page data from the repository, examines it and publishes it. Its only source is the files on the disk and the metadata files next to them. It reads no notes and it copies nothing. It operates at these times:
 
-- After each round that changed the tree notes, a doc, a draft or a How it works file.
+- After each round that changed a file, a folder or a metadata file.
 - After a pull that brought changes.
 - As the last step of each sync.
 
-These are its scripts. All are Python with the standard library, but not the page check:
+Its scripts are in `agents/system/.claude/skills/ide-build/scripts/`. All are Python with the standard library, but not the page check:
 
 | Script | What it does |
 |---|---|
-| `parse.py` | It reads the tree notes, the feature map and the decisions into a list of items. |
-| `enrich.py` | It adds the drafts, examples, knowledge, How it works files, Details files and the other tabs. It adds each real file in git below each folder that exists. It applies the kept page edits of the owner. It writes the page data and `real-files.json`. You give it the next data version. |
+| `index_files.py` | It lists the items: each file in git, the folders that contain them, and the local `.env` files. It does not read the `.env` files. It knows the location of each How it works file and each Details file. It reads and writes them. |
+| `materialize.py` | It gives empty How it works and Details files to each new item. It keeps a `.gitkeep` in empty folders. It writes `docs/file-tree.md`. It copies nothing. |
+| `build_map.py` | It examines the How it works files against their items. It finds the missing files and the stale files (children first), and the files that are still empty. It gives the context to write one file. It confirms a file. It writes many files at one time. It finds orphans (files whose item is gone). |
+| `enrich.py` | It reads each item with its metadata files and other tabs. It applies the kept edits of the owner to the extra tables. It writes the page data and `real-files.json`. You give it the next data version. |
 | `tabs.py` | It makes the field guides and the other tables (keys, jobs, links, tests, capabilities). `enrich.py` uses it. |
-| `materialize.py` | It keeps the files on the disk the same as their sources in `vision/`. It copies each draft to its real file. It copies the How it works and Details files next to each item. It gives empty metadata files to all other items. It does not make files from the plan. |
-| `index_files.py` | It knows the location of each How it works file and each Details file. It reads and writes them. It makes the missing Details files. |
-| `build_map.py` | It makes the knowledge map and examines the How it works files. It finds the missing files and the stale files (children first). It gives the context to write one file. It confirms a file. It writes many files at one time. It finds orphans (files whose item is gone). |
-| `check_page.js` | It opens the page at the width of a desktop and at the width of a phone, with a substitute for the artifact runtime. It fails on a page error, on a missing tab, or if the page is wider than the phone. It needs Node and Playwright with Chromium. |
+| `check_tree.py` | It makes sure that the items of the page are the files in git and their folders, and the local `.env` files. |
+| `check_page.js` | It opens the page at the width of a desktop and at the width of a phone, with a substitute for the artifact runtime. It fails on a page error, on a missing tab, on an address that does not open its item, or if the page is wider than the phone. It needs Node and Playwright with Chromium. |
 
 Do the build in this sequence:
 
 1. Put the final page in its location first. The page shows its own source.
-2. Parse the tree notes. Then run `enrich.py` with the next data version.
-3. Run `materialize.py`. If it made new files, run `enrich.py` again.
-4. Copy the data next to the page.
-5. Run `build_map.py`. Do this until it tells you that all How it works files are fresh, none are missing, and there are no orphans. Give the stale files to the `file-index` skill of the knowledge base agent.
-6. Run `check_page.js` on the top item, on the README and on each item that the round changed. Look at the screenshots of each change to the page itself. The script must show "page ok".
-7. Make sure that the tree is equal to the files in git. The items of the page must be the paths that `git ls-files` gives, and the local `.env` files. Now we do this check path by path when the tree changes. There is no script for it yet.
+2. Run `materialize.py`.
+3. Run `build_map.py --stale`. Give the stale How it works files to the `file-index` skill of the knowledge base agent, or confirm the files that are still correct.
+4. Run `enrich.py` with the next data version. Run `materialize.py` again. If it made files, examine and run `enrich.py` again.
+5. Run `build_map.py`. All How it works files must be fresh, none can be missing, and there must be no orphans.
+6. Run `check_tree.py`. It must show "tree ok".
+7. Run `check_page.js` on the top item, on the README and on each item that the round changed. Look at the screenshots of each change to the page itself. The script must show "page ok".
 8. Publish at the same link. Put the data and `real-files.json` next to the page.
 9. Tell the owner in plain words what changed on the page.
 
-The build never makes a status. An item is decided, but not if its notes tell that it is proposed. Each new item that an agent adds is proposed until the owner agrees. The data never contains a secret value.
+The build never makes a status. An item is decided, but not if its Details file tells that it is proposed or an idea. Each new item that an agent adds is proposed until the owner agrees. The data never contains a secret value.
 
 ## How the owner's work comes back
 
@@ -439,11 +421,11 @@ The `ide-sync` skill puts them back into the files. It operates when the owner p
 3. Write the edits into their files:
    - Write the text of a file into that file.
    - Write How it works into the `.index.md` of the item, word for word. Set the owner as the writer.
-   - Write a new item into the tree notes, with its How it works file.
-   - Write each other field into the kept page edits.
+   - Make a new item on the disk, with its How it works file and its Details file.
+   - Write each edit of an extra table into the kept page edits.
    - Remove a deleted item from the project. Obey the note of the owner.
 4. Do the requests of the owner. Record each answer with its input.
-5. Give the recorded inputs to the knowledge base agent. It puts them into the notes and the docs, and it updates the explanations.
+5. Give the recorded inputs to the knowledge base agent. It puts them into the docs and the metadata files, and it updates the explanations.
 6. Build and publish the page with `ide-build`.
 7. Remove what is in the files now:
    - Mark each recorded input as processed.
@@ -479,9 +461,9 @@ These rules apply to the names:
 
 Now each item has its How it works file and its Details file. The example files and the questions files are being written now, for the main docs and the keys files only. Other files get them later, when they need them.
 
-The rule is: a tab shows only when its file exists, and the tab shows that file. Now the page still shows Example and Questions on each file, from the tree notes. The change to real files is stage one work.
+The rule is: a tab shows only when its file exists, and the tab shows that file.
 
-While we plan, the How it works files and the Details files are in the mirror `vision/tree/agent-os/...`, or next to a draft in `vision/`. The build copies them next to each item on the disk.
+Each metadata file is its own source. Edit it where it is, next to its item. The build only gives empty How it works and Details files to a new item.
 
 ## The server
 
@@ -501,7 +483,7 @@ If the SDK is not installed, the page operates, but the request box is off. If t
 To start the server, do these steps:
 
 1. Go to the top of the repository.
-2. While we plan, type `python3 vision/server/server.py`. Later, type `python3 apps/project-IDE/server/server.py`.
+2. Type `python3 apps/project-IDE/server/server.py`.
 3. On your computer, open a tunnel: `ssh -N -L 8765:127.0.0.1:8765 you@your-server`.
 4. Open `http://127.0.0.1:8765/` in the browser.
 5. Make sure that the header shows "on your server".
@@ -543,7 +525,6 @@ The settings are in `server.config.json`. The file contains only the names of ke
 | `store_dir` | The location of the page store |
 | `write_through` | Writes edits to a file and to How it works directly into their files |
 | `log_dir` | The location of the request records |
-| `planning_dir` | While we plan, the folder that contains the drafts and the How it works files |
 | `secrets.file`, `secrets.keys` | The keys file and the names of the keys to read from it |
 | `voice` | The Groq address, the models in sequence, the key name, the limit of five minutes, the language |
 | `claude.cwd` | Where Claude Code starts |
@@ -553,14 +534,14 @@ The settings are in `server.config.json`. The file contains only the names of ke
 | `claude.ask_owner` | Words in a command that always wait for a click from the owner: push, reset, rebase, clean, delete, permission changes, installs, network tools |
 | `claude.never` | Paths that nothing can touch: the keys folder |
 
-While we plan, the settings point to `vision/`:
+The settings point to these locations:
 
-- The page is in `vision/explorer/`.
-- The store is in `vision/page-store/`.
-- The records are in `vision/logs/project-ide-agent/`.
-- Claude Code starts in `vision/`. There it loads the planning copy of the agents, skills and `CLAUDE.md` of the system.
+- The page is in `apps/project-IDE/current-ui/`.
+- The store is in `apps/project-IDE/data/page-store/`.
+- The logs are in `agents/system/logs/subagents/project-ide-agent/`.
+- Claude Code starts in `agents/system/`. Thus it loads the `CLAUDE.md`, the agents and the skills of the system as its own.
 
-In the final layout, Claude Code starts in `agents/system/`. Thus it loads the `CLAUDE.md`, the agents and the skills of the system as its own.
+A How it works edit from the page goes into the `x.index.md` next to its item.
 
 ## Who looks after it
 
@@ -571,7 +552,7 @@ In the final layout, Claude Code starts in `agents/system/`. Thus it loads the `
   - It deletes items fully.
 
   On the server, it can be the Claude Code session behind the box. It never edits the page data by hand. It never loses the words of the owner. It never puts a secret value in any location. It never pushes without a click from the owner.
-- **The knowledge base agent** keeps the knowledge. It writes the docs and each How it works file (`file-index`). If the two agents do not agree about a file, the files and the notes are correct. The agent builds the page again from them.
+- **The knowledge base agent** keeps the knowledge. It writes the docs and each How it works file (`file-index`). If the two agents do not agree about a file, the files and their metadata are correct. The agent builds the page again from them.
 - **The owner** can change all items on the page. The agents keep the edits of the owner to How it works word for word.
 
 ## Tests and checks
@@ -603,13 +584,9 @@ In the final layout, Claude Code starts in `agents/system/`. Thus it loads the `
 
 - Make a custom view for each type of file. For example, one shared view for all skills. The current other tabs become shared views. The location of the shared views is not decided. We propose `apps/project-IDE/views/`.
 - Make the metadata correct on each item. Fill each Details file with correct data. Keep each How it works file current.
-- Make the tabs real files. Show Example and Questions only where `x.example.md` and `x.questions.md` exist. Show an ASD-STE100 tab on a README that has a `README.asd.md`. The page must read each tab from its file.
 
 **Other subjects:**
 
-- Move the working sources from `vision/` into the final layout. Point the server settings and the scripts to the new paths. The copy of `server.config.json` in `apps/project-IDE/server/` still contains the planning paths.
-- `materialize.py` is not yet in the copies of the build scripts in `agents/system/.claude/skills/ide-build/scripts/`.
-- Write a script that compares the tree with `git ls-files`.
 - We propose a routine that examines the page store on a schedule. Then the owner does not have to push Apply changes.
 - It is not decided how the page on claude.ai gets the changes from the server.
 - Add more statuses than "changed" when the owner asks for them.

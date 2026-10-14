@@ -16,7 +16,7 @@
     "apps/project-IDE/server/server.py",
     "project-ide-agent"
   ],
-  "changes_when": "The page or its data is built again; until the move out of vision/, the build copies the page here from its planning source.",
+  "changes_when": "The page or its data is built again.",
   "related": [
     {
       "path": "apps/project-IDE/current-ui/file-tree-explorer.html",

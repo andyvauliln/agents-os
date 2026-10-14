@@ -77,10 +77,6 @@
       "how": "the table 'When and how to update each doc', if a skill that writes a doc changes"
     },
     {
-      "path": "agents/system/.claude/skills/ide-build/scripts/index_files.py",
-      "how": "its DRAFTS list, when a skill with a planning source in vision/ is added"
-    },
-    {
       "path": "docs/file-tree.md",
       "how": "rebuilt by ide-build when the item is added, moved or removed; never edited by hand"
     }

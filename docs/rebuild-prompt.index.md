@@ -1,7 +1,7 @@
 ---
 about: agent-os/docs/rebuild-prompt.md
 basis: 662c618b5ed4
-written: 2026-10-12T00:00:00Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
@@ -29,7 +29,7 @@ The project README, the `rebuild-prompt-doc` skill, and the rebuild prompts of t
 
 ## Related knowledge
 
-It must agree with the project vision and README and use their names. The tree notes in `vision/docs/file-tree.md` give the exact paths; the lower prompts build everything inside their own folders.
+It must agree with the project vision and README and use their names. The files on disk and `docs/file-tree.md` give the exact paths; the lower prompts build everything inside their own folders.
 
 ## Keep in mind
 

@@ -21,4 +21,6 @@ The logic of the IDE is in `agents/system/.claude/`. This is the project IDE age
 
 This changed later: the owner moved the project IDE into `apps/` on the same day. While we plan, the records are still in `vision/`.
 
+This changed later: on 2026-10-14 the records moved to `apps/project-IDE/data/`, and `vision/` was removed.
+
 Docs improved: apps/project-IDE/project-IDE.index.md.

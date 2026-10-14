@@ -1,7 +1,7 @@
 ---
 about: agent-os/agents/system/configs/system.config.json
 basis: 0b926e7a68a1
-written: 2026-10-07T19:01:11Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
@@ -21,11 +21,11 @@ When a setting for the whole system changes. A section that grows long moves int
 
 ## Who uses it, and when
 
-Every agent at the start of each run, merged with its domain's settings and its own into the settings it actually uses. Every script that acts checks the stop switch before each action; the dashboard shows the values.
+Every agent at the start of each run, merged with its domain's settings and its own into the settings it actually uses. Every script that acts checks the stop switch before each action; the File Tree page shows the values.
 
 ## Where it is mentioned
 
-Each agent's own settings file and its link to this file, each domain's own config, the rules for merging settings, the safety rules and the dashboard.
+Each agent's own settings file and its link to this file, each domain's own config, the rules for merging settings, the safety rules and the File Tree page.
 
 ## Related knowledge
 

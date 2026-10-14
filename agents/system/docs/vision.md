@@ -149,7 +149,7 @@ The same window serves the AI doing the work. Before an AI changes a file, it re
 
 ## Where we are and what comes next
 
-The project is in its first stage, and nothing of the system runs yet. The design is complete for the system domain and for trading in general, and the repository already has its final shape: every planned file and folder exists, files with a draft carry their text, the rest are empty, and every file and folder has its How it works and Details notes next to it. The knowledge base agent, the project IDE agent and their skills exist as drafts; the File Tree page works on claude.ai and on the owner's own server; every input from the owner so far is kept word for word. The prediction-market domain, the first trading domain, keeps only its folders for now: it is the second stage.
+The project is in its first stage, and nothing of the system runs yet. The design is complete for the system domain and for trading in general, and the repository already has its final shape: every planned file and folder exists, files with a draft carry their text, the rest are empty, and every file and folder has its How it works and Details notes next to it. The knowledge base agent, the project IDE agent and their skills are written; the File Tree page works on claude.ai and on the owner's own server; every input from the owner so far is kept word for word. The prediction-market domain, the first trading domain, keeps only its folders for now: it is the second stage.
 
 The work of the first stage, in order:
 
@@ -213,4 +213,4 @@ These are for the owner to answer.
 
 ## Going deeper
 
-The README describes every part of the system domain exactly: what each part holds and does, how the parts connect, and where each part's own docs are. It is at `agents/system/docs/README.md`. The project as a whole, including the apps and the planning area, is described in the project's own vision at `docs/vision.md`, and each domain has its own vision that builds on this one.
+The README describes every part of the system domain exactly: what each part holds and does, how the parts connect, and where each part's own docs are. It is at `agents/system/docs/README.md`. The project as a whole, including the apps and the records, is described in the project's own vision at `docs/vision.md`, and each domain has its own vision that builds on this one.

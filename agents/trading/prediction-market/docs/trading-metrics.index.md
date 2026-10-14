@@ -1,17 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-metrics.md
 basis: 0060fa9178b8
-written: 2026-10-07T18:56:50Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-metrics.md
 
-## Summary
+## What it is
 
-How trading agents are measured on money, the trading layer of the system's `metrics.md`: capital, PnL and return, win rate, drawdown, calibration against the market and cost per trade; the rules for comparing variants like for like; champion and challengers in the strategy loop; the daily variant report; when a variant goes live, is cut back or retired; and what the dashboard shows. Almost all of it is proposed, and the owner has set no thresholds yet.
+An earlier note on how trading agents are measured on money: capital, PnL and return, win rate, drawdown, calibration and cost per trade; how variants are compared; the daily variant report; and when a variant goes live, is cut back or retired. Almost all of it is a proposal, with no thresholds set by the owner; it is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/docs.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
 
 ## Keep in mind
 
-- When you compare variants, use the same period and capital, test against test, net of AI cost, and never call a winner below the minimum data.
-- When you weigh a backtest, use it for research only; only forward results in test mode decide a promotion.
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

@@ -42,7 +42,7 @@ Inside a level the docs are always written in this order: `vision.md` (`vision-d
 - **The `README.md` of the level**, already updated for this round. It is the only source of content.
 - **The current `README.asd.md`**, to keep the sentences that are still correct.
 - **The terms**, so that each name is the same in both files: the README itself.
-- **A model of the style:** `vision/archive/2026-10-12/claude-docs/inputs-vision.md`, which gives every owner requirement in ASD-STE100.
+- **A model of the style:** `docs/metadata.md`, which is written in ASD-STE100.
 
 ## The writing rules
 

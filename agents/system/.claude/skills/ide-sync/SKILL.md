@@ -26,11 +26,11 @@ Read them with the artifact data tool on the page's link, https://claude.ai/arti
 1. **List** every `inputs` document with status `new` and every `nodes` document with fields, comments, `deleted`, `new_node` or `worked`.
 2. **Save each as an input,** word for word, with the item it was left on: the first step of `knowledge-intake`. A page message and the answer the page gave are one input. An edit is an input too: its text is the new value.
 3. **Write the edits into their files:**
-   - an edit to a file's text goes into that file (while we plan: its draft; for a file nobody has written yet: `overrides.json` as `content`);
-   - an edit to How it works goes into the item's `.index.md` word for word, with `by: owner` and the time, then `build_map.py --confirm <id>`;
-   - a new item gets its number and a line in the tree notes, a section, and its How it works file, marked proposed until the owner says otherwise;
+   - an edit to a file's text goes into that file, also when the file was empty;
+   - an edit to How it works goes into the item's `.index.md` word for word, with `by: owner` and the time, then `build_map.py --confirm <path>`;
+   - a new item is created on disk with its How it works and Details files, marked proposed until the owner says otherwise;
    - a deleted item is cleaned out of the project as in "Deleting an item" below, keeping the owner's note in mind; when its `cleanup` is `claude-code`, Claude Code already did it on the server, so only check it;
-   - any other field goes into `overrides.json` under the item's number;
+   - an edit of an extra table goes into `apps/project-IDE/data/overrides.json` under the item's path;
    - an open line comment is applied when the owner asked for the change, otherwise it becomes an open question for the owner in the item's Questions file, part "Open questions for the owner".
 4. **Run the requests** the owner sent from the page, such as a question to answer or a file to add. File each answer with its input. A question the owner asked on an item, and an answer the owner gave to an open question (the Discuss button), go into that item's Questions file (`knowledge-intake` step 1.5).
 5. **Hand over the knowledge.** List the saved inputs for the knowledge base agent, which sorts them into the notes, decisions and docs and refreshes the How it works files.
@@ -55,10 +55,9 @@ The owner deletes a file or folder with the Delete button on the page and may wr
 1. **Read the note first** and follow it: it says what to keep, move or leave before anything goes.
 2. **Delete the item from the repository:** the file, or the folder with everything inside it, and its How it works and Details files (`vision.index.md` and `vision.meta.json` next to `vision.md`; a folder's sit inside it). An item that was only planned has no files, so there is nothing to delete here.
 3. **Clean the project of it:**
-   - its line and section in the tree notes; its number is retired and never reused;
    - every link file that points to it, and its rows in the links and workers files;
    - mentions in other files and in How it works files: remove them, or reword the sentence so it still reads well;
-   - the parent folder's How it works file when it lists the item, and the item's entries in the knowledge map.
+   - the parent folder's How it works file when it lists the item.
    Earlier inputs and decisions that mention it stay as they are: they are the history.
 4. **File it:** the deletion and the note go in word for word as one input (`knowledge-intake`), with a line in the changelog saying what was deleted and why. Then rebuild with `ide-build` and commit.
 5. **Report** in one or two plain lines what was deleted and what else changed, and anything the note asked for that could not be done.

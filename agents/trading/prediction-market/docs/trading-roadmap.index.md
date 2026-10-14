@@ -1,12 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-roadmap.md
 basis: 1fcfd98f3dfa
-written: 2026-10-07T18:56:50Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-roadmap.md
 
-## Summary
+## What it is
 
-The trading layer of the system's roadmap, one line per item: the trading decisions done so far (the strategy loop and variant names), what comes next (the first Polymarket strategies, the domain's part of the repo, the price collector and a first test variant, a first trading UI), what comes later (more trading domains copied from this one, live trading with funded accounts), and the open trading design questions.
+An earlier note with the trading roadmap: the first Polymarket strategies, a price collector and a first test variant, a first trading UI, later trading domains copied from this one, live trading with funded accounts, and the open trading design questions. It is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/docs.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
+
+## Keep in mind
+
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

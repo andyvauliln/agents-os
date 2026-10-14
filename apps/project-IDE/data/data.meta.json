@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "This project's knowledge and the data the page is built from: inputs, decisions, changelog, tree notes, knowledge map, page edits, plans.",
+  "about": "This project's records and the data the page is built from: inputs, decisions, changelog, plans, the owner's kept page edits and the page store.",
   "kind": "folder",
   "state": "written",
   "status": "decided",
@@ -18,7 +18,7 @@
     "agents/system/.claude/skills/ide-build/scripts/enrich.py",
     "agents/system/.claude/skills/ide-build/scripts/build_map.py"
   ],
-  "changes_when": "A record is added (an input, a decision, a changelog line, a plan) or the build writes the knowledge map; the move out of vision/ moves the records here.",
+  "changes_when": "A record is added (an input, a decision, a changelog line, a plan), or the owner's page edits are synced.",
   "related": [
     {
       "path": "apps/project-IDE/data/README.md",

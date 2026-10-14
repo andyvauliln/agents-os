@@ -30,7 +30,7 @@ A trading domain is one area of trading, such as prediction markets. It is a ful
 
 Every trading agent starts in test mode. Only the owner gives an agent an account with real money, and every new strategy configuration starts only after the owner reads a report on it and approves it. A change to a running agent makes a new test version with a new name. Orders are placed only on blockchains for now; centralised exchanges and other apps are sources of information only. Every order is logged.
 
-The first trading domain is prediction markets on Polymarket, in `agents/trading/prediction-market/`. In stage one, the current stage, it is its empty folders plus its `docs/`, which holds earlier notes kept for stage two; its other earlier files are kept in `vision/archive/2026-10-12/prediction-market/`. A later trading domain, such as copy trading, is a copy of it, made with `create-agent` when the owner asks.
+The first trading domain is prediction markets on Polymarket, in `agents/trading/prediction-market/`. In stage one, the current stage, it is its empty folders plus its `docs/`, which holds earlier notes kept for stage two; its other earlier files are in git history. A later trading domain, such as copy trading, is a copy of it, made with `create-agent` when the owner asks.
 
 ## Ground rules
 
@@ -235,7 +235,7 @@ Check: `ls agents/trading/researches/prediction-market-research/[0-9]*.md | grep
 
 ### The prediction-market domain (stage one: folders and the earlier notes)
 
-Create every folder under `agents/trading/prediction-market/` exactly as in the tree, and put one `.gitkeep` in each empty leaf folder. Keep the earlier notes in its `docs/` as they are, with their metadata files; they are kept for stage two and not used now. Create nothing else there: no settings or scripts. The domain is built in stage two from its own prompt, `agents/trading/prediction-market/docs/rebuild-prompt.md`, written from `vision/archive/2026-10-12/prediction-market/`. Its folder names stay as they are until the owner decides otherwise.
+Create every folder under `agents/trading/prediction-market/` exactly as in the tree, and put one `.gitkeep` in each empty leaf folder. Keep the earlier notes in its `docs/` as they are, with their metadata files; they are kept for stage two and not used now. Create nothing else there: no settings or scripts. The domain is built in stage two from its own prompt, `agents/trading/prediction-market/docs/rebuild-prompt.md`, written from its earlier files in git history. Its folder names stay as they are until the owner decides otherwise.
 
 Check: `find agents/trading/prediction-market -type f ! -name .gitkeep` prints nothing, and `find agents/trading/prediction-market -name .gitkeep | wc -l` prints `60`.
 

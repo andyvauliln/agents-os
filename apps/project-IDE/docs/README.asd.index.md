@@ -1,7 +1,7 @@
 ---
 about: agent-os/apps/project-IDE/docs/README.asd.md
 basis: c1c749b6a7e0
-written: 2026-10-12T00:00:00Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
@@ -25,11 +25,11 @@ The owner, to compare it with `README.md` and to read the IDE's procedures as pl
 
 ## Where it is mentioned
 
-Its first line names `README.md` as the source. The IDE's README lists it in the layout, the tree notes list it under the IDE's docs, and the page is planned to show it as an ASD-STE100 tab on the README.
+Its first line names `README.md` as the source. The IDE's README lists it in the layout, `docs/file-tree.md` lists it, and the page is planned to show it as an ASD-STE100 tab on the README.
 
 ## Related knowledge
 
-It must say exactly what `README.md` says. The ASD-STE100 rules it follows are the ones the system's inputs vision uses: one topic per sentence, at most 25 words for a description and 20 for a step, present tense, one word for one meaning.
+It must say exactly what `README.md` says. The ASD-STE100 rules it follows are the ones of the `readme-asd-doc` skill: one topic per sentence, at most 25 words for a description and 20 for a step, present tense, one word for one meaning.
 
 ## Keep in mind
 

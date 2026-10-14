@@ -14,7 +14,7 @@
     "knowledge-base-agent",
     "knowledge-intake"
   ],
-  "changes_when": "The file format of an input or the list of categories changes; until the move out of vision/, the build copies it here from its planning draft.",
+  "changes_when": "The file format of an input or the list of categories changes.",
   "related": [
     {
       "path": "apps/project-IDE/data/inputs/index.json",

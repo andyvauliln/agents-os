@@ -1,7 +1,7 @@
 ---
 about: agent-os/agents/system/configs/system.workers.json
 basis: 0b926e7a68a1
-written: 2026-10-14T12:00:00Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
@@ -13,7 +13,7 @@ The list of everything the system agent itself runs, on a schedule or on demand:
 
 ## Who looks after it
 
-The owner, from the dashboard: turning jobs on or off and changing when, where and with which model they run. The system's helpers propose changes. For now every job is off (the owner, 2026-10-09): they stay in the file and run only once turned on.
+The owner, from the File Tree page: turning jobs on or off and changing when, where and with which model they run. The system's helpers propose changes. For now every job is off (the owner, 2026-10-09): they stay in the file and run only once turned on.
 
 ## When and how it changes
 
@@ -21,7 +21,7 @@ Only when someone adds, changes, pauses or removes a job. What actually happened
 
 ## Who uses it, and when
 
-The scheduler reads it to start each job at its time; the dashboard and the list of all jobs show it.
+The scheduler reads it to start each job at its time; the File Tree page and the list of all jobs show it.
 
 ## Where it is mentioned
 

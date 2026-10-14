@@ -16,7 +16,7 @@
     "every AI session on the project",
     "agents/system/.claude/skills/ide-build/scripts/enrich.py"
   ],
-  "changes_when": "Every round adds an entry; until the move out of vision/, the build copies it here from its planning draft.",
+  "changes_when": "Every round adds an entry.",
   "related": [
     {
       "path": "apps/project-IDE/data/decisions.md",

@@ -56,6 +56,10 @@ Yes. It works as it does here:
 
 After the move out of `vision/`, only `server.config.json` changes. It gets the page and store folders and the logs. It has no planning folder. Claude Code starts in `agents/system/`.
 
+This changed later: on 2026-10-14 the move was done. The server now starts with `python3 apps/project-IDE/server/server.py`.
+
 This is not proved yet. We tested it one time on a copy of the repository on 2026-10-05. A full server test after the move is a step of the plan.
+
+This changed later: on 2026-10-14 the move was done. `server.config.json` has the new folders and no planning folder.
 
 Docs improved: apps/project-IDE/server/README.md.

@@ -1,21 +1,37 @@
 ---
 about: agent-os/agents/trading/prediction-market/
 basis: 303dd5357c28
-written: 2026-10-14T08:00:17Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
 # prediction-market/
 
-## Summary
+## What it is
 
-The prediction-market domain (Polymarket first), the first domain in the `trading/` folder, and its domain-level agent, which is responsible for the whole domain: its strategies, their health, money made, and the owner's questions and comments about it. It holds everything about trading in the Agent OS, and a later trading domain is copied from it. It is stage two: only its folders exist, and its `docs/` holds earlier notes kept for stage two. Its prompt `.claude/CLAUDE.md` holds the domain owner role, and its self-improvement sub-agent improves the domain.
+The prediction-market trading domain (Polymarket first), the first domain in `agents/trading/`. It belongs to stage two: today only its folders exist, most holding just a `.gitkeep`, and its `docs/` holds earlier trading notes kept for stage two and not referenced. The folders follow the standard agent layout (`.claude/`, `configs/`, `scripts/`, `logs/`, `data/`, `docs/`, `tests/`, `research/`), with the first strategy folder `strategy-1-agent/` and inside it the example trading agent `pm-strategy-1.momentum-v1.opus55-test/`. Its prompt, config, decision scripts, collectors and jobs are not written yet; they come when the owner starts stage two.
 
-Its own config holds the risk limits, the trading accounts, the venues with their fees and market filters, the currency, the order stop switch and the trade notifications, read after the system's settings and before each agent's own. `scripts/decisions/` holds the shared buy, sell and risk-check scripts every trading agent calls; the Polymarket price collector runs every 5 minutes and the markets catalog every hour, with their job logs and data, and every order goes to the order logs.
+## Who looks after it
 
-Its strategies sit below it, starting with `strategy-1-agent/`, and it reads each through `subagents.link/`. For now actions happen only on blockchains; centralised exchanges are data sources only.
+It is written by the owner and knowledge-base-agent.
+
+## When and how it changes
+
+It changes when the owner starts stage two; until then nothing is added here. It belongs to stage two and is not built yet.
+
+## Who uses it, and when
+
+It is read by the owner and knowledge-base-agent.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md`, `agents/trading/docs/rebuild-prompt.md`, `agents/trading/docs/vision.md`, `docs/file-tree.md` and its folder's How it works file `agents/trading/trading.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one"), `agents/trading/docs/README.md` (section "The trading domains"), `agents/trading/docs/README.md` (section "What every trading domain holds") and `agents/trading/docs/vision.md` (section "What every trading domain shares").
 
 ## Keep in mind
 
-- When something is shared by two or more strategies of this domain, keep it at the domain level and let them link it; when it is shared by more domains, it goes to the system.
-- When you change the domain config's risk limits or accounts, get the owner's approval first; a lower level may only tighten a limit.
+- When stage two starts, write the domain from its docs first; until then add nothing here.
+- When something is shared by two or more strategies of this domain, keep it at the domain level; when it is shared by more domains, it goes to the system.

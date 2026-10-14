@@ -4,7 +4,6 @@
 
 - **Do we rebuild the research studies with their pipeline, or only restore them from git?** Today the prompt restores them as they are. A new run of the pipeline does not give the same text.
 - **In stage two, does the rebuild prompt of the prediction-market domain make its empty folders?** The alternative is that this prompt continues to make them. Today this prompt makes them. The prompt of the domain is planned for stage two.
-- **Does the rebuild write the How it works and Details files next to each item on disk?** The alternative is only in the planning mirror `vision/tree/agent-os/`. Today the mirror is the source while we plan. The build copies the files next to each item.
 
 ## The owner's questions
 

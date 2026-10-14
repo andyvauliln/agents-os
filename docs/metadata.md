@@ -1,6 +1,6 @@
 # Metadata
 
-This document tells you all of the metadata logic of the Agent OS. It is written in ASD-STE100. It tells how the metadata works in the new system, without the planning folder `vision/`. Sections 15 to 18 tell how status, owner inputs, decisions and the two types of questions work. Section 19 tells the true state of each Details field. Section 20 tells which parts are not built yet.
+This document tells you all of the metadata logic of the Agent OS. It is written in ASD-STE100. It tells how the metadata works now. The planning folder `vision/` was removed on 2026-10-14, and each metadata file next to its item is its only source. Sections 15 to 18 tell how status, owner inputs, decisions and the two types of questions work. Section 19 tells the true state of each Details field. Section 20 tells which parts are not built yet.
 
 ## 1. What metadata is
 
@@ -31,7 +31,7 @@ This document tells you all of the metadata logic of the Agent OS. It is written
 
 Rules:
 
-1. Each file and each folder has a How it works file and a Details file. There is no exception outside `vision/`.
+1. Each file and each folder has a How it works file and a Details file. The only exception is the prediction-market domain in stage two (section 20).
 2. The Example file and the Questions file exist only when somebody wrote them.
 3. The page shows a tab only when its file exists. The tab shows that file as it is.
 4. A metadata file has no metadata files of its own. The only exception is `README.asd.md`. It is a doc, so it has its own metadata files (the family name is `README.asd`).
@@ -58,8 +58,7 @@ It tells a person who sees the project for the first time what the item is and h
 ### 5.2 Its parts
 
 1. The front matter at the top, between two `---` lines:
-   - `about`: the path of the item from the top. The path starts with `agent-os/`.
-   - `node`: the identifier of the item on the page.
+   - `about`: the path of the item from the top. The path starts with `agent-os/`. The path is also the identifier of the item on the page.
    - `written`: the date and time of the last change.
    - `by`: who made the last change. This is an agent name, or `owner`.
    - `basis` and `confirmed`: the build script sets these two fields. Do not write them by hand (see section 9).
@@ -175,7 +174,7 @@ A metadata file is "stale" when it does not agree with its item any more.
 
 | Metadata file | It becomes stale when |
 |---|---|
-| How it works | The content of the item changed. The knowledge that applies to the item changed. The How it works file of a child changed. The owner edited it on the page. |
+| How it works | The content of the item changed. For a folder: an item in it was added, removed or renamed, or the How it works file of a child changed. The owner edited it on the page. |
 | Details | The item was moved, renamed, made or emptied. Its writers or readers changed. A related item changed. A decision or an owner input changed it. |
 | Example | The structure of the item changed. The outline in the skill of the doc changed. For `.env.example`: a key name was added, changed or removed. |
 | Questions | The owner answered a question. A new question came up. |
@@ -184,16 +183,16 @@ A metadata file is "stale" when it does not agree with its item any more.
 ## 9. How the build finds stale How it works files
 
 1. For each item, the build script `build_map.py` calculates a "basis". The basis is a hash of these data:
-   - the content of the item;
-   - the knowledge that applies to the item;
-   - the How it works files of the children of the item.
+   - the content of the item (for a file);
+   - for a folder: the names of its items and the text of their How it works files.
+   The basis uses nothing else: no notes and no knowledge from other files.
 2. The script compares the new basis with the `basis` field in the front matter.
    - The same: the file is "fresh".
    - Different: the file is "stale".
    - No file: the file is "missing".
 3. `build_map.py --stale` lists the stale and missing files. It lists the children before the folders.
 4. When a child's How it works file changes, its folder becomes stale. Thus a change goes up from the bottom to the top. This is the "ripple".
-5. If a stale file is still correct, confirm it: `build_map.py --confirm <id>`. This writes the new basis and the `confirmed` time. Then the parent folder does not become stale because of this file. Thus the ripple stops.
+5. If a stale file is still correct, confirm it: `build_map.py --confirm <path>`. This writes the new basis and the `confirmed` time. Then the parent folder does not become stale because of this file. Thus the ripple stops.
 6. `build_map.py --orphans` lists metadata files whose item does not exist any more. Remove each orphan, or move it to the archive.
 
 ## 10. How to update metadata after a change
@@ -201,12 +200,12 @@ A metadata file is "stale" when it does not agree with its item any more.
 Do these steps after each change to an item. The `file-index` skill gives all the details.
 
 1. Before you change an item, read its How it works file and its Details file.
-2. Read the How it works files of the folders above it. Use `build_map.py --context <id>` to get the full context.
+2. Read the How it works files of the folders above it. Use `build_map.py --context <path>` to get the full context.
 3. Make the change.
 4. Read the `update_with` list in the Details file. Update each item in the list as it tells.
 5. Run `build_map.py --stale`.
 6. For each stale file, from the children to the top:
-   - If it is correct, add its identifier to the confirm list.
+   - If it is correct, add its path to the confirm list.
    - If it is not correct, write it again. Set `written` to now and `by` to your name. Then confirm it.
 7. Update the Details file of each changed item: all the fields must be true now.
 8. Update the Example and Questions files where they exist.
@@ -307,7 +306,7 @@ Do these steps after each change to an item. The `file-index` skill gives all th
 
 ### 16.2 Where the inputs are
 
-1. Each input is one file in the inputs folder. Now the folder is `vision/docs/inputs/`. After the move, it is `apps/project-IDE/data/inputs/`.
+1. Each input is one file in the inputs folder, `apps/project-IDE/data/inputs/`.
 2. The file name is `YYYY-MM-DD-HHMM-<topic>.md`. The identifier is `in-YYYYMMDD-HHMM`.
 3. The file has these parts:
    - a header: the time, where, the source, the categories and a summary;
@@ -341,7 +340,7 @@ An input from the page comes through `ide-sync`. On claude.ai it waits in the pa
 
 ### 17.2 Where the decisions are
 
-1. All decisions are in one file, `decisions.md`. Now it is in `vision/docs/`. After the move, it is in `apps/project-IDE/data/`.
+1. All decisions are in one file, `apps/project-IDE/data/decisions.md`.
 2. Each decision has these lines: `Decision`, `Date`, `Why`, `Status`, `Sources` (the input identifiers), `Changed` (the files that it changed). Some decisions also have `Rules now in`.
 3. A decision has one of three statuses: `decided`, `proposed` or `replaced`. When a new decision replaces an old one, the old one gets the status "replaced by D-0xx". When it replaces only a part, the status is "decided. Partly replaced by D-0xx". Do not remove an old decision.
 
@@ -421,39 +420,39 @@ Rules:
 4. The agent puts the answer into the docs and the metadata, and writes a decision if necessary.
 5. The agent removes the question from part 1 and from "Still open".
 
-### 18.6 Other locations, until the move out of `vision/`
+### 18.6 Other locations
 
-1. The tree notes still have old open questions for some items. The Questions tab shows them too, with a "Discuss" button.
-2. After the move, the Questions files are the only location. The "Still open" parts of the docs stay.
+1. The move out of `vision/` is done. The tree notes are not used any more. The Questions files are the only location of the questions about an item.
+2. The "Still open" parts of the docs stay.
 
 ## 19. The Details fields today
 
-This table tells the true state on 2026-10-14. There are 421 Details files outside `vision/`. 257 of them contain only `{}`. 135 contain only the empty schema. About 29 are written.
+This table tells the true state on 2026-10-14. There are 604 Details files of items. 422 of them are written. 182 contain only `{}`: these are the items that came after the last fill, for example the moved inputs and plans.
 
 | Field | Who fills it now | What reads it now | Files with a value |
 |---|---|---|---|
-| `schema_version` | `index_files.py`, when it makes the empty schema | Nothing | 164 |
-| `about` | The knowledge base agent, by hand | The Details tab (as raw JSON) | 29 |
-| `kind` | By hand | The Details tab | 29 (also the value `skill`, which is not in the list) |
-| `state` | By hand | The Details tab | 27 (also the value `built`, which is not in the list) |
-| `status` | By hand | The Details tab | 27, all `decided` |
-| `git` | By hand | The Details tab | 27 |
-| `secret` | By hand | The Details tab | 27 |
-| `generated_by` | By hand | The Details tab | 1 |
-| `writers`, `readers`, `changes_when` | By hand | The Details tab | 27 |
-| `related` | By hand | The Details tab | 27 |
-| `sources` | By hand | The Details tab | 29 |
-| `update_with` | By hand | Agents, before they finish a change (section 10, step 4) | 27 |
-| `inherits` | By hand. No script fills it yet | The Details tab | 25 |
-| `features` | By hand | The Details tab | 26 |
-| `views` | By hand | The Details tab | 17 |
-| `how_it_works` | By hand | Nothing. The build still uses the front matter of the How it works file | 26 |
+| `schema_version` | The knowledge base agent | Nothing | 422 |
+| `about` | The knowledge base agent | The Details tab (as raw JSON) | 422 |
+| `kind` | The knowledge base agent | The Details tab | 422, all with a permitted value |
+| `state` | The knowledge base agent | The Details tab | 422, all with a permitted value |
+| `status` | The knowledge base agent | The Details tab | 421 (415 `decided`, 6 `proposed`) |
+| `git` | The knowledge base agent | The Details tab | 422 |
+| `secret` | The knowledge base agent | The Details tab | 422 |
+| `generated_by` | The knowledge base agent | The Details tab | 78 (the others are `null`) |
+| `writers`, `readers` | The knowledge base agent | The Details tab | About 400 |
+| `changes_when` | The knowledge base agent | The Details tab | 422 |
+| `related` | The knowledge base agent | The Details tab | 422 |
+| `sources` | The knowledge base agent | The Details tab | 422 |
+| `update_with` | The knowledge base agent | Agents, before they finish a change (section 10, step 4) | 384 |
+| `inherits` | The knowledge base agent. No script fills it yet | The Details tab | 422 |
+| `features`, `views` | Nobody yet | Nothing | 0 |
+| `how_it_works` | Nobody yet | Nothing. The build still uses the front matter of the How it works file | 0 |
 
 What this means:
 
 1. No script reads a Details field yet. The page shows the file as raw JSON in the Details tab.
-2. Most items have an empty Details file. To fill them is stage one work.
-3. The build does not check the values. Thus `skill` and `built` got into two fields.
+2. The items that came after the last fill have an empty Details file. To fill them is stage one work.
+3. The build does not check the values yet.
 
 What must come (proposed):
 
@@ -463,14 +462,13 @@ What must come (proposed):
 
 ## 20. What is not built yet
 
-1. **The mirror in `vision/`.** Now the source of most How it works and Details files is the mirror `vision/tree/agent-os/`. The build copies them next to their items. After the move out of `vision/`, the files next to the items become the source, and the copy stops.
-2. **The basis.** Now the basis also uses the tree notes in `vision/docs/file-tree.md`. After the move, the basis uses only the item, its knowledge and its children (section 9).
-3. **The page identifier and the number.** Now the identifier comes from the tree notes. After the move, the path of the item is its identifier. The old tree numbers and the node identifiers are removed: from the front matter of the How it works files, from the knowledge tags and from the page. The `tree_number` field is already removed from the Details files.
-4. **The check field.** The build will move `basis` and `confirmed` from the front matter into the `how_it_works` field of the Details file.
-5. **The views.** The special views (`x.{type}.{name}.view.html`) are a plan. No view exists yet.
-6. **The prediction-market domain.** It is in stage two. Only its docs folder has metadata files now.
-7. **Other metadata files.** These metadata files are proposed. None of them is built:
+The move out of `vision/` is done (2026-10-14). The files next to the items are the only source, and the build copies nothing. The basis uses only the item and its children (section 9). The path of an item is its identifier on the page; the old tree numbers and node identifiers are not used.
+
+1. **The check field.** The build will move `basis` and `confirmed` from the front matter into the `how_it_works` field of the Details file.
+2. **The views.** The special views (`x.{type}.{name}.view.html`) are a plan. No view exists yet.
+3. **The prediction-market domain.** It is in stage two. Only its docs folder has metadata files now.
+4. **Other metadata files.** These metadata files are proposed. None of them is built:
    - a change log file of an item;
    - a Tests file of an item, with the list of its tests;
    - a format file (a schema) for a settings file or a data file. A script uses it to check the file. The Example of the file is then made from it. Now the Example tells the fields of a settings file (section 7.1).
-   The plan of these files is `vision/plans/file-set.md`. Its naming rule and the empty Details files are built. Its other parts wait.
+   The plan of these files is `apps/project-IDE/data/plans/file-set.md`. Its naming rule and the empty Details files are built. Its other parts wait.

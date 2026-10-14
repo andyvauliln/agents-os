@@ -1,17 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/how-to/go-live-with-money.md
 basis: e9382c4b6e52
-written: 2026-10-07T18:56:50Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
 # go-live-with-money.md
 
-## Summary
+## What it is
 
-The runbook for giving a test trading agent real money, the trading steps added to the system's `how-to/promote-to-live.md`. The variant must meet the promotion rules in `trading-metrics.md`, and the strategy or its SI proposes it; only the owner approves, funds an account, adds its live keys and marks it funded and approved in the domain config. Then its orders are watched through the order log and notifications. The steps are proposed.
+An earlier runbook for giving a test trading agent real money: the variant must meet the promotion rules, only the owner approves, funds an account and adds its live keys, and its orders are then watched. The steps are proposals; it is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/how-to/how-to.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
 
 ## Keep in mind
 
-- When you prepare a promotion, only propose it; only the owner approves an account with real money.
-- When you take an agent live, check its risk caps are no looser than the domain config's and the order stop switch is off.
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

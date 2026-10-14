@@ -2,7 +2,6 @@
 
 ## Open questions for the owner
 
-- **Do the records move from `vision/docs/` into `apps/project-IDE/data/`?** The records are the inputs, the decisions, the changelog, the tree notes and the plans. The README tells about both locations. The answer decides which location is the source.
 - **Does `docs/file-tree.md` also list the metadata files, or only the items?** If it lists each `.index.md` and `.meta.json`, the file becomes approximately two times longer. Without them, the map is cleaner.
 - **Must git ignore the logs and the data of the agents again?** The current `.gitignore` does not have these rules now. The rules kept the runtime `logs/` and `data/` and the research clones in `apps/temp/` out of git. The owner asked for them before.
 - **Do we still need `HANDOFF.md` when `agents/system/CLAUDE.md` is the entry point?** Both files tell a new session where to start. Two start points can disagree.
@@ -21,7 +20,7 @@ The layout was agreed: the repository itself is the tree. Today the top of the r
 4. `apps/`, the project IDE, `trading-ui/`, `temp/` and the docs of the apps.
 5. The planning area `vision/`.
 
-This changed later: there is no `CLAUDE.md` and no `researches/` at the top. `CLAUDE.md` is in `agents/system/`. The research studies are in `agents/trading/researches/`. `trading-ui/` and the project IDE are in `apps/`.
+This changed later: there is no `CLAUDE.md`, no `researches/` and no `vision/` at the top. `CLAUDE.md` is in `agents/system/`. The research studies are in `agents/trading/researches/`. `trading-ui/` and the project IDE are in `apps/`.
 
 Docs improved: none, the answer was already in docs/README.md (how the repository is laid out).
 
@@ -63,6 +62,8 @@ The File Tree page now shows it as all other folders.
 
 A plan is written to make the real files the only source and to remove `vision/` from the repository. This plan waits for the approval of the owner.
 
+This changed later: on 2026-10-14 the records moved to `apps/project-IDE/data/`, and `vision/` was removed from the repository. Git history keeps it.
+
 Docs improved: none, the answer was already in docs/README.md (the planning area).
 
 ### 2026-10-13: What do we need to work without vision/?
@@ -80,5 +81,7 @@ The other work is:
 5. Stop the copy of drafts and metadata.
 
 The plan is `apps/project-IDE/data/plans/2026-10-13-leave-vision.md`. It waits for the approval of the owner.
+
+This changed later: the owner approved the plan. On 2026-10-14 the move was done, and `vision/` was removed from the repository.
 
 Docs improved: docs/README.md, docs/README.asd.md.

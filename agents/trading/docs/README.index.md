@@ -1,7 +1,7 @@
 ---
 about: agent-os/agents/trading/docs/README.md
 basis: db7e852f2b7e
-written: 2026-10-14T12:00:00Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---

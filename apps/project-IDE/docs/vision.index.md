@@ -1,7 +1,7 @@
 ---
 about: agent-os/apps/project-IDE/docs/vision.md
 basis: eed5a53f0807
-written: 2026-10-12T00:00:00Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
@@ -25,7 +25,7 @@ The owner and anyone new to the IDE read it first. The project IDE agent and eve
 
 ## Where it is mentioned
 
-The IDE's README names it in its first section. The `vision-doc` skill, the system's `CLAUDE.md` reading list (through the IDE docs), the apps docs and the tree notes point to it.
+The IDE's README names it in its first section. The `vision-doc` skill, the system's `CLAUDE.md` reading list (through the IDE docs), and the apps docs point to it; `docs/file-tree.md` lists it.
 
 ## Related knowledge
 

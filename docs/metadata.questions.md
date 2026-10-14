@@ -55,7 +55,9 @@ Docs improved: none, the answer was already in docs/metadata.md (sections 10 and
 
 The agent made all of them, but in a mirror folder. Thus no file was next to its item.
 
-Today each file and folder outside `vision/` has its How it works file next to it on disk. While we plan, the source is still the mirror in `vision/tree/agent-os/`. The build copies each file into its location.
+Today each file and folder has its How it works file next to it on disk. That file is the only source. The build copies nothing.
+
+This changed later: until 2026-10-14 the source was a mirror in `vision/tree/agent-os/`, and the build copied each file into its location.
 
 Docs improved: none, the answer was already in docs/metadata.md (sections 3 and 20).
 
@@ -107,6 +109,8 @@ After that, its name rule and an empty Details file for each item were built. Th
 
 The plan stays in the planning area. When its content is moved out, it goes to the archive.
 
+This changed later: on 2026-10-14 the plan moved to `apps/project-IDE/data/plans/file-set.md`.
+
 Docs improved: docs/metadata.md.
 
 ### 2026-10-12: Is the metadata in the tree on disk?
@@ -115,9 +119,9 @@ Docs improved: docs/metadata.md.
 
 Yes. Each How it works file and each Details file is next to its item on disk. It is next to a file, or in a folder.
 
-While we plan, the copy in the mirror `vision/tree/agent-os/` is still the source. The build copies it into its location. After the move out of `vision/`, the files next to the items become the only source.
+The files next to the items are the only source. The build copies nothing.
 
-This changed later: at the time of the question, the files were only in the mirror.
+This changed later: at the time of the question, the files were only in the mirror. Until 2026-10-14 the mirror `vision/tree/agent-os/` was the source, and the build copied each file into its location.
 
 Docs improved: none, the answer was already in docs/metadata.md (sections 1, 3 and 20).
 

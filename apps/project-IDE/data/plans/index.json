@@ -1,0 +1,229 @@
+{
+ "schema_version": 1,
+ "note": "One row per plan (change-plan skill, D-051). Older plans written before the skill keep their names.",
+ "plans": [
+  {
+   "id": "github-sync",
+   "file": "github-sync.md",
+   "title": "Working from two places through GitHub",
+   "status": "approved",
+   "note": "the layout is decided; the first sync waits for the owner's GitHub project",
+   "inputs": [
+    "in-20261005-0925",
+    "in-20261005-1041",
+    "in-20261005-1043",
+    "in-20261005-1254"
+   ],
+   "decisions": [
+    "D-040",
+    "D-041"
+   ],
+   "created": "2026-10-05",
+   "updated": "2026-10-05"
+  },
+  {
+   "id": "server-ide",
+   "file": "server-ide.md",
+   "title": "The File Tree page on the owner's server with Claude Code behind it",
+   "status": "built",
+   "inputs": [
+    "in-20261005-1433",
+    "in-20261005-1452",
+    "in-20261005-1517"
+   ],
+   "decisions": [
+    "D-042",
+    "D-043"
+   ],
+   "created": "2026-10-05",
+   "updated": "2026-10-05"
+  },
+  {
+   "id": "file-set",
+   "file": "file-set.md",
+   "title": "One file for every tab",
+   "status": "building",
+   "inputs": [
+    "in-20261006-1611",
+    "in-20261006-1729",
+    "in-20261006-2047",
+    "in-20261006-2104",
+    "in-20261007-0904"
+   ],
+   "decisions": [
+    "D-049",
+    "D-050",
+    "D-057"
+   ],
+   "created": "2026-10-06",
+   "updated": "2026-10-07",
+   "note": "steps 1 and 2 (the second with empty files) on the owner's go of 2026-10-07; the rest waits"
+  },
+  {
+   "id": "2026-10-06-2143-general-system",
+   "file": "2026-10-06-2143-general-system.md",
+   "title": "Plans for every change, features, docs at every level, and a general system",
+   "status": "approved",
+   "inputs": [
+    "in-20261006-2143"
+   ],
+   "decisions": [
+    "D-051",
+    "D-052",
+    "D-053",
+    "D-054",
+    "D-056"
+   ],
+   "created": "2026-10-06",
+   "updated": "2026-10-07",
+   "files": [
+    ".claude/skills/change-plan/SKILL.md",
+    ".claude/CLAUDE.md",
+    "docs/decisions.md",
+    "docs/conventions.md",
+    "docs/file-tree.md",
+    ".claude/docs/vision.md",
+    ".claude/docs/README.md",
+    ".claude/docs/rebuild-prompt.md"
+   ]
+  },
+  {
+   "id": "2026-10-06-2206-apps-docs-clones-forks",
+   "file": "2026-10-06-2206-apps-docs-clones-forks.md",
+   "title": "Apps with their own docs, research clones and forks",
+   "status": "building",
+   "inputs": [
+    "in-20261006-2206"
+   ],
+   "decisions": [
+    "D-055"
+   ],
+   "files": [
+    "docs/decisions.md",
+    "docs/conventions.md",
+    "docs/architecture.md",
+    "docs/file-tree.md",
+    ".claude/skills/vision-doc/SKILL.md",
+    ".claude/skills/readme-doc/SKILL.md",
+    ".claude/skills/rebuild-prompt-doc/SKILL.md",
+    ".claude/docs/README.md",
+    ".claude/docs/rebuild-prompt.md"
+   ],
+   "created": "2026-10-06",
+   "updated": "2026-10-06",
+   "note": "steps 1 to 4 done; step 5 with the docs at every level; step 6 with the first outside app; step 7 on the owner's request"
+  },
+  {
+   "id": "2026-10-07-0904-agent-os",
+   "file": "2026-10-07-0904-agent-os.md",
+   "title": "Agent OS, trading moves down, metadata files",
+   "status": "building",
+   "inputs": [
+    "in-20261007-0904"
+   ],
+   "decisions": [
+    "D-056",
+    "D-057",
+    "D-058"
+   ],
+   "files": [
+    "every doc naming the system",
+    "docs/file-tree.md",
+    "tree/",
+    "tools/",
+    "explorer/file-tree-explorer.html"
+   ],
+   "created": "2026-10-07",
+   "updated": "2026-10-07",
+   "note": "steps 1 to 4 done (File Tree page v46); step 5, the docs at every level, next"
+  },
+  {
+   "id": "2026-10-09-0940-trading-folder",
+   "file": "2026-10-09-0940-trading-folder.md",
+   "title": "Trading as a folder of domains, and the top docs",
+   "status": "done",
+   "inputs": [
+    "in-20261009-0940"
+   ],
+   "decisions": [
+    "D-059"
+   ],
+   "created": "2026-10-09",
+   "updated": "2026-10-09"
+  },
+  {
+   "id": "2026-10-09-1019-voice-input",
+   "file": "2026-10-09-1019-voice-input.md",
+   "title": "Voice input for the page's AI boxes",
+   "status": "done",
+   "inputs": [
+    "in-20261009-1019"
+   ],
+   "decisions": [
+    "D-060"
+   ],
+   "created": "2026-10-09",
+   "updated": "2026-10-09"
+  },
+  {
+   "id": "2026-10-09-1938-inputs-vision",
+   "file": "2026-10-09-1938-inputs-vision.md",
+   "title": "Check all owner inputs; write the inputs vision",
+   "status": "done",
+   "inputs": [
+    "in-20261009-1938"
+   ],
+   "decisions": [
+    "D-062"
+   ],
+   "created": "2026-10-09",
+   "updated": "2026-10-09"
+  },
+  {
+   "id": "2026-10-12-claude-md-stage-one",
+   "file": "2026-10-12-claude-md-stage-one.md",
+   "title": "CLAUDE.md for the system, the docs at every level, stage one",
+   "status": "built",
+   "inputs": [
+    "in-20261012-stage1"
+   ],
+   "decisions": [
+    "D-064"
+   ],
+   "created": "2026-10-12",
+   "updated": "2026-10-12"
+  },
+  {
+   "id": "2026-10-13-leave-vision",
+   "file": "2026-10-13-leave-vision.md",
+   "title": "Live without the vision/ folder",
+   "status": "building",
+   "inputs": [
+    "in-20261013-leave-vision",
+    "in-20261014-1439"
+   ],
+   "decisions": [
+    "D-066",
+    "D-070",
+    "D-071"
+   ],
+   "created": "2026-10-13",
+   "updated": "2026-10-14"
+  },
+  {
+   "id": "2026-10-13-leave-vision-files",
+   "file": "2026-10-13-leave-vision-files.md",
+   "title": "What happens to every file in vision/",
+   "status": "building",
+   "inputs": [
+    "in-20261013-vision-files"
+   ],
+   "decisions": [
+    "D-066",
+    "D-070"
+   ],
+   "created": "2026-10-13",
+   "updated": "2026-10-14"
+  }
+ ]
+}

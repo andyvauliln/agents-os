@@ -79,10 +79,6 @@
   },
   "update_with": [
     {
-      "path": "vision/.claude/agents/knowledge-base-agent.md",
-      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
-    },
-    {
       "path": "agents/system/.claude/agents/knowledge-base-agent.index.md",
       "how": "if its job, skills or rules change"
     },

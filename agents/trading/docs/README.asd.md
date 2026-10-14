@@ -115,7 +115,7 @@ Each trading domain is a full domain of the Agent OS. Each domain has its own fo
 - one strategy, `strategy-1-agent/`;
 - one example trading agent below the strategy, `pm-strategy-1.momentum-v1.opus55-test/`. The word "momentum" is only a placeholder.
 
-The old files of the domain are in `vision/archive/2026-10-12/prediction-market/`. Its docs folder `agents/trading/prediction-market/docs/` contains earlier notes. They are kept for stage two. In stage two, the project writes the domain again from these files. The domain then gets its own vision, README and rebuild prompt.
+The old files of the domain are in the git history. Its docs folder `agents/trading/prediction-market/docs/` contains earlier notes. They are kept for stage two. In stage two, the project writes the domain again from these files. The domain then gets its own vision, README and rebuild prompt.
 
 **Later trading domains** are copies of the prediction-market domain, for example copy trading. The owner asks for them. At this time, none is in the tree.
 

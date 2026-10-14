@@ -16,7 +16,7 @@
     "agents/system/.claude/skills/ide-build/scripts/build_map.py",
     "agents/system/.claude/skills/ide-build/scripts/enrich.py"
   ],
-  "changes_when": "An input is stored, or its knowledge is placed; until the move out of vision/, the build copies it here from its planning draft.",
+  "changes_when": "An input is stored, or its knowledge is placed.",
   "related": [
     {
       "path": "apps/project-IDE/data/inputs/README.md",

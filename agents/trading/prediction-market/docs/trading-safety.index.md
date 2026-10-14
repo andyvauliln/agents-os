@@ -1,19 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-safety.md
 basis: baffb209619a
-written: 2026-10-07T18:56:50Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-safety.md
 
-## Summary
+## What it is
 
-The domain's money rules, the trading layer of the system's `safety.md` and shared mechanics: only the owner approves an account with real money; a live order needs a funded, owner-approved account; risk caps sit in the domain config, are enforced in code and may only be tightened below; the order stop switch refuses orders and winds trading down; plus account keys and what self-improvement may change. It changes only on an explicit owner decision.
+An earlier note with the domain's money rules: only the owner approves an account with real money; a live order needs a funded, owner-approved account; risk caps sit in the domain config, are enforced in code and may only be tightened below; and an order stop switch refuses orders. It is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/docs.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
 
 ## Keep in mind
 
-- When you add a risk limit, enforce it in the decision and risk-check scripts, never only in a prompt.
-- When you set a cap in an agent's config, only tighten the domain's cap; a looser value is ignored.
-- When you write a script that places orders, check the general stop switch and the order stop switch before every order, in test and in live.
-- When you want to change this note or the domain config's risk, accounts or order stop switch, get the owner's approval first.
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

@@ -1,15 +1,35 @@
 ---
 about: agent-os/apps/trading-ui/
 basis: 981c7ce4dc3d
-written: 2026-10-07T14:21:32Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-ui/
 
-## Summary
+## What it is
 
-The prediction-market domain's dashboard: a Next.js API and web app where the owner will watch and control its trading agents. It will show each agent in full (parts, logs, performance, data used and produced, every decision, every improvement being tested) and let the owner create an agent from a plain input, read a report on each new strategy variant and approve it before it starts, approve or reject a live account, stop or delete agents, and comment or ask an agent questions. It reaches every level's files from the system down through `subagents.link/`. It is empty for now, and it may never be needed if the project IDE next to it, `apps/project-IDE/`, does the job. Open: whether it reads files directly or through an API layer, and how it is accessed.
+The prediction-market domain's dashboard, meant as a web app where the owner would watch and control the trading agents: each agent in full, its logs, performance and decisions, new variants to approve, live accounts to approve, and agents to stop or delete. It belongs to stage two and is empty: the folder holds only its metadata files. It may never be needed if the project IDE next to it, `apps/project-IDE/`, does the job; the owner decides when stage two starts.
+
+## Who looks after it
+
+It is written by the owner.
+
+## When and how it changes
+
+It changes when the owner starts stage two and the dashboard is designed, or decides it is not needed. It belongs to stage two and is not built yet.
+
+## Who uses it, and when
+
+It is read by the owner.
+
+## Where it is mentioned
+
+It is described in `apps/docs/README.md` and its folder's How it works file `apps/apps.index.md`.
+
+## Related knowledge
+
+It has the same format as `apps/project-IDE/`. The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `docs/metadata.md`, `apps/docs/README.md`, `docs/README.md` (section "Apps") and `apps/docs/README.md` (section "The prediction-market dashboard").
 
 ## Keep in mind
 

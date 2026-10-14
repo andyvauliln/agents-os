@@ -1,7 +1,7 @@
 ---
 about: agent-os/apps/project-IDE/docs/
 basis: eb6836a75f04
-written: 2026-10-12T00:00:00Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
@@ -25,7 +25,7 @@ The owner, to understand and check the IDE. Every AI before it works on the page
 
 ## Where it is mentioned
 
-The system's `CLAUDE.md` (the IDE docs to read), the apps docs and the system README (the project IDE part), the tree notes, and the IDE folder's own How it works.
+The system's `CLAUDE.md` (the IDE docs to read), the apps docs and the system README (the project IDE part), `docs/file-tree.md`, and the IDE folder's own How it works.
 
 ## Related knowledge
 

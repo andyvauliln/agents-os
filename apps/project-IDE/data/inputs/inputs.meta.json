@@ -18,7 +18,7 @@
     "agents/system/.claude/skills/ide-build/scripts/enrich.py",
     "every AI session when a summary is unclear"
   ],
-  "changes_when": "The owner says anything about the system; the move out of vision/ moves every stored input here.",
+  "changes_when": "The owner says anything about the system.",
   "related": [
     {
       "path": "apps/project-IDE/data/inputs/README.md",

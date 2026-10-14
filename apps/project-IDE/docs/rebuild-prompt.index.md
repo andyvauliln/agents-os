@@ -1,7 +1,7 @@
 ---
 about: agent-os/apps/project-IDE/docs/rebuild-prompt.md
 basis: 520aeed75fd2
-written: 2026-10-12T00:00:00Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
@@ -29,7 +29,7 @@ The IDE's README lists it in its table of docs. The system's and the apps' rebui
 
 ## Related knowledge
 
-It must match the page, the scripts in `vision/tools/`, the server in `vision/server/`, the `ide-build` and `ide-sync` skills, the project IDE agent and the IDE's README. Paths and keys come from those files, character for character.
+It must match the page, the build scripts in `agents/system/.claude/skills/ide-build/scripts/`, the server in `apps/project-IDE/server/`, the `ide-build` and `ide-sync` skills, the project IDE agent and the IDE's README. Paths and keys come from those files, character for character.
 
 ## Keep in mind
 

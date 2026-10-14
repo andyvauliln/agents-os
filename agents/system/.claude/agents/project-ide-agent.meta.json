@@ -68,10 +68,6 @@
   },
   "update_with": [
     {
-      "path": "vision/.claude/agents/project-ide-agent.md",
-      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
-    },
-    {
       "path": "agents/system/.claude/agents/project-ide-agent.index.md",
       "how": "if its job or skills change"
     },

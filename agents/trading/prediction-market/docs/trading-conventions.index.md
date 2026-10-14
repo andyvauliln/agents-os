@@ -1,17 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-conventions.md
 basis: 4595030949cd
-written: 2026-10-07T18:56:50Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-conventions.md
 
-## Summary
+## What it is
 
-The trading layer of the system's `conventions.md`: how strategy agents and variants are named (a variant starts with its strategy, as in `pm-strategy-1.momentum-v1.opus55-test`), what makes a new variant and bumps `v[N]`, the `decision` script kind this domain adds and its shared decision scripts in `scripts/decisions/`, and the trading fields of an agent's config. The exact formats are proposed, and several naming questions are still open.
+An earlier note on the trading conventions: how strategy agents and variants are named (a variant starts with its strategy, as in `pm-strategy-1.momentum-v1.opus55-test`), what makes a new variant, the `decision` script kind, and the trading fields of an agent's config. The formats are proposals; it is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/docs.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
 
 ## Keep in mind
 
-- When you name a variant, start with its strategy's ID and end with its platform/model and mode; never rename or reuse a name.
-- When you change a config, prompt, code or model, make a new variant with a new `v[N]` or model part, never an edit of the old one.
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

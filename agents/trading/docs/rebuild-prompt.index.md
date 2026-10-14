@@ -1,7 +1,7 @@
 ---
 about: agent-os/agents/trading/docs/rebuild-prompt.md
 basis: 22c513d260ed
-written: 2026-10-12T00:00:00Z
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
 confirmed: 2026-10-14T15:07:13Z
 ---

@@ -49,14 +49,6 @@
   },
   "update_with": [
     {
-      "path": "vision/.claude/skills/make-questions/SKILL.md",
-      "how": "the planning copy: change both together until the move out of vision/"
-    },
-    {
-      "path": "vision/.claude/skills/make-questions/SKILL.md",
-      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
-    },
-    {
       "path": "agents/system/.claude/skills/make-questions/SKILL.index.md",
       "how": "if what the skill does or when it runs changes"
     },

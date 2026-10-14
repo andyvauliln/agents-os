@@ -48,10 +48,6 @@
   },
   "update_with": [
     {
-      "path": "vision/.claude/skills/readme-doc/SKILL.md",
-      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
-    },
-    {
       "path": "agents/system/.claude/skills/readme-doc/SKILL.index.md",
       "how": "if what the skill does or when it runs changes"
     },

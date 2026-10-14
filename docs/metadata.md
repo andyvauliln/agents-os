@@ -100,7 +100,23 @@ It tells a person who sees the project for the first time what the item is and h
 
 It contains all the facts about the item that are not its content and not its explanation. It is for agents and for the page. The Details tab shows these facts in plain words. The related files show as links.
 
-### 6.2 Its fields
+### 6.2 Why the fields exist
+
+The fields answer the questions that an agent must ask before it changes an item, without a read of the full project:
+
+| Question | Fields |
+|---|---|
+| What is it? | `about`, `kind`, `state`, `status` |
+| Is it safe to change? | `secret` (never read it), `git` (only on this machine), `generated_by` (do not edit it, run its script) |
+| Who works with it? | `writers`, `readers`, `changes_when` |
+| What else must change with it? | `related`, `update_with` (the most important) |
+| Why is it like this? | `sources` |
+| Which rules from above apply? | `inherits` |
+| For later or for tools | `features`, `views`, `how_it_works`, `tree_number` |
+
+Example: you change `README.md`. Its `update_with` says: "write `README.asd.md` again". Thus the agent does not forget the twin.
+
+### 6.3 Its fields
 
 Keep all the fields, in this order.
 
@@ -126,7 +142,7 @@ Keep all the fields, in this order.
 | `how_it_works` | object | The check data of the How it works file. The build does not use it yet (see sections 19 and 20). |
 | `tree_number` | text | An old number of the item, only for agents. It is empty when the item has none. |
 
-### 6.3 An empty Details file
+### 6.4 An empty Details file
 
 A Details file can contain only `{}` until somebody writes it. The item still has its file.
 
@@ -262,7 +278,16 @@ Do these steps after each change to an item. The `file-index` skill gives all th
 | Change plan in `plans/index.json` | `status` | `draft`, `approved`, `building`, `built`, `done` |
 | How it works and the docs | Plain words | "proposal", "still open", "not decided" |
 
-### 15.3 How the status changes
+### 15.3 When an agent writes "proposed"
+
+1. An agent must choose something that the owner did not say. Then it writes "proposed". This is the same now and in the new version, in the terminal, on the page and in a thread.
+2. Examples:
+   - The owner asks for a large change. The agent writes a plan. The plan is "proposed" until the owner says yes.
+   - The owner does not give a name or a detail. The agent uses a default and marks the default "proposed".
+   - The agent sees a better way. It writes the idea as "proposed" and asks the owner.
+3. It is not a separate step. It occurs each time that an agent fills a gap.
+
+### 15.4 How the status changes
 
 1. An agent writes its idea with status `proposed`. It names the idea in its reply to the owner and gives its recommendation.
 2. The owner answers. The answer is an owner input (section 16).
@@ -333,7 +358,14 @@ There are three locations at this time:
 2. **The open questions of an item in the tree notes.** This is the old location. The Questions tab also shows these, with a "Discuss" button. A folder also shows the open questions of the items in it.
 3. **The "Still open" part** of each vision and README.
 
-### 18.2 How a question is asked and answered
+### 18.2 When a question is made
+
+1. No script makes questions. An agent writes a question only when it finds a choice that only the owner can make, while it works.
+2. When an agent writes or updates a doc, it puts the open points in the "Still open" part of the doc and in the Questions file of the doc. In stage one, only the main docs and the `.env` files got Questions files in this way.
+3. When an agent changes an item and a choice about it is for the owner, it adds the question to the Questions file of that item.
+4. In the new version, the method is the same. Any item can get a Questions file when it needs one. The owner answers mainly on the page.
+
+### 18.3 How a question is asked and answered
 
 1. An agent finds a question that only the owner can answer. It writes the question in the Questions file of the item. It gives one sentence that tells why the question is important.
 2. The agent also asks the owner in the thread, with a recommendation.
@@ -342,7 +374,7 @@ There are three locations at this time:
 5. The agent puts the answer into the docs and the metadata, and writes a decision if necessary.
 6. The agent removes the question from the Questions file and from "Still open". When no question stays, the file says "None open."
 
-### 18.3 After the move out of `vision/`
+### 18.4 After the move out of `vision/`
 
 The tree notes stop. Then the Questions files are the only location for the questions of an item. The "Still open" parts of the docs stay.
 

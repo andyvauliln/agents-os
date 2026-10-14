@@ -2362,6 +2362,24 @@
     "docs/metadata.md"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261014-0950",
+   "at": "2026-10-14T09:50",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-14-0950-proposed-questions-fields.md",
+   "chars": 330,
+   "categories": [
+    "docs-knowledge",
+    "question"
+   ],
+   "summary": "When proposed happens, when questions are made, and why the Details fields exist.",
+   "processed_into": [
+    "docs/metadata.md"
+   ],
+   "answered": true
   }
  ]
 }

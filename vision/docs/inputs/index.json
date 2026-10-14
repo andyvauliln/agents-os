@@ -2254,6 +2254,21 @@
     "decisions.md#d-067"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261014-terminal-vs-page",
+   "at": "2026-10-14",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-14-terminal-vs-page.md",
+   "chars": 107,
+   "categories": [
+    "ide"
+   ],
+   "summary": "Difference between running Claude Code in the terminal and leaving notes on the page.",
+   "processed_into": [],
+   "answered": true
   }
  ]
 }

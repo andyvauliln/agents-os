@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/common/trading-prompt.md
-node: n-19.6.16.2
-basis: 32398d4685a5
+basis: 68afd144a0cb
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-prompt.md
 

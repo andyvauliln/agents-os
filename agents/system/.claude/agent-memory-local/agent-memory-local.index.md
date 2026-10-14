@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/agent-memory-local/
-node: n-10.1.13
-basis: 86b495817bf8
+basis: 981c7ce4dc3d
 written: 2026-10-01T00:54:17Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # agent-memory-local/
 

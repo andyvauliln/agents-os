@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/docs/subagents.link/
-node: n-2.20
-basis: a9bb7dc8a733
+basis: 6b29f71594bd
 written: 2026-10-07T19:01:11Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T10:03:12Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # subagents.link/
 

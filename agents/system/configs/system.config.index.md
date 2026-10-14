@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/configs/system.config.json
-node: n-11.1
-basis: 0e084038141c
+basis: 0b926e7a68a1
 written: 2026-10-07T19:01:11Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # system.config.json
 

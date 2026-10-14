@@ -1,3 +1,8 @@
+---
+about: agent-os/agents/system/.claude/skills/make-questions/SKILL.md
+basis: 0d93cb0f0146
+confirmed: 2026-10-14T15:07:13Z
+---
 # make-questions/SKILL.md
 
 ## Summary

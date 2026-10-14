@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/data/system/
-node: n-16.1
-basis: 2fafba2e0ddf
+basis: 981c7ce4dc3d
 written: 2026-10-01T00:59:23Z
 by: summary-worker
-confirmed: 2026-10-07T19:08:15Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # system/
 

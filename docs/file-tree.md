@@ -1,8 +1,8 @@
 # File tree
 
 Every file and folder in the repository, one path per line, folders ending with `/`. The metadata files
-(`.index.md`, `.meta.json`, `.example.md`, `.questions.md`, `.gitkeep`) are left out, and `vision/`, the planning
-area, is one line. Built by the IDE build every round; never edit it by hand.
+(`.index.md`, `.meta.json`, `.example.md`, `.questions.md`, `.gitkeep`) are left out. Built by the IDE build
+every round; never edit it by hand.
 
 ```text
 .gitignore
@@ -39,9 +39,10 @@ agents/system/.claude/skills/ide-build/
 agents/system/.claude/skills/ide-build/scripts/
 agents/system/.claude/skills/ide-build/scripts/build_map.py
 agents/system/.claude/skills/ide-build/scripts/check_page.js
+agents/system/.claude/skills/ide-build/scripts/check_tree.py
 agents/system/.claude/skills/ide-build/scripts/enrich.py
 agents/system/.claude/skills/ide-build/scripts/index_files.py
-agents/system/.claude/skills/ide-build/scripts/parse.py
+agents/system/.claude/skills/ide-build/scripts/materialize.py
 agents/system/.claude/skills/ide-build/scripts/README.md
 agents/system/.claude/skills/ide-build/scripts/tabs.py
 agents/system/.claude/skills/ide-build/SKILL.md
@@ -347,6 +348,7 @@ apps/project-IDE/
 apps/project-IDE/current-ui/
 apps/project-IDE/current-ui/file-tree-explorer.html
 apps/project-IDE/current-ui/file-tree.data.json
+apps/project-IDE/current-ui/real-files.json
 apps/project-IDE/data/
 apps/project-IDE/data/changelog.md
 apps/project-IDE/data/decisions.md
@@ -386,5 +388,4 @@ docs/rebuild-prompt.md
 docs/vision.md
 HANDOFF.md
 README.md
-vision/
 ```

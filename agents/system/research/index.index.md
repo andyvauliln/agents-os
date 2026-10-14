@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/research/index.json
-node: n-10.9.1
-basis: ddc9a0a0f7c0
+basis: 0b926e7a68a1
 written: 2026-10-07T19:01:11Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # index.json
 

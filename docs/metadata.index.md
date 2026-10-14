@@ -1,8 +1,9 @@
 ---
 about: agent-os/docs/metadata.md
-node: r-docs-metadata.md
+basis: 672a15c9c9cf
 written: 2026-10-14T09:05:37Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # metadata.md
 

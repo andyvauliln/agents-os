@@ -40,10 +40,6 @@
   },
   "update_with": [
     {
-      "path": "vision/tools/check_page.js",
-      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
-    },
-    {
       "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
       "how": "if how it is run or what it does changes"
     },

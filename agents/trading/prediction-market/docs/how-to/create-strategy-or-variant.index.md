@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/how-to/create-strategy-or-variant.md
-node: n-19.6.17.1
-basis: 8740f00afb25
+basis: 5b4b81c95926
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # create-strategy-or-variant.md
 

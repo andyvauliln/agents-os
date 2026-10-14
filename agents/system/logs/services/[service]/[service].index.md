@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/logs/services/[service]/
-node: n-15.2
-basis: 35090fb4837a
+basis: 981c7ce4dc3d
 written: 2026-10-07T19:01:11Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # services/[service]/
 

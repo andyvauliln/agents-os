@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/readme-doc/SKILL.md
-node: n-10.1.2.4
-basis: 48cb69c73630
+basis: 9339f67bda4d
 written: 2026-10-06T21:56:21Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # readme-doc/SKILL.md
 

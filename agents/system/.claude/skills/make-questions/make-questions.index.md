@@ -1,3 +1,8 @@
+---
+about: agent-os/agents/system/.claude/skills/make-questions/
+basis: 2a242e4e6502
+confirmed: 2026-10-14T15:07:13Z
+---
 # make-questions/
 
 ## Summary

@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-glossary.md
-node: n-19.6.12
-basis: 12ff85f1770d
+basis: 39ae34454be9
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-glossary.md
 

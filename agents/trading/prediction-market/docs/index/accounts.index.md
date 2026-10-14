@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/index/accounts.md
-node: n-19.6.18.1
-basis: 12b78d2b7f6c
+basis: bb67631cfc02
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:08:15Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # accounts.md
 

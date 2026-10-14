@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/server/server.py
-node: n-53.3.2
-basis: 3ab7494ff6ae
+basis: a6bae833dd18
 written: 2026-10-07T14:21:32Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T10:30:32Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # server.py
 

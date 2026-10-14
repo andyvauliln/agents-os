@@ -1,16 +1,15 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/scripts/tabs.py
-node: n-10.1.2.5.2.4
-basis: de8a4b0d0e88
-written: 2026-10-06T21:09:36Z
-by: knowledge-base-agent
-confirmed: 2026-10-07T19:02:04Z
+basis: 2e94d3274769
+written: 2026-10-14T15:04:45Z
+by: project-ide-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # tabs.py
 
 ## Summary
 
-The field guides and extra tabs for the page: for a settings file, each key with its values, an example and what it means; for an agent, its overview, jobs and links; for a keys file, the key names, never values.
+The field guides and extra tabs for the page, chosen by the item's path or kind: for a settings file, each key with its values, an example and what it means; for an agent, its overview, jobs and links; for a keys file, the key names, never values.
 
 ## Keep in mind
 

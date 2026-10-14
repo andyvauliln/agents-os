@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/sources/
-node: n-53.2.2
-basis: 3acf738601cf
+basis: 74b583411272
 written: 2026-10-05T13:25:49Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # sources/
 

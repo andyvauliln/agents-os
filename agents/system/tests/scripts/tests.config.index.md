@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/tests/scripts/tests.config.json
-node: n-10.8.2.1
-basis: 08885feda81f
+basis: 0b926e7a68a1
 written: 2026-10-01T01:00:33Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # tests.config.json
 

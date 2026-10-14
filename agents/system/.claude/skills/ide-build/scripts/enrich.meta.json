@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "Builds the page data from the parsed items and the files on disk, with every tab and the next data version.",
+  "about": "Builds the page data from the files on disk and each item's metadata files, with every tab and the next data version.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -14,11 +14,11 @@
   "readers": [
     "ide-build"
   ],
-  "changes_when": "The page data, a tab, the empty-file rule or how real files and metadata are read changes.",
+  "changes_when": "The page data, a tab, the empty-file rule or how the files on disk and their metadata are read changes.",
   "related": [
     {
-      "path": "agents/system/.claude/skills/ide-build/scripts/parse.py",
-      "how": "reads"
+      "path": "apps/project-IDE/current-ui/real-files.json",
+      "how": "writes"
     },
     {
       "path": "agents/system/.claude/skills/ide-build/scripts/tabs.py",
@@ -35,6 +35,14 @@
     {
       "path": "apps/project-IDE/current-ui/file-tree.data.json",
       "how": "writes"
+    },
+    {
+      "path": "apps/project-IDE/data/overrides.json",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/data/decisions.md",
+      "how": "reads"
     }
   ],
   "sources": {
@@ -54,10 +62,6 @@
     "notes": []
   },
   "update_with": [
-    {
-      "path": "vision/tools/enrich.py",
-      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
-    },
     {
       "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
       "how": "if how it is run or what it does changes"

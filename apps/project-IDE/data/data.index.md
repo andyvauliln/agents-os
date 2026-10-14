@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/
-node: n-53.2
-basis: 90ee1e4cf54d
+basis: 0644b2d3b86c
 written: 2026-10-05T15:37:34Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T14:22:08Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # data/
 

@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-sync/SKILL.md
-node: n-10.1.2.6
-basis: 6c27a9a2fddf
+basis: e87cbe02169e
 written: 2026-10-14T12:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-06T11:55:20Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # ide-sync/SKILL.md
 

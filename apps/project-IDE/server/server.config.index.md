@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/server/server.config.json
-node: n-53.3.4
-basis: 3bbf27c1c80e
+basis: 0107f331ab6c
 written: 2026-10-05T16:17:55Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T10:30:32Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # server.config.json
 

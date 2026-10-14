@@ -13,7 +13,7 @@
   "readers": [
     "the owner"
   ],
-  "changes_when": "A setting, a start step or a safety rule of the server changes; until the move out of vision/, the build copies it here from its planning draft.",
+  "changes_when": "A setting, a start step or a safety rule of the server changes.",
   "related": [
     {
       "path": "apps/project-IDE/server/server.config.json",

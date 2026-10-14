@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/scripts/system/
-node: n-14.1
-basis: 76947222e689
+basis: 981c7ce4dc3d
 written: 2026-10-07T19:01:11Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:03:52Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # system/
 

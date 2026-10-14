@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/how-to/stop-trading-agent.md
-node: n-19.6.17.4
-basis: 6e8a81caca0f
+basis: 6f7f9e8f2099
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # stop-trading-agent.md
 

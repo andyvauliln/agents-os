@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/file-tree.md
-node: n-2.13
-basis: edba7cc43131
+basis: 538fa892e10b
 written: 2026-10-05T13:25:49Z
 by: knowledge-base-agent
-confirmed: 2026-10-06T11:55:20Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # file-tree.md
 

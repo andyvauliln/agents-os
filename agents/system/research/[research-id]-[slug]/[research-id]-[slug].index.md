@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/research/[research-id]-[slug]/
-node: n-10.9.2
-basis: 1a8ef44ff799
+basis: 981c7ce4dc3d
 written: 2026-10-07T19:01:11Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:08:15Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # [research-id]-[slug]/
 

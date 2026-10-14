@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/rules/[topic].md
-node: p-agent-os-agents-system-.claude-rules-topic-.md
-basis: 60126570d4b5
+basis: 674b4c90b427
 written: 2026-10-01T00:52:45Z
 by: summary-worker
+confirmed: 2026-10-14T15:07:13Z
 ---
 # [topic].md
 

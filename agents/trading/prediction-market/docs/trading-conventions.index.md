@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-conventions.md
-node: n-19.6.7
-basis: 24a5bc45c73b
+basis: 4595030949cd
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-conventions.md
 

@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/how-to/go-live-with-money.md
-node: n-19.6.17.2
-basis: c12aea3bd89d
+basis: e9382c4b6e52
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # go-live-with-money.md
 

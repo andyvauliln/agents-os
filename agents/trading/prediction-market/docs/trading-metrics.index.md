@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-metrics.md
-node: n-19.6.11
-basis: 3def12fb3d78
+basis: 0060fa9178b8
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-metrics.md
 

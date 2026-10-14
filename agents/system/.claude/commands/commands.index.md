@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/commands/
-node: n-10.1.9
-basis: be0b1e3d9420
+basis: 5fb0d765fcf4
 written: 2026-10-01T00:52:45Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # commands/
 

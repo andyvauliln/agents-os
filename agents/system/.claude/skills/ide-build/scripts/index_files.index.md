@@ -1,16 +1,15 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/scripts/index_files.py
-node: n-10.1.2.5.2.6
-basis: 35d5a77cd098
-written: 2026-10-07T09:33:39Z
-by: knowledge-base-agent
-confirmed: 2026-10-07T19:02:04Z
+basis: 70115fa99970
+written: 2026-10-14T15:04:45Z
+by: project-ide-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # index_files.py
 
 ## Summary
 
-Knows where every How it works and Details file lives: next to the draft for items that have one, otherwise in a copy of the planned tree while we plan, and next to the real file in the repository. Each is named after its file without the extension, so `vision.md` has `vision.index.md` and `vision.meta.json`. It reads and writes them with their header and makes the empty Details files.
+Lists the items of the tree from the repository: every file git keeps, the folders that hold them and the local keys files, with the top as `agent-os`. It knows where each item's How it works and Details files are, named after the item without its extension, so `vision.md` has `vision.index.md` and `vision.meta.json`; a file that shares its name with a sibling or its folder keeps its extension. It reads and writes the How it works files with their header, and finds missing and orphan metadata files.
 
 ## Keep in mind
 

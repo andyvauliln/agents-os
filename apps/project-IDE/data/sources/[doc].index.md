@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/sources/[doc].md
-node: n-53.2.2.1
-basis: ebe015c66af5
+basis: 674b4c90b427
 written: 2026-10-05T13:25:49Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # [doc].md
 

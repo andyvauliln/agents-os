@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The page's only data: every item with its tabs and metadata, plus the decisions, inputs and docs, built by enrich.py.",
+  "about": "The page's only data: every item, with its path as its id, its tabs and metadata, plus the decisions, built by enrich.py.",
   "kind": "file",
   "state": "empty",
   "status": "decided",
@@ -14,7 +14,7 @@
     "apps/project-IDE/current-ui/file-tree-explorer.html",
     "apps/project-IDE/server/server.py"
   ],
-  "changes_when": "The build runs after a round that changed the tree, a doc or a metadata file; today it is an empty placeholder until the build writes here after the move out of vision/.",
+  "changes_when": "The build runs after a round that changed a file, a folder or a metadata file.",
   "related": [
     {
       "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
@@ -25,15 +25,11 @@
       "how": "read by"
     },
     {
-      "path": "apps/project-IDE/data/file-tree.md",
+      "path": "apps/project-IDE/data/decisions.md",
       "how": "built from"
     },
     {
       "path": "apps/project-IDE/data/overrides.json",
-      "how": "built from"
-    },
-    {
-      "path": "apps/project-IDE/data/knowledge-map.json",
       "how": "built from"
     },
     {

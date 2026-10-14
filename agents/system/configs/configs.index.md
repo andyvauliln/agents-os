@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/configs/
-node: n-11
-basis: 528e42c0bb8c
+basis: e66a909e492f
 written: 2026-10-07T19:01:11Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # configs/
 

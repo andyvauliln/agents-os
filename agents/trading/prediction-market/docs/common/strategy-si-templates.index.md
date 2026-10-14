@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/common/strategy-si-templates.md
-node: n-19.6.16.3
-basis: 25a734c23a66
+basis: f2c93af3887d
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # strategy-si-templates.md
 

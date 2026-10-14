@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/decisions.md
-node: n-2.6
-basis: ce974958f067
+basis: cb287a0b8732
 written: 2026-10-05T13:25:49Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T14:22:08Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # decisions.md
 

@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/rules/
-node: n-10.1.8
-basis: 2543709588ab
+basis: 0c140b607db0
 written: 2026-10-01T00:52:45Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # rules/
 

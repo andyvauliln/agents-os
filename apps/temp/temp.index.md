@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/temp/
-node: n-55
-basis: 8d3e209e7570
+basis: 981c7ce4dc3d
 written: 2026-10-06T22:14:30Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # temp/
 

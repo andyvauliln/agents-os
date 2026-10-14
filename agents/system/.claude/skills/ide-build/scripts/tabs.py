@@ -5,7 +5,7 @@ def F(key, values, example, meaning):
     return {"key": key, "values": values, "example": example, "meaning": meaning}
 
 SYSTEM_CONFIG = [
- F("schema_version", "integer", "1", "Version of this file's shape. Bumped when sections or keys change (see data-schemas.md [2.14])."),
+ F("schema_version", "integer", "1", "Version of this file's shape. Bumped when sections or keys change (see data-schemas.md)."),
  F("defaults.timezone", "IANA zone", "\"UTC\"", "Time zone for schedules, quiet hours and log timestamps."),
  F("defaults.log_level", "debug | info | warn | error", "\"info\"", "Minimum level written to logs."),
  F("defaults.run_timeout_sec", "seconds", "600", "A run that takes longer is stopped and logged as timed out."),
@@ -28,22 +28,22 @@ SYSTEM_CONFIG = [
  F("notifications.events.<event>", "low | medium | high", "\"high\"", "Severity per event: agent_error, promotion_proposed, kill_switch, live_action; a domain adds its own (the prediction-market domain: live_trade, risk_limit_hit)."),
 ]
 
-DOMAIN_CONFIG = [  # [19.2.4] prediction-market-agents.config.json: the trading settings that left [11.1] (D-058)
- F("schema_version", "integer", "1", "Version of this file's shape (see trading-data-schemas.md [19.6.9])."),
+DOMAIN_CONFIG = [  # prediction-market-agents.config.json: the trading settings that left (D-058)
+ F("schema_version", "integer", "1", "Version of this file's shape (see trading-data-schemas.md)."),
  F("currency", "ISO code", "\"USD\"", "Currency for capital, risk caps and PnL."),
  F("risk.domain.max_total_live_usd", "number", "500", "Hard cap on all live capital across the domain's agents."),
  F("risk.domain.max_daily_loss_usd", "number", "50", "When today's total loss reaches this, live trading stops for the day."),
  F("risk.domain.drawdown_stop_pct", "percent", "15", "Stop live trading when the drawdown from the peak reaches this."),
  F("risk.per_agent.max_capital_usd", "number", "100", "Most capital one agent may use. An agent config may only lower it."),
  F("risk.per_agent.max_position_pct", "percent", "5", "Largest single position as a share of the agent's capital."),
- F("risk.per_agent.max_open_positions", "integer", "10", "Most positions one agent may hold at once."),
+ F("risk.per_agent.max_open_positions", "integer", "agents/system", "Most positions one agent may hold at once."),
  F("risk.per_agent.max_orders_per_hour", "integer", "20", "Rate limit on orders per agent."),
  F("accounts[].id / venue / mode", "text / polymarket... / test | live", "\"acct-pm-test-1\", \"polymarket\", \"test\"", "One trading account per entry."),
  F("accounts[].funded / approved_by_owner", "true | false", "false, false", "Live needs both: money in the account and the owner's approval in the UI."),
  F("accounts[].assigned_agent / max_capital_usd", "agent name / number", "\"pm-strategy-1.momentum-v1.opus55-test\", 0", "Which agent may use it, and how much."),
  F("accounts[].secret_keys", "list of .env key names", "[\"POLYMARKET_ACCT1_*\"]", "Which keys in .secrets/[mode]/.env belong to this account (D-027). Never the values."),
  F("venues / fees_bps / market_filters", "list / number / object", "[\"polymarket\"], 0, {\"min_volume_usd\": 10000}", "Per-venue settings of the domain. Risk here can only be tighter than the domain caps."),
- F("kill_switch", "true | false", "false", "The order stop switch: when true, orders are refused, positions are closed and the accounts are set back to unfunded. The system's general stop switch [11.1] stops every outside action, orders included. The name is our proposal."),
+ F("kill_switch", "true | false", "false", "The order stop switch: when true, orders are refused, positions are closed and the accounts are set back to unfunded. The system's general stop switch stops every outside action, orders included. The name is our proposal."),
  F("notifications.events.<event>", "low | medium | high", "\"high\"", "The domain's own events: live_trade, risk_limit_hit."),
 ]
 
@@ -60,7 +60,7 @@ WORKERS_CONFIG = [
  F("jobs[].timezone", "IANA zone", "\"America/New_York\"", "Time zone for cron and once. Default from defaults, then system.config.json."),
  F("jobs[].run_on", "local | cloud | desktop | github-actions", "\"local\"", "local = headless on the scheduler's machine (files, links, test secrets). cloud = the platform's cloud (fresh repo copy, no local files, no secrets; Claude Code routines at most hourly). desktop = Claude desktop task, only while the app is open. github-actions = scheduled workflow."),
  F("jobs[].platform", "none | claude-code | cursor | codex", "\"claude-code\"", "Which coding agent runs an AI job. none for plain scripts. Cursor and Codex can take jobs later without changing anything else."),
- F("jobs[].model / effort", "route | model name / low ... max", "\"route\", \"high\"", "route = the model from models.config.json [11.11]. A name here overrides it for this job only."),
+ F("jobs[].model / effort", "route | model name / low ... max", "\"route\", \"high\"", "route = the model from models.config.json. A name here overrides it for this job only."),
  F("jobs[].prompt", "text | @path", "\"@docs/prompts/main-run.md\"", "What the AI run is asked to do. @path reads the prompt from a file in the workspace."),
  F("jobs[].workspace", "folder", "\"agents/prediction-market-agents\"", "Folder the run starts in, so it picks up that level's .claude/. Default: the owner agent's folder."),
  F("jobs[].allowed_tools / permission_mode / max_turns", "list / default | acceptEdits | plan / integer", "[\"Read\", \"Grep\", \"Bash(python scripts/*)\"], \"acceptEdits\", 30", "Limits for a headless AI run. run-job turns them into the platform's flags."),
@@ -205,23 +205,23 @@ ENV_FAKE = {
  "NOTIFY_TELEGRAM_BOT_TOKEN": "",
 }
 
-def env_rows(num):
-    if num == "47.2.1":
+def env_rows(key):
+    if key == ".secrets/live/.env":
         return [dict(r, used_by=r["used_by"].replace("test", "live")) for r in ENV_ROWS if r["name"] not in ("OPENROUTER_API_KEY", "GROQ_API_KEY")]
     return ENV_ROWS
 
-def env_fields(num):
-    live = num == "47.2.1"
+def env_fields(key):
+    live = key == ".secrets/live/.env"
     out = []
-    for r in env_rows(num):
+    for r in env_rows(key):
         ex = "live" if (live and r["name"] == "AGENT_OS_ENV") else ENV_FAKE.get(r["name"], "")
         out.append(F(r["name"], r["format"] + (" (required)" if r["required"] else " (optional, may be empty)"), ex or "(empty)",
                      r["purpose"] + ". Used by " + r["used_by"] + "."))
     return out
 
-def env_example(num):
-    live = num == "47.2.1"
-    rows = env_rows(num)
+def env_example(key):
+    live = key == ".secrets/live/.env"
+    rows = env_rows(key)
     lines = [f"# .secrets/{'live' if live else 'test'}/.env  (git-ignored, chmod 600)",
              "# FAKE values for illustration. Real values are typed into the local file only.", ""]
     groups = [("Mode", lambda n: n == "AGENT_OS_ENV"), ("Claude", lambda n: n.startswith("ANTHROPIC")),
@@ -242,32 +242,32 @@ def env_example(num):
             "note": "Every variable from the Variables tab, one KEY=value per line. Values here are fake; this page never stores real ones."}
 
 def example_for(n):
-    if (n["num"] or "") in ("47.1.1", "47.2.1"):
-        return env_example(n["num"])
-    if (n["num"] or "") in JOBS:
-        return jobs_example(n["num"])
-    if (n["num"] or "") in LINKS:
-        return links_example(n["num"])
+    if n["id"] in (".secrets/test/.env", ".secrets/live/.env"):
+        return env_example(n["id"])
+    if n["id"] in JOBS:
+        return jobs_example(n["id"])
+    if n["id"] in LINKS:
+        return links_example(n["id"])
     return None
 
 def table(tab_id, title, columns, rows, note):
     return {"id": tab_id, "title": title, "type": "table", "columns": columns, "rows": rows, "note": note}
 
 def fields_for(n):
-    name, num, path = n["name"], n["num"] or "", n["path"]
-    if num == "11.1": return SYSTEM_CONFIG
-    if num == "19.2.4": return DOMAIN_CONFIG
+    name, key, path = n["name"], n["id"], n["path"]
+    if key == "agents/system/configs/system.config.json": return SYSTEM_CONFIG
+    if key == "agents/trading/prediction-market/configs/prediction-market-agents.config.json": return DOMAIN_CONFIG
     if name.endswith(".workers.json") and not (n.get("link") or n.get("is_link")): return WORKERS_CONFIG
     if name.endswith(".links.json") and not (n.get("link") or n.get("is_link")): return LINKS_CONFIG
-    if num == "11.11": return MODELS_CONFIG
-    if num == "27.2": return AGENT_CONFIG
+    if key == "agents/system/configs/models.config.json": return MODELS_CONFIG
+    if key == "agents/trading/prediction-market/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/configs/pm-strategy-1.momentum-v1.opus55-test.config.json": return AGENT_CONFIG
     if name == "tests.config.json": return TESTS_CONFIG
     if name == "index.json" and "/research/" in path: return RESEARCH_INDEX
     if name == "settings.json": return SETTINGS_JSON
-    if num == "47.3": return SECRETS_INDEX
-    if num in ("47.1.1", "47.2.1"): return env_fields(num)
+    if key == ".secrets/secrets.index.json": return SECRETS_INDEX
+    if key in (".secrets/test/.env", ".secrets/live/.env"): return env_fields(key)
     if name == "package.json": return PACKAGE_JSON
-    if name == "[subagent-name].md" or name.endswith("-agent.md"): return SUBAGENT_MD
+    if name == "[subagent-name].md" or (name.endswith("-agent.md") and "/.claude/agents/" in path): return SUBAGENT_MD
     if name.startswith("runs.jsonl"): return RUNS_JSONL
     return None
 
@@ -282,49 +282,49 @@ CAP_COLUMNS = [
 def cap(capability, what, related, status="planned", notes=""):
     return {"capability": capability, "what": what, "status": status, "related": related, "notes": notes}
 CAPS = {
- "10": [
+ "agents/system": [
   cap("Manage all domains", "Oversees every domain agent: health, resources, what each is working on.", "subagents.link/ in every content folder, one link per domain (D-030)"),
-  cap("Create new agents", "Turns owner input into a new agent: scaffold the folder, register it in the index and UI, link its docs.", "scripts/system [14.1]; agents index; sys-docs-agent [10.1.1.2]"),
-  cap("Develop the system", "Builds and updates shared scripts, workers, configs and docs every agent uses.", "scripts [14]; configs [11]; docs [2]"),
-  cap("Run shared workers", "Runs data-collection workers on their schedule and keeps their output clean.", "system.workers.json [11.10]; scripts/workers [14.2]"),
-  cap("Schedule every agent's jobs", "One scheduler runs every job from every agent's workers file on time, locally or in the cloud, and shows them by domain.", "scheduler, run-job [14.1]; configs/subagents.link [11.2]; scheduler-state [16.1]"),
-  cap("Keep every link right", "Builds every file link from each agent's links file plus the child links, removes stale ones, checks them and keeps an index of who reads what.", "relink, check-links [14.1]; [name].links.json in every configs/ [11.13]; links index [16.1]"),
-  cap("Model and platform routing", "Keeps the list of models/platforms and routes each agent to its model.", "models.config.json [11.11]"),
-  cap("Answer owner questions", "Answers questions about system state and acts on owner comments.", "sys-knowledge-agent [10.1.1.2]"),
-  cap("Keep the knowledge base current", "Files every owner input and system change into the docs, keeps the knowledge map and the How it works summaries of every file and folder in line (D-033).", "sys-knowledge-agent [10.1.1.2]; skills [10.1.2.1], [10.1.2.2]; docs [2]"),
-  cap("System self-improvement", "Reads logs, data, research and owner comments; proposes and tests improvements at system level.", "sys-self-improvement-agent [10.1.1.1]; research [10.9]; tests [10.8]"),
-  cap("Run tests", "Runs tests from tests.config.json, writes results; before_promote tests gate promotion.", "run-tests [14.1]; tests [10.8]"),
-  cap("Safety and secrets", "Test/live separation, kill switch, keys loaded only at execution time.", "load-secret [14.1]; .secrets [47]; settings.json [10.1.6]"),
-  cap("Logs and analytics", "Collects logs and performance per agent for the UI.", "logs [15]; data [16]; trading-ui [45]"),
+  cap("Create new agents", "Turns owner input into a new agent: scaffold the folder, register it in the index and UI, link its docs.", "scripts/system; agents index; sys-docs-agent"),
+  cap("Develop the system", "Builds and updates shared scripts, workers, configs and docs every agent uses.", "scripts; configs; docs"),
+  cap("Run shared workers", "Runs data-collection workers on their schedule and keeps their output clean.", "system.workers.json; scripts/workers"),
+  cap("Schedule every agent's jobs", "One scheduler runs every job from every agent's workers file on time, locally or in the cloud, and shows them by domain.", "scheduler, run-job; configs/subagents.link; scheduler-state"),
+  cap("Keep every link right", "Builds every file link from each agent's links file plus the child links, removes stale ones, checks them and keeps an index of who reads what.", "relink, check-links; [name].links.json in every configs/; links index"),
+  cap("Model and platform routing", "Keeps the list of models/platforms and routes each agent to its model.", "models.config.json"),
+  cap("Answer owner questions", "Answers questions about system state and acts on owner comments.", "sys-knowledge-agent"),
+  cap("Keep the knowledge base current", "Files every owner input and system change into the docs, keeps the knowledge map and the How it works summaries of every file and folder in line (D-033).", "sys-knowledge-agent; skills; docs"),
+  cap("System self-improvement", "Reads logs, data, research and owner comments; proposes and tests improvements at system level.", "sys-self-improvement-agent; research; tests"),
+  cap("Run tests", "Runs tests from tests.config.json, writes results; before_promote tests gate promotion.", "run-tests; tests"),
+  cap("Safety and secrets", "Test/live separation, kill switch, keys loaded only at execution time.", "load-secret; .secrets; settings.json"),
+  cap("Logs and analytics", "Collects logs and performance per agent for the UI.", "logs; data; trading-ui"),
  ],
- "19": [
-  cap("Own the prediction-market domain", "Responsible for Polymarket (first) and later other prediction markets: domain health and coverage.", "CLAUDE.md [19.1.5]"),
-  cap("Find and create strategies", "Finds, creates and updates strategy agents and their self-improvement sub-agents.", "strategy agents [21]; skills [19.1.2]"),
-  cap("Compare and promote variants", "Compares variants of each strategy and proposes promotion or retirement; the owner approves.", "research [19.13]; tests [19.12]; strategy agents [21]"),
-  cap("Domain self-improvement", "Reads domain logs, data, research and owner comments; improves domain rules and strategies.", "pm-self-improvement-agent [19.1.1.2]", "planned", "sub-agent is proposed"),
-  cap("Domain data and workers", "Decides which Polymarket workers the domain needs and runs them as its own jobs.", "prediction-market-agents.workers.json [19.2.1] (markets-catalog, polymarket-prices [19.3.5])"),
-  cap("Answer owner questions", "Explains what the domain and its strategies are doing and why.", "CLAUDE.md [19.1.5]; docs [19.6]"),
-  cap("Domain docs", "Keeps the domain's own docs and file links up to date.", "docs [19.6]"),
-  cap("Domain tests", "Keeps prompt and script tests for the domain level.", "tests [19.12]"),
+ "agents/trading/prediction-market": [
+  cap("Own the prediction-market domain", "Responsible for Polymarket (first) and later other prediction markets: domain health and coverage.", "CLAUDE.md"),
+  cap("Find and create strategies", "Finds, creates and updates strategy agents and their self-improvement sub-agents.", "strategy agents; skills"),
+  cap("Compare and promote variants", "Compares variants of each strategy and proposes promotion or retirement; the owner approves.", "research; tests; strategy agents"),
+  cap("Domain self-improvement", "Reads domain logs, data, research and owner comments; improves domain rules and strategies.", "pm-self-improvement-agent", "planned", "sub-agent is proposed"),
+  cap("Domain data and workers", "Decides which Polymarket workers the domain needs and runs them as its own jobs.", "prediction-market-agents.workers.json (markets-catalog, polymarket-prices)"),
+  cap("Answer owner questions", "Explains what the domain and its strategies are doing and why.", "CLAUDE.md; docs"),
+  cap("Domain docs", "Keeps the domain's own docs and file links up to date.", "docs"),
+  cap("Domain tests", "Keeps prompt and script tests for the domain level.", "tests"),
  ],
 }
 AGENT_INFO = {
- "10": {"level": "system", "keywords": []},
- "19": {"level": "domain", "keywords": ["polymarket", "pm-"]},
+ "agents/system": {"level": "system", "keywords": []},
+ "agents/trading/prediction-market": {"level": "domain", "keywords": ["polymarket", "pm-"]},
 }
 def agent_for(n):
-    return AGENT_INFO.get(n["num"] or "")
+    return AGENT_INFO.get(n["id"])
 
 def custom_tabs_for(n):
-    num, name = n["num"] or "", n["name"]
-    if num in CAPS:
-        return [table("capabilities", "Capabilities", CAP_COLUMNS, CAPS[num],
+    key, name = n["id"], n["name"]
+    if key in CAPS:
+        return [table("capabilities", "Capabilities", CAP_COLUMNS, CAPS[key],
             "What this agent can do and should do. Add a row for anything new; saving it also updates related files.")]
-    if num == "47.1.1":
+    if key == ".secrets/test/.env":
         return [table("variables", "Variables", ENV_COLUMNS, ENV_ROWS,
-            "The variables test/.env must have. Values are never stored on this page: fill them in the local file (or later in the trading UI [45]). A script can write .env.example from this table.")]
-    if num == "47.2.1":
-        return [table("variables", "Variables", ENV_COLUMNS, env_rows("47.2.1"),
+            "The variables test/.env must have. Values are never stored on this page: fill them in the local file (or later in the trading UI). A script can write .env.example from this table.")]
+    if key == ".secrets/live/.env":
+        return [table("variables", "Variables", ENV_COLUMNS, env_rows(".secrets/live/.env"),
             "Same names as test/.env with live values, owner only (D-027). Names only here, never values.")]
     if name == "tests.config.json":
         kind = "agents" if "/agents/" in n["path"] else "scripts"
@@ -338,15 +338,15 @@ def custom_tabs_for(n):
             {"key": "last_result", "label": "Last result", "kind": "select", "options": ["never", "success", "fail", "error", "skipped"]},
             {"key": "next_action", "label": "Next action", "kind": "text"}], rows,
             "Example rows. When the agent exists, run-tests fills Last result.")]
-    if num in JOBS:
-        t = table("jobs", "Jobs", JOB_COLUMNS, JOBS[num],
+    if key in JOBS:
+        t = table("jobs", "Jobs", JOB_COLUMNS, JOBS[key],
             "Every job this agent runs. Turn one off with On, change When, Where, Platform or Model in the row, and open Details for the prompt, workspace, tools and limits. Saving updates the file.")
         t["layout"] = "jobs"
         return [t]
-    if num in LINKS:
-        return [table("links", "Links", LINK_COLUMNS, LINKS[num],
+    if key in LINKS:
+        return [table("links", "Links", LINK_COLUMNS, LINKS[key],
             "Every file this agent links, where it appears and where it comes from: the system, its own domain or strategy, another domain, or any agent by name. Saving updates the links file; relink then builds the links. Child links (subagents.link/) are built from the folder tree and not listed.")]
-    if num == "11.11":
+    if key == "agents/system/configs/models.config.json":
         return [table("routes", "Routes", [
             {"key": "who", "label": "Agent / sub-agent / worker", "kind": "text"},
             {"key": "model", "label": "Model", "kind": "select", "options": ["fable-5.1", "opus-5.5", "sonnet-5.5", "haiku-4.5", "composer-2.5"]},
@@ -395,14 +395,14 @@ def job(id, purpose, type, run, schedule, run_on="local", platform=None, model="
     if not r["notify"]: r["notify"] = "failure"
     if not r["concurrency"]: r["concurrency"] = "skip"
     return r
-JOB_FILES = {  # num -> (agent name, workspace)
- "11.10": ("system", "agents/system"),
- "19.2.1": ("prediction-market-agents", "agents/trading/prediction-market"),
- "21.2.1": ("strategy-1-agent", "agents/trading/prediction-market/strategy-1-agent"),
- "27.4": ("pm-strategy-1.momentum-v1.opus55-test", "agents/trading/prediction-market/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test"),
+JOB_FILES = {  # key -> (agent name, workspace)
+ "agents/system/configs/system.workers.json": ("system", "agents/system"),
+ "agents/trading/prediction-market/configs/prediction-market-agents.workers.json": ("prediction-market-agents", "agents/trading/prediction-market"),
+ "agents/trading/prediction-market/strategy-1-agent/configs/strategy-1-agent.workers.json": ("strategy-1-agent", "agents/trading/prediction-market/strategy-1-agent"),
+ "agents/trading/prediction-market/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/configs/pm-strategy-1.momentum-v1.opus55-test.workers.json": ("pm-strategy-1.momentum-v1.opus55-test", "agents/trading/prediction-market/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test"),
 }
 JOBS = {
- "11.10": [
+ "agents/system/configs/system.workers.json": [
   job("relink", "Rebuild links when any links file changes, plus one full run a day", "script", "node scripts/system/relink.system.js --changed", "cron 0 4 * * *",
       on_change="agents/**/configs/*.links.json", concurrency="queue", timeout="5m"),
   job("check-links", "Find broken, missing or upward links and any link into .secrets", "script", "node scripts/system/check-links.system.js", "cron 0 * * * *", timeout="5m"),
@@ -421,7 +421,7 @@ JOBS = {
   job("scripts-review", "Weekly review of shared scripts by a second platform", "command", "/review-scripts", "cron 0 9 * * 5", run_on="cloud", platform="codex",
       enabled=False, prompt="Review scripts/ for bugs and risky code. Report only; change nothing.", permission_mode="plan", max_turns="20", timeout="30m", notify="always"),
  ],
- "19.2.1": [
+ "agents/trading/prediction-market/configs/prediction-market-agents.workers.json": [
   job("domain-session", "Check domain health, strategies and owner comments", "agent", "", "every 4h", effort="high", prompt="@docs/prompts/domain-session.md",
       allowed_tools="Read, Grep, Glob, Bash(node scripts/*), Write(data/**), Write(docs/**)", permission_mode="acceptEdits", max_turns="40", max_cost_usd="2", timeout="30m"),
   job("markets-catalog", "Catalogue of Polymarket markets the domain cares about", "script", "python scripts/markets-catalog.worker.py", "every 1h",
@@ -434,7 +434,7 @@ JOBS = {
       timezone="America/New_York", model="sonnet-5.5", effort="medium", prompt="Check every open position on US election markets and report which resolve tonight and the risk on each.",
       max_turns="20", max_cost_usd="1", notify="always"),
  ],
- "21.2.1": [
+ "agents/trading/prediction-market/strategy-1-agent/configs/strategy-1-agent.workers.json": [
   job("strategy-session", "Compare today's variants and write the daily summary", "agent", "", "cron 0 23 * * *", effort="high", prompt="@docs/prompts/strategy-session.md",
       permission_mode="acceptEdits", max_turns="30", max_cost_usd="2", timeout="30m"),
   job("compare-variants", "Side-by-side report of every variant's results", "workflow", "compare-variants", "after strategy-session", model="sonnet-5.5", effort="medium",
@@ -443,7 +443,7 @@ JOBS = {
       model="opus-5.5", effort="xhigh", prompt="@docs/prompts/strategy-si.md", allowed_tools="Read, Grep, Glob, Bash(node ../../../system/scripts/system/create-agent.system.js *)",
       permission_mode="acceptEdits", max_turns="60", max_cost_usd="5", timeout="90m"),
  ],
- "27.4": [
+ "agents/trading/prediction-market/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/configs/pm-strategy-1.momentum-v1.opus55-test.workers.json": [
   job("main-run", "Trade on 24h momentum (test mode)", "agent", "", "every 15m", model="opus-5.5", effort="high", prompt="@docs/prompts/main-run.md",
       allowed_tools="Read, Bash(node scripts/*), Bash(python scripts/*), Write(data/**)", permission_mode="acceptEdits", max_turns="30", max_cost_usd="1",
       on_change="data/polymarket-prices.link.json", concurrency="restart", timeout="10m", secret_keys="POLYMARKET_ACCT1_*"),
@@ -455,7 +455,7 @@ JOBS = {
  ],
 }
 # The owner turned every system job off on the page (2026-10-09, in-20261009-1040): they stay in the file and never run until turned on.
-for _r in JOBS["11.10"]:
+for _r in JOBS["agents/system/configs/system.workers.json"]:
     _r["enabled"] = False
 LIST_KEYS = ("allowed_tools", "on_change", "outputs", "secret_keys")
 NUM_KEYS = ("max_turns", "retries", "max_cost_usd")
@@ -471,11 +471,11 @@ def job_json(r, defaults):
         o[k] = v
     if "enabled" not in o: o = {"enabled": r.get("enabled", False), **o}
     return o
-def jobs_example(num):
+def jobs_example(key):
     import json
-    agent, ws = JOB_FILES[num]
+    agent, ws = JOB_FILES[key]
     defaults = {"timezone": "UTC", "run_on": "local", "workspace": ws, "mode": "test", "notify": "failure", "concurrency": "skip", "permission_mode": "default"}
-    doc = {"schema_version": 1, "agent": agent, "defaults": defaults, "jobs": [job_json(r, defaults) for r in JOBS[num]]}
+    doc = {"schema_version": 1, "agent": agent, "defaults": defaults, "jobs": [job_json(r, defaults) for r in JOBS[key]]}
     return {"lang": "json", "title": "Example: " + agent + ".workers.json (built from the Jobs tab rows)", "body": json.dumps(doc, indent=2, ensure_ascii=False),
             "note": "Values that match defaults are left out of each job. Runtime state (last run, result, next run) is not in this file: the scheduler keeps it in data/system/scheduler-state.json."}
 
@@ -493,24 +493,24 @@ def link(to, frm, why, required=True, added_by="create-agent", enabled=True):
 RELINK = link("scripts/relink.system.link.js", "@system/scripts/system/relink.system.js", "rerun after editing this file")
 TEST_RUNNERS = [link("tests/agents/run-tests.system.link.js", "@system/scripts/system/run-tests.system.js", "run the agent tests next to their config"),
                 link("tests/scripts/run-tests.system.link.js", "@system/scripts/system/run-tests.system.js", "run the script tests next to their config")]
-LINK_FILES = {"11.13": "system", "19.2.3": "prediction-market-agents", "21.2.3": "strategy-1-agent", "27.3": "pm-strategy-1.momentum-v1.opus55-test"}
+LINK_FILES = {"agents/system/configs/system.links.json": "system", "agents/trading/prediction-market/configs/prediction-market-agents.links.json": "prediction-market-agents", "agents/trading/prediction-market/strategy-1-agent/configs/strategy-1-agent.links.json": "strategy-1-agent", "agents/trading/prediction-market/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/configs/pm-strategy-1.momentum-v1.opus55-test.links.json": "pm-strategy-1.momentum-v1.opus55-test"}
 LINKS = {
- "11.13": [
+ "agents/system/configs/system.links.json": [
   *TEST_RUNNERS,
  ],
- "19.2.3": [
+ "agents/trading/prediction-market/configs/prediction-market-agents.links.json": [
   link("data/news-digest.link.md", "@system/data/subagents/news-digest/latest.md", "news for the domain session", required=False),
   link("docs/safety.link.md", "@system/docs/safety.md", "hard limits every domain follows"),
   *TEST_RUNNERS,
   RELINK,
  ],
- "21.2.3": [
+ "agents/trading/prediction-market/strategy-1-agent/configs/strategy-1-agent.links.json": [
   link("data/markets-catalog.link.json", "@domain/data/markets-catalog/latest.json", "compare variants market by market"),
   link("docs/trading-metrics.link.md", "@domain/docs/trading-metrics.md", "how variants are compared and promoted"),
   *TEST_RUNNERS,
   RELINK,
  ],
- "27.3": [
+ "agents/trading/prediction-market/strategy-1-agent/pm-strategy-1.momentum-v1.opus55-test/configs/pm-strategy-1.momentum-v1.opus55-test.links.json": [
   link("configs/system.config.link.json", "@system/configs/system.config.json", "global modes, the stop switch, triggers"),
   link("configs/prediction-market-agents.config.link.json", "@domain/configs/prediction-market-agents.config.json", "its domain's risk limits, accounts and venues"),
   link("configs/models.config.link.json", "@system/configs/models.config.json", "its model route"),
@@ -529,10 +529,10 @@ LINKS = {
   link("docs/trading-agent-architecture.link.md", "@domain/docs/common/trading-agent-architecture.md", "how a trading agent runs"),
  ],
 }
-def links_example(num):
+def links_example(key):
     import json
-    agent = LINK_FILES[num]
+    agent = LINK_FILES[key]
     doc = {"schema_version": 1, "agent": agent,
-           "links": [dict(r, added="2026-10-02" if r["added_by"] not in ("create-agent", "owner") else "2026-09-29") for r in LINKS[num]]}
+           "links": [dict(r, added="2026-10-02" if r["added_by"] not in ("create-agent", "owner") else "2026-09-29") for r in LINKS[key]]}
     return {"lang": "json", "title": "Example: " + agent + ".links.json (built from the Links tab rows)", "body": json.dumps(doc, indent=2, ensure_ascii=False),
             "note": "relink turns every enabled entry into a relative symlink at `to`. @domain and @strategy are this agent's own; @[name] finds any domain or agent by its unique name. Child links (subagents.link/) are not listed."}

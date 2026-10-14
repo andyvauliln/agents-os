@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/docs/vision.md
-node: n-53.4.1
-basis: e4dc9579e41c
+basis: eed5a53f0807
 written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # vision.md
 

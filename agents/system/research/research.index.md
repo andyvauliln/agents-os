@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/research/
-node: n-10.9
-basis: 31ea29f99440
+basis: 716989d020ab
 written: 2026-10-07T19:01:11Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T12:41:47Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # research/
 
@@ -15,4 +14,4 @@ The system's research history: what was asked about the system itself, what was 
 ## Keep in mind
 
 - When you start research, read `index.json` first so you do not repeat work.
-- When your research leads to an owner decision, also record it in the decision log [2.6].
+- When your research leads to an owner decision, also record it in the decision log.

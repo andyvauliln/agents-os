@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/server/voice.py
-node: n-53.3.5
-basis: 88848f43be9f
+basis: 437deb7f2846
 written: 2026-10-14T12:00:00Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # voice.py
 

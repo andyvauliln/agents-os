@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-feature-map.md
-node: n-19.6.14
-basis: 2b7fd927300d
+basis: a5f03658c154
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-feature-map.md
 

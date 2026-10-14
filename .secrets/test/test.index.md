@@ -1,10 +1,9 @@
 ---
 about: agent-os/.secrets/test/
-node: n-47.1
-basis: 522991459bf9
+basis: fc2a99c201bc
 written: 2026-09-30T20:11:26Z
 by: knowledge-agent
-confirmed: 2026-10-07T14:22:08Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # test/
 

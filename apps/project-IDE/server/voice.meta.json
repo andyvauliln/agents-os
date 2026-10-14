@@ -13,7 +13,7 @@
   "readers": [
     "apps/project-IDE/server/server.py"
   ],
-  "changes_when": "A Groq model is retired or added, or the voice flow changes; until the move out of vision/, the build copies it here from its planning source.",
+  "changes_when": "A Groq model is retired or added, or the voice flow changes.",
   "related": [
     {
       "path": "apps/project-IDE/server/server.py",

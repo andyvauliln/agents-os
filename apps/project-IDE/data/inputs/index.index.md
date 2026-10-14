@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/inputs/index.json
-node: n-2.10.2
-basis: 05056c88d286
+basis: 5245735d9611
 written: 2026-10-01T00:54:39Z
 by: summary-worker
-confirmed: 2026-10-07T14:22:08Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # index.json
 

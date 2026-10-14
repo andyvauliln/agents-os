@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/
-node: n-19
-basis: adaed12fa917
+basis: 303dd5357c28
 written: 2026-10-14T08:00:17Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T08:00:17Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # prediction-market/
 

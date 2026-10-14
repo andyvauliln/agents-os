@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/inputs/YYYY-MM-DD-HHMM-[topic].md
-node: n-2.10.1
-basis: 8c11d10c098c
+basis: 674b4c90b427
 written: 2026-10-01T00:54:39Z
 by: summary-worker
-confirmed: 2026-10-05T15:38:31Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # YYYY-MM-DD-HHMM-[topic].md
 

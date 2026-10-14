@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/trading/researches/self-improving-agents/
-node: n-54.2
-basis: 69977f2d15cc
+basis: 7c3c8f012be6
 written: 2026-10-09T12:40:34Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T15:06:20Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # self-improving-agents/
 

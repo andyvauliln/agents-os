@@ -1,10 +1,9 @@
 ---
 about: agent-os/.secrets/live/
-node: n-47.2
-basis: e75df462e284
+basis: 202d9e05e36a
 written: 2026-09-30T20:11:26Z
 by: knowledge-agent
-confirmed: 2026-10-07T14:22:08Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # live/
 

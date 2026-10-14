@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "about": "Checks that the page tree equals the files in git, with each item's path as its id; prints \"tree ok\".",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the owner",
+    "project-ide-agent"
+  ],
+  "readers": [
+    "ide-build",
+    "project-ide-agent"
+  ],
+  "changes_when": "The rule for which items the page lists changes.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/index_files.py",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/current-ui/file-tree.data.json",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-041",
+      "D-070"
+    ],
+    "inputs": [
+      "in-20261013-leave-vision",
+      "in-20261014-1241"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
+      "how": "if how it is run or what it does changes"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the script table in 'How the page is built and checked'"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked",
+    "agents/system/.claude/skills/ide-build/scripts/README.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

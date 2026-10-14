@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/logs/system/
-node: n-15.1
-basis: 9fdc5f1bcdf5
+basis: 981c7ce4dc3d
 written: 2026-10-01T00:58:18Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # system/
 

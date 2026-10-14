@@ -1,10 +1,9 @@
 ---
 about: agent-os/docs/vision.md
-node: n-57.1
-basis: a06257745242
+basis: 31f242e105c5
 written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # vision.md
 

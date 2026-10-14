@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/server/README.md
-node: n-53.3.1
-basis: 6bcd40d2bb67
+basis: 52ce4f35e529
 written: 2026-10-05T15:37:34Z
 by: knowledge-base-agent
-confirmed: 2026-10-06T10:52:16Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # README.md
 

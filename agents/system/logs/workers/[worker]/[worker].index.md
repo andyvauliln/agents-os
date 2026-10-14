@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/logs/workers/[worker]/
-node: n-15.3
-basis: 99f5b0a72f92
+basis: 981c7ce4dc3d
 written: 2026-10-01T00:58:18Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # workers/[worker]/
 

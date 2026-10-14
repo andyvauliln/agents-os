@@ -1,19 +1,19 @@
-"""How it works and metadata of every file and folder, one file each (owner, 2026-10-05; names 2026-10-07, D-057).
+"""The items of the tree and their metadata files, read from the repository on disk (docs/metadata.md).
+
+An item is a file that git keeps (`git ls-files --cached --others --exclude-standard`), a folder that holds one,
+or a local keys file (`.env`) that is on disk. Its id is its path from the top of the repository; the top itself
+is `agent-os`. The old planning folder (SKIP) is left out.
 
 A file's metadata files are named after it without its last extension and sit next to it: `vision.md` has
-`vision.index.md` (How it works) and `vision.meta.json` (metadata). A folder `f/` has `f/f.index.md` and
-`f/f.meta.json` inside it. A name with no extension stays whole (`.gitignore.index.md`). Where two files in one
-folder, or a file and its folder, would share a name (`server/server.py` and `server/`), the file keeps its
-extension (`server.py.index.md`). While we plan, the real files do not exist yet, so these files sit in a mirror
-of the planned tree: vision/tree/agent-os/... Files and folders that already exist as drafts in this folder
-(DRAFTS, DRAFT_DIRS: the people docs, the agents, the skills) keep theirs next to the draft, e.g.
-vision/.claude/docs/README.index.md. When the repo is built they all move next to the real files.
+`vision.index.md` (How it works) and `vision.meta.json` (Details). A folder `f/` has `f/f.index.md` and
+`f/f.meta.json` inside it; the top has `agent-os.index.md`. A name with no extension stays whole
+(`.gitignore.index.md`). Where two files in one folder, or a file and its folder, would share a name
+(`server/server.py` and `server/`), the file keeps its extension (`server.py.index.md`).
 
-Each index file:
+Each How it works file:
 
     ---
     about: agent-os/agents/system/docs/README.md     # what it describes
-    node: n-2.1                                       # its node on the File Tree page
     basis: 1a2b3c4d5e6f                               # hash of what it was written from (build_map.py)
     written: 2026-10-05T07:31:00Z
     by: knowledge-base-agent
@@ -21,46 +21,55 @@ Each index file:
     ---
     # README.md
 
-    ## What it is            (fixed headings, D-036) ... or ## Summary for files not moved yet
+    ## What it is            (the fixed headings of docs/metadata.md section 5)
     ...
     ## Keep in mind
     - When you ..., ...
 
-Each metadata file is JSON with the fields of the file-set plan (vision/plans/file-set.md), empty for now.
-
-build_map.py reads and writes the index files through load_all() and save(); enrich.py reads the metadata files.
+build_map.py, enrich.py and materialize.py read the items and their metadata files through this module.
 """
-import os, re
+import json, os, re, subprocess
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VISION = os.path.dirname(HERE)
-TREE = os.path.join(VISION, "tree")
 ROOT = "agent-os"
+SKIP = ("vision",)   # the old planning area is not part of the tree
 FIXED = ["What it is", "Who looks after it", "When and how it changes", "Who uses it, and when", "Where it is mentioned", "Related knowledge"]
 KEEP = "Keep in mind"
-META_KEYS = ["about", "node", "basis", "written", "by", "confirmed"]
-# nodes whose draft already exists in vision/ (by [n]): their index file sits next to the draft, not in the mirror
-DRAFTS = {"10.1.1.2": ".claude/agents/knowledge-base-agent.md",
-          "10.1.1.3": ".claude/agents/project-ide-agent.md",
-          "10.1.2.5.1": ".claude/skills/ide-build/SKILL.md",
-          "10.1.2.6": ".claude/skills/ide-sync/SKILL.md",
-          "10.1.2.1": ".claude/skills/knowledge-intake/SKILL.md",
-          "10.1.2.2": ".claude/skills/file-index/SKILL.md",
-          "10.1.2.3": ".claude/skills/vision-doc/SKILL.md",
-          "10.1.2.4": ".claude/skills/readme-doc/SKILL.md",
-          "10.1.2.7": ".claude/skills/rebuild-prompt-doc/SKILL.md",
-          "10.1.2.8": ".claude/skills/change-plan/SKILL.md",
-          "10.1.2.9": ".claude/skills/readme-asd-doc/SKILL.md",
-          "10.1.2.10": ".claude/skills/claude-md-doc/SKILL.md"}
-DRAFT_DIRS = {"10.1": ".claude/", "10.1.1": ".claude/agents/", "10.1.2": ".claude/skills/",
-              "10.1.2.5": ".claude/skills/ide-build/"}
+META_KEYS = ["about", "basis", "written", "by", "confirmed"]
+# metadata and tab files have no metadata files of their own (docs/metadata.md section 3, rule 4)
+META_ENDS = (".index.md", ".meta.json", ".example.md", ".questions.md", ".view.html", ".gitkeep", ".env.example")
+STAGE_TWO = "agents/trading/prediction-market/"   # stage two (owner, 2026-10-12): nothing is made inside ...
+PM_DOCS = STAGE_TWO + "docs"                      # ... except its docs, which have metadata like any item (owner, 2026-10-14)
 
 
-def _safe(seg):
-    return re.sub(r",\s*", "+", seg.replace("|", "-"))
+def repo_dir():
+    """The top of the repository: REPO_DIR, else the git checkout these scripts sit in."""
+    if os.environ.get("REPO_DIR"):
+        return os.path.realpath(os.environ["REPO_DIR"])
+    try:
+        return subprocess.run(["git", "-C", HERE, "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return os.path.realpath(os.path.join(HERE, *[".."] * 5))
 
 
-CLASH = set()   # ids of files that keep their extension: another family in the same folder has the same name
+REPO = repo_dir()
+
+
+def is_meta_file(name):
+    return name.rstrip("/").endswith(META_ENDS)
+
+
+def stage_two(rel):
+    rel = rel.rstrip("/")
+    return rel.startswith(STAGE_TWO) and not (rel == PM_DOCS or rel.startswith(PM_DOCS + "/"))
+
+
+def git_files(repo=None):
+    """Every path git keeps or would keep (tracked, or untracked and not ignored), without the old planning folder."""
+    repo = repo or REPO
+    out = subprocess.run(["git", "-c", "core.quotepath=off", "-C", repo, "ls-files", "--cached", "--others", "--exclude-standard"],
+                         capture_output=True, text=True, check=True).stdout.split("\n")
+    return sorted({f for f in out if f and f.split("/")[0] not in SKIP and os.path.lexists(os.path.join(repo, f))})
 
 
 def family(name, keep_ext=False):
@@ -72,85 +81,127 @@ def family(name, keep_ext=False):
     return base if base and ext else nm
 
 
-def prepare(nodes):
-    """Find the files whose family name is shared in their folder (with a sibling or with the folder itself)."""
-    groups = {}
-    for n in nodes:
-        name = n.get("name") or ""
-        if n.get("type") == "folder":
-            groups.setdefault((n["id"], _safe(name.rstrip("/"))), []).append(None)
-        elif n.get("parent") and not name.endswith(".index.md"):
-            groups.setdefault((n["parent"], family(_safe(name))), []).append(n["id"])
-    CLASH.clear()
-    for ids in groups.values():
-        if len(ids) > 1:
-            CLASH.update(i for i in ids if i)
+def load_items(repo=None):
+    """-> list of items, the top first, every folder before what is inside it.
+    An item: {id, rel, name, type, parent, children, link}. `rel` is the path from the top ("" for the top)."""
+    repo = repo or REPO
+    files = git_files(repo)
+    # a keys file is never in git; it is on the machine only and is listed, never read (docs/metadata.md section 14)
+    folders = {""}
+    for f in files:
+        parts = f.split("/")
+        for i in range(1, len(parts)):
+            folders.add("/".join(parts[:i]))
+    envs = sorted(os.path.join(d, ".env") if d else ".env" for d in folders if os.path.isfile(os.path.join(repo, d, ".env")))
+    paths = set(files) | set(envs)
+    items = {"": {"id": ROOT, "rel": "", "name": ROOT + "/", "type": "folder", "parent": None, "children": [], "link": False}}
+    for d in sorted(folders - {""}):
+        items[d] = {"id": d, "rel": d, "name": os.path.basename(d) + "/", "type": "folder", "parent": None, "children": [], "link": False}
+    for f in sorted(paths):
+        full = os.path.join(repo, f)
+        isdir = os.path.isdir(full) and not os.path.islink(full)
+        items[f] = {"id": f, "rel": f, "name": os.path.basename(f) + ("/" if isdir else ""), "type": "folder" if isdir else "file",
+                    "parent": None, "children": [], "link": os.path.islink(full)}
+    for rel, it in items.items():
+        if rel:
+            par = os.path.dirname(rel)
+            it["parent"] = items[par]["id"]
+            items[par]["children"].append(rel)
+    for it in items.values():
+        it["children"] = order_children(it, [items[c] for c in it["children"]])
+    for it in items.values():
+        if it["type"] == "file":
+            it["fam"] = file_family(it, items)
+        else:
+            it["fam"] = family(it["name"]) if it["rel"] else ROOT
+    out, st = [], [""]
+    while st:
+        r = st.pop()
+        out.append(items[r])
+        st += [items_rel(c) for c in reversed(items[r]["children"])]
+    return out
 
 
-def family_rel(node, ending):
-    """Path of one of the node's metadata files (ending ".index.md" or ".meta.json"), relative to vision/tree/."""
-    p = node.get("path") or ROOT + "/"
-    segs = [_safe(s) for s in p.rstrip("/").split("/") if s]
-    if node.get("type") == "folder":
-        return "/".join(segs + [segs[-1] + ending])
-    if segs[-1].endswith(".index.md"):  # an index file has none of its own; (the retired pattern node [51] was its own example)
-        return "/".join(segs)
-    return "/".join(segs[:-1] + [family(segs[-1], node.get("id") in CLASH) + ending])
+def items_rel(item_id):
+    return "" if item_id == ROOT else item_id
 
 
-def index_rel(node):
-    return family_rel(node, ".index.md")
+def file_family(it, items):
+    """A file's family name; it keeps its extension when a sibling file or its folder has the same family."""
+    par = items[os.path.dirname(it["rel"])]
+    own = family(it["name"])
+    if par["rel"] and family(par["name"]) == own:
+        return it["name"]
+    same = [c for c in par["children"] if c != it["rel"] and items[c]["type"] == "file" and not is_meta_file(items[c]["name"])
+            and family(items[c]["name"]) == own]
+    if same and not is_meta_file(it["name"]):
+        return it["name"]
+    return own
 
 
-def family_path(node, ending):
-    num = node.get("num") or ""
-    if num in DRAFTS:
-        d, b = os.path.split(DRAFTS[num])
-        return os.path.join(VISION, d, family(b, node.get("id") in CLASH) + ending)
-    if num in DRAFT_DIRS:
-        d = DRAFT_DIRS[num].rstrip("/")
-        return os.path.join(VISION, d, os.path.basename(d) + ending)
-    return os.path.join(TREE, family_rel(node, ending))
+def order_children(folder, kids):
+    """The folder's own metadata files first, then its folders, then each file followed by its own metadata files."""
+    fam_folder = family(folder["name"]) if folder["rel"] else ROOT
+    own_meta = [k for k in kids if k["type"] == "file" and is_meta_file(k["name"]) and _meta_owner(k["name"]) == fam_folder]
+    rest = [k for k in kids if k not in own_meta]
+    sub = sorted((k for k in rest if k["type"] == "folder"), key=lambda k: k["name"].lower())
+    files = [k for k in rest if k["type"] == "file"]
+    plain = sorted((k for k in files if not is_meta_file(k["name"])), key=lambda k: k["name"].lower())
+    metas = [k for k in files if is_meta_file(k["name"])]
+    out, used = [], set()
+    for f in plain:
+        out.append(f)
+        fams = {f["name"], family(f["name"])}
+        for m in sorted(metas, key=lambda k: k["name"].lower()):
+            if m["rel"] not in used and (_meta_owner(m["name"]) in fams or (f["name"] == ".env" and m["name"] == ".env.example")):
+                out.append(m); used.add(m["rel"])
+    out += [m for m in sorted(metas, key=lambda k: k["name"].lower()) if m["rel"] not in used]
+    order = sorted(own_meta, key=lambda k: k["name"].lower()) + sub + out
+    return [k["id"] for k in order]
 
 
-def index_path(node):
-    return family_path(node, ".index.md")
+def _meta_owner(name):
+    for end in (".index.md", ".meta.json", ".example.md", ".questions.md"):
+        if name.endswith(end):
+            return name[:-len(end)]
+    return None
 
 
-def meta_path(node):
-    return family_path(node, ".meta.json")
+def meta_home(item):
+    """The folder an item's metadata files sit in: inside a folder, beside a file (relative to the top)."""
+    return item["rel"] if item["type"] == "folder" else os.path.dirname(item["rel"])
 
 
-def index_file(node):
-    """Where the node's index file is, relative to vision/ (shown on the page)."""
-    return os.path.relpath(index_path(node), VISION)
+def family_rel(item, ending):
+    home = meta_home(item)
+    name = item["fam"] + ending
+    return os.path.join(home, name) if home else name
 
 
-def meta_file(node):
-    return os.path.relpath(meta_path(node), VISION)
+def index_file(item):
+    return family_rel(item, ".index.md")
 
 
-META_FIELDS = {"schema_version": 1, "about": "", "kind": "", "state": "", "status": "", "git": "", "secret": None,
-               "generated_by": None, "writers": [], "readers": [], "changes_when": "", "related": [],
-               "sources": {"decisions": [], "inputs": [], "notes": []}, "update_with": [], "inherits": [],
-               "features": [], "views": [], "how_it_works": {}}
+def meta_file(item):
+    return family_rel(item, ".meta.json")
 
 
-def ensure_meta(nodes):
-    """Write an empty metadata file for every node that has none (owner, 2026-10-07: empty for now)."""
-    import json
-    made = []
-    for n in nodes:
-        if (n.get("name") or "").endswith(".index.md"):
-            continue
-        f = meta_path(n)
-        if not os.path.isfile(f):
-            os.makedirs(os.path.dirname(f), exist_ok=True)
-            with open(f, "w", encoding="utf-8") as fh:
-                json.dump(META_FIELDS, fh, indent=2)
-                fh.write("\n")
-            made.append(f)
-    return made
+def index_path(item):
+    return os.path.join(REPO, index_file(item))
+
+
+def meta_path(item):
+    return os.path.join(REPO, meta_file(item))
+
+
+def has_meta(item):
+    """Whether the item has (or must have) its How it works and Details files: every item but a metadata file,
+    outside stage two; in stage two only where they already exist."""
+    if item["type"] == "file" and is_meta_file(item["name"]):
+        return False
+    if stage_two(item["rel"]):
+        return os.path.isfile(index_path(item))
+    return True
 
 
 def split_front(text):
@@ -185,12 +236,12 @@ def parse_body(body):
     return {"text": plain, "sections": [], "keep": keep}
 
 
-def title_of(node):
-    return node.get("name") or ROOT + "/"
+def title_of(item):
+    return item["name"]
 
 
-def make_body(node, rec):
-    out = [f"# {title_of(node)}", ""]
+def make_body(item, rec):
+    out = [f"# {title_of(item)}", ""]
     secs = rec.get("sections") or []
     if secs:
         for s in secs:
@@ -203,48 +254,58 @@ def make_body(node, rec):
     return "\n".join(out).rstrip() + "\n"
 
 
-def load(node):
-    f = index_path(node)
+def load(item):
+    """The item's How it works file as a record, or None when it has none."""
+    f = index_path(item)
     if not os.path.isfile(f):
         return None
     text = open(f, encoding="utf-8").read()
     meta, body = split_front(text)
     rec = parse_body(body)
-    rec.update({"basis": meta.get("basis", ""), "at": meta.get("written", ""), "by": meta.get("by", ""), "body": body, "file": index_file(node)})
+    rec.update({"basis": meta.get("basis", ""), "at": meta.get("written", ""), "by": meta.get("by", ""), "body": body,
+                "file": index_file(item), "front": bool(meta)})
     if meta.get("confirmed"):
         rec["confirmed"] = meta["confirmed"]
     return rec
 
 
-def load_all(nodes):
-    prepare(nodes)
-    out = {}
-    for n in nodes:
-        r = load(n)
-        if r is not None:
-            out[n["id"]] = r
-    return out
+def load_all(items):
+    return {it["id"]: r for it in items if has_meta(it) for r in [load(it)] if r is not None}
 
 
-def save(node, rec, body=None):
-    """Write the node's index file. body=None renders it from rec (text, sections, keep)."""
-    f = index_path(node)
+def about(item):
+    return ROOT + "/" + item["rel"] + ("/" if item["type"] == "folder" and item["rel"] else "")
+
+
+def save(item, rec, body=None):
+    """Write the item's How it works file. body=None renders it from rec (text, sections, keep)."""
+    f = index_path(item)
     os.makedirs(os.path.dirname(f), exist_ok=True)
-    meta = {"about": node.get("path") or ROOT + "/", "node": node["id"], "basis": rec.get("basis", ""),
-            "written": rec.get("at", ""), "by": rec.get("by", ""), "confirmed": rec.get("confirmed", "")}
+    meta = {"about": about(item), "basis": rec.get("basis", ""), "written": rec.get("at", ""), "by": rec.get("by", ""),
+            "confirmed": rec.get("confirmed", "")}
     front = "---\n" + "".join(f"{k}: {meta[k]}\n" for k in META_KEYS if meta.get(k)) + "---\n"
-    text = front + (body if body is not None else make_body(node, rec))
+    text = front + (body if body is not None else make_body(item, rec))
     tmp = f + ".tmp"
-    open(tmp, "w", encoding="utf-8").write(text)
+    with open(tmp, "w", encoding="utf-8") as fh:
+        fh.write(text)
     os.replace(tmp, f)
     return f
 
 
-def orphans(nodes):
-    """Index files under tree/ whose object is gone (renamed or removed): archive them."""
-    prepare(nodes)
-    want = {os.path.normpath(p(n)) for n in nodes for p in (index_path, meta_path)}
-    out = []
-    for d, _, fs in os.walk(TREE):
-        out += [os.path.relpath(os.path.join(d, f), TREE) for f in fs if f.endswith((".index.md", ".meta.json")) and os.path.normpath(os.path.join(d, f)) not in want]
-    return sorted(out)
+def load_meta(item):
+    try:
+        return json.load(open(meta_path(item), encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
+def orphans(items):
+    """How it works and Details files whose item is gone (renamed or removed): remove them or archive them."""
+    want = {p(it) for it in items if has_meta(it) for p in (index_file, meta_file)}
+    return sorted(it["rel"] for it in items if it["type"] == "file" and it["name"].endswith((".index.md", ".meta.json"))
+                  and it["rel"] not in want)
+
+
+def missing(items):
+    """Items that must have metadata files and lack one: -> [(item, path)]."""
+    return [(it, p(it)) for it in items if has_meta(it) for p in (index_file, meta_file) if not os.path.isfile(os.path.join(REPO, p(it)))]

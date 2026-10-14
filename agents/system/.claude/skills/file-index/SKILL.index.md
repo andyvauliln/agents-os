@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/file-index/SKILL.md
-node: n-10.1.2.2
-basis: c163f8888df3
+basis: 638f0c05fa4d
 written: 2026-10-07T09:33:39Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # file-index/SKILL.md
 

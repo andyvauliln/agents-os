@@ -14,7 +14,7 @@
     "the owner",
     "project-ide-agent"
   ],
-  "changes_when": "The owner asks for a change to the server page; until the move out of vision/, the build copies its files here from their planning sources.",
+  "changes_when": "The owner asks for a change to the server page.",
   "related": [
     {
       "path": "apps/project-IDE/server/README.md",

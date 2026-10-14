@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/readme-asd-doc/SKILL.md
-node: n-10.1.2.9
-basis: 75d84fa39827
+basis: 8ac7d61d2e87
 written: 2026-10-12T16:00:00Z
 by: project-ide-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # readme-asd-doc/SKILL.md
 

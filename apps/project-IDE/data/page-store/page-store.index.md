@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/page-store/
-node: n-53.2.7
-basis: f0ca5b844679
+basis: 981c7ce4dc3d
 written: 2026-10-05T15:37:34Z
 by: knowledge-base-agent
-confirmed: 2026-10-06T10:52:16Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # page-store/
 

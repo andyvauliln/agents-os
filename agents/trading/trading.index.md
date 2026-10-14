@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/trading/
-node: n-56
-basis: 7a4d1fb2498e
+basis: b6acccba8273
 written: 2026-10-09T09:55:29Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T08:00:22Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading/
 

@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/subagents.link/
-node: n-19.6.1
-basis: 91322ce34fb6
+basis: 28685df8eabb
 written: 2026-10-01T00:56:32Z
 by: summary-worker
-confirmed: 2026-10-09T10:03:12Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # subagents.link/
 

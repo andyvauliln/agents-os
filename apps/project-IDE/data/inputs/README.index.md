@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/inputs/README.md
-node: n-2.10.3
-basis: c905fd27c480
+basis: 83ce66a25ddc
 written: 2026-10-01T00:54:39Z
 by: summary-worker
-confirmed: 2026-10-07T09:34:43Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # README.md
 

@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/trading/researches/prediction-market-research/
-node: n-54.1
-basis: 8c6585d2b919
+basis: b448cf6be9ad
 written: 2026-10-09T12:40:34Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T15:06:20Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # prediction-market-research/
 

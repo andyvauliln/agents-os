@@ -1,8 +1,9 @@
 ---
 about: agent-os/HANDOFF.md
-node: r-HANDOFF.md
+basis: 8f533ef841ce
 written: 2026-10-14T12:00:00Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # HANDOFF.md
 

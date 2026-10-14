@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/tests/agents/
-node: n-10.8.1
-basis: a1ba8b808afc
+basis: 4ad153594f20
 written: 2026-10-14T12:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T10:21:35Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # agents/
 

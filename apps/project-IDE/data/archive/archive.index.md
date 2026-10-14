@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/archive/
-node: n-53.2.6
-basis: b452955e797a
+basis: 4436e9b6a325
 written: 2026-10-05T13:25:49Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # archive/
 

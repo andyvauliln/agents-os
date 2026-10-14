@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-flows.md
-node: n-19.6.10
-basis: 0815dd024e5a
+basis: fcb6b723e682
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-flows.md
 

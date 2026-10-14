@@ -16,7 +16,7 @@
     "apps/project-IDE/server/claude_bridge.py",
     "apps/project-IDE/server/voice.py"
   ],
-  "changes_when": "The owner changes a setting, or the move out of vision/ points its paths at the real places.",
+  "changes_when": "The owner changes a setting.",
   "related": [
     {
       "path": "apps/project-IDE/server/server.py",

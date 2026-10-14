@@ -245,7 +245,7 @@ class Bridge:
     def _prompt(self, run, input_id):
         n = run.node
         where = n.get("path", "the repository")
-        label = f"{n.get('name', '')} [{n['num']}]" if n.get("num") else n.get("name", "")
+        label = n.get("name", "")
         lines = [f"The owner wrote this on the File Tree page, on {where} ({label}):", "", run.text, ""]
         if run.delete:
             target = os.path.join(self.repo, run.delete)

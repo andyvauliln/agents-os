@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/tests/agents/run-tests.system.link.js
-node: n-10.8.1.3
-basis: a4f4a0c917bf
+basis: 674b4c90b427
 written: 2026-10-14T12:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T10:03:12Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # run-tests.system.link.js
 

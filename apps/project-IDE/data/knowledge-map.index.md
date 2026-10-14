@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/knowledge-map.json
-node: n-2.18.8
-basis: 816f034b9714
+basis: d0af0f9959ed
 written: 2026-10-05T13:25:49Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T14:22:08Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # knowledge-map.json
 

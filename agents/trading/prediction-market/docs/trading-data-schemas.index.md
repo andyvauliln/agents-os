@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-data-schemas.md
-node: n-19.6.9
-basis: ea7e6178daab
+basis: de159ae320a9
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:08:15Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-data-schemas.md
 

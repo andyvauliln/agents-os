@@ -14,7 +14,7 @@
     "the owner, who starts it",
     "project-ide-agent"
   ],
-  "changes_when": "The page's way of talking to the server, the store or the write-through changes; until the move out of vision/, the build copies it here from its planning source.",
+  "changes_when": "The page's way of talking to the server, the store or the write-through changes.",
   "related": [
     {
       "path": "apps/project-IDE/server/server.config.json",

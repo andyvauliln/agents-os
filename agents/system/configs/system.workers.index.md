@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/configs/system.workers.json
-node: n-11.10
-basis: 7c1542d4df4a
+basis: 0b926e7a68a1
 written: 2026-10-14T12:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T10:48:55Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # system.workers.json
 

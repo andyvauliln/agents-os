@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/tests/agents/[test-id].test.md
-node: n-10.8.1.2
-basis: 74d11de1a6d6
+basis: 674b4c90b427
 written: 2026-10-06T21:55:22Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # [test-id].test.md
 

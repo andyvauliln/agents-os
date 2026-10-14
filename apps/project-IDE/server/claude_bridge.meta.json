@@ -13,7 +13,7 @@
   "readers": [
     "apps/project-IDE/server/server.py"
   ],
-  "changes_when": "A rule on what Claude Code may do, the start folder or the request flow changes; until the move out of vision/, the build copies it here from its planning source.",
+  "changes_when": "A rule on what Claude Code may do, the start folder or the request flow changes.",
   "related": [
     {
       "path": "apps/project-IDE/server/server.py",

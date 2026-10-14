@@ -1,380 +1,201 @@
-"""Knowledge map for the Agent OS knowledge base (D-032).
+"""Checks the How it works files of every item against the item itself (docs/metadata.md sections 9 and 10).
 
-Reads every doc in vision/docs/ (knowledge tags, see docs/README.md) plus the node list of
-file-tree.data.json and works out which knowledge applies to which file or folder.
+The items are the files in git and their folders (index_files.py); an item's id is its path from the top of the
+repository, and the top itself is `agent-os`. Every item outside stage two, except a metadata file, has a How it
+works file. Its "basis" is a hash of:
+  - the content of the item (a file's bytes; nothing for a folder, a local keys file or a built output),
+  - for a folder, the names of its items and the text of their How it works files.
+A file whose front matter holds the same basis is fresh; another basis is stale; no file is missing; a file with
+nothing in it yet is empty (written later, by the knowledge base agent's file-index skill).
 
-  python3 build_map.py                      # rebuild docs/index/knowledge-map.json, print problems + stale count
-  python3 build_map.py --stale              # list nodes whose "How it works" summary is missing or stale, children first
-  python3 build_map.py --context <node>     # everything needed to write one node's summary (node = id, [n] or path)
-  python3 build_map.py --set <file.json>    # write {node: text} or {node: {text, keep: [...], sections: [{title, text}]}} into each node's index file (by = $BY or "knowledge-agent")
-  python3 build_map.py --confirm <node>...  # the index file is right (also after editing it by hand): store the new basis, keep the text
-  python3 build_map.py --orphans            # index files whose file or folder is gone (move them to archive/<date>/tree/)
+  python3 build_map.py                      # the report: "how it works files: N fresh, M missing or stale, K orphans ..."
+  python3 build_map.py --stale              # the missing or stale ones, children first: path, state
+  python3 build_map.py --empty              # the empty ones (nothing written yet)
+  python3 build_map.py --context <path>     # everything needed to write one item's How it works
+  python3 build_map.py --set <file.json>    # write {path: text} or {path: {text, keep: [...], sections: [{title, text}]}} (by = $BY or "knowledge-base-agent")
+  python3 build_map.py --confirm <path>...  # the file is right (also after editing it by hand): store the new basis, keep the text
+  python3 build_map.py --confirm -          # the same for every path read from stdin (first column), e.g. from --stale
+  python3 build_map.py --orphans            # metadata files whose item is gone (remove them, or move them to an archive)
 
-The How it works of every node lives in its own Markdown file, `{name}.index.md` (tools/index_files.py),
-in the mirror tree vision/tree/ while we plan. docs/index/summaries.json is retired (archive/2026-10-05/).
-
-enrich.py imports build() to bake the map and the summaries into the explorer data.
+enrich.py imports states() to show each How it works file's state on the page.
 """
-import json, re, os, sys, hashlib, datetime, fnmatch
+import datetime, fcntl, hashlib, json, os, sys
 import index_files as IF
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-VISION = os.path.dirname(HERE)
-DOCS = os.path.join(VISION, "docs")
-INDEX = os.path.join(DOCS, "index")
-MAP_PATH = os.path.join(INDEX, "knowledge-map.json")
-LOCK_PATH = os.path.join(IF.TREE, ".index.lock")
-DATA_PATH = os.path.join(VISION, "file-tree.data.json")
-
-TAG = re.compile(r"<!--\s*k:\s*(.*?)\s*-->")
-HEAD = re.compile(r"^(#{1,6})\s+(.*)$")
+LOCK_PATH = os.path.join(IF.REPO, ".git", "ide-build.index.lock")
+# outputs of the build itself: they change every round, so their content is not part of the basis
+BUILT = {"apps/project-IDE/current-ui/file-tree.data.json", "apps/project-IDE/current-ui/real-files.json", "docs/file-tree.md"}
 
 
 def h(s):
-    return hashlib.sha1(s.encode("utf-8")).hexdigest()[:12]
+    return hashlib.sha1(s.encode("utf-8") if isinstance(s, str) else s).hexdigest()[:12]
 
 
-def rel(path):
-    return path[len("agent-os/"):] if path.startswith("agent-os/") else ("" if path == "agent-os" else path)
-
-
-def glob_rx(pat):
-    out, i = "", 0
-    while i < len(pat):
-        if pat.startswith("**", i):
-            out += ".*"; i += 2
-            if i < len(pat) and pat[i] == "/":
-                out = out[:-2] + "(?:.*/)?"; i += 1
-        elif pat[i] == "*":
-            out += "[^/]*"; i += 1
-        elif pat[i] == "?":
-            out += "[^/]"; i += 1
-        else:
-            out += re.escape(pat[i]); i += 1
-    return re.compile("^" + out + "/?$")
-
-
-def parse_attrs(s):
-    a = {}
-    for part in s.split():
-        if "=" in part:
-            k, v = part.split("=", 1)
-            a[k.strip()] = v.strip()
-    return a
-
-
-def doc_files():
-    for root, dirs, files in os.walk(DOCS):
-        dirs[:] = sorted(d for d in dirs if d not in ("inputs",))
-        for f in sorted(files):
-            if f.endswith(".md"):
-                yield os.path.relpath(os.path.join(root, f), DOCS)
-
-
-def read_doc(relpath):
-    """-> (title, [entries]) for a topic doc; entries carry raw applies."""
-    text = open(os.path.join(DOCS, relpath), encoding="utf-8").read()
-    lines = text.split("\n")
-    title = next((l.lstrip("# ").strip() for l in lines if l.startswith("# ")), relpath)
-    heads = []  # (line_no, level, heading, attrs or None)
-    fence = False
-    for i, ln in enumerate(lines):
-        if ln.strip().startswith("```"):
-            fence = not fence
-            continue
-        if fence:
-            continue
-        m = HEAD.match(ln)
-        if not m:
-            continue
-        attrs = None
-        for j in range(i + 1, min(i + 3, len(lines))):
-            t = TAG.search(lines[j])
-            if t:
-                attrs = parse_attrs(t.group(1)); break
-            if lines[j].strip() and not lines[j].strip().startswith("<!--"):
-                break
-        heads.append((i, len(m.group(1)), m.group(2).strip(), attrs))
-    entries = []
-    for k, (i, lvl, head, attrs) in enumerate(heads):
-        if attrs is None:
-            continue
-        end = len(lines)
-        for (j, l2, _, a2) in heads[k + 1:]:
-            if l2 <= lvl or a2 is not None:
-                end = j; break
-        body = "\n".join(l for l in lines[i + 1:end] if not TAG.search(l)).strip()
-        entries.append({"id": attrs.get("id"), "doc": relpath, "heading": head, "level": lvl, "line": i + 1,
-                        "applies_raw": [x for x in attrs.get("applies", "").split(",") if x],
-                        "sources": [x for x in attrs.get("sources", "").split(",") if x],
-                        "status": attrs.get("status", "decided"), "text": body, "hash": h(head + "\n" + body)})
-    return title, entries, h(text)
-
-
-def file_tree_sections():
-    """file-tree.md object sections -> {heading: entry}; the file docs layer."""
-    p = os.path.join(DOCS, "file-tree.md")
-    if not os.path.exists(p):
-        p = os.path.join(VISION, "file-tree.md")
-    lines = open(p, encoding="utf-8").read().split("\n")
-    out, cur, buf = {}, None, []
+def content_hash(item):
+    if item["type"] != "file" or item["name"] == ".env" or item["rel"] in BUILT:   # a keys file is never read
+        return ""
     try:
-        start = lines.index("## 2. Objects")
-    except ValueError:
-        start = 0
+        with open(os.path.join(IF.REPO, item["rel"]), "rb") as f:
+            return h(f.read())
+    except OSError:
+        return ""
 
-    def flush():
-        if cur:
-            body = "\n".join(buf).strip()
-            nums = re.findall(r"\[([\d.]+)\]", re.match(r"^((?:\[[\d.]+\][, ]*)+)", cur).group(1)) if re.match(r"^\[", cur) else []
-            retired = bool(re.search(r"\((retired|moved to|moved:|merged into)", cur))
-            out[cur] = {"id": "ft-" + (nums[0] if nums else h(cur)), "doc": "file-tree.md", "heading": cur, "nums": nums,
-                        "status": "retired" if retired else "file-doc", "text": body, "hash": h(cur + "\n" + body)}
-    for ln in lines[start + 1:]:
-        if ln.startswith("## "):
-            break
-        if ln.startswith("### "):
-            flush(); cur, buf = ln[4:].strip(), []
-        elif cur is not None:
-            buf.append(ln)
-    flush()
+
+def body_of(rec):
+    return (rec or {}).get("body", "").strip()
+
+
+def bases(items, summaries):
+    byid = {it["id"]: it for it in items}
+    out = {}
+    for it in items:
+        if not IF.has_meta(it):
+            continue
+        kids = [byid[c] for c in it["children"] if IF.has_meta(byid[c])] if it["type"] == "folder" else []
+        out[it["id"]] = h(json.dumps([content_hash(it), [[k["name"], h(body_of(summaries.get(k["id"])))] for k in kids]]))
     return out
 
 
-def load_json(p, default):
-    try:
-        return json.load(open(p, encoding="utf-8"))
-    except Exception:
-        return default
+def state_of(rec, basis):
+    if rec is None:
+        return "missing"
+    if not body_of(rec) and not rec.get("basis"):
+        return "empty"
+    return "fresh" if rec.get("basis") == basis else "stale"
 
 
-def build(nodes, summaries=None):
-    """nodes: explorer node dicts (id, num, name, path, type, parent, children, summary, purpose, section_heading)."""
-    summaries = IF.load_all(nodes) if summaries is None else summaries
-    byid = {n["id"]: n for n in nodes}
-    bynum = {}
-    for n in nodes:
-        if n.get("num"):
-            bynum.setdefault(n["num"], []).append(n["id"])
-    problems = []
-
-    def subtree(nid):
-        out, st = [], [nid]
-        while st:
-            x = st.pop(); out.append(x); st += byid[x].get("children") or []
-        return out
-
-    def resolve(item):
-        """-> (direct ids, inherited ids)"""
-        m = re.fullmatch(r"\[([\d.]+)\](/\*\*)?", item)
-        if m:
-            ids = bynum.get(m.group(1), [])
-            if not m.group(2):
-                return ids, []
-            inh = [d for i in ids for d in subtree(i)[1:]]
-            return ids, inh
-        if item.startswith("path:"):
-            rx = glob_rx(item[5:])
-            return [n["id"] for n in nodes if rx.match(rel(n["path"]))], []
-        if item.startswith("name:"):
-            rx = glob_rx(item[5:])
-            return [n["id"] for n in nodes if rx.match(n["name"])], []
-        if item in ("none", "root"):
-            return [], []
-        return None, None
-
-    # topic docs
-    docs, entries = {}, {}
-    for rp in doc_files():
-        if rp == "file-tree.md":
-            continue
-        title, ents, dh = read_doc(rp)
-        docs[rp] = {"title": title, "hash": dh, "entries": []}
-        for e in ents:
-            if not e["id"]:
-                problems.append(f"{rp}:{e['line']} tag without id"); continue
-            if e["id"] in entries:
-                problems.append(f"{rp}:{e['line']} duplicate id {e['id']} (also {entries[e['id']]['doc']})"); continue
-            direct, inh = set(), set()
-            for it in e["applies_raw"]:
-                d, i = resolve(it)
-                if d is None:
-                    problems.append(f"{rp}:{e['line']} {e['id']}: bad applies item {it!r}"); continue
-                if not d and it not in ("none", "root"):
-                    problems.append(f"{rp}:{e['line']} {e['id']}: applies {it!r} matches nothing")
-                direct |= set(d); inh |= set(i)
-            e["nodes"], e["inherited_by"] = sorted(direct), sorted(inh - direct)
-            entries[e["id"]] = e
-            docs[rp]["entries"].append(e["id"])
-    # file docs
-    ft = file_tree_sections()
-    file_docs = {}
-    for head, s in ft.items():
-        file_docs[s["id"]] = s
-    node_fd = {}
-    for n in nodes:
-        sh = n.get("section_heading")
-        if sh and sh in ft:
-            node_fd[n["id"]] = ft[sh]["id"]
-        elif n.get("num") and ("ft-" + n["num"]) in file_docs and file_docs["ft-" + n["num"]]["status"] != "retired":
-            node_fd[n["id"]] = "ft-" + n["num"]
-    # per node
-    nmap = {}
-    for n in nodes:
-        nmap[n["id"]] = {"num": n.get("num"), "path": rel(n["path"]), "name": n["name"], "type": n["type"],
-                         "parent": n.get("parent"), "children": n.get("children") or [],
-                         "file_doc": node_fd.get(n["id"]), "same_as": n.get("same_as"), "direct": [], "inherited": []}
-    for eid, e in entries.items():
-        for nid in e["nodes"]:
-            nmap[nid]["direct"].append(eid)
-        for nid in e["inherited_by"]:
-            nmap[nid]["inherited"].append(eid)
-    for nid, x in nmap.items():
-        n = byid[nid]
-        fd = file_docs.get(x["file_doc"]) if x["file_doc"] else None
-        kids = [h((summaries.get(c) or {}).get("text", "")) for c in x["children"]]
-        basis_src = json.dumps([n.get("summary") or "", n.get("purpose") or "", fd["hash"] if fd else "",
-                                sorted(entries[e]["hash"] for e in x["direct"]), kids])
-        x["basis"] = h(basis_src)
-        s = summaries.get(nid)
-        x["summary_state"] = "missing" if not s else ("fresh" if s.get("basis") == x["basis"] else "stale")
-        if not x["file_doc"] and not x["direct"] and not x["inherited"] and not x["same_as"]:
-            problems.append(f"node {nid} ({x['path']}) has no file doc and no knowledge")
-    # inputs
-    inputs = load_json(os.path.join(DOCS, "inputs", "index.json"), {"inputs": []})
-    inp = {}
-    for i in inputs.get("inputs", []):
-        inp[i["id"]] = {k: i.get(k) for k in ("at", "where", "file", "categories", "summary", "processed_into")}
-        inp[i["id"]]["entries"] = []
-    for eid, e in entries.items():
-        for s in e["sources"]:
-            if s.startswith("in-"):
-                if s in inp:
-                    inp[s]["entries"].append(eid)
-                else:
-                    problems.append(f"{e['doc']}:{e['line']} {eid}: unknown input {s}")
-    return {
-        "schema_version": 1,
-        "built": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "docs": docs,
-        "entries": {k: {kk: v for kk, v in e.items() if kk not in ("text",)} | {"chars": len(e["text"])} for k, e in entries.items()},
-        "file_docs": {k: {kk: v for kk, v in s.items() if kk != "text"} for k, s in file_docs.items()},
-        "nodes": nmap,
-        "inputs": inp,
-        "problems": problems,
-    }, entries, file_docs
+def states(items, summaries=None):
+    """-> {id: {"basis", "state"}} for every item that has a How it works file."""
+    summaries = IF.load_all(items) if summaries is None else summaries
+    return {i: {"basis": b, "state": state_of(summaries.get(i), b)} for i, b in bases(items, summaries).items()}
 
 
-def post_order(nmap, root):
-    out, st = [], [(root, False)]
+def find(items, key):
+    key = key.strip()
+    k = key[len(IF.ROOT) + 1:] if key.startswith(IF.ROOT + "/") else key
+    k = k.rstrip("/")
+    for it in items:
+        if key == it["id"] or k == it["rel"] or (not k and it["rel"] == ""):
+            return it
+    return None
+
+
+def post_order(items):
+    byid = {it["id"]: it for it in items}
+    out, st = [], [(items[0]["id"], False)]
     while st:
         x, done = st.pop()
         if done:
             out.append(x); continue
         st.append((x, True))
-        for c in reversed(nmap[x]["children"]):
+        for c in reversed(byid[x]["children"]):
             st.append((c, False))
     return out
 
 
-def find_node(nodes, key):
-    key = key.strip()
-    for n in nodes:
-        if key in (n["id"], f"[{n.get('num')}]", n.get("num"), n["path"], rel(n["path"])):
-            return n
-    return None
+def context(items, it, summaries, st):
+    byid = {x["id"]: x for x in items}
+    meta = IF.load_meta(it) or {}
+    print(f"# {IF.about(it)}  ({it['type']}, how it works: {st.get(it['id'], {}).get('state', 'none')})")
+    print(f"how it works file: {IF.index_file(it)}\ndetails file: {IF.meta_file(it)}")
+    if meta.get("about"):
+        print(f"about: {meta['about']}")
+    if it["type"] == "file" and it["name"] != ".env":
+        try:
+            text = open(os.path.join(IF.REPO, it["rel"]), encoding="utf-8").read()
+            print(f"\n## Content ({len(text)} characters; first 60 lines)\n" + "\n".join(text.split("\n")[:60]))
+        except (OSError, UnicodeDecodeError):
+            print("\n## Content: not a text file")
+    if it["children"]:
+        print("\n## Inside")
+        for c in it["children"]:
+            x = byid[c]
+            if not IF.has_meta(x):
+                continue
+            s = summaries.get(c)
+            print(f"- {x['name']}: {(s or {}).get('text') or '(no How it works yet)'}")
+    if it["id"] in summaries:
+        rec = summaries[it["id"]]
+        print(f"\n## Current How it works\n{body_of(rec) or '(empty)'}")
 
 
 def main():
     args = sys.argv[1:]
-    data = load_json(DATA_PATH, None)
-    _scanned = {n["id"] for n in data["nodes"] if n.get("scanned")}   # real files found by the scan have no index file (D-061)
-    nodes = [dict(n, children=[c for c in n.get("children") or [] if c not in _scanned]) for n in data["nodes"] if n["id"] not in _scanned]
-    summaries = IF.load_all(nodes)
-    m, entries, file_docs = build(nodes, summaries)
-    byid = {n["id"]: n for n in nodes}
-    root = data.get("root") or nodes[0]["id"]
+    items = IF.load_items()
+    summaries = IF.load_all(items)
+    st = states(items, summaries)
+    byid = {it["id"]: it for it in items}
     if "--context" in args:
-        n = find_node(nodes, args[args.index("--context") + 1])
-        x = m["nodes"][n["id"]]
-        print(f"# {x['path'] or 'agent-os/'}  ({n['id']}, [{n.get('num') or '-'}], {n['type']}, status {n.get('status')})")
-        print(f"tree comment: {n.get('summary') or ''}\npurpose: {n.get('purpose') or ''}")
-        if x["file_doc"]:
-            fd = file_docs[x["file_doc"]]
-            print(f"\n## File doc: file-tree.md / {fd['heading']}\n{fd['text']}")
-        elif x["same_as"]:
-            print(f"\n## Same layout as {x['same_as']} ({byid[x['same_as']]['path']})")
-        for eid in x["direct"]:
-            e = entries[eid]
-            print(f"\n## Knowledge {eid} ({e['doc']} / {e['heading']}, {e['status']})\n{e['text']}")
-        if x["inherited"]:
-            print("\n## From folders above: " + "; ".join(f"{e} ({entries[e]['heading']})" for e in x["inherited"]))
-        if x["children"]:
-            print("\n## Children")
-            for c in x["children"]:
-                s = summaries.get(c, {}).get("text") or "(no summary yet) " + (byid[c].get("summary") or "")
-                print(f"- {byid[c]['name']} [{byid[c].get('num') or '-'}]: {s}")
-        if n["id"] in summaries:
-            print(f"\n## Current summary ({x['summary_state']})\n{summaries[n['id']]['text']}")
-            for sec in summaries[n["id"]].get("sections") or []:
-                print(f"- {sec['title']}: {sec['text']}")
-            for k in summaries[n["id"]].get("keep") or []:
-                print(f"- keep in mind: {k}")
+        it = find(items, args[args.index("--context") + 1])
+        if not it:
+            sys.exit("unknown item")
+        context(items, it, summaries, st)
         return
     if "--set" in args or "--confirm" in args:
-        # several workers may save at once: hold a lock and re-read the file inside it
-        import fcntl
-        os.makedirs(IF.TREE, exist_ok=True)
-        lock = open(LOCK_PATH, "w"); fcntl.flock(lock, fcntl.LOCK_EX)
-        summaries = IF.load_all(nodes)
+        lock = open(LOCK_PATH, "w"); fcntl.flock(lock, fcntl.LOCK_EX)   # several workers may save at once
+        summaries = IF.load_all(items)
         rendered = set()
-        by = os.environ.get("BY", "knowledge-agent")
+        by = os.environ.get("BY", "knowledge-base-agent")
         at = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        ids = []
         if "--set" in args:
-            new = load_json(args[args.index("--set") + 1], {})
-            ids = []
+            new = json.load(open(args[args.index("--set") + 1], encoding="utf-8"))
             for k, t in new.items():
-                n = find_node(nodes, k)
-                if not n:
-                    print("unknown node", k); continue
+                it = find(items, k)
+                if not it or not IF.has_meta(it):
+                    print("unknown item", k); continue
                 rec = t if isinstance(t, dict) else {"text": t}
-                keep = [k.strip() for k in rec.get("keep") or [] if k.strip()]
+                keep = [x.strip() for x in rec.get("keep") or [] if x.strip()]
                 secs = [{"title": x["title"].strip(), "text": x["text"].strip()} for x in rec.get("sections") or [] if x.get("title") and x.get("text")]
-                # the six-heading files are read back with "What it is" as their text: store the same, so parents' bases hold
                 text = next((x["text"] for x in secs if x["title"].lower() == "what it is"), None) or rec.get("text", "").strip()
-                summaries[n["id"]] = {"text": text, "basis": "", "at": at, "by": by} | ({"keep": keep} if keep else {}) | ({"sections": secs} if secs else {})
-                ids.append(n["id"]); rendered.add(n["id"])
+                r = {"text": text, "basis": "", "at": at, "by": by} | ({"keep": keep} if keep else {}) | ({"sections": secs} if secs else {})
+                r["body"] = IF.make_body(it, r)
+                summaries[it["id"]] = r
+                ids.append(it["id"]); rendered.add(it["id"])
         else:
-            ids = [find_node(nodes, k)["id"] for k in args[args.index("--confirm") + 1:]]
-        # bases depend on children's texts: recompute after all texts are in
-        m, _, _ = build(nodes, summaries)
-        for i in ids:
-            rec = summaries.setdefault(i, {"text": "", "at": at, "by": by})
-            rec["basis"] = m["nodes"][i]["basis"]
+            keys = args[args.index("--confirm") + 1:]
+            if keys == ["-"]:
+                keys = [l.split("\t")[0].split()[0] for l in sys.stdin if l.strip()]
+            for k in keys:
+                it = find(items, k)
+                if not it or not IF.has_meta(it):
+                    print("unknown item", k); continue
+                ids.append(it["id"])
+        # bases depend on the children's texts: compute them after all texts are in, children first
+        order = [i for i in post_order(items) if i in set(ids)]
+        new_bases = bases(items, summaries)
+        for i in order:
+            rec = summaries.setdefault(i, {"text": "", "at": "", "by": "", "body": ""})
+            rec["basis"] = new_bases[i]
             if "--confirm" in args:
                 rec["confirmed"] = at
-            IF.save(byid[i], rec, None if i in rendered or not rec.get("body") else rec["body"])
+            IF.save(byid[i], rec, rec.get("body", ""))
         fcntl.flock(lock, fcntl.LOCK_UN); lock.close()
-        m, _, _ = build(nodes, summaries)
-        print(f"set {len(ids)}; stale now: {sum(1 for x in m['nodes'].values() if x['summary_state'] != 'fresh')}")
-    os.makedirs(INDEX, exist_ok=True)
-    json.dump(m, open(MAP_PATH, "w"), indent=1, ensure_ascii=False)
-    order = post_order(m["nodes"], root)
-    stale = [i for i in order if m["nodes"][i]["summary_state"] != "fresh"]
+        summaries = IF.load_all(items)
+        st = states(items, summaries)
+        print(f"{'set' if '--set' in args else 'confirmed'} {len(order)}; missing or stale now: {sum(1 for x in st.values() if x['state'] in ('missing', 'stale'))}")
+    order = [i for i in post_order(items) if i in st]
     if "--orphans" in args:
-        for f in IF.orphans(nodes):
-            print("tree/" + f)
+        for f in IF.orphans(items):
+            print(f)
         return
     if "--stale" in args:
-        for i in stale:
-            print(f"{i}\t{m['nodes'][i]['summary_state']}\t{m['nodes'][i]['path'] or 'agent-os/'}")
+        for i in order:
+            if st[i]["state"] in ("missing", "stale"):
+                print(f"{i}\t{st[i]['state']}")
         return
-    print(f"docs {len(m['docs'])}, entries {len(m['entries'])}, file docs {len(m['file_docs'])}, nodes {len(m['nodes'])}, inputs {len(m['inputs'])}")
-    print(f"how it works files: {sum(1 for x in m['nodes'].values() if x['summary_state'] == 'fresh')} fresh, {len(stale)} missing or stale, {len(IF.orphans(nodes))} orphans (--orphans)")
-    for p in m["problems"][:80]:
-        print("problem:", p)
-    if len(m["problems"]) > 80:
-        print(f"... {len(m['problems']) - 80} more problems")
+    if "--empty" in args:
+        for i in order:
+            if st[i]["state"] == "empty":
+                print(i)
+        return
+    count = lambda *s: sum(1 for i in order if st[i]["state"] in s)
+    print(f"items {len(items)}, with a How it works file {len(st)}")
+    print(f"how it works files: {count('fresh')} fresh, {count('missing', 'stale')} missing or stale, {len(IF.orphans(items))} orphans (--orphans); "
+          f"{count('empty')} empty, not written yet (--empty)")
+    lacking = IF.missing(items)
+    if lacking:
+        print(f"{len(lacking)} metadata files missing (materialize.py makes them): " + ", ".join(p for _, p in lacking[:10]) + (" ..." if len(lacking) > 10 else ""))
 
 
 if __name__ == "__main__":

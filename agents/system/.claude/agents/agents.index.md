@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/agents/
-node: n-10.1.1
-basis: a4f907fcc084
+basis: b18fb48fdc8c
 written: 2026-10-05T13:25:49Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T09:57:03Z
+confirmed: 2026-10-14T15:09:25Z
 ---
 # agents/
 

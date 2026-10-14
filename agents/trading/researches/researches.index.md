@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/trading/researches/
-node: n-56.2
-basis: 7745c0e2cd70
+basis: 70dbf004b0a7
 written: 2026-10-09T12:40:34Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T15:06:20Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # researches/
 

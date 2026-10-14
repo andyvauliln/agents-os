@@ -1,10 +1,9 @@
 ---
-about: agent-os/agents/system/tests/scripts/[test-id].test.[js|py]
-node: n-10.8.2.2
-basis: 33c78a830ca8
+about: agent-os/agents/system/tests/scripts/[test-id].test.[js-py]
+basis: 674b4c90b427
 written: 2026-10-01T01:00:33Z
 by: summary-worker
-confirmed: 2026-10-12T11:29:26Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # [test-id].test.[js|py]
 

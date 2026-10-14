@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/settings.local.json
-node: n-10.1.7
-basis: f1bbd52f2d8e
+basis: 0b926e7a68a1
 written: 2026-10-01T00:52:45Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # settings.local.json
 

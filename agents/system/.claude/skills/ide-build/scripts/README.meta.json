@@ -46,10 +46,6 @@
   },
   "update_with": [
     {
-      "path": "vision/tools/README.md",
-      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
-    },
-    {
       "path": "apps/project-IDE/docs/README.md",
       "how": "the part 'How the page is built and checked'"
     },

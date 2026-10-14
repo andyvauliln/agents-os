@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/doc-outlines.md
-node: n-19.6.15
-basis: 7bb2336fba30
+basis: dfb5c6da56e1
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # doc-outlines.md
 

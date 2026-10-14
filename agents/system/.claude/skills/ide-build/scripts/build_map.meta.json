@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "Builds the knowledge map and keeps the How it works files honest: stale, missing, orphaned, context, confirm.",
+  "about": "Keeps the How it works files honest: fresh, stale, missing, empty, orphaned; context, set and confirm.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -17,7 +17,7 @@
     "file-index",
     "agents/system/.claude/skills/ide-build/scripts/enrich.py"
   ],
-  "changes_when": "How staleness is found, what a How it works is written from, or the knowledge map format changes.",
+  "changes_when": "The rule for a fresh How it works file changes, or an option is added.",
   "related": [
     {
       "path": "apps/project-IDE/data/knowledge-map.json",
@@ -50,10 +50,6 @@
     "notes": []
   },
   "update_with": [
-    {
-      "path": "vision/tools/build_map.py",
-      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
-    },
     {
       "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
       "how": "if how it is run or what it does changes"

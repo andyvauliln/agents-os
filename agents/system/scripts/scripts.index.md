@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/scripts/
-node: n-14
-basis: fb74545fd416
+basis: e9185fe0cced
 written: 2026-10-07T19:01:11Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:09:25Z
 ---
 # scripts/
 

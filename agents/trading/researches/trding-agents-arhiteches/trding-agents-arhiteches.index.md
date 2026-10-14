@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/trading/researches/trding-agents-arhiteches/
-node: n-54.3
-basis: c71d3071ad81
+basis: 13b183cfed93
 written: 2026-10-09T12:40:34Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T15:06:20Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trding-agents-arhiteches/
 

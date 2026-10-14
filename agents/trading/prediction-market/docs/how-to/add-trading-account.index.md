@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/how-to/add-trading-account.md
-node: n-19.6.17.3
-basis: af84006d31a0
+basis: a58f522ee3b6
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # add-trading-account.md
 

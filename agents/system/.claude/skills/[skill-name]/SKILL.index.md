@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/[skill-name]/SKILL.md
-node: p-agent-os-agents-system-.claude-skills-skill-name-SKILL.md
-basis: f3632a902519
+basis: 01336eac60db
 written: 2026-10-01T00:52:45Z
 by: summary-worker
+confirmed: 2026-10-14T15:07:13Z
 ---
 # [skill-name]/SKILL.md
 

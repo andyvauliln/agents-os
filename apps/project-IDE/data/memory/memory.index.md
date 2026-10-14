@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/memory/
-node: n-53.2.4
-basis: d772f2ee85d4
+basis: 48b3a104f9c7
 written: 2026-10-05T13:25:49Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # memory/
 

@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-architecture.md
-node: n-19.6.6
-basis: 7bc799d71a36
+basis: be348aa37770
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-architecture.md
 

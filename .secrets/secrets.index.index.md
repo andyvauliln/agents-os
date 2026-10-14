@@ -1,10 +1,9 @@
 ---
 about: agent-os/.secrets/secrets.index.json
-node: n-47.3
-basis: a6568822ea57
+basis: 0b926e7a68a1
 written: 2026-09-30T20:11:26Z
 by: knowledge-agent
-confirmed: 2026-10-07T19:08:15Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # secrets.index.json
 

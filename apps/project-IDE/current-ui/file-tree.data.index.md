@@ -1,15 +1,15 @@
 ---
 about: agent-os/apps/project-IDE/current-ui/file-tree.data.json
-node: n-53.1.2
-basis: 09a42999110b
-written: 2026-10-07T14:21:32Z
-by: knowledge-base-agent
+basis: 981c7ce4dc3d
+written: 2026-10-14T15:06:23Z
+by: project-ide-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # file-tree.data.json
 
 ## Summary
 
-Everything the page shows, in one generated file: every item with its notes, status, example, text, How it works, knowledge and tabs, plus the lists of inputs, decisions and docs. `enrich.py` builds it from the tree notes, the drafts, the knowledge and the How it works files, with a new data version each time. It cannot hold a copy of itself, so its File tab shows it exactly as the page loaded it, read-only.
+Everything the page shows, in one generated file: every item, with its path as its id, its status, its How it works and Details, its Example, Questions and ASD-STE100 text where those files exist, and its extra tabs, plus the decisions the page shows when one is named. `enrich.py` builds it from the files on disk and the metadata files next to each item, with a new data version each time. The text of each file is in `real-files.json` next to it. It cannot hold a copy of itself, so its File tab shows it exactly as the page loaded it, read-only.
 
 ## Keep in mind
 

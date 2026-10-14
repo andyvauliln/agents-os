@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The owner's page edits kept in the page data rather than in a file of their own; enrich.py applies them last.",
+  "about": "The owner's page edits of the extra tables, keyed by path; enrich.py applies them on top of the built tabs.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -14,7 +14,7 @@
   "readers": [
     "agents/system/.claude/skills/ide-build/scripts/enrich.py"
   ],
-  "changes_when": "A sync folds in a page edit that has no file of its own; until the move out of vision/, the build copies it here from its planning source.",
+  "changes_when": "A sync folds in a page edit of an extra table that has no file of its own.",
   "related": [
     {
       "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",

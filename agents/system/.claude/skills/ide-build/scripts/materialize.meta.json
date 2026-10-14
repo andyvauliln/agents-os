@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "Reads the tree notes, the feature map and the decisions into one list of items for enrich.py.",
+  "about": "Gives every new item its empty How it works and Details files, keeps .gitkeep in empty folders and writes docs/file-tree.md.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -12,14 +12,17 @@
     "project-ide-agent"
   ],
   "readers": [
-    "ide-build",
-    "agents/system/.claude/skills/ide-build/scripts/enrich.py"
+    "ide-build"
   ],
-  "changes_when": "The format of the tree notes or of what enrich.py needs changes.",
+  "changes_when": "The rule for which items get metadata files, the .gitkeep rule or the plain tree changes.",
   "related": [
     {
-      "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
-      "how": "read by"
+      "path": "agents/system/.claude/skills/ide-build/scripts/index_files.py",
+      "how": "reads"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "writes"
     },
     {
       "path": "agents/system/.claude/skills/ide-build/SKILL.md",
@@ -29,20 +32,15 @@
   "sources": {
     "decisions": [
       "D-041",
-      "D-050"
+      "D-070"
     ],
     "inputs": [
-      "in-20261005-1041",
-      "in-20261005-1254",
-      "in-20261006-2104"
+      "in-20261013-leave-vision",
+      "in-20261014-1241"
     ],
     "notes": []
   },
   "update_with": [
-    {
-      "path": "vision/tools/parse.py",
-      "how": "the planning source: edit it first; the build copies it here until the move out of vision/"
-    },
     {
       "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
       "how": "if how it is run or what it does changes"

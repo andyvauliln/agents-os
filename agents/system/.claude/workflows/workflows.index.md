@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/workflows/
-node: n-10.1.10
-basis: e14e2c111a91
+basis: 111ec18f196e
 written: 2026-10-01T00:54:17Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # workflows/
 

@@ -1,13 +1,14 @@
 // Smoke test of the File Tree page before publishing (ide-build step 5).
 // Loads the page with a stand-in for the artifact runtime, opens items on a desktop and a phone width,
 // and fails when the page throws, a tab is missing, or the page is wider than a phone screen.
-//   node check_page.js <page dir> [out dir for screenshots] [node ids...]
+//   node check_page.js <page dir> [out dir for screenshots, or -] [item ids...]
+// An item's id is its path from the top of the repository; the top is agent-os. The page dir defaults to apps/project-IDE/current-ui.
 // Needs Playwright with Chromium: PLAYWRIGHT (module path) and CHROMIUM (browser path) override the defaults.
 const fs = require('fs'), path = require('path');
 const { chromium } = require(process.env.PLAYWRIGHT || '/opt/node22/lib/node_modules/playwright');
-const DIR = path.resolve(process.argv[2] || path.join(__dirname, '../explorer'));
+const DIR = path.resolve(process.argv[2] || path.join(__dirname, '../../../../../../apps/project-IDE/current-ui'));
 const OUT = process.argv[3] && process.argv[3] !== '-' ? path.resolve(process.argv[3]) : null;
-const IDS = process.argv.slice(4).length ? process.argv.slice(4) : ['n-0', 'n-2.1', 'n-53', 'n-10.1.1.3', 'n-11'];
+const IDS = process.argv.slice(4).length ? process.argv.slice(4) : ['agent-os', 'docs/README.md', 'apps/project-IDE', 'agents/system/.claude/skills/file-index/SKILL.md', '.gitignore'];
 const mock = () => {   // in-memory db, sample and user, the parts of window.claude the page uses
   const store = {}, subs = {};
   const snap = c => ({ docs: Object.entries(store[c] || {}).map(([id, v]) => ({ id, data: () => JSON.parse(JSON.stringify(v)) })) });
@@ -37,10 +38,10 @@ const mock = () => {   // in-memory db, sample and user, the parts of window.cla
       const p = await b.newPage({ viewport: vp }); const errs = [];
       p.on('pageerror', e => errs.push(String(e)));
       await p.addInitScript('(' + mock + ')()');
-      await p.route('http://local.test/**', r => { const f = path.join(DIR, new URL(r.request().url()).pathname);
+      await p.route('http://local.test/**', r => { const f = path.join(DIR, decodeURIComponent(new URL(r.request().url()).pathname));
         r.fulfill({ body: fs.readFileSync(f), contentType: f.endsWith('.json') ? 'application/json' : 'text/html; charset=utf-8' }); });
       await p.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
-      await p.goto('http://local.test/file-tree-explorer.html#' + id);
+      await p.goto('http://local.test/file-tree-explorer.html#' + id.split('/').map(encodeURIComponent).join('/'));
       await p.waitForSelector('.tab', { timeout: 15000 }).catch(() => errs.push('no tabs rendered'));
       await p.waitForTimeout(400);
       const tabs = await p.$$eval('.tab', t => t.map(x => x.dataset.tab).filter(Boolean));
@@ -48,10 +49,10 @@ const mock = () => {   // in-memory db, sample and user, the parts of window.cla
         await p.evaluate(t => [...document.querySelectorAll(`.tab[data-tab="${t}"]`)].find(e => e.offsetParent)?.click(), t); await p.waitForTimeout(200); }
       const wide = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       const sel = await p.evaluate(() => document.querySelector('#tree .row.sel, #tree .row[aria-selected="true"]')?.dataset.id || '');
-      const ok = !errs.length && tabs.length && (label === 'desktop' || wide <= 1);
+      const ok = !errs.length && tabs.length && sel === id && (label === 'desktop' || wide <= 1);   // the address opened that item
       if (!ok) bad++;
       console.log(`${ok ? 'ok  ' : 'FAIL'} ${label} ${id} tabs=${tabs.join(',')} overflow=${wide}px selected=${sel} ${errs.join(' | ')}`);
-      if (OUT) { fs.mkdirSync(OUT, { recursive: true }); await p.screenshot({ path: path.join(OUT, `${label}-${id}.png`) }); }
+      if (OUT) { fs.mkdirSync(OUT, { recursive: true }); await p.screenshot({ path: path.join(OUT, `${label}-${id.replace(/[^A-Za-z0-9._-]+/g, '_')}.png`) }); }
       await p.close();
     }
   }

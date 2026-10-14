@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/claude-md-doc/SKILL.md
-node: n-10.1.2.10
-basis: 7d2c7cdbe50b
+basis: e91e706cc6cd
 written: 2026-10-12T16:00:00Z
 by: project-ide-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # claude-md-doc/SKILL.md
 

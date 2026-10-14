@@ -1,17 +1,16 @@
 ---
 about: agent-os/apps/project-IDE/data/overrides.json
-node: n-53.2.3
-basis: 86e7aa9a497e
-written: 2026-10-05T13:25:49Z
-by: knowledge-base-agent
-confirmed: 2026-10-07T14:22:08Z
+basis: b4a06fe6a5a8
+written: 2026-10-14T15:06:48Z
+by: project-ide-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # overrides.json
 
 ## Summary
 
-The owner's edits from the page that are kept in the page data rather than in a file of their own, such as a draft typed on the page for a file nobody has written yet, listed by the item's number. `enrich.py` applies them last, so they win over the tree notes.
+The owner's edits from the page that are kept in the page data rather than in a file of their own, listed by the item's path. `enrich.py` applies only the edits of the extra tables (such as the key names of a keys file); an item's text, How it works and Details come from its own files, so the other edits here are kept as a record only.
 
 ## Keep in mind
 
-- When you rebuild the page, keep this file: without it the owner's page edits are lost.
+- When you rebuild the page, keep this file: without it the owner's edits of the extra tables are lost.

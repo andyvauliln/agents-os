@@ -1,8 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/README-trading-parts.md
-node: r-agents-trading-prediction-market-docs-README-trading-parts.md
+basis: 7c55a171edf5
 written: 2026-10-14T07:58:57Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # README-trading-parts.md
 

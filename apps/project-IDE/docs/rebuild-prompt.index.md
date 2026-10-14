@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/docs/rebuild-prompt.md
-node: n-53.4.3
-basis: d437b30e5040
+basis: 520aeed75fd2
 written: 2026-10-12T00:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # rebuild-prompt.md
 

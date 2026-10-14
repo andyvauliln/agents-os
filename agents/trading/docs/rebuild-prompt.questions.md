@@ -8,4 +8,8 @@
 
 ## The owner's questions
 
-None recorded yet.
+### 2026-10-07: Why the agents had no rebuild prompt
+
+> why agents didn't got a rebuild-prompt?
+
+When the rebuild prompt was created, lower levels were to get theirs only once their parts were designed, so only the system had one. Today every level's docs folder has a rebuild prompt: the project, the system, trading, the apps and the project IDE. The prediction-market domain and its agents get theirs in stage two.

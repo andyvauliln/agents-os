@@ -11,4 +11,8 @@
 
 ## The owner's questions
 
-None recorded yet.
+### 2026-10-07: Did everything about trading move down?
+
+> also did we remove all related to trading agent down to trading agents in our case i think to prediction market domain
+
+Not yet at that moment; it was done the same day. Today the system level stays general, with nothing about money, markets or orders, and all trading knowledge sits in `agents/trading/prediction-market/docs/`. This changed later: trading became a folder of domains, `agents/trading/`, with its own docs, and the prediction-market domain sits inside it.

@@ -2380,6 +2380,46 @@
     "docs/metadata.md"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261014-1004",
+   "at": "2026-10-14T10:04",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-14-1004-two-types-of-questions.md",
+   "chars": 205,
+   "categories": [
+    "docs-knowledge",
+    "process"
+   ],
+   "summary": "Two types of questions: the owner's own, recorded on the item with the answer, and open questions from plans and a skill that analyses items.",
+   "processed_into": [
+    "docs/metadata.md",
+    "skills: change-plan, knowledge-intake, ide-sync, file-index, make-questions",
+    "Questions files"
+   ],
+   "answered": true
+  },
+  {
+   "id": "in-20261014-1006",
+   "at": "2026-10-14T10:06",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-14-1006-analyse-owner-questions.md",
+   "chars": 73,
+   "categories": [
+    "docs-knowledge",
+    "process"
+   ],
+   "summary": "The owner's questions should be analysed and the related docs improved.",
+   "processed_into": [
+    "skills: knowledge-intake, make-questions",
+    "docs/metadata.md",
+    "agents/system/CLAUDE.md"
+   ],
+   "answered": true
   }
  ]
 }

@@ -3,6 +3,7 @@
 System-level history: what changed in the OS design, when, and from which decision. Newest first. Per-agent changes stay in each agent's own `docs/changes.md` [46]. The knowledge agent adds one line per processed input or system change (knowledge-intake, step 6).
 
 ## 2026-10-14
+- **Knowledge notes kept but not referenced; tree numbers removed (D-070).** The topic notes and the trading notes are kept, but no doc, skill or agent points to them now. The `tree_number` field is gone from every Details file; the tree numbers and node ids leave the rest of the system in the move out of `vision/`.
 - **How it works and Questions tabs read like a file; questions in ASD (D-069).** Both tabs now offer Read or Source and Full screen, like a Markdown file on the File tab. Every Questions file is rewritten in ASD-STE100, apart from the owner's own words, and the skills and the knowledge base agent write questions that way.
 - **Two types of questions (D-068).** The owner asked that their own questions be recorded on their items with the answers, and that open questions come from plans and from a skill that analyses items. Every Questions file now has two parts; 53 past questions were recorded in 21 files; `change-plan` writes its choices as open questions; the new `make-questions` skill finds what only the owner can answer.
 - **The owner's questions improve the docs (D-068).** Each owner question is analysed for why the docs did not answer it, and those docs are improved (`knowledge-intake` step 6). All recorded questions were analysed this way.

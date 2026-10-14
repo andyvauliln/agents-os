@@ -133,7 +133,7 @@ def meta_file(node):
 META_FIELDS = {"schema_version": 1, "about": "", "kind": "", "state": "", "status": "", "git": "", "secret": None,
                "generated_by": None, "writers": [], "readers": [], "changes_when": "", "related": [],
                "sources": {"decisions": [], "inputs": [], "notes": []}, "update_with": [], "inherits": [],
-               "features": [], "views": [], "how_it_works": {}, "tree_number": ""}
+               "features": [], "views": [], "how_it_works": {}}
 
 
 def ensure_meta(nodes):

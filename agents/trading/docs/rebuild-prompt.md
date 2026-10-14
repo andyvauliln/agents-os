@@ -193,8 +193,7 @@ Every `.meta.json` has exactly these keys:
   "inherits": [],
   "features": [],
   "views": [],
-  "how_it_works": {"written": "2026-10-12T00:00:00Z", "by": "knowledge-base-agent"},
-  "tree_number": "56.1.2"
+  "how_it_works": {"written": "2026-10-12T00:00:00Z", "by": "knowledge-base-agent"}
 }
 ```
 

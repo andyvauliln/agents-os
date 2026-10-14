@@ -92,7 +92,7 @@ An adopted outside app gets `apps/[name]/` with `docs/` (`vision.md`, `README.md
   ```
 
   `about` is `agent-os/` plus the item's path (a folder ends with `/`); `node` is the item's id on the File Tree page: `n-43` for `apps/`, `n-43.1` for `apps/docs/`, `n-43.1.1` to `n-43.1.4` for `vision.md`, `README.md`, `README.asd.md`, `rebuild-prompt.md`, `n-53` for `project-IDE/`, `n-55` for `temp/`, `n-45` for `trading-ui/`. A file not yet moved to the six headings has one `## Summary` instead.
-- **Details file keys, in this order:** `schema_version`, `about`, `kind`, `state`, `status`, `git`, `secret`, `generated_by`, `writers`, `readers`, `changes_when`, `related` (list of `{"path", "how"}`), `sources` (`{"decisions": [], "inputs": [], "notes": []}`), `update_with` (list of `{"path", "how"}`), `inherits`, `features`, `views`, `how_it_works`, `tree_number`. Example for `apps/temp/`:
+- **Details file keys, in this order:** `schema_version`, `about`, `kind`, `state`, `status`, `git`, `secret`, `generated_by`, `writers`, `readers`, `changes_when`, `related` (list of `{"path", "how"}`), `sources` (`{"decisions": [], "inputs": [], "notes": []}`), `update_with` (list of `{"path", "how"}`), `inherits`, `features`, `views`, `how_it_works`. Example for `apps/temp/`:
 
   ```json
   {
@@ -113,8 +113,7 @@ An adopted outside app gets `apps/[name]/` with `docs/` (`vision.md`, `README.md
     "inherits": ["conv-apps"],
     "features": [],
     "views": [],
-    "how_it_works": {"written": "2026-10-12T00:00:00Z", "by": "knowledge-base-agent"},
-    "tree_number": "55"
+    "how_it_works": {"written": "2026-10-12T00:00:00Z", "by": "knowledge-base-agent"}
   }
   ```
 

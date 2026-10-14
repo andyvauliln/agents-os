@@ -2443,6 +2443,28 @@
     "Questions files"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261014-1241",
+   "at": "2026-10-14T12:41",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-14-1241-no-refs-no-tree-numbers.md",
+   "chars": 255,
+   "categories": [
+    "docs-knowledge",
+    "structure"
+   ],
+   "summary": "Keep the knowledge notes but reference them nowhere; remove tree numbers and node ids.",
+   "processed_into": [
+    "skills and agents",
+    "level docs",
+    "Details files",
+    "docs/metadata.md",
+    "leave-vision plan"
+   ],
+   "answered": true
   }
  ]
 }

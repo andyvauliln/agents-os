@@ -681,3 +681,11 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - **Why:** the owner: "can we make question and how it works tab same like file, that i can pick lick mode, can make full screen, also all question should be made with a asd style".
 - **Status:** decided.
 - **Changed:** the page, apps/project-IDE/docs/README.md and its ASD twin, docs/metadata.md, the four skills and the knowledge base agent (both copies), every Questions file.
+
+### D-070: The extra knowledge notes are kept but not referenced; tree numbers and node ids go
+<!-- k: id=d-070 applies=[57] sources=in-20261014-1241 status=decided -->
+- **Decision:** the topic notes (overview, architecture, conventions, safety, flows, data schemas, glossary, metrics, roadmap, feature map, common, index lists) move to `apps/project-IDE/data/sources/`, and the trading notes stay in `agents/trading/prediction-market/docs/`, but no doc, skill or agent refers to them; whether to use them is decided later. Knowledge goes into the level docs, CLAUDE.md, metadata.md and each item's metadata files. The tree numbers and node ids of the old tree notes are not needed once the path is the id: `tree_number` is removed from every Details file now; the numbers and ids leave the How it works front matter, the knowledge tags and the page in the move out of `vision/`.
+- **Date:** 2026-10-14
+- **Why:** the owner: "i don't want that we anywhere make references to them now, addditional knowledge files ll be considered later"; "if we no need file tree number we can remove it".
+- **Status:** decided.
+- **Changed:** the skills and agents (both copies), CLAUDE.md, the level docs, every Details file, docs/metadata.md, the rebuild prompts, the leave-vision plan.

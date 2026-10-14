@@ -179,8 +179,7 @@ by: knowledge-base-agent
   "inherits": [],
   "features": [],
   "views": [],
-  "how_it_works": {"written": "2026-10-12T00:00:00Z", "by": "knowledge-base-agent"},
-  "tree_number": "57.1"
+  "how_it_works": {"written": "2026-10-12T00:00:00Z", "by": "knowledge-base-agent"}
 }
 ```
 

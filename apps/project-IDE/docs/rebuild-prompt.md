@@ -101,7 +101,7 @@ While the project is planned, the working sources live in `vision/`: the page in
   {"schema_version": 1, "about": "", "kind": "", "state": "", "status": "", "git": "", "secret": null,
    "generated_by": null, "writers": [], "readers": [], "changes_when": "", "related": [],
    "sources": {"decisions": [], "inputs": [], "notes": []}, "update_with": [], "inherits": [],
-   "features": [], "views": [], "how_it_works": {}, "tree_number": ""}
+   "features": [], "views": [], "how_it_works": {}}
   ```
 
   `related` and `update_with` hold `{"path": "...", "how": "..."}` objects.

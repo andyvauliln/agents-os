@@ -128,7 +128,6 @@ Everything about the item that is neither its content nor its explanation. It is
 | `features` | list of text | The features it serves, by name. |
 | `views` | list of text | The custom views that apply to it, its own and the shared ones. |
 | `how_it_works` | object | The check of its How it works: `basis`, `written`, `by`, `confirmed`. Left `{}` until the build moves these here from the How it works front matter. |
-| `tree_number` | text | Its number in the tree notes, such as `"2.1"`, for agents only; `""` when it has none. |
 
 Example, for `agents/system/docs/README.md`:
 
@@ -158,8 +157,7 @@ Example, for `agents/system/docs/README.md`:
   "inherits": [],
   "features": [],
   "views": [],
-  "how_it_works": {},
-  "tree_number": "2.1"
+  "how_it_works": {}
 }
 ```
 

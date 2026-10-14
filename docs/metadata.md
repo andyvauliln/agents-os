@@ -112,7 +112,7 @@ The fields answer the questions that an agent must ask before it changes an item
 | What else must change with it? | `related`, `update_with` (the most important) |
 | Why is it like this? | `sources` |
 | Which rules from above apply? | `inherits` |
-| For later or for tools | `features`, `views`, `how_it_works`, `tree_number` |
+| For later or for tools | `features`, `views`, `how_it_works` |
 
 Example: you change `README.md`. Its `update_with` says: "write `README.asd.md` again". Thus the agent does not forget the twin.
 
@@ -140,7 +140,6 @@ Keep all the fields, in this order.
 | `features` | list | The features that the item helps to supply. |
 | `views` | list | The special views that apply to the item. |
 | `how_it_works` | object | The check data of the How it works file. The build does not use it yet (see sections 19 and 20). |
-| `tree_number` | text | An old number of the item, only for agents. It is empty when the item has none. |
 
 ### 6.4 An empty Details file
 
@@ -449,7 +448,6 @@ This table tells the true state on 2026-10-14. There are 421 Details files outsi
 | `features` | By hand | The Details tab | 26 |
 | `views` | By hand | The Details tab | 17 |
 | `how_it_works` | By hand | Nothing. The build still uses the front matter of the How it works file | 26 |
-| `tree_number` | By hand | Nothing | 28 |
 
 What this means:
 
@@ -467,7 +465,7 @@ What must come (proposed):
 
 1. **The mirror in `vision/`.** Now the source of most How it works and Details files is the mirror `vision/tree/agent-os/`. The build copies them next to their items. After the move out of `vision/`, the files next to the items become the source, and the copy stops.
 2. **The basis.** Now the basis also uses the tree notes in `vision/docs/file-tree.md`. After the move, the basis uses only the item, its knowledge and its children (section 9).
-3. **The page identifier and the number.** Now the identifier comes from the tree notes. After the move, the identifier comes from the path of the item. The old number stays in `tree_number`.
+3. **The page identifier and the number.** Now the identifier comes from the tree notes. After the move, the path of the item is its identifier. The old tree numbers and the node identifiers are removed: from the front matter of the How it works files, from the knowledge tags and from the page. The `tree_number` field is already removed from the Details files.
 4. **The check field.** The build will move `basis` and `confirmed` from the front matter into the `how_it_works` field of the Details file.
 5. **The views.** The special views (`x.{type}.{name}.view.html`) are a plan. No view exists yet.
 6. **The prediction-market domain.** It is in stage two. Only its docs folder has metadata files now.

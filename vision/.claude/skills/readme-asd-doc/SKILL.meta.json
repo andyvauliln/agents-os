@@ -12,7 +12,9 @@
   "changes_when": "",
   "related": [],
   "sources": {
-    "decisions": ["D-064"],
+    "decisions": [
+      "D-064"
+    ],
     "inputs": [],
     "notes": []
   },
@@ -20,6 +22,5 @@
   "inherits": [],
   "features": [],
   "views": [],
-  "how_it_works": {},
-  "tree_number": "10.1.2.9"
+  "how_it_works": {}
 }

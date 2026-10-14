@@ -470,3 +470,8 @@ What must come (proposed):
 4. **The check field.** The build will move `basis` and `confirmed` from the front matter into the `how_it_works` field of the Details file.
 5. **The views.** The special views (`x.{type}.{name}.view.html`) are a plan. No view exists yet.
 6. **The prediction-market domain.** It is in stage two. Only its docs folder has metadata files now.
+7. **Other metadata files.** These metadata files are proposed. None of them is built:
+   - a change log file of an item;
+   - a Tests file of an item, with the list of its tests;
+   - a format file (a schema) for a settings file or a data file. A script uses it to check the file. The Example of the file is then made from it. Now the Example tells the fields of a settings file (section 7.1).
+   The plan of these files is `vision/plans/file-set.md`. Its naming rule and the empty Details files are built. Its other parts wait.

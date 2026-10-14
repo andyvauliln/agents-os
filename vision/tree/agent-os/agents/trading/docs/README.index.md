@@ -2,7 +2,7 @@
 about: agent-os/agents/trading/docs/README.md
 node: n-56.1.1
 basis: 144895ef93fd
-written: 2026-10-12T00:00:00Z
+written: 2026-10-14T12:00:00Z
 by: knowledge-base-agent
 confirmed: 2026-10-12T15:40:56Z
 ---
@@ -30,7 +30,7 @@ Trading's vision names it in its last section; the system's README gives it as t
 
 ## Related knowledge
 
-Its In short uses the vision's words. `README.asd.md` must say the same in ASD-STE100. The rebuild prompt builds what it describes. The detail of each trading rule is in the kept trading notes in `vision/docs/prediction-market-agents/`.
+Its In short uses the vision's words. `README.asd.md` must say the same in ASD-STE100. The rebuild prompt builds what it describes. The detail of each trading rule is in the trading notes in `agents/trading/prediction-market/docs/`. The system level stays general: nothing about money, markets or orders is written there.
 
 ## Keep in mind
 

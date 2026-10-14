@@ -1,10 +1,10 @@
 ---
 about: agent-os/apps/
 node: n-43
-basis: d7f24ab16886
+basis: 87a1c066980c
 written: 2026-10-07T14:21:32Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T10:21:35Z
 ---
 # apps/
 

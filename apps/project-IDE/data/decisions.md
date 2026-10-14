@@ -665,3 +665,11 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - **Why:** the owner: "for trading all current available information we need put in a docs"; "detailed full explanation in asd style for the metadata logic, all logic related to it in a new system, add this to the top level docs".
 - **Status:** decided.
 - **Changed:** docs/metadata.md, the project, system and trading docs, CLAUDE.md, file-index, materialize.py, enrich.py, the leave-vision files plan.
+
+### D-068: Two types of questions; the owner's questions improve the docs
+<!-- k: id=d-068 applies=[57] sources=in-20261014-1004,in-20261014-1006 status=decided -->
+- **Decision:** every Questions file has two parts. "Open questions for the owner" holds what only the owner can answer; it is written by `change-plan` (each choice of a plan), by the new `make-questions` skill (gaps, contradictions, unapproved defaults, waiting proposals, stale answers), while a doc is written and while an item is changed; an answered question leaves it. "The owner's questions" holds each question the owner asked about the item, word for word, with its answer; it stays, and the answer is updated when it stops being true. Each owner question is also analysed for why the docs did not answer it (missing, hard to find, unclear, wrong, asked before), the docs that should have answered it are improved, and a "Docs improved" line names them (`knowledge-intake` step 6).
+- **Date:** 2026-10-14
+- **Why:** the owner: "for question i think we need 2 types one we should record mine in metadata ... (with an answer) ... questions created when we do plan, or by skill to analyse and make questions"; "also mine questions should be analysed and improve related documentations".
+- **Status:** decided.
+- **Changed:** docs/metadata.md section 18, the skills change-plan, knowledge-intake, ide-sync, file-index and make-questions, agents/system/CLAUDE.md, every Questions file, the docs named in the "Docs improved" lines.

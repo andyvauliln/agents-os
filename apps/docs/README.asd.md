@@ -157,6 +157,5 @@ Its docs: this file
 - **Research clones:** Can agents make a clone without a request from the owner?
 - **First outside app:** Do the old Polymarket tools come in as a fork?
 - **The list of apps:** Where is the list: in this README (proposed now) or in a separate file?
-- **Ignore rule:** `.gitignore` does not have the line `apps/temp/*/repo/` now. Add it before the first clone.
 - **The dashboard:** Is it necessary? If yes, does it use files or an API layer, and how does the owner get access? When does it get its `docs/` folder?
 - **Shared views:** the proposed folder `apps/project-IDE/views/` and its file `views.json`.

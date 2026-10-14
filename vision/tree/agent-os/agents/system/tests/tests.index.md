@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/system/tests/
 node: n-10.8
-basis: d407ccea13bd
+basis: ee5d0a84a781
 written: 2026-10-01T01:00:33Z
 by: summary-worker
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T10:21:35Z
 ---
 # tests/
 

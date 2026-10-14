@@ -31,7 +31,7 @@ Read them with the artifact data tool on the page's link, https://claude.ai/arti
    - a new item gets its number and a line in the tree notes, a section, and its How it works file, marked proposed until the owner says otherwise;
    - a deleted item is cleaned out of the project as in "Deleting an item" below, keeping the owner's note in mind; when its `cleanup` is `claude-code`, Claude Code already did it on the server, so only check it;
    - any other field goes into `overrides.json` under the item's number;
-   - an open line comment is applied when the owner asked for the change, otherwise it becomes an open question in the item's section.
+   - an open line comment is applied when the owner asked for the change, otherwise it becomes an open question for the owner in the item's Questions file, part "Open questions for the owner".
 4. **Run the requests** the owner sent from the page, such as a question to answer or a file to add. File each answer with its input. A question the owner asked on an item, and an answer the owner gave to an open question (the Discuss button), go into that item's Questions file (`knowledge-intake` step 1.5).
 5. **Hand over the knowledge.** List the saved inputs for the knowledge base agent, which sorts them into the notes, decisions and docs and refreshes the How it works files.
 6. **Rebuild and publish** with `ide-build`.

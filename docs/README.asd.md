@@ -104,6 +104,8 @@ The docs folder of each level has the same four docs: `vision.md`, `README.md`, 
 
 A level does not repeat the text of its parent level. It gives a short summary of the parent level in one or two sentences. Then it describes only its own parts.
 
+Each of the four docs has a different purpose. The vision tells what the level is for and why. It tells the concept, how the level must operate, the business rules and examples. The README gives an exact description of each part of the level. It tells what each part contains and how the parts connect. It gives the path to the docs of each part. It does not tell the logic in the agents. `README.asd.md` is the README in ASD-STE100. The rebuild prompt is the specification that an AI uses to build the level again. Detailed logic is not in these four docs. It is in its own doc or skill. The README gives a short summary and the path to it. The vision keeps only the idea. Example: the full metadata logic is in `docs/metadata.md`. This README has a short part with a link to it. The `file-index` skill has the steps.
+
 ## The parts
 
 ### The front page and the handoff
@@ -299,7 +301,7 @@ Its docs: `docs/metadata.md`, `agent-os.index.md` and the `file-index` skill, `a
 
 The build copies the drafts, records and metadata files from `vision/` to their locations in the tree. We write the docs of each level in their own folders.
 
-It is an open subject when the real files become the only source. After that change, `vision/` becomes an archive.
+It is an open subject when the real files become the only source. After that change, `vision/` becomes an archive. The plan for this change is `apps/project-IDE/data/plans/2026-10-13-leave-vision.md`. It waits for the approval of the owner. In the plan, the identifiers, numbers and decisions of the tree notes go into the Details file of each item. The records go to `apps/project-IDE/data/`. The build scripts go into the `ide-build` skill. The page goes to `apps/project-IDE/current-ui/`. The server settings are corrected. The build stops the copy of drafts and metadata.
 
 Its docs: `vision/docs/README.md` and `vision/tools/README.md`.
 

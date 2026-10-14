@@ -2,7 +2,7 @@
 
 ## In short
 
-Trading is the first kind of work the Agent OS does, and everything about it lives in one place: a folder of trading domains, with trading's own docs and its research. A trading domain is one area of trading, such as prediction markets. Every trading domain runs many small trading agents side by side, tries each idea in test mode with no real money, keeps the versions that work and lets only the owner put real money in. The first trading domain is prediction markets on Polymarket; a new one starts as a copy of it and changes only what is its own.
+Trading is the first kind of work the Agent OS does, and everything about it lives in one place: a folder of trading domains, with trading's own docs and its research. A trading domain is one area of trading, such as prediction markets. Every trading domain runs many small trading agents side by side, tries each idea in test mode with no real money, keeps the versions that work and lets only the owner put real money in. The first trading domain is prediction markets on Polymarket; a new one starts as a copy of it and changes only what is its own. The system level stays general: nothing about money, markets or orders is written in the system's docs, settings or scripts, and all of it lives here, in trading and its domains.
 
 Where it stands: trading's docs and its research studies exist. The prediction-market domain exists as its empty folders, and its `docs/` already holds all the trading notes the project has; its other files are kept aside and it is written again in the project's second stage. Nothing that trades is built yet.
 

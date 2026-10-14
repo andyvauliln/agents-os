@@ -2,7 +2,7 @@
 about: agent-os/agents/trading/docs/vision.md
 node: n-56.1.2
 basis: 147765503685
-written: 2026-10-12T00:00:00Z
+written: 2026-10-14T12:00:00Z
 by: knowledge-base-agent
 confirmed: 2026-10-12T15:40:56Z
 ---
@@ -30,7 +30,7 @@ Trading's README and its ASD-STE100 version name it in their first section; trad
 
 ## Related knowledge
 
-It sits below the system's vision, which holds what every agent shares, and above each trading domain's vision. Trading's README describes the same things exactly, with paths. The rules behind it are in the prediction-market domain's kept trading notes (`vision/docs/prediction-market-agents/`) and the owner's inputs.
+It sits below the system's vision, which holds what every agent shares, and above each trading domain's vision. Trading's README describes the same things exactly, with paths. The rules behind it are in the prediction-market domain's kept trading notes (`agents/trading/prediction-market/docs/`) and the owner's inputs.
 
 ## Keep in mind
 

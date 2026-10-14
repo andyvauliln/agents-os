@@ -41,7 +41,9 @@ Every `README.md` has an ASD-STE100 twin, `README.asd.md`, next to it. Read the 
 
 **Where to edit while we plan.** The docs at the four levels and this file are real files: edit them where they are. Everything else that came from a draft has its source in `vision/`, and the build copies it into place, so edit the source: skills and agents in `vision/.claude/`, tools in `vision/tools/`, the page in `vision/explorer/`, the server in `vision/server/`, records in `vision/docs/`, How it works and Details files in the mirror `vision/tree/agent-os/`.
 
-## Rules (from the project memory, `vision/.claude/memory/`)
+## Rules
+
+These are the lasting rules for every session. The new version keeps no memory folder: agents work from the docs and the metadata, and the planning copy of the memory notes, `vision/.claude/memory/`, is deleted, not moved, when `vision/` goes.
 
 - Decided means the owner decided. Your own ideas are "proposed" until the owner says yes.
 - Never write a key value anywhere: no keys, passwords or wallet details. Key names only. Never read a `.env` file.
@@ -54,6 +56,7 @@ Every `README.md` has an ASD-STE100 twin, `README.asd.md`, next to it. Read the 
 - Generated files are rebuilt, never merged by hand: the page data, the knowledge map, `docs/file-tree.md`.
 - Ask the owner before anything hard to undo: deleting, rewriting history, merging into `main`, anything that acts in the outside world. A Delete the owner pressed on the page is that ask for that one item.
 - What you learn goes into the docs before the round ends. Every question the owner asks gets its answer written where they should have found it.
+- Answer in ASD-STE100 when the owner asks for it, and keep token use low: read what the task needs, not everything.
 - Call the owner "the owner", and "they" when a pronoun is needed.
 
 ## After every input or update

@@ -82,6 +82,8 @@ project            docs/
 
 Every level's docs folder holds the same four docs: `vision.md`, `README.md`, `README.asd.md` and `rebuild-prompt.md`. The project level adds `file-tree.md`, the plain list of every path. A level never repeats its parent; it sums the parent up in a sentence and describes only its own parts.
 
+Each of the four has its own job. The vision says what the level is for and why: the concept, how it should work, its business rules and examples. The README describes every part of the level exactly, what it holds and how the parts connect, with the path to each part's own docs and no logic inside the agents. `README.asd.md` is the README again in ASD-STE100. The rebuild prompt is the spec an AI follows to build the level again. Detailed logic does not go into any of them: it lives in its own doc or skill, the README gives a short view with the path to it, and the vision keeps only the idea. The metadata logic shows the rule: the full logic is `docs/metadata.md`, this README has a short part that points to it, and the `file-index` skill holds the steps.
+
 ## The parts
 
 ### The front page and the handoff
@@ -220,7 +222,7 @@ Its docs: `docs/metadata.md`, `agent-os.index.md` and the `file-index` skill, `a
 - `vision/tree/agent-os/`: the mirror tree of every How it works and Details file.
 - `vision/archive/`: retired texts, by date, among them the earlier drafts of the docs and the prediction-market domain's files, kept for stage two.
 
-The build copies the drafts, records and metadata files from here into their places in the tree. The docs of every level are written in their own folders. Making every real file its own only source, and leaving the planning area as an archive, is still open.
+The build copies the drafts, records and metadata files from here into their places in the tree. The docs of every level are written in their own folders. Making every real file its own only source, and leaving the planning area as an archive, is still open. The plan for it, which waits for the owner's go, is `apps/project-IDE/data/plans/2026-10-13-leave-vision.md`: the tree notes' ids, numbers and decisions move into each item's Details file, the records move to `apps/project-IDE/data/`, the build scripts into the `ide-build` skill and the page to `apps/project-IDE/current-ui/`, the server settings are fixed, and the copying of drafts and metadata stops.
 
 Its docs: `vision/docs/README.md` and `vision/tools/README.md`.
 

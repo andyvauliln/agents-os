@@ -10,6 +10,8 @@ A trading domain is one area of trading, for example prediction markets. Each tr
 
 The first trading domain is prediction markets on Polymarket. A new trading domain starts as a copy of the prediction-market domain. Then it changes only its own parts.
 
+The system level stays general. The docs, settings and scripts of the system contain no information about money, markets or orders. All of this information is in trading and in its domains.
+
 Status: the trading docs and the research studies exist. The prediction-market domain has empty folders. Its `docs/` folder contains all the trading notes of the project. Its other old files are in an archive. The project writes this domain again in stage two. No part that trades exists at this time.
 
 This document gives a full and exact description of each part of `agents/trading/`. It also tells what each trading domain contains, and where the docs of each part are. It does not tell how an agent makes decisions. The vision, `agents/trading/docs/vision.md`, tells why trading has its own folder, how trading must operate and the rules.

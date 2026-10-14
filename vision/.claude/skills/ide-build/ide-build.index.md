@@ -1,10 +1,10 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/
 node: n-10.1.2.5
-basis: 5a4215adf588
+basis: 12b21ee74904
 written: 2026-10-05T13:25:49Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T10:21:35Z
 ---
 # ide-build/
 

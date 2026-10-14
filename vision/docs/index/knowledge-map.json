@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-14T09:51:34Z",
+ "built": "2026-10-14T10:21:45Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "e15d9a686e79",
+   "hash": "3b899a2739bc",
    "entries": []
   },
   "conventions.md": {
@@ -147,7 +147,7 @@
   },
   "decisions.md": {
    "title": "Agent OS: Decisions (v1.13)",
-   "hash": "d980b76c5d50",
+   "hash": "63568bd5313f",
    "entries": [
     "d-001",
     "d-002",
@@ -215,7 +215,8 @@
     "d-064",
     "d-065",
     "d-066",
-    "d-067"
+    "d-067",
+    "d-068"
    ]
   },
   "feature-map.md": {
@@ -6251,6 +6252,27 @@
    ],
    "inherited_by": [],
    "chars": 1142
+  },
+  "d-068": {
+   "id": "d-068",
+   "doc": "decisions.md",
+   "heading": "D-068: Two types of questions; the owner's questions improve the docs",
+   "level": 3,
+   "line": 669,
+   "applies_raw": [
+    "[57]"
+   ],
+   "sources": [
+    "in-20261014-1004",
+    "in-20261014-1006"
+   ],
+   "status": "decided",
+   "hash": "2129f4595377",
+   "nodes": [
+    "n-57"
+   ],
+   "inherited_by": [],
+   "chars": 1334
   },
   "fm-data-collection-workers": {
    "id": "fm-data-collection-workers",
@@ -20261,7 +20283,7 @@
     "vis-q-hosting"
    ],
    "inherited": [],
-   "basis": "987e3ba12bb6",
+   "basis": "5e2440725f67",
    "summary_state": "fresh"
   },
   "n-48": {
@@ -20313,10 +20335,11 @@
     "arch-docs",
     "d-064",
     "d-067",
+    "d-068",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "f41063a68e23",
+   "basis": "7dfcaaae5eec",
    "summary_state": "fresh"
   },
   "n-57.1": {
@@ -20704,7 +20727,7 @@
     "idx-agents"
    ],
    "inherited": [],
-   "basis": "e5911902aa15",
+   "basis": "933e9d8dc5b7",
    "summary_state": "fresh"
   },
   "n-10.20": {
@@ -21056,7 +21079,7 @@
     "d-057"
    ],
    "inherited": [],
-   "basis": "5a4215adf588",
+   "basis": "12b21ee74904",
    "summary_state": "fresh"
   },
   "n-10.1.2.5.1": {
@@ -22767,7 +22790,7 @@
     "howto-add-or-run-tests-steps"
    ],
    "inherited": [],
-   "basis": "d407ccea13bd",
+   "basis": "ee5d0a84a781",
    "summary_state": "fresh"
   },
   "n-10.8.1": {
@@ -22787,7 +22810,7 @@
     "conv-tests-research"
    ],
    "inherited": [],
-   "basis": "15a284327e31",
+   "basis": "a1ba8b808afc",
    "summary_state": "fresh"
   },
   "n-10.8.1.1": {
@@ -26036,7 +26059,7 @@
     "vis-q-polymarket-suite"
    ],
    "inherited": [],
-   "basis": "d7f24ab16886",
+   "basis": "87a1c066980c",
    "summary_state": "fresh"
   },
   "n-43.1": {
@@ -26147,7 +26170,7 @@
     "ov-parts-ui-apps"
    ],
    "inherited": [],
-   "basis": "f32e916f3143",
+   "basis": "b31579384259",
    "summary_state": "fresh"
   },
   "n-53.4": {
@@ -26253,7 +26276,7 @@
    "same_as": null,
    "direct": [],
    "inherited": [],
-   "basis": "866f24a21312",
+   "basis": "4685d178daec",
    "summary_state": "fresh"
   },
   "n-53.1.1": {
@@ -26320,7 +26343,7 @@
     "d-060"
    ],
    "inherited": [],
-   "basis": "11d68992fb45",
+   "basis": "0925227060c4",
    "summary_state": "fresh"
   },
   "n-53.3.1": {
@@ -29383,6 +29406,42 @@
     "docs/metadata.md"
    ],
    "entries": []
+  },
+  "in-20261014-1004": {
+   "at": "2026-10-14T10:04",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-14-1004-two-types-of-questions.md",
+   "categories": [
+    "docs-knowledge",
+    "process"
+   ],
+   "summary": "Two types of questions: the owner's own, recorded on the item with the answer, and open questions from plans and a skill that analyses items.",
+   "processed_into": [
+    "docs/metadata.md",
+    "skills: change-plan, knowledge-intake, ide-sync, file-index, make-questions",
+    "Questions files"
+   ],
+   "entries": [
+    "d-068"
+   ]
+  },
+  "in-20261014-1006": {
+   "at": "2026-10-14T10:06",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-14-1006-analyse-owner-questions.md",
+   "categories": [
+    "docs-knowledge",
+    "process"
+   ],
+   "summary": "The owner's questions should be analysed and the related docs improved.",
+   "processed_into": [
+    "skills: knowledge-intake, make-questions",
+    "docs/metadata.md",
+    "agents/system/CLAUDE.md"
+   ],
+   "entries": [
+    "d-068"
+   ]
   }
  },
  "problems": [

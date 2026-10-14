@@ -1,6 +1,6 @@
 ---
 name: claude-md-doc
-description: Write and keep agents/system/CLAUDE.md, the file Claude Code reads first when it starts in agents/system/ - what the project is and its current stage, the docs to read in order, the work of the current stage, and the rules, the steps after every input or update and which change makes which doc stale. Use it to write CLAUDE.md the first time, and whenever the stage, the reading list, a rule from memory, the steps of a round, a doc or a skill that writes a doc changes.
+description: Write and keep agents/system/CLAUDE.md, the file Claude Code reads first when it starts in agents/system/ - what the project is and its current stage, the docs to read in order, the work of the current stage, and the rules, the steps after every input or update and which change makes which doc stale. Use it to write CLAUDE.md the first time, and whenever the stage, the reading list, a lasting rule, the steps of a round, a doc or a skill that writes a doc changes.
 ---
 
 # CLAUDE.md doc
@@ -24,14 +24,14 @@ The owner set the order of its parts:
 1. What the project is, and its current stage.
 2. The reading list, in this order: the project vision, the project README, the system vision, the system README, the file tree, the project IDE docs.
 3. The current stage and its work.
-4. The things that belong to `CLAUDE.md` itself: the rules from memory, what to do after every input or update, and when and how to update each doc file.
+4. The things that belong to `CLAUDE.md` itself: the lasting rules, what to do after every input or update, and when and how to update each doc file.
 
 Keep this order. A heading can be worded to fit, but no part moves and no part is left out.
 
 ## What to read before writing
 
 - **The current `CLAUDE.md`** and its earlier draft in `vision/archive/2026-10-12/claude-docs/CLAUDE.md`. Keep what is still true.
-- **The memory notes** in `vision/.claude/memory/` (`MEMORY.md` is the index). Each rule there that holds for every session goes into the rules.
+- **The memory notes** in `vision/.claude/memory/` (`MEMORY.md` is the index), only while we plan. Each rule there that holds for every session goes into the rules. The new version keeps no memory folder: it is deleted, not moved, when `vision/` goes, and from then on the rules in `CLAUDE.md` are their only home.
 - **The notes:** the newest decisions, the changelog and the owner's inputs in `vision/docs/`, and the plan of the current round in `vision/plans/`. Newest wins.
 - **The project vision and README** (`docs/vision.md`, `docs/README.md`), for the words that say what the project is and its stage.
 - **The skills** in `vision/.claude/skills/` and the helper agents in `vision/.claude/agents/`, so each skill named in the update table exists and does what the table says.
@@ -63,8 +63,8 @@ The stage, its work as a short list in the order the owner gave it, and what is 
 
 ## CLAUDE.md related things
 
-### Rules from memory
-The rules every session follows, one line each, taken from the memory notes.
+### Rules
+The lasting rules every session follows, one line each. No memory folder stands behind them in the new version.
 
 ### What to do after every input or update
 Numbered steps, from the moment an input arrives to the commit.
@@ -81,7 +81,7 @@ A short table: what, and its path. Only what a new session needs to find its way
 - **What this project is.** The same words as the "In short" of the project vision. The stage: today stage one, and nothing of the agents is built yet.
 - **Read first, in this order.** Exactly the six docs above, in that order. Add a doc to the list only on the owner's word. The How it works line: `vision.index.md` next to `vision.md`, `f/f.index.md` inside a folder, and `python3 vision/tools/build_map.py --context <node>` to print everything that applies to an item, the levels above included.
 - **The current stage and its work.** For stage one: finish the project IDE; go through every file and folder; write the custom views; make all metadata correct; finish the docs at the project level, the system domain, trading in general and apps. Out of scope: the prediction-market domain and everything below it, which keep only their folders; that is stage two.
-- **Rules from memory.** From `vision/.claude/memory/`, one line each, for example: decided only on the owner's word, and our ideas are "proposed"; never write or read a key value, and never open a `.env` file; docs for people are plain and book-like, with no reference numbers, ids or decision codes; every owner input, every answer to the owner's question and every system change goes through `knowledge-intake`; every change request gets a plan first (`change-plan`); before a change, know the item's whole context, and after it bring everything related in line in the same round; the tree on the page always equals the files on disk, and every planned item is a real file; every file and folder outside `vision/` has its How it works and Details files; one job per code file; generated files are rebuilt, never merged by hand; use only the repository `andyvauliln/trading-oss`; ask before anything hard to undo (deleting, rewriting history, merging into `main` unless the owner allowed it, anything that acts live); show the plan and one example before a big rewrite; call the owner "the owner", and "they".
+- **Rules.** The lasting rules, one line each (taken from `vision/.claude/memory/` while it exists), for example: decided only on the owner's word, and our ideas are "proposed"; never write or read a key value, and never open a `.env` file; docs for people are plain and book-like, with no reference numbers, ids or decision codes; every owner input, every answer to the owner's question and every system change goes through `knowledge-intake`; every change request gets a plan first (`change-plan`); before a change, know the item's whole context, and after it bring everything related in line in the same round; the tree on the page always equals the files on disk, and every planned item is a real file; every file and folder outside `vision/` has its How it works and Details files; one job per code file; generated files are rebuilt, never merged by hand; use only the repository `andyvauliln/trading-oss`; ask before anything hard to undo (deleting, rewriting history, merging into `main` unless the owner allowed it, anything that acts live); show the plan and one example before a big rewrite; answer in ASD-STE100 when the owner asks for it, and keep token use low; call the owner "the owner", and "they".
 - **What to do after every input or update.** The steps in "The round" below.
 - **When and how to update each doc.** The table in "The update table" below.
 - **Where things are.** The knowledge base and notes, the memory, the plans, the drafts of the helper agents and skills, the build tools, the File Tree page and its server, the keys folder, while we plan and where each goes later.
@@ -115,7 +115,7 @@ These are the steps `CLAUDE.md` gives for every input or update:
 | A doc's outline changed in its skill | that doc's `.example.md` at every level | `file-index` |
 | A question about an item asked or answered | its `.questions.md`, and the doc where the answer belongs | `knowledge-intake`, `file-index` |
 | The owner left notes, edits or deletes on the page | the files they touch, then all of the above | `ide-sync`, then `ide-build` |
-| The stage, the reading list, a memory rule, the round, a doc or a doc skill changed | `agents/system/CLAUDE.md` | `claude-md-doc` |
+| The stage, the reading list, a lasting rule, the round, a doc or a doc skill changed | `agents/system/CLAUDE.md` | `claude-md-doc` |
 
 The five doc levels, each with `vision.md`, `README.md`, `README.asd.md` and `rebuild-prompt.md`: the project in `docs/`, the system in `agents/system/docs/`, trading in `agents/trading/docs/`, apps in `apps/docs/`, and one app, such as `apps/project-IDE/docs/`. When every level is written fresh, the order is project, system, apps, the project IDE, trading.
 
@@ -139,7 +139,7 @@ About 1,000 to 2,000 words. Claude Code loads the whole file into every session,
 
 - the stage changes, or the work of the current stage changes;
 - a doc in the reading list is added, removed, moved or renamed, or the owner changes the order;
-- a rule in the memory notes is added, changed or dropped, when it holds for every session;
+- a lasting rule is added, changed or dropped, when it holds for every session;
 - the steps of a round change (a new skill in the round, a new check, a new git rule);
 - a doc is added at a level, a doc skill is added or renamed, or a change starts to make another doc stale;
 - a path in "Where things are" changes, for example when the planning area `vision/` moves into the repository's own folders;

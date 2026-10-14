@@ -140,6 +140,5 @@ Its docs: this file
 - **Research clones:** whether agents may clone a repository on their own.
 - **First outside app:** whether the earlier Polymarket tools come in as a fork.
 - **The list of apps:** where it lives: in this README, as now proposed, or in a file of its own.
-- **Ignore rule:** `.gitignore` does not yet hold the line `apps/temp/*/repo/`; it must be added before the first clone.
 - **The dashboard:** whether it is needed at all; if so, files or an API layer, and how it is reached; when it gets its own `docs/`.
 - **Shared views:** the proposed `apps/project-IDE/views/` folder and its `views.json`.

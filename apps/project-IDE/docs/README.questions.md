@@ -15,11 +15,15 @@
 
 The page on claude.ai cannot pick a named model or an effort level: it can only ask for one of three levels, Most capable, Balanced or Fastest, and the platform chooses the model. That choice sits with the ask box. On the owner's server the page has no model choice; the setting `claude.model` in `server.config.json` chooses, and empty means Claude Code's default.
 
+Docs improved: none, the answer was already in apps/project-IDE/docs/README.md (the ask box and the server settings).
+
 ### 2026-09-30: How Changed works and when a sync happens
 
 > and how changed works, since the last sync and when and how we do sync?
 
 The "changed" mark is on every item a request from the page touched (an edit, a note, an added or deleted item, a waiting request), and the Changed tab lists them until the next sync. A sync happens when the owner presses Apply changes at the top of the page or says "sync the file tree": `ide-sync` writes everything into the files and files each message as an owner input, then `ide-build` rebuilds and publishes the page, and the marks are cleared. On the owner's server, file and How it works edits go into the files at once. This changed later: the first Changed view with its NEW, EDITED, REMOVED and COMMENTS labels became the one "changed" mark, and the Apply changes button was added.
+
+Docs improved: none, the answer was already in apps/project-IDE/docs/README.md (the "changed" mark and Apply changes).
 
 ### 2026-10-05: Does editing the files update the claude.ai page?
 
@@ -27,11 +31,15 @@ The "changed" mark is on every item a request from the page touched (an edit, a 
 
 The claude.ai link shows what was last published, and it changes only when the page is published again to the same link, which keeps the owner's waiting notes. The `ide-build` skill publishes it at the end of every round. How the claude.ai page gets updated after work done on the server is still open.
 
+Docs improved: none, the answer was already in apps/project-IDE/docs/README.md (the three places the page runs, and "Still open in the design").
+
 ### 2026-10-13: Can a block be edited as it looks?
 
 > can we when we edit file block in ide  not change format to md again for editing, just same box but just edit there
 
 Yes. A double-click in the Read view, or two taps on a phone, makes the block editable where it stands, looking as it reads. Save, Ctrl+Enter or a click outside the block turns it back into Markdown and writes only those lines; a Markdown button opens the source lines, and the front matter always opens as source.
+
+Docs improved: none, the answer was already in apps/project-IDE/docs/README.md (reading and editing a document).
 
 ### 2026-10-13: What decides planned and not planned files?
 
@@ -39,8 +47,12 @@ Yes. A double-click in the Read view, or two taps on a phone, makes the block ed
 
 Today nothing does: the page and the build know only the files on disk, nothing is created from a plan, and the "planned" switch is gone. A file with nothing written in it yet is marked "empty", and the "empty" filter shows only those files. This changed later: when asked, planned items came from the tree notes and found items from the disk; the same day the owner had all logic about planned items removed.
 
+Docs improved: none, the answer was already in apps/project-IDE/docs/README.md (the empty filter) and agents/system/CLAUDE.md (the rules).
+
 ### 2026-10-14: Terminal or page?
 
 > what is a differnce if exist when we ll run agent from terminal claude code and when we make notes on ui?
 
 It is the same Claude Code with the same `CLAUDE.md`, skills and files. In the terminal it files the input and does the round by following `CLAUDE.md`, you name the item yourself, and it asks in the terminal before risky steps. On the page every note is tied to one item, saved word for word at once with a history and undo, and marked "changed" until the sync; on the server the request box runs the same Claude Code with Allow and Refuse. Use the page for one item and the terminal for wide work; terminal work shows on the page only after the next rebuild.
+
+Docs improved: apps/project-IDE/docs/README.md, apps/project-IDE/docs/README.asd.md.

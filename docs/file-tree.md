@@ -49,6 +49,8 @@ agents/system/.claude/skills/ide-sync/
 agents/system/.claude/skills/ide-sync/SKILL.md
 agents/system/.claude/skills/knowledge-intake/
 agents/system/.claude/skills/knowledge-intake/SKILL.md
+agents/system/.claude/skills/make-questions/
+agents/system/.claude/skills/make-questions/SKILL.md
 agents/system/.claude/skills/readme-asd-doc/
 agents/system/.claude/skills/readme-asd-doc/SKILL.md
 agents/system/.claude/skills/readme-doc/

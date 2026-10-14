@@ -351,6 +351,8 @@ The page asks for four runtime capabilities:
 - The identity of the viewer.
 - Comments to Claude.
 
+**The page or the terminal.** The page and the terminal use the same Claude Code. They use the same `CLAUDE.md`, the same skills and the same files. In the terminal, the owner starts Claude Code in `agents/system/`. The owner gives the name of the item. Claude Code records the words of the owner and does the round as `CLAUDE.md` tells. Before a risky step, it asks the owner in the terminal. On the page, each note and each message is about one item. The page keeps it immediately, word for word, with its history and an undo. The item shows "changed" until the sync. On the server, the request box starts the same Claude Code, with Allow and Refuse. Use the page for work on one item. Use the terminal for work on many items. The page shows work from the terminal only after the next build.
+
 ## What the page reads
 
 `file-tree.data.json` is the only data of the page. A script makes it. Do not edit it or merge it by hand.

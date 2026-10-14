@@ -72,4 +72,5 @@ The page source is `file-tree-explorer.html`. The page shows its own source on i
 
 - `build_map.py` reports every How it works file fresh, none missing, no orphans.
 - `check_page.js` prints "page ok".
+- The page tree lists exactly the files in git (`git ls-files --cached --others --exclude-standard`), plus the two local-only `.env` files. This is how the page stays in step with the disk.
 - The data version on the page is the new one, and the items the round changed show what the round changed.

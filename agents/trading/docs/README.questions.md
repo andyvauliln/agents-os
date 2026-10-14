@@ -16,3 +16,5 @@
 > also did we remove all related to trading agent down to trading agents in our case i think to prediction market domain
 
 Not yet at that moment; it was done the same day. Today the system level stays general, with nothing about money, markets or orders, and all trading knowledge sits in `agents/trading/prediction-market/docs/`. This changed later: trading became a folder of domains, `agents/trading/`, with its own docs, and the prediction-market domain sits inside it.
+
+Docs improved: agents/trading/docs/README.md, agents/trading/docs/README.asd.md, agents/trading/docs/README.index.md, agents/trading/docs/vision.index.md.

@@ -1,13 +1,13 @@
 ---
 name: knowledge-intake
-description: Process one owner input or one system change into the Agent OS knowledge base - store it, extract the knowledge, place it in the right docs, ripple it to every related file doc and topic, record it, rebuild the map and refresh the How it works summaries.
+description: Process one owner input or one system change into the Agent OS knowledge base - store it, extract the knowledge, place it in the right docs, ripple it to every related file doc, record it, rebuild the map and refresh the How it works summaries.
 ---
 
 # Knowledge intake
 
 Use this for every owner input (project chat, a thread, the File Tree page), every change to the system's files, and whatever a session learned about the system even when no file changed. The aim: every AI that later touches a file finds all the context it needs to change it precisely. The guide to your notes is the `README.md` in the notes folder (`apps/project-IDE/data/` in the repository, `vision/docs/` while we plan); read it first if you have not this session. It is not the people README in the system's `docs/`.
 
-Paths below are relative to the planning folder `/mnt/project-files/vision/` (notes in `docs/`, scripts in `tools/`). In the repository the records (inputs, decisions, changelog, the tree notes, the map, sources) are in `apps/project-IDE/data/`, the topic notes in `agents/system/docs/`, and the scripts in `agents/system/.claude/skills/ide-build/scripts/`. Messages and edits from the File Tree page reach you through the project IDE agent's `ide-sync`, already saved word for word.
+Paths below are relative to the planning folder `/mnt/project-files/vision/` (notes in `docs/`, scripts in `tools/`). In the repository the records (inputs, decisions, changelog, the tree notes, the map) are in `apps/project-IDE/data/`, the docs of each level in its `docs/`, and the scripts in `agents/system/.claude/skills/ide-build/scripts/`. Messages and edits from the File Tree page reach you through the project IDE agent's `ide-sync`, already saved word for word.
 
 ## 1. Store the input
 
@@ -18,8 +18,8 @@ For an owner input:
 4. **A question and its answer are one input.** When the owner asked something and Claude answered (in chat, in a thread, on the File Tree page), store the answer in the same file under `## Answer` and set `answered: true` on the row. The answer is knowledge: it goes through steps 2 to 7 like the owner's own words.
 5. **Record the owner's question on its item.** Add it to the Questions file of the item it is about (`x.questions.md`, part "The owner's questions"): a `### <date>: <short title>` heading, the owner's question word for word as a quote, and the answer in one to four short sentences in ASD-STE100 (Simplified Technical English, like `docs/metadata.md`): short sentences, one statement each, active voice, simple common words, articles kept, lists for steps and choices. Create the file when it does not exist. The full format is in `docs/metadata.md` (Questions). When a later change makes the answer untrue, update the answer and add "This changed later: ...".
 6. **Analyse the owner's question and improve the docs.** A question from the owner shows that the docs did not tell them something. Find why, and fix the docs, not only the answer:
-   - **Missing**: no doc holds the answer. Add it to the doc where the owner looked or should look (the item's How it works, the level's vision or README, or a topic note).
-   - **Hard to find**: a doc holds it, but deep or under another name. Add a link or one sentence where the owner looked, and the owner's word to the glossary.
+   - **Missing**: no doc holds the answer. Add it to the doc where the owner looked or should look (the item's How it works, Details, Example or Questions, or the level's vision, README, README.asd or rebuild prompt).
+   - **Hard to find**: a doc holds it, but deep or under another name. Add a link or one sentence where the owner looked, and the owner's word to the terms used in the level's README.
    - **Unclear**: the doc holds it, but the owner still asked. Rewrite that part in plainer words, or add a short example.
    - **Wrong or out of date**: fix the doc and every file it ripples to (step 4 of part 4).
    - **Repeated**: the owner asked about the same thing before (see the item's Questions file). The doc is weak there: rewrite the part, do not add one more sentence.
@@ -38,7 +38,7 @@ Read the input against what the knowledge base says now. Write a short working l
 - **status**: decided (the owner said it) · proposed (your reading or a gap you fill) · open.
 - **scope**: the files and folders it concerns, as [n] numbers or patterns.
 
-Separate what the owner said from what you infer. For a question, extract from the answer too: what it says about how the system works is knowledge with the status of what it rests on (decided when it restates a decision, proposed when the answer suggested something new). A question is also a signal: the place in the docs that should have answered it was missing or unclear, so fix that place. **Every question gets a home:** write the explanation of how exactly that thing works where the owner should have found it (the How it works of the file it is about, or the topic note), and when the docs already cover it, check that they answer exactly what was asked and sharpen them if not. Record that place in `processed_into`. If the input contradicts a decided rule, keep the item and flag it for the owner in step 8 instead of choosing silently.
+Separate what the owner said from what you infer. For a question, extract from the answer too: what it says about how the system works is knowledge with the status of what it rests on (decided when it restates a decision, proposed when the answer suggested something new). A question is also a signal: the place in the docs that should have answered it was missing or unclear, so fix that place. **Every question gets a home:** write the explanation of how exactly that thing works where the owner should have found it (the How it works of the file it is about, or the docs of its level), and when the docs already cover it, check that they answer exactly what was asked and sharpen them if not. Record that place in `processed_into`. If the input contradicts a decided rule, keep the item and flag it for the owner in step 8 instead of choosing silently.
 
 ## 3. Find where each item lives
 
@@ -49,9 +49,10 @@ For each item, look before you write:
 
 Then choose one home per item:
 - about one object only → its section in `docs/file-tree.md` (and its tree comment in §1 when the one-line summary changes);
-- shared by several objects, a kind of file, or a mechanism → a section in the topic doc that owns the topic (see the layers table in `docs/README.md`);
-- a format → `data-schemas.md`; a rule → `conventions.md` or `safety.md`; a sequence of steps → `flows.md` or a `how-to/` runbook; a term → `glossary.md`;
-- nothing fits → a new section, or a new doc (tagged, and listed in `docs/README.md` read order and layers table).
+- about one object, for its readers → its metadata files: How it works, Details, Example and Questions;
+- shared by several objects, a kind of file, or a mechanism → the docs of the level that owns it (vision, README, README.asd, rebuild prompt), and the How it works of the folder it concerns;
+- a format, a rule or a sequence of steps → the README and rebuild prompt of the level, or a how-to guide in `agents/system/docs/how-to/`; a rule for every session → `agents/system/CLAUDE.md`; a metadata rule → `docs/metadata.md`; a term → the terms used in the level's README, the same in every doc;
+- nothing fits → a new section in the docs of the level.
 
 ## 4. Write
 
@@ -64,7 +65,7 @@ Then choose one home per item:
 ## 5. Ripple
 
 Every other place that states the changed fact must now agree. Check, in this order:
-1. The grep results from step 3 (docs, tree comments, feature-map rows, how-to steps, glossary terms, examples in index lists).
+1. The grep results from step 3 (docs, tree comments, metadata files, how-to steps).
 2. Every node in the changed section's `applies`: does its file doc still read true?
 3. Renames: grep the old name across `docs/`, and in the planning phase `tools/enrich.py` and `tools/tabs.py` (examples and field guides shown on the page).
 4. Open questions the input answers: remove them from the "Open questions for the owner" part of each Questions file and from "Still open" in the docs, wherever they appear.

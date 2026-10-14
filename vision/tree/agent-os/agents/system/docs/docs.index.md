@@ -30,7 +30,7 @@ The owner, every Claude that works on the system (through `CLAUDE.md`'s reading 
 
 ## Related knowledge
 
-The project's docs are in `docs/`; trading's in `agents/trading/docs/`; the apps' in `apps/docs/` and `apps/project-IDE/docs/`. The records and topic notes the docs are built from are in the planning area, `vision/docs/`.
+The project's docs are in `docs/`; trading's in `agents/trading/docs/`; the apps' in `apps/docs/` and `apps/project-IDE/docs/`. The records the docs are built from are in the planning area, `vision/docs/`.
 
 ## Keep in mind
 

@@ -250,7 +250,7 @@ A domain gets its part of the shared settings, scripts and data through links. I
 
 Domains of one kind are in one folder. `agents/trading/` contains the trading domains. Its `docs/` contains the vision, the README, the ASD-STE100 README and the rebuild prompt of trading. These documents tell what all trading domains share and how to make a new trading domain. Its `researches/` contains the trading studies that are complete. It has no agent, settings or scripts of its own.
 
-The first trading domain is the prediction-market domain, `agents/trading/prediction-market/`. It starts with Polymarket. This domain is the second stage of the project. Now only its folders exist. Its `docs/` folder contains the trading notes. The other folders contain no written files.
+The first trading domain is the prediction-market domain, `agents/trading/prediction-market/`. It starts with Polymarket. This domain is the second stage of the project. Now only its folders exist. Its `docs/` folder contains earlier notes. They are kept for stage two. The other folders contain no written files.
 
 The next trading domain is copy trading. The system makes it as a copy of the prediction-market domain when the owner asks. Agents of other kinds come later as their own domains, for example social media or management.
 
@@ -428,7 +428,7 @@ Outside text can contain hidden instructions that try to trick an AI. Examples o
 
 We propose hard limits for each outside action. Code in the scripts that do actions checks these limits before each action. A domain or an agent can only make the limits stricter. We also propose one general stop switch in the global settings. It stops all outside actions immediately. Only the owner can set it to on or off.
 
-Its docs: `vision/docs/safety.md`
+Its docs: `agents/system/configs/system.config.index.md`
 
 ### Keys and secrets
 
@@ -612,13 +612,12 @@ They contain no reference numbers, codes or history. The notes are for agents. D
 - `vision/docs/changelog.md`: the changes;
 - `vision/docs/file-tree.md`: the tree notes, with one section for each file and folder;
 - the knowledge map;
-- the topic notes that agents read during their work. They are overview, architecture, conventions, safety, data schemas, flows, metrics, glossary, roadmap and feature map. Also the procedures in `how-to/`, the shared knowledge in `common/` and the lists in `index/`;
 - `vision/plans/`: the plans;
 - `vision/.claude/memory/`: the work notes that each Claude reads.
 
 The planned location of the records is `apps/project-IDE/data/`. The build keeps a copy there.
 
-Open subjects: Where do the topic notes go when the planning area closes? Does a person write the lists of agents and workers, or does a script make them? Must a check compare the tree notes with the real folders automatically?
+Open subjects: Where do the records go when the planning area closes? Does a person write the lists of agents and workers, or does a script make them? Must a check compare the tree notes with the real folders automatically?
 
 Its docs: `agents/system/.claude/agents/knowledge-base-agent.md` and `vision/docs/README.md`
 
@@ -684,7 +683,7 @@ Its docs: `apps/project-IDE/docs/README.md`
 | Jobs and the scheduler | `agents/system/configs/system.workers.index.md`, `agents/system/scripts/system/system.index.md` | The jobs file, and the shared scripts that operate the system |
 | Links between agents | `agents/system/configs/system.links.index.md` | The links file |
 | Settings and AI models | `agents/system/configs/configs.index.md` | The global settings and the models file |
-| Actions: test and live | `vision/docs/safety.md` | The rules for test and live, live approval, hard limits and the stop switch |
+| Actions: test and live | `agents/system/configs/system.config.index.md` | The settings for test and live, the live list and the stop switch |
 | Keys and secrets | `.secrets/.secrets.index.md` | The keys folder and its files |
 | Logs | `agents/system/logs/logs.index.md` | The shared logs for each source |
 | Tests | `agents/system/tests/tests.index.md` | The structure of the tests of each level |
@@ -741,7 +740,7 @@ These design subjects are not decided. The list shows them by part. The vision c
 - Which skills do all agents share? Can an agent get a shared skill as a link?
 
 **The knowledge base and the docs**
-- Where do the topic notes and the records go when the planning area `vision/` closes?
+- Where do the records go when the planning area `vision/` closes?
 - Does a person write the lists of agents, workers and other items? Or does a script make them from one list that the screens of the owner also read?
 - Must a check compare the tree notes with the real folders automatically?
 

@@ -53,7 +53,7 @@ The vision tells why the IDE exists and how it must operate. The vision is `apps
 | The text of the real files | The text of each real file. The page loads it when the owner opens the file. | `vision/explorer/real-files.json` | Next to the page data |
 | The build scripts | They make the data, keep the files the same as their drafts and metadata, and examine the page | `vision/tools/` | `agents/system/.claude/skills/ide-build/scripts/` |
 | The kept page edits | Values that the owner set on the page. The build applies them. | `vision/tools/overrides.json` | `apps/project-IDE/data/overrides.json` |
-| The tree notes and the knowledge | One section for each file and folder; topic notes, decisions, inputs, changelog | `vision/docs/` | `apps/project-IDE/data/` and `agents/system/docs/` |
+| The tree notes and the knowledge | One section for each file and folder; decisions, inputs, changelog | `vision/docs/` | `apps/project-IDE/data/` |
 | The How it works files and the Details files | One explanation file and one details file for each item | `vision/tree/agent-os/...`, with a copy next to each item on the disk | Next to each item |
 | The server | The page on the machine of the owner, with Claude Code behind it | `vision/server/` | `apps/project-IDE/server/` |
 | The page store on the server | The notes, edits and messages of the owner, as JSON files | `vision/page-store/` | `apps/project-IDE/data/page-store/` |
@@ -97,7 +97,7 @@ apps/project-IDE/
     ├── inputs/                   every owner input, word for word, with index.json
     ├── decisions.md, changelog.md
     ├── knowledge-map.json        which knowledge applies to which item
-    ├── sources/                  the notes behind each doc for people
+    ├── sources/                  earlier knowledge notes; kept, not used now
     ├── page-store/               on the server: the page's notes, edits and messages
     ├── overrides.json            the owner's page edits kept in the page data
     ├── memory/, plans/, archive/ working notes, change plans, retired files

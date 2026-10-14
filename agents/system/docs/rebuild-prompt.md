@@ -168,7 +168,7 @@ agents/system/                                        # the system domain: the s
 └── start.sh                                          # starts the scheduler and the system's session
 ```
 
-What the system reads from elsewhere, built by other prompts: `.secrets/` (`test/.env`, `live/`, `secrets.index.json`, the `.env.example` files), `.gitignore`, the planning area `vision/` (the records and topic notes the helpers read and write, and while it exists the source of the helpers, skills and build scripts), `apps/project-IDE/` (the page the build writes into), and `agents/trading/` with its domains (the system's children).
+What the system reads from elsewhere, built by other prompts: `.secrets/` (`test/.env`, `live/`, `secrets.index.json`, the `.env.example` files), `.gitignore`, the planning area `vision/` (the records the helpers read and write, and while it exists the source of the helpers, skills and build scripts), `apps/project-IDE/` (the page the build writes into), and `agents/trading/` with its domains (the system's children).
 
 ## Conventions
 
@@ -269,7 +269,7 @@ Each level runs in its own folder and sees only its own setup and links. Helpers
 - `init.sh` (executable, re-runnable): finds the repository root with `git rev-parse --show-toplevel`, writes the git hooks of part 6 into `.git/hooks/`, then runs `node agents/system/scripts/system/relink.system.js` for the whole project.
 - `start.sh` (executable): starts `node agents/system/scripts/system/scheduler.system.js` in the foreground, and nothing else in this build (default, the owner may change it). Starting the system's own session and keeping the scheduler alive as a service wait for the owner.
 
-**The registry** of agent names is the Markdown table `vision/docs/index/agents.md` while the planning area exists (where it lives afterwards is open): one row per agent ever created, retired ones included, with the columns `name | type | domain | parent | route | mode | status | created | path`. If it is missing, create it with one row: `sys-system-agent | system | system | - | route | - | planned | - | agents/system/`. Each lower prompt adds the rows of its own agents. An owner-provided registry replaces it, since retired names stay reserved.
+**The registry** of agent names is a Markdown table (where it lives is open): one row per agent ever created, retired ones included, with the columns `name | type | domain | parent | route | mode | status | created | path`. Its first row is `sys-system-agent | system | system | - | route | - | planned | - | agents/system/`. Each lower prompt adds the rows of its own agents. An owner-provided registry replaces it, since retired names stay reserved.
 
 **Check:** `ls -A agents/system` shows every part of the standard folder plus `CLAUDE.md`; `bash -n agents/system/init.sh agents/system/start.sh` passes; `node -e "JSON.parse(require('fs').readFileSync('agents/system/package.json'))"` passes; the registry has the system's row.
 
@@ -329,7 +329,7 @@ A worker is a script that collects and prepares data. A worker shared by several
 - Envelope for every JSON output: `{ "ts": <when fetched>, "producer": <worker or agent name>, "<rows name>": [ ... ] }`.
 - A helper's digest is Markdown: `# [name]: YYYY-MM-DD HH:MM UTC`, then at most about 10 bullets, each with its subject, a signal, a one-line reason and a source link.
 - `agents/system/data/system/` holds the system's state: `scheduler-state.json` (part 5) and `links.index.json` (part 6).
-- Before adding a worker, look for existing data in `vision/docs/index/workers.md` and `links.index.json`. To add one: write the script, add its job, add a link entry to each reader's links file (and to its main-run `on_change` if it must react at once), and list it in `vision/docs/index/workers.md`.
+- Before adding a worker, look for existing data in `links.index.json`. To add one: write the script, add its job, add a link entry to each reader's links file (and to its main-run `on_change` if it must react at once).
 
 **Check:** every `data/` and `logs/` folder in the tree exists with a `.gitkeep`; a test file written under `agents/system/data/system/` is reported by `git check-ignore` as ignored while its `.gitkeep` is not. If the project's `.gitignore` does not ignore it, report that to the owner instead of changing `.gitignore`.
 
@@ -568,7 +568,7 @@ The system's helper proposes changes to shared files that have no versions as pl
 
 Every level has the standard `.claude/`. The placeholder lines of the tree become placeholder files and folders with their notes.
 
-**The common prompt** every agent below the system builds on is written out in each agent's instructions (default; import or copy is open). Its source is `vision/docs/common/common-prompt.md` while the planning area exists. If it is missing, write it there with these six sections, addressed to the agent, with `<agent-id>`, `<role>`, `<scope>` and `<agent-folder>` filled in each copy:
+**The common prompt** every agent below the system builds on is written out in each agent's instructions (default; import or copy is open). It has these six sections, addressed to the agent, with `<agent-id>`, `<role>`, `<scope>` and `<agent-folder>` filled in each copy:
 
 - **Who you are:** the `<role>` of the Agent OS, a system that runs many agents of any kind across domains on one shared core; responsible for `<scope>`; your name is your permanent ID; you work in your own folder and see other levels only through your links.
 - **Read first:** the rest of your instructions; `docs/README.md`; your config, jobs and links files (in a run, `logs/effective-config.json`); `docs/changes.md`; before research, `research/index.json`; before changing a prompt or script, the `tests.config.json` files.
@@ -611,7 +611,7 @@ The knowledge base agent keeps every input and turns it into the docs. Copy the 
 
 **The docs** in `agents/system/docs/`, written in this order every round: `vision.md` (In short, Why we are building it, The concept, How it should work, The business logic, Examples, What the owner sees and does, Where we are and what comes next, Principles, Ideas we are still weighing, Open questions, Going deeper; it names no files except in its last section), `README.md` (In short, The system at a glance, How the project is laid out, the parts in the order of this file, each ending "Its docs: `path`", Where each part's docs are, Still open in the design), `README.asd.md` (the same content and section order in ASD-STE100: a first line saying it is the ASD-STE100 version and `README.md` is the source; one topic per sentence; descriptive sentences at most 25 words, procedural at most 20; active voice; present tense; the README's names exactly; numbered steps for procedures; paragraphs of at most 6 sentences) and `rebuild-prompt.md` (this file). Next to each sits its `x.example.md` (its outline, one line per section) and `x.questions.md` (its open questions for the owner, or "None open."). Copy the owner's docs if handed over.
 
-**The records and topic notes** are not part of `agents/system/`: while the planning area exists they are in `vision/` (`vision/docs/` with `inputs/`, `decisions.md`, `changelog.md`, `file-tree.md`, the topic notes, `how-to/`, `common/`, `index/`; `vision/plans/`; `vision/.claude/memory/`), built by the project's prompt, with a copy of the records in `apps/project-IDE/data/`. The helpers read and write them there.
+**The records** are not part of `agents/system/`: while the planning area exists they are in `vision/` (`vision/docs/` with `inputs/`, `decisions.md`, `changelog.md`, `file-tree.md`; `vision/plans/`; `vision/.claude/memory/`), built by the project's prompt, with a copy of the records in `apps/project-IDE/data/`. The helpers read and write them there.
 
 **Whole context for every change.** `build_map.py --context <id>` prints, for any item, its section in the tree notes, the knowledge that applies to it directly and from every folder above it, and its children. Every agent runs it before it changes a file; after the change it brings every related file, agent, skill, doc and list in line in the same round. What a session learns is filed as an input even when no file changed, and every owner question gets its answer written where the owner should have found it.
 
@@ -734,7 +734,7 @@ Leave each as stated, and list it in your report.
 - The scheduler's machine and OS service; cloud, desktop and GitHub jobs: nothing.
 - How `triggers.important` combines with `on_change`; how a test's own schedule reaches the scheduler: nothing.
 - Read cursors, a JSON registry, JSON Schema files: none.
-- Where the records and topic notes live once the planning area `vision/` is retired: leave them in `vision/`.
+- Where the records live once the planning area `vision/` is retired: leave them in `vision/`.
 - The skills `readme-asd-doc` and `claude-md-doc`: planned for this stage; create their folders only when the owner hands over their `SKILL.md`.
 - Splitting the IDE build scripts into one-job files, custom views and the other files of the file-set plan: nothing.
 - Anything under `agents/trading/prediction-market/` beyond its folders: nothing; it is the second stage.

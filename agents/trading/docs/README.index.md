@@ -30,7 +30,7 @@ Trading's vision names it in its last section; the system's README gives it as t
 
 ## Related knowledge
 
-Its In short uses the vision's words. `README.asd.md` must say the same in ASD-STE100. The rebuild prompt builds what it describes. The detail of each trading rule is in the trading notes in `agents/trading/prediction-market/docs/`. The system level stays general: nothing about money, markets or orders is written there.
+Its In short uses the vision's words. `README.asd.md` must say the same in ASD-STE100. The rebuild prompt builds what it describes. The system level stays general: nothing about money, markets or orders is written there.
 
 ## Keep in mind
 

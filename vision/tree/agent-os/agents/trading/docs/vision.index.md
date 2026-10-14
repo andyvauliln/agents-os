@@ -30,7 +30,7 @@ Trading's README and its ASD-STE100 version name it in their first section; trad
 
 ## Related knowledge
 
-It sits below the system's vision, which holds what every agent shares, and above each trading domain's vision. Trading's README describes the same things exactly, with paths. The rules behind it are in the prediction-market domain's kept trading notes (`agents/trading/prediction-market/docs/`) and the owner's inputs.
+It sits below the system's vision, which holds what every agent shares, and above each trading domain's vision. Trading's README describes the same things exactly, with paths. The rules behind it are in the owner's inputs and the decisions.
 
 ## Keep in mind
 

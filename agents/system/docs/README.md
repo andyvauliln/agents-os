@@ -179,7 +179,7 @@ Like every level, a domain has the standard folder, with its own instructions, i
 
 A domain takes its share of the shared settings, scripts and data through links, and reads the next level down through its child links. The system reaches every domain through its own child links.
 
-Domains of one kind are grouped in one folder. `agents/trading/` holds the trading domains: its `docs/` holds trading's own vision, README, README twin and rebuild prompt, what every trading domain shares and how a new one is made, and its `researches/` holds the trading studies already done. It has no agent, settings or scripts of its own. Its first domain is the prediction-market domain, `agents/trading/prediction-market/`, with Polymarket first. That domain is the project's second stage: today only its folders exist, and its `docs/` holds the trading notes; nothing else in it is written. The next trading domain, copy trading, is copied from it when the owner asks. Agents of other kinds, such as social media or management, come later as domains of their own.
+Domains of one kind are grouped in one folder. `agents/trading/` holds the trading domains: its `docs/` holds trading's own vision, README, README twin and rebuild prompt, what every trading domain shares and how a new one is made, and its `researches/` holds the trading studies already done. It has no agent, settings or scripts of its own. Its first domain is the prediction-market domain, `agents/trading/prediction-market/`, with Polymarket first. That domain is the project's second stage: today only its folders exist, and its `docs/` holds earlier notes kept for stage two; nothing else in it is written. The next trading domain, copy trading, is copied from it when the owner asks. Agents of other kinds, such as social media or management, come later as domains of their own.
 
 Its docs: `agents/trading/docs/README.md`
 
@@ -269,7 +269,7 @@ An agent acts live only after it has shown good results, and only when the owner
 
 Outside text, such as news and social posts, can carry hidden instructions meant to trick an AI, so an agent treats outside text as data, never as instructions, and protection against it is built together with acting live. We propose hard limits on every outside action, written in code in the scripts that act and checked before every action, which a domain or an agent may only make stricter, and one general stop switch in the global settings that halts every outside action at once, which only the owner turns on or off.
 
-Its docs: `vision/docs/safety.md`
+Its docs: `agents/system/configs/system.config.index.md`
 
 ### Keys and secrets
 
@@ -369,9 +369,9 @@ The docs serve two readers at once. The owner reads them to understand and steer
 
 The docs come in levels: the project's in `docs/`, the system domain's in `agents/system/docs/`, trading's in `agents/trading/docs/`, the apps' in `apps/docs/` and each app's in its own `docs/`. At every level there are four: `vision.md`, read first; `README.md`, every part exactly; `README.asd.md`, the same README in Simplified Technical English, kept for the owner to compare with the original; and `rebuild-prompt.md`, the exact spec an AI coding agent rebuilds that level's folder from. Inside a level they are written in that order every round; across levels the lowest level that changed comes first, then each level above it. `agents/system/docs/` holds the system's four and `subagents.link/`, one link per domain to that domain's docs. The plain list of every path in the repository, `docs/file-tree.md`, is built by the page build every round.
 
-Notes and docs are kept apart. The docs are for people and for AI: plain, readable by someone who is not technical, with no reference numbers, codes or history. The notes are for agents. While we plan, they live in the planning area `vision/`: in `vision/docs/`, every owner input word for word in `inputs/`, the decisions with their reasons in `decisions.md`, `changelog.md`, the tree notes `file-tree.md` with one section per file and folder, the knowledge map, and the topic notes agents read while they work (overview, architecture, conventions, safety, data schemas, flows, metrics, glossary, roadmap, feature map, the runbooks in `how-to/`, the shared knowledge in `common/` and the lists in `index/`); in `vision/plans/`, the plans; in `vision/.claude/memory/`, the working notes every Claude reads. The planned home of the records is `apps/project-IDE/data/`, where the build keeps a copy.
+Notes and docs are kept apart. The docs are for people and for AI: plain, readable by someone who is not technical, with no reference numbers, codes or history. The notes are for agents. While we plan, they live in the planning area `vision/`: in `vision/docs/`, every owner input word for word in `inputs/`, the decisions with their reasons in `decisions.md`, `changelog.md`, the tree notes `file-tree.md` with one section per file and folder, and the knowledge map; in `vision/plans/`, the plans; in `vision/.claude/memory/`, the working notes every Claude reads. The planned home of the records is `apps/project-IDE/data/`, where the build keeps a copy.
 
-Still open: where the topic notes live once the planning area is retired, whether the lists of agents and workers are written by hand or generated, and an automatic check of the tree notes against the real folders.
+Still open: where the records live once the planning area is retired, whether the lists of agents and workers are written by hand or generated, and an automatic check of the tree notes against the real folders.
 
 Its docs: `agents/system/.claude/agents/knowledge-base-agent.md` and `vision/docs/README.md`
 
@@ -412,7 +412,7 @@ Its docs: `apps/project-IDE/docs/README.md`
 | Jobs and the scheduler | `agents/system/configs/system.workers.index.md`, `agents/system/scripts/system/system.index.md` | the jobs file, and the shared scripts that run the system |
 | Links between agents | `agents/system/configs/system.links.index.md` | the links file |
 | Settings and AI models | `agents/system/configs/configs.index.md` | the global settings and the models file |
-| Actions: test and live | `vision/docs/safety.md` | the rules for test and live, going live, hard limits and the stop switch |
+| Actions: test and live | `agents/system/configs/system.config.index.md` | the settings for test and live, the live list and the stop switch |
 | Keys and secrets | `.secrets/.secrets.index.md` | the keys folder and its files |
 | Logs | `agents/system/logs/logs.index.md` | the shared logs by source |
 | Tests | `agents/system/tests/tests.index.md` | how each level's tests are laid out |
@@ -469,7 +469,7 @@ The design details not settled yet, by part. Questions about the goals and the b
 - Which skills does every agent share, and may an agent get a shared skill as a link?
 
 **The knowledge base and the docs**
-- Where do the topic notes and the records live once the planning area `vision/` is retired?
+- Where do the records live once the planning area `vision/` is retired?
 - Are the lists of agents, workers and the rest written by hand, or generated from one list the owner's screens also read?
 - Should a check compare the tree notes with the real folders automatically?
 

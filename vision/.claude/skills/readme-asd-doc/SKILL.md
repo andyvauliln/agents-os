@@ -41,7 +41,7 @@ Inside a level the docs are always written in this order: `vision.md` (`vision-d
 
 - **The `README.md` of the level**, already updated for this round. It is the only source of content.
 - **The current `README.asd.md`**, to keep the sentences that are still correct.
-- **The terms**, so that each name is the same in both files: the README itself, and the glossary in the notes (`vision/docs/glossary.md` while we plan).
+- **The terms**, so that each name is the same in both files: the README itself.
 - **A model of the style:** `vision/archive/2026-10-12/claude-docs/inputs-vision.md`, which gives every owner requirement in ASD-STE100.
 
 ## The writing rules
@@ -132,7 +132,7 @@ About the same number of words as the `README.md` of the level: often between 80
 
 ## When it goes stale
 
-`README.asd.md` is stale each time its `README.md` changes. Write it again right after the README, in the same round, before the rebuild prompt of the level. It is also stale when a rule in this skill changes, or when the glossary changes a name that it uses.
+`README.asd.md` is stale each time its `README.md` changes. Write it again right after the README, in the same round, before the rebuild prompt of the level. It is also stale when a rule in this skill changes, or when the README changes a name that it uses.
 
 ## Steps
 

@@ -12,7 +12,7 @@ Nothing of the system runs yet. The files on disk are the tree: what exists is t
 2. Go through every file and folder: write custom views for each kind of file, and make every metadata file correct.
 3. Finish the docs at four levels: the project (`docs/`), the system domain (`agents/system/docs/`), trading in general (`agents/trading/docs/`) and the apps (`apps/docs/`, `apps/project-IDE/docs/`).
 
-**Stage two, not now:** the prediction-market domain and everything under it (`agents/trading/prediction-market/`, its strategy and variant folders). Only its folders exist, and its `docs/` holds all the trading notes the project has (each with its metadata files). Its other old files are in `vision/archive/2026-10-12/prediction-market/`. Do not add, write or plan anything else there until the owner starts stage two. Keep the trading notes in its `docs/` up to date when trading knowledge changes.
+**Stage two, not now:** the prediction-market domain and everything under it (`agents/trading/prediction-market/`, its strategy and variant folders). Only its folders exist, and its `docs/` holds earlier notes kept for stage two. Its other old files are in `vision/archive/2026-10-12/prediction-market/`. Do not add, write or plan anything else there until the owner starts stage two.
 
 ## Read first, in this order
 

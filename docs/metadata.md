@@ -405,7 +405,7 @@ Rules:
 | Cause | What the agent does |
 |---|---|
 | Missing | It adds the answer to the doc where the owner looked or should look. |
-| Hard to find | It adds a link or one sentence where the owner looked. It adds the owner's word to the glossary. |
+| Hard to find | It adds a link or one sentence where the owner looked. It adds the owner's word to the terms in the README of the level. |
 | Unclear | It rewrites that part in plainer words, or adds a short example. |
 | Wrong or out of date | It corrects the doc and every related file. |
 | Repeated | The owner asked the same thing before. It rewrites the weak part of the doc. |

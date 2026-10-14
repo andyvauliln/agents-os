@@ -51,7 +51,7 @@ apps/project-IDE/
     ├── inputs/                   [YYYY-MM-DD-HHMM-topic].md per owner input, README.md, index.json
     ├── decisions.md, changelog.md
     ├── knowledge-map.json        built by build_map.py
-    ├── sources/[doc].md          notes behind each doc for people
+    ├── sources/[doc].md          earlier knowledge notes, kept; not used now
     ├── page-store/               nodes/, changes/, inputs/ (server only; one JSON file per document)
     ├── overrides.json            the owner's page edits kept in the data, keyed by item number
     ├── memory/[note].md, plans/[plan].md, archive/[date]/

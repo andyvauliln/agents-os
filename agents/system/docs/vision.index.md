@@ -30,7 +30,7 @@ The owner and anyone new to the system read it first, after the project's vision
 
 ## Related knowledge
 
-It sits below the project's vision (`docs/vision.md`) and above trading's vision (`agents/trading/docs/vision.md`). The system's README describes the same things exactly, with paths. It is built from the owner's inputs, the decisions and the topic notes in `vision/docs/` (overview, architecture, safety, roadmap).
+It sits below the project's vision (`docs/vision.md`) and above trading's vision (`agents/trading/docs/vision.md`). The system's README describes the same things exactly, with paths. It is built from the owner's inputs and the decisions in `vision/docs/`.
 
 ## Keep in mind
 

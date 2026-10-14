@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-14T10:54:09Z",
+ "built": "2026-10-14T12:48:30Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "06475b348638",
+   "hash": "35dd3a216ed5",
    "entries": []
   },
   "conventions.md": {
@@ -147,7 +147,7 @@
   },
   "decisions.md": {
    "title": "Agent OS: Decisions (v1.13)",
-   "hash": "a98673e4bccf",
+   "hash": "19187aa96735",
    "entries": [
     "d-001",
     "d-002",
@@ -217,7 +217,8 @@
     "d-066",
     "d-067",
     "d-068",
-    "d-069"
+    "d-069",
+    "d-070"
    ]
   },
   "feature-map.md": {
@@ -6310,6 +6311,26 @@
    ],
    "inherited_by": [],
    "chars": 845
+  },
+  "d-070": {
+   "id": "d-070",
+   "doc": "decisions.md",
+   "heading": "D-070: The extra knowledge notes are kept but not referenced; tree numbers and node ids go",
+   "level": 3,
+   "line": 685,
+   "applies_raw": [
+    "[57]"
+   ],
+   "sources": [
+    "in-20261014-1241"
+   ],
+   "status": "decided",
+   "hash": "50b3dc8fe6cb",
+   "nodes": [
+    "n-57"
+   ],
+   "inherited_by": [],
+   "chars": 1104
   },
   "fm-data-collection-workers": {
    "id": "fm-data-collection-workers",
@@ -20374,10 +20395,11 @@
     "d-067",
     "d-068",
     "d-069",
+    "d-070",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "04f5e7636dcb",
+   "basis": "838d32c497be",
    "summary_state": "stale"
   },
   "n-57.1": {
@@ -20708,8 +20730,8 @@
     "vis-domains"
    ],
    "inherited": [],
-   "basis": "04912367795b",
-   "summary_state": "fresh"
+   "basis": "3daef489d565",
+   "summary_state": "stale"
   },
   "n-10": {
    "num": "10",
@@ -23358,8 +23380,8 @@
     "term-domain"
    ],
    "inherited": [],
-   "basis": "7a4d1fb2498e",
-   "summary_state": "fresh"
+   "basis": "9de0dcd98db7",
+   "summary_state": "stale"
   },
   "n-56.2": {
    "num": "56.2",
@@ -26249,7 +26271,7 @@
     "ov-parts-ui-apps"
    ],
    "inherited": [],
-   "basis": "c07e13364542",
+   "basis": "263e4ac12ec1",
    "summary_state": "stale"
   },
   "n-53.4": {
@@ -26546,8 +26568,8 @@
     "term-data"
    ],
    "inherited": [],
-   "basis": "90ee1e4cf54d",
-   "summary_state": "fresh"
+   "basis": "af00f640ed80",
+   "summary_state": "stale"
   },
   "n-53.2.1": {
    "num": "53.2.1",
@@ -29541,6 +29563,26 @@
    ],
    "entries": [
     "d-069"
+   ]
+  },
+  "in-20261014-1241": {
+   "at": "2026-10-14T12:41",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-14-1241-no-refs-no-tree-numbers.md",
+   "categories": [
+    "docs-knowledge",
+    "structure"
+   ],
+   "summary": "Keep the knowledge notes but reference them nowhere; remove tree numbers and node ids.",
+   "processed_into": [
+    "skills and agents",
+    "level docs",
+    "Details files",
+    "docs/metadata.md",
+    "leave-vision plan"
+   ],
+   "entries": [
+    "d-070"
    ]
   }
  },

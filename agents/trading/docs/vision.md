@@ -24,7 +24,7 @@ Each trading domain is a full domain of the Agent OS and arranges its agents in 
 
 Every agent has the same standard folder: settings, scripts, logs, data, docs, tests, research and its own AI setup, and a parent reaches its children's folders one level at a time.
 
-What only one trading domain uses stays in that domain: its trading notes, its settings with risk limits and accounts, and its shared buy, sell and risk scripts. When a second domain needs the same thing, that part can move up into trading's own folder.
+What only one trading domain uses stays in that domain: its settings with risk limits and accounts, and its shared buy, sell and risk scripts. When a second domain needs the same thing, that part can move up into trading's own folder.
 
 ## How trading should work
 
@@ -53,7 +53,7 @@ Two more are our proposals, the defaults until the owner decides: risk limits wr
 
 ## How a new trading domain is made
 
-A new trading domain is a copy of the prediction-market domain, made when the owner asks. It keeps the levels, the standard folders, the trading notes, the shape of the settings and the shared scripts, then changes what is its own: where it may act, what information it collects, its fees, strategies and risk limits. Its domain agent is created like every agent, and it starts with no real money.
+A new trading domain is a copy of the prediction-market domain, made when the owner asks. It keeps the levels, the standard folders, the shape of the settings and the shared scripts, then changes what is its own: where it may act, what information it collects, its fees, strategies and risk limits. Its domain agent is created like every agent, and it starts with no real money.
 
 ## Examples
 

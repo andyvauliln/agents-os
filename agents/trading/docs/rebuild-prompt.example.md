@@ -13,7 +13,7 @@ Safety, formats, names, metadata files, Example and Questions files, empty folde
 The complete tree of `agents/trading/` as one code block, with placeholders explained.
 
 ## Conventions
-Trading agent names, strategy IDs, new versions, decision scripts, trading notes, child links, and the exact How it works and Details formats with examples.
+Trading agent names, strategy IDs, new versions, decision scripts, child links, and the exact How it works and Details formats with examples.
 
 ## The parts
 The trading folder, trading's docs, the research studies, the prediction-market domain as folders only, and what a trading domain will hold in stage two; each with its check.

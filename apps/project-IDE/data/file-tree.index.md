@@ -15,4 +15,3 @@ The annotated, numbered tree of the whole OS with one fully expanded example age
 ## Keep in mind
 
 - When you move or retire an object, keep a stub under its old number; numbers are never reused.
-- When you add, move, rename or remove a file or folder, update `feature-map.md` in the same change.

@@ -20,6 +20,6 @@ Today `docs/` holds only the project-level docs:
 4. The plain file tree.
 5. The metadata logic (`metadata.md`).
 
-This changed later: the flows, the data schemas and the metrics became notes. The general notes are in the planning area (`vision/docs/`). The trading notes are in `agents/trading/prediction-market/docs/`, with the money runbooks in `how-to/`.
+This changed later: the flows, the data schemas and the metrics became separate notes. These notes are kept, but the docs do not use them now.
 
 Docs improved: none, the answer was already in docs/README.md (the project docs and the planning area).

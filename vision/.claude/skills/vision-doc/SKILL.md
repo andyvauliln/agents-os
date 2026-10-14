@@ -46,7 +46,7 @@ When every level is written fresh, take the levels in this order: project, syste
 
 ## What to read before writing
 
-- **The notes:** every owner input word for word, the decisions, the changelog and the answers we gave. While we plan they are in `vision/docs/` (`inputs/`, `decisions.md`, `changelog.md`, `file-tree.md`, the topic notes). Newest wins when they disagree.
+- **The notes:** every owner input word for word, the decisions, the changelog and the answers we gave. While we plan they are in `vision/docs/` (`inputs/`, `decisions.md`, `changelog.md`, `file-tree.md`). Newest wins when they disagree.
 - **The owner's requirements by scope:** the inputs vision, kept in `vision/archive/2026-10-12/claude-docs/inputs-vision.md`. It is the best single summary of what the owner wants.
 - **The current doc** (often an older draft) and the earlier drafts in `vision/archive/`.
 - **What exists today:** the real repository (`git ls-files`, leaving out `vision/archive/`), the File Tree page, the other docs of this level.
@@ -166,18 +166,17 @@ A change to a file name, a format or a path alone does not make the vision stale
 2. In the notes (never in the doc), list what the vision must say: one line per point, with its status (decided, proposed, open) and where it came from, grouped by section.
 3. Write the doc section by section from that list.
 4. Run the checks below.
-5. Save the section list with its sources in the notes, at `vision/docs/sources/<level>/vision.md` while we plan (`<level>` is `project`, `system`, `trading`, `apps` or the app's folder name), so the next update knows which sections an input touches.
-6. Write the README of the level with `readme-doc`, then `README.asd.md` with `readme-asd-doc`, then the rebuild prompt with `rebuild-prompt-doc`.
-7. Write or refresh the metadata of `vision.md` with `file-index`: its How it works, its Details, its Example and its Questions (see "Its page on the File Tree").
-8. If the parent level sums up this one, check that summary and bring it in line.
+5. Write the README of the level with `readme-doc`, then `README.asd.md` with `readme-asd-doc`, then the rebuild prompt with `rebuild-prompt-doc`.
+6. Write or refresh the metadata of `vision.md` with `file-index`: its How it works, its Details, its Example and its Questions (see "Its page on the File Tree").
+7. If the parent level sums up this one, check that summary and bring it in line.
 
 ### After an input
 
 1. Ask whether it changes anything listed in "When it goes stale" at this level. If not, the vision stays as it is.
-2. Find the sections it touches, using the section list in the notes.
+2. Find the sections it touches.
 3. Rewrite those passages so the doc still reads as one story. Remove what is no longer true. Never add "Update:" notes.
 4. An answered question leaves "Open questions" and its answer goes into the section where it belongs. An idea the owner accepts moves from "Ideas we are still weighing" into its section; an idea they reject is removed.
-5. Run the checks and update the section list in the notes.
+5. Run the checks.
 6. Go on with the README, `README.asd.md` and the rebuild prompt of the level, in that order, where the change reaches them.
 7. Refresh the metadata of `vision.md` with `file-index`, and climb to the parent level if its summary of this level changed.
 
@@ -207,5 +206,5 @@ The File Tree page shows a tab only when its file exists. For `vision.md` these 
 - Every statement rests on an input, a decision or an answer in the notes. Nothing is invented, examples included: an example only shows rules that are decided.
 - Nothing proposed or open is presented as decided. Stage two parts are called stage two.
 - It covers only its own level and sums up what it shares with the level above in a sentence or two.
-- It agrees with the README, `README.asd.md` and the rebuild prompt of the level, with the level above, and uses the glossary's terms.
+- It agrees with the README, `README.asd.md` and the rebuild prompt of the level, with the level above, and uses the same terms as they do.
 - It is within the length for its level.

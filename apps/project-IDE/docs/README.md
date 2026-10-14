@@ -39,7 +39,7 @@ This document is the full manual of the IDE: every part of the page and how to u
 | The real files' texts | The text of every real file, loaded when one is opened | `vision/explorer/real-files.json` | next to the page data |
 | The build scripts | Build the data, keep files in step with their drafts and metadata, check the page | `vision/tools/` | `agents/system/.claude/skills/ide-build/scripts/` |
 | The owner's page edits kept in the data | Values the owner set on the page that the build applies on top | `vision/tools/overrides.json` | `apps/project-IDE/data/overrides.json` |
-| The tree notes and the knowledge | One section per file and folder; topic notes, decisions, inputs, changelog | `vision/docs/` | `apps/project-IDE/data/` and `agents/system/docs/` |
+| The tree notes and the knowledge | One section per file and folder; decisions, inputs, changelog | `vision/docs/` | `apps/project-IDE/data/` |
 | How it works and Details files | One explanation and one details file per item | `vision/tree/agent-os/...`, copied next to each item on disk | next to each item |
 | The server | The page on the owner's machine with Claude Code behind it | `vision/server/` | `apps/project-IDE/server/` |
 | The page store on the server | The owner's notes, edits and messages as JSON files | `vision/page-store/` | `apps/project-IDE/data/page-store/` |
@@ -73,7 +73,7 @@ apps/project-IDE/
     ├── inputs/                   every owner input, word for word, with index.json
     ├── decisions.md, changelog.md
     ├── knowledge-map.json        which knowledge applies to which item
-    ├── sources/                  the notes behind each doc for people
+    ├── sources/                  earlier knowledge notes, kept; not used now
     ├── page-store/               on the server: the page's notes, edits and messages
     ├── overrides.json            the owner's page edits kept in the page data
     ├── memory/, plans/, archive/ working notes, change plans, retired files

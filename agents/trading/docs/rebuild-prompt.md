@@ -9,7 +9,7 @@ You build:
 1. the folder `agents/trading/` with its How it works and Details files;
 2. trading's docs in `agents/trading/docs/`: `vision.md`, `README.md`, `README.asd.md`, `rebuild-prompt.md` (this file), each with its metadata files;
 3. the research folder `agents/trading/researches/`, restored as it is;
-4. the prediction-market domain `agents/trading/prediction-market/` as empty folders, with the trading notes in its `docs/`.
+4. the prediction-market domain `agents/trading/prediction-market/` as empty folders, with the earlier notes kept in its `docs/`.
 
 "The same" means: the acceptance checks at the end all pass.
 
@@ -30,7 +30,7 @@ A trading domain is one area of trading, such as prediction markets. It is a ful
 
 Every trading agent starts in test mode. Only the owner gives an agent an account with real money, and every new strategy configuration starts only after the owner reads a report on it and approves it. A change to a running agent makes a new test version with a new name. Orders are placed only on blockchains for now; centralised exchanges and other apps are sources of information only. Every order is logged.
 
-The first trading domain is prediction markets on Polymarket, in `agents/trading/prediction-market/`. In stage one, the current stage, it is its empty folders plus its `docs/`, which holds the trading notes; its other earlier files are kept in `vision/archive/2026-10-12/prediction-market/`. A later trading domain, such as copy trading, is a copy of it, made with `create-agent` when the owner asks.
+The first trading domain is prediction markets on Polymarket, in `agents/trading/prediction-market/`. In stage one, the current stage, it is its empty folders plus its `docs/`, which holds earlier notes kept for stage two; its other earlier files are kept in `vision/archive/2026-10-12/prediction-market/`. A later trading domain, such as copy trading, is a copy of it, made with `create-agent` when the owner asks.
 
 ## Ground rules
 
@@ -140,7 +140,6 @@ Names in `[brackets]` are placeholders, created literally as folders with those 
 - **Strategy agent IDs** (default, the owner may change it): `[domain-code]-[strategy]-agent.[platform-model]-[test|live]`, for example `pm-strategy-1-agent.opus55-test`. The strategy folder keeps its plain name, `strategy-1-agent/`; the ID lives in the strategy's settings.
 - **New versions.** A changed setting, instruction or script makes a new trading agent and raises `v[N]`; a different model changes `[platform-model]`. Names are never changed or reused.
 - **Decision scripts** (default): a trading domain adds the script kind `decision` to the system's `worker` and `system`: `[name].decision.[ext]`, shared ones in the domain's `scripts/decisions/`.
-- **Trading notes** (default): a trading domain's notes take a `trading-` prefix, so a trading agent's links to the system's notes and to its domain's never share a name.
 - **Child links.** In every level with children, each content folder holds `subagents.link/[child-name]/`, a folder link to the child's folder of the same kind. The system's own `subagents.link/` folders point straight at `agents/trading/prediction-market/`; `agents/trading/` adds no level of agents. The `relink` script builds these links in stage two; in stage one the `[agent-name]/` placeholder folders stand in for them.
 
 ### How it works file
@@ -234,9 +233,9 @@ Never edit a study's content. If the history is not available, ask the owner; do
 
 Check: `ls agents/trading/researches/prediction-market-research/[0-9]*.md | grep -v index | wc -l` prints `42`.
 
-### The prediction-market domain (stage one: folders and the trading notes)
+### The prediction-market domain (stage one: folders and the earlier notes)
 
-Create every folder under `agents/trading/prediction-market/` exactly as in the tree, and put one `.gitkeep` in each empty leaf folder. Copy the trading notes into its `docs/` as they are, each with its metadata files: the ten `trading-*.md` notes, `doc-outlines.md`, `trading-vision-notes.md`, `README-trading-parts.md`, `rebuild-prompt-trading-parts.md`, `common/` (three files), `how-to/` (four guides) and `index/accounts.md`. Create nothing else there: no settings or scripts. The domain is built in stage two from its own prompt, `agents/trading/prediction-market/docs/rebuild-prompt.md`, written from `vision/archive/2026-10-12/prediction-market/` and the notes in its `docs/`. Its folder names stay as they are until the owner decides otherwise.
+Create every folder under `agents/trading/prediction-market/` exactly as in the tree, and put one `.gitkeep` in each empty leaf folder. Keep the earlier notes in its `docs/` as they are, with their metadata files; they are kept for stage two and not used now. Create nothing else there: no settings or scripts. The domain is built in stage two from its own prompt, `agents/trading/prediction-market/docs/rebuild-prompt.md`, written from `vision/archive/2026-10-12/prediction-market/`. Its folder names stay as they are until the owner decides otherwise.
 
 Check: `find agents/trading/prediction-market -type f ! -name .gitkeep` prints nothing, and `find agents/trading/prediction-market -name .gitkeep | wc -l` prints `60`.
 
@@ -247,7 +246,7 @@ Do not build these now. They are listed so the docs you write describe them corr
 - one trading settings file in the domain's `configs/` (in the prediction-market domain `prediction-market-agents.config.json`): risk limits for the domain, per agent and per venue; trading accounts with id, venue, mode, `funded`, `approved_by_owner`, assigned agent, maximum capital and key names; venues, fees, market filters, the currency, the order stop switch and trade alerts;
 - the shared decision scripts in `scripts/decisions/`, which read the mode, the limits and both stop switches before every order;
 - the order logs in `logs/services/[service]/`;
-- the `trading-` notes, `common/`, `how-to/`, `index/` (the list of accounts) and `doc-outlines.md` in `docs/`;
+- the domain's own docs in `docs/`, written in stage two;
 - the domain's dashboard, planned in `apps/trading-ui/`, which stays empty.
 
 ## Build order

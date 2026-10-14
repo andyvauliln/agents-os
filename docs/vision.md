@@ -97,7 +97,7 @@ Stage one, now:
 2. Go through every file and folder, write the custom views each kind of item needs, and make all metadata correct.
 3. Finish the docs at the project level, the system level, the level of trading as a whole and the level of the apps.
 
-Stage two: the prediction-market domain, its strategies and their trading agents. Until then that domain is its folders and the trading notes in its docs.
+Stage two: the prediction-market domain, its strategies and their trading agents. Until then that domain is its folders and earlier notes kept in its docs.
 
 Later: building the system's machinery, starting the first strategy chosen by the owner in test mode, more trading domains copied from the first, and agents of other kinds.
 

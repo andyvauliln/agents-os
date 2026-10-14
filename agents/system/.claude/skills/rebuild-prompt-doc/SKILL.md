@@ -44,7 +44,7 @@ Inside a level the docs are always written in this order: `vision.md` (`vision-d
 ## What to read before writing
 
 - **The tree notes** (`vision/docs/file-tree.md`, one section per file and folder, with every name, format and rule) and the real repository (`git ls-files`, leaving out `vision/archive/`). Every path in the prompt comes from them; where they disagree, the newest decision wins, and the conflict goes in your report.
-- **The topic notes:** conventions, data schemas, safety, flows, architecture, the how-to runbooks and the common knowledge, for the exact formats and rules.
+- **The how-to guides** in `agents/system/docs/how-to/` and the metadata files of each item, for the exact formats and rules.
 - **The decisions and the changelog**, so you know what is decided, what is our proposal and what is open.
 - **What exists today:** the helper agents and their skills, the build tools in `vision/tools/`, the File Tree page and its server. Where a part exists, the prompt describes it as it is.
 - **The vision, the README and `README.asd.md` of the level**, already updated for this round: the prompt uses the same names and never contradicts them.
@@ -115,7 +115,7 @@ This doc is written for AI, so the rules for docs for people bend here; the know
 - **No history.** Only the level as it is designed now.
 - **Never a secret value.** Key names only, and where each key's value is loaded from. A `.env` file is created empty and never read.
 - **Checks you can run.** Each check is a command or an observation with a clear pass: "the `check-links` script reports no broken link."
-- **Same words** as the vision, the README and the glossary.
+- **Same words** as the vision and the README.
 
 Too loose:
 
@@ -137,18 +137,17 @@ The rebuild prompt of a level is stale when anything in the level's design chang
 2. In the notes (never in the doc), list every part and every file the prompt must cover, with its status (decided, proposed, open, stage two) and where it came from.
 3. Write the doc section by section from that list. Take every path and format from the tree notes and the disk, never from memory.
 4. Run the checks below.
-5. Save the list with its sources in the notes, at `vision/docs/sources/<level>/rebuild-prompt.md` while we plan, so the next update knows which sections a change touches.
-6. Write or refresh the metadata of `rebuild-prompt.md` with `file-index`: its How it works, its Details, its Example and its Questions.
-7. Check the parent level's prompt: its tree and its list of children's prompts must match this one.
+5. Write or refresh the metadata of `rebuild-prompt.md` with `file-index`: its How it works, its Details, its Example and its Questions.
+6. Check the parent level's prompt: its tree and its list of children's prompts must match this one.
 
 ### After every change
 
 This runs every round that changes the level's design, last of the four docs.
 
-1. Find the sections the change touches, using the list in the notes. Always check the tree, the build order, the children's prompts, the acceptance checks and "Do not build".
+1. Find the sections the change touches. Always check the tree, the build order, the children's prompts, the acceptance checks and "Do not build".
 2. Rewrite those passages so the prompt still describes one level, as it is designed now. Remove what is no longer true.
 3. A point the owner decided leaves "Do not build" and goes into its part, the tree and the build order.
-4. Run the checks and update the list in the notes.
+4. Run the checks.
 5. Refresh the metadata of `rebuild-prompt.md` with `file-index`, and climb to the parent's prompt if this change reaches it.
 
 ## Its page on the File Tree
@@ -171,7 +170,7 @@ The File Tree page shows a tab only when its file exists. For `rebuild-prompt.md
 ## Checks
 
 - An AI agent that has never seen the project could build this level from this file and the levels above without guessing. Read it once as that agent, step by step.
-- Every path and name matches the tree notes and the disk; every format matches the topic notes.
+- Every path and name matches the tree notes and the disk; every format matches the README of the level and the metadata files.
 - Every item of this level's tree is covered, every build step has a check, and every child level's prompt is listed.
 - Nothing still weighed, open or stage two is told to be built; every proposal is marked as a default.
 - No `[n]` numbers, decision or input codes, hashes, hidden tags or history.

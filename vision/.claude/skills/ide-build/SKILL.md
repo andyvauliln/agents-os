@@ -12,7 +12,7 @@ The File Tree page shows the owner every folder and file of the Agent OS, with i
 | Input | Where in the repository | While we plan (`vision/`) |
 |---|---|---|
 | The tree notes: the numbered tree and one section per file and folder | `apps/project-IDE/data/file-tree.md` | `docs/file-tree.md` |
-| The knowledge: topic notes with knowledge tags, decisions, inputs | `agents/system/docs/`, `apps/project-IDE/data/` | `docs/` |
+| The knowledge: decisions, inputs | `apps/project-IDE/data/` | `docs/` |
 | The drafts: docs for people, agents, skills, scripts | their own places in the tree | `.claude/` (with `CLAUDE.md`), `tools/` |
 | How it works of every file and folder | `vision.index.md` next to `vision.md` (the name without its extension), `f/f.index.md` inside each folder; the Details files the same with `.meta.json` | next to the drafts, otherwise `tree/agent-os/...` |
 | The owner's page edits kept in the data | `apps/project-IDE/data/overrides.json` | `tools/overrides.json` |

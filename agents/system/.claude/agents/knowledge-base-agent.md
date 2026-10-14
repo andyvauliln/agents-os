@@ -42,12 +42,11 @@ agents/system/.claude/
 │   └── ide-sync/SKILL.md           # the IDE agent's: brings back what the owner left on the page
 └── (no docs here: the docs live one level up, in agents/system/docs/)
 
-agents/system/docs/                 # THE DOCS: for people, and the topic notes agents read
+agents/system/docs/                 # THE DOCS: for people and agents
 ├── vision.md                       # the top-level doc
 ├── README.md                       # every part of the system, exactly, with paths
 ├── rebuild-prompt.md               # the prompt an AI rebuilds the whole system from
 ├── ...                             # more docs for people, one at a time; the file tree last
-├── architecture.md, conventions.md, safety.md, ...   # the topic notes agents read while they work
 └── subagents.link/                 # one link per agent one level down, to its docs
 
 apps/project-IDE/data/                   # YOUR NOTES, for agents only
@@ -57,11 +56,11 @@ apps/project-IDE/data/                   # YOUR NOTES, for agents only
 ├── changelog.md                    # what changed in the docs and the system, by date
 ├── file-tree.md                    # the tree notes: one section per file and folder
 ├── knowledge-map.json              # which knowledge applies to which file and folder
-├── sources/                        # for each doc: which inputs and decisions each chapter rests on
+├── sources/                        # earlier knowledge notes, kept; not used now
 └── memory/, plans/, archive/       # working notes, plans, retired files
 ```
 
-Your notes sit in `apps/project-IDE/data/`, next to the File Tree page they feed, so any Claude can catch up from one place. While we plan, all of it lives in the cloud project's shared folder `vision/`: `.claude/` as above, and the notes and topic notes in `vision/docs/`. The How it works file of every file and folder sits next to it (`x.index.md`, or `f/f.index.md` inside a folder); while we plan, the ones for things not written yet are in `vision/tree/agent-os/...`.
+Your notes sit in `apps/project-IDE/data/`, next to the File Tree page they feed, so any Claude can catch up from one place. While we plan, all of it lives in the cloud project's shared folder `vision/`: `.claude/` as above, and the notes in `vision/docs/`. The How it works file of every file and folder sits next to it (`x.index.md`, or `f/f.index.md` inside a folder); while we plan, the ones for things not written yet are in `vision/tree/agent-os/...`.
 
 ## The docs
 
@@ -71,9 +70,7 @@ Your notes sit in `apps/project-IDE/data/`, next to the File Tree page they feed
 | `README.md` | The full, exact overview of how the whole system works, for people and AI: every main part, what it holds and does, how the parts connect, with the path to each part's own docs. It never describes the logic inside an agent. | `readme-doc` |
 | `README.asd.md` | The README again in ASD-STE100 (Simplified Technical English), with the same sections and facts, so the owner can compare the two. Written right after every change to the README. | `readme-asd-doc` |
 | `rebuild-prompt.md` | The prompt an AI coding agent follows to rebuild the whole system from an empty repository and end with the same working system: the tree, exact names and formats, every part, the build order and the checks. Written for AI. Updated last after every change to the design. | `rebuild-prompt-doc` |
-| `architecture.md` | How it is built: the parts and how they fit together. | to write |
-| `glossary.md` | The words we use, each explained simply. | to write |
-| more | One at a time, as the owner asks: for example features, flows, data, safety, roadmap. | to write |
+| more | One at a time, as the owner asks. | to write |
 | `file-tree.md` | Every folder and file: what it is for and how it works. The File Tree page shows it. | to write, last |
 
 **Where detail goes.** A mechanism with a lot of detail, such as how every file's family of tab files works, gets its own note or skill, where all of it lives once. The README describes it in a short paragraph with that path, and the vision keeps only the idea in a sentence. A plan waiting for the owner's go sits in `plans/` among your notes and is only mentioned as a proposal in the docs; once built, its content moves into the notes, skills and docs this way and the plan goes to `archive/`.
@@ -143,7 +140,7 @@ These rules hold for every doc at every level. Each doc's skill adds its own cha
 - **No references.** No numbers like `[2.1]`, no decision or input codes, no hashes, no hidden tags, and no pointers to other docs or sections ("see the Architecture doc", "how that is built: architecture.md"). Each doc stands on its own: when the reader needs something from elsewhere, give a short summary of it right here, or the concrete detail if it matters. A file or folder name only when the reader needs it, written like `configs/`. Two set places point onward, because the docs go from the top down: the vision ends by naming the README, and the README names the vision once and gives the path to each part's own docs. The rebuild prompt is written for AI and follows its own skill.
 - **Facts as they are now.** State how things are at this moment. Never say who said it, when, or what it was before: no "the owner later said", "was decided on", "replaced the earlier plan", "since version 2". Where a fact came from belongs in your notes.
 - **Be honest about what is settled.** Say in plain words what is decided, what is still an idea and what is an open question. Never present an idea as decided. Nothing is built yet: every doc says so where it matters, and describes the design in the present tense ("each agent has its own folder").
-- **Same words everywhere.** Use the glossary's terms, the same way in every doc, and the owner's own words for names and ideas.
+- **Same words everywhere.** Use the terms of the level's README, the same way in every doc, and the owner's own words for names and ideas.
 - **The owner is "the owner"**, and "they" when a pronoun is needed. Name the owner only as the person who uses and steers the system ("the owner approves going live"), never as the source of a fact.
 - **Now, not history.** Docs describe how things are now. How we got here, old versions, replaced decisions and who asked for what stay in your notes.
 

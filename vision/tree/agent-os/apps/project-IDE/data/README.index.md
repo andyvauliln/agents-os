@@ -10,4 +10,4 @@ confirmed: 2026-10-05T15:38:31Z
 
 ## Summary
 
-The guide to how the project keeps its knowledge, for agents: the layers (inputs, the tree notes, topic notes, history, the map and the How it works files), the format of the knowledge tags that say which files a piece of knowledge applies to, and the steps from an owner input to the docs.
+The guide to how the project keeps its knowledge, for agents: the layers (inputs, the tree notes, history, the map and the How it works files), the format of the knowledge tags that say which files a piece of knowledge applies to, and the steps from an owner input to the docs.

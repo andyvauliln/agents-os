@@ -12,7 +12,7 @@ confirmed: 2026-10-14T10:21:35Z
 
 The system level of the Agent OS: the system agent and the home of everything every agent shares, whatever its domain. Like every level it has the standard agent folder; its agent, the system manager, oversees the domains, the system's health and its development, and answers the owner's questions about the whole system.
 
-Its folders hold what holds for any agent: `configs/` the global settings (test or live, the live list, the general stop switch, schedules, notifications) and model routing; `scripts/` the shared machinery (create-agent, the scheduler, relink, load-secret, run-tests) and collectors shared by several domains; `logs/` and `data/` the shared logs and outputs; `docs/` the vision, README, rebuild prompt and the topic notes every agent reads. Its `.claude/` holds the project's rules and the helpers: self-improvement, the knowledge base agent and the project IDE agent.
+Its folders hold what holds for any agent: `configs/` the global settings (test or live, the live list, the general stop switch, schedules, notifications) and model routing; `scripts/` the shared machinery (create-agent, the scheduler, relink, load-secret, run-tests) and collectors shared by several domains; `logs/` and `data/` the shared logs and outputs; `docs/` the vision, README, README twin and rebuild prompt. Its `.claude/` holds the project's rules and the helpers: self-improvement, the knowledge base agent and the project IDE agent.
 
 Agents use shared files through read-only file links, never copies. The system reaches each domain through `subagents.link/`, one level at a time; everything about trading lives in the prediction-market domain.
 

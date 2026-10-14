@@ -50,7 +50,7 @@ When every level is written fresh, take the levels in this order: project, syste
 ## What to read before writing
 
 - **The vision of the level**, already updated for this round: the README uses the same words, and its "In short" matches the vision's.
-- **The notes:** the tree notes (`vision/docs/file-tree.md`, one section per file and folder), the topic notes (architecture, conventions, data schemas, safety, flows), the decisions, the changelog and the owner's inputs word for word, all in `vision/docs/` while we plan. Newest wins when they disagree.
+- **The notes:** the tree notes (`vision/docs/file-tree.md`, one section per file and folder), the decisions, the changelog and the owner's inputs word for word, all in `vision/docs/` while we plan. Newest wins when they disagree.
 - **What exists today:** the real repository (`git ls-files`, leaving out `vision/archive/`), the File Tree page, the skills and agents, and each part's own docs, so every path you give is real.
 - **The level above:** its README, so this one agrees with it and does not repeat it.
 
@@ -156,19 +156,18 @@ When the README changes, `README.asd.md` is stale at once, and the rebuild promp
 3. Check that every "Its docs" path is a real file or folder in the repository; where a part has no docs of its own yet, give its folder's How it works file.
 4. Write the doc section by section from that list.
 5. Run the checks below.
-6. Save the section list with its sources in the notes, at `vision/docs/sources/<level>/readme.md` while we plan, so the next update knows which sections an input touches.
-7. Write `README.asd.md` from the new README with `readme-asd-doc`, then the rebuild prompt with `rebuild-prompt-doc`.
-8. Write or refresh the metadata of `README.md` with `file-index`: its How it works, its Details, its Example and its Questions.
+6. Write `README.asd.md` from the new README with `readme-asd-doc`, then the rebuild prompt with `rebuild-prompt-doc`.
+7. Write or refresh the metadata of `README.md` with `file-index`: its How it works, its Details, its Example and its Questions.
 
 ### After every update
 
 This runs every round that touches a part of the level, after the vision and before `README.asd.md` and the rebuild prompt.
 
-1. Find the parts the change touches, using the section list in the notes. Always check "Still open in the design" and the table of docs.
+1. Find the parts the change touches. Always check "Still open in the design" and the table of docs.
 2. Rewrite those passages so each part still reads as one current description. Remove what is no longer true. Never add "Update:" notes.
 3. A settled design detail leaves "Still open in the design" and goes into its part.
 4. If the project's description in the project README's "In short" changed, bring the repository's front page `README.md` in line too: it says in a few lines what the project is and where to start.
-5. Run the checks and update the section list in the notes.
+5. Run the checks.
 6. Write `README.asd.md` again with `readme-asd-doc`, then update the rebuild prompt.
 7. Refresh the metadata of `README.md` with `file-index`, and climb to the parent level if a path or part it names changed.
 
@@ -198,7 +197,7 @@ The File Tree page shows a tab only when its file exists. For `README.md` these 
 - No `[n]` numbers, decision or input codes, hashes, hidden tags, "the owner said", dates or earlier versions.
 - Every statement rests on an input, a decision, an answer or something that exists. Nothing is invented. Stage two parts are not described as if they exist.
 - Nothing proposed or open is presented as decided.
-- It agrees with the vision, the rebuild prompt, the level above and the other docs, and uses the glossary's terms.
+- It agrees with the vision, the rebuild prompt, the level above and the other docs, and uses the same terms as they do.
 - "Still open in the design" is current.
 - It is within the length for its level.
 - `README.asd.md` was written again from this version.

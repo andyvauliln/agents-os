@@ -80,7 +80,7 @@ agent-os/
 │   └── trading/                 the folder of trading domains
 │       ├── docs/                trading's own docs
 │       ├── researches/          the research studies
-│       └── prediction-market/   the first trading domain: folders and trading notes, stage two
+│       └── prediction-market/   the first trading domain: folders and earlier notes, stage two
 ├── apps/
 │   ├── docs/                    the docs for all apps
 │   ├── project-IDE/             the File Tree page, its server and its data
@@ -183,7 +183,7 @@ Its docs: `agents/system/docs/README.md`.
 - `trding-agents-arhiteches/` contains a study about the structure of trading agents.
 - `agents/trading/prediction-market/` is the first trading domain. It is in stage two.
 - In the prediction-market domain, the folders exist. Each empty folder contains a `.gitkeep` file.
-- Its `docs/` folder contains all the trading notes of the project. Each note has its metadata files.
+- Its `docs/` folder contains earlier notes. They are kept for stage two.
 - The folders include the first strategy agent `strategy-1-agent/` and its first trading agent `pm-strategy-1.momentum-v1.opus55-test/`.
 - The old files of the domain are in the archive of the planning area. The build does not make files in the domain until stage two.
 
@@ -289,10 +289,10 @@ Its docs: `docs/metadata.md`, `agent-os.index.md` and the `file-index` skill, `a
 - `vision/docs/decisions.md` keeps all decisions.
 - `vision/docs/changelog.md` records the changes. The newest change is first.
 - `vision/docs/file-tree.md` contains the tree notes: the planned tree and one section for each file and each folder.
-- `vision/docs/` also contains topic notes for agents: `overview.md`, `architecture.md`, `conventions.md`, `safety.md`, `flows.md`, `data-schemas.md`, `glossary.md`, `metrics.md`, `roadmap.md`, `feature-map.md`, `common/`, `how-to/` and `index/`. `index/` contains the knowledge map.
-- `vision/docs/prediction-market-agents/` contains the notes of the prediction-market domain. A copy of these notes is in `agents/trading/prediction-market/docs/`.
+- `vision/docs/` also contains the knowledge map.
+- `vision/docs/` also contains earlier knowledge notes. They are kept. They are not used now.
 - `vision/plans/` contains one plan for each change request, and `index.json`.
-- `vision/.claude/` contains the planning copies of the helper agents, the skills and the working memory (`memory/`). It also contains the notes behind each doc (`knowledge/sources/`).
+- `vision/.claude/` contains the planning copies of the helper agents, the skills and the working memory (`memory/`). It also contains earlier notes behind the docs. They are kept. They are not used now.
 - `vision/tools/` contains the build scripts: `parse.py`, `enrich.py`, `materialize.py`, `tabs.py`, `build_map.py`, `index_files.py` and `check_page.js`. It also contains `overrides.json`, which keeps the owner's page edits in the data.
 - `vision/explorer/` contains the page source, its data and the texts of the real files that the page shows.
 - `vision/server/` contains the server of the page. During the planning, the server operates from here.
@@ -349,7 +349,7 @@ After stage two, we build the machinery of the system. We start the first strate
 | Agents | `agents/agents.index.md` | The domains and the standard folder |
 | The system | `agents/system/docs/README.md` | The exact description of each shared part of the system |
 | Trading | `agents/trading/docs/README.md` | The trading domains and their research |
-| The prediction-market domain | `agents/trading/prediction-market/docs/` | All the trading notes at this time. Its README comes in stage two |
+| The prediction-market domain | `agents/trading/prediction-market/prediction-market.index.md` | Its folders. Its README comes in stage two |
 | Apps | `apps/docs/README.md` | Each app and how we add apps |
 | The project IDE | `apps/project-IDE/docs/README.md` | The full documentation of the IDE |
 | The IDE server | `apps/project-IDE/server/README.md` | How to operate the page on the owner's server |

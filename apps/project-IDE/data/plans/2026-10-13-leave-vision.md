@@ -3,6 +3,7 @@
 - Input: in-20261013-leave-vision (2026-10-13), the owner: "i need kind of go out of the vision folder what we still would need in a current system to live without it and move forward"
 - Status: proposed, waiting for the owner's go
 - Paths are from the top of the repository.
+- Note (owner, 2026-10-14): the moved notes in `apps/project-IDE/data/sources/` and the prediction-market trading notes in `agents/trading/prediction-market/docs/` are kept but not referenced by any doc, skill, agent or metadata file; whether to use them is decided later.
 
 ## The idea
 
@@ -31,9 +32,9 @@ Today `vision/` is the source for most things and the build copies them into the
 
 The page still gets each item's id, its [n] number, decisions, rules and notes from the tree block in `vision/docs/file-tree.md`. Without it the build must take these from the item itself:
 
-- The id and number come from the item's Details file (`tree_number` in `x.meta.json`; only 26 of the 180 written Details files have it today, so a script fills it in from the tree notes first); a new file gets an id from its path.
+- The id is the item's path. The [n] numbers and the `n-` ids are removed (owner, 2026-10-14): the `tree_number` field is already gone from every Details file; the move removes `node:` from the How it works front matter, the numbers from the knowledge tags, and the numbers from the page.
 - Decisions, notes and open questions come from the Details file and the Questions file.
-- `parse.py` is no longer needed; `enrich.py` walks the disk and reads each item's metadata.
+- `parse.py` is no longer needed; `enrich.py` walks the disk and reads each item's metadata. The build no longer reads the topic notes, the feature map or the trading notes (owner, 2026-10-14: kept, not referenced), and `build_map.py` checks each How it works against its item and children only.
 
 This is the biggest step. Everything else is moving files and changing paths.
 
@@ -42,13 +43,12 @@ This is the biggest step. Everything else is moving files and changing paths.
 1. Move the records (inputs, decisions, changelog, plans) to `apps/project-IDE/data/` and point knowledge-intake, change-plan and CLAUDE.md at them. Put the few missing memory parts into CLAUDE.md, the trading README and the system README questions (D-066).
 2. Make the real skills, agents and metadata files the source: drop the draft lists and the metadata copying in the build.
 3. Move the build tools into `ide-build/scripts/` with paths to the real places; the page source and its data into `apps/project-IDE/current-ui/`; fix the server settings.
-4. Teach `enrich.py` to build the tree from disk plus each item's metadata, without the tree notes; carry the [n] numbers and decisions of every item into its Details file first.
+4. Teach `enrich.py` to build the tree from disk plus each item's metadata, without the tree notes, the numbers or the topic notes; carry the decisions of every item into its Details file first.
 5. Move `how-to/` and the prediction-market notes to their real docs; archive the rest.
 6. Rebuild, check the page against git, publish. Then test the server from `apps/project-IDE/server/` on a copy of the repository, the same tests as on 2026-10-05: the page opens, an edit goes into the file and a How it works edit into its `x.index.md`, a request runs with Allow and Refuse, a delete and a bring-back, and the microphone with the key present.
 7. Remove `vision/` from the repository, update CLAUDE.md, every README, HANDOFF.md, and remove `apps/project-IDE/data/memory/`.
 
 ## Open for the owner
 
-- Remove `vision/archive/` and the old topic notes from the repository (they stay in git history)? Proposed: yes.
-- Keep the [n] numbers on the page, taken from each item's Details file? Proposed: yes for now, and new files get none.
+- Remove `vision/archive/` from the repository (it stays in git history)? Proposed: yes. The topic notes move to `apps/project-IDE/data/sources/` and stay, not referenced (owner, 2026-10-14).
 - Do it in one pull request, or step by step (records first)? Proposed: one pull request, built in the order above.

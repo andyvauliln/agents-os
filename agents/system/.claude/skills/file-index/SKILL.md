@@ -20,7 +20,7 @@ The main docs are the four docs of each of the five doc levels: `vision.md`, `RE
 
 `README.asd.md` is a main doc in its own right, with its own How it works, Details, Example and Questions files (family `README.asd`), and the page also shows it as the ASD-STE100 tab of the README next to it. It is written with `readme-asd-doc`, not with this skill.
 
-The prediction-market domain and everything below it are stage two: only their folders exist, and no metadata file is made inside `agents/trading/prediction-market/`, except in its `docs/`, which holds the trading notes; every file and folder there has its metadata files like any item. The full metadata logic, in ASD-STE100, is in `docs/metadata.md`; keep it true when this skill changes. The planning area `vision/` is left out too: its drafts keep the metadata files listed below, but no other item there needs them.
+The prediction-market domain and everything below it are stage two: only their folders exist, and no metadata file is made inside `agents/trading/prediction-market/`, except in its `docs/`, which holds earlier notes kept for stage two with the metadata files they have; leave them as they are. The full metadata logic, in ASD-STE100, is in `docs/metadata.md`; keep it true when this skill changes. The planning area `vision/` is left out too: its drafts keep the metadata files listed below, but no other item there needs them.
 
 ## Names
 

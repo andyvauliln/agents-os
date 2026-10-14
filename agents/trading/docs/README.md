@@ -4,7 +4,7 @@
 
 Trading is the first kind of work the Agent OS does, and everything about it lives in one place: a folder of trading domains, with trading's own docs and its research. A trading domain is one area of trading, such as prediction markets. Every trading domain runs many small trading agents side by side, tries each idea in test mode with no real money, keeps the versions that work and lets only the owner put real money in. The first trading domain is prediction markets on Polymarket; a new one starts as a copy of it and changes only what is its own. The system level stays general: nothing about money, markets or orders is written in the system's docs, settings or scripts, and all of it lives here, in trading and its domains.
 
-Where it stands: trading's docs and its research studies exist. The prediction-market domain exists as its empty folders, and its `docs/` already holds all the trading notes the project has; its other files are kept aside and it is written again in the project's second stage. Nothing that trades is built yet.
+Where it stands: trading's docs and its research studies exist. The prediction-market domain exists as its empty folders, and its `docs/` holds earlier notes kept for stage two; its other files are kept aside and it is written again in the project's second stage. Nothing that trades is built yet.
 
 This document is the full, exact description of every part of `agents/trading/` and of what every trading domain holds, with the path to each part's own docs. It describes parts from the outside, never the logic inside an agent. Why trading has its own place, how it should work and its rules are in the vision, `agents/trading/docs/vision.md`.
 
@@ -16,7 +16,7 @@ This document is the full, exact description of every part of `agents/trading/` 
 |---|---|---|
 | Trading's docs | what every trading domain shares, how a new one is made, how to rebuild this folder | `agents/trading/docs/` |
 | Research studies | the studies the trading domains start from | `agents/trading/researches/` |
-| Prediction-market domain | the first trading domain, stage two; folders and the trading notes today | `agents/trading/prediction-market/` |
+| Prediction-market domain | the first trading domain, stage two; folders and earlier notes today | `agents/trading/prediction-market/` |
 | Later trading domains | copies of the prediction-market domain, made when the owner asks | `agents/trading/[domain]/`, none yet |
 | Trading dashboard | the prediction-market domain's dashboard, empty | `apps/trading-ui/` |
 
@@ -94,11 +94,11 @@ Each trading domain is a full domain of the Agent OS, in its own folder under `a
 - **Strategy agents**, one folder each inside the domain, such as `strategy-1-agent/`: each owns one way to make money, its definition and its versions.
 - **Trading agents** (variants), one folder each inside their strategy: the versions that actually trade.
 
-**The prediction-market domain** (`agents/trading/prediction-market/`) is the first. It trades on Polymarket first. Today it holds only its folders, each with a `.gitkeep`: the standard folder of the domain (with `scripts/decisions/`, `logs/jobs/`, `logs/services/`, `data/markets-catalog/`, `data/polymarket-prices/`, `docs/common/`, `docs/how-to/` and `docs/index/` inside), one strategy `strategy-1-agent/`, and one example trading agent below it, `pm-strategy-1.momentum-v1.opus55-test/`, where "momentum" is only a placeholder. Its docs folder already holds all the trading knowledge the project has: the trading notes (overview, architecture, conventions, safety, data formats, flows, metrics, glossary, roadmap, feature map), the trading agent's design, the trading prompt, the strategy self-improvement templates, the how-to guides, the list of trading accounts, the outlines of its docs, the notes for its vision, and the trading parts that were taken out of the system's README and rebuild prompt. Its other earlier files are kept in `vision/archive/2026-10-12/prediction-market/`. In the second stage the domain is written again from them, with its own vision, README and rebuild prompt.
+**The prediction-market domain** (`agents/trading/prediction-market/`) is the first. It trades on Polymarket first. Today it holds only its folders, each with a `.gitkeep`: the standard folder of the domain (with `scripts/decisions/`, `logs/jobs/`, `logs/services/`, `data/markets-catalog/`, `data/polymarket-prices/`, `docs/common/`, `docs/how-to/` and `docs/index/` inside), one strategy `strategy-1-agent/`, and one example trading agent below it, `pm-strategy-1.momentum-v1.opus55-test/`, where "momentum" is only a placeholder. Its docs folder holds earlier notes kept for stage two. Its other earlier files are kept in `vision/archive/2026-10-12/prediction-market/`. In the second stage the domain is written again from them, with its own vision, README and rebuild prompt.
 
 **Later trading domains**, such as copy trading, are copies of the prediction-market domain, made when the owner asks. None is in the tree.
 
-Its docs: `agents/trading/prediction-market/docs/`, the trading notes today; its `README.md` comes with the second stage
+Its docs: `agents/trading/prediction-market/prediction-market.index.md`; its `README.md` comes with the second stage
 
 ### What every trading domain holds
 
@@ -107,7 +107,7 @@ Every trading domain has the same kinds of trading parts, in its own standard fo
 - **The domain's trading settings**, one file in its `configs/`: risk limits for the whole domain, per agent and per venue; the trading accounts; the venues, fees and market filters; the currency; the order stop switch; and which trade alerts reach the owner. In the prediction-market domain it is `prediction-market-agents.config.json`. Trading agents reach it through a file link and may only make its limits tighter (our proposal).
 - **The shared trading scripts**, in `scripts/decisions/`: the scripts that buy, sell and check risk, named `[name].decision.[ext]`. `decision` is a script kind the trading domains add to the system's `worker` and `system` kinds. Every order goes through a decision script, which reads the mode and the limits before it acts. Trading agents link the ones they need.
 - **The order logs**, in `logs/services/[service]/`: every order, test or live, logged by the service that placed it.
-- **The trading notes**, in `docs/`: the trading layer of the system's notes, each named with a `trading-` prefix (overview, architecture, conventions, safety, data formats, flows, metrics, glossary, roadmap, feature map), plus `common/` (the trading agent's design, the trading prompt, the strategy self-improvement templates), `how-to/` (go live with money, add a trading account, stop a trading agent, create a strategy or variant) and `index/` (the list of trading accounts). A domain also keeps `doc-outlines.md`, which says what the docs of each of its levels hold.
+- **The domain's docs**, in `docs/`: in the prediction-market domain it holds earlier notes kept for stage two.
 
 Its docs: each trading domain's own `docs/README.md`
 
@@ -117,17 +117,17 @@ A trading agent's name starts with its strategy and ends with its AI model and i
 
 A changed setting, instruction or script makes a new trading agent and raises `v[N]`; a different model changes the model part. Names are never changed or reused, because test and live versions are different agents.
 
-Its docs: `agents/trading/prediction-market/docs/trading-conventions.md`
+Its docs: the prediction-market domain's `docs/README.md`, in stage two
 
 ### Accounts, keys and real money
 
-A trading account is an account or wallet at a venue that a trading agent may use. Accounts are listed in the domain's trading settings, each with its id, venue, mode, whether it is funded, whether the owner approved it, the agent it is assigned to, its maximum capital and the names of its keys; the domain's `docs/index/` keeps a readable list of them.
+A trading account is an account or wallet at a venue that a trading agent may use. Accounts are listed in the domain's trading settings, each with its id, venue, mode, whether it is funded, whether the owner approved it, the agent it is assigned to, its maximum capital and the names of its keys.
 
 Keys are kept like every key in the Agent OS: values only in the git-ignored `.env` files in `.secrets/test/` and `.secrets/live/`, known everywhere else by name only, with a prefix per account such as `POLYMARKET_ACCT1_API_KEY`. The system's `load-secret` script hands an account's keys to one process at a time and refuses live keys unless the owner approved the account.
 
 Only the owner approves an account with real money, adds its live keys and changes the risk limits or the accounts. No agent approves an account, for itself or for another.
 
-Its docs: `agents/trading/prediction-market/docs/trading-safety.md`
+Its docs: the prediction-market domain's `docs/README.md`, in stage two
 
 ### Test and live
 
@@ -135,17 +135,17 @@ Every trading agent starts in test mode, including every version made by self-im
 
 For now orders are placed only on blockchains, on any network and app; centralised exchanges and other apps are sources of information only. Every decision script checks the system's general stop switch and the domain's order stop switch before every order, in test and in live; both stop switches are our proposal, and what the order stop switch does with open positions is still open.
 
-Its docs: `agents/trading/prediction-market/docs/how-to/go-live-with-money.md`
+Its docs: the prediction-market domain's `docs/README.md`, in stage two
 
 ### Metrics and comparing versions
 
 Trading agents are measured on money, on top of the system's cost, speed and error measures. We propose: realised and unrealised profit and loss and the return on capital, all from the order logs; win rate with its number of trades; the largest and the current fall from a peak; calibration, comparing the agent's forecasts with what happened and with the market price; and AI cost per trade. Versions of one strategy are compared over the same period and capital, in test against test. Which numbers decide success is still open.
 
-Its docs: `agents/trading/prediction-market/docs/trading-metrics.md`
+Its docs: the prediction-market domain's `docs/README.md`, in stage two
 
 ### Making a new trading domain
 
-A new trading domain is a copy of the prediction-market domain, made when the owner asks. The system's `create-agent` script creates its domain agent and folders, never a copy by hand. The copy keeps the levels, the standard folders, the trading notes, the shape of the trading settings and the decision scripts, and changes what is its own: venues, fees, market filters, information sources, strategies and risk limits. It starts with no funded account. When two domains need the same trading part, that part can move up into `agents/trading/`; until then it stays in the domain.
+A new trading domain is a copy of the prediction-market domain, made when the owner asks. The system's `create-agent` script creates its domain agent and folders, never a copy by hand. The copy keeps the levels, the standard folders, the shape of the trading settings and the decision scripts, and changes what is its own: venues, fees, market filters, information sources, strategies and risk limits. It starts with no funded account. When two domains need the same trading part, that part can move up into `agents/trading/`; until then it stays in the domain.
 
 Its docs: `agents/trading/docs/rebuild-prompt.md`
 
@@ -162,8 +162,7 @@ Its docs: `apps/trading-ui/trading-ui.index.md`
 | Trading's folder | `agents/trading/trading.index.md` | how the folder works, in short |
 | Trading's docs | `agents/trading/docs/docs.index.md` | what each doc is for |
 | Research studies | `agents/trading/researches/researches.index.md` | the studies and how they are used |
-| Prediction-market domain | `agents/trading/prediction-market/docs/` | empty today; its vision, README and rebuild prompt in stage two |
-| Trading notes (kept) | `agents/trading/prediction-market/docs/` | the trading rules, formats, flows and metrics in full |
+| Prediction-market domain | `agents/trading/prediction-market/prediction-market.index.md` | its folders today; its vision, README and rebuild prompt in stage two |
 | Trading dashboard | `apps/trading-ui/trading-ui.index.md` | the planned dashboard |
 | The system above | `agents/system/docs/README.md` | everything every agent shares |
 

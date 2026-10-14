@@ -3,7 +3,7 @@
 - From: the owner, in the thread "Interactive file tree UI"
 - Date: 2026-10-14
 
-## Words
+## Raw input
 ~~~text
 what is a differnce if exist when we ll run agent from terminal claude code and when we make notes on ui?
 ~~~

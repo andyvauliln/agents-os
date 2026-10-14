@@ -3,7 +3,7 @@
 - From: the owner, in the thread "Interactive file tree UI"
 - Date: 2026-10-14
 
-## Words
+## Raw input
 ~~~text
 for trading i think all current available information we need put in a docs, also i need detailed full explanation in asd style for the metadata logic, there should be all logic related to it in a new system add this to the top level docs
 ~~~

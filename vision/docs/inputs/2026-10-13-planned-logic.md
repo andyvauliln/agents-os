@@ -3,7 +3,7 @@
 - From: the owner, in the thread "Interactive file tree UI"
 - Date: 2026-10-13
 
-## Words
+## Raw input
 ~~~text
 what logic we currently have around planed not planed files, don't watch vision folder, check all another
 ~~~

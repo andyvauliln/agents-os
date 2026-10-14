@@ -1,14 +1,14 @@
 ---
 about: agent-os/docs/metadata.md
 node: r-docs-metadata.md
-written: 2026-10-14T07:58:57Z
+written: 2026-10-14T09:05:37Z
 by: knowledge-base-agent
 ---
 # metadata.md
 
 ## What it is
 
-The full logic of the metadata files, in ASD-STE100: which files every file and folder has next to it, how they are named, what each holds, when one goes stale, how the build finds it and how an agent brings it up to date.
+The full logic of the metadata files, in ASD-STE100: which files every file and folder has next to it, how they are named, what each holds, when one goes stale, how the build finds it and how an agent brings it up to date; also how status, owner inputs, decisions and questions work, and the true state of each Details field.
 
 ## Who looks after it
 

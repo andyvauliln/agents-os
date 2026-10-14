@@ -3,7 +3,7 @@
 - From: the owner, in the thread "Interactive file tree UI"
 - Date: 2026-10-13
 
-## Words
+## Raw input
 ~~~text
 can we when we edit file block in ide  not change format to md again for editing, just same box but just edit there
 ~~~

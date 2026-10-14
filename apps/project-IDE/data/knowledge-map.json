@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-14T08:00:31Z",
+ "built": "2026-10-14T09:05:43Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "ef7f8327981f",
+   "hash": "e15d9a686e79",
    "entries": []
   },
   "conventions.md": {
@@ -28630,7 +28630,6 @@
    "categories": [
     "ui",
     "process",
-    "sync",
     "question"
    ],
    "summary": "Does the page work from another server, does editing its files update the claude.ai page, and how do page comments and notes become agent work.",
@@ -28645,9 +28644,8 @@
    "file": "2026-10-05-1452-server-page-with-claude-code-agent.md",
    "categories": [
     "ui",
-    "sync",
-    "agents",
-    "process"
+    "process",
+    "agents"
    ],
    "summary": "The owner wants the page on their server too, with an AI agent that sends requests to Claude Code working in the Trading OS repository.",
    "processed_into": "D-042; file-tree.md v1.19 ([53.3] proposed with [53.3.1]-[53.3.4]; [53], [53.1.1], [53.2.5], [10.1.1.3]); plans/server-ide.md; plans/github-sync.md; README; changelog",
@@ -28663,7 +28661,7 @@
     "structure",
     "ui",
     "agents",
-    "sync"
+    "process"
    ],
    "summary": "Move project-IDE into apps/, write the server code so it shows in the tree, and run Claude Code from the system folder.",
    "processed_into": "D-043; file-tree.md v1.20 ([53] under [43]; [53.3.x] decided with drafts; [53.2.7]); vision/server/ (4 files); page server mode; agents, skills, CLAUDE.md, README, plans",
@@ -28990,8 +28988,8 @@
    "where": "thread \"Interactive file tree UI\"",
    "file": "2026-10-07-1947-github-publish.md",
    "categories": [
-    "github",
-    "workflow"
+    "setup",
+    "process"
    ],
    "summary": "The owner asks to publish the project on GitHub and prepare it so they can continue in Claude Code from another account, using few tokens.",
    "processed_into": "the project pushed to trading-oss (branch claude/project-thread-dj0xqs, PR #1 merged) under vision/ with HANDOFF.md; memory MEMORY.md",
@@ -29024,8 +29022,8 @@
    "file": "2026-10-09-1019-voice-input.md",
    "categories": [
     "ui",
-    "apps",
-    "secrets"
+    "structure",
+    "secrets-safety"
    ],
    "summary": "The owner adds a voice button to the page's AI inputs: press to record (5 minute limit), the words appear in the box, and sending gives them to the agent as usual; transcription uses Groq's free models, rotating when one hits a rate limit or fails; the Groq key goes in the secrets (stored under the key name GROQ_API_KEY; the value is not written here).",
    "processed_into": [
@@ -29044,9 +29042,9 @@
    "where": "File Tree page, Apply changes",
    "file": "2026-10-09-1040-apply-jobs-off.md",
    "categories": [
-    "jobs",
-    "secrets",
-    "page-sync"
+    "workers-jobs",
+    "secrets-safety",
+    "ui"
    ],
    "summary": "Apply changes from the page: the owner turned off every job in the system's jobs file (relink, check-links, news-digest, system-self-improvement, knowledge-sync) and wrote the Groq key into the keys file's text on the page (value redacted; it already sits in the keys file), with the page's ripple adding GROQ_API_KEY to the keys file's example.",
    "processed_into": [
@@ -29062,7 +29060,7 @@
    "file": "2026-10-09-1230-researches-real-tree.md",
    "categories": [
     "structure",
-    "page-sync"
+    "ui"
    ],
    "summary": "The owner asks to pull the latest repository, move its researches/ folder to trading/researches/, and make the File Tree page show the project's real file tree.",
    "processed_into": [
@@ -29220,7 +29218,7 @@
    "where": "thread \"Interactive file tree UI\"",
    "file": "2026-10-12-secrets-in-tree.md",
    "categories": [
-    "security",
+    "secrets-safety",
     "structure",
     "ui"
    ],
@@ -29255,10 +29253,10 @@
    "where": "thread \"Interactive file tree UI\"",
    "file": "2026-10-12-claude-md-stage-one.md",
    "categories": [
-    "docs",
+    "docs-knowledge",
     "structure",
     "ui",
-    "skills",
+    "agents",
     "process"
    ],
    "summary": "CLAUDE.md in the system folder; docs at every level written fresh; README in ASD-STE100 too; tabs only for real metadata files; prediction-market emptied to folders.",
@@ -29374,7 +29372,7 @@
    "where": "thread \"Interactive file tree UI\"",
    "file": "2026-10-13-ide-on-server.md",
    "categories": [
-    "ide"
+    "ui"
    ],
    "summary": "Will the IDE work on another server the same way after the vision move.",
    "processed_into": [
@@ -29388,7 +29386,7 @@
    "file": "2026-10-14-trading-docs-metadata-logic.md",
    "categories": [
     "structure",
-    "docs"
+    "docs-knowledge"
    ],
    "summary": "Put all trading information into the docs; write the full metadata logic in ASD-STE100 in the top-level docs.",
    "processed_into": [
@@ -29399,6 +29397,32 @@
    "entries": [
     "d-067"
    ]
+  },
+  "in-20261014-terminal-vs-page": {
+   "at": "2026-10-14",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-14-terminal-vs-page.md",
+   "categories": [
+    "ui"
+   ],
+   "summary": "Difference between running Claude Code in the terminal and leaving notes on the page.",
+   "processed_into": [],
+   "entries": []
+  },
+  "in-20261014-status-inputs-fields": {
+   "at": "2026-10-14T09:03",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-14-0903-status-inputs-fields.md",
+   "categories": [
+    "docs-knowledge",
+    "process",
+    "question"
+   ],
+   "summary": "Write the current logic of proposed status, inputs, decisions, questions and the true state of every Details field into docs/metadata.md.",
+   "processed_into": [
+    "docs/metadata.md"
+   ],
+   "entries": []
   }
  },
  "problems": [

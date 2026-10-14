@@ -3,7 +3,7 @@
 - From: the owner, in the thread "Interactive file tree UI"
 - Date: 2026-10-13
 
-## Words
+## Raw input
 ~~~text
 explain me in ads style how de we sync file tree with a disk step by step, and explain me why we need all of this this new files in a memory folder, and how we ll use it
 ~~~

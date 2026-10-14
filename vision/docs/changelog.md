@@ -3,6 +3,7 @@
 System-level history: what changed in the OS design, when, and from which decision. Newest first. Per-agent changes stay in each agent's own `docs/changes.md` [46]. The knowledge agent adds one line per processed input or system change (knowledge-intake, step 6).
 
 ## 2026-10-14
+- **Status, inputs, decisions, questions and the Details fields in the metadata doc.** The owner asked what logic exists for proposed ideas, inputs, decisions and questions, and the true state of every Details field. `docs/metadata.md` now has sections 15 to 19 on them. Small drift fixed: input headings, categories and answered flags.
 - **The trading notes are in the prediction-market docs (D-067).** The owner asked that all current trading information be in the docs. The trading notes, the vision notes and the trading parts of the old system docs now sit in `agents/trading/prediction-market/docs/`, each with its metadata files.
 - **The metadata logic, in ASD-STE100 (D-067).** The owner asked for a full explanation of the metadata logic in the top-level docs. `docs/metadata.md` tells all of it; the project README, the rebuild prompt and CLAUDE.md point to it. Found items now show their own How it works and Details on the page.
 

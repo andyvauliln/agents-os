@@ -3,7 +3,7 @@
 - From: the owner, in the thread "Interactive file tree UI"
 - Date: 2026-10-13
 
-## Words
+## Raw input
 ~~~text
 before i asked agent that he kind of move all information from there to documentations or metadata files or all, so now we just need extract what we need in our current version give me detailed file tree what gonna happen with every file there first
 ~~~

@@ -3,7 +3,7 @@
 - From: the owner, in the thread "Interactive file tree UI"
 - Date: 2026-10-13
 
-## Words
+## Raw input
 ~~~text
 i need kind of go out of the vision folder what we still would need in a current system to live without it and move forward
 ~~~

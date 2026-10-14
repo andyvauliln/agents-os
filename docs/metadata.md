@@ -1,6 +1,6 @@
 # Metadata
 
-This document tells you all of the metadata logic of the Agent OS. It is written in ASD-STE100. It tells how the metadata works in the new system, without the planning folder `vision/`. Section 15 tells which parts are not built yet.
+This document tells you all of the metadata logic of the Agent OS. It is written in ASD-STE100. It tells how the metadata works in the new system, without the planning folder `vision/`. Sections 15 to 18 tell how status, owner inputs, decisions and questions work. Section 19 tells the true state of each Details field. Section 20 tells which parts are not built yet.
 
 ## 1. What metadata is
 
@@ -120,10 +120,10 @@ Keep all the fields, in this order.
 | `related` | list of `{path, how}` | The related items, and the relation to each. The relations are: `reads`, `read by`, `writes`, `written by`, `links to`, `same format as`, `built from`, `documented in`, `checked by`, `tested by`, `summed up in`. |
 | `sources` | `{decisions, inputs, notes}` | Where the knowledge about the item comes from: the decision codes, the owner input codes and the notes. Codes are permitted here. |
 | `update_with` | list of `{path, how}` | The items that must change when this item changes, and how to change each one. |
-| `inherits` | list | The knowledge from the folders above that applies to this item. A script fills this field. Do not fill it by hand. |
+| `inherits` | list | The knowledge from the folders above that applies to this item. A script will fill this field (not built yet, see section 19). |
 | `features` | list | The features that the item helps to supply. |
 | `views` | list | The special views that apply to the item. |
-| `how_it_works` | object | The check data of the How it works file. It is empty now (see section 15). |
+| `how_it_works` | object | The check data of the How it works file. The build does not use it yet (see sections 19 and 20). |
 | `tree_number` | text | An old number of the item, only for agents. It is empty when the item has none. |
 
 ### 6.3 An empty Details file
@@ -236,12 +236,153 @@ Do these steps after each change to an item. The `file-index` skill gives all th
 2. Never open, read or copy a `.env` file.
 3. Do not edit a generated file by hand. Make it again with its script.
 4. Do not write decision codes or input codes in a How it works, Example or Questions file. Write them only in the Details file.
-5. An idea of an agent is `proposed` until the owner says yes.
+5. An idea of an agent is `proposed` until the owner says yes (section 15).
 6. When you add a file or a folder, give it its metadata files in the same round.
 7. When you remove or move an item, remove or move its metadata files too.
 8. A file without metadata, or metadata without its item, is an error.
 
-## 15. What is not built yet
+## 15. Status: decided, proposed, idea, open
+
+### 15.1 The rule
+
+1. Only the owner decides. A thing is "decided" when the owner said it or approved it.
+2. When an agent adds its own idea, or fills a gap that the owner did not fill, the status is "proposed".
+3. A proposed thing stays proposed until the owner says yes. Then it becomes "decided".
+4. When the owner says no, remove the thing, or keep it as "idea" if the owner wants to think about it later.
+5. "Open" is a question that has no answer yet.
+6. Never show a proposed thing as decided. Never show a decided thing as an idea.
+
+### 15.2 Where the status is written
+
+| Where | Field or form | Values used now |
+|---|---|---|
+| Details file of an item | `status` | `decided`, `proposed`, `idea` |
+| Knowledge tag in a note (`<!-- k: ... status=... -->`) | `status=` | `decided` (318), `proposed` (237), `open` (65), `retired` (2) |
+| Decision in `decisions.md` | `**Status:**` line | `decided`, `active`, `partly superseded`, `superseded`, `proposed` |
+| Change plan in `plans/index.json` | `status` | `draft`, `approved`, `building`, `built`, `done` |
+| How it works and the docs | Plain words | "proposal", "still open", "not decided" |
+
+### 15.3 How the status changes
+
+1. An agent writes its idea with status `proposed`. It names the idea in its reply to the owner and gives its recommendation.
+2. The owner answers. The answer is an owner input (section 16).
+3. The agent changes each place of the idea to `decided` and writes a decision (section 17).
+4. The page shows no status at this time. It shows only the "changed" mark until the next sync.
+
+## 16. Owner inputs
+
+### 16.1 What an input is
+
+1. An input is one message from the owner: in the project chat, in a thread, or on the page.
+2. A question and the answer of Claude are one input.
+3. A change that an agent makes with no words from the owner is not an input. It goes only into the changelog.
+
+### 16.2 Where the inputs are
+
+1. Each input is one file in the inputs folder. Now the folder is `vision/docs/inputs/`. After the move, it is `apps/project-IDE/data/inputs/`.
+2. The file name is `YYYY-MM-DD-HHMM-<topic>.md`. The identifier is `in-YYYYMMDD-HHMM`.
+3. The file has these parts:
+   - a header: the time, where, the source, the categories and a summary;
+   - `## Raw input`: the words of the owner, word for word, in a `~~~text` block;
+   - `## Answer`: the answer of Claude, when the owner asked something;
+   - `## Processed into`: the decisions, docs and items that the input changed.
+4. `index.json` has one row for each input: `id`, `at`, `where`, `source`, `ref`, `file`, `chars`, `categories`, `summary`, `processed_into`, `answered`.
+5. The categories come from the list at the top of `index.json`. Each input has one to three categories.
+
+### 16.3 How an input is processed
+
+The `knowledge-intake` skill does these steps:
+
+1. Store the input, word for word. Never change the words of the owner. Do not correct typing errors.
+2. Find the knowledge in the input. Give each item a status (section 15).
+3. Find the correct location for each item: one item, many items, a format, a rule, a flow, a term.
+4. Write the knowledge in that location.
+5. Update all other locations that tell the same fact ("ripple").
+6. Record it: a decision (section 17), a line in the changelog, and `processed_into` of the input.
+7. Make the metadata fresh again (section 10).
+8. Tell the owner the result in two to five lines.
+
+An input from the page comes through `ide-sync`. On claude.ai it waits in the page store until you push Apply changes.
+
+## 17. Decisions
+
+### 17.1 What a decision is
+
+1. A decision is a choice of the owner that changes the system, its rules or its structure.
+2. Each decision has a number: `D-001`, `D-002` and so on. A number is never used again.
+
+### 17.2 Where the decisions are
+
+1. All decisions are in one file, `decisions.md`. Now it is in `vision/docs/`. After the move, it is in `apps/project-IDE/data/`.
+2. Each decision has these lines: `Decision`, `Date`, `Why`, `Status`, `Sources` (the input identifiers), `Changed` (the files that it changed). Some decisions also have `Rules now in`.
+3. When a new decision replaces an old one, the old one gets the status "superseded by D-0xx". Do not remove it.
+
+### 17.3 Where the decision numbers are used
+
+1. In the `sources.decisions` field of the Details file of each item that the decision changed.
+2. In the `sources=` part of the knowledge tags in the notes.
+3. Never in a doc for people, and never in a How it works, Example or Questions file.
+
+## 18. Questions
+
+### 18.1 Where the questions are
+
+There are three locations at this time:
+
+1. **The Questions file of an item** (`x.questions.md`). This is the new location. The Questions tab shows it.
+2. **The open questions of an item in the tree notes.** This is the old location. The Questions tab also shows these, with a "Discuss" button. A folder also shows the open questions of the items in it.
+3. **The "Still open" part** of each vision and README.
+
+### 18.2 How a question is asked and answered
+
+1. An agent finds a question that only the owner can answer. It writes the question in the Questions file of the item. It gives one sentence that tells why the question is important.
+2. The agent also asks the owner in the thread, with a recommendation.
+3. On the page, you push "Discuss". Then you write your answer in the box.
+4. Your answer is an owner input (section 16). The page also keeps it as an answered question of the item.
+5. The agent puts the answer into the docs and the metadata, and writes a decision if necessary.
+6. The agent removes the question from the Questions file and from "Still open". When no question stays, the file says "None open."
+
+### 18.3 After the move out of `vision/`
+
+The tree notes stop. Then the Questions files are the only location for the questions of an item. The "Still open" parts of the docs stay.
+
+## 19. The Details fields today
+
+This table tells the true state on 2026-10-14. There are 421 Details files outside `vision/`. 257 of them contain only `{}`. 135 contain only the empty schema. About 29 are written.
+
+| Field | Who fills it now | What reads it now | Files with a value |
+|---|---|---|---|
+| `schema_version` | `index_files.py`, when it makes the empty schema | Nothing | 164 |
+| `about` | The knowledge base agent, by hand | The Details tab (as raw JSON) | 29 |
+| `kind` | By hand | The Details tab | 29 (also the value `skill`, which is not in the list) |
+| `state` | By hand | The Details tab | 27 (also the value `built`, which is not in the list) |
+| `status` | By hand | The Details tab | 27, all `decided` |
+| `git` | By hand | The Details tab | 27 |
+| `secret` | By hand | The Details tab | 27 |
+| `generated_by` | By hand | The Details tab | 1 |
+| `writers`, `readers`, `changes_when` | By hand | The Details tab | 27 |
+| `related` | By hand | The Details tab | 27 |
+| `sources` | By hand | The Details tab | 29 |
+| `update_with` | By hand | Agents, before they finish a change (section 10, step 4) | 27 |
+| `inherits` | By hand. No script fills it yet | The Details tab | 25 |
+| `features` | By hand | The Details tab | 26 |
+| `views` | By hand | The Details tab | 17 |
+| `how_it_works` | By hand | Nothing. The build still uses the front matter of the How it works file | 26 |
+| `tree_number` | By hand | Nothing | 28 |
+
+What this means:
+
+1. No script reads a Details field yet. The page shows the file as raw JSON in the Details tab.
+2. Most items have an empty Details file. To fill them is stage one work.
+3. The build does not check the values. Thus `skill` and `built` got into two fields.
+
+What must come (proposed):
+
+1. A check in the build: each Details file is valid JSON, has all the fields, and uses only the permitted values.
+2. A script that fills `inherits` from the folders above, and moves `basis` and `confirmed` into `how_it_works`.
+3. A Details tab that shows the fields in plain words, with the related items as links.
+
+## 20. What is not built yet
 
 1. **The mirror in `vision/`.** Now the source of most How it works and Details files is the mirror `vision/tree/agent-os/`. The build copies them next to their items. After the move out of `vision/`, the files next to the items become the source, and the copy stops.
 2. **The basis.** Now the basis also uses the tree notes in `vision/docs/file-tree.md`. After the move, the basis uses only the item, its knowledge and its children (section 9).

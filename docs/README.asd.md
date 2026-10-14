@@ -125,7 +125,7 @@ Its docs: `README.index.md` and `HANDOFF.index.md`.
 - `docs/README.asd.md` is this document. It has the same content and the same section order as `README.md`. It uses ASD-STE100 Simplified Technical English. The owner can compare the two documents.
 - `docs/rebuild-prompt.md` gives the instructions to an AI coding agent. With these instructions, the agent builds the top level of the repository again. Then it builds each level with the rebuild prompt of that level.
 - `docs/file-tree.md` is a plain list of all paths in the repository, one path on each line. It has no metadata. The IDE build writes it in each round. Do not write it by hand.
-- `docs/metadata.md` tells all of the metadata logic, in ASD-STE100. It tells which metadata files each item has and how they get their names. It tells the content of each file, when a file becomes stale and how the build finds it. It tells how an agent updates the files after a change, how the build and the page use them, the rules, and the parts that are not built yet.
+- `docs/metadata.md` tells all of the metadata logic, in ASD-STE100. It tells which metadata files each item has and how they get their names. It tells the content of each file, when a file becomes stale and how the build finds it. It tells how an agent updates the files after a change, how the build and the page use them, and the rules. It tells how the status (decided, proposed, idea, open), the owner inputs, the decisions and the questions work. It tells the true state of each Details field, and the parts that are not built yet.
 
 Each doc has its How it works file and its Details file next to it. The four written docs also have two more files:
 

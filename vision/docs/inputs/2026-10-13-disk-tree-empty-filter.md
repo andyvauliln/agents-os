@@ -3,7 +3,7 @@
 - From: the owner, in the thread "Interactive file tree UI"
 - Date: 2026-10-13
 
-## Words
+## Raw input
 ~~~text
 let's at all remove all logic related to planed all already created files in a disk should represent a current tree on ui, for now we can consider somehow as empty files, that not yet have anything, so we can have filter on ui to see empty files
 ~~~

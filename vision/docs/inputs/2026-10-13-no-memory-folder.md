@@ -3,7 +3,7 @@
 - From: the owner, in the thread "Interactive file tree UI"
 - Date: 2026-10-13
 
-## Words
+## Raw input
 ~~~text
 i am just not sure why we need keep it in a memory in a new version agent should use documentation and index files, and not keep that much in a memory also i think most of it somehow already in a docs, and explain why we would better keep something of you suggest there what we don't have and it's not a place in a documentation or metadata
 ~~~

@@ -262,7 +262,7 @@ Every file and folder has metadata files next to it, named after the item withou
 | `vision.index.md` | How it works | The plain explanation, under fixed headings, with front matter saying what it describes, its item, when and by whom it was written |
 | `vision.meta.json` | Details | The item's details as JSON (the fields listed under the Details tab above) |
 | `vision.example.md` | Example | The structure of the file: its headings and one line on what goes under each |
-| `vision.questions.md` | Questions | The open questions for the owner about the file |
+| `vision.questions.md` | Questions | The open questions for the owner, and the questions the owner asked about the file with their answers |
 | `vision.{type}.{name}.view.html` | its own tab | A custom view for that kind of file (proposed, not built yet) |
 
 A folder keeps its own inside it (`configs/configs.index.md`). A name with no extension stays whole (`.gitignore.index.md`). A file whose name would clash with a sibling's or its folder's keeps its extension; today only `apps/project-IDE/server/server.py` has `server.py.index.md`. A metadata file has no metadata files of its own.

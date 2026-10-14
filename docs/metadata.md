@@ -1,6 +1,6 @@
 # Metadata
 
-This document tells you all of the metadata logic of the Agent OS. It is written in ASD-STE100. It tells how the metadata works in the new system, without the planning folder `vision/`. Sections 15 to 18 tell how status, owner inputs, decisions and questions work. Section 19 tells the true state of each Details field. Section 20 tells which parts are not built yet.
+This document tells you all of the metadata logic of the Agent OS. It is written in ASD-STE100. It tells how the metadata works in the new system, without the planning folder `vision/`. Sections 15 to 18 tell how status, owner inputs, decisions and the two types of questions work. Section 19 tells the true state of each Details field. Section 20 tells which parts are not built yet.
 
 ## 1. What metadata is
 
@@ -24,7 +24,7 @@ This document tells you all of the metadata logic of the Agent OS. It is written
 | `vision.index.md` | How it works | The explanation of the item, in plain words | All items |
 | `vision.meta.json` | Details | The facts about the item, as JSON | All items |
 | `vision.example.md` | Example | The structure of the item: its parts and what goes in each part | Only items that need it |
-| `vision.questions.md` | Questions | The open questions for the owner about the item | Only items that need it |
+| `vision.questions.md` | Questions | The open questions for the owner, and the questions that the owner asked with their answers | Only items that have a question |
 | `README.asd.md` (next to `README.md`) | ASD-STE100 | The README again, in ASD-STE100 | Each `README.md` of the doc levels |
 | `.env.example` (next to `.env`) | Example | The key names of a keys file, with no values | Each `.env` file |
 | `vision.{type}.{name}.view.html` | its own tab | A special view for one kind of file | Not built yet |
@@ -157,10 +157,12 @@ A Details file can contain only `{}` until somebody writes it. The item still ha
 
 ### 7.2 Questions (`x.questions.md`)
 
-1. Each open question for the owner about the item.
-2. Each question has one sentence that tells why it is important.
-3. When the owner gives an answer, put the answer into the docs and the metadata. Then remove the question from the file.
-4. When there are no questions, the file says "None open."
+The file has two parts, always in this order:
+
+1. **Open questions for the owner.** The questions that an agent has for the owner. Each has one sentence that tells why it is important, a recommended answer, and where it came from. When there are none, this part says "None open."
+2. **The owner's questions.** Each question that the owner asked about the item, word for word, with its answer. These stay in the file. When there are none, this part says "None recorded yet."
+
+Section 18 tells all of the logic.
 
 ### 7.3 ASD-STE100 (`README.asd.md`)
 
@@ -239,6 +241,8 @@ Do these steps after each change to an item. The `file-index` skill gives all th
 | Who | What it does with the metadata |
 |---|---|
 | The knowledge base agent, with the `file-index` skill | It writes and updates the How it works, Details, Example and Questions files. |
+| The `knowledge-intake` skill | It records each question of the owner, with its answer, in the Questions file of the item. |
+| The `change-plan` and `make-questions` skills | They write the open questions for the owner. |
 | The `readme-asd-doc` skill | It writes each `README.asd.md`. |
 | The project IDE agent, with `ide-build` | It runs the build scripts and publishes the page. |
 | The project IDE agent, with `ide-sync` | It writes your page edits into the metadata files. |
@@ -350,33 +354,77 @@ An input from the page comes through `ide-sync`. On claude.ai it waits in the pa
 
 ## 18. Questions
 
-### 18.1 Where the questions are
+### 18.1 The two types of questions
 
-There are three locations at this time:
+| Type | Who asks | Who answers | Where it goes | What happens after the answer |
+|---|---|---|---|---|
+| Open question for the owner | An agent | The owner | Part 1 of the Questions file of the item | The answer goes into the docs and the metadata. The question leaves part 1. |
+| The owner's question | The owner | An agent | Part 2 of the Questions file of the item, with the answer | It stays. When a later change makes the answer untrue, the agent updates the answer and adds "This changed later: ...". |
 
-1. **The Questions file of an item** (`x.questions.md`). This is the new location. The Questions tab shows it.
-2. **The open questions of an item in the tree notes.** This is the old location. The Questions tab also shows these, with a "Discuss" button. A folder also shows the open questions of the items in it.
-3. **The "Still open" part** of each vision and README.
+### 18.2 The format
 
-### 18.2 When a question is made
+```markdown
+# Questions: README.md
 
-1. No script makes questions. An agent writes a question only when it finds a choice that only the owner can make, while it works.
-2. When an agent writes or updates a doc, it puts the open points in the "Still open" part of the doc and in the Questions file of the doc. In stage one, only the main docs and the `.env` files got Questions files in this way.
-3. When an agent changes an item and a choice about it is for the owner, it adds the question to the Questions file of that item.
-4. In the new version, the method is the same. Any item can get a Questions file when it needs one. The owner answers mainly on the page.
+## Open questions for the owner
 
-### 18.3 How a question is asked and answered
+- **Should the README list every tab of the page?** It decides how long the README is. Recommended: only the main tabs. From: the plan IDE manual.
 
-1. An agent finds a question that only the owner can answer. It writes the question in the Questions file of the item. It gives one sentence that tells why the question is important.
-2. The agent also asks the owner in the thread, with a recommendation.
-3. On the page, you push "Discuss". Then you write your answer in the box.
-4. Your answer is an owner input (section 16). The page also keeps it as an answered question of the item.
-5. The agent puts the answer into the docs and the metadata, and writes a decision if necessary.
-6. The agent removes the question from the Questions file and from "Still open". When no question stays, the file says "None open."
+## The owner's questions
 
-### 18.4 After the move out of `vision/`
+### 2026-10-14: Terminal or page?
 
-The tree notes stop. Then the Questions files are the only location for the questions of an item. The "Still open" parts of the docs stay.
+> what is a differnce if exist when we ll run agent from terminal claude code and when we make notes on ui?
+
+The same Claude Code works on the same files. On the page, each note is tied to one item and is saved at once.
+
+Docs improved: docs/metadata.md.
+```
+
+Rules:
+
+1. Write the question of the owner word for word, as a quote. Do not correct typing errors.
+2. Write the answer in one to four plain sentences.
+3. No decision codes, no input codes and no hashes. Dates are permitted.
+4. The newest question is the last one in its part.
+
+### 18.3 When an open question for the owner is made
+
+1. **In a plan.** The `change-plan` skill writes each "Choice for the owner" of the plan as an open question in the Questions file of the item that the choice is about.
+2. **By the `make-questions` skill.** It examines an item, a folder or a level. It finds gaps, contradictions, defaults that the owner did not approve, proposals that wait, and answers that are not true any more. It writes the questions for the owner. Use it when the owner asks, after a doc or a plan is written, and before a stage is finished.
+3. **While a doc is written.** The open points go to the "Still open" part of the doc and to its Questions file.
+4. **While an item is changed.** A choice that only the owner can make goes to the Questions file of that item.
+
+### 18.4 When an owner's question is recorded
+
+1. The owner asks a question: in a thread, in the project chat, in the terminal, or on the page.
+2. The agent answers it.
+3. The `knowledge-intake` skill stores the input (section 16). Then it adds the question and the answer to part 2 of the Questions file of the item that the question is about. If the file does not exist, it makes the file.
+4. The agent analyses the question. A question shows that the docs did not tell the owner something. The agent finds the cause and improves the docs:
+
+| Cause | What the agent does |
+|---|---|
+| Missing | It adds the answer to the doc where the owner looked or should look. |
+| Hard to find | It adds a link or one sentence where the owner looked. It adds the owner's word to the glossary. |
+| Unclear | It rewrites that part in plainer words, or adds a short example. |
+| Wrong or out of date | It corrects the doc and every related file. |
+| Repeated | The owner asked the same thing before. It rewrites the weak part of the doc. |
+
+5. Under the answer, the agent writes one line: "Docs improved: <files>." or "Docs improved: none, the answer was already in <file>."
+6. The `make-questions` skill also reads the owner's questions. Many questions on one item show a weak doc. It improves that doc first, and asks the owner only what the docs cannot answer.
+
+### 18.5 How an open question is answered
+
+1. The agent also asks the owner in the thread, with a recommendation.
+2. On the page, you push "Discuss" and write your answer in the box. Or you answer in the thread.
+3. Your answer is an owner input (section 16).
+4. The agent puts the answer into the docs and the metadata, and writes a decision if necessary.
+5. The agent removes the question from part 1 and from "Still open".
+
+### 18.6 Other locations, until the move out of `vision/`
+
+1. The tree notes still have old open questions for some items. The Questions tab shows them too, with a "Discuss" button.
+2. After the move, the Questions files are the only location. The "Still open" parts of the docs stay.
 
 ## 19. The Details fields today
 

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "about": "The make-questions skill: analyse items and write the owner's open questions.",
+  "kind": "",
+  "state": "",
+  "status": "proposed",
+  "git": "",
+  "secret": null,
+  "generated_by": null,
+  "writers": [],
+  "readers": [],
+  "changes_when": "",
+  "related": [
+    "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+    "agents/system/.claude/skills/change-plan/SKILL.md",
+    "docs/metadata.md"
+  ],
+  "sources": {
+    "decisions": [],
+    "inputs": [],
+    "notes": []
+  },
+  "update_with": [
+    "vision/.claude/skills/make-questions/SKILL.md"
+  ],
+  "inherits": [],
+  "features": [],
+  "views": [],
+  "how_it_works": {},
+  "tree_number": ""
+}

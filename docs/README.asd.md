@@ -263,7 +263,7 @@ Each file and each folder outside the planning area has metadata files next to i
 | `x.index.md` | How it works | What the item is, who keeps it, when and how it changes, who uses it, where other files mention it, related knowledge, and a maximum of four "keep in mind" lines, in plain words |
 | `x.meta.json` | Details | The facts about the item: its kind, its state, git or secret, who writes it, who reads it, when it changes, related files, sources, what must change with it, and what applies from the levels above |
 | `x.example.md` | Example | The outline of the item: its sections and the content of each section |
-| `x.questions.md` | Questions | The open questions for the owner about the item |
+| `x.questions.md` | Questions | Two parts. Part 1: the open questions for the owner. Plans and the `make-questions` skill write them. Part 2: each question that the owner asked about the item, word for word, with its answer |
 | `x.{type}.{name}.view.html` | A custom view | A view for one kind of item. It is planned |
 
 - A folder `f/` keeps its metadata files inside it, as `f/f.index.md` and `f/f.meta.json`.

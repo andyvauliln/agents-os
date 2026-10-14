@@ -12,7 +12,7 @@ Every file and folder in the project has metadata files: small files next to it 
 | How it works | `vision.index.md` | every file and folder outside `vision/` |
 | Details | `vision.meta.json` | every file and folder outside `vision/` |
 | Example | `vision.example.md` | for now only the main docs and the two `.env` files (for `.env` it is `.env.example`) |
-| Questions | `vision.questions.md` | for now only the main docs and the two `.env` files |
+| Questions | `vision.questions.md` | the main docs and the two `.env` files, and any item with a question: an open one for the owner, or one the owner asked |
 | ASD-STE100 | `README.asd.md`, next to `README.md` | every `README.md` of the five doc levels |
 | File | the item itself | every file |
 
@@ -171,12 +171,30 @@ For a `.env` file the Example is `.env.example` next to it: the key names only, 
 
 ## Questions: `x.questions.md`
 
-The open questions for the owner about the item. Each is a short question with one sentence on why it matters. When there are none, the file says "None open." When the owner answers, the answer goes into the notes and the docs where it belongs (`knowledge-intake`), and the question leaves this file.
+Two parts, always in this order (the full logic is in `docs/metadata.md`, Questions):
+
+1. **Open questions for the owner**: questions an agent has for the owner, made by a plan (`change-plan`), by `make-questions`, or while a doc is written.
+2. **The owner's questions**: every question the owner asked about the item, word for word, with its answer (written by `knowledge-intake`).
+
+
+An open question is a short question with one sentence on why it matters, and where it came from when a plan made it. When there are none, that part says "None open." When the owner answers, the answer goes into the notes and the docs where it belongs (`knowledge-intake`), and the question leaves the open part.
+
+An owner's question stays in the file for good, newest last, with its answer kept true: when a later change makes the answer untrue, update it and add "This changed later: ...". No decision codes or input ids in this file; dates are fine.
 
 ```markdown
 # Questions: README.md
 
-- Should the project IDE part list every tab of the page, or only the main ones? It decides how long this part is.
+## Open questions for the owner
+
+- Should the project IDE part list every tab of the page, or only the main ones? It decides how long this part is. From the plan: IDE manual.
+
+## The owner's questions
+
+### 2026-10-14: Terminal or page?
+
+> what is a differnce if exist when we ll run agent from terminal claude code and when we make notes on ui?
+
+The same Claude Code works on the same files. On the page every note is tied to one item and saved word for word at once; in the terminal you name the item yourself.
 ```
 
 ## Steps
@@ -225,7 +243,7 @@ The reader is the owner, or anyone new to the project, and any agent that needs 
 ## Checks
 
 - Every file and folder outside `vision/` and outside `agents/trading/prediction-market/` has its `.index.md` and `.meta.json`, and so does everything in `agents/trading/prediction-market/docs/`; nothing else inside the prediction-market domain has any.
-- Every main doc and both `.env` files have their Example and Questions files; no other item has them yet, and no metadata file has metadata of its own (except `README.asd.md`).
+- Every main doc and both `.env` files have their Example and Questions files; other items have a Questions file only when it holds a question, and no metadata file has metadata of its own (except `README.asd.md`).
 - `--stale` prints nothing, and `python3 vision/tools/build_map.py` reports no missing files.
 - No orphans: `python3 vision/tools/build_map.py --orphans` lists metadata files whose item is gone. Move them to `vision/archive/<date>/tree/`.
 - Every `.meta.json` parses as JSON and has every field of the schema, or is empty.

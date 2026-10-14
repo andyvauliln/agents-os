@@ -1,0 +1,10 @@
+{
+  "about": "Folder of the make-questions skill.",
+  "status": "proposed",
+  "related": [
+    "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+    "agents/system/.claude/skills/change-plan/SKILL.md",
+    "docs/metadata.md"
+  ],
+  "update_with": []
+}

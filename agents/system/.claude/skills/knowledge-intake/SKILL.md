@@ -16,6 +16,14 @@ For an owner input:
 2. Write `docs/inputs/YYYY-MM-DD-HHMM-<topic-slug>.md`: header lines (At, Where, Source, Ref, Categories, Summary), `## Raw input` with the text word for word inside a `~~~text` fence, `## Processed into` (filled in step 6). Never edit the raw text, typos included.
 3. Add a row to `docs/inputs/index.json`: `id, at, where, source, ref, file, chars, categories (1-3 from the list at the top of the file), summary (one sentence), processed_into: []`.
 4. **A question and its answer are one input.** When the owner asked something and Claude answered (in chat, in a thread, on the File Tree page), store the answer in the same file under `## Answer` and set `answered: true` on the row. The answer is knowledge: it goes through steps 2 to 7 like the owner's own words.
+5. **Record the owner's question on its item.** Add it to the Questions file of the item it is about (`x.questions.md`, part "The owner's questions"): a `### <date>: <short title>` heading, the owner's question word for word as a quote, and the answer in one to four plain sentences. Create the file when it does not exist. The full format is in `docs/metadata.md` (Questions). When a later change makes the answer untrue, update the answer and add "This changed later: ...".
+6. **Analyse the owner's question and improve the docs.** A question from the owner shows that the docs did not tell them something. Find why, and fix the docs, not only the answer:
+   - **Missing**: no doc holds the answer. Add it to the doc where the owner looked or should look (the item's How it works, the level's vision or README, or a topic note).
+   - **Hard to find**: a doc holds it, but deep or under another name. Add a link or one sentence where the owner looked, and the owner's word to the glossary.
+   - **Unclear**: the doc holds it, but the owner still asked. Rewrite that part in plainer words, or add a short example.
+   - **Wrong or out of date**: fix the doc and every file it ripples to (step 4 of part 4).
+   - **Repeated**: the owner asked about the same thing before (see the item's Questions file). The doc is weak there: rewrite the part, do not add one more sentence.
+   Under the answer, add one line: `Docs improved: <file>, <file>.` or `Docs improved: none, the answer was already in <file>.` Then ripple the changed docs as usual.
 
 Page inputs: read the page database collection `inputs` (status `new`); each is one input, with the page assistant's `answer` when the owner asked something. The page's `changes` records show what the page already applied; treat those edits as the owner's proposal for the text, but place the knowledge yourself (an old page draft can carry text that later decisions replaced).
 
@@ -59,7 +67,7 @@ Every other place that states the changed fact must now agree. Check, in this or
 1. The grep results from step 3 (docs, tree comments, feature-map rows, how-to steps, glossary terms, examples in index lists).
 2. Every node in the changed section's `applies`: does its file doc still read true?
 3. Renames: grep the old name across `docs/`, and in the planning phase `tools/enrich.py` and `tools/tabs.py` (examples and field guides shown on the page).
-4. Open questions the input answers: move them to resolved (or delete them) wherever they appear.
+4. Open questions the input answers: remove them from the "Open questions for the owner" part of each Questions file and from "Still open" in the docs, wherever they appear.
 5. Related logic: the agents, skills, scripts, index lists and How it works files that depend on each changed file (from `--context`: the knowledge that applies to it, from every folder above included, and the sections that name it). Each must still be true, or it changes in this round.
 
 ## 6. Record

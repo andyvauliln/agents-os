@@ -196,7 +196,7 @@ Every file and folder outside the planning area has its metadata files beside it
 | `x.index.md` | How it works | What the item is, who looks after it, when and how it changes, who uses it, where it is mentioned, related knowledge, and up to four "keep in mind" lines, in plain words |
 | `x.meta.json` | Details | The facts about the item: what kind it is, its state, whether it is in git or secret, who writes and reads it, when it changes, related files, sources, what must change with it, what applies from above |
 | `x.example.md` | Example | The outline of the item: its sections and what goes in each |
-| `x.questions.md` | Questions | The open questions for the owner about the item |
+| `x.questions.md` | Questions | Two parts: the open questions for the owner, made by plans and by the `make-questions` skill; and every question the owner asked about the item, word for word, with its answer |
 | `x.{type}.{name}.view.html` | a custom view | A view for one kind of item; planned |
 
 A folder `f/` keeps its own as `f/f.index.md` and `f/f.meta.json` inside it. A file without an extension keeps its whole name (`.gitignore.index.md`). The root's are `agent-os.index.md` and `agent-os.meta.json`. A metadata file has no metadata files of its own. For now only the main docs and the two `.env` files have Example and Questions files; the `.env` files' example is `.env.example`, with key names only.

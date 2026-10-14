@@ -60,6 +60,7 @@ Every `README.md` has an ASD-STE100 twin, `README.asd.md`, next to it. Read the 
 
 1. **Pull.** On the owner's server, `git pull` on `main`. In the cloud project, bring `origin/main` into your branch first.
 2. **File the input** word for word in `vision/docs/inputs/` with its row in `index.json` (skill `knowledge-intake`). Your answers to the owner and every change to the plan are filed too.
+   When the owner asked a question, record it with its answer in the item's Questions file, and improve the docs that should have answered it (skill `knowledge-intake`, step 6).
 3. **Plan** the change if it alters the system (skill `change-plan`).
 4. **Record** decisions in `vision/docs/decisions.md` and the change in `vision/docs/changelog.md`.
 5. **Update the docs it touches**, level by level, in this order inside each level: vision, README, README.asd, rebuild prompt. Then this file, if the stage, the reading list or a rule changed.
@@ -76,6 +77,8 @@ Every `README.md` has an ASD-STE100 twin, `README.asd.md`, next to it. Read the 
 | any README | its `README.asd.md`, right after | `readme-asd-doc` |
 | names, formats, the tree, the build order or checks | the rebuild prompt at that level | `rebuild-prompt-doc` |
 | a file's purpose, content or links | its How it works, Details, Example and Questions | `file-index` |
+| a question the owner asked about an item | that item's Questions file, part "The owner's questions", with the answer | `knowledge-intake` |
+| a choice only the owner can make (in a plan, or found by checking) | that item's Questions file, part "Open questions for the owner" | `change-plan`, `make-questions` |
 | the stage, the reading list, the rules, the round | this file | `claude-md-doc` |
 | any file or folder added, moved or removed | `docs/file-tree.md` and the page | `ide-build` |
 

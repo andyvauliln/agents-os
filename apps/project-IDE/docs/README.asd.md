@@ -465,7 +465,7 @@ Each file and each folder has metadata files next to it. Their names are the nam
 | `vision.index.md` | How it works | The plain explanation, below fixed headings. Its front matter tells what it explains, its item, when it was written and who wrote it. |
 | `vision.meta.json` | Details | The details of the item as JSON (the fields in the Details tab above) |
 | `vision.example.md` | Example | The structure of the file: its headings and one line about what goes below each |
-| `vision.questions.md` | Questions | The open questions for the owner about the file |
+| `vision.questions.md` | Questions | The open questions for the owner, and the questions that the owner asked about the file, with their answers |
 | `vision.{type}.{name}.view.html` | Its own tab | A custom view for that type of file. This is proposed. It is not built. |
 
 These rules apply to the names:

@@ -179,6 +179,8 @@ Two parts, always in this order (the full logic is in `docs/metadata.md`, Questi
 
 An open question is a short question with one sentence on why it matters, and where it came from when a plan made it. When there are none, that part says "None open." When the owner answers, the answer goes into the notes and the docs where it belongs (`knowledge-intake`), and the question leaves the open part.
 
+Write everything in this file in ASD-STE100 (Simplified Technical English, like `docs/metadata.md`): short sentences, one statement each, active voice, simple common words, articles kept, lists for steps and choices. Only the owner's own question stays word for word, as a quote.
+
 An owner's question stays in the file for good, newest last, with its answer kept true: when a later change makes the answer untrue, update it and add "This changed later: ...". No decision codes or input ids in this file; dates are fine.
 
 ```markdown

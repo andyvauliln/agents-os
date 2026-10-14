@@ -95,7 +95,8 @@ Every file in the plan has the same tabs on the File Tree page, written for some
   - **Where it is mentioned:** the files that point to it or build on it
   - **Related knowledge:** what else must agree with it, and what each adds
   - **Keep in mind:** up to four lines, "When you ..., ..."
-- **Questions** and **File** stay as they are.
+- **Questions**: two parts, open questions for the owner and the owner's own questions with their answers, all written in ASD-STE100 (Simplified Technical English, like `docs/metadata.md`): short sentences, one statement each, active voice, simple common words, articles kept, lists for steps and choices; the owner's words stay word for word.
+- **File** stays as it is.
 
 You write the How it works files with `file-index`, and fold the owner's page edits into them at every sync. Every new doc skill gets an Outline section and an "Its page on the File Tree" section, like the vision skill. Files move to this format one by one as their doc is rebuilt; `vision.md` and `README.md` are the first.
 

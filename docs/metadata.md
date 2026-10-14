@@ -384,9 +384,10 @@ Docs improved: docs/metadata.md.
 Rules:
 
 1. Write the question of the owner word for word, as a quote. Do not correct typing errors.
-2. Write the answer in one to four plain sentences.
-3. No decision codes, no input codes and no hashes. Dates are permitted.
-4. The newest question is the last one in its part.
+2. Write the answer in one to four short sentences in ASD-STE100, like this document.
+3. Write the open questions, their reasons and their recommendations in ASD-STE100 too. A question has one sentence of 20 words or fewer.
+4. No decision codes, no input codes and no hashes. Dates are permitted.
+5. The newest question is the last one in its part.
 
 ### 18.3 When an open question for the owner is made
 

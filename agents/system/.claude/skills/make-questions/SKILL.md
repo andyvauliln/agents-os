@@ -35,7 +35,8 @@ Keep only what the owner must decide. Drop what an agent can settle by reading t
 - **<The question, one sentence, in the owner's words where possible>?** <Why it matters, one sentence.> Recommended: <the answer you suggest>. From: <where it came from, e.g. "the plan Leave vision", "the system README", "checking the keys folder">.
 ```
 
-- Plain words, no decision codes, no input ids, no hashes.
+- Write the question, the reason, the recommendation and the source in ASD-STE100 (Simplified Technical English, like `docs/metadata.md`): short sentences, one statement each, active voice, simple common words, articles kept, lists for steps and choices. The question is one sentence of at most 20 words.
+- No decision codes, no input ids, no hashes.
 - One question per choice. A yes/no or a pick from two or three options is best.
 - At most five new questions per item in one run; put the most important first.
 - If the item has no Questions file, create it with both parts ("The owner's questions" says "None recorded yet.").

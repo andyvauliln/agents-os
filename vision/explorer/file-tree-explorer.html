@@ -1059,7 +1059,7 @@ function readerHTML(n, full) {
   const top = `<div class="rd-top">${full ? `<span class="rd-name">${esc(n.name)}</span>` : ""}<span class="rd-stat">${doc.words.toLocaleString("en-US")} words · ${mins} min read</span><span class="grow"></span>
     ${rdTypeMenu()}<div class="rd-seg" role="group" aria-label="Reading theme"><button type="button" data-rtheme="light" aria-pressed="${th === "light"}" title="White page">${RD_ICON.sun}<span class="rd-label">Light</span></button><button type="button" data-rtheme="dark" aria-pressed="${th === "dark"}" title="Black page">${RD_ICON.moon}<span class="rd-label">Dark</span></button></div>
     ${full ? `<button class="rd-btn" type="button" id="rd-close" title="Close (Esc)">${RD_ICON.close}<span class="rd-label">Close</span></button><span class="rd-progress" id="rd-progress"></span>`
-           : `<button class="rd-btn" type="button" id="rd-open" title="Read full screen">${RD_ICON.expand}<span class="rd-label">Full screen</span></button>`}</div>`;
+           : `<button class="rd-btn" type="button" id="rd-open"${n.dockey ? ` data-rdoc="${n.dockey}"` : ""} title="Read full screen">${RD_ICON.expand}<span class="rd-label">Full screen</span></button>`}</div>`;
   const editable = !n.readonly && !!db ? " rd-editable" : "";
   if (!full) return `<article class="reader${editable} rd-${th} rf-${rdFont()} rs-${rdSize()}" aria-label="${esc(n.name)}, read view">${top}<div class="rd-body">${tocBox("")}<div class="rd-doc">${doc.html}</div></div></article>`;
   return `<div class="reader${editable} rd-full rd-${th} rf-${rdFont()} rs-${rdSize()}" role="dialog" aria-modal="true" aria-label="${esc(n.name)}">${top}<div class="rd-scroll" id="rd-scroll"><div class="rd-layout">${doc.toc.length ? `<nav class="rd-side" aria-label="Contents"><div class="rd-side-h">Contents</div>${tocList}</nav>` : ""}<div class="rd-main">${tocBox("rd-toc-inline")}<div class="rd-doc">${doc.html}</div></div></div></div></div>`;
@@ -1080,8 +1080,8 @@ function rdTypeMenu() {
     <div class="rd-aa-row"><span>Size</span><div class="rd-seg" role="group" aria-label="Text size">${Object.entries(RD_SIZES).map(([k, l]) => `<button type="button" data-rsize="${k}" aria-pressed="${k === z}" title="${{ s: "Small", m: "Medium", l: "Large" }[k]}">${l}</button>`).join("")}</div></div></div></details>`;
 }
 let rdLastFocus = null;
-function openReaderFull() {
-  const n = NODES[selected]; if (!n || n.content == null) return;
+function openReaderFull(key) {
+  const n = key ? RD_DOCS[key] : NODES[selected]; if (!n || n.content == null) return;
   closeReaderFull(true);
   rdLastFocus = document.activeElement;
   const host = document.createElement("div"); host.id = "rdfull"; host.innerHTML = readerHTML(n, true);
@@ -1236,6 +1236,15 @@ const howText = n => pageNewer(n) ? n.plain.text : n.how ? n.how.text : null;
 /* How it works lives in each object's own Markdown file, {name}.index.md (owner, 2026-10-05): the page shows it and edits it like a file */
 const howEdited = n => !!BASE[n.id] && (n.how_md ?? null) !== (BASE[n.id].how_md ?? null);
 const howFileName = n => n.how_file ? n.how_file.split("/").pop() : (n.type === "folder" ? n.name.replace(/\/$/, "") : n.name) + ".index.md";
+/* How it works and Questions files show like the File tab: Read or Source, and Full screen (owner, 2026-10-14) */
+const RD_DOCS = {};
+function docView(key, name, content, tools) {
+  const n = RD_DOCS[key] = { name, content: String(content ?? ""), readonly: "Edit it with the Edit button.", dockey: key };
+  const seg = `<div class="seg" role="group" aria-label="How to show the file"><button type="button" data-mdmode="read" aria-pressed="${MD_MODE === "read"}">Read</button><button type="button" data-mdmode="source" aria-pressed="${MD_MODE === "source"}">Source</button></div>`;
+  if (MD_MODE === "read") return `<div class="rd-wrap"><div class="filebar solo"><span class="mono">${esc(name)}</span><span class="grow"></span>${seg}${tools || ""}</div>${readerHTML(n, false)}</div>`;
+  const lines = n.content.split("\n");
+  return `<div><div class="filebar"><span class="mono">${esc(name)}</span><span class="grow"></span><span>${lines.length.toLocaleString("en")} line${lines.length === 1 ? "" : "s"}</span>${seg}${tools || ""}</div><div class="codeview">${lines.map((l, i) => `<div class="lrow"><span class="lnum">${i + 1}</span><span class="ltxt">${esc(l) || " "}</span></div>`).join("")}</div></div>`;
+}
 function howParts(src) {
   const body = String(src ?? "").replace(/^---\n[\s\S]*?\n---[ \t]*\n?/, "").replace(/^\s*#[ \t]+[^\n]*\n?/, "");
   const parts = body.split(/^##[ \t]+(.+?)[ \t]*$/m), secs = [];
@@ -1270,13 +1279,9 @@ function howTab(n) {
   else if (howBusy === n.id) top = `<div class="thinking">Summarising the knowledge that applies here… <button class="btn quiet" type="button" id="how-stop">Stop</button></div><div class="stream" id="how-stream"></div>`;
   else if (pn) top = `<div class="plain">${paras(n.plain.text)}</div><p class="note-muted" style="margin:0">Updated on this page ${esc(when(n.plain.at))} after your changes. The knowledge base agent checks it against the docs at the next sync.${btn("Rewrite")} <button class="btn quiet" type="button" id="how-edit">Edit</button></p>`;
   else if (n.how_md != null) {
-    const p = howParts(n.how_md);
-    const body = p.fixed ? `<div class="howsec">${p.intro ? `<section>${md(p.intro)}</section>` : ""}${p.secs.map(x => `<section><h4>${esc(x.title)}</h4>${md(x.text)}</section>`).join("")}</div>`
-      : `<div class="plain">${paras([p.intro, ...p.secs.map(x => x.text)].filter(Boolean).join("\n\n"))}</div>`;
-    const kb = p.keep.length ? `<div class="keep"><span class="keep-h">${p.fixed ? "Keep in mind" : "Always keep in mind"}</span><ul class="list">${p.keep.map(x => `<li>${inline(x)}</li>`).join("")}</ul></div>` : "";
     const note = mine ? `You edited this on the page${OV[n.id] && OV[n.id].updated_at ? " " + esc(when(OV[n.id].updated_at)) : ""}. The knowledge base agent writes it into the file at the next sync.`
       : `Written by the knowledge base agent ${esc(when(h && h.at))}.${h && h.state === "stale" ? " The docs changed since; it is refreshed at the next sync." : ""}${edited ? " Something here was changed on this page since then." + btn("Update it now") : ""}`;
-    top = `<div class="howfile"><div class="filebar solo"><span class="mono" title="${esc(n.how_file || "")}">${esc(howFileName(n))}</span><span class="src">${mine ? "Edited on this page" : ""}</span><span class="grow"></span><button class="btn" type="button" id="how-edit">Edit</button></div><div class="howbody">${body}${kb}</div></div><p class="note-muted" style="margin:0">${note}</p>`;
+    top = docView("how", howFileName(n), n.how_md.replace(/^---\n[\s\S]*?\n---[ \t]*\n?/, ""), `${mine ? `<span class="src">Edited on this page</span>` : ""}<button class="btn" type="button" id="how-edit">Edit</button>`) + `<p class="note-muted" style="margin:0">${note}</p>`;
   }
   else if (h) top = `<div class="plain">${paras(h.text)}</div><p class="note-muted" style="margin:0">Summarised from the knowledge base ${esc(when(h.at))}.${h.state === "stale" ? " The docs changed since; it is refreshed at the next sync." : ""}${edited ? " Something here was changed on this page since then." + btn("Update it now") : ""}</p>`;
   else top = sample ? `<p class="note-muted">No summary yet. The knowledge base agent writes one at the next sync.</p><div><button class="btn" type="button" id="how-go">Draft one now</button></div>` : `<p class="note-muted">No summary yet. The knowledge base agent writes one at the next sync.</p>`;
@@ -1315,7 +1320,7 @@ function howTab(n) {
 }
 
 function questionsTab(n) {
-  const qf = n.questions_file ? blk("", `<div class="howfile"><div class="filebar solo"><span class="mono">${esc(n.questions_file)}</span></div><div class="howbody">${md(n.questions_md || "")}</div></div>`) : "";
+  const qf = n.questions_file ? blk("", docView("questions", n.questions_file, n.questions_md || "")) : "";
   return qf + questionsTabOld(n);
 }
 function questionsTabOld(n) {
@@ -2298,7 +2303,7 @@ document.addEventListener("click", ev => {
     return;
   }
   if (d.more) { FILE_SHOWN[selected] = +d.more; rerender(); return; }
-  if (t.id === "rd-open") { openReaderFull(); return; }
+  if (t.id === "rd-open") { openReaderFull(t.dataset.rdoc); return; }
   if (t.id === "rd-close") { closeReaderFull(); return; }
   if (d.toc) { const r = t.closest(".reader"), h = r && r.querySelector("#" + CSS.escape(d.toc)); if (h) h.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); return; }
   if (d.copy != null && t.classList.contains("rd-copy")) { copyCode(t); return; }

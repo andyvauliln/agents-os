@@ -161,7 +161,7 @@ The tabs of the item are below these data.
 
 The first tab is always How it works. The last tab is always Details. Between them, a file has File, Example and Questions. A folder has Contents and Questions. Some items have more tabs.
 
-- **How it works.** This tab shows the explanation of the item. The page reads it from the file of the item: `vision.index.md` next to `vision.md`, or `configs/configs.index.md` in a folder. The name of that file is at the top, with an Edit button.
+- **How it works.** This tab shows the explanation of the item. The page reads it from the file of the item: `vision.index.md` next to `vision.md`, or `configs/configs.index.md` in a folder. The name of that file is at the top, with an Edit button. The tab shows the file in the Read view, like a Markdown file on the File tab. It has Read and Source, and Full screen. To change the text, push Edit.
   - Items in the new format show fixed headings: What it is, Who looks after it, When and how it changes, Who uses it and when, Where it is mentioned, Related knowledge. Then they show a short "Keep in mind" list.
   - Items in the old format show one Summary. They also show the knowledge that applies to the item directly and from the folders above. They show the notes of the item from the tree notes, and the owner inputs that had an effect on the item.
   - Below the explanation, the tab shows the messages of the owner about the item that wait for the next sync. It also shows each change that the owner made on the page to the item. Each change has an "Undo this change" button.
@@ -180,7 +180,7 @@ The first tab is always How it works. The last tab is always Details. Between th
   - For a document, the tab shows the structure of the file: each heading and what goes below it. The page takes this structure from the outline in the skill that writes that type of document.
   - For a settings file, the tab shows a full example. It also shows a table of all fields, with the permitted values, an example and the purpose of each field.
   - A jobs file or a links file makes its example from its own table. The example includes the edits that are not saved.
-- **Questions.** This tab shows the open questions about the item. Each question has a Discuss button. This button starts a conversation in the ask box. The tab also shows the questions that have an answer on the page, with their answers. A folder also shows the open questions of the files in it.
+- **Questions.** This tab shows the Questions file of the item. It shows the file in the Read view, with Read and Source, and Full screen. The file has two parts: the open questions for the owner, and the questions of the owner with their answers. All text is in ASD-STE100. Only the words of the owner stay as the owner wrote them. Below the file, the tab shows the open questions that are still in the tree notes. Each question has a Discuss button. This button starts a conversation in the ask box. The tab also shows the questions that have an answer on the page, with their answers. A folder also shows the open questions of the files in it.
 - **Details.** This tab shows the Details file of the item, `vision.meta.json`, as it is. The Details file contains these data:
   - What the item is, and its state.
   - If it is in git, if it is secret, and if a script makes it.

@@ -673,3 +673,11 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - **Why:** the owner: "for question i think we need 2 types one we should record mine in metadata ... (with an answer) ... questions created when we do plan, or by skill to analyse and make questions"; "also mine questions should be analysed and improve related documentations".
 - **Status:** decided.
 - **Changed:** docs/metadata.md section 18, the skills change-plan, knowledge-intake, ide-sync, file-index and make-questions, agents/system/CLAUDE.md, every Questions file, the docs named in the "Docs improved" lines.
+
+### D-069: Questions are written in ASD-STE100; How it works and Questions tabs read like a file
+<!-- k: id=d-069 applies=[57],[53] sources=in-20261014-1047 status=decided -->
+- **Decision:** everything in a Questions file is written in ASD-STE100 (open questions, reasons, recommendations, titles and answers); only the owner's own question stays word for word. The skills file-index, make-questions, change-plan and knowledge-intake and the knowledge base agent say so. On the page, How it works and Questions show their file like a Markdown file on the File tab: Read or Source, the reader controls and Full screen.
+- **Date:** 2026-10-14
+- **Why:** the owner: "can we make question and how it works tab same like file, that i can pick lick mode, can make full screen, also all question should be made with a asd style".
+- **Status:** decided.
+- **Changed:** the page, apps/project-IDE/docs/README.md and its ASD twin, docs/metadata.md, the four skills and the knowledge base agent (both copies), every Questions file.

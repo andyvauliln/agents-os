@@ -2,7 +2,8 @@
 
 The items are the files in git and their folders (index_files.py); an item's id is its path from the top of the
 repository, and the top itself is `agent-os`. Every item outside stage two, except a metadata file, has a How it
-works file. Its "basis" is a hash of:
+works file; nothing inside the kept-data folder (index_files.KEPT, the earlier prediction-market metadata kept as
+records) has one, and its files are not orphans. Its "basis" is a hash of:
   - the content of the item (a file's bytes; nothing for a folder, a local keys file or a built output),
   - for a folder, the names of its items and the text of their How it works files.
 A file whose front matter holds the same basis is fresh; another basis is stale; no file is missing; a file with

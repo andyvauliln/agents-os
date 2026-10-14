@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/data/
-basis: 7f0694975e8b
+basis: 999a0282665b
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # data/
 

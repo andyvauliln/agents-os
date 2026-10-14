@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/vision-doc/SKILL.md
-basis: 6b8d89c7fe79
+basis: d68df4e4687e
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # vision-doc/SKILL.md
 

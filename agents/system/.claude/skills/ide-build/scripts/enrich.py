@@ -136,7 +136,7 @@ for it in items:
     # the extra tab files: a tab shows only when its file exists (owner, 2026-10-12)
     home = IF.meta_home(it)
     j = lambda n: os.path.join(home, n) if home else n
-    if it["type"] == "file" and not IF.is_meta_file(name):
+    if it["type"] == "file" and not IF.is_meta_file(name, rel):
         ex_rel = j(".env.example") if name == ".env" else j(it["fam"] + ".example.md")
         ex = read_text(ex_rel) if os.path.isfile(os.path.join(REPO, ex_rel)) else None
         if ex is not None:

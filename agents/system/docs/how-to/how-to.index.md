@@ -1,7 +1,9 @@
 ---
 about: agent-os/agents/system/docs/how-to/
+basis: a459567b5f6d
 written: 2026-10-14T16:00:00Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # how-to/
 

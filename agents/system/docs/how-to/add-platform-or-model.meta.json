@@ -1,1 +1,55 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The earlier guide to adding a platform or a model and routing agents, sub-agents and jobs to it.",
+  "kind": "file",
+  "state": "written",
+  "status": "proposed",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "the owner",
+    "an agent that does this task"
+  ],
+  "changes_when": "The system part it tells about is built or changed; until then it stays as it is.",
+  "related": [
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/how-to/",
+      "how": "summed up in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-011",
+      "D-029",
+      "D-056"
+    ],
+    "inputs": [
+      "in-20260929-1455",
+      "in-20260930-0938"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/docs/how-to/how-to.index.md",
+      "how": "Change the list of guides if a guide is added, removed or renamed."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

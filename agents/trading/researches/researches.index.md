@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/researches/
-basis: 70dbf004b0a7
+basis: f830bba71381
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # researches/
 

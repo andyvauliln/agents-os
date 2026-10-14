@@ -1,9 +1,9 @@
 ---
 about: agent-os/docs/
-basis: c1ec209d7929
+basis: 0c569e276014
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # docs/
 

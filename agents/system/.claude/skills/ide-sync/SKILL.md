@@ -19,6 +19,8 @@ The page's store has three collections:
 | `nodes` | One document per item the owner touched: `fields` (the latest value of each field edited, such as `content` for the file's text and `how_md` for its How it works), `comments` (line comments with the line's text), `qa`, `new_node` for an item added on the page, `deleted` with `was` (what the item was), `delete_note` and `cleanup` (`sync`, or `claude-code` when Claude Code on the server already cleaned up), and `worked` (the item was changed by a request from the page). |
 | `changes` | The history of every edit, with before and after. It stays as the history and is never folded or deleted. |
 
+Every item is known by its path from the top of the repository (`docs/README.md`, `apps/project-IDE`; the top is `agent-os`). A `nodes` document is keyed by that path with `/` and every other sign but letters, digits, `.`, `_` and `-` written as `~XX` (`docs/README.md` is `docs~2FREADME.md`): turn `~` back into `%` and URL-decode it to get the path. In `inputs` and `changes` the `node_id` is the path itself. A key that is not a path on disk any more belongs to an item that was moved or removed since: find where it went from its `changes` and `inputs` documents, or ask the owner.
+
 Read them with the artifact data tool on the page's link, https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs. On the owner's server the same documents are files, one per document, in `apps/project-IDE/data/page-store/<collection>/<id>.json`: read them there, and clear a folded one by setting its `status` or deleting its file. Edits to a file's text and to How it works made on the server page are already in their files; check them and confirm them.
 
 ## Steps
@@ -28,13 +30,13 @@ Read them with the artifact data tool on the page's link, https://claude.ai/arti
 3. **Write the edits into their files:**
    - an edit to a file's text goes into that file, also when the file was empty;
    - an edit to How it works goes into the item's `.index.md` word for word, with `by: owner` and the time, then `build_map.py --confirm <path>`;
-   - a new item is created on disk with its How it works and Details files, marked proposed until the owner says otherwise;
+   - a new item is created on disk at its path; `materialize.py` gives it empty How it works and Details files at the rebuild, and its Details `status` is `proposed` until the owner says otherwise;
    - a deleted item is cleaned out of the project as in "Deleting an item" below, keeping the owner's note in mind; when its `cleanup` is `claude-code`, Claude Code already did it on the server, so only check it;
    - an edit of an extra table goes into `apps/project-IDE/data/overrides.json` under the item's path;
    - an open line comment is applied when the owner asked for the change, otherwise it becomes an open question for the owner in the item's Questions file, part "Open questions for the owner".
 4. **Run the requests** the owner sent from the page, such as a question to answer or a file to add. File each answer with its input. A question the owner asked on an item, and an answer the owner gave to an open question (the Discuss button), go into that item's Questions file (`knowledge-intake` step 1.5).
 5. **Hand over the knowledge.** List the saved inputs for the knowledge base agent, which sorts them into the notes, decisions and docs and refreshes the How it works files.
-6. **Rebuild and publish** with `ide-build`.
+6. **Rebuild and publish** with `ide-build`: the build reads only the files on disk and their metadata files, so what was not written into a file in step 3 does not reach the page.
 7. **Clear what was folded:** mark each filed `inputs` document processed and delete the folded `nodes` documents, which also clears the "changed" marks on the page. Leave `changes` alone. Clear nothing that is not yet in a file.
 8. **Report** to the owner in two to five plain lines: what was brought in, what changed on the page, and any question only they can answer.
 
@@ -53,7 +55,7 @@ A comment that reaches you from the page but is not from the Apply changes butto
 The owner deletes a file or folder with the Delete button on the page and may write a note for Claude with it. On the owner's server Claude Code does the deletion at once; on claude.ai it waits for this sync. Either way it is one round:
 
 1. **Read the note first** and follow it: it says what to keep, move or leave before anything goes.
-2. **Delete the item from the repository:** the file, or the folder with everything inside it, and its How it works and Details files (`vision.index.md` and `vision.meta.json` next to `vision.md`; a folder's sit inside it). An item that was only planned has no files, so there is nothing to delete here.
+2. **Delete the item from the repository:** the file, or the folder with everything inside it, and its How it works and Details files (`vision.index.md` and `vision.meta.json` next to `vision.md`; a folder's sit inside it). The page tree is the files on disk, so every item it shows has files to delete.
 3. **Clean the project of it:**
    - every link file that points to it, and its rows in the links and workers files;
    - mentions in other files and in How it works files: remove them, or reword the sentence so it still reads well;

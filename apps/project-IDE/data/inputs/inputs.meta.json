@@ -14,8 +14,6 @@
   ],
   "readers": [
     "knowledge-base-agent",
-    "agents/system/.claude/skills/ide-build/scripts/build_map.py",
-    "agents/system/.claude/skills/ide-build/scripts/enrich.py",
     "every AI session when a summary is unclear"
   ],
   "changes_when": "The owner says anything about the system.",

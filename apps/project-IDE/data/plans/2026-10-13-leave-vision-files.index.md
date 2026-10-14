@@ -1,7 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/plans/2026-10-13-leave-vision-files.md
+basis: 29c54fd58d05
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # 2026-10-13-leave-vision-files.md
 
@@ -15,7 +17,7 @@ It is written by knowledge-base-agent and change-plan.
 
 ## When and how it changes
 
-It changes when the leave-vision plan changes, or a file in vision/ is moved or deleted.
+It changes when the leave-vision plan changes; once the move is done it is kept as it is.
 
 ## Who uses it, and when
 

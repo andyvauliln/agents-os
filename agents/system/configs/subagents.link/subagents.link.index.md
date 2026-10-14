@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/configs/subagents.link/
-basis: bd795f24826e
+basis: 0b29a051dc53
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # subagents.link/
 

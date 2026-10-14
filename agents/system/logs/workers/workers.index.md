@@ -1,7 +1,9 @@
 ---
 about: agent-os/agents/system/logs/workers/
+basis: 909bb52ce750
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # workers/
 

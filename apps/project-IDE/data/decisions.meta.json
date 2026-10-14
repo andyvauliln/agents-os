@@ -14,7 +14,7 @@
   "readers": [
     "every AI session on the project",
     "the owner",
-    "agents/system/.claude/skills/ide-build/scripts/parse.py"
+    "agents/system/.claude/skills/ide-build/scripts/enrich.py"
   ],
   "changes_when": "The owner decides something that changes the system, its rules or its structure.",
   "related": [
@@ -27,7 +27,7 @@
       "how": "links to"
     },
     {
-      "path": "agents/system/.claude/skills/ide-build/scripts/parse.py",
+      "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
       "how": "read by"
     },
     {

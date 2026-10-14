@@ -227,7 +227,7 @@ Check: the four docs exist and are not empty; the headings of `README.md` and `R
 
 - `prediction-market-research/`: 42 study files `01-…md` to `34-…md` and `50-…md` to `57-…md`; `_evidence/` with `E1` to `E9`, `S0-index.md`, `S0-strategy-list-established.json`, `S0-strategy-list-speculative.json`, `S1-discovery-candidates.json`, `strategies/` and `rows/` (one JSON per study); `_pipeline/` with the pipeline that wrote them.
 - `self-improving-agents/`: `01-approaches-and-architectures.md`.
-- `trding-agents-arhiteches/`: `README.md`, `index.html`, `specs/` (29 architecture specs) and `diagrams/`.
+- `trding-agents-arhiteches/`: `README.md`, `index.html`, `specs/` (9 architecture specs) and `diagrams/`.
 
 Never edit a study's content. If the history is not available, ask the owner; do not write studies yourself.
 

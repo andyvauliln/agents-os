@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/change-plan/SKILL.md
-basis: 1da0d41172a4
+basis: f2028ddddbab
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # change-plan/SKILL.md
 

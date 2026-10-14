@@ -11,6 +11,7 @@ This folder holds the records of the project: what the owner said, what was deci
 | `changelog.md` | Every change to the project, newest first. |
 | `plans/` | Every change plan, one file each, with a row in `plans/index.json` (its status, inputs and decisions). |
 | `archive/` | Records that are kept but no longer used, one folder per date. |
+| `sources/` | Earlier knowledge notes, kept but not referenced by any doc, skill or agent, and the earlier prediction-market metadata files kept as plain data (`sources/prediction-market/metadata/`). |
 | `overrides.json` | The owner's kept edits of the extra tables on the File Tree page. |
 | `page-store/` | On the owner's server only: the notes, edits and messages left on the page, one file each, until the next sync. |
 

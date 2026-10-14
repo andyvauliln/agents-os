@@ -1,1 +1,52 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The earlier How it works and Details files of the prediction-market domain, kept as plain data when its old files left the tree.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [],
+  "readers": [],
+  "changes_when": "Not changed; whether to use it again is the owner's later decision.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/sources/prediction-market/",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/index_files.py",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-067",
+      "D-070",
+      "D-071"
+    ],
+    "inputs": [
+      "in-20261014-1241",
+      "in-20261014-1439"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/sources/prediction-market/prediction-market.index.md",
+      "how": "Change the line on this folder if what it holds changes."
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/index_files.py",
+      "how": "If the folder moves, change KEPT, which makes everything inside it plain data."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

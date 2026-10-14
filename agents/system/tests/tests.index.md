@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/tests/
-basis: ab867c5da786
+basis: 30e661e4b0a4
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:09:25Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # tests/
 

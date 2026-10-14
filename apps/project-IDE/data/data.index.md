@@ -1,15 +1,15 @@
 ---
 about: agent-os/apps/project-IDE/data/
-basis: 0644b2d3b86c
+basis: ee3451b422be
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # data/
 
 ## What it is
 
-This project's records and the data the page uses, in one place any AI session can read to catch up. It holds every owner input word for word in `inputs/`, the decision log `decisions.md`, the changelog, the change plans in `plans/`, `overrides.json` (the owner's page edits of the extra tables) and `page-store/` (on the owner's server, the page's notes, edits and messages as files). `archive/` is for retired files. It also keeps `README.md`, an earlier guide from the planning time, and `sources/`, the earlier knowledge notes, both kept but no longer used.
+This project's records and the data the page uses, in one place any AI session can read to catch up. It holds every owner input word for word in `inputs/`, the decision log `decisions.md`, the changelog, the change plans in `plans/`, `overrides.json` (the owner's page edits of the extra tables) and `page-store/` (on the owner's server, the page's notes, edits and messages as files). `archive/` is for retired files. `README.md` is the guide to these records. `sources/` keeps the earlier knowledge notes and the earlier prediction-market metadata files, kept but not referenced.
 
 ## Who looks after it
 

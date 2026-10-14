@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/claude-md-doc/SKILL.md
-basis: e91e706cc6cd
+basis: 3cb9d3faf398
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # claude-md-doc/SKILL.md
 

@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/common/
-basis: 657d4b2c9a56
+basis: 54c991e4eb37
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # common/
 

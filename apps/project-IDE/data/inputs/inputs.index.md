@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/inputs/
-basis: 5085d4befa01
+basis: 57dee3f764cb
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # inputs/
 
@@ -21,7 +21,7 @@ It changes when the owner says anything about the system.
 
 ## Who uses it, and when
 
-It is read by knowledge-base-agent, `agents/system/.claude/skills/ide-build/scripts/enrich.py` and every AI session when a summary is unclear.
+It is read by knowledge-base-agent and every AI session when a summary is unclear.
 
 ## Where it is mentioned
 

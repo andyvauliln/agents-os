@@ -1,7 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-sync/
+basis: c1ba1a1d84fd
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # ide-sync/
 

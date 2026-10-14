@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/workflows/
-basis: 111ec18f196e
+basis: f7e85797ec9e
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # workflows/
 

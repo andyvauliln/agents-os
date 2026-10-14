@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/docs/README.asd.md
-basis: c1c749b6a7e0
+basis: 4089c6245c03
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # README.asd.md
 

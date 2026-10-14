@@ -1,1 +1,52 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The list of every plan, one row each, with its title, status, inputs, decisions and dates.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent",
+    "change-plan"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent",
+    "every AI session that builds a change"
+  ],
+  "changes_when": "A plan is written, or a plan's status changes.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/plans/",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/system/.claude/skills/change-plan/SKILL.md",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-051"
+    ],
+    "inputs": [
+      "in-20261006-2143"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/plans/plans.index.md",
+      "how": "Keep the plans and their statuses named there true."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/.claude/skills/change-plan/SKILL.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

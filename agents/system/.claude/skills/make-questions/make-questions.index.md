@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/make-questions/
-basis: 2a242e4e6502
-confirmed: 2026-10-14T15:07:13Z
+basis: c1e97bcd0751
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # make-questions/
 

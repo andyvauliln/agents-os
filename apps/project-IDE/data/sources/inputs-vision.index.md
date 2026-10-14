@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/sources/inputs-vision.md
-basis: 888506bd8399
+basis: 5e749599fccd
 written: 2026-10-14T16:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T11:22:56Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # inputs-vision.md
 

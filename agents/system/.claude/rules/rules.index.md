@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/rules/
-basis: 0c140b607db0
+basis: 4a696fdf0fa3
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # rules/
 

@@ -1,1 +1,44 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Earlier prediction-market records kept for stage two: the copies of its old metadata files.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [],
+  "readers": [],
+  "changes_when": "Not changed; whether to use it again is the owner's later decision.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/sources/",
+      "how": "summed up in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-067",
+      "D-070",
+      "D-071"
+    ],
+    "inputs": [
+      "in-20261014-1241",
+      "in-20261014-1439"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/sources/sources.index.md",
+      "how": "Change the line on this folder if what it holds changes."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

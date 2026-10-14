@@ -1,1 +1,55 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The plan \"Plans for every change, features, docs at every level, and a general system\" (approved by the owner, not built yet).",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent",
+    "change-plan"
+  ],
+  "readers": [
+    "the owner",
+    "every AI session that builds a change"
+  ],
+  "changes_when": "Its status and steps change as it is built; once done it is kept as it is.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/plans/index.json",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/system/.claude/skills/change-plan/SKILL.md",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-051",
+      "D-052",
+      "D-053",
+      "D-054",
+      "D-056"
+    ],
+    "inputs": [
+      "in-20261006-2143"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/plans/index.json",
+      "how": "Change its row's status, note and date."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/.claude/skills/change-plan/SKILL.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

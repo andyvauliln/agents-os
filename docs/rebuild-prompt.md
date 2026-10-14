@@ -296,7 +296,7 @@ Check: both folders and their two metadata files exist.
 3. Every JSON file you wrote parses (`python3 -m json.tool <file>`).
 4. `docs/` holds the five docs with their metadata files, and `README.asd.md` follows `README.md` section by section.
 5. Every lower prompt in the build order ran and its checks passed, or it was empty and is reported.
-6. `agents/trading/prediction-market/` holds folders, `.gitkeep` files and nothing else.
+6. `agents/trading/prediction-market/` holds its folders, `.gitkeep` files and its own How it works and Details files, and its `docs/` the earlier trading notes kept for stage two with their metadata files; nothing else.
 7. `build_map.py --stale` and `build_map.py --orphans` print nothing.
 8. The page tree equals the disk: the paths the page lists are exactly `git ls-files --cached --others --exclude-standard`, plus the two local-only `.env` files.
 9. `docs/file-tree.md` lists the same paths.

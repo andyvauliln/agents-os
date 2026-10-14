@@ -1,7 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/plans/2026-10-13-leave-vision.md
+basis: c045293cf399
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # 2026-10-13-leave-vision.md
 

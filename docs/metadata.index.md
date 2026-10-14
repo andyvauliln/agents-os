@@ -1,9 +1,9 @@
 ---
 about: agent-os/docs/metadata.md
-basis: 672a15c9c9cf
+basis: 27f2013a07db
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # metadata.md
 

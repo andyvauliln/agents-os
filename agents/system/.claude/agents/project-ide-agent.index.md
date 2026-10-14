@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/agents/project-ide-agent.md
-basis: 305970dff665
+basis: de23647519c1
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # project-ide-agent.md
 

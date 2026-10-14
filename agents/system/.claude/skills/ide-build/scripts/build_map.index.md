@@ -1,15 +1,15 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/scripts/build_map.py
-basis: 9b9821ef3717
+basis: d6a82265636f
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # build_map.py
 
 ## What it is
 
-Keeps the How it works files honest. For each item it makes a basis from the item's own content and, for a folder, the names and How it works texts of what is inside, and compares it with the basis in the file: fresh, stale, missing or empty. It lists the stale ones from the deepest up, shows what one is written from, writes or confirms them, and lists metadata files whose item is gone.
+Keeps the How it works files honest. For each item it makes a basis from the item's own content and, for a folder, the names and How it works texts of what is inside, and compares it with the basis in the file: fresh, stale, missing or empty. It lists the stale ones from the deepest up, shows what one is written from, writes or confirms them, and lists metadata files whose item is gone; the copies in the kept-data folder are data, not orphans.
 
 ## Who looks after it
 

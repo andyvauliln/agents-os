@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The guide, for agents, to how the project keeps its knowledge: the layers, the knowledge tag format and the steps from an owner input to the docs.",
+  "about": "The guide to the records folder: what each part holds (inputs, decisions, changelog, plans, archive, sources, overrides, page store) and how the records change.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -16,11 +16,15 @@
     "project-ide-agent",
     "every AI session on the project"
   ],
-  "changes_when": "The way knowledge is kept changes.",
+  "changes_when": "A part of the records folder is added, removed or used differently.",
   "related": [
     {
+      "path": "apps/project-IDE/data/",
+      "how": "documented in"
+    },
+    {
       "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
-      "how": "same format as"
+      "how": "links to"
     },
     {
       "path": "apps/project-IDE/data/inputs/README.md",
@@ -45,12 +49,12 @@
   },
   "update_with": [
     {
-      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
-      "how": "Keep the steps from an input to the docs the same."
+      "path": "apps/project-IDE/data/data.index.md",
+      "how": "Keep the parts named there the same as the table."
     },
     {
       "path": "apps/project-IDE/docs/README.md",
-      "how": "Change the line on the knowledge and records in \"Where each part's docs are\" if its job changed."
+      "how": "Change the line on the records in \"Where each part's docs are\" if their job changed."
     }
   ],
   "inherits": [

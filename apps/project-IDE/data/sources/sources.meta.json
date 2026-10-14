@@ -2,7 +2,7 @@
   "schema_version": 1,
   "about": "The earlier knowledge notes the docs were written from, kept but not referenced by any doc, skill or agent.",
   "kind": "folder",
-  "state": "empty",
+  "state": "written",
   "status": "decided",
   "git": "tracked",
   "secret": false,
@@ -11,11 +11,11 @@
     "knowledge-base-agent"
   ],
   "readers": [],
-  "changes_when": "The move out of vision/ moves the notes here; whether to use them is decided later.",
+  "changes_when": "Not changed; whether to use the notes again is the owner's later decision.",
   "related": [
     {
-      "path": "apps/project-IDE/data/plans/2026-10-13-leave-vision.md",
-      "how": "links to"
+      "path": "apps/project-IDE/data/",
+      "how": "summed up in"
     }
   ],
   "sources": {

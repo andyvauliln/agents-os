@@ -45,6 +45,8 @@ When a child's How it works text changes, its folder becomes stale, so a change 
 
 The build reads no knowledge notes and no tree notes: an item is described only by its own files.
 
+One folder is plain data: `apps/project-IDE/data/sources/prediction-market/metadata/` (`KEPT` in `index_files.py`) holds the earlier metadata files of the prediction-market domain, kept as records. Nothing inside it gets metadata files, its `.index.md` and `.meta.json` files show as plain files with their text, and none of them is an orphan; the folder itself has its own metadata like any folder.
+
 ## Where the page lives
 
 The page source is `apps/project-IDE/current-ui/file-tree-explorer.html`, with `file-tree.data.json` and `real-files.json` next to it. Publish it with the Artifact tool by url (https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs) with `files: {"file-tree.data.json": ..., "real-files.json": ...}`. The page shows its own source on its File tab, so put the finished page in place before you build. On the owner's server, `apps/project-IDE/server/server.py` serves the same folder.

@@ -1,7 +1,9 @@
 ---
 about: agent-os/agents/system/data/subagents/
+basis: d82d1d98ecf2
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # subagents/
 

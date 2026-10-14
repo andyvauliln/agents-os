@@ -1,1 +1,52 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The system's earlier runbooks, one guide per task, kept until each part they tell about is built.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent",
+    "the owner, on the File Tree page"
+  ],
+  "readers": [
+    "the owner",
+    "an agent that does one of these tasks"
+  ],
+  "changes_when": "A guide is added, removed or rewritten when the part it tells about is built or changed.",
+  "related": [
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/",
+      "how": "summed up in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-033"
+    ],
+    "inputs": [
+      "in-20260930-1533"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "Change the line on the how-to guides if the folder's job changes."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

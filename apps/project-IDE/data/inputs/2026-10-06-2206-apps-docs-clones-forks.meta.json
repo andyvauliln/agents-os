@@ -1,1 +1,54 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Every app in apps/ has its own docs. A repo cloned from GitHub for research goes to a temp folder first, and on request it can get docs (vision, README, rebuild prompt). An app we use is forked, with our own main branch; from time to time updates from the source are merged in and then into our main. For now an app's metadata is only these three docs; later, on request, a skill (which must be kept up like any other) turns an app fully into the system's way: metadata for every file, one job per file, the other docs.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-intake"
+  ],
+  "readers": [
+    "knowledge-base-agent"
+  ],
+  "changes_when": "Never in the owner's words; only its answer and what it was processed into are added once its knowledge is placed.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "summed up in"
+    },
+    {
+      "path": "apps/project-IDE/data/inputs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-055"
+    ],
+    "inputs": [
+      "in-20261006-2206"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "Keep its row (summary, categories, processed_into, answered) the same as this file."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md#16. Owner inputs",
+    "apps/project-IDE/data/inputs/README.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

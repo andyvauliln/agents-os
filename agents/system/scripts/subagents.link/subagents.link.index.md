@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/scripts/subagents.link/
-basis: 260b791cfa2d
+basis: 8ee90d7aa62c
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:09:25Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # subagents.link/
 

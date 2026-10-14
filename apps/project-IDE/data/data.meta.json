@@ -15,8 +15,7 @@
     "every AI session on the project",
     "project-ide-agent",
     "knowledge-base-agent",
-    "agents/system/.claude/skills/ide-build/scripts/enrich.py",
-    "agents/system/.claude/skills/ide-build/scripts/build_map.py"
+    "agents/system/.claude/skills/ide-build/scripts/enrich.py"
   ],
   "changes_when": "A record is added (an input, a decision, a changelog line, a plan), or the owner's page edits are synced.",
   "related": [

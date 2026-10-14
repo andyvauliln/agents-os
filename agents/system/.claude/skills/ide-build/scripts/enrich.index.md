@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/scripts/enrich.py
-basis: 4deebc7826e5
+basis: 76ce11ea0217
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # enrich.py
 

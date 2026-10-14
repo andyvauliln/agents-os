@@ -1,9 +1,9 @@
 ---
 about: agent-os/docs/rebuild-prompt.md
-basis: 662c618b5ed4
+basis: 0775947c49d2
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # rebuild-prompt.md
 

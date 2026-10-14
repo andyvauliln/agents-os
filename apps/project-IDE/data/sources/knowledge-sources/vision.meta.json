@@ -1,1 +1,38 @@
-{}
+{
+  "schema_version": 1,
+  "about": "An earlier note, kept, not referenced now: what each chapter of the system vision rested on.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [],
+  "readers": [],
+  "changes_when": "Not changed; whether to use it again is the owner's later decision.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/sources/knowledge-sources/",
+      "how": "summed up in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-070",
+      "D-071"
+    ],
+    "inputs": [
+      "in-20261014-1241",
+      "in-20261014-1439"
+    ],
+    "notes": []
+  },
+  "update_with": [],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

@@ -1,9 +1,9 @@
 ---
 about: agent-os/
-basis: 2bc2f979831d
+basis: 97b20c0d7c96
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # agent-os/
 
@@ -11,7 +11,7 @@ confirmed: 2026-10-14T15:07:13Z
 
 The whole repository of the Agent OS: the owner's system that runs AI agents of any kind, such as trading, social media or management. Trading is the first kind; it lives in `agents/trading/`, whose first domain, prediction-market, waits for stage two. The project is in stage one: finish the project IDE, make every metadata file correct and finish the docs at the project, system, trading and apps levels.
 
-The top holds `docs/`, the project docs for people (vision, README and its ASD-STE100 twin, rebuild prompt, the plain file tree and the metadata logic); `agents/`, with the system level in `agents/system/` (its `CLAUDE.md` is the file AI sessions read first) and trading in `agents/trading/`; `apps/`, with the project IDE (the owner's File Tree page and the project's records), the trading dashboard and research clones; `.secrets/`, the keys store, in git except its `.env` files; `README.md`, the front page, empty for now; `HANDOFF.md`, how a new session picks the work up; and `.gitignore`. The planning folder `vision/` is being removed in this change. Every file and folder has a How it works file and a Details file next to it.
+The top holds `docs/`, the project docs for people (vision, README and its ASD-STE100 twin, rebuild prompt, the plain file tree and the metadata logic); `agents/`, with the system level in `agents/system/` (its `CLAUDE.md` is the file AI sessions read first) and trading in `agents/trading/`; `apps/`, with the project IDE (the owner's File Tree page and the project's records), the trading dashboard and research clones; `.secrets/`, the keys store, in git except its `.env` files; `README.md`, the front page, empty for now; `HANDOFF.md`, how a new session picks the work up; and `.gitignore`. The old planning folder `vision/` is removed; git history keeps it. Every file and folder has a How it works file and a Details file next to it.
 
 ## Who looks after it
 

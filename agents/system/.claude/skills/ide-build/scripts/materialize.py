@@ -8,7 +8,8 @@ again if it made anything.
 - Every file and folder outside stage two that has no How it works (x.index.md) or Details (x.meta.json) file
   gets an empty one (owner, 2026-10-12: metadata for all files). A metadata file has none of its own, and a
   local keys file (.env) is never made, read or written. The prediction-market domain is stage two: nothing is
-  made inside it, except in its docs/.
+  made inside it, except in its docs/. Nothing is made inside the kept-data folder (index_files.KEPT): the earlier
+  prediction-market metadata files kept there are plain data.
 - A folder with nothing in it keeps a .gitkeep, because git keeps no empty folder; the
   .gitkeep goes once the folder holds a file.
 - docs/file-tree.md is written again: every path in git, plain, without metadata files.
@@ -53,7 +54,7 @@ def plain_tree(items):
     """docs/file-tree.md: every path in the repository, plain, without metadata files (owner, 2026-10-12)."""
     paths = set()
     for it in items:   # the files, and the folders that hold them
-        if it["type"] != "file" or IF.is_meta_file(it["name"]) or it["name"] == ".env":
+        if it["type"] != "file" or IF.is_meta_file(it["name"], it["rel"]) or it["name"] == ".env":   # kept data (IF.KEPT) is listed
             continue
         parts = it["rel"].split("/")
         paths.update("/".join(parts[:i]) + "/" for i in range(1, len(parts)))

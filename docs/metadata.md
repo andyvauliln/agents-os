@@ -31,7 +31,7 @@ This document tells you all of the metadata logic of the Agent OS. It is written
 
 Rules:
 
-1. Each file and each folder has a How it works file and a Details file. The only exception is the prediction-market domain in stage two (section 20).
+1. Each file and each folder has a How it works file and a Details file. There are two exceptions. The first is the prediction-market domain in stage two (section 20). The second is each item inside `apps/project-IDE/data/sources/prediction-market/metadata/`: these are copies of earlier metadata files, kept as data. They have no metadata files of their own, the build shows them as plain files and does not count them as orphans (`KEPT` in `index_files.py`).
 2. The Example file and the Questions file exist only when somebody wrote them.
 3. The page shows a tab only when its file exists. The tab shows that file as it is.
 4. A metadata file has no metadata files of its own. The only exception is `README.asd.md`. It is a doc, so it has its own metadata files (the family name is `README.asd`).

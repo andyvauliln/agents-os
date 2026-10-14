@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/knowledge-intake/SKILL.md
-basis: 097c17c3b823
+basis: f4a07d43cfc5
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # knowledge-intake/SKILL.md
 

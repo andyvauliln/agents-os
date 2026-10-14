@@ -1,15 +1,15 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/scripts/materialize.py
-basis: 2978a5768482
+basis: 80b627f8fea2
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # materialize.py
 
 ## What it is
 
-Keeps the metadata files and the plain tree in step with the files on disk. It gives an empty How it works and Details file to every item that has none, outside stage two, keeps a `.gitkeep` in every empty folder and removes it once the folder holds a file, and writes `docs/file-tree.md`, every path in git without the metadata files. It copies nothing from anywhere.
+Keeps the metadata files and the plain tree in step with the files on disk. It gives an empty How it works and Details file to every item that has none, outside stage two and outside the kept-data folder `apps/project-IDE/data/sources/prediction-market/metadata/`, keeps a `.gitkeep` in every empty folder and removes it once the folder holds a file, and writes `docs/file-tree.md`, every path in git without the metadata files. It copies nothing from anywhere.
 
 ## Who looks after it
 

@@ -1,9 +1,9 @@
 ---
 about: agent-os/docs/README.asd.md
-basis: a4d9c7681fa0
+basis: a6541becea82
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # README.asd.md
 

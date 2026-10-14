@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/how-to/
-basis: 92e90e4f9e7d
+basis: c250e53497d0
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # how-to/
 

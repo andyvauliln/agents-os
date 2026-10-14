@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/tests/subagents.link/
-basis: 0aaac596ccc2
+basis: 8f7e5ed7a7e2
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:09:25Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # subagents.link/
 

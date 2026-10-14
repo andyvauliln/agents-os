@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/
-basis: 2690542b190c
+basis: 3b50457c74d9
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # project-IDE/
 

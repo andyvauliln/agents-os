@@ -1,7 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/readme-asd-doc/
+basis: 2ee4590dc5a1
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # readme-asd-doc/
 

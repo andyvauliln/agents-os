@@ -1,7 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/change-plan/
+basis: 3eacd353ae27
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # change-plan/
 

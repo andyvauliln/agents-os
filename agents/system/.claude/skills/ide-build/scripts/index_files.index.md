@@ -1,15 +1,15 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/scripts/index_files.py
-basis: 70115fa99970
+basis: c71f0cef920a
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # index_files.py
 
 ## What it is
 
-Lists the items of the tree from the repository: every file git keeps, the folders that hold them and the local keys files, with the top as `agent-os`. It knows where each item's How it works and Details files are, named after the item without its extension, so `vision.md` has `vision.index.md` and `vision.meta.json`; a file that shares its name with a sibling or its folder keeps its extension. It reads and writes the How it works files with their header, and finds missing and orphan metadata files.
+Lists the items of the tree from the repository: every file git keeps, the folders that hold them and the local keys files, with the top as `agent-os`. It knows where each item's How it works and Details files are, named after the item without its extension, so `vision.md` has `vision.index.md` and `vision.meta.json`; a file that shares its name with a sibling or its folder keeps its extension. It reads and writes the How it works files with their header, and finds missing and orphan metadata files. Everything inside the kept-data folder named by its constant `KEPT` (`apps/project-IDE/data/sources/prediction-market/metadata/`) is plain data: no metadata files of its own, shown with its text, never an orphan.
 
 ## Who looks after it
 

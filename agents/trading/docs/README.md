@@ -80,7 +80,7 @@ Its docs: `agents/trading/docs/docs.index.md`
 
 - `prediction-market-research/`: forty-two studies of ways to make money on prediction markets, numbered `01` to `34` and `50` to `57`, one Markdown file each, such as `01-maker-reward-pool-farming.md` and `21-llm-forecasting-agents.md`. Some describe practices to avoid, such as wash trading and insider trading. `_evidence/` holds the background evidence (`E1` to `E9`: venue mechanics, incentive programs, resolution, profitability, other venues, tooling, AI forecasting, multi-agent simulation, legal) with the strategy lists and one row per study; `_pipeline/` holds the pipeline that wrote the studies.
 - `self-improving-agents/`: one study of approaches and architectures for agents that improve themselves.
-- `trding-agents-arhiteches/`: a study of how trading agents are built: `README.md`, twenty-nine architecture specs in `specs/`, their diagrams in `diagrams/` and a gallery page `index.html`.
+- `trding-agents-arhiteches/`: a study of how trading agents are built: `README.md`, nine architecture specs in `specs/`, their diagrams in `diagrams/` and a gallery page `index.html`.
 
 The domain agents read these studies when they look for strategies; the owner reads them on the File Tree page. A study is not changed after the fact; when it leads to a decision, the decision is recorded in the notes.
 

@@ -14,9 +14,11 @@
   ],
   "readers": [
     "agents/system/.claude/skills/ide-build/scripts/enrich.py",
-    "agents/system/.claude/skills/ide-build/scripts/build_map.py"
+    "agents/system/.claude/skills/ide-build/scripts/build_map.py",
+    "agents/system/.claude/skills/ide-build/scripts/materialize.py",
+    "agents/system/.claude/skills/ide-build/scripts/check_tree.py"
   ],
-  "changes_when": "A metadata naming rule, the Details fields or the planning sources of drafts change.",
+  "changes_when": "A metadata naming rule, the item list, the stage-two rule or the kept-data folder (KEPT) changes.",
   "related": [
     {
       "path": "docs/metadata.md",

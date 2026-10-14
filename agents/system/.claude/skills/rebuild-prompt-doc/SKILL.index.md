@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/rebuild-prompt-doc/SKILL.md
-basis: 3117c7ff2381
+basis: 788c2f087012
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # rebuild-prompt-doc/SKILL.md
 

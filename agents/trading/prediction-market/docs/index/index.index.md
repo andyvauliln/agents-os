@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/index/
-basis: 90bd6b8127a3
+basis: 4a6c1dc1623f
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # index/
 

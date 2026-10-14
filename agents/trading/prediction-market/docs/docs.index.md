@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/
-basis: f96f3cc98675
+basis: 48361a1ba201
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # docs/
 

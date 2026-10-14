@@ -40,6 +40,11 @@ META_KEYS = ["about", "basis", "written", "by", "confirmed"]
 META_ENDS = (".index.md", ".meta.json", ".example.md", ".questions.md", ".view.html", ".gitkeep", ".env.example")
 STAGE_TWO = "agents/trading/prediction-market/"   # stage two (owner, 2026-10-12): nothing is made inside ...
 PM_DOCS = STAGE_TWO + "docs"                      # ... except its docs, which have metadata like any item (owner, 2026-10-14)
+# Kept data: the earlier metadata files of the prediction-market domain, kept as records when its old files left the
+# tree. Everything inside this folder is a plain file: it has no metadata files of its own, a ".index.md" or
+# ".meta.json" in it is data (shown with its text, never as a tab), and none of it counts as an orphan.
+# The folder itself has its metadata like any folder.
+KEPT = "apps/project-IDE/data/sources/prediction-market/metadata/"
 
 
 def repo_dir():
@@ -55,8 +60,14 @@ def repo_dir():
 REPO = repo_dir()
 
 
-def is_meta_file(name):
-    return name.rstrip("/").endswith(META_ENDS)
+def kept_data(rel):
+    """Whether the path is inside the kept-data folder (KEPT): plain data, no metadata of its own."""
+    return rel.rstrip("/").startswith(KEPT)
+
+
+def is_meta_file(name, rel=""):
+    """Whether a file is a metadata or tab file. Pass `rel` so a file inside KEPT counts as plain data."""
+    return not kept_data(rel) and name.rstrip("/").endswith(META_ENDS)
 
 
 def stage_two(rel):
@@ -132,9 +143,9 @@ def file_family(it, items):
     own = family(it["name"])
     if par["rel"] and family(par["name"]) == own:
         return it["name"]
-    same = [c for c in par["children"] if c != it["rel"] and items[c]["type"] == "file" and not is_meta_file(items[c]["name"])
+    same = [c for c in par["children"] if c != it["rel"] and items[c]["type"] == "file" and not is_meta_file(items[c]["name"], c)
             and family(items[c]["name"]) == own]
-    if same and not is_meta_file(it["name"]):
+    if same and not is_meta_file(it["name"], it["rel"]):
         return it["name"]
     return own
 
@@ -142,12 +153,12 @@ def file_family(it, items):
 def order_children(folder, kids):
     """The folder's own metadata files first, then its folders, then each file followed by its own metadata files."""
     fam_folder = family(folder["name"]) if folder["rel"] else ROOT
-    own_meta = [k for k in kids if k["type"] == "file" and is_meta_file(k["name"]) and _meta_owner(k["name"]) == fam_folder]
+    own_meta = [k for k in kids if k["type"] == "file" and is_meta_file(k["name"], k["rel"]) and _meta_owner(k["name"]) == fam_folder]
     rest = [k for k in kids if k not in own_meta]
     sub = sorted((k for k in rest if k["type"] == "folder"), key=lambda k: k["name"].lower())
     files = [k for k in rest if k["type"] == "file"]
-    plain = sorted((k for k in files if not is_meta_file(k["name"])), key=lambda k: k["name"].lower())
-    metas = [k for k in files if is_meta_file(k["name"])]
+    plain = sorted((k for k in files if not is_meta_file(k["name"], k["rel"])), key=lambda k: k["name"].lower())
+    metas = [k for k in files if is_meta_file(k["name"], k["rel"])]
     out, used = [], set()
     for f in plain:
         out.append(f)
@@ -196,7 +207,9 @@ def meta_path(item):
 
 def has_meta(item):
     """Whether the item has (or must have) its How it works and Details files: every item but a metadata file,
-    outside stage two; in stage two only where they already exist."""
+    outside stage two; in stage two only where they already exist; never inside the kept-data folder (KEPT)."""
+    if kept_data(item["rel"]):
+        return False
     if item["type"] == "file" and is_meta_file(item["name"]):
         return False
     if stage_two(item["rel"]):
@@ -300,10 +313,11 @@ def load_meta(item):
 
 
 def orphans(items):
-    """How it works and Details files whose item is gone (renamed or removed): remove them or archive them."""
+    """How it works and Details files whose item is gone (renamed or removed): remove them or archive them.
+    The files inside the kept-data folder (KEPT) are data, not orphans."""
     want = {p(it) for it in items if has_meta(it) for p in (index_file, meta_file)}
     return sorted(it["rel"] for it in items if it["type"] == "file" and it["name"].endswith((".index.md", ".meta.json"))
-                  and it["rel"] not in want)
+                  and not kept_data(it["rel"]) and it["rel"] not in want)
 
 
 def missing(items):

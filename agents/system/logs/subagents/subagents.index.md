@@ -1,7 +1,9 @@
 ---
 about: agent-os/agents/system/logs/subagents/
+basis: 6f8c6087e8ab
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # subagents/
 

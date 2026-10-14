@@ -12,23 +12,13 @@
     "knowledge-intake"
   ],
   "readers": [
-    "knowledge-base-agent",
-    "agents/system/.claude/skills/ide-build/scripts/build_map.py",
-    "agents/system/.claude/skills/ide-build/scripts/enrich.py"
+    "knowledge-base-agent"
   ],
   "changes_when": "An input is stored, or its knowledge is placed.",
   "related": [
     {
       "path": "apps/project-IDE/data/inputs/README.md",
       "how": "documented in"
-    },
-    {
-      "path": "agents/system/.claude/skills/ide-build/scripts/build_map.py",
-      "how": "read by"
-    },
-    {
-      "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
-      "how": "read by"
     },
     {
       "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",

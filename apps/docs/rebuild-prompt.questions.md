@@ -2,8 +2,8 @@
 
 ## Open questions for the owner
 
-- The project IDE's own rebuild prompt is not written yet, so this prompt falls back to the system rebuild prompt's IDE parts. Is that fallback right until the IDE's prompt exists? It decides how the IDE is rebuilt meanwhile.
-- Should this prompt add the `apps/temp/*/repo/` line to `.gitignore` itself, or should the system rebuild prompt, which owns `.gitignore`, do it? It decides which prompt owns the ignore rule.
+- **Until the IDE has its own rebuild prompt, do we use the IDE parts of the system rebuild prompt?** The rebuild prompt of the project IDE is not written yet. Thus this prompt uses the IDE parts of the system rebuild prompt. The answer decides how we rebuild the IDE until then.
+- **Which prompt adds the `apps/temp/*/repo/` line to `.gitignore`: this prompt or the system rebuild prompt?** The system rebuild prompt owns `.gitignore`. The answer decides which prompt owns the ignore rule.
 
 ## The owner's questions
 

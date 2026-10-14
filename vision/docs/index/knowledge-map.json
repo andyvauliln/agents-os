@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-14T10:21:45Z",
+ "built": "2026-10-14T10:54:18Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "3b899a2739bc",
+   "hash": "06475b348638",
    "entries": []
   },
   "conventions.md": {
@@ -147,7 +147,7 @@
   },
   "decisions.md": {
    "title": "Agent OS: Decisions (v1.13)",
-   "hash": "63568bd5313f",
+   "hash": "a98673e4bccf",
    "entries": [
     "d-001",
     "d-002",
@@ -216,7 +216,8 @@
     "d-065",
     "d-066",
     "d-067",
-    "d-068"
+    "d-068",
+    "d-069"
    ]
   },
   "feature-map.md": {
@@ -6273,6 +6274,28 @@
    ],
    "inherited_by": [],
    "chars": 1334
+  },
+  "d-069": {
+   "id": "d-069",
+   "doc": "decisions.md",
+   "heading": "D-069: Questions are written in ASD-STE100; How it works and Questions tabs read like a file",
+   "level": 3,
+   "line": 677,
+   "applies_raw": [
+    "[57]",
+    "[53]"
+   ],
+   "sources": [
+    "in-20261014-1047"
+   ],
+   "status": "decided",
+   "hash": "b00cf684a80e",
+   "nodes": [
+    "n-53",
+    "n-57"
+   ],
+   "inherited_by": [],
+   "chars": 845
   },
   "fm-data-collection-workers": {
    "id": "fm-data-collection-workers",
@@ -20336,10 +20359,11 @@
     "d-064",
     "d-067",
     "d-068",
+    "d-069",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "7dfcaaae5eec",
+   "basis": "04f5e7636dcb",
    "summary_state": "fresh"
   },
   "n-57.1": {
@@ -26166,11 +26190,12 @@
     "d-055",
     "d-057",
     "d-060",
+    "d-069",
     "fm-ui-monitoring-and-control",
     "ov-parts-ui-apps"
    ],
    "inherited": [],
-   "basis": "b31579384259",
+   "basis": "c07e13364542",
    "summary_state": "fresh"
   },
   "n-53.4": {
@@ -29441,6 +29466,27 @@
    ],
    "entries": [
     "d-068"
+   ]
+  },
+  "in-20261014-1047": {
+   "at": "2026-10-14T10:47",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-14-1047-question-tabs-asd.md",
+   "categories": [
+    "ui",
+    "docs-knowledge"
+   ],
+   "summary": "How it works and Questions tabs should work like the File tab (Read or Source, full screen); all questions in ASD style.",
+   "processed_into": [
+    "vision/explorer/file-tree-explorer.html",
+    "apps/project-IDE/docs/README.md",
+    "docs/metadata.md",
+    "skills: file-index, make-questions, change-plan, knowledge-intake",
+    "knowledge-base-agent",
+    "Questions files"
+   ],
+   "entries": [
+    "d-069"
    ]
   }
  },

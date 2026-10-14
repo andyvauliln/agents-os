@@ -1,10 +1,10 @@
 ---
 about: agent-os/apps/project-IDE/
 node: n-53
-basis: f32e916f3143
+basis: b31579384259
 written: 2026-10-14T12:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T10:21:35Z
 ---
 # project-IDE/
 

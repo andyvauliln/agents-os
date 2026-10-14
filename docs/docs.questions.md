@@ -6,10 +6,20 @@ None open.
 
 ## The owner's questions
 
-### 2026-09-29: What else should the docs hold?
+### 2026-09-29: What more must the docs hold?
 
 > anythings else we would add to docs?
 
-Four more were proposed: data schemas, data and user flows, metrics, and a runbook for daily work. Today `docs/` holds only the project-level docs: the vision, the README, its ASD-STE100 twin, the rebuild prompt, the plain file tree and the metadata logic (`metadata.md`). This changed later: the flows, data schemas and metrics were written as notes; the general ones are in the planning area (`vision/docs/`), and the trading ones, with the money runbooks in `how-to/`, are in `agents/trading/prediction-market/docs/`.
+An agent proposed four more docs: data schemas, data and user flows, metrics, and a runbook for daily work.
+
+Today `docs/` holds only the project-level docs:
+
+1. The vision.
+2. The README and its ASD-STE100 twin.
+3. The rebuild prompt.
+4. The plain file tree.
+5. The metadata logic (`metadata.md`).
+
+This changed later: the flows, the data schemas and the metrics became notes. The general notes are in the planning area (`vision/docs/`). The trading notes are in `agents/trading/prediction-market/docs/`, with the money runbooks in `how-to/`.
 
 Docs improved: none, the answer was already in docs/README.md (the project docs and the planning area).

@@ -2,10 +2,10 @@
 
 ## Open questions for the owner
 
-- May agents clone an outside repository for research on their own, or only when you ask? It sets how freely agents can learn from other people's code.
-- Do the earlier Polymarket tools come in as the first app we use, as a fork? It decides the first outside app and the prediction-market domain's tools.
-- Where should our forks live on GitHub: your own account, next to this repository, or an organization? It decides who owns them.
-- Is the prediction-market dashboard needed at all, or does the project IDE take its place? It decides whether a second app of our own is built in stage two.
+- **Can agents clone an outside repository for research without you, or only when you ask?** The answer sets how freely agents can learn from the code of other persons.
+- **Are the earlier Polymarket tools our first app, as a fork?** The answer decides the first outside app. It also decides the tools of the prediction-market domain.
+- **Where do our forks go on GitHub: your account, next to this repository, or an organization?** The answer decides who owns them.
+- **Do we need the prediction-market dashboard, or does the project IDE replace it?** The answer decides if we build a second app of our own in stage two.
 
 ## The owner's questions
 

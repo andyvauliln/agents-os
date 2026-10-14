@@ -2,12 +2,12 @@
 
 ## Open questions for the owner
 
-- Are the symlinks committed, or rebuilt by init.sh after every clone?
-- Does the system agent need a settings file of its own besides system.config.json?
-- How does the common prompt reach each level's instructions: import or copy?
-- Where do the records and topic notes live once the planning area vision/ is retired?
-- The default model effort differs between sources (high, xhigh, medium on the page): which is right?
-- Should .gitignore ignore the runtime contents of logs/ and data/ and settings.local.json, as the design says? Today it does not.
+- **Do we commit the symlinks, or does `init.sh` make them again after each clone?**
+- **Does the system agent need its own settings file in addition to `system.config.json`?**
+- **How does the common prompt go into the instructions of each level: by import or by copy?**
+- **Where do the records and the topic notes go when we remove the planning area `vision/`?**
+- **Which default model effort is correct?** The sources do not agree. They give high, xhigh, and medium on the page.
+- **Must `.gitignore` ignore the runtime contents of `logs/` and `data/`, and `settings.local.json`?** The design tells this. Today `.gitignore` does not ignore them.
 
 ## The owner's questions
 

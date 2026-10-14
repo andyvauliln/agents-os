@@ -1,10 +1,10 @@
 ---
 about: agent-os/docs/
 node: n-57
-basis: f41063a68e23
+basis: 7dfcaaae5eec
 written: 2026-10-14T08:00:17Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T08:00:17Z
+confirmed: 2026-10-14T10:21:35Z
 ---
 # docs/
 

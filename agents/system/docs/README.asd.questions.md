@@ -2,7 +2,7 @@
 
 ## Open questions for the owner
 
-- The skill readme-asd-doc that will hold this file's rules does not exist yet: when should it be written?
+- **When do we write the skill `readme-asd-doc`?** This skill will keep the rules of this file. It does not exist yet.
 
 ## The owner's questions
 

@@ -6,10 +6,20 @@ None open.
 
 ## The owner's questions
 
-### 2026-09-30: How scheduled jobs work in Claude Code
+### 2026-09-30: How do scheduled jobs work in Claude Code?
 
 > how in a claude code we do scheduled jobs and where do they stored? tell me more how it works
 
-Claude Code has five ways: `/loop` inside an open session, cloud routines saved in the Claude account and run in Anthropic's cloud, scheduled tasks of the desktop app, GitHub Actions with a `schedule:` line, and the machine's own cron or systemd timer that runs `claude -p`. In the Agent OS every agent lists everything it runs in one jobs file, for the system this file, and one shared scheduler is planned to run every job on the owner's server, where the data and keys are. Today every system job is switched off and the scheduler is not built yet.
+Claude Code has five methods:
+
+1. `/loop` in an open session.
+2. Cloud routines. The Claude account keeps them, and they run in the cloud of Anthropic.
+3. Scheduled tasks of the desktop app.
+4. GitHub Actions with a `schedule:` line.
+5. The cron or systemd timer of the machine, which runs `claude -p`.
+
+In the Agent OS, each agent lists all its jobs in one jobs file. For the system, it is this file. The plan is one shared scheduler that runs each job on the owner's server. The data and the keys are on that server.
+
+Today all system jobs are off. The scheduler is not built yet.
 
 Docs improved: agents/system/configs/system.workers.index.md.

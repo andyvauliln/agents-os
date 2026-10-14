@@ -2,11 +2,11 @@
 
 ## Open questions for the owner
 
-- **Should the rebuild doc be renamed `reverse-prompt.md`?** The owner's input used that name; every level's docs and skills use `rebuild-prompt.md` today, so a rename touches all of them.
-- **Should the repository (`trading-oss`) and its top folder be renamed `agent-os`?** The vision calls the system the Agent OS; the old name appears in links, notes and every How it works file.
-- **What should the front page `README.md` say?** It is empty, and it is the first thing anyone sees on GitHub.
-- **When does stage two start, and what marks the end of stage one?** It decides when the prediction-market domain gets its files back and when the first agents are built.
-- **Should the planning copies in `vision/` be retired so each real file is its own only source?** Two copies of a text can drift apart; the vision lists it as an idea still weighed.
+- **Do we change the name of the rebuild doc to `reverse-prompt.md`?** The input of the owner used that name. Today the docs and skills of all levels use `rebuild-prompt.md`. Thus a new name changes all of them.
+- **Do we change the name of the repository (`trading-oss`) and its top folder to `agent-os`?** The vision calls the system the Agent OS. The old name is in links, in notes and in each How it works file.
+- **What does the front page `README.md` tell?** It is empty. It is the first thing that a person sees on GitHub.
+- **When does stage two start, and what marks the end of stage one?** The answer decides when the prediction-market domain gets its files back. It also decides when we build the first agents.
+- **Do we retire the planning copies in `vision/`, so that each real file is its own only source?** Two copies of a text can become different. The vision shows this as an idea that we still examine.
 
 ## The owner's questions
 

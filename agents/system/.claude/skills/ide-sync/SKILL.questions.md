@@ -6,10 +6,22 @@ None open.
 
 ## The owner's questions
 
-### 2026-10-05: How page notes and comments become agent work
+### 2026-10-05: How do notes and comments on the page become agent work?
 
 > also not clear how we now hanlding agentic works from the ui comments and notes on files and folders?
 
-Everything left on the page is saved at once in the page's store and marked "changed". When the owner presses Apply changes or says "sync the file tree", this skill files each message as an owner input word for word, writes edits into their files, applies notes meant as changes and turns other open notes into open questions, runs the requests, cleans up deletions, hands the inputs to the knowledge base agent and rebuilds the page with `ide-build`. On the owner's server, edits go into the files at once and a request runs Claude Code straight away.
+The page saves each thing that you leave on it at once, in the store of the page. It marks the item "changed".
+
+You push Apply changes or say "sync the file tree". Then this skill does these steps:
+
+1. It records each message as an owner input, word for word.
+2. It writes the edits into their files.
+3. It applies the notes that are changes. It makes the other open notes into open questions.
+4. It does the requests.
+5. It completes the deletions.
+6. It gives the inputs to the knowledge base agent.
+7. It builds the page again with `ide-build`.
+
+On the owner's server, the page writes the edits into the files at once. A request starts Claude Code immediately.
 
 Docs improved: agents/system/.claude/skills/ide-sync/SKILL.md, agents/system/.claude/skills/ide-sync/SKILL.index.md.

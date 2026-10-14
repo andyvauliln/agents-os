@@ -2,8 +2,8 @@
 
 ## Open questions for the owner
 
-- Should the ASD-STE100 version keep tables and the folder picture as they are, or say everything in sentences? It decides how strictly the version follows the standard.
-- Should technical names that are not ASD-STE100 approved words (fork, submodule, dashboard) stay as they are, as now, or get a short definition the first time? It decides how readable the version is for a reader new to these words.
+- **Does the ASD-STE100 version keep the tables and the folder picture, or tell all in sentences?** The answer decides how strictly the version obeys the standard.
+- **Do technical names that are not approved ASD-STE100 words get a short definition when they first occur?** Examples are fork, submodule and dashboard. Today they stay as they are. The answer decides how easily a new reader understands them.
 
 ## The owner's questions
 

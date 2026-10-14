@@ -1,10 +1,10 @@
 ---
 about: agent-os/
 node: n-0
-basis: 987e3ba12bb6
+basis: 5e2440725f67
 written: 2026-10-09T09:55:29Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T08:00:22Z
+confirmed: 2026-10-14T10:21:35Z
 ---
 # agent-os/
 

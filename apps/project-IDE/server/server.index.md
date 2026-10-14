@@ -1,10 +1,10 @@
 ---
 about: agent-os/apps/project-IDE/server/
 node: n-53.3
-basis: 11d68992fb45
+basis: 0925227060c4
 written: 2026-10-06T21:09:36Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T10:30:32Z
+confirmed: 2026-10-14T10:21:35Z
 ---
 # server/
 

@@ -2,9 +2,9 @@
 
 ## Open questions for the owner
 
-- **Should a rebuilt repository include `vision/` at all, or only the system as designed?** Today the prompt copies the planning area as the owner hands it over; once the real files are the only source, it could be left out.
-- **Is the order of the lower prompts right: system, apps (then the project IDE), trading?** It follows the order in which the docs are written; the IDE's build scripts live in the system's folder, so the system must come first.
-- **Should `HANDOFF.md` be rebuilt?** It is a planning-time note; the prompt copies it only when the owner hands it over.
+- **Does a rebuilt repository include `vision/`, or only the system as designed?** Today the prompt copies the planning area as the owner gives it. When the real files are the only source, the prompt can omit it.
+- **Is the order of the lower prompts correct: system, apps (then the project IDE), trading?** It is the order in which we write the docs. The build scripts of the IDE are in the folder of the system. Thus the system must come first.
+- **Do we rebuild `HANDOFF.md`?** It is a note for the planning time. The prompt copies it only when the owner gives it.
 
 ## The owner's questions
 

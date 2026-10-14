@@ -2420,6 +2420,29 @@
     "agents/system/CLAUDE.md"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261014-1047",
+   "at": "2026-10-14T10:47",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-14-1047-question-tabs-asd.md",
+   "chars": 260,
+   "categories": [
+    "ui",
+    "docs-knowledge"
+   ],
+   "summary": "How it works and Questions tabs should work like the File tab (Read or Source, full screen); all questions in ASD style.",
+   "processed_into": [
+    "vision/explorer/file-tree-explorer.html",
+    "apps/project-IDE/docs/README.md",
+    "docs/metadata.md",
+    "skills: file-index, make-questions, change-plan, knowledge-intake",
+    "knowledge-base-agent",
+    "Questions files"
+   ],
+   "answered": true
   }
  ]
 }

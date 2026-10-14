@@ -277,7 +277,7 @@ Do these steps after each change to an item. The `file-index` skill gives all th
 |---|---|---|
 | Details file of an item | `status` | `decided`, `proposed`, `idea` |
 | Knowledge tag in a note (`<!-- k: ... status=... -->`) | `status=` | `decided` (318), `proposed` (237), `open` (65), `retired` (2) |
-| Decision in `decisions.md` | `**Status:**` line | `decided`, `active`, `partly superseded`, `superseded`, `proposed` |
+| Decision in `decisions.md` | `**Status:**` line | `decided`, `proposed`, `replaced` (a decision that a later decision replaced in part says "decided. Partly replaced by D-0xx") |
 | Change plan in `plans/index.json` | `status` | `draft`, `approved`, `building`, `built`, `done` |
 | How it works and the docs | Plain words | "proposal", "still open", "not decided" |
 
@@ -343,7 +343,7 @@ An input from the page comes through `ide-sync`. On claude.ai it waits in the pa
 
 1. All decisions are in one file, `decisions.md`. Now it is in `vision/docs/`. After the move, it is in `apps/project-IDE/data/`.
 2. Each decision has these lines: `Decision`, `Date`, `Why`, `Status`, `Sources` (the input identifiers), `Changed` (the files that it changed). Some decisions also have `Rules now in`.
-3. When a new decision replaces an old one, the old one gets the status "superseded by D-0xx". Do not remove it.
+3. A decision has one of three statuses: `decided`, `proposed` or `replaced`. When a new decision replaces an old one, the old one gets the status "replaced by D-0xx". When it replaces only a part, the status is "decided. Partly replaced by D-0xx". Do not remove an old decision.
 
 ### 17.3 Where the decision numbers are used
 

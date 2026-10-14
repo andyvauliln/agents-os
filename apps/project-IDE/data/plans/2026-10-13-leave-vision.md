@@ -1,7 +1,7 @@
 # Plan: live without the vision/ folder
 
 - Input: in-20261013-leave-vision (2026-10-13), the owner: "i need kind of go out of the vision folder what we still would need in a current system to live without it and move forward"
-- Status: proposed, waiting for the owner's go
+- Status: building (the owner said go on 2026-10-14)
 - Paths are from the top of the repository.
 - Note (owner, 2026-10-14): the moved notes in `apps/project-IDE/data/sources/` and the prediction-market trading notes in `agents/trading/prediction-market/docs/` are kept but not referenced by any doc, skill, agent or metadata file; whether to use them is decided later.
 
@@ -40,6 +40,7 @@ This is the biggest step. Everything else is moving files and changing paths.
 
 ## Steps
 
+0. Fill every field of every Details file outside `vision/`, from the item, its docs and the knowledge still in `vision/` (owner, 2026-10-14: no field is dropped).
 1. Move the records (inputs, decisions, changelog, plans) to `apps/project-IDE/data/` and point knowledge-intake, change-plan and CLAUDE.md at them. Put the few missing memory parts into CLAUDE.md, the trading README and the system README questions (D-066).
 2. Make the real skills, agents and metadata files the source: drop the draft lists and the metadata copying in the build.
 3. Move the build tools into `ide-build/scripts/` with paths to the real places; the page source and its data into `apps/project-IDE/current-ui/`; fix the server settings.
@@ -50,5 +51,4 @@ This is the biggest step. Everything else is moving files and changing paths.
 
 ## Open for the owner
 
-- Remove `vision/archive/` from the repository (it stays in git history)? Proposed: yes. The topic notes move to `apps/project-IDE/data/sources/` and stay, not referenced (owner, 2026-10-14).
-- Do it in one pull request, or step by step (records first)? Proposed: one pull request, built in the order above.
+- Answered 2026-10-14: go, in one pull request; `vision/archive/` is removed (git history keeps it); the topic notes move to `apps/project-IDE/data/sources/` and stay, not referenced.

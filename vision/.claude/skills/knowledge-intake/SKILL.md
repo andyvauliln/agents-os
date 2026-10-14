@@ -73,7 +73,7 @@ Every other place that states the changed fact must now agree. Check, in this or
 
 ## 6. Record
 
-- The owner decided something → a `decisions.md` entry with the next D number: date, decision in one to three sentences, why, status, sources (input ids), applies, and the objects it changed. Superseded entries get "superseded by D-0xx".
+- The owner decided something → a `decisions.md` entry with the next D number: date, decision in one to three sentences, why, status (`decided`, `proposed` or `replaced`), sources (input ids), applies, and the objects it changed. A replaced entry gets "replaced by D-0xx"; a partly replaced one "decided. Partly replaced by D-0xx".
 - One line in `changelog.md`.
 - Every doc you changed: bump its version and add a changelog line.
 - The input's `processed_into` (index.json row and the input file): D ids, docs and [n] objects.

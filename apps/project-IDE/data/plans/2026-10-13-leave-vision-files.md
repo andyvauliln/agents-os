@@ -8,10 +8,10 @@
 
 | What happens | Files |
 |---|---|
-| Deleted: old versions, backups, pointers, caches, empty files. Git history keeps them. | 676 |
-| Kept for stage two: prediction-market files with text and their metadata, in the IDE sources. | 424 |
-| Deleted here, because the same file already sits at its real place (most are How it works and Details files next to their items). | 353 |
-| Moved to its real place: no copy there yet. | 184 |
+| Deleted: old versions, backups, pointers, caches, empty files. Git history keeps them. | 657 |
+| Kept for stage two: prediction-market files with text and their metadata, in the IDE sources (the trading notes are already in `agents/trading/prediction-market/docs/`, D-067). | 403 |
+| Deleted here, because the same file already sits at its real place (most are How it works and Details files next to their items). | 413 |
+| Moved to its real place: no copy there yet. | 164 |
 | Deleted: the older system and trading docs, replaced by the new docs at five levels. | 106 |
 | Made by the build at the new place; deleted here. | 3 |
 | Its content goes into other files first, then it moves. | 1 |
@@ -233,27 +233,27 @@
     │   │   │   │   └── prediction-market-agents.workers.json  —  delete · empty, only {}
     │   │   │   ├── docs/
     │   │   │   │   ├── common/
-    │   │   │   │   │   ├── strategy-si-templates.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   │   ├── trading-agent-architecture.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   │   └── trading-prompt.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   │   ├── strategy-si-templates.md  —  delete · same copy already at agents/trading/prediction-market/docs/common/strategy-si-templates.md
+    │   │   │   │   │   ├── trading-agent-architecture.md  —  delete · same copy already at agents/trading/prediction-market/docs/common/trading-agent-architecture.md
+    │   │   │   │   │   └── trading-prompt.md  —  delete · same copy already at agents/trading/prediction-market/docs/common/trading-prompt.md
     │   │   │   │   ├── how-to/
-    │   │   │   │   │   ├── add-trading-account.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   │   ├── create-strategy-or-variant.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   │   ├── go-live-with-money.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   │   └── stop-trading-agent.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   │   ├── add-trading-account.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/add-trading-account.md
+    │   │   │   │   │   ├── create-strategy-or-variant.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/create-strategy-or-variant.md
+    │   │   │   │   │   ├── go-live-with-money.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/go-live-with-money.md
+    │   │   │   │   │   └── stop-trading-agent.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/stop-trading-agent.md
     │   │   │   │   ├── index/
-    │   │   │   │   │   └── accounts.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   ├── doc-outlines.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   ├── trading-architecture.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   ├── trading-conventions.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   ├── trading-data-schemas.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   ├── trading-feature-map.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   ├── trading-flows.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   ├── trading-glossary.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   ├── trading-metrics.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   ├── trading-overview.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   ├── trading-roadmap.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
-    │   │   │   │   └── trading-safety.md  —  delete · same copy in vision/docs/prediction-market-agents/, which is kept for stage two
+    │   │   │   │   │   └── accounts.md  —  delete · same copy already at agents/trading/prediction-market/docs/index/accounts.md
+    │   │   │   │   ├── doc-outlines.md  —  delete · same copy already at agents/trading/prediction-market/docs/doc-outlines.md
+    │   │   │   │   ├── trading-architecture.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-architecture.md
+    │   │   │   │   ├── trading-conventions.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-conventions.md
+    │   │   │   │   ├── trading-data-schemas.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-data-schemas.md
+    │   │   │   │   ├── trading-feature-map.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-feature-map.md
+    │   │   │   │   ├── trading-flows.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-flows.md
+    │   │   │   │   ├── trading-glossary.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-glossary.md
+    │   │   │   │   ├── trading-metrics.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-metrics.md
+    │   │   │   │   ├── trading-overview.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-overview.md
+    │   │   │   │   ├── trading-roadmap.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-roadmap.md
+    │   │   │   │   └── trading-safety.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-safety.md
     │   │   │   ├── research/
     │   │   │   │   └── index.json  —  delete · empty, only {}
     │   │   │   ├── strategy-1-agent/
@@ -349,31 +349,31 @@
     │   │       │               │   └── prediction-market-agents.workers.meta.json  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/configs/prediction-market-agents.workers.meta.json
     │   │       │               ├── docs/
     │   │       │               │   ├── common/
-    │   │       │               │   │   ├── strategy-si-templates.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/common/strategy-si-templates.index.md
-    │   │       │               │   │   ├── trading-agent-architecture.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/common/trading-agent-architecture.index.md
-    │   │       │               │   │   └── trading-prompt.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/common/trading-prompt.index.md
+    │   │       │               │   │   ├── strategy-si-templates.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/common/strategy-si-templates.index.md
+    │   │       │               │   │   ├── trading-agent-architecture.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/common/trading-agent-architecture.index.md
+    │   │       │               │   │   └── trading-prompt.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/common/trading-prompt.index.md
     │   │       │               │   ├── how-to/
-    │   │       │               │   │   ├── add-trading-account.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/how-to/add-trading-account.index.md
-    │   │       │               │   │   ├── create-strategy-or-variant.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/how-to/create-strategy-or-variant.index.md
-    │   │       │               │   │   ├── go-live-with-money.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/how-to/go-live-with-money.index.md
-    │   │       │               │   │   └── stop-trading-agent.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/how-to/stop-trading-agent.index.md
+    │   │       │               │   │   ├── add-trading-account.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/add-trading-account.index.md
+    │   │       │               │   │   ├── create-strategy-or-variant.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/create-strategy-or-variant.index.md
+    │   │       │               │   │   ├── go-live-with-money.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/go-live-with-money.index.md
+    │   │       │               │   │   └── stop-trading-agent.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/stop-trading-agent.index.md
     │   │       │               │   ├── index/
-    │   │       │               │   │   └── accounts.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/index/accounts.index.md
-    │   │       │               │   ├── doc-outlines.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/doc-outlines.index.md
+    │   │       │               │   │   └── accounts.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/index/accounts.index.md
+    │   │       │               │   ├── doc-outlines.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/doc-outlines.index.md
     │   │       │               │   ├── README.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/README.index.md
     │   │       │               │   ├── README.meta.json  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/README.meta.json
     │   │       │               │   ├── rebuild-prompt.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/rebuild-prompt.index.md
     │   │       │               │   ├── rebuild-prompt.meta.json  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/rebuild-prompt.meta.json
-    │   │       │               │   ├── trading-architecture.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/trading-architecture.index.md
-    │   │       │               │   ├── trading-conventions.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/trading-conventions.index.md
-    │   │       │               │   ├── trading-data-schemas.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/trading-data-schemas.index.md
-    │   │       │               │   ├── trading-feature-map.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/trading-feature-map.index.md
-    │   │       │               │   ├── trading-flows.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/trading-flows.index.md
-    │   │       │               │   ├── trading-glossary.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/trading-glossary.index.md
-    │   │       │               │   ├── trading-metrics.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/trading-metrics.index.md
-    │   │       │               │   ├── trading-overview.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/trading-overview.index.md
-    │   │       │               │   ├── trading-roadmap.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/trading-roadmap.index.md
-    │   │       │               │   ├── trading-safety.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/trading-safety.index.md
+    │   │       │               │   ├── trading-architecture.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-architecture.index.md
+    │   │       │               │   ├── trading-conventions.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-conventions.index.md
+    │   │       │               │   ├── trading-data-schemas.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-data-schemas.index.md
+    │   │       │               │   ├── trading-feature-map.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-feature-map.index.md
+    │   │       │               │   ├── trading-flows.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-flows.index.md
+    │   │       │               │   ├── trading-glossary.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-glossary.index.md
+    │   │       │               │   ├── trading-metrics.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-metrics.index.md
+    │   │       │               │   ├── trading-overview.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-overview.index.md
+    │   │       │               │   ├── trading-roadmap.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-roadmap.index.md
+    │   │       │               │   ├── trading-safety.index.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-safety.index.md
     │   │       │               │   ├── vision.index.md  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/vision.index.md
     │   │       │               │   └── vision.meta.json  —  stage two → apps/project-IDE/data/sources/prediction-market/metadata/docs/vision.meta.json
     │   │       │               ├── research/
@@ -608,8 +608,8 @@
     │   ├── 2026-10-06/  —  delete · 12 files (old versions; git history keeps them)
     │   ├── 2026-10-07/  —  delete · 5 files (old versions; git history keeps them)
     │   └── 2026-10-09/
-    │       ├── README-trading-parts.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/README-trading-parts.md (the trading text taken out of the system README, for pm's own docs)
-    │       ├── rebuild-prompt-trading-parts.md  —  stage two → apps/project-IDE/data/sources/prediction-market/files/rebuild-prompt-trading-parts.md (the same, from the rebuild prompt)
+    │       ├── README-trading-parts.md  —  delete · same copy already at agents/trading/prediction-market/docs/README-trading-parts.md
+    │       ├── rebuild-prompt-trading-parts.md  —  delete · same copy already at agents/trading/prediction-market/docs/rebuild-prompt-trading-parts.md
     │       └── (the rest)  —  delete · 2 files (README and rebuild prompt before they were made general; git history keeps them)
     ├── docs/
     │   ├── common/
@@ -755,28 +755,28 @@
     │   │   └── README.md  —  delete · same copy already at apps/project-IDE/data/inputs/README.md
     │   ├── prediction-market-agents/
     │   │   ├── common/
-    │   │   │   ├── strategy-si-templates.md  —  move → apps/project-IDE/data/sources/prediction-market/common/strategy-si-templates.md
-    │   │   │   ├── trading-agent-architecture.md  —  move → apps/project-IDE/data/sources/prediction-market/common/trading-agent-architecture.md
-    │   │   │   └── trading-prompt.md  —  move → apps/project-IDE/data/sources/prediction-market/common/trading-prompt.md
+    │   │   │   ├── strategy-si-templates.md  —  delete · same copy already at agents/trading/prediction-market/docs/common/strategy-si-templates.md
+    │   │   │   ├── trading-agent-architecture.md  —  delete · same copy already at agents/trading/prediction-market/docs/common/trading-agent-architecture.md
+    │   │   │   └── trading-prompt.md  —  delete · same copy already at agents/trading/prediction-market/docs/common/trading-prompt.md
     │   │   ├── how-to/
-    │   │   │   ├── add-trading-account.md  —  move → apps/project-IDE/data/sources/prediction-market/how-to/add-trading-account.md
-    │   │   │   ├── create-strategy-or-variant.md  —  move → apps/project-IDE/data/sources/prediction-market/how-to/create-strategy-or-variant.md
-    │   │   │   ├── go-live-with-money.md  —  move → apps/project-IDE/data/sources/prediction-market/how-to/go-live-with-money.md
-    │   │   │   └── stop-trading-agent.md  —  move → apps/project-IDE/data/sources/prediction-market/how-to/stop-trading-agent.md
+    │   │   │   ├── add-trading-account.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/add-trading-account.md
+    │   │   │   ├── create-strategy-or-variant.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/create-strategy-or-variant.md
+    │   │   │   ├── go-live-with-money.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/go-live-with-money.md
+    │   │   │   └── stop-trading-agent.md  —  delete · same copy already at agents/trading/prediction-market/docs/how-to/stop-trading-agent.md
     │   │   ├── index/
-    │   │   │   └── accounts.md  —  move → apps/project-IDE/data/sources/prediction-market/index/accounts.md
-    │   │   ├── doc-outlines.md  —  move → apps/project-IDE/data/sources/prediction-market/doc-outlines.md
-    │   │   ├── trading-architecture.md  —  move → apps/project-IDE/data/sources/prediction-market/trading-architecture.md
-    │   │   ├── trading-conventions.md  —  move → apps/project-IDE/data/sources/prediction-market/trading-conventions.md
-    │   │   ├── trading-data-schemas.md  —  move → apps/project-IDE/data/sources/prediction-market/trading-data-schemas.md
-    │   │   ├── trading-feature-map.md  —  move → apps/project-IDE/data/sources/prediction-market/trading-feature-map.md
-    │   │   ├── trading-flows.md  —  move → apps/project-IDE/data/sources/prediction-market/trading-flows.md
-    │   │   ├── trading-glossary.md  —  move → apps/project-IDE/data/sources/prediction-market/trading-glossary.md
-    │   │   ├── trading-metrics.md  —  move → apps/project-IDE/data/sources/prediction-market/trading-metrics.md
-    │   │   ├── trading-overview.md  —  move → apps/project-IDE/data/sources/prediction-market/trading-overview.md
-    │   │   ├── trading-roadmap.md  —  move → apps/project-IDE/data/sources/prediction-market/trading-roadmap.md
-    │   │   ├── trading-safety.md  —  move → apps/project-IDE/data/sources/prediction-market/trading-safety.md
-    │   │   └── trading-vision-notes.md  —  move → apps/project-IDE/data/sources/prediction-market/trading-vision-notes.md
+    │   │   │   └── accounts.md  —  delete · same copy already at agents/trading/prediction-market/docs/index/accounts.md
+    │   │   ├── doc-outlines.md  —  delete · same copy already at agents/trading/prediction-market/docs/doc-outlines.md
+    │   │   ├── trading-architecture.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-architecture.md
+    │   │   ├── trading-conventions.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-conventions.md
+    │   │   ├── trading-data-schemas.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-data-schemas.md
+    │   │   ├── trading-feature-map.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-feature-map.md
+    │   │   ├── trading-flows.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-flows.md
+    │   │   ├── trading-glossary.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-glossary.md
+    │   │   ├── trading-metrics.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-metrics.md
+    │   │   ├── trading-overview.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-overview.md
+    │   │   ├── trading-roadmap.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-roadmap.md
+    │   │   ├── trading-safety.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-safety.md
+    │   │   └── trading-vision-notes.md  —  delete · same copy already at agents/trading/prediction-market/docs/trading-vision-notes.md
     │   ├── architecture.md  —  move → apps/project-IDE/data/sources/architecture.md
     │   ├── changelog.md  —  delete · same copy already at apps/project-IDE/data/changelog.md
     │   ├── conventions.md  —  move → apps/project-IDE/data/sources/conventions.md

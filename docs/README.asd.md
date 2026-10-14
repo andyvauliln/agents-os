@@ -80,7 +80,7 @@ agent-os/
 │   └── trading/                 the folder of trading domains
 │       ├── docs/                trading's own docs
 │       ├── researches/          the research studies
-│       └── prediction-market/   the first trading domain: folders only, stage two
+│       └── prediction-market/   the first trading domain: folders and trading notes, stage two
 ├── apps/
 │   ├── docs/                    the docs for all apps
 │   ├── project-IDE/             the File Tree page, its server and its data
@@ -125,6 +125,7 @@ Its docs: `README.index.md` and `HANDOFF.index.md`.
 - `docs/README.asd.md` is this document. It has the same content and the same section order as `README.md`. It uses ASD-STE100 Simplified Technical English. The owner can compare the two documents.
 - `docs/rebuild-prompt.md` gives the instructions to an AI coding agent. With these instructions, the agent builds the top level of the repository again. Then it builds each level with the rebuild prompt of that level.
 - `docs/file-tree.md` is a plain list of all paths in the repository, one path on each line. It has no metadata. The IDE build writes it in each round. Do not write it by hand.
+- `docs/metadata.md` tells all of the metadata logic, in ASD-STE100. It tells which metadata files each item has and how they get their names. It tells the content of each file, when a file becomes stale and how the build finds it. It tells how an agent updates the files after a change, how the build and the page use them, the rules, and the parts that are not built yet.
 
 Each doc has its How it works file and its Details file next to it. The four written docs also have two more files:
 
@@ -179,7 +180,8 @@ Its docs: `agents/system/docs/README.md`.
 - `self-improving-agents/` contains a study about agents that improve themselves.
 - `trding-agents-arhiteches/` contains a study about the structure of trading agents.
 - `agents/trading/prediction-market/` is the first trading domain. It is in stage two.
-- In the prediction-market domain, only the folders exist. Each empty folder contains a `.gitkeep` file.
+- In the prediction-market domain, the folders exist. Each empty folder contains a `.gitkeep` file.
+- Its `docs/` folder contains all the trading notes of the project. Each note has its metadata files.
 - The folders include the first strategy agent `strategy-1-agent/` and its first trading agent `pm-strategy-1.momentum-v1.opus55-test/`.
 - The old files of the domain are in the archive of the planning area. The build does not make files in the domain until stage two.
 
@@ -272,7 +274,9 @@ Each file and each folder outside the planning area has metadata files next to i
 
 During the planning, the source of each How it works file and each Details file is in the mirror tree of the planning area, `vision/tree/agent-os/`. The build copies each file next to its item. The knowledge base agent writes these files with the `file-index` skill. It writes the children before their folders.
 
-Its docs: `agent-os.index.md` and the `file-index` skill, `agents/system/.claude/skills/file-index/SKILL.md`.
+`docs/metadata.md` tells all of the logic, step by step, in ASD-STE100.
+
+Its docs: `docs/metadata.md`, `agent-os.index.md` and the `file-index` skill, `agents/system/.claude/skills/file-index/SKILL.md`.
 
 ### The planning area
 
@@ -284,7 +288,7 @@ Its docs: `agent-os.index.md` and the `file-index` skill, `agents/system/.claude
 - `vision/docs/changelog.md` records the changes. The newest change is first.
 - `vision/docs/file-tree.md` contains the tree notes: the planned tree and one section for each file and each folder.
 - `vision/docs/` also contains topic notes for agents: `overview.md`, `architecture.md`, `conventions.md`, `safety.md`, `flows.md`, `data-schemas.md`, `glossary.md`, `metrics.md`, `roadmap.md`, `feature-map.md`, `common/`, `how-to/` and `index/`. `index/` contains the knowledge map.
-- `vision/docs/prediction-market-agents/` contains the notes of the prediction-market domain.
+- `vision/docs/prediction-market-agents/` contains the notes of the prediction-market domain. A copy of these notes is in `agents/trading/prediction-market/docs/`.
 - `vision/plans/` contains one plan for each change request, and `index.json`.
 - `vision/.claude/` contains the planning copies of the helper agents, the skills and the working memory (`memory/`). It also contains the notes behind each doc (`knowledge/sources/`).
 - `vision/tools/` contains the build scripts: `parse.py`, `enrich.py`, `materialize.py`, `tabs.py`, `build_map.py`, `index_files.py` and `check_page.js`. It also contains `overrides.json`, which keeps the owner's page edits in the data.
@@ -343,13 +347,13 @@ After stage two, we build the machinery of the system. We start the first strate
 | Agents | `agents/agents.index.md` | The domains and the standard folder |
 | The system | `agents/system/docs/README.md` | The exact description of each shared part of the system |
 | Trading | `agents/trading/docs/README.md` | The trading domains and their research |
-| The prediction-market domain | `agents/trading/prediction-market/docs/` | Stage two. Only the folder exists |
+| The prediction-market domain | `agents/trading/prediction-market/docs/` | All the trading notes at this time. Its README comes in stage two |
 | Apps | `apps/docs/README.md` | Each app and how we add apps |
 | The project IDE | `apps/project-IDE/docs/README.md` | The full documentation of the IDE |
 | The IDE server | `apps/project-IDE/server/README.md` | How to operate the page on the owner's server |
 | Keys | `.secrets/.secrets.index.md` | How we keep keys |
 | Git ignore rules | `.gitignore.index.md` | Each ignore rule |
-| Metadata files | `agent-os.index.md`, `agents/system/.claude/skills/file-index/SKILL.md` | How to write each How it works file |
+| Metadata files | `docs/metadata.md`, `agents/system/.claude/skills/file-index/SKILL.md` | All of the metadata logic, and how to write each metadata file |
 | The planning area | `vision/docs/README.md`, `vision/tools/README.md` | The knowledge base and the build |
 
 ## Still open in the design

@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-13T12:02:19Z",
+ "built": "2026-10-14T08:00:31Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "fc00a2c0cdd5",
+   "hash": "ef7f8327981f",
    "entries": []
   },
   "conventions.md": {
@@ -147,7 +147,7 @@
   },
   "decisions.md": {
    "title": "Agent OS: Decisions (v1.13)",
-   "hash": "4d95407790f7",
+   "hash": "d980b76c5d50",
    "entries": [
     "d-001",
     "d-002",
@@ -213,7 +213,9 @@
     "d-062",
     "d-063",
     "d-064",
-    "d-065"
+    "d-065",
+    "d-066",
+    "d-067"
    ]
   },
   "feature-map.md": {
@@ -6221,6 +6223,48 @@
    ],
    "inherited_by": [],
    "chars": 1107
+  },
+  "d-066": {
+   "id": "d-066",
+   "doc": "decisions.md",
+   "heading": "D-066: No memory folder in git; agents use the docs and the metadata",
+   "level": 3,
+   "line": 653,
+   "applies_raw": [
+    "[53.4]"
+   ],
+   "sources": [
+    "in-20261013-no-memory-folder"
+   ],
+   "status": "decided",
+   "hash": "2d1057c4968e",
+   "nodes": [
+    "n-53.4"
+   ],
+   "inherited_by": [],
+   "chars": 1091
+  },
+  "d-067": {
+   "id": "d-067",
+   "doc": "decisions.md",
+   "heading": "D-067: The trading notes live in the prediction-market docs; the metadata logic is a top-level doc",
+   "level": 3,
+   "line": 661,
+   "applies_raw": [
+    "[19.6]",
+    "[57]"
+   ],
+   "sources": [
+    "in-20261014-metadata-logic"
+   ],
+   "status": "decided",
+   "hash": "9eb46ad0478d",
+   "nodes": [
+    "n-19.6",
+    "n-57"
+   ],
+   "inherited_by": [],
+   "chars": 1142
   },
   "fm-data-collection-workers": {
    "id": "fm-data-collection-workers",
@@ -20231,7 +20275,7 @@
     "vis-q-hosting"
    ],
    "inherited": [],
-   "basis": "68e208adc1ff",
+   "basis": "987e3ba12bb6",
    "summary_state": "fresh"
   },
   "n-48": {
@@ -20282,10 +20326,11 @@
    "direct": [
     "arch-docs",
     "d-064",
+    "d-067",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "b3f59fec5849",
+   "basis": "f41063a68e23",
    "summary_state": "fresh"
   },
   "n-57.1": {
@@ -23266,7 +23311,7 @@
     "term-domain"
    ],
    "inherited": [],
-   "basis": "d58d060eca40",
+   "basis": "7a4d1fb2498e",
    "summary_state": "fresh"
   },
   "n-56.2": {
@@ -23479,7 +23524,7 @@
     "vis-q-mvp"
    ],
    "inherited": [],
-   "basis": "cd7a28057d81",
+   "basis": "adaed12fa917",
    "summary_state": "fresh"
   },
   "n-19.1": {
@@ -24138,13 +24183,14 @@
     "d-052",
     "d-053",
     "d-058",
+    "d-067",
     "fm-agent-creation",
     "term-docs-pattern",
     "ov-where",
     "tr-ov-where"
    ],
    "inherited": [],
-   "basis": "8bca72a320d4",
+   "basis": "6cca2820fc4c",
    "summary_state": "fresh"
   },
   "n-19.6.16": {
@@ -26178,10 +26224,11 @@
     "d-055",
     "d-064",
     "d-065",
+    "d-066",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "377d763e090d",
+   "basis": "042669f8ed1d",
    "summary_state": "fresh"
   },
   "n-53.4.1": {
@@ -29263,6 +29310,94 @@
    ],
    "entries": [
     "d-065"
+   ]
+  },
+  "in-20261013-leave-vision": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-leave-vision.md",
+   "categories": [
+    "structure",
+    "process"
+   ],
+   "summary": "What the system still needs from vision/ to live without it.",
+   "processed_into": [
+    "plans/2026-10-12-claude-md-stage-one.md"
+   ],
+   "entries": []
+  },
+  "in-20261013-vision-files": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-vision-files.md",
+   "categories": [
+    "structure"
+   ],
+   "summary": "A detailed tree of what happens to every file in vision/.",
+   "processed_into": [
+    "plans/2026-10-12-claude-md-stage-one.md"
+   ],
+   "entries": []
+  },
+  "in-20261013-sync-and-memory": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-sync-and-memory.md",
+   "categories": [
+    "structure"
+   ],
+   "summary": "How the tree syncs with the disk, and why the memory notes are needed.",
+   "processed_into": [
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md"
+   ],
+   "entries": []
+  },
+  "in-20261013-no-memory-folder": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-no-memory-folder.md",
+   "categories": [
+    "structure"
+   ],
+   "summary": "No memory folder in the new version: agents use the docs and metadata.",
+   "processed_into": [
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md",
+    "decisions.md#d-066",
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision-files.md"
+   ],
+   "entries": [
+    "d-066"
+   ]
+  },
+  "in-20261013-ide-on-server": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-ide-on-server.md",
+   "categories": [
+    "ide"
+   ],
+   "summary": "Will the IDE work on another server the same way after the vision move.",
+   "processed_into": [
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md"
+   ],
+   "entries": []
+  },
+  "in-20261014-metadata-logic": {
+   "at": "2026-10-14",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-14-trading-docs-metadata-logic.md",
+   "categories": [
+    "structure",
+    "docs"
+   ],
+   "summary": "Put all trading information into the docs; write the full metadata logic in ASD-STE100 in the top-level docs.",
+   "processed_into": [
+    "docs/metadata.md",
+    "agents/trading/prediction-market/docs/",
+    "decisions.md#d-067"
+   ],
+   "entries": [
+    "d-067"
    ]
   }
  },

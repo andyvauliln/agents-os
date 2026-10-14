@@ -10,7 +10,7 @@ A trading domain is one area of trading, for example prediction markets. Each tr
 
 The first trading domain is prediction markets on Polymarket. A new trading domain starts as a copy of the prediction-market domain. Then it changes only its own parts.
 
-Status: the trading docs and the research studies exist. The prediction-market domain has only empty folders. Its old files are in an archive. The project writes this domain again in stage two. No part that trades exists at this time.
+Status: the trading docs and the research studies exist. The prediction-market domain has empty folders. Its `docs/` folder contains all the trading notes of the project. Its other old files are in an archive. The project writes this domain again in stage two. No part that trades exists at this time.
 
 This document gives a full and exact description of each part of `agents/trading/`. It also tells what each trading domain contains, and where the docs of each part are. It does not tell how an agent makes decisions. The vision, `agents/trading/docs/vision.md`, tells why trading has its own folder, how trading must operate and the rules.
 
@@ -22,7 +22,7 @@ This document gives a full and exact description of each part of `agents/trading
 |---|---|---|
 | Trading's docs | Tell what all trading domains share, how to make a new domain and how to build this folder again | `agents/trading/docs/` |
 | Research studies | Give the start information for the trading domains | `agents/trading/researches/` |
-| Prediction-market domain | The first trading domain. Stage two. Folders only at this time | `agents/trading/prediction-market/` |
+| Prediction-market domain | The first trading domain. Stage two. At this time: folders and the trading notes | `agents/trading/prediction-market/` |
 | Later trading domains | Copies of the prediction-market domain. The owner asks for them | `agents/trading/[domain]/`. None at this time |
 | Trading dashboard | The dashboard of the prediction-market domain. Empty | `apps/trading-ui/` |
 
@@ -113,11 +113,11 @@ Each trading domain is a full domain of the Agent OS. Each domain has its own fo
 - one strategy, `strategy-1-agent/`;
 - one example trading agent below the strategy, `pm-strategy-1.momentum-v1.opus55-test/`. The word "momentum" is only a placeholder.
 
-The old files of the domain are in `vision/archive/2026-10-12/prediction-market/`. Its trading notes are in `vision/docs/prediction-market-agents/`. In stage two, the project writes the domain again from these files. The domain then gets its own vision, README and rebuild prompt.
+The old files of the domain are in `vision/archive/2026-10-12/prediction-market/`. Its docs folder `agents/trading/prediction-market/docs/` already contains all the trading knowledge of the project. It contains the trading notes, the how-to guides, the common designs, the list of trading accounts, the outlines of the docs, the notes for the vision, and the trading parts from the old README and rebuild prompt of the system. In stage two, the project writes the domain again from these files. The domain then gets its own vision, README and rebuild prompt.
 
 **Later trading domains** are copies of the prediction-market domain, for example copy trading. The owner asks for them. At this time, none is in the tree.
 
-Its docs: `agents/trading/prediction-market/docs/`. This folder is empty until stage two adds its `README.md`.
+Its docs: `agents/trading/prediction-market/docs/`. This folder contains the trading notes at this time. Stage two adds its `README.md`.
 
 ### What every trading domain holds
 
@@ -153,7 +153,7 @@ Names use only lowercase letters, digits, `-` and `.`. The maximum length is 64 
 
 A changed setting, instruction or script makes a new trading agent. Then `v[N]` increases by one. A different model changes the model part of the name. Do not change or use again a name. A test version and a live version are different agents.
 
-Its docs: `vision/docs/prediction-market-agents/trading-conventions.md`, until the project writes the domain notes again
+Its docs: `agents/trading/prediction-market/docs/trading-conventions.md`
 
 ### Accounts, keys and real money
 
@@ -179,7 +179,7 @@ Only the owner can:
 
 An agent cannot approve an account. This is true for itself and for other agents.
 
-Its docs: `vision/docs/prediction-market-agents/trading-safety.md`, until the project writes the domain notes again
+Its docs: `agents/trading/prediction-market/docs/trading-safety.md`
 
 ### Test and live
 
@@ -191,7 +191,7 @@ At this time, agents place orders only on blockchains. They can use all networks
 
 Each decision script checks two stop switches before each order: the general stop switch of the system and the order stop switch of the domain. It does this in test mode and in live mode. The two stop switches are proposals. The effect of the order stop switch on open positions is an open question.
 
-Its docs: `vision/docs/prediction-market-agents/how-to/go-live-with-money.md`, until the project writes the domain notes again
+Its docs: `agents/trading/prediction-market/docs/how-to/go-live-with-money.md`
 
 ### Metrics and comparing versions
 
@@ -205,7 +205,7 @@ The system measures trading agents on money. It also uses the cost, speed and er
 
 The system compares the versions of one strategy over the same period and the same capital. It compares test results with test results. The measures that decide success are an open question.
 
-Its docs: `vision/docs/prediction-market-agents/trading-metrics.md`, until the project writes the domain notes again
+Its docs: `agents/trading/prediction-market/docs/trading-metrics.md`
 
 ### Making a new trading domain
 
@@ -234,7 +234,7 @@ Its docs: `apps/trading-ui/trading-ui.index.md`
 | Trading's docs | `agents/trading/docs/docs.index.md` | the purpose of each doc |
 | Research studies | `agents/trading/researches/researches.index.md` | the studies and how agents use them |
 | Prediction-market domain | `agents/trading/prediction-market/docs/` | empty at this time. Its vision, README and rebuild prompt come in stage two |
-| Trading notes (kept) | `vision/docs/prediction-market-agents/` | all the trading rules, formats, flows and metrics |
+| Trading notes (kept) | `agents/trading/prediction-market/docs/` | all the trading rules, formats, flows and metrics |
 | Trading dashboard | `apps/trading-ui/trading-ui.index.md` | the planned dashboard |
 | The system above | `agents/system/docs/README.md` | all the parts that all agents share |
 

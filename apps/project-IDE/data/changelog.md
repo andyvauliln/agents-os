@@ -2,7 +2,14 @@
 
 System-level history: what changed in the OS design, when, and from which decision. Newest first. Per-agent changes stay in each agent's own `docs/changes.md` [46]. The knowledge agent adds one line per processed input or system change (knowledge-intake, step 6).
 
+## 2026-10-14
+- **The trading notes are in the prediction-market docs (D-067).** The owner asked that all current trading information be in the docs. The trading notes, the vision notes and the trading parts of the old system docs now sit in `agents/trading/prediction-market/docs/`, each with its metadata files.
+- **The metadata logic, in ASD-STE100 (D-067).** The owner asked for a full explanation of the metadata logic in the top-level docs. `docs/metadata.md` tells all of it; the project README, the rebuild prompt and CLAUDE.md point to it. Found items now show their own How it works and Details on the page.
+
 ## 2026-10-13
+- **The IDE on a server after the move.** The owner asked if the IDE works on another server as it does here. Yes; only the server settings change. A full server test after the move is added to the leave-vision plan.
+- **No memory folder in git (D-066).** The owner asked why the new version needs memory notes when agents should use the docs and metadata. Checked: nearly all is in the docs already; the few missing wishes, rules and open questions go into CLAUDE.md, the trading README and the questions files; cloud-only facts stay in the cloud project memory.
+- **How the tree follows the disk, and the memory notes.** The owner asked how the tree syncs with the disk and why the memory notes are needed. Answered step by step; proposed to keep only the notes that are still rules and fold the history notes into the decisions and the changelog.
 - **The tree is the files on disk (D-065).** The owner asked to remove all logic about planned items. The page leaves out anything that is only in the tree notes, the build creates nothing from the plan, and the "planned" switch is gone. Files with nothing written in them are marked "empty", and an "empty" filter lists only them (30 outside `vision/`).
 - **No item twice in the tree.** The owner asked what logic decides planned and not planned files. Checking it found 30 items listed twice: a planned item written with its folder in the name (`vision-doc/SKILL.md` under `skills/`) and the same file found on disk inside the found folder. `enrich.py` now moves the planned item into the found folder under its own name.
 - **Edit a block as it looks.** The owner asked that a double-click in the Read view not switch the block to Markdown. The block itself is now editable (paragraphs, headings, lists, tables, code blocks, quotes); Save turns it back into Markdown and writes only its lines. A Markdown button still opens the source; the front matter always opens as source. A click outside the block saves it and closes it; Esc closes without saving.

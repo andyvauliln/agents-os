@@ -2146,6 +2146,114 @@
     "plans/2026-10-12-claude-md-stage-one.md"
    ],
    "answered": false
+  },
+  {
+   "id": "in-20261013-leave-vision",
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-13-leave-vision.md",
+   "chars": 124,
+   "categories": [
+    "structure",
+    "process"
+   ],
+   "summary": "What the system still needs from vision/ to live without it.",
+   "processed_into": [
+    "plans/2026-10-12-claude-md-stage-one.md"
+   ],
+   "answered": false
+  },
+  {
+   "id": "in-20261013-vision-files",
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-13-vision-files.md",
+   "chars": 247,
+   "categories": [
+    "structure"
+   ],
+   "summary": "A detailed tree of what happens to every file in vision/.",
+   "processed_into": [
+    "plans/2026-10-12-claude-md-stage-one.md"
+   ],
+   "answered": false
+  },
+  {
+   "id": "in-20261013-sync-and-memory",
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-13-sync-and-memory.md",
+   "chars": 160,
+   "categories": [
+    "structure"
+   ],
+   "summary": "How the tree syncs with the disk, and why the memory notes are needed.",
+   "processed_into": [
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md"
+   ],
+   "answered": true
+  },
+  {
+   "id": "in-20261013-no-memory-folder",
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-13-no-memory-folder.md",
+   "chars": 331,
+   "categories": [
+    "structure"
+   ],
+   "summary": "No memory folder in the new version: agents use the docs and metadata.",
+   "processed_into": [
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md",
+    "decisions.md#d-066",
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision-files.md"
+   ],
+   "answered": true
+  },
+  {
+   "id": "in-20261013-ide-on-server",
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-13-ide-on-server.md",
+   "chars": 84,
+   "categories": [
+    "ide"
+   ],
+   "summary": "Will the IDE work on another server the same way after the vision move.",
+   "processed_into": [
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md"
+   ],
+   "answered": true
+  },
+  {
+   "id": "in-20261014-metadata-logic",
+   "at": "2026-10-14",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-14-trading-docs-metadata-logic.md",
+   "chars": 236,
+   "categories": [
+    "structure",
+    "docs"
+   ],
+   "summary": "Put all trading information into the docs; write the full metadata logic in ASD-STE100 in the top-level docs.",
+   "processed_into": [
+    "docs/metadata.md",
+    "agents/trading/prediction-market/docs/",
+    "decisions.md#d-067"
+   ],
+   "answered": true
   }
  ]
 }

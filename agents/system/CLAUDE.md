@@ -12,7 +12,7 @@ Nothing of the system runs yet. The files on disk are the tree: what exists is t
 2. Go through every file and folder: write custom views for each kind of file, and make every metadata file correct.
 3. Finish the docs at four levels: the project (`docs/`), the system domain (`agents/system/docs/`), trading in general (`agents/trading/docs/`) and the apps (`apps/docs/`, `apps/project-IDE/docs/`).
 
-**Stage two, not now:** the prediction-market domain and everything under it (`agents/trading/prediction-market/`, its strategy and variant folders). Only its folders exist; its old files are in `vision/archive/2026-10-12/prediction-market/`. Do not add, write or plan anything there until the owner starts stage two.
+**Stage two, not now:** the prediction-market domain and everything under it (`agents/trading/prediction-market/`, its strategy and variant folders). Only its folders exist, and its `docs/` holds all the trading notes the project has (each with its metadata files). Its other old files are in `vision/archive/2026-10-12/prediction-market/`. Do not add, write or plan anything else there until the owner starts stage two. Keep the trading notes in its `docs/` up to date when trading knowledge changes.
 
 ## Read first, in this order
 
@@ -21,8 +21,9 @@ Nothing of the system runs yet. The files on disk are the tree: what exists is t
 3. `agents/system/docs/vision.md`: the system vision.
 4. `agents/system/docs/README.md`: the system README.
 5. `docs/file-tree.md`: every path in the repository, plain, without metadata. The IDE build writes it every round.
-6. `apps/project-IDE/docs/README.md`: the IDE, in full: the page, its modes and tabs, how it is built and checked, the server, how the owner's edits come back.
-7. The newest entries of `vision/docs/changelog.md` and `git log --oneline -20`: what changed since your last round.
+6. `docs/metadata.md`: the full logic of the metadata files, in ASD-STE100. Read it before you write or change any metadata file.
+7. `apps/project-IDE/docs/README.md`: the IDE, in full: the page, its modes and tabs, how it is built and checked, the server, how the owner's edits come back.
+8. The newest entries of `vision/docs/changelog.md` and `git log --oneline -20`: what changed since your last round.
 
 Every `README.md` has an ASD-STE100 twin, `README.asd.md`, next to it. Read the README; the twin is for the owner to compare. Before you change a file or folder, read its How it works file: `x.index.md` beside a file `x.md`, or `f/f.index.md` inside a folder `f/`.
 
@@ -48,7 +49,7 @@ Every `README.md` has an ASD-STE100 twin, `README.asd.md`, next to it. Read the 
 - Never change the owner's words in a stored input, and never drop their words from a How it works file they edited on the page.
 - Plan every change that alters the system, its structure, code or docs (skill `change-plan`), show the plan to the owner, then build it. Small fixes need no plan.
 - The page tree always equals the files on disk. There is no separate plan of files: to add a file or folder, create it.
-- Every file and folder outside `vision/` has an `x.index.md` and an `x.meta.json`. The extra tab files (`x.example.md`, `x.questions.md`, `README.asd.md`) exist only where they are written; the page shows a tab only when its file exists.
+- Every file and folder outside `vision/` has an `x.index.md` and an `x.meta.json` (all the rules are in `docs/metadata.md`). The extra tab files (`x.example.md`, `x.questions.md`, `README.asd.md`) exist only where they are written; the page shows a tab only when its file exists.
 - One job per code file. Group related ones in a folder, each with its own How it works.
 - Generated files are rebuilt, never merged by hand: the page data, the knowledge map, `docs/file-tree.md`.
 - Ask the owner before anything hard to undo: deleting, rewriting history, merging into `main`, anything that acts in the outside world. A Delete the owner pressed on the page is that ask for that one item.

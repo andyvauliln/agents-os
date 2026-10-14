@@ -18,6 +18,12 @@ import json, os, sys
 from collections import Counter
 
 STAGE_TWO = "agents/trading/prediction-market/"   # stage two (owner, 2026-10-12): only its folders exist, nothing is made inside
+PM_DOCS = STAGE_TWO + "docs"   # except its docs: all trading knowledge we have, with metadata like any item (owner, 2026-10-14)
+
+
+def stage_two(rel):
+    rel = rel.rstrip("/")
+    return rel.startswith(STAGE_TWO) and not (rel == PM_DOCS or rel.startswith(PM_DOCS + "/"))
 META_ENDS = (".index.md", ".meta.json", ".gitkeep", ".example.md", ".questions.md", ".env.example")   # metadata and tab files have none of their own
 
 REPO = os.path.abspath(os.environ.get("REPO_DIR") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
@@ -59,7 +65,7 @@ def scanned_meta(nodes):
     by_dir = {}
     for n in found:
         rel = n["path"][len("agent-os/"):].rstrip("/")
-        if rel.startswith(("vision/", STAGE_TWO)) or rel == "vision" or n["name"].rstrip("/").endswith(META_ENDS) or n["name"] == ".env":
+        if rel.startswith("vision/") or stage_two(rel) or rel == "vision" or n["name"].rstrip("/").endswith(META_ENDS) or n["name"] == ".env":
             continue
         by_dir.setdefault(os.path.dirname(rel), []).append((n, rel))
     for d, items in by_dir.items():
@@ -121,7 +127,7 @@ def main(data_file):
             continue
         rel = disk(path[len("agent-os/"):])
         full = os.path.join(REPO, rel.rstrip("/"))
-        if not os.path.exists(full) or rel.startswith(STAGE_TWO):   # only what is on disk; stage two stays as it is
+        if not os.path.exists(full) or stage_two(rel):   # only what is on disk; stage two stays as it is
             continue
         metas += copy_meta(n, rel)
         if n["type"] == "folder":

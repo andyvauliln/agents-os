@@ -101,7 +101,8 @@ agent-os/                          # the repository root (the GitHub repository 
 │   ├── README.md                  # + README.index.md, README.meta.json, README.example.md, README.questions.md
 │   ├── README.asd.md              # + README.asd.index.md, README.asd.meta.json, README.asd.example.md, README.asd.questions.md
 │   ├── rebuild-prompt.md          # this file; + rebuild-prompt.index.md, .meta.json, .example.md, .questions.md
-│   └── file-tree.md               # built; + file-tree.index.md, file-tree.meta.json
+│   ├── file-tree.md               # built; + file-tree.index.md, file-tree.meta.json
+│   └── metadata.md                # the metadata logic in ASD-STE100; + metadata.index.md, metadata.meta.json
 ├── agents/
 │   ├── agents.index.md
 │   ├── agents.meta.json
@@ -119,7 +120,7 @@ agent-os/                          # the repository root (the GitHub repository 
 
 ## Conventions
 
-**Docs per level.** Every level's `docs/` folder holds `vision.md`, `README.md`, `README.asd.md` and `rebuild-prompt.md`, written in that order. The project level adds `file-tree.md`. Each doc has its How it works and Details files; the four written docs also have their Example and Questions files. Levels, with their docs folders:
+**Docs per level.** Every level's `docs/` folder holds `vision.md`, `README.md`, `README.asd.md` and `rebuild-prompt.md`, written in that order. The project level adds `file-tree.md` and `metadata.md`. Each doc has its How it works and Details files; the four written docs also have their Example and Questions files. Levels, with their docs folders:
 
 | Level | Docs folder |
 |---|---|
@@ -262,7 +263,8 @@ Write the project docs in this order, each with its own skill when the skills ex
 3. `docs/README.asd.md`: `README.md` again in ASD-STE100, as under "Conventions".
 4. `docs/rebuild-prompt.md`: this file.
 5. Each doc's Example and Questions files.
-6. `docs/file-tree.md`: never written by hand. The IDE build writes it every round: every path in the repository, one per line, in tree order, with nothing else on the line. Until the build exists, create it empty.
+6. `docs/metadata.md`: the full logic of the metadata files, in ASD-STE100, in fifteen numbered sections: what metadata is; why the system needs it; the metadata files of an item; how the names are made; the How it works file; the Details file with every field; Example, Questions and the ASD-STE100 twin; when a file becomes stale; how the build finds stale files (the basis, confirm, the ripple, orphans); how to update metadata after a change; how the build uses it; how the page shows and changes it; who does what; the rules; what is not built yet. It must agree with the `file-index` skill.
+7. `docs/file-tree.md`: never written by hand. The IDE build writes it every round: every path in the repository, one per line, in tree order, with nothing else on the line. Until the build exists, create it empty.
 
 If the owner handed you the current docs, copy them in unchanged instead of writing them, then check them against this list.
 
@@ -286,7 +288,7 @@ Check: when copied, `git diff --stat` against the owner's material shows no chan
 2. Create `.secrets/` (never any key value). Check: the `.secrets/` checks.
 3. Copy `vision/` if the owner handed it to you. Check: the `vision/` check.
 4. Create `agents/` and `apps/` with their metadata files. Check: their check.
-5. Write or copy `docs/` (step 6 of its list waits for the build). Check: the `docs/` check.
+5. Write or copy `docs/` (step 7 of its list waits for the build). Check: the `docs/` check.
 6. Follow the lower rebuild prompts, in this order, running each one's own checks:
    1. `agents/system/docs/rebuild-prompt.md`: the system agent, the shared parts, `agents/system/CLAUDE.md`, the helper agents and skills, the build scripts.
    2. `apps/docs/rebuild-prompt.md`: the apps folder, `apps/temp/`, `apps/trading-ui/`, and in its turn `apps/project-IDE/docs/rebuild-prompt.md`, the File Tree page, its server and its data.

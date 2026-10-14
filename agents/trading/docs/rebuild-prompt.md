@@ -9,7 +9,7 @@ You build:
 1. the folder `agents/trading/` with its How it works and Details files;
 2. trading's docs in `agents/trading/docs/`: `vision.md`, `README.md`, `README.asd.md`, `rebuild-prompt.md` (this file), each with its metadata files;
 3. the research folder `agents/trading/researches/`, restored as it is;
-4. the prediction-market domain `agents/trading/prediction-market/` as empty folders only.
+4. the prediction-market domain `agents/trading/prediction-market/` as empty folders, with the trading notes in its `docs/`.
 
 "The same" means: the acceptance checks at the end all pass.
 
@@ -30,7 +30,7 @@ A trading domain is one area of trading, such as prediction markets. It is a ful
 
 Every trading agent starts in test mode. Only the owner gives an agent an account with real money, and every new strategy configuration starts only after the owner reads a report on it and approves it. A change to a running agent makes a new test version with a new name. Orders are placed only on blockchains for now; centralised exchanges and other apps are sources of information only. Every order is logged.
 
-The first trading domain is prediction markets on Polymarket, in `agents/trading/prediction-market/`. In stage one, the current stage, it is only its empty folders; its earlier files are kept in `vision/archive/2026-10-12/prediction-market/` and its trading notes in `vision/docs/prediction-market-agents/`. A later trading domain, such as copy trading, is a copy of it, made with `create-agent` when the owner asks.
+The first trading domain is prediction markets on Polymarket, in `agents/trading/prediction-market/`. In stage one, the current stage, it is its empty folders plus its `docs/`, which holds the trading notes; its other earlier files are kept in `vision/archive/2026-10-12/prediction-market/`. A later trading domain, such as copy trading, is a copy of it, made with `create-agent` when the owner asks.
 
 ## Ground rules
 
@@ -78,7 +78,7 @@ agents/trading/
 │   ├── prediction-market-research/          42 studies 01-34 and 50-57, _evidence/, _pipeline/
 │   ├── self-improving-agents/               one study: 01-approaches-and-architectures.md
 │   └── trding-agents-arhiteches/            README.md, index.html, specs/, diagrams/
-└── prediction-market/                       the first trading domain: empty folders only (stage two)
+└── prediction-market/                       the first trading domain: empty folders and the notes in docs/ (stage two)
     ├── .claude/
     │   ├── agent-memory/[subagent-name]/
     │   ├── agent-memory-local/
@@ -235,9 +235,9 @@ Never edit a study's content. If the history is not available, ask the owner; do
 
 Check: `ls agents/trading/researches/prediction-market-research/[0-9]*.md | grep -v index | wc -l` prints `42`.
 
-### The prediction-market domain (stage one: folders only)
+### The prediction-market domain (stage one: folders and the trading notes)
 
-Create every folder under `agents/trading/prediction-market/` exactly as in the tree, and put one `.gitkeep` in each leaf folder. Create nothing else there: no settings, scripts, notes, docs or metadata files. The domain is built in stage two from its own prompt, `agents/trading/prediction-market/docs/rebuild-prompt.md`, written from `vision/archive/2026-10-12/prediction-market/` and `vision/docs/prediction-market-agents/`. Its folder names stay as they are until the owner decides otherwise.
+Create every folder under `agents/trading/prediction-market/` exactly as in the tree, and put one `.gitkeep` in each empty leaf folder. Copy the trading notes into its `docs/` as they are, each with its metadata files: the ten `trading-*.md` notes, `doc-outlines.md`, `trading-vision-notes.md`, `README-trading-parts.md`, `rebuild-prompt-trading-parts.md`, `common/` (three files), `how-to/` (four guides) and `index/accounts.md`. Create nothing else there: no settings or scripts. The domain is built in stage two from its own prompt, `agents/trading/prediction-market/docs/rebuild-prompt.md`, written from `vision/archive/2026-10-12/prediction-market/` and the notes in its `docs/`. Its folder names stay as they are until the owner decides otherwise.
 
 Check: `find agents/trading/prediction-market -type f ! -name .gitkeep` prints nothing, and `find agents/trading/prediction-market -name .gitkeep | wc -l` prints `60`.
 
@@ -279,7 +279,7 @@ The prediction-market domain's own prompt runs later, in stage two. Later tradin
 ## Do not build
 
 - **Trading's own agent, settings, scripts or jobs** in `agents/trading/`: leave nothing; shared trading parts stay in a domain until two domains need them.
-- **The prediction-market domain's files:** leave its empty folders; stage two.
+- **The prediction-market domain's files:** leave its empty folders and its notes as they are; stage two.
 - **A second trading domain such as `agents/trading/copytrading/`:** leave nothing until the owner asks.
 - **Renamed folders such as `strategy-1/strategy-1.v1.Claude-Opus5.5/`:** keep today's names until the owner decides.
 - **The order stop switch's handling of open positions, live capital limits, success metrics, the trade-alert channel:** leave nothing; they are open.

@@ -60,7 +60,7 @@ agent-os/
 │   └── trading/                 the folder of trading domains
 │       ├── docs/                trading's own docs
 │       ├── researches/          the research studies
-│       └── prediction-market/   the first trading domain: folders only, stage two
+│       └── prediction-market/   the first trading domain: folders and trading notes, stage two
 ├── apps/
 │   ├── docs/                    the docs for all apps
 │   ├── project-IDE/             the File Tree page, its server and its data
@@ -103,6 +103,7 @@ Its docs: `README.index.md` and `HANDOFF.index.md`.
 - `docs/README.asd.md`: this document again in ASD-STE100 Simplified Technical English, with the same content and section order, so the two can be compared. `README.md` is its source.
 - `docs/rebuild-prompt.md`: the instructions an AI coding agent follows to build the repository's top level again, then each level in order through that level's own rebuild prompt.
 - `docs/file-tree.md`: a plain list of every path in the repository, one per line, with no metadata. It is written by the IDE build every round, never by hand.
+- `docs/metadata.md`: the full logic of the metadata files, in ASD-STE100: which files every item has and how they are named, what each one holds, when one goes stale and how the build finds it, how an agent updates them after a change, how the build and the page use them, the rules, and what is not built yet.
 
 Every doc has its How it works and Details files beside it. The four written docs also have `x.example.md`, the outline of the doc (its headings and one line on what goes under each), and `x.questions.md`, the open questions for the owner about it.
 
@@ -138,7 +139,7 @@ Its docs: `agents/system/docs/README.md`.
 
 - `agents/trading/docs/` holds trading's four docs: what trading as a whole is for, how its domains relate, and how they are built.
 - `agents/trading/researches/` holds the research studies: 42 studies of ways to make money on prediction markets with their evidence and the pipeline that wrote them (`prediction-market-research/`), a study of agents that improve themselves (`self-improving-agents/`), and a study of how trading agents are built (`trding-agents-arhiteches/`).
-- `agents/trading/prediction-market/` is the first trading domain. It is stage two: only its folders exist, each empty folder holding a `.gitkeep`, including its first strategy agent `strategy-1-agent/` and that strategy's first trading agent `pm-strategy-1.momentum-v1.opus55-test/`. Its earlier files are kept in the planning area's archive. The build creates nothing inside it until stage two.
+- `agents/trading/prediction-market/` is the first trading domain. It is stage two: only its folders exist, each empty folder holding a `.gitkeep`, including its first strategy agent `strategy-1-agent/` and that strategy's first trading agent `pm-strategy-1.momentum-v1.opus55-test/`. Its `docs/` already holds all the trading notes the project has, each with its metadata files. Its other earlier files are kept in the planning area's archive. The build creates nothing else inside it until stage two.
 
 The next trading domain, copy trading, will be copied from the prediction-market domain when the owner asks.
 
@@ -202,13 +203,15 @@ A folder `f/` keeps its own as `f/f.index.md` and `f/f.meta.json` inside it. A f
 
 While we plan, the source of each How it works and Details file is in the planning area's mirror tree, `vision/tree/agent-os/`, and the build copies it next to its item. The knowledge base agent writes them with the `file-index` skill, children before their folders.
 
-Its docs: `agent-os.index.md` and the `file-index` skill, `agents/system/.claude/skills/file-index/SKILL.md`.
+The full logic, step by step in ASD-STE100, is in `docs/metadata.md`.
+
+Its docs: `docs/metadata.md`, `agent-os.index.md` and the `file-index` skill, `agents/system/.claude/skills/file-index/SKILL.md`.
 
 ### The planning area
 
 `vision/` holds everything used to plan the project while it is planned. It is the workshop; the rest of the repository is the system as designed.
 
-- `vision/docs/`: the knowledge base. `inputs/` keeps every owner input word for word with its answer (and `index.json`); `decisions.md` keeps every decision; `changelog.md`, newest first; `file-tree.md`, the tree notes, with the planned tree and one section per file and folder; topic notes for agents (`overview.md`, `architecture.md`, `conventions.md`, `safety.md`, `flows.md`, `data-schemas.md`, `glossary.md`, `metrics.md`, `roadmap.md`, `feature-map.md`, `common/`, `how-to/`, `index/` with the knowledge map), and the prediction-market domain's notes in `prediction-market-agents/`.
+- `vision/docs/`: the knowledge base. `inputs/` keeps every owner input word for word with its answer (and `index.json`); `decisions.md` keeps every decision; `changelog.md`, newest first; `file-tree.md`, the tree notes, with the planned tree and one section per file and folder; topic notes for agents (`overview.md`, `architecture.md`, `conventions.md`, `safety.md`, `flows.md`, `data-schemas.md`, `glossary.md`, `metrics.md`, `roadmap.md`, `feature-map.md`, `common/`, `how-to/`, `index/` with the knowledge map), and the prediction-market domain's notes in `prediction-market-agents/` (copied to `agents/trading/prediction-market/docs/`).
 - `vision/plans/`: one plan per change request, with `index.json`.
 - `vision/.claude/`: the planning copies of the helper agents, skills and working memory (`memory/`), and the notes behind each doc (`knowledge/sources/`).
 - `vision/tools/`: the build scripts (`parse.py`, `enrich.py`, `materialize.py`, `tabs.py`, `build_map.py`, `index_files.py`, `check_page.js`) and `overrides.json`, the owner's page edits kept in the data.
@@ -256,13 +259,13 @@ Every round, whether it starts from a chat, the page or the AI's own work, follo
 | Agents | `agents/agents.index.md` | The domains and the standard folder |
 | The system | `agents/system/docs/README.md` | Every shared part of the system exactly |
 | Trading | `agents/trading/docs/README.md` | The trading domains and their research |
-| The prediction-market domain | `agents/trading/prediction-market/docs/` | Stage two; folder only |
+| The prediction-market domain | `agents/trading/prediction-market/docs/` | All the trading notes today; its README in stage two |
 | Apps | `apps/docs/README.md` | Every app and how apps are brought in |
 | The project IDE | `apps/project-IDE/docs/README.md` | The full documentation of the IDE |
 | The IDE server | `apps/project-IDE/server/README.md` | How to run the page on the owner's server |
 | Keys | `.secrets/.secrets.index.md` | How keys are kept |
 | What git ignores | `.gitignore.index.md` | Each ignore rule |
-| Metadata files | `agent-os.index.md`, `agents/system/.claude/skills/file-index/SKILL.md` | How every How it works file is written |
+| Metadata files | `docs/metadata.md`, `agents/system/.claude/skills/file-index/SKILL.md` | The full metadata logic; how every metadata file is written |
 | The planning area | `vision/docs/README.md`, `vision/tools/README.md` | The knowledge base and the build |
 
 ## Still open in the design

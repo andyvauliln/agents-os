@@ -2,6 +2,10 @@
 
 System-level history: what changed in the OS design, when, and from which decision. Newest first. Per-agent changes stay in each agent's own `docs/changes.md` [46]. The knowledge agent adds one line per processed input or system change (knowledge-intake, step 6).
 
+## 2026-10-14
+- **The trading notes are in the prediction-market docs (D-067).** The owner asked that all current trading information be in the docs. The trading notes, the vision notes and the trading parts of the old system docs now sit in `agents/trading/prediction-market/docs/`, each with its metadata files.
+- **The metadata logic, in ASD-STE100 (D-067).** The owner asked for a full explanation of the metadata logic in the top-level docs. `docs/metadata.md` tells all of it; the project README, the rebuild prompt and CLAUDE.md point to it. Found items now show their own How it works and Details on the page.
+
 ## 2026-10-13
 - **The IDE on a server after the move.** The owner asked if the IDE works on another server as it does here. Yes; only the server settings change. A full server test after the move is added to the leave-vision plan.
 - **No memory folder in git (D-066).** The owner asked why the new version needs memory notes when agents should use the docs and metadata. Checked: nearly all is in the docs already; the few missing wishes, rules and open questions go into CLAUDE.md, the trading README and the questions files; cloud-only facts stay in the cloud project memory.

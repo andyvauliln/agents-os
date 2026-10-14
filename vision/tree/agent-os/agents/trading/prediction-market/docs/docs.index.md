@@ -1,16 +1,16 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/
 node: n-19.6
-basis: 8bca72a320d4
+basis: 6cca2820fc4c
 written: 2026-10-07T18:56:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T08:00:17Z
 ---
 # docs/
 
 ## Summary
 
-The domain's own docs, real Markdown files. Like every level, it has a `vision.md` (why this domain and how it makes money), a `README.md` (every part of the domain, with each strategy's docs path) and a `rebuild-prompt.md`, none written yet, plus the proposed `decisions.md` and `notes.md`. It also holds the domain's trading notes, each the trading layer of the system note of the same name: `trading-overview.md`, `trading-safety.md`, `trading-metrics.md` and seven more, `doc-outlines.md`, `common/`, the `how-to/` runbooks with money and `index/accounts.md`. Trading agents link the notes they need, and `subagents.link/` gives the domain every strategy's docs. A later trading domain copies these notes.
+The domain's own docs, real Markdown files. Like every level, it has a `vision.md` (why this domain and how it makes money), a `README.md` (every part of the domain, with each strategy's docs path) and a `rebuild-prompt.md`, none written yet, plus the proposed `decisions.md` and `notes.md`. It also holds the domain's trading notes, each the trading layer of the system note of the same name: `trading-overview.md`, `trading-safety.md`, `trading-metrics.md` and seven more, `doc-outlines.md`, `common/`, the `how-to/` runbooks with money and `index/accounts.md`. Trading agents link the notes they need, and `subagents.link/` gives the domain every strategy's docs. A later trading domain copies these notes. In stage one these notes are all the trading knowledge the project has; next to them are `trading-vision-notes.md`, the ideas for the domain's vision, and `README-trading-parts.md` and `rebuild-prompt-trading-parts.md`, the trading text taken out of the system's README and rebuild prompt, which the domain's own README and rebuild prompt are written from in stage two.
 
 ## Keep in mind
 

@@ -990,6 +990,7 @@ print("real files listed:", sum(1 for x in out_nodes if x.get("scanned")))
 
 # ---- the extra tabs are real files next to the item (owner, 2026-10-12, D-064): a tab shows only when its file exists.
 # Example: x.example.md (for a .env file: .env.example); Questions: x.questions.md; ASD-STE100: README.asd.md beside README.md.
+META_TAB_ENDS = (".index.md", ".meta.json", ".example.md", ".questions.md", ".gitkeep", ".env.example")   # metadata and tab files have none of their own
 def _extra(rel):
     f = os.path.join(REPO, rel)
     if os.path.isfile(f):
@@ -1008,7 +1009,24 @@ for x in out_nodes:
         home, base = os.path.dirname(rel), os.path.basename(rel)
         fam = x.get("fam") or (base if base.startswith(".") else os.path.splitext(base)[0])
     j = lambda name: os.path.join(home, name) if home else name
-    ex_rel = j(".env.example") if x["name"] == ".env" else j(fam + ".example.md")
+    if x.get("scanned") and not x["name"].rstrip("/").endswith(META_TAB_ENDS):
+        # a found item's own How it works and Details sit next to it (owner, 2026-10-14: the metadata logic holds for
+        # every item); a file whose name would clash keeps its extension
+        if x["type"] == "file" and os.path.isfile(os.path.join(REPO, j(base + ".index.md"))):
+            fam = base
+        x["fam"] = fam
+        how_rel, meta_rel = j(fam + ".index.md"), j(fam + ".meta.json")
+        how = _extra(how_rel)
+        if how is not None:
+            body = re.sub(r"^---\n.*?\n---[ \t]*\n?", "", how, count=1, flags=re.S).strip()
+            x["how_md"] = body + "\n" if body else None
+        x["how_file"] = os.path.relpath(how_rel, "vision")   # like every How it works path: relative to vision/
+        x["meta_file"] = os.path.relpath(meta_rel, "vision")
+        try:
+            x["meta"] = json.load(open(os.path.join(REPO, meta_rel), encoding="utf-8"))
+        except (OSError, ValueError):
+            x["meta"] = None
+    ex_rel =j(".env.example") if x["name"] == ".env" else j(fam + ".example.md")
     ex = _extra(ex_rel) if x["type"] == "file" else None
     if ex is not None:
         x["example"] = {"lang": "dotenv" if x["name"] == ".env" else "markdown", "title": os.path.basename(ex_rel), "body": ex, "file": ex_rel}

@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "built": "2026-10-13T12:02:19Z",
+ "built": "2026-10-14T08:00:33Z",
  "docs": {
   "README.md": {
    "title": "Agent OS: Knowledge base (v0.2)",
@@ -46,7 +46,7 @@
   },
   "changelog.md": {
    "title": "Agent OS: Changelog (v0.5)",
-   "hash": "fc00a2c0cdd5",
+   "hash": "ef7f8327981f",
    "entries": []
   },
   "conventions.md": {
@@ -147,7 +147,7 @@
   },
   "decisions.md": {
    "title": "Agent OS: Decisions (v1.13)",
-   "hash": "4d95407790f7",
+   "hash": "d980b76c5d50",
    "entries": [
     "d-001",
     "d-002",
@@ -213,7 +213,9 @@
     "d-062",
     "d-063",
     "d-064",
-    "d-065"
+    "d-065",
+    "d-066",
+    "d-067"
    ]
   },
   "feature-map.md": {
@@ -2448,11 +2450,9 @@
     "n-24.9",
     "n-25",
     "n-26",
-    "p-agent-os-agents-system-.claude-agent-memory-subagent-name-MEMORY.md",
     "p-agent-os-agents-system-.claude-commands-command-name-.md",
     "p-agent-os-agents-system-.claude-output-styles-style-name-.md",
     "p-agent-os-agents-system-.claude-rules-topic-.md",
-    "p-agent-os-agents-system-.claude-skills-skill-name-SKILL.md",
     "p-agent-os-agents-system-.claude-workflows-workflow-name-.js"
    ],
    "inherited_by": [],
@@ -3124,14 +3124,9 @@
    ],
    "inherited_by": [
     "n-15.1",
-    "n-15.2",
-    "n-15.3",
-    "n-15.4",
     "n-15.5",
     "n-15.5.1",
     "n-16.1",
-    "n-16.2",
-    "n-16.3",
     "n-16.4",
     "n-16.4.1",
     "n-35.2"
@@ -3184,14 +3179,9 @@
    ],
    "inherited_by": [
     "n-15.1",
-    "n-15.2",
-    "n-15.3",
-    "n-15.4",
     "n-15.5",
     "n-15.5.1",
     "n-16.1",
-    "n-16.2",
-    "n-16.3",
     "n-16.4",
     "n-16.4.1",
     "n-35.2"
@@ -3653,11 +3643,9 @@
     "n-10.1.1.2",
     "n-10.1.1.3",
     "n-10.20",
-    "p-agent-os-agents-system-.claude-agent-memory-subagent-name-MEMORY.md",
     "p-agent-os-agents-system-.claude-commands-command-name-.md",
     "p-agent-os-agents-system-.claude-output-styles-style-name-.md",
-    "p-agent-os-agents-system-.claude-rules-topic-.md",
-    "p-agent-os-agents-system-.claude-skills-skill-name-SKILL.md"
+    "p-agent-os-agents-system-.claude-rules-topic-.md"
    ],
    "inherited_by": [],
    "chars": 948
@@ -6221,6 +6209,48 @@
    ],
    "inherited_by": [],
    "chars": 1107
+  },
+  "d-066": {
+   "id": "d-066",
+   "doc": "decisions.md",
+   "heading": "D-066: No memory folder in git; agents use the docs and the metadata",
+   "level": 3,
+   "line": 653,
+   "applies_raw": [
+    "[53.4]"
+   ],
+   "sources": [
+    "in-20261013-no-memory-folder"
+   ],
+   "status": "decided",
+   "hash": "2d1057c4968e",
+   "nodes": [
+    "n-53.4"
+   ],
+   "inherited_by": [],
+   "chars": 1091
+  },
+  "d-067": {
+   "id": "d-067",
+   "doc": "decisions.md",
+   "heading": "D-067: The trading notes live in the prediction-market docs; the metadata logic is a top-level doc",
+   "level": 3,
+   "line": 661,
+   "applies_raw": [
+    "[19.6]",
+    "[57]"
+   ],
+   "sources": [
+    "in-20261014-metadata-logic"
+   ],
+   "status": "decided",
+   "hash": "9eb46ad0478d",
+   "nodes": [
+    "n-19.6",
+    "n-57"
+   ],
+   "inherited_by": [],
+   "chars": 1142
   },
   "fm-data-collection-workers": {
    "id": "fm-data-collection-workers",
@@ -20231,7 +20261,7 @@
     "vis-q-hosting"
    ],
    "inherited": [],
-   "basis": "68e208adc1ff",
+   "basis": "987e3ba12bb6",
    "summary_state": "fresh"
   },
   "n-48": {
@@ -20282,10 +20312,11 @@
    "direct": [
     "arch-docs",
     "d-064",
+    "d-067",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "b3f59fec5849",
+   "basis": "f41063a68e23",
    "summary_state": "fresh"
   },
   "n-57.1": {
@@ -20842,17 +20873,7 @@
    "type": "folder",
    "parent": "n-10.1",
    "children": [
-    "n-10.1.2.1",
-    "n-10.1.2.2",
-    "n-10.1.2.3",
-    "n-10.1.2.4",
-    "n-10.1.2.7",
-    "n-10.1.2.9",
-    "n-10.1.2.10",
-    "n-10.1.2.8",
-    "n-10.1.2.5",
-    "n-10.1.2.6",
-    "p-agent-os-agents-system-.claude-skills-skill-name-SKILL.md"
+    "n-10.1.2.5"
    ],
    "file_doc": "ft-25",
    "same_as": "n-25",
@@ -20864,15 +20885,15 @@
     "road-q-shared-skills"
    ],
    "inherited": [],
-   "basis": "e64e5d527469",
-   "summary_state": "stale"
+   "basis": "05c26ab4b4a5",
+   "summary_state": "fresh"
   },
   "n-10.1.2.1": {
    "num": "10.1.2.1",
    "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
-   "name": "knowledge-intake/SKILL.md",
+   "name": "SKILL.md",
    "type": "file",
-   "parent": "n-10.1.2",
+   "parent": "r-agents-system-.claude-skills-knowledge-intake",
    "children": [],
    "file_doc": "ft-10.1.2.1",
    "same_as": null,
@@ -20893,9 +20914,9 @@
   "n-10.1.2.2": {
    "num": "10.1.2.2",
    "path": "agents/system/.claude/skills/file-index/SKILL.md",
-   "name": "file-index/SKILL.md",
+   "name": "SKILL.md",
    "type": "file",
-   "parent": "n-10.1.2",
+   "parent": "r-agents-system-.claude-skills-file-index",
    "children": [],
    "file_doc": "ft-10.1.2.2",
    "same_as": null,
@@ -20923,9 +20944,9 @@
   "n-10.1.2.3": {
    "num": "10.1.2.3",
    "path": "agents/system/.claude/skills/vision-doc/SKILL.md",
-   "name": "vision-doc/SKILL.md",
+   "name": "SKILL.md",
    "type": "file",
-   "parent": "n-10.1.2",
+   "parent": "r-agents-system-.claude-skills-vision-doc",
    "children": [],
    "file_doc": "ft-10.1.2.3",
    "same_as": null,
@@ -20941,9 +20962,9 @@
   "n-10.1.2.4": {
    "num": "10.1.2.4",
    "path": "agents/system/.claude/skills/readme-doc/SKILL.md",
-   "name": "readme-doc/SKILL.md",
+   "name": "SKILL.md",
    "type": "file",
-   "parent": "n-10.1.2",
+   "parent": "r-agents-system-.claude-skills-readme-doc",
    "children": [],
    "file_doc": "ft-10.1.2.4",
    "same_as": null,
@@ -20959,9 +20980,9 @@
   "n-10.1.2.7": {
    "num": "10.1.2.7",
    "path": "agents/system/.claude/skills/rebuild-prompt-doc/SKILL.md",
-   "name": "rebuild-prompt-doc/SKILL.md",
+   "name": "SKILL.md",
    "type": "file",
-   "parent": "n-10.1.2",
+   "parent": "r-agents-system-.claude-skills-rebuild-prompt-doc",
    "children": [],
    "file_doc": "ft-10.1.2.7",
    "same_as": null,
@@ -20976,9 +20997,9 @@
   "n-10.1.2.9": {
    "num": "10.1.2.9",
    "path": "agents/system/.claude/skills/readme-asd-doc/SKILL.md",
-   "name": "readme-asd-doc/SKILL.md",
+   "name": "SKILL.md",
    "type": "file",
-   "parent": "n-10.1.2",
+   "parent": "r-agents-system-.claude-skills-readme-asd-doc",
    "children": [],
    "file_doc": null,
    "same_as": null,
@@ -20990,9 +21011,9 @@
   "n-10.1.2.10": {
    "num": "10.1.2.10",
    "path": "agents/system/.claude/skills/claude-md-doc/SKILL.md",
-   "name": "claude-md-doc/SKILL.md",
+   "name": "SKILL.md",
    "type": "file",
-   "parent": "n-10.1.2",
+   "parent": "r-agents-system-.claude-skills-claude-md-doc",
    "children": [],
    "file_doc": null,
    "same_as": null,
@@ -21004,9 +21025,9 @@
   "n-10.1.2.8": {
    "num": "10.1.2.8",
    "path": "agents/system/.claude/skills/change-plan/SKILL.md",
-   "name": "change-plan/SKILL.md",
+   "name": "SKILL.md",
    "type": "file",
-   "parent": "n-10.1.2",
+   "parent": "r-agents-system-.claude-skills-change-plan",
    "children": [],
    "file_doc": "ft-10.1.2.8",
    "same_as": null,
@@ -21198,9 +21219,9 @@
   "n-10.1.2.6": {
    "num": "10.1.2.6",
    "path": "agents/system/.claude/skills/ide-sync/SKILL.md",
-   "name": "ide-sync/SKILL.md",
+   "name": "SKILL.md",
    "type": "file",
-   "parent": "n-10.1.2",
+   "parent": "r-agents-system-.claude-skills-ide-sync",
    "children": [],
    "file_doc": "ft-10.1.2.6",
    "same_as": null,
@@ -21217,19 +21238,16 @@
   "p-agent-os-agents-system-.claude-skills-skill-name-SKILL.md": {
    "num": null,
    "path": "agents/system/.claude/skills/[skill-name]/SKILL.md",
-   "name": "[skill-name]/SKILL.md",
+   "name": "SKILL.md",
    "type": "file",
-   "parent": "n-10.1.2",
+   "parent": "r-agents-system-.claude-skills-skill-name-",
    "children": [],
    "file_doc": null,
    "same_as": null,
-   "direct": [
-    "conv-claude-parts",
-    "schema-claude-md-files"
-   ],
+   "direct": [],
    "inherited": [],
-   "basis": "f3632a902519",
-   "summary_state": "fresh"
+   "basis": "b2d9d19add71",
+   "summary_state": "stale"
   },
   "n-10.1.9": {
    "num": "10.1.9",
@@ -21488,9 +21506,7 @@
    "name": "agent-memory/",
    "type": "folder",
    "parent": "n-10.1",
-   "children": [
-    "p-agent-os-agents-system-.claude-agent-memory-subagent-name-MEMORY.md"
-   ],
+   "children": [],
    "file_doc": null,
    "same_as": null,
    "direct": [
@@ -21503,25 +21519,22 @@
     "howto-record-research-steps"
    ],
    "inherited": [],
-   "basis": "c0cefc10fb2d",
-   "summary_state": "stale"
+   "basis": "5205ad652431",
+   "summary_state": "fresh"
   },
   "p-agent-os-agents-system-.claude-agent-memory-subagent-name-MEMORY.md": {
    "num": null,
    "path": "agents/system/.claude/agent-memory/[subagent-name]/MEMORY.md",
-   "name": "[subagent-name]/MEMORY.md",
+   "name": "MEMORY.md",
    "type": "file",
-   "parent": "n-10.1.12",
+   "parent": "r-agents-system-.claude-agent-memory-subagent-name-",
    "children": [],
    "file_doc": null,
    "same_as": null,
-   "direct": [
-    "conv-claude-parts",
-    "schema-claude-md-files"
-   ],
+   "direct": [],
    "inherited": [],
-   "basis": "60126570d4b5",
-   "summary_state": "fresh"
+   "basis": "33c78a830ca8",
+   "summary_state": "stale"
   },
   "n-10.1.13": {
    "num": "10.1.13",
@@ -22331,9 +22344,6 @@
    "parent": "n-10",
    "children": [
     "n-15.1",
-    "n-15.2",
-    "n-15.3",
-    "n-15.4",
     "n-15.5"
    ],
    "file_doc": "ft-15",
@@ -22363,8 +22373,8 @@
     "common-mech-open"
    ],
    "inherited": [],
-   "basis": "028276481506",
-   "summary_state": "stale"
+   "basis": "1c35d150aea3",
+   "summary_state": "fresh"
   },
   "n-15.1": {
    "num": "15.1",
@@ -22401,9 +22411,9 @@
   "n-15.2": {
    "num": "15.2",
    "path": "agents/system/logs/services/[service]/",
-   "name": "services/[service]/",
+   "name": "[service]/",
    "type": "folder",
-   "parent": "n-15",
+   "parent": "r-agents-system-logs-services",
    "children": [],
    "file_doc": null,
    "same_as": null,
@@ -22416,19 +22426,16 @@
     "common-mech-logging",
     "howto-promote-to-live-steps"
    ],
-   "inherited": [
-    "schema-formats",
-    "schema-encoding-time-units"
-   ],
+   "inherited": [],
    "basis": "35090fb4837a",
    "summary_state": "fresh"
   },
   "n-15.3": {
    "num": "15.3",
    "path": "agents/system/logs/workers/[worker]/",
-   "name": "workers/[worker]/",
+   "name": "[worker]/",
    "type": "folder",
-   "parent": "n-15",
+   "parent": "r-agents-system-logs-workers",
    "children": [],
    "file_doc": null,
    "same_as": null,
@@ -22440,19 +22447,16 @@
     "fm-logging-and-analytics",
     "common-mech-logging"
    ],
-   "inherited": [
-    "schema-formats",
-    "schema-encoding-time-units"
-   ],
+   "inherited": [],
    "basis": "99f5b0a72f92",
    "summary_state": "fresh"
   },
   "n-15.4": {
    "num": "15.4",
    "path": "agents/system/logs/subagents/[subagent]/",
-   "name": "subagents/[subagent]/",
+   "name": "[subagent]/",
    "type": "folder",
-   "parent": "n-15",
+   "parent": "r-agents-system-logs-subagents",
    "children": [],
    "file_doc": null,
    "same_as": null,
@@ -22467,10 +22471,7 @@
     "metric-open",
     "common-mech-logging"
    ],
-   "inherited": [
-    "schema-formats",
-    "schema-encoding-time-units"
-   ],
+   "inherited": [],
    "basis": "bf78d033a8cd",
    "summary_state": "fresh"
   },
@@ -22546,8 +22547,6 @@
    "parent": "n-10",
    "children": [
     "n-16.1",
-    "n-16.2",
-    "n-16.3",
     "n-16.4"
    ],
    "file_doc": "ft-16",
@@ -22571,8 +22570,8 @@
     "vis-q-retention"
    ],
    "inherited": [],
-   "basis": "66c4adae2f3e",
-   "summary_state": "stale"
+   "basis": "583bccb1ee1f",
+   "summary_state": "fresh"
   },
   "n-16.1": {
    "num": "16.1",
@@ -22632,9 +22631,9 @@
   "n-16.2": {
    "num": "16.2",
    "path": "agents/system/data/workers/[worker]/",
-   "name": "workers/[worker]/",
+   "name": "[worker]/",
    "type": "folder",
-   "parent": "n-16",
+   "parent": "r-agents-system-data-workers",
    "children": [],
    "file_doc": null,
    "same_as": null,
@@ -22648,19 +22647,16 @@
     "safe-untrusted-input",
     "howto-add-worker-steps"
    ],
-   "inherited": [
-    "schema-formats",
-    "schema-encoding-time-units"
-   ],
+   "inherited": [],
    "basis": "ff1a77de018e",
    "summary_state": "fresh"
   },
   "n-16.3": {
    "num": "16.3",
    "path": "agents/system/data/subagents/[subagent]/",
-   "name": "subagents/[subagent]/",
+   "name": "[subagent]/",
    "type": "folder",
-   "parent": "n-16",
+   "parent": "r-agents-system-data-subagents",
    "children": [],
    "file_doc": null,
    "same_as": null,
@@ -22679,10 +22675,7 @@
     "common-agent-subagent-outputs",
     "howto-add-worker-steps"
    ],
-   "inherited": [
-    "schema-formats",
-    "schema-encoding-time-units"
-   ],
+   "inherited": [],
    "basis": "19e1b41721c3",
    "summary_state": "fresh"
   },
@@ -23266,7 +23259,7 @@
     "term-domain"
    ],
    "inherited": [],
-   "basis": "d58d060eca40",
+   "basis": "7a4d1fb2498e",
    "summary_state": "fresh"
   },
   "n-56.2": {
@@ -23479,7 +23472,7 @@
     "vis-q-mvp"
    ],
    "inherited": [],
-   "basis": "cd7a28057d81",
+   "basis": "adaed12fa917",
    "summary_state": "fresh"
   },
   "n-19.1": {
@@ -23869,8 +23862,6 @@
    "type": "folder",
    "parent": "n-19",
    "children": [
-    "n-19.4.2",
-    "n-19.4.3",
     "n-19.4.1"
    ],
    "file_doc": "ft-34",
@@ -23887,15 +23878,15 @@
     "safe-gitignore"
    ],
    "inherited": [],
-   "basis": "3dfb39f6061b",
-   "summary_state": "stale"
+   "basis": "70a8732fa12c",
+   "summary_state": "fresh"
   },
   "n-19.4.2": {
    "num": "19.4.2",
    "path": "agents/trading/prediction-market/logs/jobs/[job-id]/",
-   "name": "jobs/[job-id]/",
+   "name": "[job-id]/",
    "type": "folder",
-   "parent": "n-19.4",
+   "parent": "r-agents-trading-prediction-market-logs-jobs",
    "children": [],
    "file_doc": "ft-19.4.2",
    "same_as": null,
@@ -23910,9 +23901,9 @@
   "n-19.4.3": {
    "num": "19.4.3",
    "path": "agents/trading/prediction-market/logs/services/[service]/",
-   "name": "services/[service]/",
+   "name": "[service]/",
    "type": "folder",
-   "parent": "n-19.4",
+   "parent": "r-agents-trading-prediction-market-logs-services",
    "children": [],
    "file_doc": "ft-19.4.3",
    "same_as": null,
@@ -24138,13 +24129,14 @@
     "d-052",
     "d-053",
     "d-058",
+    "d-067",
     "fm-agent-creation",
     "term-docs-pattern",
     "ov-where",
     "tr-ov-where"
    ],
    "inherited": [],
-   "basis": "8bca72a320d4",
+   "basis": "6cca2820fc4c",
    "summary_state": "fresh"
   },
   "n-19.6.16": {
@@ -26178,10 +26170,11 @@
     "d-055",
     "d-064",
     "d-065",
+    "d-066",
     "term-docs-pattern"
    ],
    "inherited": [],
-   "basis": "377d763e090d",
+   "basis": "042669f8ed1d",
    "summary_state": "fresh"
   },
   "n-53.4.1": {
@@ -29264,6 +29257,94 @@
    "entries": [
     "d-065"
    ]
+  },
+  "in-20261013-leave-vision": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-leave-vision.md",
+   "categories": [
+    "structure",
+    "process"
+   ],
+   "summary": "What the system still needs from vision/ to live without it.",
+   "processed_into": [
+    "plans/2026-10-12-claude-md-stage-one.md"
+   ],
+   "entries": []
+  },
+  "in-20261013-vision-files": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-vision-files.md",
+   "categories": [
+    "structure"
+   ],
+   "summary": "A detailed tree of what happens to every file in vision/.",
+   "processed_into": [
+    "plans/2026-10-12-claude-md-stage-one.md"
+   ],
+   "entries": []
+  },
+  "in-20261013-sync-and-memory": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-sync-and-memory.md",
+   "categories": [
+    "structure"
+   ],
+   "summary": "How the tree syncs with the disk, and why the memory notes are needed.",
+   "processed_into": [
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md"
+   ],
+   "entries": []
+  },
+  "in-20261013-no-memory-folder": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-no-memory-folder.md",
+   "categories": [
+    "structure"
+   ],
+   "summary": "No memory folder in the new version: agents use the docs and metadata.",
+   "processed_into": [
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md",
+    "decisions.md#d-066",
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision-files.md"
+   ],
+   "entries": [
+    "d-066"
+   ]
+  },
+  "in-20261013-ide-on-server": {
+   "at": "2026-10-13",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-13-ide-on-server.md",
+   "categories": [
+    "ide"
+   ],
+   "summary": "Will the IDE work on another server the same way after the vision move.",
+   "processed_into": [
+    "apps/project-IDE/data/plans/2026-10-13-leave-vision.md"
+   ],
+   "entries": []
+  },
+  "in-20261014-metadata-logic": {
+   "at": "2026-10-14",
+   "where": "thread \"Interactive file tree UI\"",
+   "file": "2026-10-14-trading-docs-metadata-logic.md",
+   "categories": [
+    "structure",
+    "docs"
+   ],
+   "summary": "Put all trading information into the docs; write the full metadata logic in ASD-STE100 in the top-level docs.",
+   "processed_into": [
+    "docs/metadata.md",
+    "agents/trading/prediction-market/docs/",
+    "decisions.md#d-067"
+   ],
+   "entries": [
+    "d-067"
+   ]
   }
  },
  "problems": [
@@ -29302,7 +29383,9 @@
   "conventions.md:96 conv-script-links: applies 'name:*.decision.link.js' matches nothing",
   "conventions.md:101 conv-standard-script-links: applies 'name:relink.system.link.js' matches nothing",
   "conventions.md:108 conv-agent-config-files: applies '[27.2]' matches nothing",
+  "conventions.md:178 conv-claude-parts: applies 'name:[skill-name]/SKILL.md' matches nothing",
   "conventions.md:178 conv-claude-parts: applies 'name:[subagent-name].md' matches nothing",
+  "conventions.md:178 conv-claude-parts: applies 'name:[subagent-name]/MEMORY.md' matches nothing",
   "conventions.md:196 conv-tests-research: applies 'name:[test-id].test.[js|py]' matches nothing",
   "conventions.md:196 conv-tests-research: applies 'name:tests.jsonl' matches nothing",
   "conventions.md:252 conv-links-file: applies 'name:relink.system.link.js' matches nothing",
@@ -29339,6 +29422,8 @@
   "data-schemas.md:150 schema-workers-job-fields: applies '[2.18.2]' matches nothing",
   "data-schemas.md:261 schema-links-from: applies '[2.18.1]' matches nothing",
   "data-schemas.md:308 schema-claude-md-files: applies 'name:[subagent-name].md' matches nothing",
+  "data-schemas.md:308 schema-claude-md-files: applies 'name:[skill-name]/SKILL.md' matches nothing",
+  "data-schemas.md:308 schema-claude-md-files: applies 'name:[subagent-name]/MEMORY.md' matches nothing",
   "data-schemas.md:422 schema-index-tables: applies '[2.18.1]' matches nothing",
   "data-schemas.md:422 schema-index-tables: applies '[2.18.2]' matches nothing",
   "data-schemas.md:422 schema-index-tables: applies '[2.18.3]' matches nothing",
@@ -30176,6 +30261,8 @@
   "node n-57.5 (docs/file-tree.md) has no file doc and no knowledge",
   "node n-10.1.2.9 (agents/system/.claude/skills/readme-asd-doc/SKILL.md) has no file doc and no knowledge",
   "node n-10.1.2.10 (agents/system/.claude/skills/claude-md-doc/SKILL.md) has no file doc and no knowledge",
+  "node p-agent-os-agents-system-.claude-skills-skill-name-SKILL.md (agents/system/.claude/skills/[skill-name]/SKILL.md) has no file doc and no knowledge",
+  "node p-agent-os-agents-system-.claude-agent-memory-subagent-name-MEMORY.md (agents/system/.claude/agent-memory/[subagent-name]/MEMORY.md) has no file doc and no knowledge",
   "node n-10.8.2.2 (agents/system/tests/scripts/[test-id].test.[js|py]) has no file doc and no knowledge",
   "node n-56.1.4 (agents/trading/docs/README.asd.md) has no file doc and no knowledge",
   "node n-43.1.1 (apps/docs/vision.md) has no file doc and no knowledge",

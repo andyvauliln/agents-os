@@ -2234,6 +2234,26 @@
     "apps/project-IDE/data/plans/2026-10-13-leave-vision.md"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261014-metadata-logic",
+   "at": "2026-10-14",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-14-trading-docs-metadata-logic.md",
+   "chars": 236,
+   "categories": [
+    "structure",
+    "docs"
+   ],
+   "summary": "Put all trading information into the docs; write the full metadata logic in ASD-STE100 in the top-level docs.",
+   "processed_into": [
+    "docs/metadata.md",
+    "agents/trading/prediction-market/docs/",
+    "decisions.md#d-067"
+   ],
+   "answered": true
   }
  ]
 }

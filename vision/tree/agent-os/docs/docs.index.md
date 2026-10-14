@@ -1,16 +1,16 @@
 ---
 about: agent-os/docs/
 node: n-57
-basis: b3f59fec5849
-written: 2026-10-12T00:00:00Z
+basis: f41063a68e23
+written: 2026-10-14T08:00:17Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T08:00:17Z
 ---
 # docs/
 
 ## What it is
 
-The project docs: the folder that describes the whole repository and the way the Agent OS is built, read first by people and by every AI session. It holds the project vision, the project README, the README again in ASD-STE100, the rebuild prompt for the top level, and a plain list of every path in the repository.
+The project docs: the folder that describes the whole repository and the way the Agent OS is built, read first by people and by every AI session. It holds the project vision, the project README, the README again in ASD-STE100, the rebuild prompt for the top level, a plain list of every path in the repository, and `metadata.md`, the full logic of the metadata files in ASD-STE100.
 
 ## Who looks after it
 
@@ -37,3 +37,4 @@ The docs of the levels below must agree with it: the system (`agents/system/docs
 - When a lower level changes something the project docs say, bring these docs in line in the same round.
 - When you write the vision or the README here, keep to plain prose with no ids, codes or history.
 - When you need `file-tree.md` changed, change the build, never the file.
+- When a metadata rule changes, change `metadata.md` and the `file-index` skill together.

@@ -20,7 +20,7 @@ The main docs are the four docs of each of the five doc levels: `vision.md`, `RE
 
 `README.asd.md` is a main doc in its own right, with its own How it works, Details, Example and Questions files (family `README.asd`), and the page also shows it as the ASD-STE100 tab of the README next to it. It is written with `readme-asd-doc`, not with this skill.
 
-The prediction-market domain and everything below it are stage two: only their folders exist, and no metadata file is made inside `agents/trading/prediction-market/`. The planning area `vision/` is left out too: its drafts keep the metadata files listed below, but no other item there needs them.
+The prediction-market domain and everything below it are stage two: only their folders exist, and no metadata file is made inside `agents/trading/prediction-market/`, except in its `docs/`, which holds the trading notes; every file and folder there has its metadata files like any item. The full metadata logic, in ASD-STE100, is in `docs/metadata.md`; keep it true when this skill changes. The planning area `vision/` is left out too: its drafts keep the metadata files listed below, but no other item there needs them.
 
 ## Names
 
@@ -224,7 +224,7 @@ The reader is the owner, or anyone new to the project, and any agent that needs 
 
 ## Checks
 
-- Every file and folder outside `vision/` and outside `agents/trading/prediction-market/` has its `.index.md` and `.meta.json`; nothing inside the prediction-market domain has any.
+- Every file and folder outside `vision/` and outside `agents/trading/prediction-market/` has its `.index.md` and `.meta.json`, and so does everything in `agents/trading/prediction-market/docs/`; nothing else inside the prediction-market domain has any.
 - Every main doc and both `.env` files have their Example and Questions files; no other item has them yet, and no metadata file has metadata of its own (except `README.asd.md`).
 - `--stale` prints nothing, and `python3 vision/tools/build_map.py` reports no missing files.
 - No orphans: `python3 vision/tools/build_map.py --orphans` lists metadata files whose item is gone. Move them to `vision/archive/<date>/tree/`.

@@ -657,3 +657,11 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - **Why:** the owner: agents should use the documentation and index files, not keep that much in a memory; most of it is already in the docs.
 - **Status:** decided. Built with the leave-vision plan.
 - **Changed:** apps/project-IDE/data/plans/2026-10-13-leave-vision.md, 2026-10-13-leave-vision-files.md.
+
+### D-067: The trading notes live in the prediction-market docs; the metadata logic is a top-level doc
+<!-- k: id=d-067 applies=[19.6],[57] sources=in-20261014-metadata-logic status=decided -->
+- **Decision:** all the trading knowledge the project has sits now in `agents/trading/prediction-market/docs/`: the ten `trading-*.md` notes, `doc-outlines.md`, `trading-vision-notes.md`, `common/`, `how-to/`, `index/accounts.md`, and `README-trading-parts.md` and `rebuild-prompt-trading-parts.md` (the trading text taken out of the system docs). They are real files with their metadata, like any item; the rest of the domain stays stage two. The full logic of the metadata files, in ASD-STE100, is `docs/metadata.md`, read by every agent before it writes a metadata file and kept in step with the `file-index` skill. A found item shows its own How it works and Details on the page, read from the files next to it.
+- **Date:** 2026-10-14
+- **Why:** the owner: "for trading all current available information we need put in a docs"; "detailed full explanation in asd style for the metadata logic, all logic related to it in a new system, add this to the top level docs".
+- **Status:** decided.
+- **Changed:** docs/metadata.md, the project, system and trading docs, CLAUDE.md, file-index, materialize.py, enrich.py, the leave-vision files plan.

@@ -30,7 +30,7 @@ The system's README and rebuild prompt, the folder `agents/trading/`, and every 
 
 ## Related knowledge
 
-They sit between the system's docs in `agents/system/docs/` and each trading domain's docs. The trading rules in full are in the kept trading notes in `vision/docs/prediction-market-agents/` until the prediction-market domain is written again in stage two.
+They sit between the system's docs in `agents/system/docs/` and each trading domain's docs. The trading rules in full are in the trading notes in `agents/trading/prediction-market/docs/` until the prediction-market domain is written again in stage two.
 
 ## Keep in mind
 

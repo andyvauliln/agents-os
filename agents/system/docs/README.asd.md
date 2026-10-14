@@ -250,7 +250,7 @@ A domain gets its part of the shared settings, scripts and data through links. I
 
 Domains of one kind are in one folder. `agents/trading/` contains the trading domains. Its `docs/` contains the vision, the README, the ASD-STE100 README and the rebuild prompt of trading. These documents tell what all trading domains share and how to make a new trading domain. Its `researches/` contains the trading studies that are complete. It has no agent, settings or scripts of its own.
 
-The first trading domain is the prediction-market domain, `agents/trading/prediction-market/`. It starts with Polymarket. This domain is the second stage of the project. Now only its folders exist, and they contain no written files.
+The first trading domain is the prediction-market domain, `agents/trading/prediction-market/`. It starts with Polymarket. This domain is the second stage of the project. Now only its folders exist. Its `docs/` folder contains the trading notes. The other folders contain no written files.
 
 The next trading domain is copy trading. The system makes it as a copy of the prediction-market domain when the owner asks. Agents of other kinds come later as their own domains, for example social media or management.
 

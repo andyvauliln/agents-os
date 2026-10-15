@@ -494,6 +494,7 @@ apps/project-IDE/data/inputs/2026-10-14-terminal-vs-page.md
 apps/project-IDE/data/inputs/2026-10-14-trading-docs-metadata-logic.md
 apps/project-IDE/data/inputs/2026-10-15-0641-ignore-local-block-live-keys.md
 apps/project-IDE/data/inputs/2026-10-15-0655-ide-start-scripts.md
+apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.md
 apps/project-IDE/data/inputs/index.json
 apps/project-IDE/data/inputs/README.md
 apps/project-IDE/data/inputs/YYYY-MM-DD-HHMM-[topic].md
@@ -508,6 +509,7 @@ apps/project-IDE/data/plans/2026-10-09-1938-inputs-vision.md
 apps/project-IDE/data/plans/2026-10-12-claude-md-stage-one.md
 apps/project-IDE/data/plans/2026-10-13-leave-vision-files.md
 apps/project-IDE/data/plans/2026-10-13-leave-vision.md
+apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.md
 apps/project-IDE/data/plans/[plan].md
 apps/project-IDE/data/plans/file-set.md
 apps/project-IDE/data/plans/github-sync.md

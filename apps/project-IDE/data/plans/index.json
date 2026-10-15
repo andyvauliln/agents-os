@@ -224,6 +224,32 @@
    ],
    "created": "2026-10-13",
    "updated": "2026-10-14"
+  },
+  {
+   "id": "2026-10-15-0925-notes-and-runs-panel",
+   "file": "2026-10-15-0925-notes-and-runs-panel.md",
+   "title": "One panel for AI notes and runs, with a page for every run",
+   "status": "waiting",
+   "inputs": [
+    "in-20261015-0925"
+   ],
+   "decisions": [],
+   "files": [
+    "apps/project-IDE/current-ui/file-tree-explorer.html",
+    "apps/project-IDE/server/server.py",
+    "apps/project-IDE/server/claude_bridge.py",
+    "apps/project-IDE/server/server.config.json",
+    "apps/project-IDE/server/runs.py",
+    "apps/project-IDE/server/notes.py",
+    "apps/project-IDE/server/run_summary.py",
+    "apps/project-IDE/server/run_pr.py",
+    "agents/system/.claude/skills/ide-build/scripts/check_page.js",
+    "agents/system/.claude/skills/ide-sync/SKILL.md",
+    "apps/project-IDE/docs/README.md",
+    "apps/project-IDE/server/README.md"
+   ],
+   "created": "2026-10-15",
+   "updated": "2026-10-15"
   }
  ]
 }

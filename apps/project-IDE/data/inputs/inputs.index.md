@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/inputs/
-basis: b01e73e597e4
+basis: 2f9410effad2
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T07:11:37Z
+confirmed: 2026-10-15T09:57:53Z
 ---
 # inputs/
 

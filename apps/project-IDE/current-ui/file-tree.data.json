@@ -3,10 +3,10 @@
  "title": "Agent OS file tree",
  "source": {
   "repo": "the files in git (without the old planning folder), their folders and the local keys files, with every item's metadata files",
-  "doc_version": "v74"
+  "doc_version": "v77"
  },
- "generated": "2026-10-15T07:12:21Z",
- "data_version": 74,
+ "generated": "2026-10-15T09:57:56Z",
+ "data_version": 77,
  "sync": "Built by the ide-build scripts from the files on disk and the metadata files next to each item. The page saves straight away into its own store (collections inputs, nodes, changes); at a sync (\"sync the file tree\") the project IDE agent saves them word for word, writes edits into their files and rebuilds this file.",
  "status_legend": {
   "decided": "agreed by the owner",
@@ -1059,6 +1059,7 @@
    "children": [
     ".secrets/test/test.index.md",
     ".secrets/test/test.meta.json",
+    ".secrets/test/.env",
     ".secrets/test/.env.example",
     ".secrets/test/.env.index.md",
     ".secrets/test/.env.meta.json",
@@ -1230,6 +1231,261 @@
    "content_source": "the repository: .secrets/test/test.meta.json",
    "fields": null,
    "custom_tabs": [],
+   "agent": null
+  },
+  {
+   "id": ".secrets/test/.env",
+   "name": ".env",
+   "path": "agent-os/.secrets/test/.env",
+   "type": "file",
+   "link": false,
+   "placeholder": false,
+   "parent": ".secrets/test",
+   "children": [],
+   "status": "decided",
+   "summary": "Every test key as KEY=value lines in comment sections, with names that start with their account or platform; only on the machine.",
+   "purpose": "Every test key as KEY=value lines in comment sections, with names that start with their account or platform; only on the machine.",
+   "link_target": null,
+   "decisions": [
+    "D-023",
+    "D-027",
+    "D-063"
+   ],
+   "open_questions": [],
+   "qa": [],
+   "example": {
+    "lang": "dotenv",
+    "title": ".env.example",
+    "body": "# .secrets/test/.env: the key names this file holds, with no values.\n# The real .env stays on the machine and never goes in git. Type real values only there.\n\n# Which secrets file load-secret reads: test or live. test | live, required. Used by load-secret.\nAGENT_OS_ENV=test\n\n# Claude API for agents and sub-agents run headless. sk-ant-..., required. Used by run-agent, run-tests.\nANTHROPIC_API_KEY=\n\n# Polymarket CLOB API key for test account 1. uuid, required. Used by acct-pm-test-1, polymarket-exec.\nPOLYMARKET_ACCT1_API_KEY=\n\n# Secret paired with the API key. base64, required. Used by acct-pm-test-1.\nPOLYMARKET_ACCT1_API_SECRET=\n\n# Passphrase paired with the API key. text, required. Used by acct-pm-test-1.\nPOLYMARKET_ACCT1_API_PASSPHRASE=\n\n# Signs orders for the account's wallet. 0x + 64 hex, required. Used by acct-pm-test-1.\nPOLYMARKET_ACCT1_WALLET_PRIVATE_KEY=\n\n# Groq speech to text for voice input in the project IDE (D-060); test file only. gsk_..., optional. Used by apps/project-IDE/server/voice.py.\nGROQ_API_KEY=\n\n# Other models via OpenRouter (not connected yet). sk-or-..., optional. Used by models.config.json.\nOPENROUTER_API_KEY=\n\n# Alerts to Telegram (later). 123:ABC..., optional. Used by notifier.\nNOTIFY_TELEGRAM_BOT_TOKEN=\n",
+    "file": ".secrets/test/.env.example"
+   },
+   "exists": true,
+   "content": null,
+   "local_only": true,
+   "content_source": "a keys file: it stays on the machine, git ignores it and the page never shows what is in it",
+   "readonly": "Keys are never shown or edited here. Write them in the file on the machine.",
+   "how": {
+    "text": "The file meant to hold every test credential as `KEY=value` lines, grouped in comment sections (mode, models, platforms and accounts, notifications), with names that start with their account or platform, such as `POLYMARKET_ACCT1_API_KEY`. It is git-ignored and stays on the machine; its key names, with no values, are in `.env.example` next to it. The project IDE server reads its keys from it by name. Agents and the dev workflow may read and update it, since these are safe test keys.",
+    "keep": [
+     "When you add a test key, put it in the matching section with its account or platform prefix and add the same name to `live/.env` and `secrets.index.json`.",
+     "When a config or job needs a key, list its name in `secret_keys`; never copy the value anywhere else."
+    ],
+    "sections": [
+     {
+      "title": "What it is",
+      "text": "The file meant to hold every test credential as `KEY=value` lines, grouped in comment sections (mode, models, platforms and accounts, notifications), with names that start with their account or platform, such as `POLYMARKET_ACCT1_API_KEY`. It is git-ignored and stays on the machine; its key names, with no values, are in `.env.example` next to it. The project IDE server reads its keys from it by name. Agents and the dev workflow may read and update it, since these are safe test keys."
+     },
+     {
+      "title": "Who looks after it",
+      "text": "It is written by the owner."
+     },
+     {
+      "title": "When and how it changes",
+      "text": "It changes when a test key is added, renamed, removed or given a new value. It is empty for now."
+     },
+     {
+      "title": "Who uses it, and when",
+      "text": "It is read by load-secret (the proposed shared loader, not written yet); and scripts that list the key in secret_keys."
+     },
+     {
+      "title": "Where it is mentioned",
+      "text": "It is described in `.secrets/secrets.index.json` and its folder's How it works file `.secrets/test/test.index.md`."
+     },
+     {
+      "title": "Related knowledge",
+      "text": "It has the same format as `.secrets/test/.env.example` and `.secrets/live/.env`. It is checked by `.gitignore`. The rules that apply to it come from `agents/system/CLAUDE.md` (section \"Rules\"), `docs/metadata.md`, `docs/README.md` (section \"Keys and secrets\") and `agents/system/docs/README.md` (section \"Keys and secrets\")."
+     }
+    ],
+    "at": "2026-10-14T15:17:50Z",
+    "by": "knowledge-base-agent",
+    "state": "fresh"
+   },
+   "how_md": "# .env\n\n## What it is\n\nThe file meant to hold every test credential as `KEY=value` lines, grouped in comment sections (mode, models, platforms and accounts, notifications), with names that start with their account or platform, such as `POLYMARKET_ACCT1_API_KEY`. It is git-ignored and stays on the machine; its key names, with no values, are in `.env.example` next to it. The project IDE server reads its keys from it by name. Agents and the dev workflow may read and update it, since these are safe test keys.\n\n## Who looks after it\n\nIt is written by the owner.\n\n## When and how it changes\n\nIt changes when a test key is added, renamed, removed or given a new value. It is empty for now.\n\n## Who uses it, and when\n\nIt is read by load-secret (the proposed shared loader, not written yet); and scripts that list the key in secret_keys.\n\n## Where it is mentioned\n\nIt is described in `.secrets/secrets.index.json` and its folder's How it works file `.secrets/test/test.index.md`.\n\n## Related knowledge\n\nIt has the same format as `.secrets/test/.env.example` and `.secrets/live/.env`. It is checked by `.gitignore`. The rules that apply to it come from `agents/system/CLAUDE.md` (section \"Rules\"), `docs/metadata.md`, `docs/README.md` (section \"Keys and secrets\") and `agents/system/docs/README.md` (section \"Keys and secrets\").\n\n## Keep in mind\n\n- When you add a test key, put it in the matching section with its account or platform prefix and add the same name to `live/.env` and `secrets.index.json`.\n- When a config or job needs a key, list its name in `secret_keys`; never copy the value anywhere else.\n",
+   "how_state": "fresh",
+   "how_file": ".secrets/test/.env.index.md",
+   "meta_file": ".secrets/test/.env.meta.json",
+   "meta": {
+    "schema_version": 1,
+    "about": "Every test key as KEY=value lines in comment sections, with names that start with their account or platform; only on the machine.",
+    "kind": "file",
+    "state": "empty",
+    "status": "decided",
+    "git": "ignored",
+    "secret": true,
+    "generated_by": null,
+    "writers": [
+     "the owner"
+    ],
+    "readers": [
+     "load-secret (the proposed shared loader, not written yet)",
+     "scripts that list the key in secret_keys"
+    ],
+    "changes_when": "A test key is added, renamed, removed or given a new value.",
+    "related": [
+     {
+      "path": ".secrets/test/.env.example",
+      "how": "same format as"
+     },
+     {
+      "path": ".secrets/live/.env",
+      "how": "same format as"
+     },
+     {
+      "path": ".secrets/secrets.index.json",
+      "how": "summed up in"
+     },
+     {
+      "path": ".gitignore",
+      "how": "checked by"
+     }
+    ],
+    "sources": {
+     "decisions": [
+      "D-023",
+      "D-027",
+      "D-063"
+     ],
+     "inputs": [
+      "in-20260929-2147",
+      "in-20260930-0804",
+      "in-20260930-0812",
+      "in-20261012-secrets"
+     ],
+     "notes": []
+    },
+    "update_with": [
+     {
+      "path": ".secrets/test/.env.example",
+      "how": "Add, rename or remove the key name, with no value."
+     },
+     {
+      "path": ".secrets/secrets.index.json",
+      "how": "Add, rename or remove the key's entry, with no value."
+     },
+     {
+      "path": ".secrets/live/.env.example",
+      "how": "A new test key name is added to the live names too."
+     },
+     {
+      "path": ".secrets/test/.env.questions.md",
+      "how": "Record a question the owner asks about the keys file."
+     }
+    ],
+    "inherits": [
+     "agents/system/CLAUDE.md#Rules",
+     "docs/metadata.md",
+     "docs/README.md#Keys and secrets",
+     "agents/system/docs/README.md#Keys and secrets"
+    ],
+    "features": [],
+    "views": [],
+    "how_it_works": {}
+   },
+   "fam": ".env",
+   "questions_md": "# Questions: .env\n\n## Open questions for the owner\n\n- **Which machine holds this file: only the owner's server, or also a laptop?** The answer decides where the owner types the keys. It also decides where the backup is.\n- **Who can change this file, and how do we record a change without a value?** Today only the owner types the keys. The metadata records the key names only.\n- **Is one test account sufficient for stage one?** The IDE can need more keys, for example for a second model platform.\n\n## The owner's questions\n\nNone recorded yet.\n",
+   "questions_file": ".secrets/test/.env.questions.md",
+   "fields": [
+    {
+     "key": "AGENT_OS_ENV",
+     "values": "test | live (required)",
+     "example": "test",
+     "meaning": "Which secrets file load-secret reads: test or live. Used by load-secret."
+    },
+    {
+     "key": "ANTHROPIC_API_KEY",
+     "values": "sk-ant-... (required)",
+     "example": "sk-ant-api03-XXXXXXXXXXXXXXXXXXXX",
+     "meaning": "Claude API for agents and sub-agents run headless. Used by run-agent, run-tests."
+    },
+    {
+     "key": "POLYMARKET_ACCT1_API_KEY",
+     "values": "uuid (required)",
+     "example": "00000000-0000-0000-0000-000000000000",
+     "meaning": "Polymarket CLOB API key for test account 1. Used by acct-pm-test-1, polymarket-exec."
+    },
+    {
+     "key": "POLYMARKET_ACCT1_API_SECRET",
+     "values": "base64 (required)",
+     "example": "ZmFrZS1zZWNyZXQtZXhhbXBsZQ==",
+     "meaning": "Secret paired with the API key. Used by acct-pm-test-1."
+    },
+    {
+     "key": "POLYMARKET_ACCT1_API_PASSPHRASE",
+     "values": "text (required)",
+     "example": "example-passphrase",
+     "meaning": "Passphrase paired with the API key. Used by acct-pm-test-1."
+    },
+    {
+     "key": "POLYMARKET_ACCT1_WALLET_PRIVATE_KEY",
+     "values": "0x + 64 hex (required)",
+     "example": "0x0000000000000000000000000000000000000000000000000000000000000001",
+     "meaning": "Signs orders for the account's wallet. Used by acct-pm-test-1."
+    },
+    {
+     "key": "GROQ_API_KEY",
+     "values": "gsk_... (optional, may be empty)",
+     "example": "gsk_XXXXXXXXXXXXXXXXXXXXXXXX",
+     "meaning": "Groq speech to text for voice input in the project IDE (D-060); test file only. Used by apps/project-IDE/server/voice.py."
+    },
+    {
+     "key": "OPENROUTER_API_KEY",
+     "values": "sk-or-... (optional, may be empty)",
+     "example": "(empty)",
+     "meaning": "Other models via OpenRouter (not connected yet). Used by models.config.json."
+    },
+    {
+     "key": "NOTIFY_TELEGRAM_BOT_TOKEN",
+     "values": "123:ABC... (optional, may be empty)",
+     "example": "(empty)",
+     "meaning": "Alerts to Telegram (later). Used by notifier."
+    }
+   ],
+   "custom_tabs": [
+    {
+     "columns": [
+      {
+       "key": "name",
+       "kind": "text",
+       "label": "Variable"
+      },
+      {
+       "key": "section",
+       "kind": "text",
+       "label": "Section"
+      },
+      {
+       "key": "purpose",
+       "kind": "text",
+       "label": "What it is for"
+      },
+      {
+       "key": "used_in",
+       "kind": "text",
+       "label": "Used in (files / scripts)"
+      },
+      {
+       "key": "required",
+       "kind": "bool",
+       "label": "Required"
+      },
+      {
+       "key": "format",
+       "kind": "text",
+       "label": "Format (no real values)"
+      },
+      {
+       "key": "notes",
+       "kind": "text",
+       "label": "Notes"
+      }
+     ],
+     "id": "variables",
+     "note": "This table is the current picture of the real .secrets/test/.env: one row per key that is actually in the file, with the section it sits in, what it is for, which files or scripts read it, whether it is required, its format and any extra notes. Empty for now - rows are added as real keys are created. Values are never stored here; they live only in the local file (edited there or later in the trading UI). A script can write .env.example from this table.",
+     "rows": [],
+     "title": "Variables",
+     "type": "table"
+    }
+   ],
    "agent": null
   },
   {
@@ -74229,6 +74485,9 @@
     "apps/project-IDE/data/inputs/2026-10-15-0655-ide-start-scripts.md",
     "apps/project-IDE/data/inputs/2026-10-15-0655-ide-start-scripts.index.md",
     "apps/project-IDE/data/inputs/2026-10-15-0655-ide-start-scripts.meta.json",
+    "apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.md",
+    "apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.index.md",
+    "apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.meta.json",
     "apps/project-IDE/data/inputs/index.json",
     "apps/project-IDE/data/inputs/index.index.md",
     "apps/project-IDE/data/inputs/index.meta.json",
@@ -92590,6 +92849,93 @@
    "agent": null
   },
   {
+   "id": "apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.md",
+   "name": "2026-10-15-0925-notes-and-runs-panel.md",
+   "path": "agent-os/apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.md",
+   "type": "file",
+   "link": false,
+   "placeholder": false,
+   "parent": "apps/project-IDE/data/inputs",
+   "children": [],
+   "status": "decided",
+   "summary": "",
+   "purpose": null,
+   "link_target": null,
+   "decisions": [],
+   "open_questions": [],
+   "qa": [],
+   "example": null,
+   "exists": true,
+   "content": null,
+   "src_file": "apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.md",
+   "content_lazy": true,
+   "content_source": "the repository: apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.md",
+   "how": null,
+   "how_md": null,
+   "how_state": "empty",
+   "how_file": "apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.index.md",
+   "meta_file": "apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "meta": {},
+   "fam": "2026-10-15-0925-notes-and-runs-panel",
+   "fields": null,
+   "custom_tabs": [],
+   "agent": null
+  },
+  {
+   "id": "apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.index.md",
+   "name": "2026-10-15-0925-notes-and-runs-panel.index.md",
+   "path": "agent-os/apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.index.md",
+   "type": "file",
+   "link": false,
+   "placeholder": false,
+   "parent": "apps/project-IDE/data/inputs",
+   "children": [],
+   "status": "decided",
+   "summary": "",
+   "purpose": null,
+   "link_target": null,
+   "decisions": [],
+   "open_questions": [],
+   "qa": [],
+   "example": null,
+   "exists": true,
+   "content": null,
+   "src_file": "apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.index.md",
+   "content_lazy": true,
+   "content_source": "the repository: apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.index.md",
+   "fields": null,
+   "custom_tabs": [],
+   "agent": null,
+   "empty": true
+  },
+  {
+   "id": "apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "name": "2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "path": "agent-os/apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "type": "file",
+   "link": false,
+   "placeholder": false,
+   "parent": "apps/project-IDE/data/inputs",
+   "children": [],
+   "status": "decided",
+   "summary": "",
+   "purpose": null,
+   "link_target": null,
+   "decisions": [],
+   "open_questions": [],
+   "qa": [],
+   "example": null,
+   "exists": true,
+   "content": null,
+   "src_file": "apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "content_lazy": true,
+   "content_source": "the repository: apps/project-IDE/data/inputs/2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "fields": null,
+   "custom_tabs": [],
+   "agent": null,
+   "empty": true
+  },
+  {
    "id": "apps/project-IDE/data/inputs/index.json",
    "name": "index.json",
    "path": "agent-os/apps/project-IDE/data/inputs/index.json",
@@ -93336,6 +93682,10 @@
     "apps/project-IDE/data/plans/2026-10-13-leave-vision.md",
     "apps/project-IDE/data/plans/2026-10-13-leave-vision.index.md",
     "apps/project-IDE/data/plans/2026-10-13-leave-vision.meta.json",
+    "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.md",
+    "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.index.md",
+    "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.meta.json",
+    "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.questions.md",
     "apps/project-IDE/data/plans/[plan].md",
     "apps/project-IDE/data/plans/[plan].index.md",
     "apps/project-IDE/data/plans/[plan].meta.json",
@@ -94842,6 +95192,121 @@
    "src_file": "apps/project-IDE/data/plans/2026-10-13-leave-vision.meta.json",
    "content_lazy": true,
    "content_source": "the repository: apps/project-IDE/data/plans/2026-10-13-leave-vision.meta.json",
+   "fields": null,
+   "custom_tabs": [],
+   "agent": null
+  },
+  {
+   "id": "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.md",
+   "name": "2026-10-15-0925-notes-and-runs-panel.md",
+   "path": "agent-os/apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.md",
+   "type": "file",
+   "link": false,
+   "placeholder": false,
+   "parent": "apps/project-IDE/data/plans",
+   "children": [],
+   "status": "decided",
+   "summary": "",
+   "purpose": null,
+   "link_target": null,
+   "decisions": [],
+   "open_questions": [],
+   "qa": [],
+   "example": null,
+   "exists": true,
+   "content": null,
+   "src_file": "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.md",
+   "content_lazy": true,
+   "content_source": "the repository: apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.md",
+   "how": null,
+   "how_md": null,
+   "how_state": "empty",
+   "how_file": "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.index.md",
+   "meta_file": "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "meta": {},
+   "fam": "2026-10-15-0925-notes-and-runs-panel",
+   "questions_md": "# Questions: 2026-10-15-0925-notes-and-runs-panel.md\n\n## Open questions for the owner\n\nFrom the plan: One panel for AI notes and runs, with a page for every run.\n\n1. **Who writes the summary and the tags of a run?** This choice sets the cost and covers terminal runs. Recommended: Claude Haiku writes them after each run. The cost is about one cent for each run.\n2. **How do we make a pull request?** A merge acts outside this server. Recommended: the owner presses a button for one run. The server moves the commits of the run to a new branch and opens the pull request. The owner signs in `gh` on the server one time. NOTES: already github connected, so we should work i guesss always in a worktree or in a cloud to handle several notes, in a notification i can selecte it default locally, after i press pull request, yes merge could be outside, also i want some control buttons about what to do in a process, like auto merge, do all tests or only related to this feature, check for bugs,make report etc,\n3. **Does git keep the run records?** Transcripts can hold private text. Recommended: no. The run records stay in the logs folder, and git does not keep that folder.\n4. **Which terminal runs does the list show?** Recommended: the 50 newest Claude Code sessions in all folders of this repository. NOTES: for now let's make 10 default, and i can change it with a show more, also they should be sorted by that last one was done, first if there some block where ai can't do something without me involved\n5. **Which statuses does a note have?**  Notes:  statuses: transcribing, ready, planing, working, done, failed, cancelled, need human, need manual test, in main. something like this\n6. **Can we install the browser libraries on this server?** Without them, no browser test of the page can run here. Recommended: the owner runs `sudo npx playwright install-deps chromium` one time.\n\n\n\n## The owner's questions\n\n## Taken into the plan\n\n- Questions 1, 2, 4, 5 and 6 are answered. The second version of the plan uses the answers.\n- Question 3 has no answer. The plan uses the recommended answer: the run records stay out of git.\n- Two new open questions are in the plan: the defaults of the send options, and the worktree folder.\n",
+   "questions_file": "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.questions.md",
+   "fields": null,
+   "custom_tabs": [],
+   "agent": null
+  },
+  {
+   "id": "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.index.md",
+   "name": "2026-10-15-0925-notes-and-runs-panel.index.md",
+   "path": "agent-os/apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.index.md",
+   "type": "file",
+   "link": false,
+   "placeholder": false,
+   "parent": "apps/project-IDE/data/plans",
+   "children": [],
+   "status": "decided",
+   "summary": "",
+   "purpose": null,
+   "link_target": null,
+   "decisions": [],
+   "open_questions": [],
+   "qa": [],
+   "example": null,
+   "exists": true,
+   "content": null,
+   "src_file": "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.index.md",
+   "content_lazy": true,
+   "content_source": "the repository: apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.index.md",
+   "fields": null,
+   "custom_tabs": [],
+   "agent": null,
+   "empty": true
+  },
+  {
+   "id": "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "name": "2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "path": "agent-os/apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "type": "file",
+   "link": false,
+   "placeholder": false,
+   "parent": "apps/project-IDE/data/plans",
+   "children": [],
+   "status": "decided",
+   "summary": "",
+   "purpose": null,
+   "link_target": null,
+   "decisions": [],
+   "open_questions": [],
+   "qa": [],
+   "example": null,
+   "exists": true,
+   "content": null,
+   "src_file": "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "content_lazy": true,
+   "content_source": "the repository: apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.meta.json",
+   "fields": null,
+   "custom_tabs": [],
+   "agent": null,
+   "empty": true
+  },
+  {
+   "id": "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.questions.md",
+   "name": "2026-10-15-0925-notes-and-runs-panel.questions.md",
+   "path": "agent-os/apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.questions.md",
+   "type": "file",
+   "link": false,
+   "placeholder": false,
+   "parent": "apps/project-IDE/data/plans",
+   "children": [],
+   "status": "decided",
+   "summary": "",
+   "purpose": null,
+   "link_target": null,
+   "decisions": [],
+   "open_questions": [],
+   "qa": [],
+   "example": null,
+   "exists": true,
+   "content": null,
+   "src_file": "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.questions.md",
+   "content_lazy": true,
+   "content_source": "the repository: apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.questions.md",
    "fields": null,
    "custom_tabs": [],
    "agent": null

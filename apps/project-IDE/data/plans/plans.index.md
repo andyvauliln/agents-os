@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/plans/
-basis: 3c10ab114c24
+basis: e0740d916930
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T19:42:37Z
+confirmed: 2026-10-15T09:57:53Z
 ---
 # plans/
 

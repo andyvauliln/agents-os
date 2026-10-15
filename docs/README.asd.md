@@ -39,6 +39,7 @@ The project is one GitHub repository, `andyvauliln/trading-oss`. The docs use th
 |---|---|---|
 | The front page | The first page that GitHub shows | `README.md` |
 | The handoff | It tells how to continue the planning in a new session | `HANDOFF.md` |
+| The start scripts | They prepare the server of the owner one time, and they start or restart the project IDE | `init.sh`, `start.sh` |
 | The project docs | They describe the full repository and the method of work | `docs/` |
 | Agents | All domains. The system is the first domain | `agents/` |
 | The system | The system agent, the shared parts and the entry point for Claude Code | `agents/system/` |
@@ -74,6 +75,8 @@ This is the top of the tree:
 agent-os/
 ├── README.md                    the front page for people
 ├── HANDOFF.md                   how to continue the planning in a new session
+├── init.sh                      sets up the owner's server once: tools, .venv/, the service that starts the IDE at boot
+├── start.sh                     starts the project IDE: sync, stop the old server, rebuild, start, check
 ├── .gitignore                   what git leaves out: .env files, dependencies, caches
 ├── .secrets/                    keys: test/.env and live/.env stay on the machine
 ├── docs/                        the project docs: vision, README, README.asd, rebuild prompt, file tree
@@ -109,15 +112,26 @@ Each of the four docs has a different purpose. The vision tells what the level i
 
 ## The parts
 
-### The front page and the handoff
+### The front page, the handoff and the start scripts
 
 `README.md` at the top of the repository is the front page that GitHub shows. It must tell in a few lines what the project is. It must tell where to start: the project vision and the project README in `docs/`. The front page is empty now. Its content is an open subject.
 
 `HANDOFF.md` is a file for the planning time. It tells how to continue the planning in a new Claude Code session. It tells the current status, the build commands and the rules. A person writes it at the end of a period of planning. The next person or AI reads it.
 
-Each of these two files has its How it works file and its Details file next to it: `README.index.md`, `README.meta.json`, `HANDOFF.index.md` and `HANDOFF.meta.json`. The root has `agent-os.index.md` and `agent-os.meta.json`.
+`init.sh` and `start.sh` operate the project IDE on the server of the owner. You run `./init.sh` one time. It does these tasks:
 
-Its docs: `README.index.md` and `HANDOFF.index.md`.
+- It examines the tools.
+- It makes `.venv/` with the Python package of the request box. Git ignores `.venv/`.
+- It installs a service. The service starts the IDE when the machine starts.
+- It starts the IDE.
+
+`./start.sh` starts or restarts the IDE. It gets the new commits from GitHub if the branch can move forward cleanly. It stops the old server. It makes the page data again. Then it starts the server again.
+
+These two scripts are not the scripts `agents/system/init.sh` and `agents/system/start.sh` of the system. The scripts of the system are for the agents, and nobody wrote them yet.
+
+Each of these files has its How it works file and its Details file next to it: `README.index.md`, `HANDOFF.index.md`, `init.index.md` and `start.index.md`, each with its `.meta.json`. The root has `agent-os.index.md` and `agent-os.meta.json`.
+
+Its docs: `README.index.md`, `HANDOFF.index.md`, and for the start scripts `apps/project-IDE/server/README.md`.
 
 ### The project docs
 
@@ -231,7 +245,7 @@ The page shows each file and each folder of the repository:
 - Each item has a Delete button.
 - The "Apply changes" button at the top puts all changes from the page into the files.
 
-Start the page on the owner's server from the top of the repository with `python3 apps/project-IDE/server/server.py`. The server listens only on the machine, at `127.0.0.1:8765`. Use an SSH tunnel to open it.
+Start the IDE on the owner's server from the top of the repository with `./start.sh`. A service starts the IDE when the machine starts. `./init.sh` installs this one time. The server listens only on the machine, at `127.0.0.1:8765`. Use an SSH tunnel to open it.
 
 Its docs: `apps/project-IDE/docs/README.md`.
 
@@ -333,7 +347,7 @@ After stage two, we build the machinery of the system. We start the first strate
 | The prediction-market domain | `agents/trading/prediction-market/prediction-market.index.md` | Its folders. Its README comes in stage two |
 | Apps | `apps/docs/README.md` | Each app and how we add apps |
 | The project IDE | `apps/project-IDE/docs/README.md` | The full documentation of the IDE |
-| The IDE server | `apps/project-IDE/server/README.md` | How to operate the page on the owner's server |
+| The IDE server and the start scripts | `apps/project-IDE/server/README.md` | How to install, start and get access to the page on the owner's server |
 | Keys | `.secrets/.secrets.index.md` | How we keep keys |
 | Git ignore rules | `.gitignore.index.md` | Each ignore rule |
 | Metadata files | `docs/metadata.md`, `agents/system/.claude/skills/file-index/SKILL.md` | All of the metadata logic, and how to write each metadata file |

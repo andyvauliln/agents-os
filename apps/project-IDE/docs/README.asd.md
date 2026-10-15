@@ -10,7 +10,7 @@ The IDE shows the full project as one tree of all folders and files. The owner c
 
 The owner reads, edits, comments, asks and deletes on the page. AI then puts all the work of the owner into the files. The same tree gives each AI the full context that it must have to make exact changes.
 
-The IDE operates now. The page is published on claude.ai, and the owner uses it. The build and the checks operate. The server puts Claude Code behind the page. The server is written, and we tested it on a copy of the repository.
+The IDE operates now. The page is published on claude.ai, and the owner uses it. The build and the checks operate. The server puts Claude Code behind the page. The server operates on the server of the owner. A service starts it when the machine starts.
 
 The completion of the IDE is stage one of the project. Stage one has three tasks:
 
@@ -101,7 +101,7 @@ apps/project-IDE/
     └── overrides.json            the owner's kept edits of the extra tables
 ```
 
-Each file and each folder in this layout has its How it works file and its Details file next to it. This rule applies to all the repository. The project IDE agent and its two skills are in `agents/system/.claude/`, with the other helpers of the system. The build scripts are in the `ide-build` skill.
+Two scripts at the top of the repository install and start the server. You run `init.sh` one time. You run `start.sh` for each start. Each file and each folder in this layout has its How it works file and its Details file next to it. This rule applies to all the repository. The project IDE agent and its two skills are in `agents/system/.claude/`, with the other helpers of the system. The build scripts are in the `ide-build` skill.
 
 ## The page
 
@@ -474,21 +474,58 @@ You must have these items:
 - The repository on the server, with permission to push.
 - Python 3.10 or a newer version.
 - Node.
-- Claude Code and its SDK: `npm install -g @anthropic-ai/claude-code` and `pip install claude-agent-sdk`.
+- Claude Code: `npm install -g @anthropic-ai/claude-code`.
+- The Python SDK `claude-agent-sdk`. `./init.sh` installs it into `.venv/` at the top of the repository. Git ignores `.venv/`.
 - A sign-in for Claude Code. Put the key `ANTHROPIC_API_KEY` in the keys file `.secrets/test/.env`, or sign in to Claude Code one time with `claude` in a terminal.
 - For voice, the key `GROQ_API_KEY` in the same keys file.
 
 If the SDK is not installed, the page operates, but the request box is off. If the Groq key is not there, the microphone button does not show.
 
-To start the server, do these steps:
+To install the server one time, do these steps:
 
 1. Go to the top of the repository.
-2. Type `python3 apps/project-IDE/server/server.py`.
-3. On your computer, open a tunnel: `ssh -N -L 8765:127.0.0.1:8765 you@your-server`.
-4. Open `http://127.0.0.1:8765/` in the browser.
-5. Make sure that the header shows "on your server".
+2. Type `./init.sh`.
 
-To stop the server, push Ctrl+C.
+`./init.sh` does these tasks:
+
+- It examines the tools: git, curl, Python 3.10 or a newer version, Node and Claude Code.
+- It makes `.venv/` with the SDK.
+- It installs the systemd user service `project-ide`. The service starts the IDE when the machine starts. Lingering is on, so the service starts before a person logs in.
+- At the end, it runs `./start.sh`.
+
+You can run `./init.sh` again safely. `./init.sh --no-service` does not install the service.
+
+To start or restart the IDE, type `./start.sh` at the top of the repository. `./start.sh` does four steps:
+
+1. **Sync.** It gets the new commits from GitHub. If the branch is behind, it puts back the three built files: the page data, `real-files.json` and `docs/file-tree.md`. Then it moves the branch forward. It does this only if no other file has local changes and there are no local commits. If not, it does not pull, and it shows a warning. It never merges, stashes or pushes. It also tells how many items on the page have the "changed" mark. It does not sync these items. Apply changes or "sync the file tree" starts a Claude Code run for the sync.
+2. **Stop.** It stops the service. It also stops a server that a person started by hand. It stops only a process that runs `apps/project-IDE/server/server.py`. It never stops another program on the port.
+3. **Rebuild.** It runs `rebuild.py` from the build scripts. The page data gets a new data version only if a change occurred. Thus a restart without a change keeps git clean. `rebuild.py` writes no How it works file and publishes nothing.
+4. **Start.** It starts the service. If there is no service, it starts a background process. It shows the output. It waits a maximum of two minutes for an answer from `api/health`. Then it shows the address and the tunnel command.
+
+Other commands:
+
+- `./start.sh --no-pull` does not do the sync.
+- `./start.sh stop` stops the IDE.
+- `./start.sh status` shows the state of the IDE.
+- `./start.sh logs` shows the output of the IDE while it operates.
+- `./start.sh serve` is the command that the service runs. It does the sync, the stop and the rebuild. Then it runs the server in the foreground.
+
+If there is no service, the output and the process id go to `agents/system/logs/services/project-ide/`. Git ignores this folder.
+
+The owner decided that these scripts start the IDE when the machine starts. Some details are a proposal. The owner did not decide them:
+
+- the name of the service;
+- the rule that a pull occurs only if the branch can move forward cleanly;
+- the report of the items that wait on the page, instead of a sync;
+- `.venv/` for the SDK.
+
+You can also start the server by hand when the service is stopped. Type `python3 apps/project-IDE/server/server.py`. To stop it, push Ctrl+C.
+
+To get access to the page from your computer, do these steps:
+
+1. On your computer, open a tunnel: `ssh -N -L 8765:127.0.0.1:8765 you@your-server`.
+2. Open `http://127.0.0.1:8765/` in the browser.
+3. Make sure that the header shows "on your server".
 
 WARNING: Do not open the port to the internet. A person who can get access to the page can make Claude Code change files and run commands.
 
@@ -562,6 +599,8 @@ A How it works edit from the page goes into the `x.index.md` next to its item.
 - The tree must be equal to the files in git.
 - After a sync, each new input from the page must be in the inputs folder with its answer. Each How it works edit must be in its file, word for word. The store must contain only the history and the items that the agent kept intentionally.
 - We tested the server on a copy of the repository. We tested these functions: the store as files, the write to the files, a real Claude Code request, Allow and Refuse, a deletion with a note, and a restore.
+- We tested the server on the server of the owner with `./start.sh`. The health check answers. A restart stops the old server and a server that a person started by hand. A second start keeps the data version. The page store saves and reads a note.
+- `check_page.js` does not operate on the server of the owner yet. Chromium needs system libraries there. Only the owner can install them.
 
 ## Where each part's docs are
 
@@ -570,7 +609,7 @@ A How it works edit from the page goes into the `x.index.md` next to its item.
 | The IDE as a whole | `apps/project-IDE/project-IDE.index.md` | The How it works of the folder |
 | The page | `apps/project-IDE/current-ui/file-tree-explorer.index.md` | The How it works of the page |
 | The page data | `apps/project-IDE/current-ui/file-tree.data.index.md` | What the data file contains |
-| The server | `apps/project-IDE/server/README.md` | Installation, start and safety, step by step |
+| The server | `apps/project-IDE/server/README.md` | Installation, start with `init.sh` and `start.sh`, and safety, step by step |
 | The knowledge and the records | `apps/project-IDE/data/README.md` | How the knowledge is kept: layers, tags, the flow |
 | The build | `agents/system/.claude/skills/ide-build/SKILL.md` and `scripts/README.md` | The build steps and the options of each script |
 | The sync | `agents/system/.claude/skills/ide-sync/SKILL.md` | Each step from the page back into the files |
@@ -589,4 +628,5 @@ A How it works edit from the page goes into the `x.index.md` next to its item.
 
 - We propose a routine that examines the page store on a schedule. Then the owner does not have to push Apply changes.
 - It is not decided how the page on claude.ai gets the changes from the server.
+- It is not decided if the page check operates on the server of the owner. Chromium there needs system libraries (`sudo npx playwright install-deps`). Only the owner can install them.
 - Add more statuses than "changed" when the owner asks for them.

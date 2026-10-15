@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "about": "Rebuilds the page data for a start of the IDE, with a new data version only when the data changed; then the How it works report and the tree check.",
+  "kind": "file",
+  "state": "written",
+  "status": "proposed",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "project-ide-agent",
+    "the owner"
+  ],
+  "readers": [
+    "start.sh",
+    "project-ide-agent"
+  ],
+  "changes_when": "The build steps change, or how the data is compared.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/materialize.py",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/build_map.py",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/check_tree.py",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/current-ui/file-tree.data.json",
+      "how": "writes"
+    },
+    {
+      "path": "apps/project-IDE/current-ui/real-files.json",
+      "how": "writes"
+    },
+    {
+      "path": "start.sh",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-073"
+    ],
+    "inputs": [
+      "in-20261015-0655"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
+      "how": "its row in the scripts table"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "its row in the scripts table"
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.md",
+      "how": "its line in the build part"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked",
+    "agents/system/.claude/skills/ide-build/scripts/README.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

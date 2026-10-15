@@ -1,9 +1,9 @@
 ---
 about: agent-os/HANDOFF.md
-basis: fba811a60617
+basis: 1dfd7b76e111
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T19:42:37Z
+confirmed: 2026-10-15T07:11:37Z
 ---
 # HANDOFF.md
 

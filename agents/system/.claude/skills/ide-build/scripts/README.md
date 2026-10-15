@@ -19,6 +19,8 @@ python3 $S/check_tree.py                        # must say "tree ok"
 node $S/check_page.js apps/project-IDE/current-ui - agent-os docs/README.md <the items this round changed>   # must say "page ok"
 ```
 
+To start the IDE on the owner's server, `./start.sh` at the top of the repository runs `rebuild.py` instead of these steps: the same data, without a new version when nothing changed, and without writing How it works files or publishing.
+
 `REPO_DIR` points every script at another checkout (default: the checkout the scripts sit in). `enrich.py` takes another data file as its argument, for a test build in a scratch folder; `real-files.json` is written next to it. `check_page.js` takes a screenshot folder instead of `-`.
 
 ## The items and their ids
@@ -35,6 +37,7 @@ An item is a file git keeps (`git ls-files --cached --others --exclude-standard`
 | `materialize.py` | Gives every item outside stage two that has none an empty `x.index.md` and `x.meta.json` (a metadata file has none of its own; in the prediction-market domain only its `docs/` gets them). Keeps a `.gitkeep` in every empty folder and removes it once the folder holds a file. Writes `docs/file-tree.md`, every path in git without the metadata files. It copies nothing. |
 | `build_map.py` | Checks the How it works files (below). `--stale`, `--empty`, `--context <path>`, `--set <file.json>`, `--confirm <path>...` (or `-` to read the paths from stdin), `--orphans`. Without an option it prints the report. |
 | `check_tree.py` | Checks that the items of the page data are exactly the files in git, the folders that hold them and the top, with the path as each id; the local `.env` files are the only extra items. |
+| `rebuild.py` | The rebuild for a start of the IDE, run by `start.sh` at the top of the repository. Runs `materialize.py`, builds the data into a scratch folder with the current data version and compares it with the data next to the page (without the `generated` time) and with `real-files.json`; only when something differs does it build in place with the next data version, so a restart with no change leaves git clean. Then it prints the `build_map.py` report and runs `check_tree.py`. Exit 0 when the tree check passes. It never writes How it works files and never publishes: a stale one is only reported. |
 | `check_page.js` | Opens the page at a desktop and a phone width with a stand-in for the artifact runtime, opens each item it is given by its path in the address and its How it works and File tabs, and fails on a page error, a missing tab, an address that does not open its item, or a page wider than the phone. `PLAYWRIGHT` and `CHROMIUM` override the module and browser paths. |
 
 ## How it works files and their basis

@@ -2507,6 +2507,36 @@
     "decisions.md"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261015-0655",
+   "at": "2026-10-15T06:55",
+   "where": "Claude Code chat on the owner's server",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-15-0655-ide-start-scripts.md",
+   "chars": 297,
+   "categories": [
+    "setup",
+    "ui",
+    "process"
+   ],
+   "summary": "Run the project IDE on this server and start it at boot, with root start.sh and init.sh that sync, stop the old process and rebuild before starting.",
+   "processed_into": [
+    "start.sh",
+    "init.sh",
+    "agents/system/.claude/skills/ide-build/scripts/rebuild.py",
+    "D-073",
+    "apps/project-IDE/server/README.md",
+    "apps/project-IDE/docs/README.md",
+    "apps/project-IDE/docs/rebuild-prompt.md",
+    "docs/README.md",
+    "docs/rebuild-prompt.md",
+    "agents/system/docs/README.md",
+    "agents/system/CLAUDE.md",
+    "HANDOFF.md"
+   ],
+   "answered": true
   }
  ]
 }

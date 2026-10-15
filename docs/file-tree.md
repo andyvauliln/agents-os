@@ -43,6 +43,7 @@ agents/system/.claude/skills/ide-build/scripts/enrich.py
 agents/system/.claude/skills/ide-build/scripts/index_files.py
 agents/system/.claude/skills/ide-build/scripts/materialize.py
 agents/system/.claude/skills/ide-build/scripts/README.md
+agents/system/.claude/skills/ide-build/scripts/rebuild.py
 agents/system/.claude/skills/ide-build/scripts/tabs.py
 agents/system/.claude/skills/ide-build/SKILL.md
 agents/system/.claude/skills/ide-sync/
@@ -492,6 +493,7 @@ apps/project-IDE/data/inputs/2026-10-14-1439-go-move-fill-metadata.md
 apps/project-IDE/data/inputs/2026-10-14-terminal-vs-page.md
 apps/project-IDE/data/inputs/2026-10-14-trading-docs-metadata-logic.md
 apps/project-IDE/data/inputs/2026-10-15-0641-ignore-local-block-live-keys.md
+apps/project-IDE/data/inputs/2026-10-15-0655-ide-start-scripts.md
 apps/project-IDE/data/inputs/index.json
 apps/project-IDE/data/inputs/README.md
 apps/project-IDE/data/inputs/YYYY-MM-DD-HHMM-[topic].md
@@ -1078,5 +1080,7 @@ docs/README.md
 docs/rebuild-prompt.md
 docs/vision.md
 HANDOFF.md
+init.sh
 README.md
+start.sh
 ```

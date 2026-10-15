@@ -2,7 +2,7 @@
 
 ## Open questions for the owner
 
-None open.
+- Do you want the page check to run on this server? The check `check_page.js` needs Playwright and Chromium. Chromium needs system libraries, such as `libgbm`. Install them one time with `sudo npx playwright install-deps`. Only you can run `sudo`. Without the check, the build cannot prove that the page opens without errors on this server. From the start scripts, 2026-10-15.
 
 ## The owner's questions
 
@@ -21,6 +21,8 @@ The full page runs on the owner's server with `server.py`. The server does these
 While we plan, you start it with `python3 vision/server/server.py`. You get access to it through an SSH tunnel.
 
 This changed later: now you start it with `python3 apps/project-IDE/server/server.py`.
+
+This changed later: on 2026-10-15 the root scripts came. Run `./init.sh` one time. Then start the IDE with `./start.sh`. A service starts it when the server boots.
 
 Docs improved: apps/project-IDE/server/README.md.
 
@@ -61,5 +63,7 @@ This changed later: on 2026-10-14 the move was done. The server now starts with 
 This is not proved yet. We tested it one time on a copy of the repository on 2026-10-05. A full server test after the move is a step of the plan.
 
 This changed later: on 2026-10-14 the move was done. `server.config.json` has the new folders and no planning folder.
+
+This changed later: on 2026-10-15 we tested the IDE on the owner's server with `./start.sh`. The health check answered, a restart stopped the old server, and the store of the page saved and read a note. Voice is off on that server because it has no `GROQ_API_KEY`.
 
 Docs improved: apps/project-IDE/server/README.md.

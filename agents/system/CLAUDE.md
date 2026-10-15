@@ -90,7 +90,7 @@ Levels from the top: the project (`docs/`), then the system (`agents/system/docs
 
 ## The File Tree page
 
-The page is published at https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs, and the owner's server serves the same page with `python3 apps/project-IDE/server/server.py`. Messages, edits and deletions the owner leaves on it wait in the page's store, marked "changed". When the owner presses Apply changes, or says "sync the file tree", run `ide-sync` (everything saved word for word and carried into the files), then `ide-build` (rebuild, check, publish), and commit.
+The page is published at https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs, and the owner's server serves the same page: `./start.sh` at the top of the repository syncs, stops the old server, rebuilds and starts it, and the service `project-ide` starts it at boot (`./init.sh` sets this up once; `./start.sh status`, `stop` and `logs` check it, stop it and follow it). Messages, edits and deletions the owner leaves on it wait in the page's store, marked "changed". When the owner presses Apply changes, or says "sync the file tree", run `ide-sync` (everything saved word for word and carried into the files), then `ide-build` (rebuild, check, publish), and commit.
 
 ## The system manager
 

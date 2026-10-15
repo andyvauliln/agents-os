@@ -69,6 +69,12 @@ agent-os/                          # the repository root (the GitHub repository 
 ├── HANDOFF.md                     # planning handoff; copied
 ├── HANDOFF.index.md
 ├── HANDOFF.meta.json
+├── init.sh                        # sets up the owner's server once and starts the IDE; built by the project IDE prompt
+├── init.index.md
+├── init.meta.json
+├── start.sh                       # starts or restarts the project IDE; built by the project IDE prompt
+├── start.index.md
+├── start.meta.json
 ├── .gitignore                     # exactly as under "The parts"
 ├── .gitignore.index.md
 ├── .gitignore.meta.json
@@ -194,6 +200,7 @@ by: knowledge-base-agent
 
 - `README.md`: create it empty. What the front page says is open; do not write it.
 - `HANDOFF.md`: copy it as the owner hands it to you. If you have none, do not create it.
+- `init.sh` and `start.sh` (executable Bash): the set-up and start scripts of the project IDE on the owner's server. Their exact spec is in `apps/project-IDE/docs/rebuild-prompt.md`; write them when you follow that prompt. They are not `agents/system/init.sh` and `agents/system/start.sh`.
 - `agent-os.index.md`: How it works of the whole repository in at most 200 words: what the Agent OS is, the top folders and what each holds, the stage, and up to four system-wide "Keep in mind" lines (key names only, never a value; the page tree equals the disk; decided only on the owner's word; plan every change).
 - Every root file gets its How it works and Details files.
 

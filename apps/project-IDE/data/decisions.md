@@ -705,3 +705,11 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - **Why:** the docs said the block and the ignore lines existed, but they did not; the owner: "about that yes".
 - **Status:** decided.
 - **Changed:** settings.json, .gitignore, their How it works files, the system README and rebuild prompt, the project README and their twins.
+
+### D-073: The project IDE runs on the owner's server and starts at boot, with root start.sh and init.sh
+<!-- k: id=d-073 sources=in-20261015-0655 status=decided -->
+- **Decision:** the project IDE runs on the owner's server and starts when the machine boots. Two scripts at the top of the repository run it: `init.sh`, run once, sets the machine up and starts the IDE; `start.sh` starts or restarts it, and before starting it syncs with git, stops the previous server process and rebuilds the page data (`agents/system/.claude/skills/ide-build/scripts/rebuild.py`). Proposed, our choices waiting for the owner's yes: the systemd user service is named `project-ide` and runs `start.sh serve`; the sync pulls only when it is a clean fast-forward (the three built files are put back first; otherwise the pull is skipped with a warning, never merged, stashed or pushed); the page items waiting in the page store are reported, not synced, since the sync is a Claude Code run; `claude-agent-sdk` is installed into `.venv/` at the top of the repository, which git ignores; a start with no change keeps the data version.
+- **Date:** 2026-10-15
+- **Why:** the owner: "let's make project ide run on this server and check if it's working, it should be running on start pc ... sync before if we have something, kill previous process and start new with rebuilding".
+- **Status:** decided (the start at boot and the two scripts with sync, stop and rebuild). Proposed (the service name, the fast-forward-only pull, reporting instead of syncing the page store, `.venv/`).
+- **Changed:** start.sh, init.sh and rebuild.py with their How it works and Details; the server README and its Questions file; the ide-build skill and its scripts README; the project IDE README, its twin and rebuild prompt; the project README, its twin and rebuild prompt; the system README, its twin and rebuild prompt; agents/system/CLAUDE.md; HANDOFF.md.

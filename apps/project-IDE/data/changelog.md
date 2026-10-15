@@ -3,6 +3,7 @@
 System-level history: what changed in the OS design, when, and from which decision. Newest first. Per-agent changes stay in each agent's own `docs/changes.md` [46]. The knowledge agent adds one line per processed input or system change (knowledge-intake, step 6).
 
 ## 2026-10-15
+- **The project IDE runs on the owner's server and starts at boot (D-073).** New `init.sh` (run once: tools, `.venv/` with the request box's SDK, the user service `project-ide`) and `start.sh` (sync when it is a clean fast-forward, stop the old and any stray server, rebuild, start, wait for the health check; also `stop`, `status`, `logs`, `serve`) at the top of the repository, and `rebuild.py` in the build scripts, which makes a new data version only when the data changed. Tested on the owner's server. The page check cannot run there until Chromium's system libraries are installed (open question for the owner).
 - **Live keys blocked; local and run-time files out of git (D-072).** `settings.json` now denies reading or editing `.secrets/live/**` and `.env` files. `.gitignore` now leaves out `settings.local.json`, `agent-memory-local/` contents and run-time logs and data; their folders and metadata stay.
 - **The move out of `vision/` is merged (PR #6).**
 

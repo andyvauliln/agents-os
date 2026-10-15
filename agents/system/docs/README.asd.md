@@ -654,7 +654,7 @@ The repository is on GitHub. The owner works on it from two locations: Claude in
 
 The File Tree page also runs on the server of the owner. Claude Code operates behind its request box. Each request on the page runs as a Claude Code session that starts in `agents/system/`. Thus the session reads the instructions, helpers and skills of the system.
 
-You start the page from the top of the repository with `python3 apps/project-IDE/server/server.py`. The service listens only on its own computer. The owner gets to it through a private tunnel, never through the open internet.
+You start the page from the top of the repository with `./start.sh`. This script gets the new commits when it is safe. It stops the old server, makes the page data again and starts the server again. A service starts the page when the server starts. `./init.sh` installs this one time. These two scripts are part of the project IDE. They are not the `init.sh` and `start.sh` of the system. The service listens only on its own computer. The owner gets to it through a private tunnel, never through the open internet.
 
 The page cannot open the keys folder. Some actions wait for the owner to push Allow or Refuse on the page:
 

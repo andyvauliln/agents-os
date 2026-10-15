@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "about": "Starts or restarts the project IDE on the owner's server: sync with git when safe, stop the old server, rebuild the page data, start it and check its health.",
+  "kind": "file",
+  "state": "written",
+  "status": "proposed",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "project-ide-agent",
+    "the owner"
+  ],
+  "readers": [
+    "the owner",
+    "the systemd user service project-ide (start.sh serve)",
+    "init.sh"
+  ],
+  "changes_when": "The way the IDE starts changes: the sync rule, the processes it stops, the rebuild, the service or the server's address.",
+  "related": [
+    {
+      "path": "init.sh",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/rebuild.py",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/server/server.py",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/server/server.config.json",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/data/page-store",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/logs",
+      "how": "writes"
+    },
+    {
+      "path": "apps/project-IDE/server/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-073"
+    ],
+    "inputs": [
+      "in-20261015-0655"
+    ],
+    "notes": [
+      "apps/project-IDE/server/README.md"
+    ]
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/server/README.md",
+      "how": "the 'Start it' section: the steps, the commands and what each does"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "'How to start it' in 'The server', then README.asd.md right after"
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.md",
+      "how": "'The start scripts' part, the build order and the acceptance checks"
+    },
+    {
+      "path": "docs/README.md",
+      "how": "the root files table, the tree and 'The project IDE' start line, then README.asd.md"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "'The File Tree page' line, if the start command changes"
+    },
+    {
+      "path": "HANDOFF.md",
+      "how": "step 2 of 'Start here'"
+    },
+    {
+      "path": "init.sh",
+      "how": "the service's ExecStart when the serve command or its name changes"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "apps/project-IDE/docs/README.md#The server",
+    "apps/project-IDE/server/README.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

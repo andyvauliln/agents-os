@@ -1,15 +1,15 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/scripts/
-basis: d8c6e83dfe83
-written: 2026-10-14T15:17:50Z
+basis: 5d4965ba12cc
+written: 2026-10-15T07:11:30Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T19:42:37Z
+confirmed: 2026-10-15T07:11:37Z
 ---
 # scripts/
 
 ## What it is
 
-The build scripts, in Python with nothing beyond the standard library, plus one page check in JavaScript. `enrich.py` builds the page data from the files on disk with help from `index_files.py` and `tabs.py`, `materialize.py` gives new items their empty metadata files and writes the plain tree, `build_map.py` finds out-of-date How it works files, and `check_page.js` and `check_tree.py` test the page and its tree before it is published. `README.md` explains how to run them.
+The build scripts, in Python with nothing beyond the standard library, plus one page check in JavaScript. `enrich.py` builds the page data from the files on disk with help from `index_files.py` and `tabs.py`, `materialize.py` gives new items their empty metadata files and writes the plain tree, `build_map.py` finds out-of-date How it works files, and `check_page.js` and `check_tree.py` test the page and its tree before it is published. `rebuild.py` is the lighter rebuild that `start.sh` runs at each start of the IDE: a new data version only when the data changed, no How it works writing, no publishing. `README.md` explains how to run them.
 
 ## Who looks after it
 

@@ -1,15 +1,15 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/scripts/README.md
-basis: c92ee47ddf01
-written: 2026-10-14T15:17:50Z
+basis: 4fb55c97cf1a
+written: 2026-10-15T07:11:30Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T19:42:37Z
+confirmed: 2026-10-15T07:11:37Z
 ---
 # README.md
 
 ## What it is
 
-The guide to the build scripts: the commands of one build from the top of the repository, what each script does and its options, where the page and its data live, how How it works files are found and confirmed, and how the owner's page saves reach the files at a sync.
+The guide to the build scripts: the commands of one build from the top of the repository, the lighter rebuild `start.sh` runs at each start of the IDE (`rebuild.py`), what each script does and its options, where the page and its data live, how How it works files are found and confirmed, and how the owner's page saves reach the files at a sync.
 
 ## Who looks after it
 

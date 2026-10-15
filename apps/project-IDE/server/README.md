@@ -5,26 +5,45 @@ This folder runs the File Tree page on your own machine, with Claude Code behind
 ## What you need
 
 - The repository cloned on the server, with a way to push.
-- Python 3.10 or newer, Node, and Claude Code with its SDK: `npm install -g @anthropic-ai/claude-code` and `pip install claude-agent-sdk`.
+- Python 3.10 or newer, Node, and Claude Code with its SDK: `npm install -g @anthropic-ai/claude-code`, and the Python package `claude-agent-sdk`, which `./init.sh` installs into `.venv/` at the top of the repository (git ignores that folder).
 - A way for Claude Code to sign in. Either put an API key in the keys file `.secrets/test/.env` as `ANTHROPIC_API_KEY=...`, or sign Claude Code in once with `claude` in a terminal. The settings name the key; its value never leaves the keys file.
 - For voice input, a Groq key in the same keys file as `GROQ_API_KEY=...` (free at console.groq.com). Without it the microphone button stays hidden.
 
 ## Start it
 
-From the top of the repository:
+Run once, from the top of the repository:
 
 ```bash
-python3 apps/project-IDE/server/server.py
+./init.sh
 ```
 
-It listens only on the machine itself, at `127.0.0.1:8765`. From your own computer, open a tunnel and then the page:
+It checks the tools (git, curl, Python 3.10 or newer, Node, Claude Code), makes `.venv/` with the SDK of the request box, installs a systemd user service named `project-ide` that starts the IDE when the server boots, and then runs `./start.sh`. It is safe to run again. `./init.sh --no-service` does the same without the service. If the server does not keep user services running before you log in, it tries `loginctl enable-linger` or prints the `sudo` command to run.
+
+After that, start or restart the IDE with:
+
+```bash
+./start.sh
+```
+
+Each start does four things in order:
+
+1. **Sync.** It fetches from GitHub. When the branch is behind, it first puts back the three built files (the page data, `real-files.json` and `docs/file-tree.md`, which the rebuild makes again), then moves the branch forward, but only when no other file has local changes and there are no local commits. Otherwise it skips the pull with a warning; it never merges, stashes or pushes. It also says how many items on the page are marked changed and waiting; it does not sync them itself, so press Apply changes on the page or say "sync the file tree" to Claude Code.
+2. **Stop.** It stops the service and any server still running from a start by hand, but only a process running `apps/project-IDE/server/server.py`, never another program on the port.
+3. **Rebuild.** It rebuilds the page data. When nothing changed, the data keeps its version, so a restart leaves git clean.
+4. **Start.** It starts the service, or a background process when no service is installed, shows its output, waits until the server answers its health check, and prints the address and the tunnel command.
+
+Other commands: `./start.sh --no-pull` (the same without the sync), `./start.sh stop`, `./start.sh status` (the service and the health check), `./start.sh logs` (follow the server's output) and `./start.sh serve` (the sync, the stop and the rebuild, then the server in the foreground; this is what the service runs). Without the service, the output and the process id go to `agents/system/logs/services/project-ide/`, which git ignores. The scripts use `.venv/bin/python` when it exists, and the port from `server.config.json` or `IDE_PORT`.
+
+The manual way still works: `python3 apps/project-IDE/server/server.py` from the top of the repository, stopped with Ctrl+C. Use it only when the service is stopped.
+
+The server listens only on the machine itself, at `127.0.0.1:8765`. From your own computer, open a tunnel and then the page:
 
 ```bash
 ssh -N -L 8765:127.0.0.1:8765 you@your-server
 # then open http://127.0.0.1:8765/ in the browser
 ```
 
-The header of the page says "on your server" when it found the service. Stop the service with Ctrl+C.
+The header of the page says "on your server" when it found the service.
 
 Never open the port to the internet or put the service behind a public address. Whoever can reach the page can make Claude Code change files and run commands. The server refuses to listen on any address but the machine's own.
 
@@ -66,3 +85,5 @@ Never open the port to the internet or put the service behind a public address. 
 - `claude_bridge.py`: runs each request as a Claude Code session and checks every step first.
 - `voice.py`: turns a recording into text through Groq.
 - `server.config.json`: the settings.
+
+The start and set-up scripts, `start.sh` and `init.sh`, sit at the top of the repository.

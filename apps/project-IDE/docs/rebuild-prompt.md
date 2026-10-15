@@ -57,8 +57,9 @@ agents/system/.claude/
 └── skills/
     ├── ide-build/SKILL.md
     │   └── scripts/              README.md, index_files.py, materialize.py, build_map.py, enrich.py,
-    │                             tabs.py, check_tree.py, check_page.js
+    │                             tabs.py, check_tree.py, check_page.js, rebuild.py
     └── ide-sync/SKILL.md
+start.sh, init.sh                 at the top of the repository: start the IDE, set up the machine once
 ```
 
 Every file is its own source and is edited where it is; the build copies nothing.
@@ -148,6 +149,7 @@ Check: the data parses; every `children` id exists; no node's `content` contains
 - `tabs.py`: field guides; the Variables table for each `.env` (names and purposes, fake example values only); Jobs, Links, Tests and Capabilities tables.
 - `check_tree.py`: the page's items are exactly the files in git, the folders that hold them and the top, with the path as each id, plus the local `.env` files; prints "tree ok".
 - `check_page.js <page dir> <shots dir|-> <paths...>`: loads the page in Chromium at 1400×900 and 390×844 with an in-memory stand-in for `window.claude` (`db`, `sample`, `user`), opens each item by its path in the URL hash, clicks How it works and File, fails on a page error, a missing item, an address that does not open its item, no tabs rendered, or (at phone width) a document wider than the viewport; saves a screenshot per width and item when given a folder; prints "page ok" or the number of problems and exits non-zero. `PLAYWRIGHT` and `CHROMIUM` override module and browser paths.
+- `rebuild.py` (standard library only; run by `start.sh`): runs `materialize.py`; builds the data with `enrich.py` into a scratch folder with the current `data_version` and compares it with `apps/project-IDE/current-ui/file-tree.data.json` without the `generated` key, and the scratch `real-files.json` with the one next to the page; only when either differs runs `enrich.py` in place with `DATA_VERSION` = current + 1, otherwise prints that the data is kept at its version; then prints the `build_map.py` report and runs `check_tree.py`. Exit 0 when the tree check passes, 1 otherwise. It never writes a How it works file and never publishes; a stale one is only reported.
 
 Steps, from the top of the repository, with `S` the scripts folder and `N` = current `data_version` + 1:
 
@@ -177,9 +179,24 @@ Check: after a sync, no `inputs` document is `new`, and every edit is in its fil
 - `server.py` (standard library `ThreadingHTTPServer`): exits if `host` is not local; rejects any request whose Host or Origin is not `127.0.0.1`, `localhost` or `::1`. Routes: `GET /` redirects to the page; `GET /<page>`, `/<data>`; `GET /real-files.json` reads scanned files fresh from disk (never under `never` paths); `GET /api/health` → `{ok, server: "project-ide", agent, agent_error, repo, claude_cwd, write_through, voice, voice_max_seconds}`; `GET /api/store/<coll>` → `{docs: [{id, data}]}`; `POST /api/store/<coll>` → `{id}`; `PUT|PATCH /api/store/<coll>/<id>` → `{ok, written}`; `POST /api/agent` `{text, node_id, path, name, num, session, input_id, kind, delete}` → `{run}`; `GET /api/agent/<run>/events` (SSE, `id:` per event, resumable); `POST /api/agent/<run>/answer` `{id, allow}`; `POST /api/agent/<run>/stop`; `POST /api/voice` (raw audio, 25 MB at most) → `{text, model}`. Collections are only `nodes`, `changes`, `inputs`; ids match `^[A-Za-z0-9_.:@+~-]{1,200}$`; files are written atomically. Write-through on `nodes` saves: `content` into the item's `src_file` (and `real_file`), never a text containing "…(cut for the page", never a field equal to the previous save; `how_md` into the item's How it works file next to it on disk, with front matter kept and `written` now, `by: owner`. Secrets are read from the keys file by name only; the Groq key is not passed to Claude Code.
 - `claude_bridge.py`: one run per request, id `YYYYMMDD-HHMMSS-<6 hex>`, in a thread; `ClaudeSDKClient` with `cwd` from the config, `add_dirs` the repository, `setting_sources ["project", "local"]`, all skills, the `claude_code` system prompt with an appended note (work for the owner through the page; follow the system's `CLAUDE.md`, file the request, finish the round, never push, never open the keys folder; answer plainly), `allowed_tools` from `allow`, a `PreToolUse` hook and `can_use_tool` both using one check: deny anything naming a `never` path; allow exactly `git rm -r -q --ignore-unmatch <item and its metadata files>` and `rm -rf <same>` for a page deletion; ask for paths outside the repository and commands containing an `ask_owner` word. Asking emits `approval {id, tool, summary, reason}` and waits up to `approval_timeout_s`, then `answered`. Events: `start`, `text`, `tool {tool, summary}`, `approval`, `answered`, `result {text, cost_usd, duration_ms, turns, session, is_error, subtype}`, `error`, `end {changed, seconds}`. `changed` comes from git: files that differ from HEAD at the start or changed during the run, committed or not, never under `never`. Each run is logged as `<log_dir>/<YYYYMMDD>/<run>.json` with node, request, result, changed, steps and the owner's answers. The prompt names the item and, when given, the input file in the page store to mark processed.
 - `voice.py`: posts multipart audio to the configured URL with the key as a bearer token; tries the models in order; a 429 parks a model for its `retry-after` (5 to 3,600 seconds); an error moves on; keeps nothing.
-- `README.md`: what you need, how to start (`python3 <server path>/server.py` from the repository top), the SSH tunnel, what happens for each page action, the settings table, the files.
+- `README.md`: what you need, how to start (`./init.sh` once, then `./start.sh`, with its four steps and its other commands; the manual way `python3 apps/project-IDE/server/server.py` from the repository top), the SSH tunnel, what happens for each page action, the settings table, the files.
 
 Check: start the server, open `http://127.0.0.1:8765/`; the header says "on your server"; a comment creates `page-store/nodes/<id>.json`; a File edit changes the file on disk; a request lists the system's agents; a `git push` waits for Allow.
+
+### The start scripts: `start.sh` and `init.sh` at the top of the repository
+
+Both are Bash, executable, run from any folder (they find the repository top from their own path), and never read a keys file. The service name `project-ide`, the fast-forward-only pull, reporting the page store instead of syncing it, and `.venv/` are defaults the owner may change.
+
+- `start.sh [""|start|--no-pull|stop|status|logs|serve|-h]`. Python is `.venv/bin/python` when it exists, else `python3`; the port is `IDE_PORT` or `port` in `server.config.json` (default 8765); run-time files go to `agents/system/logs/services/project-ide/` (`server.log`, `server.pid`; git ignores them).
+  - **sync** (skipped with `--no-pull`): on a branch with an upstream, `git fetch` (60-second limit; on failure start with what is on disk). When behind: `git checkout --` the three built files (`apps/project-IDE/current-ui/file-tree.data.json`, `apps/project-IDE/current-ui/real-files.json`, `docs/file-tree.md`); then `git merge --ff-only` only when there are no local commits and no other tracked file is changed; otherwise warn and skip. Never merge, stash or push. Then count the JSON files in `apps/project-IDE/data/page-store/nodes/` and, when any, say that many items are marked changed and to press Apply changes or say "sync the file tree"; never run the sync.
+  - **stop**: `systemctl --user stop project-ide` when the unit exists and is active; then for the pid file and every process listening on the port, kill it (TERM, then KILL after 5 seconds) only when its command line contains `project-IDE/server/server.py`; if another program still holds the port, fail.
+  - **rebuild**: `rebuild.py`; a failure is a warning and the server starts with the data on disk.
+  - **start** (the default): stop; with the unit, follow its journal, pass `NO_PULL` through the user manager's environment and `systemctl --user start project-ide`; without it, `nohup start.sh serve` in the background with output to `server.log` and its pid in `server.pid`. Poll `GET /api/health` once a second up to 120 seconds (stop early when the unit fails), then print the address, the health answer and `ssh -N -L <port>:127.0.0.1:<port> <user>@<this server>`; exit 1 when it never answers.
+  - **serve** (what the unit runs): sync, stop stray servers, rebuild, then `exec` the server in the foreground.
+  - **status**: the unit's state and the health answer. **logs**: `journalctl --user -u project-ide -f`, or `tail -f` of `server.log`.
+- `init.sh [--no-service]`, safe to run again: check git, curl, `python3` 3.10 or newer (fail without them), and node and `claude` (warn without them); create `.venv/` (git ignores it) with `uv venv`, `python3 -m venv` or `virtualenv`, and install `claude-agent-sdk` into it; unless `--no-service`, write `~/.config/systemd/user/project-ide.service` (`Type=simple`, `ExecStart=/bin/bash <repo>/start.sh serve`, `WorkingDirectory=<repo>`, `Restart=on-failure`, `RestartSec=10`, `TimeoutStartSec=180`, `KillMode=control-group` so a stop also ends the Claude Code runs it started, `WantedBy=default.target`, and `Environment=` lines with the caller's `PATH` without editor-server entries and `CLAUDE_CONFIG_DIR` when set, so the service finds node and `claude` and uses the same sign-in), `daemon-reload` and `enable` it; check lingering with `loginctl show-user`, try `loginctl enable-linger`, else print the `sudo` command; then run `./start.sh`.
+
+Check: `./start.sh` prints the address and a health answer `{"ok": true, ...}`; `./start.sh` again stops the old process and says the data is kept at its version, and `git status` shows no change to the built files; a server started by hand on the port is stopped by the next `./start.sh`; `./start.sh status` shows the unit active; after a reboot the health check answers without a login.
 
 ### The agent: `agents/system/.claude/agents/project-ide-agent.md`
 
@@ -194,12 +211,12 @@ Check: the file parses as an agent definition and names both skills.
 ## Build order
 
 1. Create the folders in the tree with their `.index.md` and `.meta.json`. Check: every folder has both.
-2. Write `index_files.py`, `materialize.py`, `tabs.py`, `build_map.py`, `enrich.py`, `check_tree.py`. Check: they run on the repository without an error, and `check_tree.py` prints "tree ok".
+2. Write `index_files.py`, `materialize.py`, `tabs.py`, `build_map.py`, `enrich.py`, `check_tree.py`, `rebuild.py`. Check: they run on the repository without an error, `check_tree.py` prints "tree ok", and a second `rebuild.py` keeps the data version.
 3. Write the page. Check: it loads the data in a browser in view-only mode.
 4. Write `check_page.js`. Check: "page ok" on `agent-os` and `docs/README.md`.
 5. Run the full build and fix every stale or orphaned How it works file through `file-index`. Check: "fresh, 0 missing or stale, 0 orphans".
 6. Write `ide-build`, `ide-sync` and the agent. Check: a test sync on a stand-in store folds one comment and one edit.
-7. Write the server files and their README. Check: the server checks above.
+7. Write the server files and their README, then `start.sh` and `init.sh` at the top of the repository. Check: the server checks and the start-script checks above.
 8. Write the four docs. Check: they agree with each other and with this prompt.
 9. Publish the page at its link (only with the owner's go). Check: the acceptance checks.
 
@@ -213,6 +230,7 @@ Check: the file parses as an agent definition and names both skills.
 - The server refuses a non-local host and any request with a foreign Origin.
 - A page deletion on the server removes exactly the item and its metadata files without a click, and any other `rm` waits for one.
 - An Apply changes round ends with its `apply` input processed and the page showing the new data version.
+- `./start.sh` run twice leaves the built files unchanged in git and ends with a health answer; the service starts the IDE at boot.
 
 ## Do not build
 
@@ -221,5 +239,6 @@ Check: the file parses as an agent definition and names both skills.
 - Filled Details files everywhere: leave empty templates where nothing is known.
 - A scheduled routine that syncs the page store without Apply changes: a proposal, not built.
 - Updating the published claude.ai page after work on the server: open.
+- Running `check_page.js` on the owner's server: open; Chromium there needs system libraries (`sudo npx playwright install-deps`), which only the owner installs. Do not install them yourself.
 - Statuses other than "changed": not built until the owner asks.
 - Any file under the prediction-market domain other than its folders: stage two.

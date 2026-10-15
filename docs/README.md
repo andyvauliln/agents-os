@@ -186,7 +186,7 @@ Its docs: `apps/project-IDE/docs/README.md`.
 
 The page lists each `.env` file as local-only and never reads, shows or edits its text. Settings and docs name keys, never their values; today the named keys include `ANTHROPIC_API_KEY` for Claude Code on the server and `GROQ_API_KEY` for voice input.
 
-`.gitignore` keeps every `.env` file out of git (except an `.env.example`, which holds names only), while keeping the How it works, Details and Questions files of a keys file. It also leaves out dependencies and build output (`node_modules/`, `dist/`, `build/`, `.venv/`, `venv/`), Python caches, OS and editor files, and Cursor's local state. Each entry carries a comment saying why.
+`.gitignore` keeps every `.env` file out of git (except an `.env.example`, which holds names only), while keeping the How it works, Details and Questions files of a keys file. It also leaves out dependencies and build output (`node_modules/`, `dist/`, `build/`, `.venv/`, `venv/`), Python caches, OS and editor files, Cursor's local state, each person's Claude Code `settings.local.json` and `agent-memory-local/` contents, and what agents write at run time into `logs/` and `data/` under `agents/` (the folders and their metadata files stay). Each entry carries a comment saying why.
 
 Its docs: `.secrets/.secrets.index.md` and `.gitignore.index.md`.
 

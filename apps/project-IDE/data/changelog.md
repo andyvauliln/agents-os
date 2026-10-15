@@ -2,6 +2,10 @@
 
 System-level history: what changed in the OS design, when, and from which decision. Newest first. Per-agent changes stay in each agent's own `docs/changes.md` [46]. The knowledge agent adds one line per processed input or system change (knowledge-intake, step 6).
 
+## 2026-10-15
+- **Live keys blocked; local and run-time files out of git (D-072).** `settings.json` now denies reading or editing `.secrets/live/**` and `.env` files. `.gitignore` now leaves out `settings.local.json`, `agent-memory-local/` contents and run-time logs and data; their folders and metadata stay.
+- **The move out of `vision/` is merged (PR #6).**
+
 ## 2026-10-14
 - **Go for the move out of `vision/` (D-071).** PR #5 is merged. The move starts with filling every Details field; decision statuses are now decided, proposed or replaced; the stage-one defaults are accepted.
 - **Knowledge notes kept but not referenced; tree numbers removed (D-070).** The topic notes and the trading notes are kept, but no doc, skill or agent points to them now. The `tree_number` field is gone from every Details file; the tree numbers and node ids leave the rest of the system in the move out of `vision/`.

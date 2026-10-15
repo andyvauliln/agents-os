@@ -2487,6 +2487,26 @@
     "docs/metadata.md"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261015-0641",
+   "at": "2026-10-15T06:41",
+   "where": "thread \"Interactive file tree UI\"",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-15-0641-ignore-local-block-live-keys.md",
+   "chars": 290,
+   "categories": [
+    "safety",
+    "structure"
+   ],
+   "summary": "Yes: settings.json blocks the live keys and .env files; .gitignore ignores local Claude Code state and run-time logs and data.",
+   "processed_into": [
+    "agents/system/.claude/settings.json",
+    ".gitignore",
+    "decisions.md"
+   ],
+   "answered": true
   }
  ]
 }

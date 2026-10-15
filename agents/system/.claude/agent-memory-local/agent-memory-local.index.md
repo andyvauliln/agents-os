@@ -9,7 +9,7 @@ confirmed: 2026-10-14T15:07:13Z
 
 ## What it is
 
-Memory for system sub-agents that use `memory: local`: the same kind of lessons as `agent-memory/`, but meant to stay on one machine. It is meant to be git-ignored, but `.gitignore` has no line for it today, so it is tracked in git as an empty placeholder that holds only its own metadata files.
+Memory for system sub-agents that use `memory: local`: the same kind of lessons as `agent-memory/`, but meant to stay on one machine. Git ignores what is put in it; only its own How it works and Details files are in git.
 
 ## Who looks after it
 
@@ -33,4 +33,4 @@ It has the same format as `agents/system/.claude/agent-memory/`. It is checked b
 
 ## Keep in mind
 
-- When you put a real memory file here, first add an ignore line for it, so it does not reach git.
+- When you need a lesson shared with every machine, put it in `agent-memory/`, not here.

@@ -79,7 +79,7 @@ agents/system/                                        # the system domain: the s
 ├── CLAUDE.md                                         # read first by Claude Code started here: project, stage, read order, rules, the round, the system manager
 ├── .claude/                                          # the system's Claude Code folder
 │   ├── settings.json                                 # permissions (deny .secrets/live/**), hooks, env, model; committed
-│   ├── settings.local.json                           # personal overrides; meant to stay local
+│   ├── settings.local.json                           # personal overrides; git-ignored
 │   ├── rules/                                        # topic rules; `paths:` frontmatter
 │   │   └── [topic].md                                # one rule per topic (placeholder)
 │   ├── skills/                                       # one folder per skill
@@ -114,7 +114,7 @@ agents/system/                                        # the system domain: the s
 │   │   └── [style-name].md                           # one output style (placeholder)
 │   ├── agent-memory/                                 # `memory: project` helper memory, committed
 │   │   └── [subagent-name]/MEMORY.md                 # one helper's memory (placeholder)
-│   └── agent-memory-local/                           # `memory: local`; meant to stay local
+│   └── agent-memory-local/                           # `memory: local`; git-ignored
 ├── docs/                                             # the system's four docs + how-to/ + subagents.link/
 │   ├── vision.md                                     # read first: why, the concept, how it works, the business logic
 │   ├── README.md                                     # every part exactly, how they connect, where their docs are
@@ -233,7 +233,7 @@ Folder names are plural. Agents at the lowest level have no children, so their f
 ```text
 .claude/
 ├── settings.json                           # committed
-├── settings.local.json                     # meant to stay local
+├── settings.local.json                     # git-ignored
 ├── rules/[topic].md
 ├── skills/[skill-name]/SKILL.md
 ├── commands/[command-name].md

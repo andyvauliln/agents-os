@@ -9,7 +9,7 @@ confirmed: 2026-10-14T19:42:37Z
 
 ## What it is
 
-The system's shared logs, sorted by source, and the starting point for every log in the system. `system/` is for the machinery's JSONL log (scheduler, relink and link checks, loaded or refused keys, errors, AI costs); `services/` for one line per test or live action of a shared service; `workers/` for the shared workers' logs; `subagents/` for one line per sub-agent call with its cost (the project IDE server logs its requests in `subagents/project-ide-agent/`). Through `subagents.link/` a reader goes down to each domain's logs. Each agent's own logs stay in its own `logs/`. `.gitignore` does not keep runtime logs out of git today; whether it should, the log format and how long logs are kept are open.
+The system's shared logs, sorted by source, and the starting point for every log in the system. `system/` is for the machinery's JSONL log (scheduler, relink and link checks, loaded or refused keys, errors, AI costs); `services/` for one line per test or live action of a shared service; `workers/` for the shared workers' logs; `subagents/` for one line per sub-agent call with its cost (the project IDE server logs its requests in `subagents/project-ide-agent/`). Through `subagents.link/` a reader goes down to each domain's logs. Each agent's own logs stay in its own `logs/`. Git ignores the log files written at run time; the folders and their metadata files stay in git. The log format and how long logs are kept are open.
 
 ## Who looks after it
 

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "about": "The committed Claude Code settings for system-level sessions: model, permissions, hooks and environment.",
   "kind": "file",
-  "state": "empty",
+  "state": "written",
   "status": "decided",
   "git": "tracked",
   "secret": false,
@@ -15,15 +15,11 @@
     "Claude Code started in agents/system/",
     "the server's Claude Code session behind the page's request box"
   ],
-  "changes_when": "A permission, hook, environment value or default model for system sessions changes; first, when its deny rules for the live keys are written.",
+  "changes_when": "A permission, hook, environment value or default model for system sessions changes.",
   "related": [
     {
       "path": ".secrets/",
       "how": "links to"
-    },
-    {
-      "path": "agents/system/.claude/settings.local.json",
-      "how": "same format as"
     },
     {
       "path": "agents/system/configs/models.config.json",
@@ -41,12 +37,14 @@
   "sources": {
     "decisions": [
       "D-024",
-      "D-027"
+      "D-027",
+      "D-072"
     ],
     "inputs": [
       "in-20260929-2025",
       "in-20260929-2147",
-      "in-20260930-0804"
+      "in-20260930-0804",
+      "in-20261015-0641"
     ],
     "notes": []
   },

@@ -1,9 +1,9 @@
 ---
 about: agent-os/
-basis: 97b20c0d7c96
+basis: 6aef319563b3
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T19:42:37Z
+confirmed: 2026-10-15T06:43:18Z
 ---
 # agent-os/
 

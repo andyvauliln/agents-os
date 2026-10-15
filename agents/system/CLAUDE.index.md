@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/CLAUDE.md
-basis: 28ceed9cf88c
+basis: 36d9d9d90175
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T07:11:37Z
+confirmed: 2026-10-15T10:40:51Z
 ---
 # CLAUDE.md
 

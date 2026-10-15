@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The owner's guide to the server page: what it needs, how to start it and reach it through an SSH tunnel, what waits for the owner, and every setting.",
+  "about": "The owner's guide to the server page: what it needs, how to start it and reach it through an SSH tunnel, notes and runs, each run's branch and merge, what waits for the owner, and every setting.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -13,7 +13,7 @@
   "readers": [
     "the owner"
   ],
-  "changes_when": "A setting, a start step or a safety rule of the server changes.",
+  "changes_when": "A setting, a start step, a safety rule, a file of the server or the way notes and runs work changes.",
   "related": [
     {
       "path": "apps/project-IDE/server/server.config.json",
@@ -30,6 +30,26 @@
     {
       "path": "apps/project-IDE/docs/README.md",
       "how": "same format as"
+    },
+    {
+      "path": "apps/project-IDE/server/claude_bridge.py",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/server/notes.py",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/server/runs.py",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/server/run_summary.py",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/server/worktrees.py",
+      "how": "links to"
     }
   ],
   "sources": {
@@ -38,13 +58,15 @@
       "D-044",
       "D-046",
       "D-060",
-      "D-073"
+      "D-073",
+      "D-074"
     ],
     "inputs": [
       "in-20261005-1517",
       "in-20261009-1019",
       "in-20261013-ide-on-server",
-      "in-20261015-0655"
+      "in-20261015-0655",
+      "in-20261015-0925"
     ],
     "notes": []
   },

@@ -1,15 +1,15 @@
 ---
 about: agent-os/apps/project-IDE/docs/README.md
-basis: ee8bac46ccdd
-written: 2026-10-14T15:17:50Z
+basis: f8a8f999ad1c
+written: 2026-10-15T11:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T07:11:37Z
+confirmed: 2026-10-15T10:41:58Z
 ---
 # README.md
 
 ## What it is
 
-The full manual of the project IDE. It describes every part of the File Tree page and how to use it, the three places the page runs (claude.ai, the owner's server, view only), how the page is built and checked, how the owner's work comes back into the files, the metadata files behind the tabs, how to run the server, who looks after it, where every part lives now and later, and what is still open.
+The full manual of the project IDE. It describes every part of the File Tree page and how to use it, the Notes and runs panel with each run on its own branch and the page of each run, the three places the page runs (claude.ai, the owner's server, view only), how the page is built and checked, how the owner's work comes back into the files, the metadata files behind the tabs, how to run the server, who looks after it, where every part lives now and later, and what is still open.
 
 ## Who looks after it
 

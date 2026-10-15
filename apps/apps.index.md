@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/
-basis: 97d3d5516db4
+basis: 0324cce385ea
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T19:42:37Z
+confirmed: 2026-10-15T10:41:12Z
 ---
 # apps/
 

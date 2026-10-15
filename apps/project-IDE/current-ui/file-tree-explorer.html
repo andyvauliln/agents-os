@@ -58,6 +58,7 @@ header.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px
 .applybox { flex: 1 1 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; background: var(--accent-soft); border-radius: 8px; padding: 8px 12px; font-size: 13px; line-height: 1.45; }
 .applybox p { margin: 0; flex: 1 1 300px; min-width: 0; }
 .applybox.wait { background: var(--warn-soft); }
+.applybox[hidden] { display: none; }
 .btn.danger { color: var(--danger); }
 .btn.quiet { background: transparent; border-color: transparent; color: var(--accent); padding-inline: 4px; }
 .btn:disabled { opacity: 0.55; cursor: default; }
@@ -490,7 +491,7 @@ table.jt tr.off td { color: var(--muted); }
 .thinking { font-size: 12.5px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
 .stream { font: 11.5px/1.5 var(--f-mono); color: var(--muted); max-height: 90px; overflow: auto; white-space: pre-wrap; background: var(--code-bg); border-radius: 6px; padding: 6px 8px; }
 .inputrow { display: flex; gap: 8px; align-items: flex-end; padding: 8px 24px 12px; flex-wrap: wrap; }
-.inputrow textarea { flex: 1 1 260px; min-height: 42px; max-height: 160px; resize: vertical; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); line-height: 1.45; }
+.inputrow textarea { flex: 1 1 260px; min-height: 42px; max-height: 50vh; resize: vertical; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); line-height: 1.45; }
 .inputrow .side { display: flex; gap: 6px; align-items: center; }
 .inputrow select { padding: 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); font-size: 12.5px; color: var(--muted); }
 .btn.mic { display: inline-flex; align-items: center; gap: 5px; font-variant-numeric: tabular-nums; }
@@ -550,16 +551,125 @@ del.w { background: var(--danger-soft); }
 @media (prefers-reduced-motion: no-preference) {
   .row, .child, .btn, .tab { transition: background-color .12s, border-color .12s, color .12s; }
 }
+/* Notes and runs: the header button, the panel under the header, the selection bar, the page of a run */
+.jobsbtn .n { font: 11px var(--f-mono); margin-left: 7px; padding: 0 6px; border-radius: 999px; background: var(--sunk); }
+.jobsbtn.need { border-color: var(--danger); color: var(--danger); }
+.jobsbtn.need .n { background: var(--danger-soft); }
+.jobs { flex: none; max-height: 44vh; display: flex; flex-direction: column; border-bottom: 1px solid var(--line); background: var(--panel); min-height: 0; }
+.jobs[hidden] { display: none; }
+.jhead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 8px 16px 0; }
+.jhead h2 { font: 600 15px var(--f-display); margin: 0; }
+.jtabs { display: flex; gap: 2px; margin-right: auto; }
+.jnew { display: flex; gap: 8px; align-items: flex-end; padding: 8px 16px 0; flex-wrap: wrap; }
+.jnew textarea, .jedit { flex: 1 1 240px; min-height: 36px; resize: vertical; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); line-height: 1.45; width: 100%; }
+.jctx { margin: 6px 16px 0; font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+.jerr { margin: 6px 0 0; color: var(--danger); font-size: 12.5px; overflow-wrap: anywhere; }
+.jobs > .jerr { margin: 6px 16px 0; }
+.jrows { overflow: auto; min-height: 0; flex: 1 1 auto; padding: 6px 16px; display: flex; flex-direction: column; gap: 5px; }
+.jrow.run .jline { flex-wrap: nowrap; }
+.jrow.run .jtitle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jrow.run .jacts { margin-top: 3px; }
+.jrow.run .jacts:empty { display: none; }
+.jrow { display: flex; gap: 8px; align-items: flex-start; border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; background: var(--bg); min-width: 0; }
+.jrow.run { border-left: 3px solid var(--accent); }
+.jrow .jinc { margin-top: 4px; flex: none; }
+.jmain { flex: 1 1 auto; min-width: 0; }
+.jline { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; min-width: 0; }
+.jpath, .jtitle { border: 0; background: none; padding: 0; color: var(--accent); cursor: pointer; font-size: 12.5px; text-align: left; overflow-wrap: anywhere; min-width: 0; }
+.jtitle { font-weight: 600; color: var(--fg); font-size: 13.5px; }
+.jt { margin-left: auto; font: 11.5px var(--f-mono); color: var(--muted); }
+.jtag { font: 11px var(--f-mono); color: var(--muted); background: var(--sunk); border-radius: 4px; padding: 0 5px; white-space: nowrap; }
+.jtext { margin-top: 3px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13.5px; }
+.jsub, .jver { margin-top: 2px; font-size: 11.5px; color: var(--muted); overflow-wrap: anywhere; }
+.jdetail { margin-top: 3px; font-size: 12.5px; color: var(--warn); overflow-wrap: anywhere; }
+.jacts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; align-items: center; }
+.jacts .btn { padding: 3px 9px; font-size: 12.5px; }
+.jdl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 12px; margin: 8px 0 0; font-size: 12.5px; }
+.jdl dt { color: var(--muted); }
+.jdl dd { margin: 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+.jmore { display: flex; gap: 10px; align-items: center; justify-content: center; font-size: 12px; color: var(--muted); padding: 0 16px; }
+.jfoot { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; padding: 8px 16px 10px; border-top: 1px solid var(--line); }
+.joptsd { flex: 1 1 300px; min-width: 0; font-size: 12.5px; }
+.joptsd > summary { cursor: pointer; color: var(--muted); overflow-wrap: anywhere; }
+.jopts { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12.5px; min-width: 0; margin-top: 6px; }
+.jog { display: inline-flex; flex-wrap: wrap; gap: 2px 10px; align-items: center; }
+.jog b { font-weight: 600; color: var(--muted); }
+.jopt { display: inline-flex; gap: 4px; align-items: center; cursor: pointer; white-space: nowrap; }
+.jopt.off { opacity: .5; cursor: default; }
+.selbar { position: fixed; z-index: 40; display: flex; gap: 6px; padding: 5px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+.selbar[hidden] { display: none; }
+.selbar .btn { padding: 3px 9px; font-size: 12.5px; }
+.detail.runmode .dock { display: none; }
+/* the page of a run takes the whole page: no tree beside it, one scroll for everything */
+body.runfull .treeside { display: none; }
+body.runfull .panes { grid-template-columns: minmax(0, 1fr); }
+body.runfull .detail { grid-column: 1 / -1; }
+.runpage { padding: 14px 24px 80px; max-width: 1280px; margin: 0 auto; min-width: 0; }
+.rhead h2 { font: 600 20px/1.25 var(--f-display); margin: 8px 0 6px; overflow-wrap: anywhere; }
+.rmeta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.rfacts { margin: 6px 0; font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.rsec { border: 1px solid var(--line); border-radius: 8px; margin-top: 10px; background: var(--panel); min-width: 0; }
+.rsec > summary { cursor: pointer; padding: 8px 12px; font-weight: 600; }
+.rbody { padding: 0 12px 10px; min-width: 0; overflow-wrap: anywhere; }
+.rsum { margin: 0 0 6px; line-height: 1.6; }
+.rtext { font-size: 13.5px; overflow-wrap: anywhere; }
+.rlist { margin: 4px 0 8px; padding-left: 18px; }
+.rlist li { margin: 2px 0; overflow-wrap: anywhere; }
+.rnotes { list-style: none; padding: 0; }
+.rnotes li { border-top: 1px solid var(--line); padding: 6px 0; }
+.jq, .jdl q { display: block; margin-top: 3px; color: var(--muted); font-style: italic; overflow-wrap: anywhere; }
+.rchips { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin: 4px 0; }
+.rchips .slab { margin: 0 4px 0 0; }
+.jchip { cursor: pointer; border: 1px solid var(--line); }
+.jchip.on { border-color: var(--accent); background: var(--accent-soft); }
+.rfiles summary { cursor: pointer; font-size: 13px; margin-top: 4px; }
+.linkish { border: 0; background: none; padding: 0; color: var(--accent); cursor: pointer; text-align: left; font-size: inherit; overflow-wrap: anywhere; }
+.slab { font: 600 11px var(--f-body); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 8px 0 3px; }
+.rsteps { margin-top: 14px; }
+.rsteps-h { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.rsteps-h h3 { font: 600 16px var(--f-display); margin: 0 auto 0 0; }
+.step { border-bottom: 1px solid var(--line); min-width: 0; }
+.step > summary { display: flex; gap: 8px; align-items: center; cursor: pointer; padding: 5px 2px; list-style: none; min-width: 0; }
+.step > summary::-webkit-details-marker { display: none; }
+.sk { flex: none; width: 20px; height: 20px; border-radius: 5px; display: inline-grid; place-items: center; font: 600 11px var(--f-mono); background: var(--sunk); color: var(--muted); }
+.k-edit .sk { background: var(--warn-soft); color: var(--warn); }
+.k-command .sk { background: var(--neutral-soft); color: var(--fg); }
+.k-skill .sk, .k-workflow .sk { background: var(--ph-soft); color: var(--ph); }
+.k-subagent .sk { background: var(--exists-soft); color: var(--exists); }
+.k-mcp .sk, .k-web .sk { background: var(--info-soft); color: var(--info); }
+.k-prompt .sk, .k-notification .sk { background: var(--accent); color: var(--panel); }
+.k-text .sk { background: var(--ok-soft); color: var(--ok); }
+.ss { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.step[open] > summary .ss { white-space: normal; overflow-wrap: anywhere; }
+.serr { flex: none; font: 600 10px var(--f-body); text-transform: uppercase; color: var(--danger); }
+.sm { flex: none; font: 11px var(--f-mono); color: var(--muted); }
+.sctx { flex: none; width: 54px; height: 6px; border-radius: 3px; background: var(--sunk); overflow: hidden; }
+.sctx i { display: block; height: 100%; background: var(--accent); opacity: .7; }
+.sbody { padding: 2px 0 10px 28px; min-width: 0; }
+.sinfo { font-size: 12px; color: var(--muted); margin: 2px 0 4px; overflow-wrap: anywhere; }
+.spre { margin: 0 0 6px; padding: 8px 10px; background: var(--code-bg); border-radius: 6px; font: 12px/1.45 var(--f-mono); white-space: pre-wrap; overflow-wrap: anywhere; max-height: 70vh; overflow: auto; }
+.substeps { border-left: 2px solid var(--exists-soft); padding-left: 8px; margin-top: 6px; }
+@media (max-width: 760px) {
+  .jhead, .jnew, .jrows, .jfoot { padding-left: 12px; padding-right: 12px; }
+  .jobs { max-height: 72vh; }
+  .jhead { gap: 4px 8px; }
+  .runpage { padding: 12px 16px 60px; }
+  .sm { display: none; }
+  .sbody { padding-left: 4px; }
+  .jt { margin-left: 0; }
+}
 </style>
 
 <div class="app">
   <header class="bar">
     <div class="brand"><h1>Agent OS File Tree</h1><span class="ver" id="ver">loading…</span></div>
     <button class="btn primary applybtn" id="apply" type="button" hidden aria-controls="applybox" aria-expanded="false" title="Carry every change marked on this page into the files, then show the new tree"><span id="applyl">Apply changes</span><span class="n" id="applyn">0</span></button>
+    <button class="btn jobsbtn" id="jobsbtn" type="button" hidden aria-controls="jobs" aria-expanded="false" title="Every note and every Claude Code run, with what each is doing">Notes and runs<span class="n" id="jobsn">0</span></button>
     <label class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <input id="q" type="search" placeholder="Filter: name, .md, *.json, agents/system/" aria-label="Filter the tree by name, file type or path"></label>
     <div class="applybox" id="applybox" hidden aria-live="polite"></div>
   </header>
+  <section class="jobs" id="jobs" hidden aria-label="Notes and runs"></section>
   <div class="panes">
     <aside class="treeside">
       <div class="sidetabs" role="tablist" aria-label="Which files">
@@ -593,6 +703,7 @@ del.w { background: var(--danger-soft); }
   </div>
 </div>
 <div class="pop" id="pop" hidden></div>
+<div class="selbar" id="selbar" hidden><button class="btn mic" type="button" data-voice="sel" title="Record a note about the selected text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span></span> Record about this</button><button class="btn" type="button" data-sel="note">Note</button></div>
 
 <script>
 (() => {
@@ -801,6 +912,7 @@ const saveOpen = () => store.set("ftx-open", JSON.stringify([...expanded]));
 function revealPath(id) { let c = NODES[id]?.parent; while (c) { expanded.add(c); c = NODES[c].parent; } saveOpen(); }
 function select(id) {
   if (!NODES[id]) return;
+  if (RUNVIEW) { RUNVIEW = null; $("#detail").classList.remove("runmode"); document.body.classList.remove("runfull"); }
   selected = id; revealPath(id);
   try { history.replaceState(null, "", "#" + hashOf(id)); } catch {}
   store.set("ftx-sel", id);
@@ -847,6 +959,7 @@ function loadRealFiles() {
   return REAL.p;
 }
 function renderSheet(reset) {
+  if (RUNVIEW) return;   // the page of a run is shown; it renders itself
   const n = NODES[selected]; const el = $("#dscroll"); if (!n) { el.innerHTML = ""; return; }
   const a = document.activeElement;
   if (!reset && a && el.contains(a) && /INPUT|TEXTAREA|SELECT/.test(a.tagName)) { pendingRender = true; return; }
@@ -1820,7 +1933,7 @@ const mmss = s => Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart
 function voicePaint() {
   const limit = (SERVER && SERVER.voice_max_seconds) || 300, on = !!VOICE.rec;
   document.querySelectorAll("[data-voice]").forEach(b => {
-    const mine = b.dataset.voice === VOICE.target, lab = b.querySelector("span");
+    const mine = b.dataset.voice === (VOICE.btn || VOICE.target), lab = b.querySelector("span");
     b.classList.toggle("rec", on && mine);
     b.disabled = (on && !mine) || VOICE.busy;
     if (lab) lab.textContent = on && mine ? `${mmss((Date.now() - VOICE.t0) / 1000)} / ${mmss(limit)}` : VOICE.busy && mine ? "Writing…" : "";
@@ -1830,7 +1943,10 @@ function voicePaint() {
 async function voiceStart(target) {
   let stream;
   try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
-  catch { return hint("The browser did not allow the microphone. Allow it for this page and press the button again.", true); }
+  catch {
+    if (String(target).startsWith("note:")) { jpost("notes/" + target.slice(5) + "/delete").catch(() => {}).then(jobsLoad); VOICE.btn = null; }
+    return hint("The browser did not allow the microphone. Allow it for this page and press the button again.", true);
+  }
   const type = ["audio/webm;codecs=opus", "audio/ogg;codecs=opus", "audio/mp4"].find(x => MediaRecorder.isTypeSupported(x)) || "";
   const rec = new MediaRecorder(stream, type ? { mimeType: type, audioBitsPerSecond: 32000 } : undefined), parts = [];
   rec.ondataavailable = e => e.data.size && parts.push(e.data);
@@ -1849,6 +1965,12 @@ function voiceStop() {
 }
 async function voiceSend(blob) {
   const target = VOICE.target;
+  if (String(target).startsWith("note:")) {   // a note: the server turns it into text and keeps it in the panel
+    const id = target.slice(5);
+    try { const r = await fetch("api/notes/" + id + "/audio", { method: "POST", headers: { "content-type": blob.type }, body: blob }); const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || "the server answered " + r.status); hint("The note is in Notes and runs. Its text comes in a moment; edit it there or send it."); }
+    catch (e) { hint("The recording did not reach the server: " + e.message, true); }
+    VOICE.busy = false; VOICE.target = null; VOICE.btn = null; voicePaint(); jobsLoad(); return;
+  }
   hint("Turning your recording into text…");
   try {
     const r = await fetch("api/voice", { method: "POST", headers: { "content-type": blob.type }, body: blob });
@@ -1869,8 +1991,16 @@ document.addEventListener("click", ev => {
   const b = ev.target.closest("[data-voice]");
   if (!b || !voiceOn()) return;
   ev.preventDefault(); ev.stopPropagation();
-  if (VOICE.rec) { if (VOICE.target === b.dataset.voice) voiceStop(); return; }
-  if (!VOICE.busy) voiceStart(b.dataset.voice);
+  if (VOICE.rec) { if ((VOICE.btn || VOICE.target) === b.dataset.voice) voiceStop(); return; }
+  if (VOICE.busy) return;
+  const k = b.dataset.voice;
+  if (jobsOn() && (k === "ask" || k === "jnew" || k === "sel")) {   // on the server a recording is a note in the panel
+    $("#selbar").hidden = true;
+    if (k === "jnew") { const ta = $("#jnew"), ctx = JOBS.draftCtx || noteCtx("notes panel"); JOBS.draftCtx = null; const pre = ta ? ta.value.trim() : ""; if (ta) { ta.value = ""; store.set("ftx-jnew", ""); }
+      return jpost("notes", { recording: true, text: pre, context: ctx }).then(n => { VOICE.btn = k; jobsLoad(); voiceStart("note:" + n.id); }).catch(e => hint("The note could not be made: " + e.message, true)); }
+    return recordNote(k, noteCtx(k === "sel" ? "selection" : "ask box", k === "sel" ? LASTSEL : null));
+  }
+  voiceStart(k);
 }, true);
 function hint(t, err) { const h = $("#hint"); h.textContent = t; h.className = "dockhint" + (err ? " err" : ""); }
 let DEFAULT_HINT = "Ask anything or say what to change: requests get a draft you can check and save. Every message and answer is kept and brought into the files at the next sync. Enter sends, Shift+Enter adds a line.";
@@ -1971,7 +2101,8 @@ async function send() {
   if (draftMsg && DISCARD_RX.test(text)) { draftMsg.draft.state = "discarded"; c.msgs.push({ who: "claude", text: "Discarded the draft." }); saveChat(id); renderChat(); return; }
   // every message is an input for the knowledge agent (D-033): stored first, filed into the docs at the next sync
   // the answer is stored with it (a question and its answer are one input, in-20260930-1841)
-  const { inputId, answer: answerInput } = newInput(id, n, text);
+  // on the server with notes, the run files the note itself, so no second input is kept here
+  const { inputId, answer: answerInput } = jobsOn() ? { inputId: null, answer: () => {} } : newInput(id, n, text);
   if (SERVER) return serverAsk(id, n, c, text, inputId, answerInput);
   if (!sample) { c.msgs.push({ who: "claude", text: !sampleReady ? "Still connecting to Claude. Send again in a moment." : db ? "Claude is not available in this view. Your message is saved and comes into the files at the next sync." : "This copy of the page only shows the files: Claude and saving work on claude.ai, or on your server through the project IDE service. Your message stays in this browser and reaches no one." }); renderChat(); return; }
   setBusy(id); hint(DEFAULT_HINT); renderChat();
@@ -2313,7 +2444,7 @@ document.addEventListener("click", ev => {
   if (d.approve) { const [run, aid, yes] = d.approve.split("|"); t.disabled = true; fetch("api/agent/" + run + "/answer", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: aid, allow: yes === "1" }) }).catch(() => { t.disabled = false; }); return; }
   if (t.id === "clear") { if (currentDraft(chatOf(selected)) && !sure(t, "Clear it, draft too?")) return; CHAT[selected] = { msgs: [] }; saveChat(selected); renderChat(); return; }
 });
-window.addEventListener("hashchange", () => { const h = decodeURIComponent((location.hash || "").slice(1)); if (NODES[h] && h !== selected) select(h); });
+window.addEventListener("hashchange", () => { const h = decodeURIComponent((location.hash || "").slice(1)); if (h.startsWith("run/")) return openRun(h.slice(4)); if (NODES[h] && (h !== selected || RUNVIEW)) select(h); });
 function renderChatKeep() { const el = $("#msgs"), top = el.scrollTop; renderChat(); el.scrollTop = top; }
 $("#dscroll").addEventListener("keydown", ev => { const a = ev.target.closest && ev.target.closest(".aitem[data-go]"); if (a && (ev.key === "Enter" || ev.key === " ")) { ev.preventDefault(); select(a.dataset.go); } });
 $("#dscroll").addEventListener("change", ev => {
@@ -2348,7 +2479,10 @@ function wysInline(node, flat) {   // rendered inline HTML back to Markdown
     else if (t === "EM" || t === "I") out += wrap("*", inner());
     else if (t === "S" || t === "DEL" || t === "STRIKE") out += wrap("~~", inner());
     else if (t === "CODE") out += c.textContent ? "`" + c.textContent + "`" : "";
-    else if (t === "A") out += `[${inner()}](${c.getAttribute("href") || ""})`;
+    else if (t === "A") {   // a link the browser made by itself (macOS smart links turn "notes.md" into http://notes.md) stays plain text
+      const h = c.getAttribute("href") || "", txt = c.textContent || "";
+      out += !h || h.replace(/^(https?:\/\/|mailto:)/, "").replace(/\/$/, "") === txt.trim() ? inner() : `[${inner()}](${h})`;
+    }
     else if (c.classList.contains("rd-xref")) out += `[${inner()}](${c.title || ""})`;
     else if (t === "DIV" || t === "P") out += (out && !out.endsWith("\n") ? (flat ? " " : "\n") : "") + inner();
     else if (t === "UL" || t === "OL") continue;
@@ -2509,6 +2643,7 @@ async function connectServer() {
   DEFAULT_HINT = h.agent ? "Ask or say what to do: Claude Code works in the repository and shows each step. Steps like pushing or deleting wait for your click. Enter sends, Shift+Enter adds a line." : "Claude Code is not set up on this server yet, so the box only saves your message. Enter sends, Shift+Enter adds a line.";
   hint(DEFAULT_HINT);
   attachDb(serverDb());
+  jobsInit();
 }
 function serverDb() {
   const subs = {}, last = {};
@@ -2533,7 +2668,13 @@ async function serverAsk(id, n, c, text, inputId, answerInput, extra) {
   const done = () => { m.live = false; RUN = null; setBusy(null); hint(DEFAULT_HINT); saveChat(id); if (selected === id) renderChatKeep(); };
   if (!SERVER.agent) { m.text = "Claude Code is not set up on this server yet, so your message is only saved. " + (SERVER.agent_error || ""); return done(); }
   let r = null;
-  try { r = await fetch("api/agent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text, node_id: id, path: n.path, name: n.name, session: c.session || null, input_id: inputId, ...(extra || {}) }) }).then(x => x.json()); }
+  try {
+    if (jobsOn() && !isApply && !(extra && Object.keys(extra).length)) {   // a request from the box is a note: it shows in the panel and works on its own branch
+      const note = await jpost("notes", { text, context: noteCtx("ask box") });
+      r = await jpost("notes/send", { ids: [note.id], session: c.session || null, options: jobsOpts(), node: { node_id: id, path: n.path, name: n.name } });
+      jobsLoad();
+    } else r = await fetch("api/agent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text, node_id: id, path: n.path, name: n.name, session: c.session || null, input_id: inputId, ...(extra || {}) }) }).then(x => x.json());
+  }
   catch (e) { m.text = "Could not reach the server (" + (e.message || e) + ")."; return done(); }
   if (!r || !r.run) { m.text = (r && r.error) || "The server did not start the request."; return done(); }
   RUN = { id: r.run, node: id }; m.run = r.run;
@@ -2658,6 +2799,350 @@ $("header.bar").addEventListener("click", ev => {
   else if (t.id === "apply-reload") { try { location.reload(); } catch {} }
   else if (t.id === "apply-drop") { const w = applyWaiting(); if (w && db) db.doc("inputs/" + w.id).update({ status: "cancelled", cancelled_at: nowIso() }).catch(() => {}); }
 });
+/* ---------- Notes and runs (owner's server only): every note and every Claude Code run in one panel, and a page for every run ---------- */
+const JOBS = { open: store.get("ftx-jobs-open") === "1", show: store.get("ftx-jobs-show") || "all", limit: 10, rows: [], total: 0, edit: {}, details: new Set(), draftCtx: null, opts: null, busy: false, pending: false, err: "" };
+const ACTIVE_ST = ["transcribing", "queued", "sending", "planning", "working"];
+const ST_COLOR = { "need human": "danger", "need manual test": "warn", transcribing: "info", queued: "info", sending: "info", planning: "ph", working: "info", ready: "neutral", done: "ok", "in main": "ok", failed: "danger", cancelled: "neutral" };
+const SENDABLE = ["ready", "failed", "cancelled", "need human", "need manual test"];
+let RUNVIEW = null, LASTSEL = null;
+const stChip = s => { const c = ST_COLOR[s] || "neutral"; return `<span class="chip st" style="--c:var(--${c});--cs:var(--${c}-soft)"><span class="dot" style="background:var(--${c})"></span>${esc(s || "")}</span>`; };
+const jget = p => fetch("api/" + p, { cache: "no-store" }).then(r => r.json().catch(() => ({})).then(j => { if (!r.ok) throw new Error(j.error || "HTTP " + r.status); return j; }));
+const jpost = (p, body, method) => fetch("api/" + p, { method: method || "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body || {}) })
+  .then(r => r.json().catch(() => ({})).then(j => { if (!r.ok) throw new Error(j.error || "HTTP " + r.status); return j; }));
+const jobsOn = () => !!(SERVER && SERVER.jobs);
+const shortTime = ts => { if (!ts) return ""; try { const d = new Date(ts), t = new Date(); return d.toDateString() === t.toDateString() ? d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }); } catch { return ts; } };
+const dur = ms => ms == null ? "" : ms < 1000 ? ms + " ms" : ms < 60000 ? (ms / 1000).toFixed(1) + " s" : Math.floor(ms / 60000) + " min " + Math.round((ms % 60000) / 1000) + " s";
+const ktok = n => n == null ? "" : n >= 1000 ? Math.round(n / 1000) + "k" : String(n);
+const verText = v => v ? `${v.commit || "?"}${v.data_version != null ? " · page v" + v.data_version : ""}` : "";
+function jobsOpts() {
+  if (!JOBS.opts) { let o = null; try { o = JSON.parse(store.get("ftx-send-opts") || "null"); } catch {} JOBS.opts = { ...((SERVER && SERVER.send_options) || {}), ...(o || {}) }; delete JOBS.opts._about; }
+  return JOBS.opts;
+}
+// what a note knows about where it was made: the item, the tab, the text selected on the sheet
+function noteCtx(where, sel) {
+  const n = NODES[selected] || {};
+  const c = { where, path: n.path ? relPath(n) : null, node_id: n.id || null, name: n.name || null, tab, page_version: DATA ? DATA.data_version : null };
+  const s = sel || (LASTSEL && LASTSEL.node === selected && Date.now() - LASTSEL.at < 120000 ? LASTSEL : null);
+  if (s) { c.selection = s.text; if (s.line) c.line = s.line; }
+  return c;
+}
+function jobsInit() {
+  if (!jobsOn()) return;
+  $("#jobsbtn").hidden = false;
+  jobsPaint(); jobsLoad();
+  setInterval(() => { if (!document.hidden && (JOBS.open || JOBS.rows.some(r => ACTIVE_ST.includes(r.status)))) jobsLoad(); }, 3000);
+  setInterval(() => { if (!document.hidden) jobsLoad(); }, 20000);
+  const h = decodeURIComponent((location.hash || "").slice(1));
+  if (h.startsWith("run/")) openRun(h.slice(4));
+}
+async function jobsLoad() {
+  if (JOBS.busy) return; JOBS.busy = true;
+  try { const d = await jget(`jobs?limit=${JOBS.limit}&show=${JOBS.show}`); JOBS.rows = d.rows || []; JOBS.total = d.total || 0; JOBS.err = ""; }
+  catch (e) { JOBS.err = "The list did not load: " + e.message; }
+  JOBS.busy = false; jobsPaint();
+}
+function jobsPaint() {
+  const btn = $("#jobsbtn"); if (!btn) return;
+  const need = JOBS.rows.filter(r => r.status === "need human").length, act = JOBS.rows.filter(r => ACTIVE_ST.includes(r.status)).length;
+  $("#jobsn").textContent = need ? need + " need you" : String(act);
+  btn.classList.toggle("need", !!need); btn.setAttribute("aria-expanded", JOBS.open ? "true" : "false");
+  const box = $("#jobs"); box.hidden = !JOBS.open; if (!JOBS.open) return;
+  const a = document.activeElement;
+  if (a && box.contains(a) && /INPUT|TEXTAREA/.test(a.tagName) && a.type !== "checkbox") { JOBS.pending = true; return; }
+  JOBS.pending = false;
+  const sc = $(".jrows", box), top = sc ? sc.scrollTop : 0;
+  const o = jobsOpts();
+  const ready = JOBS.rows.filter(r => r.type === "note" && SENDABLE.includes(r.status) && r.include !== false && (r.text || "").trim());
+  const tabsH = ["all", "notes", "runs"].map(x => `<button class="tab" type="button" data-j="show" data-v="${x}" aria-selected="${JOBS.show === x}">${x[0].toUpperCase() + x.slice(1)}</button>`).join("");
+  const dc = JOBS.draftCtx;
+  const opt = (k, v, label, dis) => `<label class="jopt${dis ? " off" : ""}"><input type="radio" name="jo-${k}" data-jo="${k}" value="${v}"${o[k] === v ? " checked" : ""}${dis ? " disabled" : ""}> ${label}</label>`;
+  const chk = (k, label) => `<label class="jopt"><input type="checkbox" data-jo="${k}"${o[k] ? " checked" : ""}> ${label}</label>`;
+  box.innerHTML = `<div class="jhead"><h2>Notes and runs</h2><div class="jtabs" role="tablist">${tabsH}</div><button class="btn quiet" type="button" data-j="refresh">Refresh</button><button class="btn quiet" type="button" data-j="hide">Hide</button></div>
+    <div class="jnew"><textarea id="jnew" rows="1" placeholder="A new note to Claude Code${NODES[selected] ? " about " + esc(NODES[selected].name) : ""}…" aria-label="New note">${esc(store.get("ftx-jnew") || "")}</textarea>${voiceOn() ? `<button class="btn mic" type="button" data-voice="jnew" title="Record a note (up to 5 minutes)" aria-label="Record a note">${MIC_ICON}<span></span></button>` : ""}<button class="btn" type="button" data-j="add">Add note</button></div>
+    ${dc && dc.selection ? `<div class="jctx">About <code>${esc(dc.path || "")}</code>${dc.line ? ", line " + dc.line : ""}: “${esc(clip(dc.selection, 160))}” <button class="btn quiet" type="button" data-j="dropctx">Remove</button></div>` : ""}
+    ${JOBS.err ? `<div class="jerr">${esc(JOBS.err)}</div>` : ""}
+    <div class="jrows">${JOBS.rows.length ? JOBS.rows.map(jobRowHTML).join("") : `<div class="empty">No notes or runs yet.</div>`}</div>
+    <div class="jmore"><span>${JOBS.rows.length} of ${JOBS.total}</span>${JOBS.rows.length < JOBS.total ? `<button class="btn quiet" type="button" data-j="more">Show more</button>` : ""}</div>
+    <div class="jfoot"><details class="joptsd"${JOBS.optsOpen ? " open" : ""}><summary title="How the next run works">Options: ${esc([o.where === "cloud" ? "cloud" : "local", o.merge === "auto" ? "auto merge" : "ask before merge", (o.tests || "related") + " tests", o.bug_check ? "bug check" : "", o.report ? "report" : ""].filter(Boolean).join(" · "))}</summary><div class="jopts">
+      <span class="jog"><b>Where</b>${opt("where", "local", "Local")}${opt("where", "cloud", "Cloud (later)", true)}</span>
+      <span class="jog"><b>Merge</b>${opt("merge", "auto", "Auto merge")}${opt("merge", "ask", "Ask me")}</span>
+      <span class="jog"><b>Tests</b>${opt("tests", "related", "Related")}${opt("tests", "all", "All")}${opt("tests", "none", "None")}</span>
+      <span class="jog">${chk("bug_check", "Check for bugs")}${chk("report", "Report")}</span></div></details>
+      <button class="btn primary" type="button" data-j="sendall"${ready.length ? "" : " disabled"} title="Send every checked note that is ready, together, as one run">Send all (${ready.length})</button></div>`;
+  const s2 = $(".jrows", box); if (s2) s2.scrollTop = top;
+  voicePaint();
+}
+function jobRowHTML(r) {
+  if (r.type === "run") {
+    const tags = (r.tags || []).map(t => `<span class="jtag">#${esc(t)}</span>`).join("");
+    const meta = [r.origin, r.branch, r.steps != null ? r.steps + " steps" : "", r.cost_usd != null ? "$" + Number(r.cost_usd).toFixed(2) : r.max_context ? ktok(r.max_context) + " context" : "", shortTime(r.end || r.start)].filter(Boolean).map(esc).join(" · ");
+    const canMerge = r.origin === "page" && r.branch && ["done", "need manual test", "need human"].includes(r.status) && r.kind === "notes";
+    return `<div class="jrow run" data-run="${esc(r.id)}"><div class="jmain">
+      <div class="jline">${stChip(r.status)}<button class="jtitle" type="button" data-j="openrun" data-v="${esc(r.id)}" title="Open this run">${esc(r.title || r.id)}</button></div>
+      <div class="jsub mono">${tags}${tags ? " " : ""}${meta}${(r.notes || []).length ? " · " + plural(r.notes.length, "note") : ""}</div>
+      ${r.detail ? `<div class="jdetail">${esc(r.detail)}</div>` : ""}
+      <div class="jacts">${r.origin === "page" && ACTIVE_ST.concat("need human").includes(r.status) ? `<button class="btn" type="button" data-j="stoprun" data-v="${esc(r.id)}">Stop</button>` : ""}${canMerge ? `<button class="btn" type="button" data-j="merge" data-v="${esc(r.id)}">Merge into main</button>` : ""}</div>
+    </div></div>`;
+  }
+  const c = r.context || {}, st = r.status, editing = JOBS.edit[r.id] != null;
+  const acts = [];
+  if (st === "transcribing" && !r.send_after_transcript) acts.push(`<button class="btn" type="button" data-j="sendafter" data-v="${esc(r.id)}">Send after transcript</button>`);
+  if (st === "queued" || (st === "transcribing" && r.send_after_transcript)) acts.push(`<span class="note-muted">Goes out when its text is in.</span>`);
+  if (SENDABLE.includes(st) && !editing) acts.push(`<button class="btn" type="button" data-j="edit" data-v="${esc(r.id)}">Edit</button><button class="btn" type="button" data-j="send" data-v="${esc(r.id)}">Send</button>`);
+  if (editing) acts.push(`<button class="btn primary" type="button" data-j="save" data-v="${esc(r.id)}">Save</button><button class="btn" type="button" data-j="noedit" data-v="${esc(r.id)}">Cancel edit</button>`);
+  if (r.run) acts.push(`<button class="btn" type="button" data-j="openrun" data-v="${esc(r.run)}">Open run</button>`);
+  if (["transcribing", "queued", "sending", "planning", "working", "need human"].includes(st)) acts.push(`<button class="btn" type="button" data-j="cancel" data-v="${esc(r.id)}">Cancel</button>`);
+  if (!["sending", "planning", "working"].includes(st)) acts.push(`<button class="btn danger" type="button" data-j="del" data-v="${esc(r.id)}">Delete</button>`);
+  acts.push(`<button class="btn quiet" type="button" data-j="details" data-v="${esc(r.id)}" aria-expanded="${JOBS.details.has(r.id)}">${JOBS.details.has(r.id) ? "Hide details" : "Details"}</button>`);
+  const ver = r.sent ? `<div class="jver mono">sent at ${esc(verText(r.sent))}${r.fixed ? " → in main at " + esc(verText(r.fixed)) : ""}</div>` : "";
+  const text = editing ? `<textarea class="jedit" data-jedit="${esc(r.id)}" rows="2">${esc(JOBS.edit[r.id])}</textarea>`
+    : st === "transcribing" && !(r.text || "").trim() ? `<span class="note-muted">Turning the recording into text…</span>` : esc(r.text || "");
+  const det = JOBS.details.has(r.id) ? `<dl class="jdl">${[["Where", c.where], ["Item", c.path], ["Tab", c.tab], ["Line", c.line], ["Selected text", c.selection], ["Recorded", c.recorded ? "by voice" : "typed"], ["Made", when(c.at || r.created)], ["Page version", c.page_version != null ? "v" + c.page_version : ""], ["Run", r.run], ["Sent from", verText(r.sent)], ["In main at", verText(r.fixed)], ["Note id", r.id]]
+    .filter(x => x[1] != null && x[1] !== "").map(([k, v]) => `<dt>${esc(k)}</dt><dd>${k === "Selected text" ? `<q>${esc(v)}</q>` : esc(v)}</dd>`).join("")}</dl>` : "";
+  return `<div class="jrow note" data-nid="${esc(r.id)}"><input type="checkbox" class="jinc" data-j="inc" data-v="${esc(r.id)}"${r.include !== false ? " checked" : ""} aria-label="Send with Send all" title="Send this note with Send all">
+    <div class="jmain"><div class="jline">${stChip(st)}${c.path ? `<button class="jpath mono" type="button" data-go="${esc(c.node_id || "")}" title="Open this item">${esc(c.path)}</button>` : `<span class="jpath mono">the repository</span>`}${c.selection ? `<span class="jtag" title="${esc(clip(c.selection, 300))}">selection${c.line ? " · line " + c.line : ""}</span>` : ""}${c.recorded ? `<span class="jtag">voice</span>` : ""}<span class="jt">${esc(shortTime(r.updated || r.created))}</span></div>
+    <div class="jtext">${text}</div>${r.error ? `<div class="jerr">${esc(r.error)}</div>` : ""}${ver}
+    <div class="jacts">${acts.join("")}</div>${det}</div></div>`;
+}
+async function jobsAction(t) {
+  const k = t.dataset.j, v = t.dataset.v;
+  const go = async (fn, okMsg) => { t.disabled = true; try { await fn(); if (okMsg) hint(okMsg); } catch (e) { JOBS.err = e.message; } JOBS.pending = false; await jobsLoad(); };
+  if (k === "hide") return jobsToggle(false);
+  if (k === "refresh") return jobsLoad();
+  if (k === "show") { JOBS.show = v; store.set("ftx-jobs-show", v); JOBS.limit = 10; return jobsLoad(); }
+  if (k === "more") { JOBS.limit += 10; return jobsLoad(); }
+  if (k === "dropctx") { JOBS.draftCtx = null; return jobsPaint(); }
+  if (k === "add") {
+    const ta = $("#jnew"), text = ta.value.trim(); if (!text) return ta.focus();
+    const ctx = JOBS.draftCtx || noteCtx("notes panel");
+    return go(async () => { await jpost("notes", { text, context: ctx }); ta.value = ""; store.set("ftx-jnew", ""); JOBS.draftCtx = null; });
+  }
+  if (k === "openrun") { if (JOBS.open) jobsToggle(false); return openRun(v); }
+  if (k === "stoprun") return go(() => jpost(`runs/${encodeURIComponent(v)}/stop`));
+  if (k === "merge") return go(() => jpost(`runs/${encodeURIComponent(v)}/merge`), "Merged into main.");
+  if (k === "inc") return go(() => jpost("notes/" + v, { include: t.checked }, "PATCH"));
+  if (k === "edit") { const r = JOBS.rows.find(x => x.id === v); JOBS.edit[v] = r ? r.text : ""; jobsPaint(); const e = $(`[data-jedit="${CSS.escape(v)}"]`); if (e) { grow(e); e.focus(); } return; }
+  if (k === "noedit") { delete JOBS.edit[v]; return jobsPaint(); }
+  if (k === "save") { const e = $(`[data-jedit="${CSS.escape(v)}"]`), text = e ? e.value : JOBS.edit[v]; delete JOBS.edit[v]; if (e) e.blur(); return go(() => jpost("notes/" + v, { text }, "PATCH")); }
+  if (k === "send") { const e = $(`[data-jedit="${CSS.escape(v)}"]`); if (e) { await jpost("notes/" + v, { text: e.value }, "PATCH").catch(() => {}); delete JOBS.edit[v]; } return go(() => jpost("notes/send", { ids: [v], options: jobsOpts() }), "Sent: the run shows in the panel."); }
+  if (k === "sendafter") return go(() => jpost("notes/send", { ids: [v], options: jobsOpts() }), "It goes out when its text is in.");
+  if (k === "sendall") {
+    const ids = JOBS.rows.filter(r => r.type === "note" && SENDABLE.includes(r.status) && r.include !== false && (r.text || "").trim()).map(r => r.id);
+    if (!ids.length) return;
+    return go(() => jpost("notes/send", { ids, options: jobsOpts() }), `Sent ${plural(ids.length, "note")} as one run.`);
+  }
+  if (k === "cancel") return go(() => jpost(`notes/${v}/cancel`));
+  if (k === "del") { if (!confirm("Delete this note? Its words are gone unless a run already took them.")) return; return go(() => jpost(`notes/${v}/delete`)); }
+  if (k === "details") { JOBS.details.has(v) ? JOBS.details.delete(v) : JOBS.details.add(v); return jobsPaint(); }
+}
+function jobsToggle(on) {
+  JOBS.open = on == null ? !JOBS.open : on; store.set("ftx-jobs-open", JOBS.open ? "1" : "0");
+  jobsPaint(); if (JOBS.open) jobsLoad();
+}
+// a text box grows with its text, up to half the screen
+function grow(el) { if (!el) return; el.style.height = "auto"; el.style.height = Math.min(el.scrollHeight + 2, Math.round(innerHeight * 0.5)) + "px"; }
+document.addEventListener("input", ev => {
+  const t = ev.target; if (!t || t.tagName !== "TEXTAREA") return;
+  if (t.id === "ask" || t.id === "jnew" || t.classList.contains("jedit")) grow(t);
+  if (t.id === "jnew") store.set("ftx-jnew", t.value);
+  if (t.classList.contains("jedit")) JOBS.edit[t.dataset.jedit] = t.value;
+});
+document.addEventListener("focusout", ev => { if (JOBS.pending && ev.target.closest && ev.target.closest("#jobs")) setTimeout(() => { if (!$("#jobs").contains(document.activeElement)) jobsPaint(); }, 0); });
+document.addEventListener("change", ev => {
+  const t = ev.target; if (!t.dataset || !t.dataset.jo) return;
+  const o = jobsOpts(); o[t.dataset.jo] = t.type === "checkbox" ? t.checked : t.value;
+  store.set("ftx-send-opts", JSON.stringify(o));
+  JOBS.optsOpen = true; jobsPaint();
+});
+$("#jobs").addEventListener("click", ev => {
+  const g = ev.target.closest("[data-go]"); if (g && g.dataset.go && NODES[g.dataset.go]) { select(g.dataset.go); return; }
+  const t = ev.target.closest("[data-j]"); if (t) jobsAction(t);
+});
+$("#jobs").addEventListener("keydown", ev => {
+  if (ev.target.id === "jnew" && ev.key === "Enter" && (ev.ctrlKey || ev.metaKey)) { ev.preventDefault(); jobsAction($('[data-j="add"]')); }
+  if (ev.target.classList && ev.target.classList.contains("jedit") && ev.key === "Enter" && (ev.ctrlKey || ev.metaKey)) { ev.preventDefault(); jobsAction($(`[data-j="save"][data-v="${CSS.escape(ev.target.dataset.jedit)}"]`)); }
+});
+$("#jobsbtn").addEventListener("click", () => jobsToggle());
+$("#jobs").addEventListener("toggle", ev => { if (ev.target.classList && ev.target.classList.contains("joptsd")) JOBS.optsOpen = ev.target.open; }, true);
+// a recorded note: made first, so it shows in the panel at once; the server turns the recording into its text
+async function recordNote(btnKey, ctx) {
+  let note;
+  try { note = await jpost("notes", { recording: true, context: ctx }); } catch (e) { return hint("The note could not be made: " + e.message, true); }
+  VOICE.btn = btnKey; if (!JOBS.open) jobsToggle(true); else jobsLoad();
+  voiceStart("note:" + note.id);
+}
+
+/* ---------- selected text on a sheet: record or write a note about it ---------- */
+function selInfo() {
+  const s = getSelection(); if (!s || s.isCollapsed || !s.rangeCount) return null;
+  const text = s.toString().trim(); if (!text) return null;
+  const r = s.getRangeAt(0), sc = $("#dscroll");
+  if (!sc.contains(r.commonAncestorContainer) || RUNVIEW) return null;
+  const el = (r.startContainer.nodeType === 1 ? r.startContainer : r.startContainer.parentElement);
+  if (el && el.closest("textarea, input, [contenteditable=true]")) return null;
+  const ln = el && el.closest("[data-l]");
+  return { text: text.slice(0, 4000), line: ln ? Number(ln.dataset.l) || null : null, rect: r.getBoundingClientRect(), node: selected, at: Date.now() };
+}
+let selTimer = null;
+document.addEventListener("selectionchange", () => {
+  clearTimeout(selTimer);
+  selTimer = setTimeout(() => {
+    const bar = $("#selbar"); if (!bar) return;
+    const s = jobsOn() ? selInfo() : null;
+    if (!s) { bar.hidden = true; return; }
+    LASTSEL = s;
+    bar.hidden = false;
+    const w = bar.offsetWidth || 220, x = Math.max(8, Math.min(innerWidth - w - 8, s.rect.left)), y = s.rect.bottom + 8 > innerHeight - 50 ? s.rect.top - 44 : s.rect.bottom + 8;
+    bar.style.left = x + "px"; bar.style.top = Math.max(8, y) + "px";
+    voicePaint();
+  }, 180);
+});
+$("#selbar").addEventListener("pointerdown", ev => ev.preventDefault());   // keep the selection while a button is pressed
+$("#selbar").addEventListener("click", ev => {
+  const b = ev.target.closest("[data-sel]"); if (!b) return;
+  const s = LASTSEL; if (!s) return;
+  const ctx = noteCtx("selection", s);
+  $("#selbar").hidden = true;
+  if (b.dataset.sel === "note") { JOBS.draftCtx = ctx; if (!JOBS.open) jobsToggle(true); else jobsPaint(); setTimeout(() => { const t = $("#jnew"); t && t.focus(); }, 0); }
+});
+
+/* ---------- the page of one run ---------- */
+const KIND_ICON = { prompt: "◆", notification: "◇", text: "¶", read: "R", edit: "E", command: "$", skill: "S", subagent: "A", mcp: "M", web: "W", workflow: "F", tool: "T" };
+const KIND_NAME = { prompt: "request", notification: "notification", text: "answer text", read: "read", edit: "edit", command: "command", skill: "skill", subagent: "subagent", mcp: "MCP", web: "web", workflow: "workflow", tool: "tool" };
+function openRun(id) {
+  if (!jobsOn() || !id) return;
+  if (!RUNVIEW || RUNVIEW.id !== id) RUNVIEW = { id, data: null, open: new Set(), filter: null, full: {}, err: "" };
+  try { history.replaceState(null, "", "#run/" + encodeURIComponent(id)); } catch {}
+  $("#detail").classList.add("runmode"); document.body.classList.add("show-detail", "runfull");
+  renderRunView(); runLoad();
+}
+function closeRun() {
+  RUNVIEW = null; $("#detail").classList.remove("runmode"); document.body.classList.remove("runfull");
+  if (selected && NODES[selected]) select(selected);
+}
+async function runLoad() {
+  const v = RUNVIEW; if (!v) return;
+  clearTimeout(v.timer);
+  try { v.data = await jget("runs/" + encodeURIComponent(v.id)); v.err = ""; } catch (e) { v.err = e.message; }
+  if (RUNVIEW !== v) return;
+  renderRunView();
+  const d = v.data;
+  if (d && (d.active || d.live || ACTIVE_ST.includes(d.status))) v.timer = setTimeout(runLoad, 4000);
+}
+function walkSteps(steps, out = []) { for (const s of steps || []) { out.push(s); walkSteps(s.steps, out); } return out; }
+function stepHTML(s, max) {
+  const v = RUNVIEW, open = v.open.has(s.id), pct = s.context && max ? Math.max(2, Math.round(s.context / max * 100)) : 0;
+  const t = s.at ? new Date(s.at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "";
+  return `<details class="step k-${esc(s.kind)}" data-step="${esc(s.id)}"${open ? " open" : ""}><summary>
+      <span class="sk" title="${esc(KIND_NAME[s.kind] || s.kind)}">${KIND_ICON[s.kind] || "•"}</span>
+      <span class="ss">${s.tool && !["Bash", "Read", "Edit", "Write"].includes(s.tool) ? `<b>${esc(s.tool)}</b> ` : ""}${esc(s.summary || "")}</span>
+      ${s.error ? `<span class="serr">error</span>` : ""}
+      <span class="sm">${esc(t)}${s.ms != null ? " · " + dur(s.ms) : ""}${s.steps ? " · " + plural(walkSteps(s.steps).length, "step") : ""}</span>
+      ${pct ? `<span class="sctx" title="${s.context.toLocaleString()} tokens in view at this step${s.out_tokens ? ", " + s.out_tokens.toLocaleString() + " written" : ""}"><i style="width:${pct}%"></i></span>` : ""}
+    </summary><div class="sbody">${open ? stepBody(s, max) : ""}</div></details>`;
+}
+function stepBody(s, max) {
+  const full = RUNVIEW.full[s.id];
+  const inp = full ? full.input : s.input, out = full ? full.output : s.output;
+  const pre = (label, x) => x ? `<div class="slab">${label}</div><pre class="spre">${esc(typeof x === "string" ? x : JSON.stringify(x, null, 1))}</pre>` : "";
+  return (s.context ? `<div class="sinfo">${s.context.toLocaleString()} tokens in view${s.out_tokens ? " · " + s.out_tokens.toLocaleString() + " written in this message" : ""}${s.file ? ` · <button class="linkish" type="button" data-rgo="${esc(s.file)}">${esc(s.file)}</button>` : ""}</div>` : "")
+    + pre(s.kind === "prompt" || s.kind === "notification" ? "Message" : "Input", inp) + pre(s.kind === "text" ? "Text" : "Output", out)
+    + (s.more && !full ? `<button class="btn quiet" type="button" data-rfull="${esc(s.id)}">Show all of it</button>` : "")
+    + (s.steps ? `<div class="substeps"><div class="slab">The subagent's steps</div>${s.steps.map(x => stepHTML(x, max)).join("")}</div>` : "");
+}
+function chipsOf(obj, kind) { return Object.entries(obj || {}).sort((a, b) => b[1] - a[1]).map(([k, n]) => `<button class="chip jchip${RUNVIEW.filter && RUNVIEW.filter.v === k ? " on" : ""}" type="button" data-rfilter="${kind}|${esc(k)}">${esc(k)} <b>${n}</b></button>`).join(""); }
+function fileLinks(list) { return (list || []).map(f => `<li><button class="linkish mono" type="button" data-rgo="${esc(f)}">${esc(f)}</button></li>`).join(""); }
+function renderRunView() {
+  const v = RUNVIEW; if (!v) return;
+  const el = $("#dscroll"), d = v.data, top = el.scrollTop;
+  if (!d) { el.innerHTML = `<div class="runpage"><button class="btn backbtn2" type="button" data-rback="1">‹ Back</button><p class="note-muted">${v.err ? esc(v.err) : "Loading the run…"}</p></div>`; return; }
+  const all = walkSteps(d.steps), max = Math.max(1, ...all.map(s => s.context || 0));
+  const t = d.totals || {}, rec = d.record;
+  const f = v.filter;
+  const match = s => !f || (f.k === "kind" ? s.kind === f.v : f.k === "tool" ? s.tool === f.v : f.k === "skill" ? s.kind === "skill" && (s.summary || "").startsWith(f.v) : f.k === "mcp" ? (s.tool || "").startsWith("mcp__" + f.v + "__") : f.k === "subagent" ? s.kind === "subagent" : true);
+  const shown = f ? all.filter(match) : (d.steps || []);
+  const started = d.start || d.started, ended = d.end || d.ended;
+  const len = started && ended ? dur(new Date(ended) - new Date(started)) : "";
+  const bn = d.branch_now || {};
+  const acts = [];
+  if (d.active || (rec && ACTIVE_ST.concat("need human").includes(d.status) && d.origin === "page")) acts.push(`<button class="btn" type="button" data-ract="stop">Stop</button>`);
+  if (rec && d.worktree && bn.exists && !ACTIVE_ST.includes(d.status)) acts.push(`<button class="btn primary" type="button" data-ract="merge">Merge into main</button><button class="btn danger" type="button" data-ract="discard">Discard the branch</button>`);
+  acts.push(`<button class="btn" type="button" disabled title="Pull requests come in a later step of the plan">Make PR</button><button class="btn" type="button" disabled title="Pull requests come in a later step of the plan">Make PR and merge</button>`);
+  if (d.session) acts.push(`<button class="btn quiet" type="button" data-ract="copy" title="Continue this session in a terminal">Copy: claude --resume ${esc(d.session.slice(0, 8))}…</button>`);
+  const tags = (d.tags || []).map(x => `<span class="jtag">#${esc(x)}</span>`).join("");
+  const ctxNote = n => { const c = n.context || {}; return `<li>${stChip(n.status)} <span class="mono">${esc(c.path || "the repository")}</span>${c.tab ? " · " + esc(c.tab) : ""}${c.line ? " · line " + c.line : ""}${c.recorded ? " · voice" : ""}<div class="jtext">${esc(n.text)}</div>${c.selection ? `<q class="jq">${esc(clip(c.selection, 400))}</q>` : ""}</li>`; };
+  const sec = (title, body, open = true) => body ? `<details class="rsec"${open ? " open" : ""}><summary>${title}</summary><div class="rbody">${body}</div></details>` : "";
+  const gitBody = [
+    d.sent ? `<p>Sent from <code>${esc(verText(d.sent))}</code>${d.fixed ? ` · in main at <code>${esc(verText(d.fixed))}</code>` : ""}${d.merged ? ` · merged from <code>${esc(d.merged.branch)}</code>` : ""}</p>` : "",
+    d.worktree ? `<p>Branch <code>${esc(d.worktree.branch)}</code> made from <code>${esc(d.worktree.base || "")}</code>${bn.exists ? `, now at <code>${esc(bn.head)}</code>` : " (merged or removed)"}</p>` : (d.branch ? `<p>Branch <code>${esc(d.branch)}</code> · started in <code>${esc(d.cwd || ".")}</code></p>` : ""),
+    bn.commits && bn.commits.length ? `<div class="slab">Commits on the branch</div><ul class="rlist">${bn.commits.map(c => `<li><code>${esc(c.commit)}</code> ${esc(c.subject)}</li>`).join("")}</ul>` : "",
+    (d.changed || bn.changed || []).length ? `<div class="slab">Files changed</div><ul class="rlist">${fileLinks(d.changed && d.changed.length ? d.changed : bn.changed)}</ul>` : "",
+    (d.commits || []).length ? `<div class="slab">Commits in the repository while it ran</div><ul class="rlist">${d.commits.map(c => `<li><code>${esc(c.commit)}</code> ${esc(c.subject)} <span class="note-muted">${esc(shortTime(c.at))}</span></li>`).join("")}</ul>` : "",
+    d.git ? `<div class="slab">The repository now: <code>${esc(d.git.branch)}</code> at <code>${esc(d.git.head)}</code>, ${plural((d.git.status || []).length, "file")} not committed</div>${(d.git.status || []).length ? `<pre class="spre">${esc(d.git.status.join("\n"))}</pre>` : ""}` : "",
+  ].join("");
+  const totalsBody = [
+    `<div class="rchips"><span class="slab">Kinds</span>${chipsOf(all.reduce((a, s) => (a[s.kind] = (a[s.kind] || 0) + 1, a), {}), "kind")}</div>`,
+    Object.keys(t.tools || {}).length ? `<div class="rchips"><span class="slab">Tools</span>${chipsOf(t.tools, "tool")}</div>` : "",
+    Object.keys(t.skills || {}).length ? `<div class="rchips"><span class="slab">Skills</span>${chipsOf(t.skills, "skill")}</div>` : "",
+    (t.subagents || []).length ? `<div class="rchips"><span class="slab">Subagents</span>${t.subagents.map(a => `<button class="chip jchip" type="button" data-rstep="${esc(a.step)}">${esc(a.type)}: ${esc(a.description)}</button>`).join("")}</div>` : "",
+    Object.keys(t.mcp || {}).length ? `<div class="rchips"><span class="slab">MCP</span>${chipsOf(t.mcp, "mcp")}</div>` : "",
+    Object.keys(t.plugins || {}).length ? `<div class="rchips"><span class="slab">Plugins</span>${Object.entries(t.plugins).map(([k, n]) => `<span class="chip">${esc(k)} <b>${n}</b></span>`).join("")}</div>` : "",
+    (t.workflows || []).length ? `<div class="rchips"><span class="slab">Workflows</span>${t.workflows.map(w => `<span class="chip">${esc(w)}</span>`).join("")}</div>` : "",
+    (t.web || []).length ? `<div class="rchips"><span class="slab">Web</span>${t.web.slice(0, 20).map(w => `<span class="chip">${esc(clip(w, 60))}</span>`).join("")}</div>` : "",
+    (t.read || []).length ? `<details class="rfiles"><summary>${plural(t.read.length, "file")} read</summary><ul class="rlist">${fileLinks(t.read)}</ul></details>` : "",
+    (t.edited || []).length ? `<details class="rfiles"><summary>${plural(t.edited.length, "file")} edited</summary><ul class="rlist">${fileLinks(t.edited)}</ul></details>` : "",
+  ].join("");
+  el.innerHTML = `<div class="runpage">
+    <div class="rhead"><button class="btn backbtn2" type="button" data-rback="1">‹ Back</button>
+      <h2>${esc(d.title || d.id)}</h2>
+      <div class="rmeta">${stChip(d.status)}<span class="jtag">${esc(d.origin || "terminal")}</span>${tags}${d.status_detail ? `<span class="jdetail">${esc(d.status_detail)}</span>` : ""}</div>
+      <div class="rfacts mono">${[d.cwd ? "in " + d.cwd : "", d.branch || (d.worktree || {}).branch, started ? "started " + when(started) : "", len, d.model, d.result && d.result.cost_usd != null ? "$" + Number(d.result.cost_usd).toFixed(2) : "", d.max_context ? ktok(d.max_context) + " tokens at most in view" : "", d.output_tokens ? ktok(d.output_tokens) + " written" : "", d.steps ? plural(all.length, "step") : ""].filter(Boolean).map(esc).join(" · ")}</div>
+      <div class="editacts">${acts.join("")}</div>${v.err ? `<div class="jerr">${esc(v.err)}</div>` : ""}</div>
+    ${sec("Summary (ASD-STE100)", (d.summary ? `<p class="rsum">${esc(d.summary)}</p>` : `<p class="note-muted">${d.summary_error ? "The summary failed: " + esc(d.summary_error) : d.live || d.active ? "The summary is written when the run ends." : "No summary yet."}</p>`) + `<button class="btn quiet" type="button" data-ract="summary">${d.summary ? "Write it again" : "Write it now"}</button>`)}
+    ${sec("Request", `<div class="rtext md">${md(d.request_full || d.request || "")}</div>`)}
+    ${sec("Answer", d.answer_full || d.answer ? `<div class="rtext md">${md(d.answer_full || d.answer)}</div>` : `<p class="note-muted">No answer yet.</p>`)}
+    ${(d.notes_full || []).length ? sec(`Notes (${d.notes_full.length})`, `<ul class="rlist rnotes">${d.notes_full.map(ctxNote).join("")}</ul>`) : ""}
+    ${d.options ? sec("Send options", `<p class="mono">${esc(Object.entries(d.options).map(([k, x]) => k + ": " + x).join(" · "))}</p>`, false) : ""}
+    ${sec("Git", gitBody)}
+    ${sec("What it used", totalsBody)}
+    ${(d.checks || []).length ? sec(`Checks and tests (${d.checks.length})`, `<ul class="rlist">${d.checks.map(s => `<li><button class="linkish" type="button" data-rstep="${esc(s.id)}">${s.error ? "✗" : "✓"} ${esc(clip(s.command || s.summary, 160))}</button></li>`).join("")}</ul>`, false) : ""}
+    ${(d.plans || []).length ? sec("Plan", `<ul class="rlist">${fileLinks(d.plans)}</ul>`) : ""}
+    <section class="rsteps"><div class="rsteps-h"><h3>Steps${f ? ` · only ${esc(f.v)}` : ""}</h3>${f ? `<button class="btn quiet" type="button" data-rfilter="">Show all steps</button>` : ""}<button class="btn quiet" type="button" data-ract="openall">Open all</button><button class="btn quiet" type="button" data-ract="closeall">Close all</button></div>
+      ${shown.length ? shown.map(s => stepHTML(s, max)).join("") : `<p class="note-muted">No steps yet.</p>`}</section>
+  </div>`;
+  el.scrollTop = top;
+}
+function findStep(id) { return RUNVIEW && RUNVIEW.data ? walkSteps(RUNVIEW.data.steps).find(s => s.id === id) : null; }
+$("#dscroll").addEventListener("toggle", ev => {
+  const d = ev.target; if (!RUNVIEW || !d.classList || !d.classList.contains("step")) return;
+  const id = d.dataset.step;
+  if (d.open) { RUNVIEW.open.add(id); const b = d.querySelector(":scope > .sbody"), s = findStep(id); if (b && s && !b.innerHTML) b.innerHTML = stepBody(s, Math.max(1, ...walkSteps(RUNVIEW.data.steps).map(x => x.context || 0))); }
+  else RUNVIEW.open.delete(id);
+}, true);
+$("#dscroll").addEventListener("click", async ev => {
+  if (!RUNVIEW) return;
+  const t = ev.target.closest("button"); if (!t) return;
+  const v = RUNVIEW, d = v.data || {};
+  if (t.dataset.rback) return closeRun();
+  if (t.dataset.rgo != null) { const id = Object.keys(NODES).find(k => relPath(NODES[k]).replace(/\/$/, "") === t.dataset.rgo.replace(/\/$/, "")); if (id) { closeRun(); select(id); } else hint("That file is not in the tree (it may be on the run's branch only).", true); return; }
+  if (t.dataset.rfilter != null) { const [k, x] = t.dataset.rfilter.split("|"); v.filter = t.dataset.rfilter && !(v.filter && v.filter.k === k && v.filter.v === x) ? { k, v: x } : null; return renderRunView(); }
+  if (t.dataset.rstep) { let s = t.dataset.rstep; const parts = s.split("."); for (let i = 1; i <= parts.length; i++) v.open.add(parts.slice(0, i).join(".")); v.filter = null; renderRunView(); const e = $(`details.step[data-step="${CSS.escape(s)}"]`); e && e.scrollIntoView({ block: "center" }); return; }
+  if (t.dataset.rfull) { t.disabled = true; try { v.full[t.dataset.rfull] = await jget(`runs/${encodeURIComponent(v.id)}/steps/${encodeURIComponent(t.dataset.rfull)}`); } catch (e) { v.err = e.message; } return renderRunView(); }
+  const a = t.dataset.ract; if (!a) return;
+  if (a === "openall") { walkSteps(d.steps).forEach(s => v.open.add(s.id)); return renderRunView(); }
+  if (a === "closeall") { v.open.clear(); return renderRunView(); }
+  if (a === "copy") { try { await navigator.clipboard.writeText("claude --resume " + d.session); hint("Copied. Run it in agents/system/ or where the run started."); } catch { prompt("Copy this:", "claude --resume " + d.session); } return; }
+  if (a === "discard" && !confirm("Discard this run's branch and its worktree? Its commits are lost.")) return;
+  t.disabled = true;
+  try {
+    if (a === "summary") await jpost(`runs/${encodeURIComponent(v.id)}/summary`);
+    if (a === "merge") { await jpost(`runs/${encodeURIComponent(v.id)}/merge`); hint("Merged into main."); reloadData(); }
+    if (a === "discard") await jpost(`runs/${encodeURIComponent(v.id)}/discard`);
+    if (a === "stop") await jpost(`runs/${encodeURIComponent(v.id)}/stop`);
+  } catch (e) { v.err = e.message; }
+  runLoad(); jobsLoad();
+});
+
 boot();
 })();
 </script>

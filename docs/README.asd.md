@@ -225,7 +225,7 @@ Its docs: `apps/docs/README.md`.
 
 - `current-ui/` contains the File Tree page, `file-tree-explorer.html`, its data file, `file-tree.data.json`, and `real-files.json`. `real-files.json` contains the text of each file. The page loads it when the owner opens a file. The page is on claude.ai at https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs.
 - `server/` operates the same page on the owner's server. Claude Code operates behind the request box of the page.
-- The server files are `server.py`, `claude_bridge.py`, `voice.py`, `server.config.json` and `README.md`. `voice.py` changes speech to text with Groq.
+- The server files are `server.py`, `claude_bridge.py`, `notes.py`, `runs.py`, `run_summary.py`, `worktrees.py`, `voice.py`, `server.config.json` and `README.md`. `notes.py` keeps the notes and runs of the Notes and runs panel. `runs.py` reads the transcripts of Claude Code into runs. `run_summary.py` writes the summary and the tags of each run. `worktrees.py` makes the branch of each page run and merges it into `main`. `voice.py` changes speech to text with Groq.
 - `data/` contains the project records.
 - `data/inputs/` keeps each owner input word for word, with its answer. It also has `index.json`.
 - `data/decisions.md` keeps all decisions. `data/changelog.md` records the changes. The newest change is first.
@@ -271,6 +271,8 @@ Settings and docs give the names of keys. They do not give the values. Two of th
 - the local state of Cursor
 - the `settings.local.json` file of each person, and the contents of `agent-memory-local/`
 - the files that agents write when they run, in the `logs/` and `data/` folders under `agents/`. The folders and their metadata files stay in git.
+- `.worktrees/`. Each run from the project IDE page operates on its own branch in this folder.
+- `apps/project-IDE/data/page-store/notes/`. This folder keeps the notes of the owner that wait on the server page.
 
 Each entry in `.gitignore` has a comment that tells why.
 

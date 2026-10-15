@@ -242,6 +242,37 @@ __pycache__/
 
 # Cursor local state
 .cursor/
+
+# Research clones stay out of git
+apps/temp/*/repo/
+
+# Claude Code local state: one person's settings and one machine's memory stay out of git
+# (the folder's How it works and Details files stay in git)
+**/.claude/settings.local.json
+**/.claude/agent-memory-local/*
+!**/.claude/agent-memory-local/*.index.md
+!**/.claude/agent-memory-local/*.meta.json
+!**/.claude/agent-memory-local/.gitkeep
+
+# Runtime logs and data: what agents and workers write at run time is not source;
+# the folders, their How it works, Details and Questions files and .gitkeep stay in git
+agents/**/logs/**
+!agents/**/logs/**/
+!agents/**/logs/**/.gitkeep
+!agents/**/logs/**/*.index.md
+!agents/**/logs/**/*.meta.json
+!agents/**/logs/**/*.questions.md
+agents/**/data/**
+!agents/**/data/**/
+!agents/**/data/**/.gitkeep
+!agents/**/data/**/*.index.md
+!agents/**/data/**/*.meta.json
+!agents/**/data/**/*.questions.md
+
+# The project IDE: each run's worktree, and the owner's notes waiting on the server page
+# (a note's words are filed as an owner input by the run that takes it)
+.worktrees/
+apps/project-IDE/data/page-store/notes/
 ```
 
 Every new ignore line gets a comment saying why.

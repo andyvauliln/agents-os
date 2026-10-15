@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "Runs each request from the server page as a Claude Code session started in agents/system/, checks every step, streams it to the page and logs it.",
+  "about": "Runs each request from the server page as a Claude Code session, a run with notes on its own branch in a worktree; checks every step, sets the run's status, merges on auto merge, streams and logs it.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -13,7 +13,7 @@
   "readers": [
     "apps/project-IDE/server/server.py"
   ],
-  "changes_when": "A rule on what Claude Code may do, the start folder or the request flow changes.",
+  "changes_when": "A rule on what Claude Code may do, the start folder, the worktree flow or the statuses of a run change.",
   "related": [
     {
       "path": "apps/project-IDE/server/server.py",
@@ -34,6 +34,18 @@
     {
       "path": "apps/project-IDE/server/README.md",
       "how": "documented in"
+    },
+    {
+      "path": "apps/project-IDE/server/worktrees.py",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/server/notes.py",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/server/run_summary.py",
+      "how": "reads"
     }
   ],
   "sources": {
@@ -42,12 +54,14 @@
       "D-043",
       "D-044",
       "D-045",
-      "D-050"
+      "D-050",
+      "D-074"
     ],
     "inputs": [
       "in-20261005-1452",
       "in-20261005-1517",
-      "in-20261005-1545"
+      "in-20261005-1545",
+      "in-20261015-0925"
     ],
     "notes": []
   },
@@ -71,6 +85,10 @@
     {
       "path": "apps/project-IDE/server/server.config.json",
       "how": "If a new setting is read, add it with its default."
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "If where a page run works or how it reaches main changes, change the section \"The File Tree page\"."
     }
   ],
   "inherits": [
@@ -78,9 +96,12 @@
     "docs/metadata.md",
     "apps/docs/README.md#The project IDE",
     "apps/project-IDE/docs/README.md#The server",
-    "agents/system/docs/README.md#Keys and secrets"
+    "agents/system/docs/README.md#Keys and secrets",
+    "apps/project-IDE/docs/README.md#Notes and runs"
   ],
-  "features": [],
+  "features": [
+    "Notes and runs"
+  ],
   "views": [],
   "how_it_works": {}
 }

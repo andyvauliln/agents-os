@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The File Tree page on the owner's own server, with Claude Code behind its request box.",
+  "about": "The File Tree page on the owner's own server, with Claude Code behind it, the Notes and runs panel, and each page run on its own branch.",
   "kind": "folder",
   "state": "written",
   "status": "decided",
@@ -14,7 +14,7 @@
     "the owner",
     "project-ide-agent"
   ],
-  "changes_when": "The owner asks for a change to the server page.",
+  "changes_when": "The owner asks for a change to the server page, its panel or the way runs work and reach main.",
   "related": [
     {
       "path": "apps/project-IDE/server/README.md",
@@ -35,6 +35,14 @@
     {
       "path": "agents/system/CLAUDE.md",
       "how": "reads"
+    },
+    {
+      "path": "agents/system/logs/subagents/",
+      "how": "writes"
+    },
+    {
+      "path": ".gitignore",
+      "how": "links to"
     }
   ],
   "sources": {
@@ -42,7 +50,8 @@
       "D-042",
       "D-043",
       "D-044",
-      "D-060"
+      "D-060",
+      "D-074"
     ],
     "inputs": [
       "in-20261005-1433",
@@ -50,7 +59,8 @@
       "in-20261005-1517",
       "in-20261009-1019",
       "in-20261009-2219",
-      "in-20261013-ide-on-server"
+      "in-20261013-ide-on-server",
+      "in-20261015-0925"
     ],
     "notes": []
   },
@@ -80,7 +90,8 @@
     "agents/system/CLAUDE.md#Rules",
     "docs/metadata.md",
     "apps/docs/README.md#The project IDE",
-    "apps/project-IDE/docs/README.md#The server"
+    "apps/project-IDE/docs/README.md#The server",
+    "apps/project-IDE/docs/README.md#Notes and runs"
   ],
   "features": [],
   "views": [],

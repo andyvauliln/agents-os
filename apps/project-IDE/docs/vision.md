@@ -33,13 +33,13 @@ When the owner wants something changed, they have three ways to say it:
 
 Everything the owner does is marked "changed". When they are ready, one button at the top, Apply changes, hands it all to AI: AI writes the edits into their files, files every note and request as an owner input, cleans up what was deleted, rebuilds the page and shows the new tree.
 
-The IDE works in three places. Published on claude.ai, it keeps the owner's work in its own store and AI brings it in when asked. On the owner's own server, Claude Code works behind it: edits go straight into the files, requests run at once, and the owner watches each step and approves the risky ones. Opened anywhere else, it only shows the project and says so.
+The IDE works in three places. Published on claude.ai, it keeps the owner's work in its own store and AI brings it in when asked. On the owner's own server, Claude Code works behind it: edits go straight into the files, requests run at once, and the owner watches each step and approves the risky ones. There, every note the owner types or says and every run of Claude Code, from the page or from a terminal, is one row in one panel that the owner can follow, send in batches and open step by step, and each run from the page works on its own branch until it is merged, so several can work at once without touching what the page shows. Opened anywhere else, it only shows the project and says so.
 
 The rules are the same as everywhere in the Agent OS. Only the owner decides; what AI adds is marked as a proposal until they agree. No secret value is ever shown or stored: a keys file shows only the names of its keys. Every change is filed and committed, so it can be traced and undone.
 
 ## Where it stands and what comes next
 
-The IDE works today. The page, its build, its checks and the way back into the files are written, and the owner uses the page on claude.ai. The server with Claude Code behind it is written and was tested on a copy of the repository. The tree on the page matches the repository file for file, and every file and folder has its explanation file and its details file on disk.
+The IDE works today. The page, its build, its checks and the way back into the files are written, and the owner uses the page on claude.ai. The server with Claude Code behind it runs on the owner's server and starts at boot, and its Notes and runs panel shows every note and every run. The tree on the page matches the repository file for file, and every file and folder has its explanation file and its details file on disk.
 
 Finishing the IDE is the first stage of the whole project, and three things are still open in it:
 

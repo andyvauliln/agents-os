@@ -1,15 +1,15 @@
 ---
 about: agent-os/apps/project-IDE/
-basis: 3b50457c74d9
-written: 2026-10-14T15:17:50Z
+basis: fc0e94ffb2fc
+written: 2026-10-15T11:03:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T19:42:37Z
+confirmed: 2026-10-15T10:41:06Z
 ---
 # project-IDE/
 
 ## What it is
 
-The owner's IDE for the project, one of the apps: the File Tree page they use to manage, analyse and view the Agent OS while it is built with AI, and everything the page is built from. It serves every AI as much as the owner: for any file it shows what it is for, how it works, what depends on it and what holds for it from the levels above. Like every app it has its own `docs/`: a vision, a README (the full manual of the IDE), its ASD-STE100 twin and a rebuild prompt. `current-ui/` holds the page and its data, as published on claude.ai; `server/` runs the same page on the owner's server, with Claude Code behind its request box; `data/` holds the project's records: every owner input, the decisions, the changelog, the plans, the owner's page edits and the page's store on the server. The build scripts live in `agents/system/.claude/skills/ide-build/scripts/`. It is not the trading dashboard, which is `trading-ui/`.
+The owner's IDE for the project, one of the apps: the File Tree page they use to manage, analyse and view the Agent OS while it is built with AI, and everything the page is built from. It serves every AI as much as the owner: for any file it shows what it is for, how it works, what depends on it and what holds for it from the levels above. Like every app it has its own `docs/`: a vision, a README (the full manual of the IDE), its ASD-STE100 twin and a rebuild prompt. `current-ui/` holds the page and its data, as published on claude.ai; `server/` runs the same page on the owner's server, with Claude Code behind its request box and a Notes and runs panel of every note and run, each page run on its own branch until the server merges it into `main`; `data/` holds the project's records: every owner input, the decisions, the changelog, the plans, the owner's page edits and the page's store on the server. The build scripts live in `agents/system/.claude/skills/ide-build/scripts/`. It is not the trading dashboard, which is `trading-ui/`.
 
 ## Who looks after it
 

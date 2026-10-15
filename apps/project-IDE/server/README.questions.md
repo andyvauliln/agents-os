@@ -2,7 +2,7 @@
 
 ## Open questions for the owner
 
-- Do you want the page check to run on this server? The check `check_page.js` needs Playwright and Chromium. Chromium needs system libraries, such as `libgbm`. Install them one time with `sudo npx playwright install-deps`. Only you can run `sudo`. Without the check, the build cannot prove that the page opens without errors on this server. From the start scripts, 2026-10-15.
+- **Pull requests: when do we build them?** Today a run from the page merges into `main` on this server only, and nothing goes to GitHub. The buttons Make PR and Make PR and merge are on the run page, but they are off. To make a pull request, the server must push the branch and use `gh`. The `gh` command must be signed in on this server. Recommended: build pull requests as the next step of the plan, after the owner uses the local merge for some days. From the plan: one panel for notes and runs, 2026-10-15.
 
 ## The owner's questions
 

@@ -171,7 +171,7 @@ Its docs: `apps/docs/README.md`.
 `apps/project-IDE/` is the owner's window on the project and the context every AI works from.
 
 - `current-ui/` holds the File Tree page, `file-tree-explorer.html`, its data file, `file-tree.data.json`, and `real-files.json`, the text of every file, loaded when one is opened. The page is published on claude.ai at https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs.
-- `server/` runs the same page on the owner's server, with Claude Code behind its request box: `server.py`, `claude_bridge.py`, `voice.py` (voice input through Groq), `server.config.json` and its own `README.md`.
+- `server/` runs the same page on the owner's server, with Claude Code behind its request box: `server.py`, `claude_bridge.py`, `notes.py` (the notes and runs of its Notes and runs panel), `runs.py` (Claude Code's transcripts read into runs), `run_summary.py` (each run's summary and tags), `worktrees.py` (each page run's own branch and its merge into `main`), `voice.py` (voice input through Groq), `server.config.json` and its own `README.md`.
 - `data/` holds the project's records: `inputs/` with every owner input word for word and its answer (and `index.json`), `decisions.md`, `changelog.md` (newest first), `plans/` with one plan per change request (and `index.json`), `overrides.json` with the owner's kept edits of the extra tables, the page's store on the server, and the archive.
 - `docs/` holds the IDE's four docs; its README is the full documentation of the IDE.
 
@@ -191,7 +191,7 @@ Its docs: `apps/project-IDE/docs/README.md`.
 
 The page lists each `.env` file as local-only and never reads, shows or edits its text. Settings and docs name keys, never their values; today the named keys include `ANTHROPIC_API_KEY` for Claude Code on the server and `GROQ_API_KEY` for voice input.
 
-`.gitignore` keeps every `.env` file out of git (except an `.env.example`, which holds names only), while keeping the How it works, Details and Questions files of a keys file. It also leaves out dependencies and build output (`node_modules/`, `dist/`, `build/`, `.venv/`, `venv/`), Python caches, OS and editor files, Cursor's local state, each person's Claude Code `settings.local.json` and `agent-memory-local/` contents, and what agents write at run time into `logs/` and `data/` under `agents/` (the folders and their metadata files stay). Each entry carries a comment saying why.
+`.gitignore` keeps every `.env` file out of git (except an `.env.example`, which holds names only), while keeping the How it works, Details and Questions files of a keys file. It also leaves out dependencies and build output (`node_modules/`, `dist/`, `build/`, `.venv/`, `venv/`), Python caches, OS and editor files, Cursor's local state, each person's Claude Code `settings.local.json` and `agent-memory-local/` contents, what agents write at run time into `logs/` and `data/` under `agents/` (the folders and their metadata files stay), and for the project IDE `.worktrees/`, where each run from the page works on its own branch, and the owner's waiting notes in `apps/project-IDE/data/page-store/notes/`. Each entry carries a comment saying why.
 
 Its docs: `.secrets/.secrets.index.md` and `.gitignore.index.md`.
 

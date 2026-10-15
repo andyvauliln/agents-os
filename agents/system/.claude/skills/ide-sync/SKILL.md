@@ -23,6 +23,8 @@ Every item is known by its path from the top of the repository (`docs/README.md`
 
 Read them with the artifact data tool on the page's link, https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs. On the owner's server the same documents are files, one per document, in `apps/project-IDE/data/page-store/<collection>/<id>.json`: read them there, and clear a folded one by setting its `status` or deleting its file. Edits to a file's text and to How it works made on the server page are already in their files; check them and confirm them.
 
+**Notes on the server.** The server page also keeps the notes of its Notes and runs panel, one file each in `apps/project-IDE/data/page-store/notes/<id>.json` (git ignores the folder), and a message in the server's ask box is such a note, not an `inputs` document. A note does not wait for a sync: the run that takes it files its words as an owner input, word for word. So a sync only checks the notes still `ready` (never sent): list them for the owner in the report and leave them where they are; the owner sends or deletes them in the panel. Never send or delete a note yourself.
+
 ## Steps
 
 1. **List** every `inputs` document with status `new` and every `nodes` document with fields, comments, `deleted`, `new_node` or `worked`.

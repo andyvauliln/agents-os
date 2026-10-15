@@ -1,15 +1,15 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-sync/SKILL.md
-basis: 047a4444f20c
-written: 2026-10-14T15:17:50Z
+basis: a7474c862ba3
+written: 2026-10-15T11:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T19:42:37Z
+confirmed: 2026-10-15T10:40:51Z
 ---
 # ide-sync/SKILL.md
 
 ## What it is
 
-The skill for the way back from the page. It reads everything waiting in the page's store (messages, notes, file edits, How it works edits, new or deleted items, requests), saves each word for word as an input in `apps/project-IDE/data/inputs/`, writes edits into their files, applies each note meant as a change and turns any other open note into a question in the item's Questions file, runs the requests, rebuilds and republishes the page, and clears only what reached a file. It starts when the owner presses Apply changes on the page or says "sync the file tree". A deletion is a round of its own: read the owner's note, delete the item and its metadata files, remove every mention in other files, record it with the note and rebuild. On claude.ai the store is read with the artifact data tool; on the owner's server it is a folder of JSON files, and the edits made there are already in the files, so it checks and confirms them.
+The skill for the way back from the page. It reads everything waiting in the page's store (messages, notes, file edits, How it works edits, new or deleted items, requests), saves each word for word as an input in `apps/project-IDE/data/inputs/`, writes edits into their files, applies each note meant as a change and turns any other open note into a question in the item's Questions file, runs the requests, rebuilds and republishes the page, and clears only what reached a file. It starts when the owner presses Apply changes on the page or says "sync the file tree". A deletion is a round of its own: read the owner's note, delete the item and its metadata files, remove every mention in other files, record it with the note and rebuild. On claude.ai the store is read with the artifact data tool; on the owner's server it is a folder of JSON files, and the edits made there are already in the files, so it checks and confirms them. The notes of the server's Notes and runs panel are filed by the run that takes them, so a sync only lists the notes still ready for the owner and never sends or deletes one.
 
 ## Who looks after it
 

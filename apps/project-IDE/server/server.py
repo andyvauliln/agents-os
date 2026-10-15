@@ -33,7 +33,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.dont_write_bytecode = True   # no __pycache__ in the repository
 import claude_bridge  # noqa: E402
+import notes  # noqa: E402
+import run_summary  # noqa: E402
+import runs  # noqa: E402
 import voice  # noqa: E402
+import worktrees  # noqa: E402
 
 CONFIG = os.environ.get("IDE_CONFIG", os.path.join(HERE, "server.config.json"))
 COLLECTIONS = {"nodes", "changes", "inputs"}       # what the page keeps (same as on claude.ai)
@@ -214,7 +218,171 @@ class App:
         self.voice = voice.Voice(self.cfg, secrets)
         # Claude Code gets only its own keys, never the voice key
         vkey = self.voice.cfg["key"]
-        self.bridge = claude_bridge.Bridge(self.cfg, self.repo, {k: v for k, v in secrets.items() if k != vkey})
+        log_dir = os.path.join(self.repo, self.cfg.get("log_dir", "agents/system/logs/subagents/project-ide-agent"))
+        self.jobs = notes.Jobs(self.store.root, log_dir, self.cfg)
+        self.worktrees = worktrees.Worktrees(self.repo, self.cfg.get("worktrees"))
+        self.transcripts = runs.Transcripts(self.repo, self.cfg.get("runs"))
+        self.summarizer = run_summary.Summarizer(self.cfg.get("runs"))
+        self.bridge = claude_bridge.Bridge(self.cfg, self.repo, {k: v for k, v in secrets.items() if k != vkey}, jobs=self.jobs,
+                                           worktrees=self.worktrees, data_file=os.path.join(self.page_dir, self.data), summarize=self.summarize)
+        self.jobs.recover(set())
+        self.worktrees.git("worktree", "prune", check=False)
+        self.summary_queue, self.summary_busy, self.summary_lock = [], set(), threading.Lock()
+
+    # ---------- notes and runs ----------
+    def send(self, ids, options=None, session=None, node=None):
+        """Send notes as one run. Notes still transcribing wait and go out by themselves."""
+        waiting = [i for i in ids if (self.jobs.note(i) or {}).get("status") in ("transcribing", "queued")]
+        for i in waiting:
+            self.jobs.update_note(i, {"status": "queued", "send_after_transcript": True, "options": options or {}}, force=True)
+        ready = self.jobs.sendable([i for i in ids if i not in waiting])
+        if not ready:
+            if waiting:
+                return {"queued": waiting}
+            raise ValueError("No note to send.")
+        for n in ready:
+            self.jobs.update_note(n["id"], {"status": "sending"}, force=True)
+        first = (ready[0].get("context") or {})
+        node = node or {"node_id": first.get("node_id"), "path": first.get("path"), "name": first.get("name")}
+        try:
+            run = self.bridge.start(None, node, session, notes=ready, options=options)
+        except Exception as e:
+            for n in ready:
+                try:
+                    self.jobs.update_note(n["id"], {"status": "failed", "error": str(e)}, force=True)
+                except ValueError:
+                    pass
+            raise
+        return {"run": run.id, "queued": waiting}
+
+    def transcribe(self, nid, audio, ctype):
+        """Turn a note's recording into its text, in the background; send it when it was queued."""
+        def work():
+            try:
+                got = self.voice.transcribe(audio, ctype)
+                text = (got.get("text") or "").strip()
+                n = self.jobs.note(nid)
+                if not n or n["status"] == "cancelled":
+                    return
+                if not text:
+                    self.jobs.update_note(nid, {"status": "failed", "error": "Nothing was heard in the recording."}, force=True)
+                    return
+                both = ((n.get("text") or "").rstrip() + " " + text).strip()
+                queued = n["status"] == "queued" or n.get("send_after_transcript")
+                self.jobs.update_note(nid, {"text": both, "status": "ready", "error": None, "model": got.get("model")}, force=True)
+                if queued and (self.jobs.note(nid) or {}).get("status") == "ready":   # not cancelled or deleted meanwhile
+                    self.send([nid], n.get("options"), None)
+            except Exception as e:
+                try:
+                    self.jobs.update_note(nid, {"status": "failed", "error": str(e)}, force=True)
+                except ValueError:
+                    pass
+        threading.Thread(target=work, daemon=True).start()
+
+    def run_view(self, rid):
+        """One run for its page: the record and the transcript together, with the branch and git state."""
+        rec = self.jobs.run(rid) if notes.SAFE.match(rid or "") else None
+        rec = rec or self.jobs.run_by_session(rid)
+        session = (rec or {}).get("session") or (None if rec else rid)
+        t = self.transcripts.get(session) if session else None
+        if not rec and not t:
+            return None
+        live = self.bridge.runs.get((rec or {}).get("id"))
+        out = {**(t or {}), **{k: v for k, v in (rec or {}).items() if v is not None}}
+        out["id"] = (rec or {}).get("id") or session
+        out["session"] = session
+        out["record"] = bool(rec)
+        out["status"] = (rec or {}).get("status") or ("working" if (t or {}).get("live") else "done")
+        out["active"] = bool(live and not live.done)
+        if t:
+            out["request_full"] = next((s.get("input") for s in t["steps"] if s["kind"] == "prompt"), "")
+            out["answer_full"] = next((s.get("output") for s in reversed(t["steps"]) if s["kind"] == "text"), "")
+        if (rec or {}).get("worktree") and self.worktrees.exists(rec["id"]):
+            out["branch_now"] = self.worktrees.status(rec["id"])
+        out["git"] = {"branch": (self.worktrees.git("rev-parse", "--abbrev-ref", "HEAD", check=False) or "").strip(),
+                      "head": (self.worktrees.git("rev-parse", "--short", "HEAD", check=False) or "").strip(),
+                      "status": self.worktrees.git("status", "--short", check=False).splitlines()[:200]}
+        out["notes_full"] = [n for n in (self.jobs.note(i) for i in (rec or {}).get("notes") or []) if n]
+        return out
+
+    def summarize(self, rec_or_session):
+        """Write the summary and tags of a run into its record (a terminal run gets one now)."""
+        rec = rec_or_session if isinstance(rec_or_session, dict) else (self.jobs.run_by_session(rec_or_session) or {})
+        session = rec.get("session") or (rec_or_session if isinstance(rec_or_session, str) else None)
+        view = self.run_view(rec.get("id") or session)
+        if not view:
+            raise ValueError("no such run")
+        got = self.summarizer.write(view)
+        rec = self.jobs.run(view["id"]) if notes.SAFE.match(view["id"]) else None
+        rec = rec or self.jobs.run_by_session(session) or {"id": session, "session": session, "origin": "terminal"}
+        rec.update(summary=got["summary"], tags=got["tags"], summary_cost_usd=got.get("cost_usd"), summary_at=notes.now())
+        self.jobs.save_run(rec)
+        return rec
+
+    def queue_summaries(self, sessions):
+        """Summaries for finished runs that have none, one after another in the background."""
+        if not self.summarizer.available:
+            return
+        with self.summary_lock:
+            new = [x for x in sessions if x not in self.summary_busy]
+            self.summary_busy.update(new)
+            self.summary_queue += new
+            if not new or len(self.summary_queue) > len(new):
+                return
+        def work():
+            while True:
+                with self.summary_lock:
+                    if not self.summary_queue:
+                        return
+                    sid = self.summary_queue[0]
+                try:
+                    self.summarize(sid)
+                except Exception:
+                    pass
+                with self.summary_lock:
+                    self.summary_queue.pop(0)
+        threading.Thread(target=work, daemon=True).start()
+
+    def job_rows(self, offset=0, limit=10, show="all"):
+        """The rows of the panel: notes and runs, those that need the owner first, then those at work, then the newest."""
+        rows = []
+        if show in ("all", "notes"):
+            for n in self.jobs.notes():
+                rows.append({"type": "note", **n})
+        if show in ("all", "runs"):
+            recs = self.jobs.runs()
+            by_session = {r["session"]: r for r in recs if r.get("session")}
+            seen, todo = set(), []
+            trows, _ = self.transcripts.list(0, 200)
+            for t in trows:
+                rec = by_session.get(t["id"])
+                if rec:
+                    seen.add(rec["id"])
+                elif not t["live"]:
+                    todo.append(t["id"])
+                rows.append(self._run_row(t, rec))
+            for r in recs:
+                if r["id"] not in seen and r.get("origin") == "page":
+                    rows.append(self._run_row(None, r))
+            self.queue_summaries(todo[:limit + offset])
+        order = {"need human": 0, "transcribing": 1, "queued": 1, "sending": 1, "planning": 1, "working": 1}
+        rows.sort(key=lambda r: r.get("updated") or "", reverse=True)
+        rows.sort(key=lambda r: order.get(r.get("status"), 2))
+        return {"rows": rows[offset:offset + limit], "total": len(rows), "offset": offset}
+
+    def _run_row(self, t, rec):
+        rec, t = rec or {}, t or {}
+        status = rec.get("status") or ("working" if t.get("live") else "done")
+        if t.get("live") and status in ("done", "failed"):
+            status = "working"
+        return {"type": "run", "id": rec.get("id") or t.get("id"), "session": rec.get("session") or t.get("id"),
+                "title": t.get("title") or (rec.get("request") or "")[:90], "status": status, "detail": rec.get("status_detail"),
+                "origin": rec.get("origin") or t.get("origin") or "terminal", "kind": rec.get("kind"), "tags": rec.get("tags") or [],
+                "summary": bool(rec.get("summary")), "notes": rec.get("notes") or [], "branch": (rec.get("worktree") or {}).get("branch") or t.get("branch"),
+                "cwd": t.get("cwd"), "steps": t.get("steps"), "cost_usd": (rec.get("result") or {}).get("cost_usd"),
+                "max_context": t.get("max_context"), "start": t.get("start") or rec.get("started"), "end": t.get("end") or rec.get("ended"),
+                "updated": max(filter(None, [t.get("end"), rec.get("updated")]), default=""), "live": t.get("live", False),
+                "sent": rec.get("sent"), "fixed": rec.get("fixed")}
 
     def real_files(self):
         """id -> text of every real file the build found on disk ("scanned"), read now, so the page shows what is on disk."""
@@ -292,7 +460,20 @@ class Handler(BaseHTTPRequestHandler):
             b = a.bridge
             return self._send(200, {"ok": True, "server": "project-ide", "agent": b.available, "agent_error": claude_bridge.SDK_ERROR,
                                     "repo": os.path.basename(a.repo), "claude_cwd": os.path.relpath(b.cwd, a.repo), "write_through": bool(a.write),
-                                    "voice": a.voice.available, "voice_max_seconds": a.voice.cfg["max_seconds"]})
+                                    "voice": a.voice.available, "voice_max_seconds": a.voice.cfg["max_seconds"],
+                                    "jobs": True, "send_options": a.jobs.defaults, "summaries": a.summarizer.available})
+        if parts[1:] == ["jobs"]:
+            off, lim = int((q.get("offset") or ["0"])[0]), min(int((q.get("limit") or ["10"])[0]), 100)
+            return self._send(200, a.job_rows(off, lim, (q.get("show") or ["all"])[0]))
+        if parts[1:] == ["notes"]:
+            return self._send(200, {"notes": a.jobs.notes()})
+        if len(parts) == 3 and parts[1] == "runs":
+            v = a.run_view(parts[2])
+            return self._send(200, v) if v else self._send(404, {"error": "no such run"})
+        if len(parts) == 5 and parts[1] == "runs" and parts[3] == "steps":
+            v = a.run_view(parts[2])
+            st = a.transcripts.step(v["session"], parts[4]) if v and v.get("session") else None
+            return self._send(200, st) if st else self._send(404, {"error": "no such step"})
         if len(parts) == 3 and parts[1] == "store":
             try:
                 return self._send(200, {"docs": a.store.list(parts[2])})
@@ -333,6 +514,19 @@ class Handler(BaseHTTPRequestHandler):
         a = self.app
         if parts == ["api", "voice"] and method == "POST":
             return self._voice()
+        if len(parts) == 4 and parts[:2] == ["api", "notes"] and parts[3] == "audio" and method == "POST":
+            n = int(self.headers.get("Content-Length") or 0)
+            if n > a.voice.cfg["max_bytes"]:
+                return self._send(413, {"error": "recording too large"})
+            if not a.voice.available:
+                return self._send(503, {"error": "Voice input is off: no Groq key on this server."})
+            audio = self.rfile.read(n) if n else b""
+            try:
+                a.jobs.update_note(parts[2], {"status": "transcribing"}, force=True)
+            except ValueError as e:
+                return self._send(404, {"error": str(e)})
+            a.transcribe(parts[2], audio, self.headers.get("Content-Type"))
+            return self._send(200, {"ok": True})
         try:
             body = self._body()
         except ValueError:
@@ -349,6 +543,34 @@ class Handler(BaseHTTPRequestHandler):
                 doc = a.store.set(coll, doc_id, body) if method == "PUT" else a.store.update(coll, doc_id, body)
                 written = a.write.apply(doc_id, doc, before) if (a.write and coll == "nodes") else []
                 return self._send(200, {"ok": True, "written": written})
+            if parts == ["api", "notes"] and method == "POST":
+                return self._send(200, a.jobs.add_note(body))
+            if parts == ["api", "notes", "send"] and method == "POST":
+                return self._send(200, a.send(body.get("ids") or [], body.get("options"), body.get("session"), body.get("node")))
+            if len(parts) == 3 and parts[:2] == ["api", "notes"] and method in ("PATCH", "PUT"):
+                return self._send(200, a.jobs.update_note(parts[2], body))
+            if len(parts) == 4 and parts[:2] == ["api", "notes"] and method == "POST":
+                nid, act = parts[2], parts[3]
+                n = a.jobs.note(nid)
+                if not n:
+                    return self._send(404, {"error": "no such note"})
+                if act == "delete":
+                    a.jobs.delete_note(nid)
+                    return self._send(200, {"ok": True})
+                if act == "cancel":
+                    if n["status"] in ("planning", "working", "need human", "sending") and n.get("run"):
+                        return self._send(200, {"ok": a.bridge.stop(n["run"])})
+                    return self._send(200, a.jobs.update_note(nid, {"status": "cancelled"}, force=True))
+            if len(parts) == 4 and parts[:2] == ["api", "runs"] and method == "POST":
+                rid, act = parts[2], parts[3]
+                if act == "summary":
+                    return self._send(200, a.summarize(rid))
+                if act == "merge":
+                    return self._send(200, a.bridge.merge(rid))
+                if act == "discard":
+                    return self._send(200, a.bridge.discard(rid))
+                if act == "stop":
+                    return self._send(200, {"ok": a.bridge.stop(rid)})
             if parts == ["api", "agent"] and method == "POST":
                 text = (body.get("text") or "").strip()
                 if not text:

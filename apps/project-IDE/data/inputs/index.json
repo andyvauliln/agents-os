@@ -2552,7 +2552,26 @@
    ],
    "summary": "A notifications panel in the page header: every AI note (typed or recorded) and every run, terminal runs too, with statuses, edit, cancel, delete, send all or selected as one run, versions, context, and a run page with every step, tags, an ASD summary and PR buttons.",
    "processed_into": [
-    "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.md"
+    "D-074",
+    "apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.md",
+    "apps/project-IDE/server/runs.py",
+    "apps/project-IDE/server/worktrees.py",
+    "apps/project-IDE/server/notes.py",
+    "apps/project-IDE/server/run_summary.py",
+    "apps/project-IDE/server/server.py",
+    "apps/project-IDE/server/claude_bridge.py",
+    "apps/project-IDE/server/server.config.json",
+    "apps/project-IDE/server/README.md",
+    "apps/project-IDE/current-ui/file-tree-explorer.html",
+    ".gitignore",
+    "apps/project-IDE/docs/vision.md",
+    "apps/project-IDE/docs/README.md",
+    "apps/project-IDE/docs/README.asd.md",
+    "apps/project-IDE/docs/rebuild-prompt.md",
+    "agents/system/.claude/skills/ide-sync/SKILL.md",
+    "agents/system/CLAUDE.md",
+    "apps/docs/README.md",
+    "docs/README.md"
    ],
    "answered": true
   }

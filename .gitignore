@@ -56,3 +56,8 @@ agents/**/data/**
 !agents/**/data/**/*.index.md
 !agents/**/data/**/*.meta.json
 !agents/**/data/**/*.questions.md
+
+# The project IDE: each run's worktree, and the owner's notes waiting on the server page
+# (a note's words are filed as an owner input by the run that takes it)
+.worktrees/
+apps/project-IDE/data/page-store/notes/

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The server page's settings: address and port, paths, the key names (never values), where Claude Code starts, limits, what it may do, and voice.",
+  "about": "The server page's settings: address and port, paths, the key names (never values), where Claude Code starts, limits, what it may do, voice, the send options' defaults, worktrees and runs.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -12,9 +12,13 @@
     "the owner"
   ],
   "readers": [
-    "apps/project-IDE/server/server.py",
     "apps/project-IDE/server/claude_bridge.py",
-    "apps/project-IDE/server/voice.py"
+    "apps/project-IDE/server/notes.py",
+    "apps/project-IDE/server/run_summary.py",
+    "apps/project-IDE/server/runs.py",
+    "apps/project-IDE/server/server.py",
+    "apps/project-IDE/server/voice.py",
+    "apps/project-IDE/server/worktrees.py"
   ],
   "changes_when": "The owner changes a setting.",
   "related": [
@@ -41,6 +45,22 @@
     {
       "path": "apps/project-IDE/data/plans/2026-10-13-leave-vision.md",
       "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/server/notes.py",
+      "how": "read by"
+    },
+    {
+      "path": "apps/project-IDE/server/runs.py",
+      "how": "read by"
+    },
+    {
+      "path": "apps/project-IDE/server/run_summary.py",
+      "how": "read by"
+    },
+    {
+      "path": "apps/project-IDE/server/worktrees.py",
+      "how": "read by"
     }
   ],
   "sources": {
@@ -48,12 +68,14 @@
       "D-043",
       "D-044",
       "D-060",
-      "D-063"
+      "D-063",
+      "D-074"
     ],
     "inputs": [
       "in-20261005-1517",
       "in-20261009-1019",
-      "in-20261013-leave-vision"
+      "in-20261013-leave-vision",
+      "in-20261015-0925"
     ],
     "notes": []
   },

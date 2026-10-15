@@ -13,5 +13,16 @@ So for AI notes, it's right now only working on every folder details or file det
 This is a change to the page and the server, so it gets a plan first: apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.md. Nothing is built until the owner says go.
 ~~~
 
+The owner answered the plan's questions and said go without pull requests (D-074). Built and tested on the owner's server on 2026-10-15: a Notes and runs panel in the header of the server page lists every note (typed, recorded, or about selected text) and every Claude Code run in the repository, terminal runs too, 10 at a time with Show more, those that need the owner first; notes can be edited, sent, cancelled, deleted and sent together as one run, with the send options (local, auto merge, related tests, bug check, report); each run from the page works on its own branch in .worktrees/ and the server merges it into main locally; each run has its own page with every step, what it used, git, checks, plan, and a summary in ASD-STE100 with tags by Claude Haiku. Make PR and Make PR and merge are shown but off: pull requests wait for a later step.
+
 ## Processed into
-- apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.md (waiting)
+- D-074 (decisions.md)
+- apps/project-IDE/data/plans/2026-10-15-0925-notes-and-runs-panel.md (distributed; pull requests wait)
+- apps/project-IDE/data/changelog.md (2026-10-15)
+- apps/project-IDE/server/: runs.py, worktrees.py, notes.py, run_summary.py (new, with How it works and Details); server.py, claude_bridge.py, server.config.json (changed, with metadata); README.md and README.questions.md
+- apps/project-IDE/current-ui/file-tree-explorer.html (and its metadata)
+- .gitignore (and its metadata)
+- apps/project-IDE/docs/vision.md, README.md (parts "Notes and runs", "The page of a run"), README.asd.md, rebuild-prompt.md
+- agents/system/.claude/skills/ide-sync/SKILL.md (notes on the server)
+- agents/system/CLAUDE.md (section "The File Tree page")
+- apps/docs/README.md, apps/docs/README.asd.md, apps/docs/rebuild-prompt.md, docs/README.md, docs/README.asd.md, docs/rebuild-prompt.md

@@ -1,15 +1,15 @@
 ---
 about: agent-os/apps/project-IDE/docs/
-basis: 375a1f93fd4c
-written: 2026-10-14T15:17:50Z
+basis: d722001d6d1a
+written: 2026-10-15T11:03:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T19:42:37Z
+confirmed: 2026-10-15T10:41:06Z
 ---
 # docs/
 
 ## What it is
 
-The project IDE's own docs, as every app in `apps/` has them. `vision.md` says what the IDE is for and why; `README.md` is the full manual of the IDE: every part of the page and how to use it, its three modes, the build and checks, the sync, the metadata files, the server and where everything lives; `README.asd.md` is that manual in ASD-STE100; `rebuild-prompt.md` tells an AI how to build the IDE again exactly. Each doc has its How it works and Details files, an example of its structure and its open questions next to it.
+The project IDE's own docs, as every app in `apps/` has them. `vision.md` says what the IDE is for and why; `README.md` is the full manual of the IDE: every part of the page and how to use it, the Notes and runs panel and the page of each run, its three modes, the build and checks, the sync, the metadata files, the server and where everything lives; `README.asd.md` is that manual in ASD-STE100; `rebuild-prompt.md` tells an AI how to build the IDE again exactly. Each doc has its How it works and Details files, an example of its structure and its open questions next to it.
 
 ## Who looks after it
 

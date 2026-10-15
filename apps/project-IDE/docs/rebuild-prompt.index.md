@@ -1,15 +1,15 @@
 ---
 about: agent-os/apps/project-IDE/docs/rebuild-prompt.md
-basis: 804aead5d03c
-written: 2026-10-14T15:17:50Z
+basis: 0fbae0abb459
+written: 2026-10-15T11:00:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T07:11:37Z
+confirmed: 2026-10-15T10:40:51Z
 ---
 # rebuild-prompt.md
 
 ## What it is
 
-The prompt an AI coding agent follows to build the project IDE again exactly: the folder tree, the page's features and store format, the data format, every build script with its options, the sync, the server's routes, settings and safety checks, the agent, the build order, the acceptance checks and what not to build yet. It builds only the IDE's own folder and its agent, skills and scripts, assuming the levels above exist.
+The prompt an AI coding agent follows to build the project IDE again exactly: the folder tree, the page's features and store format, the data format, every build script with its options, the sync, the server's routes, settings and safety checks, the note and run records with their statuses and the `STATUS:` line, the send options, the step kinds and tags of a run, each page run's branch and its merge into `main`, the agent, the build order, the acceptance checks and what not to build yet. It builds only the IDE's own folder and its agent, skills and scripts, assuming the levels above exist.
 
 ## Who looks after it
 

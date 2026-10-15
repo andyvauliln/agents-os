@@ -6,7 +6,7 @@ The project IDE is the owner's window on the Agent OS. The owner builds the syst
 
 The IDE works today: the page is published on claude.ai and in use, its build and checks run, and the server that puts Claude Code behind the page runs on the owner's server, where a service starts it when the machine boots. Finishing it is stage one of the project: a view for every kind of file, correct metadata on every item, and a tab for each metadata file that really exists.
 
-This document is the full manual of the IDE: every part of the page and how to use it, the three places it runs, how it is built and checked, how the owner's work comes back into the files, the metadata files behind its tabs, how to run it on a server, and where every part lives now and later. Why the IDE exists and how it should behave are in its vision, `apps/project-IDE/docs/vision.md`.
+This document is the full manual of the IDE: every part of the page and how to use it, the Notes and runs panel and the page of each run, the three places it runs, how it is built and checked, how the owner's work comes back into the files, the metadata files behind its tabs, how to run it on a server, and where every part lives now and later. Why the IDE exists and how it should behave are in its vision, `apps/project-IDE/docs/vision.md`.
 
 ## The IDE at a glance
 
@@ -25,6 +25,8 @@ This document is the full manual of the IDE: every part of the page and how to u
                                    on the owner's server: server.py
                           store as files · write-through into the files
                           request box ─► Claude Code (claude_bridge.py)
+                          Notes and runs panel ─► notes, runs, summaries
+                          each page run on its own branch (worktrees.py)
                           voice ─► Groq (voice.py)
                     │
                     │  ide-sync: every note, edit, deletion and request back into the files
@@ -42,10 +44,12 @@ This document is the full manual of the IDE: every part of the page and how to u
 | The records | Every owner input, the decisions, the changelog, the plans | `apps/project-IDE/data/` |
 | How it works and Details files | One explanation and one details file per item | next to each item |
 | The server | The page on the owner's machine with Claude Code behind it | `apps/project-IDE/server/` |
-| The page store on the server | The owner's notes, edits and messages as JSON files | `apps/project-IDE/data/page-store/` |
+| The page store on the server | The owner's comments, edits, messages and notes as JSON files | `apps/project-IDE/data/page-store/` |
+| Notes and runs | Every note and every Claude Code run in one panel on the server page, each run with its own page | the page, with `notes.py`, `runs.py`, `run_summary.py` and `worktrees.py` in `apps/project-IDE/server/` |
+| The run records | Each run's status, notes, branch, summary and tags (out of git) | `agents/system/logs/subagents/project-ide-agent/runs/` |
 | The project IDE agent and its skills | Build the page, bring the owner's work back | `agents/system/.claude/agents/`, `agents/system/.claude/skills/` |
 
-The parts connect in one loop. The build reads the repository and writes the page data. The page shows it. The owner works on the page, and everything they do is saved at once in the page's store. When the owner presses Apply changes or says "sync the file tree", the project IDE agent reads the store, writes every edit into its file, files every note and request as an owner input, cleans up what was deleted and rebuilds the page. The knowledge base agent then sorts the new inputs into the docs and refreshes the explanations, and the page is rebuilt once more. On the owner's server the loop is shorter: edits go straight into the files, and requests run at once.
+The parts connect in one loop. The build reads the repository and writes the page data. The page shows it. The owner works on the page, and everything they do is saved at once in the page's store. When the owner presses Apply changes or says "sync the file tree", the project IDE agent reads the store, writes every edit into its file, files every note and request as an owner input, cleans up what was deleted and rebuilds the page. The knowledge base agent then sorts the new inputs into the docs and refreshes the explanations, and the page is rebuilt once more. On the owner's server the loop is shorter: edits go straight into the files, and each message or note runs at once on its own branch, which the server merges into `main` when the run is done.
 
 ## How it is laid out
 
@@ -64,8 +68,12 @@ apps/project-IDE/
 │   └── real-files.json           the text of every file; built
 ├── server/                       the same page on the owner's server
 │   ├── README.md                 how to start it and reach it safely
-│   ├── server.py                 the web service: page, store, write-through, request box
+│   ├── server.py                 the web service: page, store, write-through, request box, panel routes
 │   ├── claude_bridge.py          runs each request as a Claude Code session
+│   ├── notes.py                  notes and run records, statuses, sending notes as one run
+│   ├── runs.py                   reads Claude Code's transcripts into runs with every step
+│   ├── run_summary.py            each run's summary in ASD-STE100 and its tags
+│   ├── worktrees.py              each page run's branch and worktree, and its merge into main
 │   ├── voice.py                  turns a recording into text through Groq
 │   └── server.config.json        address, paths, limits, what Claude Code may do
 └── data/                         this project's records
@@ -73,11 +81,11 @@ apps/project-IDE/
     ├── inputs/                   every owner input, word for word, with index.json
     ├── decisions.md, changelog.md
     ├── plans/, archive/          change plans with index.json, retired files
-    ├── page-store/               on the server: the page's notes, edits and messages
+    ├── page-store/               on the server: the page's comments, edits, messages and notes
     └── overrides.json            the owner's kept edits of the extra tables
 ```
 
-Two scripts at the top of the repository set up and start the server: `init.sh`, run once, and `start.sh`, run for every start. Every file and folder in it has its How it works file and its Details file next to it, as everywhere in the repository. The project IDE agent and the two skills live with the system's other helpers in `agents/system/.claude/`, and the build scripts inside the `ide-build` skill.
+Two scripts at the top of the repository set up and start the server: `init.sh`, run once, and `start.sh`, run for every start. Each run from the page works in its own checkout in `.worktrees/` at the top of the repository, which git ignores. Every file and folder in it has its How it works file and its Details file next to it, as everywhere in the repository. The project IDE agent and the two skills live with the system's other helpers in `agents/system/.claude/`, and the build scripts inside the `ide-build` skill.
 
 ## The page
 
@@ -86,6 +94,7 @@ The page is one HTML file, `file-tree-explorer.html`, that reads one data file, 
 ### The header
 
 - **The title and the version line.** The version line shows the version of the page data and the number of items, and then where the page runs: "on your server", "view only", or nothing on claude.ai.
+- **Notes and runs** (on the owner's server only). Opens and closes the panel of notes and runs under the header (see "Notes and runs" below). It shows how many notes and runs are at work, or "N need you" in red when a run waits for the owner.
 - **Apply changes.** Shown when something on the page is marked changed, with the count. It opens a short confirmation and then carries every change into the files (see "Apply changes" below). While a request waits, it reads "Applying changes" and cannot be pressed again.
 - **The filter.** Typing filters the tree as you type. A text with `*` matches names as a pattern (`*.json`); a text with `/` matches paths (`agents/system/`); anything else matches part of a name, so `.md` finds every Markdown file. The folders on the way to each match open by themselves, and a line under the tabs says how many items match, with a button to clear the filter.
 
@@ -121,18 +130,18 @@ A Markdown file opens as a page of a book, on its own white or black paper, with
 - **Aa.** The font (Sans, Legible or Serif) and the size (S, M or L).
 - **Light and Dark.** The paper, white or black, remembered in the browser.
 - **Full screen.** The document fills the screen, with the Contents in a side column on a wide screen, a progress line at the top, and Close or Esc to leave.
-- **Edit in place.** A double-click on a paragraph, heading, list or table, or two taps on a phone, makes that block editable right where it stands, looking just as it reads: type in it, with Ctrl+B for bold and Ctrl+I for italic. Save, Ctrl+Enter or a click anywhere outside the block turns it back into Markdown and writes only those lines into the file; Esc or Cancel leaves it as it was. A Markdown button switches the block to its source lines when you want them, and the front matter at the top always opens as source. It works in full screen too.
+- **Edit in place.** A double-click on a paragraph, heading, list or table, or two taps on a phone, makes that block editable right where it stands, looking just as it reads: type in it, with Ctrl+B for bold and Ctrl+I for italic. Save, Ctrl+Enter or a click anywhere outside the block turns it back into Markdown and writes only those lines into the file; Esc or Cancel leaves it as it was. A link the browser made by itself while typing, such as a file name like `x.md` that a Mac turns into a web address, is saved as plain text. A Markdown button switches the block to its source lines when you want them, and the front matter at the top always opens as source. It works in full screen too.
 - **Edit.** Opens the whole file in an editor with numbered lines that wrap to the screen. Save file or Ctrl+S saves it; Cancel drops the edit.
 
 Every save is recorded with what was there before, so it can be undone from How it works. On the owner's server the file on disk changes at once; on claude.ai the edit waits in the page's store until the next sync. After a save on claude.ai the page also checks related items (the parent folders and the items that mention this one) and saves any update they need as "Related updates", which can be undone in one click; it never changes another file's text or anyone's How it works.
 
-### Notes
+### Comments
 
-A note, or comment, is left on one line (from the line numbers) or on the whole file or folder (the "Comment on" button). Each note keeps the text of its line, so it stays on the right line when the file changes, and says so when that line is gone. A note can be resolved, reopened or deleted; resolved notes are hidden until asked for. At the sync, a note the owner meant as a change is applied, and any other open note becomes an open question on the item.
+A comment is left on one line (from the line numbers) or on the whole file or folder (the "Comment on" button). Each comment keeps the text of its line, so it stays on the right line when the file changes, and says so when that line is gone. A comment can be resolved, reopened or deleted; resolved comments are hidden until asked for. At the sync, a comment the owner meant as a change is applied, and any other open comment becomes an open question on the item. A comment is not the same as a note in the Notes and runs panel: a comment waits on its item for the sync, while a note is meant for Claude Code and goes out as a run.
 
 ### The ask box
 
-The box under every item takes a question or a request about that item. Enter sends; Shift+Enter adds a line. Each item keeps its own conversation in the browser, and Clear empties it. Every message and its answer are also saved in the page's store as an owner input, so they reach the files at the next sync.
+The box under every item takes a question or a request about that item. Enter sends; Shift+Enter adds a line. Each item keeps its own conversation in the browser, and Clear empties it. On claude.ai every message and its answer are also saved in the page's store as an owner input, so they reach the files at the next sync; on the server the run that takes the message files it.
 
 On claude.ai the page asks Claude itself, with a choice of model: Most capable, Balanced or Fastest. Claude reads the item, the knowledge that applies to it and its related items, and answers in one of three ways:
 
@@ -140,7 +149,7 @@ On claude.ai the page asks Claude itself, with a choice of model: Most capable, 
 - **A draft.** A request for a change comes back as a draft card: every item it changes, and for each one the fields it changes, with a before and after view of each field. Save (or typing "save") applies it at once and marks the items changed; Discard drops it; asking more changes the draft first. A new file or folder and a removal show as such.
 - **Save or discard,** when the owner says so in words about a waiting draft.
 
-On the owner's server the box sends the request to Claude Code working in the repository (see "The server"). There is no model choice on the page; the server's settings choose. The chat shows each step Claude Code takes, any step that waits for the owner with Allow and Refuse buttons, then the answer with its cost, its time and how many files changed. A follow-up in the same box continues the same conversation, Stop ends a run, and the tree reloads when files changed. On the server a microphone button sits next to the box: it records up to five minutes with a timer, the server turns the recording into text, and the text is added to the box to check before sending.
+On the owner's server a message in the box becomes a note in the Notes and runs panel and goes out at once as its own run of Claude Code, on its own branch (see "Notes and runs"); no second copy of it is kept as a page input. There is no model choice on the page; the server's settings choose. The chat shows each step Claude Code takes, any step that waits for the owner with Allow and Refuse buttons, then the answer with its cost, its time and how many files changed. A follow-up in the same box continues the same conversation on the same branch, Stop ends a run, and the tree reloads when files changed. The box grows with the text, up to half the screen. A microphone button sits next to it: it records up to five minutes with a timer, and the recording becomes a note in the panel at once, whose text the server writes in and the owner checks and edits there.
 
 Opened anywhere else, the box says that the page only shows the files and that a message reaches no one.
 
@@ -176,7 +185,75 @@ Below a width of 760 pixels the page shows one pane at a time: the tree, then th
 
 ### What the page remembers in the browser
 
-The open folders, the selected item and tab, the switches, the Read or Source choice, the reader's paper, font and size, each item's conversation (its last 30 messages) and unsent text in the box. Nothing the owner needs to keep is kept only there: notes, edits and messages go to the page's store.
+The open folders, the selected item and tab, the switches, the Read or Source choice, the reader's paper, font and size, each item's conversation (its last 30 messages), unsent text in the box, and on the server whether the Notes and runs panel is open and the send options. Nothing the owner needs to keep is kept only there: comments, edits, messages and notes go to the page's store.
+
+## Notes and runs
+
+A spoken or typed request is easy to lose: it goes into one item's chat, and once a run ends, its steps are gone from view after a reload. On the owner's server the page keeps all of them in sight. Every note the owner makes for Claude Code, and every Claude Code run in this repository, from the page or from a terminal, is one row in one panel. The owner sees what waits, what works and what is done, sends several notes as one run, and opens any run to see what it did. The panel exists only on the server page; on claude.ai and anywhere else its button is hidden.
+
+**The panel.** The Notes and runs button in the header opens it under the header, and the page remembers whether it was open. It has three tabs, All, Notes and Runs, with Refresh and Hide. Rows that need the owner come first, then the rows at work, then the rest, newest first. Ten rows show at a time, with a line such as "10 of 34" and Show more for ten more.
+
+**Making a note.** A note is anything the owner types or says for Claude Code on the server page. There are four ways to make one:
+
+- the box at the top of the panel, which grows with the text; Ctrl+Enter or Add note adds it;
+- the ask box under an item, where a message becomes a note that goes out at once as its own run;
+- a microphone, in the panel or in the ask box: the recording becomes a note at once, with the status transcribing, and the server turns it into text, which the owner then edits in the panel;
+- selecting text on an item's sheet: a small bar shows "Record about this" and "Note", and the note keeps the selected text, its line, the tab and the item.
+
+**A note's row** shows a checkbox (unchecked leaves it out of Send all), its status, the item it is about (a click opens it), tags such as "selection · line 12" and "voice", its time and its text. Its buttons follow its status: Send after transcript while it is still transcribing, so it goes out by itself when its text is in; Edit, with Save and Cancel; Send; Open run; Cancel; Delete; and Details. Details show where the note was made (the ask box, the panel or a selection), the item, the tab, the line, the selected text, whether it was typed or spoken, when it was made, the page version, its run, and the commits it was sent from and merged at. Once sent, the row says, for example, "sent at 3f2a1c9 · page v75 → in main at 8b0d2e4 · page v76".
+
+**The statuses** are the same for notes and runs:
+
+| Status | What it means |
+|---|---|
+| transcribing | The recording is being turned into text. |
+| ready | The text is in. The owner can edit it, send it or leave it. |
+| queued | It goes out by itself as soon as its text is in. |
+| sending | It is on its way to Claude Code. |
+| planning | Its run is writing a plan before it builds. |
+| working | Its run is doing the work. |
+| need human | The run cannot go on without the owner: an Allow or Refuse waits, or it asks something. These rows come first. |
+| need manual test | The run is finished, and says what a person must try. |
+| done | The run is finished and its branch is ready, not yet in `main`. |
+| in main | Its branch is merged into `main`. |
+| failed | The recording or the run failed; the row says why. |
+| cancelled | The owner stopped it. |
+
+A run tells how it ended: the last line of its answer is "STATUS: done", "STATUS: need manual test:" with what to try, or "STATUS: need human:" with what it needs. After the server restarts, notes and runs that were at work become failed.
+
+**Sending.** Send all, at the bottom, sends every checked ready note together as one run: each note goes in with where it came from and its selected text, so Claude Code knows which item each one is about. A folded line above it, "Options: local · auto merge · related tests · bug check · report", opens the send options, which the page remembers:
+
+- **Where:** Local, a branch on this server. Cloud is shown but off, for later.
+- **Merge:** Auto merge, into `main` as soon as the run ends done, or Ask me, which waits for the owner's button.
+- **Tests:** Related (the build checks and the tests of what the run changed), All or None.
+- **Check for bugs:** the run reviews its own changes before it ends.
+- **Report:** the run ends with a short report of what was asked, what changed, the checks and what is left.
+
+The defaults are Local, Auto merge, Related, Check for bugs on and Report on.
+
+**Each run from the page works on its own branch.** Without that, two runs at once would change the same files, and a half-done run would change the files the page shows. So for every run that carries notes, the server makes a branch named `ide/<date>-<subject>` from the last commit of `main`, with its own checkout in `.worktrees/<run>/`, and Claude Code works and commits there. A follow-up from the same chat continues on the same branch. When the run ends done with Auto merge, or when the owner presses Merge into main on its page, the server brings the branch up to date with `main`, moves `main` forward on the server and rebuilds the page; the notes and the run become in main. The built files (the page data, `real-files.json` and `docs/file-tree.md`) always differ between branches, so a conflict only in them is solved by building them again; any other conflict stops at need human. Nothing is pushed to GitHub. Because the branch starts from the last commit, page edits the owner has not committed yet are not in it. A Delete and Apply changes still work in the repository itself, not on a branch.
+
+**A run's row** shows its status, its title (a click opens its page, and the panel closes to give it room), its tags, whether it came from the page or a terminal, its branch, its number of steps, its cost (page runs) or its largest context (terminal runs), its time and how many notes it carries. A run at work has Stop; a finished page run with a branch has Merge into main.
+
+**Where it is all kept.** Each note is a small file in the page store's `notes/` folder, and each run has a record in the project IDE agent's log folder; git keeps neither. The run that takes a note files its words as an owner input, word for word. Terminal runs need no record to appear: the server reads them from Claude Code's own transcripts of this repository, and a terminal run counts as live while its transcript changed in the last 90 seconds. Terminal runs show no cost, because their transcripts hold none.
+
+## The page of a run
+
+Every run, from the page or from a terminal, has its own page at the address `#run/<id>`. It fills the whole page: the tree hides, the run uses the full width, and the whole page scrolls as one. The ask box hides, and "‹ Back" returns to the tree and the item. A run still at work refreshes every four seconds.
+
+The top shows the title, the status, page or terminal, the tags, the folder it started in, its branch, the start, the length, the model, the cost, the largest context, the tokens written and the number of steps. Its buttons: Stop; Merge into main; Discard the branch, which removes the branch without merging; Make PR and Make PR and merge, shown but off, because pull requests come in a later step; and Copy, which gives `claude --resume <session>` to go on with the run in a terminal.
+
+Below come these sections:
+
+- **Summary:** four to ten sentences in ASD-STE100 and one to four tags, written by Claude Haiku after each page run and in the background for finished terminal runs, for about half a cent to one cent each. Write it again asks for a new one. Tags come from a fixed list (question, change, fix, docs, ui, server, setup, sync, plan, research, delete, failed, waiting); a new tag is made only when none fits.
+- **Request** and **Answer:** the first message and the last answer, in full.
+- **Notes:** the notes the run carried, with where each came from.
+- **Send options:** the options it was sent with.
+- **Git:** the commit it was sent from and the one it is in `main` at, its branch and the branch's commits, the files it changed with links to their items, the commits made while it ran, and the repository's current branch and uncommitted files.
+- **What it used:** chips for the kinds of steps, the tools, skills, subagents, MCP servers, plugins, workflows and web pages, and the files read and edited. A click on a chip shows only those steps.
+- **Checks and tests:** the build checks and tests the run ran, with their results.
+- **Plan:** the plan the run wrote, when it wrote one.
+- **Steps:** one row per step, in order, with an icon by kind (prompt, notification, text, read, edit, command, skill, subagent, MCP, web, workflow, other tool), a one-line summary, its time and duration, and a small bar for how much context the model had at that step. A row opens to show the step's input and output; a long one shows its start, with "Show all of it" for the rest; a subagent's step opens into the subagent's own steps. Open all and Close all open or close every row.
 
 ## The three places the page runs
 
@@ -190,7 +267,7 @@ The page finds out where it is when it loads.
 
 The published page has one link, https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs, and is always republished at that link, so the owner's work waiting in its store stays where it is. It asks for four runtime capabilities: its store, asking Claude, knowing who views it, and sending a comment to Claude.
 
-**The page or the terminal.** Both reach the same Claude Code, with the same `CLAUDE.md`, skills and files. In the terminal the owner starts Claude Code in `agents/system/` and names the item themselves; it files their words and does the round as `CLAUDE.md` says, and asks in the terminal before a risky step. On the page every note and message is tied to one item, saved word for word at once with its history and undo, and marked changed until the sync; on the server the request box runs the same Claude Code, with Allow and Refuse. The page suits work on one item, the terminal wide work across many. Work done in the terminal shows on the page only after the next rebuild.
+**The page or the terminal.** Both reach the same Claude Code, with the same `CLAUDE.md`, skills and files. In the terminal the owner starts Claude Code in `agents/system/` and names the item themselves; it files their words and does the round as `CLAUDE.md` says, and asks in the terminal before a risky step. On the page every note and message is tied to one item, saved word for word at once with its history and undo, and marked changed until the sync; on the server the request box runs the same Claude Code, with Allow and Refuse. The page suits work on one item, the terminal wide work across many. Work done in the terminal shows in the tree only after the next rebuild, but its run shows at once in the Notes and runs panel on the server, with its own page. A run from the page works on its own branch and reaches `main` when it is merged; a run in the terminal works wherever the owner started it.
 
 ## What the page reads
 
@@ -236,7 +313,7 @@ The page saves everything at once, so the owner never waits; the files change on
 | `nodes` | item the owner touched | The latest value of each edited field (`content` for the text, `how_md` for How it works), line comments with their line's text, answered questions, a new item, a deletion with what the item was, the owner's note and who cleans up, and the mark of a server request that changed it. |
 | `changes` | save | The history: when, by whom, the owner's words, and for each item every field before and after, and whether it was undone. It is never folded or cleared. |
 
-On claude.ai these live in the artifact's store and are read through the artifact data tool on the page's link. On the server each document is one JSON file, `page-store/<collection>/<id>.json`.
+On claude.ai these live in the artifact's store and are read through the artifact data tool on the page's link. On the server each document is one JSON file, `page-store/<collection>/<id>.json`. The server also keeps the notes of the Notes and runs panel there, one file each in `page-store/notes/`, which git ignores. They do not wait for a sync: the run that takes a note files its words as an owner input, so a sync only checks the notes left ready and never sent.
 
 The `ide-sync` skill brings them back. It runs when the owner presses Apply changes or says "sync the file tree", and always before `ide-build`:
 
@@ -286,9 +363,13 @@ The server listens only on the machine itself, at `127.0.0.1:8765`, and refuses 
 
 **What it does:**
 
-- `server.py` serves the page, its data and `real-files.json` read fresh from disk; answers `api/health`; keeps the page store as JSON files (`api/store/<collection>`); writes an edit to a file's text straight into the file the page showed, and into the real file made from a draft, and an edit to How it works into the item's `.index.md` (and its copy on disk), with the owner as its writer; never writes back a text the page showed only in part, and never writes again a field it already wrote, so it cannot undo what Claude Code changed since. An edit to a planned file nobody has written yet waits in the store until the sync.
-- `claude_bridge.py` runs each request (`api/agent`) as a Claude Code session in the folder the settings name, streams its steps to the page, and checks every step first: anything touching the keys folder is refused; deleting exactly the item the owner deleted goes ahead; a file outside the repository, or a tool or command not on the allow list, waits for the owner's Allow or Refuse, and a question nobody answers is refused after fifteen minutes. Claude Code is told to follow the system's `CLAUDE.md`, file the request, finish the round and never push. Each run is logged with its steps, answer, cost and time.
-- `voice.py` takes a recording (`api/voice`), sends it to Groq's speech-to-text models in order, skips a model that hits its rate limit or fails, and returns the text. The recording is not kept, and the Groq key never reaches Claude Code or the page.
+- `server.py` serves the page, its data and `real-files.json` read fresh from disk; answers `api/health`; keeps the page store as JSON files (`api/store/<collection>`); writes an edit to a file's text straight into the file the page showed, and into the real file made from a draft, and an edit to How it works into the item's `.index.md` (and its copy on disk), with the owner as its writer; never writes back a text the page showed only in part, and never writes again a field it already wrote, so it cannot undo what Claude Code changed since. An edit to a planned file nobody has written yet waits in the store until the sync. It also serves the Notes and runs panel: the list of notes and runs, each note (made, edited, recorded, sent, cancelled or deleted), each run with its steps and the full text of a long step, and a run's summary, merge, discard and stop. Its health answer says whether the panel, the send options' defaults and the summaries are available.
+- `claude_bridge.py` runs each request (`api/agent`, and every send of notes) as a Claude Code session, streams its steps to the page, and checks every step first: anything touching the keys folder is refused; deleting exactly the item the owner deleted goes ahead; a file outside the run's checkout, or a tool or command not on the allow list, waits for the owner's Allow or Refuse, and a question nobody answers is refused after fifteen minutes. A run with notes starts in `.worktrees/<run>/agents/system/` on its own branch; Delete and Apply changes runs start in `agents/system/` of the repository itself. It sets the status of the run and its notes as the run moves, merges on Auto merge, and lets Stop work even before Claude Code has connected. Claude Code is told to follow the system's `CLAUDE.md`, file the request, finish the round, never push and end with its `STATUS:` line. Each run is logged with its steps, answer, cost and time.
+- `notes.py` keeps the notes and the run records, sorts the panel's list, combines notes into one request and reads a run's `STATUS:` line.
+- `runs.py` reads Claude Code's own transcripts of every session started inside the repository, with its subagents, into the run list and the run page. It copies nothing.
+- `run_summary.py` asks Claude Haiku for each run's summary and tags, from a folder outside the repository, so that call loads no project settings and never shows as a run.
+- `worktrees.py` makes each run's branch and worktree, merges a finished branch into `main` on the server and rebuilds the page, and removes or discards a branch.
+- `voice.py` takes a recording (`api/voice` for the delete note box, or a note's recording, which the server turns into text in the background), sends it to Groq's speech-to-text models in order, skips a model that hits its rate limit or fails, and returns the text. The recording is not kept, and the Groq key never reaches Claude Code or the page.
 
 **Its settings,** `server.config.json`, hold no key values, only key names:
 
@@ -308,8 +389,11 @@ The server listens only on the machine itself, at `127.0.0.1:8765`, and refuses 
 | `claude.allow` | Tools and commands Claude Code may use without asking |
 | `claude.ask_owner` | Words in a command that always wait for the owner's click: push, reset, rebase, clean, delete, permission changes, installs, network tools |
 | `claude.never` | Paths nothing may touch: the keys folder |
+| `send_options` | The defaults of the send options: where, merge, tests, bug check, report |
+| `worktrees.folder`, `worktrees.main` | Where each run's checkout goes (`.worktrees`) and the branch runs start from and merge into (`main`) |
+| `runs.claude_config_dir`, `runs.live_seconds`, `runs.max_text`, `runs.summary_model` | Where Claude Code's transcripts are, how long a terminal run counts as live, how much of a step's text comes at once, and the model that writes summaries |
 
-The settings point at the page in `apps/project-IDE/current-ui/`, the store in `apps/project-IDE/data/page-store/` and the logs in `agents/system/logs/subagents/project-ide-agent/`. Claude Code starts in `agents/system/`, so the system's `CLAUDE.md`, agents and skills load as its own. A How it works edit from the page goes into the `x.index.md` next to its item.
+The settings point at the page in `apps/project-IDE/current-ui/`, the store in `apps/project-IDE/data/page-store/` and the logs in `agents/system/logs/subagents/project-ide-agent/`. Claude Code starts in `agents/system/`, or in the `agents/system/` of a run's own checkout, so the system's `CLAUDE.md`, agents and skills load as its own. A How it works edit from the page goes into the `x.index.md` next to its item.
 
 ## Who looks after it
 
@@ -323,7 +407,8 @@ The settings point at the page in `apps/project-IDE/current-ui/`, the store in `
 - `build_map.py` must report every How it works file fresh, none missing, no orphans.
 - The tree must equal the files in git.
 - After a sync, every new input from the page is in the inputs folder with its answer, every How it works edit is in its file word for word, and the store holds only the history and what was kept on purpose.
-- The server was tested on a copy of the repository: the store as files, write-through, a real Claude Code request, Allow and Refuse, a delete with a note and a bring-back. On the owner's server it was tested with `./start.sh`: the health check answers, a restart stops the old server and a stray one started by hand, a second start keeps the data version, and the page store saves and reads a note. `check_page.js` does not run there yet: Chromium needs system libraries that only the owner can install.
+- The server was tested on a copy of the repository: the store as files, write-through, a real Claude Code request, Allow and Refuse, a delete with a note and a bring-back. On the owner's server it was tested with `./start.sh`: the health check answers, a restart stops the old server and a stray one started by hand, a second start keeps the data version, and the page store saves and reads a note. `check_page.js` runs there once Chromium's system libraries are installed with `sudo npx playwright install-deps chromium`, which only the owner can run.
+- The Notes and runs panel and the page of a run were tested on the owner's server: `check_page.js` prints "page ok"; a browser test of the panel and a run page at a desktop width in light and a phone width in dark passed, with nothing wider than the screen; a real run with two notes ended done and was merged into `main`; a Stop right after sending ended cancelled at no cost; and the summary of a small run cost less than half a cent.
 
 ## Where each part's docs are
 
@@ -332,7 +417,8 @@ The settings point at the page in `apps/project-IDE/current-ui/`, the store in `
 | The IDE as a whole | `apps/project-IDE/project-IDE.index.md` | The folder's How it works |
 | The page | `apps/project-IDE/current-ui/file-tree-explorer.index.md` | The page's How it works |
 | The page data | `apps/project-IDE/current-ui/file-tree.data.index.md` | What the data file holds |
-| The server | `apps/project-IDE/server/README.md` | Setup, start with `init.sh` and `start.sh`, and safety, step by step |
+| The server | `apps/project-IDE/server/README.md` | Setup, start with `init.sh` and `start.sh`, notes and runs, each run's branch, and safety, step by step |
+| Notes, runs and their branches | `apps/project-IDE/server/server.index.md` and the How it works files of `notes.py`, `runs.py`, `run_summary.py` and `worktrees.py` next to them | What each file keeps or reads, and who uses it |
 | The knowledge and records | `apps/project-IDE/data/README.md` | How the knowledge is kept: layers, tags, the flow |
 | The build | `agents/system/.claude/skills/ide-build/SKILL.md` and `scripts/README.md` | The build steps and each script's options |
 | The sync | `agents/system/.claude/skills/ide-sync/SKILL.md` | Every step from the page back into the files |
@@ -351,5 +437,8 @@ The settings point at the page in `apps/project-IDE/current-ui/`, the store in `
 
 - A routine that checks the page store on a schedule, so Apply changes is not needed (proposed).
 - How the page published on claude.ai is updated after work on the server.
-- Whether the page check runs on the owner's server: Chromium there needs system libraries (`sudo npx playwright install-deps`), which only the owner can install.
-- More statuses than "changed", when the owner asks for them.
+- More statuses for items than "changed", when the owner asks for them. Notes and runs have their own statuses.
+- Pull requests from a run (Make PR, Make PR and merge): the next step of the notes and runs plan, not built; when to build it is open. Until then a merge happens on the server only and nothing is pushed.
+- Running notes in a cloud session (the Cloud send option): shown but off; it needs its own plan.
+- A run's branch starts from the last commit of `main`, so page edits not yet committed are not in it.
+- Whether the run records ever go into git: today they stay in the logs folder, out of git (proposed).

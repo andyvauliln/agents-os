@@ -1,15 +1,15 @@
 ---
 about: agent-os/apps/project-IDE/server/claude_bridge.py
-basis: 5d6eeab0d1f2
-written: 2026-10-14T15:17:50Z
+basis: 8d62241e46c7
+written: 2026-10-15T10:35:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-15T10:40:41Z
 ---
 # claude_bridge.py
 
 ## What it is
 
-Runs each request typed on the server page as a Claude Code session through the Claude Agent SDK, started in `agents/system/`, so the system's `CLAUDE.md`, agents and skills load as its own. A follow-up in the same box continues the same session. Before every step it checks: nothing may touch the keys folder; a file outside the repository, and any tool or command not on the allow list in `server.config.json` (push, delete, installs, network tools), waits for the owner's Allow or Refuse on the page. When the owner pressed Delete on the page, the request carries that item, and one command that deletes exactly it and its How it works and Details files goes ahead without a second click; Claude Code then cleans the project of it as the sync skill says, keeping the owner's note in mind. It streams the text, the steps, the questions and the result with its cost and time, tells the page every file the request changed, even when Claude Code committed them, so the page marks them changed, and logs each request, with every step that waited for the owner in full, in the project IDE agent's log folder.
+Runs each request from the server page as a Claude Code session through the Claude Agent SDK, so the system's `CLAUDE.md`, agents and skills load as its own. A run that carries notes (every message from the ask box and every send from the Notes and runs panel) works on its own branch: it gets a worktree from `worktrees.py` and Claude Code starts in `.worktrees/<run>/agents/system/`; a follow-up from the same chat continues on that branch while it exists. Delete and Apply changes runs work in the repository itself. Before every step it checks: nothing may touch the keys folder; a file outside the run's checkout, and any tool or command not on the allow list in `server.config.json`, waits for the owner's Allow or Refuse; a page deletion of exactly the item goes ahead. It sets the run's and its notes' status as the run moves (planning when the run uses the `change-plan` skill, need human while an Allow or Refuse waits, then the `STATUS:` line of the answer, cancelled on Stop, failed on error), merges the branch into `main` when the run ends done and the send option says auto merge, asks for the summary, streams every step to the page and logs each run.
 
 ## Who looks after it
 
@@ -17,7 +17,7 @@ It is written by project-ide-agent.
 
 ## When and how it changes
 
-It changes when a rule on what Claude Code may do, the start folder or the request flow changes.
+It changes when a rule on what Claude Code may do, the start folder, the worktree flow or the statuses of a run change.
 
 ## Who uses it, and when
 
@@ -29,8 +29,9 @@ It is described in `apps/project-IDE/server/README.md` and its folder's How it w
 
 ## Related knowledge
 
-It is read by `apps/project-IDE/server/server.py`. It reads `apps/project-IDE/server/server.config.json` and `agents/system/CLAUDE.md`. It writes `agents/system/logs/subagents/`. The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `docs/metadata.md`, `apps/docs/README.md` (section "The project IDE"), `apps/project-IDE/docs/README.md` (section "The server") and `agents/system/docs/README.md` (section "Keys and secrets").
+It is read by `apps/project-IDE/server/server.py`. It reads `apps/project-IDE/server/server.config.json` and `agents/system/CLAUDE.md`, and uses `apps/project-IDE/server/worktrees.py`, `apps/project-IDE/server/notes.py` and `apps/project-IDE/server/run_summary.py`. It writes `agents/system/logs/subagents/`. The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `docs/metadata.md`, `apps/docs/README.md` (section "The project IDE"), `apps/project-IDE/docs/README.md` (sections "Notes and runs" and "The server") and `agents/system/docs/README.md` (section "Keys and secrets").
 
 ## Keep in mind
 
-- Pushing, deleting anything but the item the owner deleted, anything outside the repository and any live action wait for the owner's click; the keys folder is never opened.
+- Pushing, deleting anything but the item the owner deleted, anything outside the run's checkout and any live action wait for the owner's click; the keys folder is never opened.
+- A run with notes never commits on `main` itself: it works on its branch, and only the merge moves `main`.

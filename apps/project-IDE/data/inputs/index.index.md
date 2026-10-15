@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/inputs/index.json
-basis: 014c6c95552c
+basis: 462daddd4727
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T09:57:53Z
+confirmed: 2026-10-15T10:40:56Z
 ---
 # index.json
 

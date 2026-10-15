@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "Keeps every .env keys file, dependencies, build output, caches, editor state and research clones out of git, with a comment on each group.",
+  "about": "Keeps every .env keys file, dependencies, build output, caches, editor state, research clones, run-time logs and data, the IDE's run worktrees and its waiting notes out of git, with a comment on each group.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -42,19 +42,29 @@
     {
       "path": "apps/docs/rebuild-prompt.md",
       "how": "documented in"
+    },
+    {
+      "path": "apps/project-IDE/server/worktrees.py",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/server/notes.py",
+      "how": "links to"
     }
   ],
   "sources": {
     "decisions": [
       "D-028",
       "D-055",
-      "D-063"
+      "D-063",
+      "D-074"
     ],
     "inputs": [
       "in-20260929-2147",
       "in-20260930-0752",
       "in-20261006-2206",
-      "in-20261012-secrets"
+      "in-20261012-secrets",
+      "in-20261015-0925"
     ],
     "notes": []
   },

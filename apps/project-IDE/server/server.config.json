@@ -96,5 +96,25 @@
   "never": [
    ".secrets"
   ]
+ },
+ "send_options": {
+  "_about": "Defaults of the send options in the Notes and runs panel; the page can change them for each send. where: local (a worktree on this server) or cloud (later). merge: auto (merge into main when the run ends done) or ask. tests: related, all or none. bug_check and report: true or false.",
+  "where": "local",
+  "merge": "auto",
+  "tests": "related",
+  "bug_check": true,
+  "report": true
+ },
+ "worktrees": {
+  "_about": "Each run from the page works on its own branch ide/<date>-<subject>, in a worktree in this folder at the top of the repository (git ignores it).",
+  "folder": ".worktrees",
+  "main": "main"
+ },
+ "runs": {
+  "_about": "Runs are read from Claude Code's transcripts in <claude_config_dir>/projects/ (null: CLAUDE_CONFIG_DIR, else ~/.claude). A run is live while its transcript changed in the last live_seconds. max_text: characters of a step's input or output sent with the run; the rest loads on demand. summary_model writes each run's ASD-STE100 summary and tags.",
+  "claude_config_dir": null,
+  "live_seconds": 90,
+  "max_text": 1200,
+  "summary_model": "haiku"
  }
 }

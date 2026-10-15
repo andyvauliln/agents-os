@@ -49,7 +49,7 @@ apps/
 │   ├── project-IDE.meta.json
 │   ├── docs/                          # vision.md, README.md, README.asd.md, rebuild-prompt.md
 │   ├── current-ui/                    # file-tree-explorer.html, file-tree.data.json, real-files.json
-│   ├── server/                        # README.md, server.py, claude_bridge.py, voice.py, server.config.json
+│   ├── server/                        # README.md, server.py, claude_bridge.py, notes.py, runs.py, run_summary.py, worktrees.py, voice.py, server.config.json
 │   └── data/                          # README.md, decisions.md, changelog.md, inputs/, plans/, archive/,
 │                                      # overrides.json, page-store/
 ├── temp/                              # research clones

@@ -1070,10 +1070,14 @@ apps/project-IDE/docs/rebuild-prompt.md
 apps/project-IDE/docs/vision.md
 apps/project-IDE/server/
 apps/project-IDE/server/claude_bridge.py
+apps/project-IDE/server/notes.py
 apps/project-IDE/server/README.md
+apps/project-IDE/server/run_summary.py
+apps/project-IDE/server/runs.py
 apps/project-IDE/server/server.config.json
 apps/project-IDE/server/server.py
 apps/project-IDE/server/voice.py
+apps/project-IDE/server/worktrees.py
 docs/
 docs/file-tree.md
 docs/metadata.md

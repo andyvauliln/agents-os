@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The web service behind the server page: serves the page and data, keeps the page store as files, writes edits into their files, and hands requests and recordings on.",
+  "about": "The web service behind the server page: serves the page and data, keeps the page store as files, writes edits into their files, serves the Notes and runs panel and run pages, and hands requests and recordings on.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -14,7 +14,7 @@
     "the owner, who starts it",
     "project-ide-agent"
   ],
-  "changes_when": "The page's way of talking to the server, the store or the write-through changes.",
+  "changes_when": "The page's way of talking to the server, the store, the write-through or a route of the Notes and runs panel changes.",
   "related": [
     {
       "path": "apps/project-IDE/server/server.config.json",
@@ -43,6 +43,22 @@
     {
       "path": "apps/project-IDE/server/README.md",
       "how": "documented in"
+    },
+    {
+      "path": "apps/project-IDE/server/notes.py",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/server/runs.py",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/server/run_summary.py",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/server/worktrees.py",
+      "how": "reads"
     }
   ],
   "sources": {
@@ -52,14 +68,16 @@
       "D-044",
       "D-050",
       "D-057",
-      "D-060"
+      "D-060",
+      "D-074"
     ],
     "inputs": [
       "in-20261005-1452",
       "in-20261005-1517",
       "in-20261005-1545",
       "in-20261009-1019",
-      "in-20261013-ide-on-server"
+      "in-20261013-ide-on-server",
+      "in-20261015-0925"
     ],
     "notes": []
   },
@@ -89,9 +107,12 @@
     "agents/system/CLAUDE.md#Rules",
     "docs/metadata.md",
     "apps/docs/README.md#The project IDE",
-    "apps/project-IDE/docs/README.md#The server"
+    "apps/project-IDE/docs/README.md#The server",
+    "apps/project-IDE/docs/README.md#Notes and runs"
   ],
-  "features": [],
+  "features": [
+    "Notes and runs"
+  ],
   "views": [],
   "how_it_works": {}
 }

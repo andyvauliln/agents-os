@@ -1,6 +1,6 @@
 # Plan: one panel for AI notes and runs, with a page for every run
 
-Status: waiting (second version, with the owner's answers) · Request: in-20261015-0925 · Updated: 2026-10-15
+Status: distributed (pull requests wait) · Request: in-20261015-0925 · Decision: D-074 · Updated: 2026-10-15
 
 ## The request
 
@@ -225,6 +225,10 @@ Still open, with the default the build follows:
 - 2026-10-15 09:25: request filed (in-20261015-0925).
 - 2026-10-15 09:40: plan drafted and shown to the owner (waiting).
 - 2026-10-15 10:05: the owner answered in the Questions file and the chat. Second version: worktree per run, send options, the owner's statuses, 10 runs with Show more, Haiku summary, the editor bug. Shown again (waiting).
+- 2026-10-15 10:15: the owner said go, without pull requests for now (step 6 waits). Send option defaults: Local, Auto merge, Related tests, Check for bugs on, Report on. Worktrees in `.worktrees/`. Until step 6 is built, a merge is local: the run's branch is merged into `main` on this server when its checks pass (Auto merge) or when the owner presses **Merge into main** on the run page; pushing `main` to GitHub stays as today. Status: building.
+- 2026-10-15 10:28: built. Steps 1 to 5 and 7 to 10: `runs.py`, `worktrees.py`, `notes.py`, `run_summary.py` (new); `claude_bridge.py`, `server.py`, `server.config.json`, `.gitignore` and the page changed. Step 6 (pull requests, `run_pr.py`) is not built: Make PR and Make PR and merge are shown but off, and a merge is local into `main` on the server. The worktree flow replaced the planned `start.sh` cleanup; `start.sh` is unchanged. Status: built.
+- 2026-10-15 10:28: tested on the owner's server (step 11). `check_page.js` "page ok"; a browser test of the panel and a run page at desktop (light) and phone (dark) width passed, nothing wider than the screen; a real run with two notes ended done and was merged into `main`; Stop right after send ended cancelled at no cost; the summary of a small run cost $0.004. Known limits: a worktree starts from the last commit of `main`, so page edits not yet committed are not in it; Whisper may write words such as "Thank you." for a silent recording; the browser test needed Chromium's system libraries, which the owner agreed to install with `sudo npx playwright install-deps chromium`.
+- 2026-10-15 10:55: distributed (step 12). Server README and its Questions file (the Chromium question closed; new open question: when to build pull requests); the IDE vision (one sentence), README (new parts "Notes and runs" and "The page of a run"; the ask box, voice, comments, the page store, the server, tests and still open), README.asd and rebuild prompt (note and run records, statuses, the `STATUS:` line, send options, step kinds, tags, routes, the worktree flow); `ide-sync` (notes on the server); `agents/system/CLAUDE.md` (a page run works on its own branch and the server merges it); `apps/docs/` and `docs/` READMEs and twins where they list the server's files and `.gitignore`; `docs/rebuild-prompt.md` (`.gitignore` block) and `apps/docs/rebuild-prompt.md` (server files); How it works and Details of every changed file. Commit not made by this round. Status: distributed (pull requests wait). The plan stays in `plans/` until step 6 is built or dropped.
 
 ## Plan in ASD-STE100
 

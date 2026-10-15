@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The File Tree page itself, one HTML file: the tree of every file and folder with search and filters, and each item's tabs.",
+  "about": "The File Tree page itself, one HTML file: the tree of every file and folder with search and filters, each item's tabs, and on the server the Notes and runs panel and the page of each run.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -47,6 +47,14 @@
     {
       "path": "agents/system/.claude/skills/ide-build/SKILL.md",
       "how": "written by"
+    },
+    {
+      "path": "apps/project-IDE/server/notes.py",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/server/runs.py",
+      "how": "links to"
     }
   ],
   "sources": {
@@ -62,7 +70,8 @@
       "D-060",
       "D-061",
       "D-065",
-      "D-069"
+      "D-069",
+      "D-074"
     ],
     "inputs": [
       "in-20261005-0908",
@@ -78,7 +87,8 @@
       "in-20261009-2005",
       "in-20261013-wysiwyg",
       "in-20261013-disk-tree",
-      "in-20261014-1047"
+      "in-20261014-1047",
+      "in-20261015-0925"
     ],
     "notes": []
   },
@@ -112,9 +122,12 @@
     "agents/system/CLAUDE.md#Rules",
     "docs/metadata.md",
     "apps/docs/README.md#The project IDE",
-    "apps/project-IDE/docs/README.md#The page"
+    "apps/project-IDE/docs/README.md#The page",
+    "apps/project-IDE/docs/README.md#Notes and runs"
   ],
-  "features": [],
+  "features": [
+    "Notes and runs"
+  ],
   "views": [],
   "how_it_works": {}
 }

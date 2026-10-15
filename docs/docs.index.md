@@ -1,10 +1,9 @@
 ---
 about: agent-os/docs/
-node: n-57
-basis: 04f5e7636dcb
-written: 2026-10-14T08:00:17Z
+basis: 0c569e276014
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T10:54:17Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # docs/
 
@@ -30,7 +29,7 @@ The owner reads it first, to see the whole project. Claude Code started in the s
 
 ## Related knowledge
 
-The docs of the levels below must agree with it: the system (`agents/system/docs/`), trading (`agents/trading/docs/`), the apps (`apps/docs/`) and the project IDE (`apps/project-IDE/docs/`). The records behind it are the owner's inputs and the decisions in `vision/docs/`.
+The docs of the levels below must agree with it: the system (`agents/system/docs/`), trading (`agents/trading/docs/`), the apps (`apps/docs/`) and the project IDE (`apps/project-IDE/docs/`). The records behind it are the owner's inputs and the decisions in `apps/project-IDE/data/`.
 
 ## Keep in mind
 

@@ -1,1 +1,53 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The pipeline that wrote the prediction-market studies: the stage 1 build scripts and raw outputs, the stage 2 and 3 workflow scripts, their arguments and the hand-over notes.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the Polymarket strategy survey sessions (2026-09-20 to 2026-09-29)"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)",
+    "a session that resumes the survey"
+  ],
+  "changes_when": "A survey session resumes the work (studies 58-84, then stage 3) and updates the arguments and notes.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/",
+      "how": "writes"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/",
+      "how": "writes"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "Record what changed and the next step."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

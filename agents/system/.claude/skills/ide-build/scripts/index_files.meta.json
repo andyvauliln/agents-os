@@ -1,23 +1,79 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Lists the items from git and knows where every How it works and Details file lives; reads and writes them.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "project-ide-agent",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "agents/system/.claude/skills/ide-build/scripts/enrich.py",
+    "agents/system/.claude/skills/ide-build/scripts/build_map.py",
+    "agents/system/.claude/skills/ide-build/scripts/materialize.py",
+    "agents/system/.claude/skills/ide-build/scripts/check_tree.py"
+  ],
+  "changes_when": "A metadata naming rule, the item list, the stage-two rule or the kept-data folder (KEPT) changes.",
+  "related": [
+    {
+      "path": "docs/metadata.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/build_map.py",
+      "how": "read by"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-039",
+      "D-041",
+      "D-050",
+      "D-057",
+      "D-064",
+      "D-070"
+    ],
+    "inputs": [
+      "in-20261005-1041",
+      "in-20261005-1254",
+      "in-20261006-2104",
+      "in-20261005-0925",
+      "in-20261005-1024",
+      "in-20261007-0904"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
+      "how": "if how it is run or what it does changes"
+    },
+    {
+      "path": "docs/metadata.md",
+      "how": "sections 4 and 6, if a name or field rule changes"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the script table in 'How the page is built and checked'"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked",
+    "agents/system/.claude/skills/ide-build/scripts/README.md"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

@@ -8,31 +8,31 @@
   "secret": false,
   "generated_by": null,
   "writers": [
-    "knowledge-base-agent with the rebuild-prompt-doc skill",
-    "the owner, on the File Tree page"
-  ],
-  "readers": [
-    "an AI coding agent rebuilding trading",
-    "an agent checking trading against its spec",
+    "knowledge-base-agent",
+    "rebuild-prompt-doc",
     "the owner"
   ],
-  "changes_when": "trading's design changes: a new file or folder, a metadata rule, a settled open point, a new trading domain",
+  "readers": [
+    "the owner",
+    "knowledge-base-agent"
+  ],
+  "changes_when": "Trading's design changes: a file or folder, a name, a metadata rule, a settled open point or a new trading domain.",
   "related": [
     {
-      "path": "agents/system/docs/rebuild-prompt.md",
-      "how": "parent prompt; lists this one in its build order"
-    },
-    {
       "path": "agents/trading/docs/vision.md",
-      "how": "same names"
+      "how": "built from"
     },
     {
       "path": "agents/trading/docs/README.md",
-      "how": "builds what it describes"
+      "how": "built from"
     },
     {
-      "path": "agents/trading/prediction-market/docs/rebuild-prompt.md",
-      "how": "child prompt, stage two"
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/.claude/skills/rebuild-prompt-doc/SKILL.md",
+      "how": "written by"
     }
   ],
   "sources": {
@@ -40,52 +40,49 @@
       "D-048",
       "D-053",
       "D-054",
+      "D-055",
       "D-056",
+      "D-057",
       "D-058",
       "D-059",
       "D-061",
+      "D-063",
       "D-064",
-      "D-055",
-      "D-057",
-      "D-063"
+      "D-067",
+      "D-070",
+      "D-071"
     ],
     "inputs": [
+      "in-20261007-0904",
       "in-20261009-0940",
       "in-20261012-stage1",
-      "in-20261007-0904"
+      "in-20261014-metadata-logic",
+      "in-20261014-1241",
+      "in-20261014-1439"
     ],
-    "notes": [
-      "tr-conv-variant-name-format",
-      "tr-conv-level-ids",
-      "tr-conv-script-kinds"
-    ]
+    "notes": []
   },
   "update_with": [
     {
       "path": "agents/system/docs/rebuild-prompt.md",
-      "how": "keep this prompt in its build order"
+      "how": "Keep this prompt in its build order."
     },
     {
       "path": "agents/trading/docs/rebuild-prompt.example.md",
-      "how": "keep the outline in step"
+      "how": "Keep the outline in step."
     },
     {
       "path": "agents/trading/docs/rebuild-prompt.questions.md",
-      "how": "keep the open questions in step"
+      "how": "Remove answered questions and add new open ones."
     }
   ],
   "inherits": [
-    "file-index: metadata file names and formats",
-    "the system's ground rules: keys by name only, test first"
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "agents/system/docs/rebuild-prompt.md#Ground rules",
+    "docs/metadata.md"
   ],
-  "features": [
-    "Rebuild from the docs"
-  ],
-  "views": [
-    "doc (shared view)"
-  ],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "features": [],
+  "views": [],
+  "how_it_works": {}
 }

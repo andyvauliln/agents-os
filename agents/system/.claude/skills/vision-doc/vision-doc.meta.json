@@ -1,1 +1,63 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Folder of the vision-doc skill.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the owner",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "knowledge-base-agent"
+  ],
+  "changes_when": "A file is added to or removed from the skill folder, or the skill is renamed.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/vision-doc/SKILL.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/",
+      "how": "summed up in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-034",
+      "D-036",
+      "D-048",
+      "D-053",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20261001-0845",
+      "in-20261001-0908",
+      "in-20261005-0710",
+      "in-20261006-1259"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/skills.index.md",
+      "how": "if the skill is renamed, added or removed"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "rebuilt by ide-build when the item is added, moved or removed; never edited by hand"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The knowledge base and the docs"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

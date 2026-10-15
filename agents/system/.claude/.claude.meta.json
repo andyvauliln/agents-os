@@ -1,23 +1,98 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The system level's Claude Code folder: settings, helper agents, skills and the standard empty parts a session started in agents/system/ loads.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent",
+    "project-ide-agent",
+    "change-plan"
+  ],
+  "readers": [
+    "Claude Code started in agents/system/",
+    "knowledge-base-agent",
+    "project-ide-agent",
+    "the owner"
+  ],
+  "changes_when": "A helper agent, a skill, a setting or one of the standard parts is added, changed or removed.",
+  "related": [
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/.claude/agents/",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/settings.json",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-008",
+      "D-016",
+      "D-024",
+      "D-026",
+      "D-030",
+      "D-043",
+      "D-047",
+      "D-064"
+    ],
+    "inputs": [
+      "in-20260929-1545",
+      "in-20260929-1616",
+      "in-20260929-2025",
+      "in-20261006-1144"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "the part 'Each agent's AI setup', if what it says about this item changes"
+    },
+    {
+      "path": "agents/system/docs/README.asd.md",
+      "how": "write it again with readme-asd-doc right after the system README changes"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "the part 'The standard .claude/ folder', if names, formats or the tree change"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "the 'Where things are' table, if the helpers or skills listed there change"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "rebuilt by ide-build when the item is added, moved or removed; never edited by hand"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Each agent's AI setup",
+    "agents/system/docs/rebuild-prompt.md#The standard .claude/ folder"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

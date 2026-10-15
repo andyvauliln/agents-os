@@ -7,7 +7,7 @@ What the IDE is, in the vision's words; where it stands (stage one); what this m
 One picture of the loop (repository, build, page in three places, sync) and one table: each part, what it is for, where it lives while we plan and in the finished layout. Then how the parts connect, step by step.
 
 ## How it is laid out
-The finished `apps/project-IDE/` tree, one line per entry; where the agent, skills and scripts live; what is still in `vision/` today.
+The finished `apps/project-IDE/` tree, one line per entry; where the agent, skills and scripts live; that every file is edited where it is.
 
 ## The page
 The manual of the page, one subsection each: the header, the tree, the sheet of an item, the tabs, reading and editing a document, notes, the ask box, adding, deleting and bringing back, the "changed" mark and Apply changes, on a phone, what the browser remembers.

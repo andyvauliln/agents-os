@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/docs/rebuild-prompt.md
-node: n-2.22
-basis: f6ea621dc9a1
-written: 2026-10-12T00:00:00Z
+basis: 55de3b7ee67a
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # rebuild-prompt.md
 
@@ -30,7 +29,7 @@ The project's rebuild prompt (`docs/rebuild-prompt.md`) lists it among the child
 
 ## Related knowledge
 
-The level above is `docs/rebuild-prompt.md` (root, keys, docs, apps, planning area); the level below is `agents/trading/docs/rebuild-prompt.md`; the IDE's own build is `apps/project-IDE/docs/rebuild-prompt.md`. Its facts come from the system's README.
+The level above is `docs/rebuild-prompt.md` (root, keys, docs, apps); the level below is `agents/trading/docs/rebuild-prompt.md`; the IDE's own build is `apps/project-IDE/docs/rebuild-prompt.md`. Its facts come from the system's README.
 
 ## Keep in mind
 

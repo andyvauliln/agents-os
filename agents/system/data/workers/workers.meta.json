@@ -1,1 +1,60 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The outputs of the shared workers, one folder per worker; none exists yet.",
+  "kind": "folder",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the shared workers (planned)"
+  ],
+  "readers": [
+    "agents, through file links to latest files",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "A shared worker is added or removed.",
+  "related": [
+    {
+      "path": "agents/system/scripts/workers/",
+      "how": "written by"
+    },
+    {
+      "path": "agents/system/docs/README.md#Workers and data",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/data/",
+      "how": "summed up in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-007",
+      "D-010"
+    ],
+    "inputs": [
+      "in-20260929-1545"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/data/data.index.md",
+      "how": "keep the folder summary in step"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "rebuild with the ide-build skill when an item here is added, moved or removed"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Workers and data"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

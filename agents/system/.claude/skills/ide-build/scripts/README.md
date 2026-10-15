@@ -1,43 +1,62 @@
-# tools: build file-tree.data.json
+# scripts: build the File Tree page data
 
-These are the scripts of the `ide-build` skill (`.claude/skills/ide-build/SKILL.md`, the project IDE agent's). In the repository they live in `agents/system/.claude/skills/ide-build/scripts/`, the page in `apps/project-IDE/current-ui/` and the records in `apps/project-IDE/data/` (D-041); while we plan they are here, in `vision/explorer/` and in `vision/docs/`.
+These are the scripts of the `ide-build` skill (`agents/system/.claude/skills/ide-build/SKILL.md`, the project IDE agent's). They build the page data from the repository on disk: the files are the only source. The page and its data are in `apps/project-IDE/current-ui/`, the records in `apps/project-IDE/data/`. All are Python with the standard library only, except `check_page.js`, which needs Node and Playwright with Chromium.
 
-Before publishing, run the page check: `node check_page.js ../explorer <screenshot dir or -> <node ids...>` opens the page on a desktop and a phone width with a stand-in for the artifact runtime and prints "page ok" or what failed (needs Playwright; `PLAYWRIGHT` and `CHROMIUM` override the module and browser paths).
+## One build, from the top of the repository
 
-`file-tree.data.json` (the File Tree explorer's data) is built from `../file-tree.md` plus hand-written knowledge:
+`N` is the next data version: one more than `data_version` in the current `apps/project-IDE/current-ui/file-tree.data.json`.
 
 ```bash
-cd /mnt/project-files/vision/tools
-python3 parse.py /tmp/parsed.json                       # tree + [n] sections + decisions + feature map
-DATA_VERSION=<next> python3 enrich.py /tmp/parsed.json ../file-tree.data.json
+S=agents/system/.claude/skills/ide-build/scripts
+python3 $S/materialize.py                       # empty metadata files for new items, .gitkeep, docs/file-tree.md
+python3 $S/build_map.py --stale                 # How it works files that are missing or stale, children first
+# write each stale one again (file-index skill), or, when it is still right:
+python3 $S/build_map.py --confirm <path> ...    # or: python3 $S/build_map.py --stale | python3 $S/build_map.py --confirm -
+DATA_VERSION=N python3 $S/enrich.py             # apps/project-IDE/current-ui/file-tree.data.json and real-files.json
+python3 $S/materialize.py                       # if it made files (a new built file), run build_map.py and enrich.py again
+python3 $S/build_map.py                         # must say "... fresh, 0 missing or stale, 0 orphans ..."
+python3 $S/check_tree.py                        # must say "tree ok"
+node $S/check_page.js apps/project-IDE/current-ui - agent-os docs/README.md <the items this round changed>   # must say "page ok"
 ```
 
-- `enrich.py` adds concepts, rules and example file contents, then the tab data from `tabs.py` (field guides, custom tables such as the .env Variables table, fake-value .env examples), reads real file contents from the repo checkout (`REPO_DIR`, read only; clone the latest repo first, or the real files are missing from the page), lists every real file under a folder that exists in the repo as a "scanned" item with no How it works of its own (D-061; only `.git/` and `.secrets/` are left out; their texts go to `real-files.json` next to the data, which the page loads when one is opened and which is published with it; `build_map.py` skips scanned items), and finally applies `overrides.json`.
-- `overrides.json` holds owner edits folded in from the explorer page, keyed by `[n]` (fields replace the parsed ones). Keep it: rebuilding without it loses those edits.
+`REPO_DIR` points every script at another checkout (default: the checkout the scripts sit in). `enrich.py` takes another data file as its argument, for a test build in a scratch folder; `real-files.json` is written next to it. `check_page.js` takes a screenshot folder instead of `-`.
+
+## The items and their ids
+
+An item is a file git keeps (`git ls-files --cached --others --exclude-standard`), a folder that holds one, or a local keys file (`.env`), which is listed but never read. The old planning folder is left out. An item's id is its path from the top of the repository, `docs/README.md` or `apps/project-IDE`; the top itself is `agent-os`. The page opens an item from its address: `file-tree-explorer.html#docs/README.md`.
+
+## The scripts
+
+| Script | What it does |
+|---|---|
+| `index_files.py` | Lists the items from git. Knows each item's metadata files: a file's are named after it without its last extension and sit beside it (`vision.md`: `vision.index.md`, `vision.meta.json`), a folder's sit inside it (`configs/configs.index.md`), the top has `agent-os.index.md`; a file whose name it shares with a sibling or its folder keeps its extension (`server.py.index.md`). Reads and writes How it works files, finds missing and orphan metadata files. |
+| `enrich.py` | Writes the page data. For each item: its text into `real-files.json` (the page loads it when a file is opened; a file over 200 KB, a non-text file, a keys file and the built files are not put there), its How it works and Details files with the state of the How it works file, its Example (`x.example.md`, `.env.example` beside a `.env`), Questions (`x.questions.md`) and ASD-STE100 twin (`README.asd.md` beside `README.md`) when they exist, and the extra tabs from `tabs.py`. It applies the owner's kept edits of those tabs from `apps/project-IDE/data/overrides.json` (keyed by path), reads the decisions from `apps/project-IDE/data/decisions.md` for the page's pop-ups, and marks the empty files (0 bytes, or only `{}` or `[]`). |
+| `tabs.py` | The field guides and extra tables by path or kind of file: settings fields, jobs, links, routes, tests, capabilities, key names (never values). |
+| `materialize.py` | Gives every item outside stage two that has none an empty `x.index.md` and `x.meta.json` (a metadata file has none of its own; in the prediction-market domain only its `docs/` gets them). Keeps a `.gitkeep` in every empty folder and removes it once the folder holds a file. Writes `docs/file-tree.md`, every path in git without the metadata files. It copies nothing. |
+| `build_map.py` | Checks the How it works files (below). `--stale`, `--empty`, `--context <path>`, `--set <file.json>`, `--confirm <path>...` (or `-` to read the paths from stdin), `--orphans`. Without an option it prints the report. |
+| `check_tree.py` | Checks that the items of the page data are exactly the files in git, the folders that hold them and the top, with the path as each id; the local `.env` files are the only extra items. |
+| `check_page.js` | Opens the page at a desktop and a phone width with a stand-in for the artifact runtime, opens each item it is given by its path in the address and its How it works and File tabs, and fails on a page error, a missing tab, an address that does not open its item, or a page wider than the phone. `PLAYWRIGHT` and `CHROMIUM` override the module and browser paths. |
+
+## How it works files and their basis
+
+Every item but a metadata file has a How it works file (docs/metadata.md, sections 5 and 9). Its front matter holds `about`, `written`, `by`, and the `basis` and `confirmed` that `build_map.py` writes. The basis is a hash of the item's own content (nothing for a folder, a keys file or a built file: the page data, `real-files.json`, `docs/file-tree.md`) and, for a folder, the names and How it works texts of the items inside it. A file with the same basis is fresh, another basis is stale, no file is missing, and a file with nothing written yet is empty: it is counted on its own and written later with the `file-index` skill.
+
+When a child's How it works text changes, its folder becomes stale, so a change goes up from the bottom. `--confirm` writes the new basis and the `confirmed` time without touching the text, so the folder above does not become stale because of it. `--set` takes `{path: text}` or `{path: {text, keep: [...], sections: [{title, text}]}}` and writes the files (writer from `BY`, default `knowledge-base-agent`).
+
+The build reads no knowledge notes and no tree notes: an item is described only by its own files.
+
+One folder is plain data: `apps/project-IDE/data/sources/prediction-market/metadata/` (`KEPT` in `index_files.py`) holds the earlier metadata files of the prediction-market domain, kept as records. Nothing inside it gets metadata files, its `.index.md` and `.meta.json` files show as plain files with their text, and none of them is an orphan; the folder itself has its own metadata like any folder.
 
 ## Where the page lives
 
-The page source is `vision/explorer/file-tree-explorer.html`, with `vision/explorer/file-tree.data.json` (a copy of `../file-tree.data.json`) next to it. Publish it with the Artifact tool by url (https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs) with `files: {"file-tree.data.json": ...}`. Copy the source back here whenever you change it in a scratchpad.
-
-## How it works files (D-039)
-
-Every node's How it works is its own Markdown file, built and read by `index_files.py`: a file has one named after it without its extension (`vision.md`: `vision.index.md`; `.gitignore`: `.gitignore.index.md`; a file whose name would clash with a sibling's or its folder's keeps its extension, today only `server.py.index.md`), a folder `f/` has `f/f.index.md`. Next to each sits an empty Details file with the same name ending in `.meta.json` (`meta_path(node)`; `ensure_meta(nodes)` makes the missing ones; `enrich.py` puts it in each node's `meta` and its path in `meta_file`). Drafts that already exist in `vision/` (`index_files.DRAFTS`, `DRAFT_DIRS`: the people docs, the agent, the skills) keep theirs next to the draft, e.g. `vision/.claude/docs/README.index.md`; everything else is in the mirror tree `vision/tree/agent-os/...`. `enrich.py` takes `CLAUDE_DRAFTS` from `index_files.DRAFTS`; `VISION_FILES` in `enrich.py` shows other drafts in `vision/` (the scripts, `overrides.json`, the page source, the server files in `vision/server/`) on the File tab while their index files stay in the mirror. `enrich.py` puts the body in each node's `how_md` and the path in `how_file`; the page shows it and edits it (db `nodes/<id>.fields.how_md`). At a sync, write each edited `how_md` into the node's index file word for word (`by: owner`), then `python3 build_map.py --confirm <id>`. `build_map.py --orphans` lists index and Details files whose node is gone. The skill is `.claude/skills/file-index/SKILL.md`.
+The page source is `apps/project-IDE/current-ui/file-tree-explorer.html`, with `file-tree.data.json` and `real-files.json` next to it. Publish it with the Artifact tool by url (https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs) with `files: {"file-tree.data.json": ..., "real-files.json": ...}`. The page shows its own source on its File tab, so put the finished page in place before you build. On the owner's server, `apps/project-IDE/server/server.py` serves the same folder.
 
 ## How page saves reach the files ("sync the file tree")
 
-The explorer saves instantly into its artifact db, not into these files:
-- `nodes/<node id>`: `{fields: {field: new value}, qa: [{q, a, at}], plain: {text, basis, at}, deleted, new_node: {...}, updated_at, by}`. `fields` is the latest full value per field; `new_node` marks a node added on the page (id `new-...`, no [n] yet).
-- `nodes/<node id>.fields.content`: the file's text as edited on the File tab. `nodes/<node id>.comments`: `[{id, line (null = whole file/folder), snippet (the line's text, used to re-anchor), text, at, by, resolved}]`.
-- `changes/<auto id>`: history `{at, by, title, instruction, kind: edit|qa|ripple (ripple = related updates Claude saved automatically after an edit), items: [{node_id, path, kind: set|remove|new|qa, fields: {k: {before, after}}}], undone}`.
+The page saves at once into its store, not into these files (on the owner's server the store is `apps/project-IDE/data/page-store/` and file and How it works edits are also written straight into their files):
 
-To fold them into the files: ArtifactData list `nodes` and `changes` → for each node with `fields`/`deleted`/`new_node`, change `file-tree.md` (bump version, changelog, give new nodes a [n], record decisions as D-0xx in the [2.6] seed list) → put the node's final `fields` (and `qa` if worth keeping) in `overrides.json` → rebuild with the next DATA_VERSION → republish the explorer with the new data file → delete the folded `nodes` docs (keep `plain` explanations by re-writing them as docs holding only `plain`, or let the page regenerate them). Leave `changes` as the history.
+- `nodes/<key>`: one document per item the owner touched, `{fields: {field: new value}, qa: [{q, a, at}], comments, deleted, new_node: {...}, updated_at, by}`. The key is the item's id (its path) with `/` and every other sign but letters, digits, `.`, `_` and `-` written as `~XX` (`docs/README.md` is `docs~2FREADME.md`); decode it by turning `~` back into `%` and URL-decoding. `fields.content` is the file's text as edited on the File tab, `fields.how_md` the How it works text.
+- `changes/<auto id>`: the history `{at, by, title, instruction, kind, items: [{node_id, path, kind, fields: {k: {before, after}}}], undone}`; `node_id` there is the path itself.
+- `inputs/<auto id>`: every message sent on the page, with `node_id` and `path`.
 
-File content edited on the page goes into `overrides.json` as `content` (and, for the docs drafted in this folder, into that draft file). It is not written into the git repo until the owner asks for that. Open comments are applied if the owner says so, otherwise carried over as open questions.
-
-## People docs on the page (D-034, D-036)
-
-- Every `.md` file's File tab opens in Read view (D-038): `mdDoc()` in the page renders the Markdown (headings with ids, nested lists, tables, code, quotes, a skill's frontmatter as properties; `<!-- -->` tags dropped), `readerHTML()` wraps it with the white/black switch (`ftx-rtheme` in localStorage) and a full-screen mode. Source (`ftx-mdmode`) is the old line view with line comments.
-
-- `enrich.py` `CLAUDE_DRAFTS` maps a node to its planning copy in `vision/.claude/` (agent, skills, `docs/README.md` for [2.1], `docs/vision.md` for [2.2]); the File tab shows that text. When a new doc is written, add its node here and in `DOC_SKILLS`.
-- `enrich.py` `DOC_SKILLS` maps a doc node to its skill; the first ```` ```markdown ```` block under `## Outline` in the skill becomes the node's Example (`kind: "outline"`).
-- `build_map.py --set` also takes `sections: [{title, text}]`. A node with sections shows only those headings, its keep lines, and the owner's waiting messages and page changes on How it works. Headings: What it is, Who looks after it, When and how it changes, Who uses it and when, Where it is mentioned, Related knowledge.
+The `ide-sync` skill folds them in: each edited text into its file, each How it works edit into the item's `x.index.md` word for word (`by: owner`), then `build_map.py --confirm <path>`, then a new build. Old documents keyed `n-...` or `r-...` belong to ids that no longer exist; read their `path` from the matching `changes` and `inputs` documents.

@@ -1,23 +1,62 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The system's view of its domains' docs: one folder link per domain, each to that domain's docs/.",
+  "kind": "folder",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "relink (planned shared script in agents/system/scripts/system/), from the folder tree"
+  ],
+  "readers": [
+    "the system agent",
+    "the owner, on the File Tree page",
+    "sys-self-improvement-agent",
+    "knowledge-base-agent"
+  ],
+  "changes_when": "A domain is added or removed; relink then adds or removes its link.",
+  "related": [
+    {
+      "path": "agents/trading/prediction-market/docs/",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/docs/",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/system/docs/README.md#How a level reaches its children",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-030",
+      "D-017"
+    ],
+    "inputs": [
+      "in-20260930-1045",
+      "in-20260929-1623"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/docs/docs.index.md",
+      "how": "keep the folder summary in step"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "rebuild with the ide-build skill when an item here is added, moved or removed"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#How a level reaches its children"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

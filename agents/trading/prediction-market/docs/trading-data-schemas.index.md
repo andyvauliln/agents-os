@@ -1,18 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-data-schemas.md
-node: n-19.6.9
-basis: ea7e6178daab
-written: 2026-10-07T18:56:50Z
+basis: de159ae320a9
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:08:15Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-data-schemas.md
 
-## Summary
+## What it is
 
-The trading layer of the system's `data-schemas.md`: the shape of the domain config (risk, accounts, order stop switch, venues, notifications), the trading fields of an agent config, trading account ids and the accounts list, the orders in `runs.jsonl` and run summaries, the order log, the domain's worker outputs, digests and the variant report, the money part of the metrics snapshot, positions, and the strategy's history and `strategy.md`. Nearly every shape is proposed; where positions live is open.
+An earlier note on the trading data shapes: the domain config (risk, accounts, order stop switch, venues, notifications), the trading fields of an agent config, account ids, orders and run summaries, the order log, worker outputs, the variant report, positions and the strategy's history. Nearly every shape is a proposal; it is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/docs.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
 
 ## Keep in mind
 
-- When you log a trade decision in `runs.jsonl`, include the agent's own probability `prob`; calibration cannot be measured without it.
-- When you give a config or job an account's keys, name them by a prefix such as `POLYMARKET_ACCT1_*`, never by value.
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

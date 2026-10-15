@@ -1,1 +1,53 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Stage 1 raw outputs (the consolidator's and critic's results for both bands) and the two Python scripts that turn them into the strategy lists, briefs and index.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the survey's stage 1 consolidator and critic agents",
+    "the Polymarket strategy survey sessions (2026-09-20 to 2026-09-29)"
+  ],
+  "readers": [
+    "the owner",
+    "a session that rebuilds the strategy lists"
+  ],
+  "changes_when": "Only if stage 1 is run again; the HANDOFF says not to.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/",
+      "how": "writes"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "Record a stage 1 rerun."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

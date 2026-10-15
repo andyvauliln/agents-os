@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/configs/
-node: n-11
-basis: 528e42c0bb8c
-written: 2026-10-07T19:01:11Z
+basis: 3c4a47633d3d
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # configs/
 
@@ -13,7 +13,7 @@ The system's settings folder. It holds the settings that hold for every agent, t
 
 ## Who looks after it
 
-The system's support helpers write the shared settings; the owner changes jobs from the dashboard and approves changes to the modes, the stop switch and the live list.
+The system's support helpers write the shared settings; the owner changes jobs from the File Tree page and approves changes to the modes, the stop switch and the live list.
 
 ## When and how it changes
 
@@ -21,11 +21,11 @@ When a system-wide setting, a model choice, a system job or a system link change
 
 ## Who uses it, and when
 
-Every agent at the start of each run reads the shared settings and the model choice through its own links; the scheduler reads the jobs; the dashboard shows all of it.
+Every agent at the start of each run reads the shared settings and the model choice through its own links; the scheduler reads the jobs; the File Tree page shows all of it.
 
 ## Where it is mentioned
 
-Every agent's own settings folder, which has the same kind of files; each domain's own config; the rules for merging settings; the dashboard.
+Every agent's own settings folder, which has the same kind of files; each domain's own config; the rules for merging settings; the File Tree page.
 
 ## Related knowledge
 

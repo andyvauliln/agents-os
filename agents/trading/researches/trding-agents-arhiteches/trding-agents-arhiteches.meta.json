@@ -1,23 +1,63 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Study of how trading agents are built: a README on nine architectures, their nine diagram specs, the rendered diagrams and a gallery page.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the trading-agent architecture research session",
+    "the owner (moved it here with the research folder)"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)",
+    "the prediction-market domain agent, when it designs its trading agents (stage two)"
+  ],
+  "changes_when": "An architecture is added, or a diagram is rendered or checked again.",
+  "related": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/index.html",
+      "how": "links to"
+    },
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-045",
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261006-1007",
+      "in-20261009-1230"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/trding-agents-arhiteches.index.md",
+      "how": "Update the summary."
+    },
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "Update the part Research studies; it says twenty-nine specs, the folder has nine."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

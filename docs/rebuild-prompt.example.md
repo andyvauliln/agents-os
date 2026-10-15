@@ -23,7 +23,6 @@ One section per top part, each with the files to create, what they hold, and its
 ### .secrets/
 ### docs/
 ### agents/ and apps/
-### vision/
 
 ## Build order
 Numbered steps, ending with the lower prompts in order: system, apps (then the project IDE), trading.

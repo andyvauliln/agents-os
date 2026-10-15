@@ -1,23 +1,82 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Keeps every .env keys file, dependencies, build output, caches, editor state and research clones out of git, with a comment on each group.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "git",
+    "the owner",
+    "every agent before it commits",
+    "project-ide-agent (ide-build checks the page tree against git)"
+  ],
+  "changes_when": "A kind of file must be kept out of git or let back in, such as keys files, build output or research clones.",
+  "related": [
+    {
+      "path": "docs/rebuild-prompt.md",
+      "how": "documented in"
+    },
+    {
+      "path": "docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": ".secrets/test/.env",
+      "how": "links to"
+    },
+    {
+      "path": ".secrets/live/.env",
+      "how": "links to"
+    },
+    {
+      "path": "apps/temp/",
+      "how": "links to"
+    },
+    {
+      "path": "apps/docs/rebuild-prompt.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-028",
+      "D-055",
+      "D-063"
+    ],
+    "inputs": [
+      "in-20260929-2147",
+      "in-20260930-0752",
+      "in-20261006-2206",
+      "in-20261012-secrets"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "docs/rebuild-prompt.md",
+      "how": "Its .gitignore part quotes the file exactly; change both together."
+    },
+    {
+      "path": "docs/README.md",
+      "how": "Update the keys and secrets part if what is ignored changes."
+    },
+    {
+      "path": ".gitignore.index.md",
+      "how": "Say what is ignored now."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#Keys and secrets"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

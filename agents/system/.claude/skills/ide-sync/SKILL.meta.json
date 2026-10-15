@@ -1,23 +1,87 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The skill for the way back from the page: it carries everything the owner left on the File Tree page into the files.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "project-ide-agent",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "project-ide-agent",
+    "the server's Claude Code session"
+  ],
+  "changes_when": "The page's store, the kinds of things the owner can leave on the page, or the delete and Apply changes rounds change.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/",
+      "how": "writes"
+    },
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041",
+      "D-043",
+      "D-044",
+      "D-046",
+      "D-068"
+    ],
+    "inputs": [
+      "in-20261005-1041",
+      "in-20261005-1254",
+      "in-20261005-1545",
+      "in-20261006-1017",
+      "in-20261014-1004"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/ide-sync/SKILL.index.md",
+      "how": "if what the skill does or when it runs changes"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the part 'How the owner's work comes back'"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.asd.md",
+      "how": "write it again after the IDE README"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "the part 'The project IDE', if what it says about this item changes"
+    },
+    {
+      "path": "agents/system/docs/README.asd.md",
+      "how": "write it again with readme-asd-doc right after the system README changes"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked",
+    "apps/project-IDE/docs/README.md#How the owner's work comes back"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

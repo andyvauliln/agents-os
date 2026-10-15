@@ -1,16 +1,35 @@
 ---
 about: agent-os/apps/project-IDE/server/server.py
-node: n-53.3.2
-basis: 3ab7494ff6ae
-written: 2026-10-07T14:21:32Z
+basis: a6bae833dd18
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T10:30:32Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # server.py
 
-## Summary
+## What it is
 
-The small web service behind the page on the owner's server, standard library only. It serves the page and its data from the repository, keeps the page's notes, edits and messages as one JSON file each in `data/page-store/`, writes an edit to a file's text straight into that file and an edit to How it works into its How it works file, and hands each request typed on the page, and each deletion, to `claude_bridge.py`, streaming its progress back. It writes only what a save changed, so saving the same item again for a note or a mark never puts an older page edit over a file Claude Code has changed since. It answers only to the machine's own address and refuses to listen on any other. It also takes a voice recording from the page at `api/voice` and hands it to `voice.py`, which returns the text; the recording is not kept, and the health answer tells the page whether voice is on. It also takes a voice recording from the page at `api/voice` and hands it to `voice.py`, which returns the text; the recording is not kept, and the health answer tells the page whether voice is on.
+The small web service behind the page on the owner's server, standard library only. It serves the page and its data from `apps/project-IDE/current-ui/`, keeps the page's notes, edits and messages as one JSON file each in `apps/project-IDE/data/page-store/`, writes an edit to a file's text straight into that file and an edit to How it works into the `x.index.md` next to the item, and hands each request typed on the page, and each deletion, to `claude_bridge.py`, streaming its progress back. It writes only what a save changed. It answers only to the machine's own address. It also takes a voice recording at `api/voice` and hands it to `voice.py`, which returns the text; the recording is not kept, and the health answer tells the page whether voice is on.
+
+## Who looks after it
+
+It is written by project-ide-agent.
+
+## When and how it changes
+
+It changes when the page's way of talking to the server, the store or the write-through changes.
+
+## Who uses it, and when
+
+It is read by the owner, who starts it; and project-ide-agent.
+
+## Where it is mentioned
+
+It is described in `apps/project-IDE/server/README.md` and its folder's How it works file `apps/project-IDE/server/server.index.md`.
+
+## Related knowledge
+
+It reads `apps/project-IDE/server/server.config.json`, `apps/project-IDE/current-ui/file-tree-explorer.html`, `apps/project-IDE/current-ui/file-tree.data.json`, `apps/project-IDE/server/claude_bridge.py` and `apps/project-IDE/server/voice.py`. It writes `apps/project-IDE/data/page-store/`. The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `docs/metadata.md`, `apps/docs/README.md` (section "The project IDE") and `apps/project-IDE/docs/README.md` (section "The server").
 
 ## Keep in mind
 

@@ -46,6 +46,8 @@ At first, the page did not show the planning folder `vision/`. This was intentio
 
 Now the page shows each file that git keeps, `vision/` also. It shows the two `.env` files as local-only, without their text. The build checks that the page tree is equal to the files in git.
 
+This changed later: on 2026-10-14 `vision/` was removed from the repository. Thus the page does not show it.
+
 Docs improved: apps/project-IDE/current-ui/file-tree-explorer.index.md.
 
 ### 2026-10-09: Why do real metadata files stay when the metadata switch is off?

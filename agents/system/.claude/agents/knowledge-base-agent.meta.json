@@ -1,23 +1,110 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The knowledge base agent: keeps every input and what we know, and writes the docs and every metadata file.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent with knowledge-intake"
+  ],
+  "readers": [
+    "Claude Code started in agents/system/ (as a helper)",
+    "the owner"
+  ],
+  "changes_when": "The owner changes how knowledge is kept or how a doc is written, or a skill of the agent is added or renamed.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/file-index/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/vision-doc/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/readme-doc/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/readme-asd-doc/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/rebuild-prompt-doc/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/claude-md-doc/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/agents/project-ide-agent.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-026",
+      "D-033",
+      "D-034",
+      "D-036",
+      "D-037",
+      "D-048",
+      "D-049",
+      "D-069",
+      "D-070"
+    ],
+    "inputs": [
+      "in-20260930-1533",
+      "in-20261001-0800",
+      "in-20261001-0845",
+      "in-20261005-0710",
+      "in-20261006-2047",
+      "in-20261014-1047",
+      "in-20261014-1241"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/.claude/agents/knowledge-base-agent.index.md",
+      "how": "if its job, skills or rules change"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "the part 'The knowledge base and the docs', if what it says about this item changes"
+    },
+    {
+      "path": "agents/system/docs/README.asd.md",
+      "how": "write it again with readme-asd-doc right after the system README changes"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "the part 'The knowledge base and the docs', if names, formats or the tree change"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "the steps after every input, if the agent's round changes"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The knowledge base and the docs"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

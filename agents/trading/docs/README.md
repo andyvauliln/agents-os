@@ -80,7 +80,7 @@ Its docs: `agents/trading/docs/docs.index.md`
 
 - `prediction-market-research/`: forty-two studies of ways to make money on prediction markets, numbered `01` to `34` and `50` to `57`, one Markdown file each, such as `01-maker-reward-pool-farming.md` and `21-llm-forecasting-agents.md`. Some describe practices to avoid, such as wash trading and insider trading. `_evidence/` holds the background evidence (`E1` to `E9`: venue mechanics, incentive programs, resolution, profitability, other venues, tooling, AI forecasting, multi-agent simulation, legal) with the strategy lists and one row per study; `_pipeline/` holds the pipeline that wrote the studies.
 - `self-improving-agents/`: one study of approaches and architectures for agents that improve themselves.
-- `trding-agents-arhiteches/`: a study of how trading agents are built: `README.md`, twenty-nine architecture specs in `specs/`, their diagrams in `diagrams/` and a gallery page `index.html`.
+- `trding-agents-arhiteches/`: a study of how trading agents are built: `README.md`, nine architecture specs in `specs/`, their diagrams in `diagrams/` and a gallery page `index.html`.
 
 The domain agents read these studies when they look for strategies; the owner reads them on the File Tree page. A study is not changed after the fact; when it leads to a decision, the decision is recorded in the notes.
 
@@ -94,7 +94,7 @@ Each trading domain is a full domain of the Agent OS, in its own folder under `a
 - **Strategy agents**, one folder each inside the domain, such as `strategy-1-agent/`: each owns one way to make money, its definition and its versions.
 - **Trading agents** (variants), one folder each inside their strategy: the versions that actually trade.
 
-**The prediction-market domain** (`agents/trading/prediction-market/`) is the first. It trades on Polymarket first. Today it holds only its folders, each with a `.gitkeep`: the standard folder of the domain (with `scripts/decisions/`, `logs/jobs/`, `logs/services/`, `data/markets-catalog/`, `data/polymarket-prices/`, `docs/common/`, `docs/how-to/` and `docs/index/` inside), one strategy `strategy-1-agent/`, and one example trading agent below it, `pm-strategy-1.momentum-v1.opus55-test/`, where "momentum" is only a placeholder. Its docs folder holds earlier notes kept for stage two. Its other earlier files are kept in `vision/archive/2026-10-12/prediction-market/`. In the second stage the domain is written again from them, with its own vision, README and rebuild prompt.
+**The prediction-market domain** (`agents/trading/prediction-market/`) is the first. It trades on Polymarket first. Today it holds only its folders, each with a `.gitkeep`: the standard folder of the domain (with `scripts/decisions/`, `logs/jobs/`, `logs/services/`, `data/markets-catalog/`, `data/polymarket-prices/`, `docs/common/`, `docs/how-to/` and `docs/index/` inside), one strategy `strategy-1-agent/`, and one example trading agent below it, `pm-strategy-1.momentum-v1.opus55-test/`, where "momentum" is only a placeholder. Its docs folder holds earlier notes kept for stage two. Its other earlier files are in git history. In the second stage the domain is written again, with its own vision, README and rebuild prompt.
 
 **Later trading domains**, such as copy trading, are copies of the prediction-market domain, made when the owner asks. None is in the tree.
 

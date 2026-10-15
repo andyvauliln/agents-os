@@ -1,23 +1,59 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The pattern of one child link: a folder link named after a domain, pointing at that domain's data/; read-only.",
+  "kind": "folder link",
+  "state": "name pattern",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "relink (planned shared script in agents/system/scripts/system/), when a domain is added; never by hand"
+  ],
+  "readers": [
+    "the system agent",
+    "the owner, on the File Tree page",
+    "sys-self-improvement-agent"
+  ],
+  "changes_when": "Only when a domain is added or removed; relink makes or deletes the link.",
+  "related": [
+    {
+      "path": "agents/trading/prediction-market/data/",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/data/subagents.link/",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/system/docs/README.md#How a level reaches its children",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-030"
+    ],
+    "inputs": [
+      "in-20260930-1045"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/data/subagents.link/subagents.link.index.md",
+      "how": "keep the folder summary in step"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "rebuild with the ide-build skill when an item here is added, moved or removed"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#How a level reaches its children"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

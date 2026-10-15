@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/configs/models.config.json
-node: n-11.11
-basis: 310133be8241
-written: 2026-10-07T19:01:11Z
+basis: 0b926e7a68a1
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # models.config.json
 
@@ -21,7 +21,7 @@ When a platform or model is added or changes status, or when an agent should use
 
 ## Who uses it, and when
 
-The scripts that start every run, to pick the model; the list of models and the dashboard, to show which model each agent uses.
+The scripts that start every run, to pick the model; the list of models and the File Tree page, to show which model each agent uses.
 
 ## Where it is mentioned
 

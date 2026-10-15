@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/docs/
-node: n-43.1
-basis: 89ec62798614
-written: 2026-10-12T00:00:00Z
+basis: b1db8f6523a0
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # docs/
 
@@ -26,7 +25,7 @@ The owner and anyone new, to see what apps exist and why; every agent before wor
 
 ## Where it is mentioned
 
-The project and system docs point here for apps; the system rebuild prompt calls the apps rebuild prompt; the tree notes list the folder.
+The project and system docs point here for apps; the system rebuild prompt calls the apps rebuild prompt; `docs/file-tree.md` lists the folder.
 
 ## Related knowledge
 

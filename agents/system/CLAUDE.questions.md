@@ -48,4 +48,6 @@ We do not need a memory folder. Almost all of its content was already in the doc
 
 This is decided. When `vision/` goes, we delete `vision/.claude/memory/`. We do not move it.
 
+This changed later: on 2026-10-14 `vision/` was removed, with its memory folder. `apps/project-IDE/data/memory/` was deleted too.
+
 Docs improved: agents/system/CLAUDE.md, agents/trading/docs/README.md, agents/trading/docs/README.asd.md.

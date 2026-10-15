@@ -1,17 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-overview.md
-node: n-19.6.5
-basis: e0b1ff31142d
-written: 2026-10-07T18:56:50Z
+basis: cf98d0b7d5cb
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-overview.md
 
-## Summary
+## What it is
 
-The trading layer of the system's `overview.md`, read together with it: the trading rules to keep in mind, the idea in one paragraph, the domain's strategy and trading-agent levels, its config and dashboard, a diagram of the domain, how a trading run places orders, how the strategy loop improves strategies, going live with money, and a table of where each trading note lives. A later trading domain copies it.
+An earlier overview of the trading domain: the trading rules, the idea in one paragraph, the strategy and trading-agent levels, the domain config, how a trading run places orders, how strategies are improved and how an agent goes live with money. It is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/docs.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
 
 ## Keep in mind
 
-- When you change a trading agent's config, prompt, code or model, make it a new test variant with a new name; never change a running variant in place.
-- When you want an agent to trade with real money, leave the approval to the owner: only they approve an account with money.
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

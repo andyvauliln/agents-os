@@ -1,23 +1,54 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The owner's page edits of the extra tables, keyed by path; enrich.py applies them on top of the built tabs.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "project-ide-agent",
+    "ide-sync"
+  ],
+  "readers": [
+    "agents/system/.claude/skills/ide-build/scripts/enrich.py"
+  ],
+  "changes_when": "A sync folds in a page edit of an extra table that has no file of its own.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-sync/SKILL.md",
+      "how": "written by"
+    },
+    {
+      "path": "apps/project-IDE/current-ui/file-tree.data.json",
+      "how": "summed up in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041"
+    ],
+    "inputs": [
+      "in-20261005-1043"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/current-ui/file-tree.data.json",
+      "how": "Run ide-build to build the page data again."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "apps/project-IDE/docs/README.md#How the owner's work comes back"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

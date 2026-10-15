@@ -1,23 +1,55 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Name pattern for one helper's memory file: dated lessons and pointers, never the research itself.",
+  "kind": "file",
+  "state": "name pattern",
+  "status": "proposed",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the helper agent its folder is named after"
+  ],
+  "readers": [
+    "the same helper agent, before new work"
+  ],
+  "changes_when": "The helper learns a lesson worth keeping, or the memory format changes.",
+  "related": [
+    {
+      "path": "agents/system/research/",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/agents/sys-self-improvement-agent.md",
+      "how": "written by"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-024"
+    ],
+    "inputs": [
+      "in-20260929-2025"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/.claude/agent-memory/[subagent-name]/MEMORY.index.md",
+      "how": "if the format changes"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "the part 'The standard .claude/ folder', if names, formats or the tree change"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Each agent's AI setup",
+    "agents/system/docs/rebuild-prompt.md#The standard .claude/ folder",
+    "agents/system/docs/README.md#Self-improvement helpers"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

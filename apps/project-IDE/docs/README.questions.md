@@ -4,8 +4,6 @@
 
 - **Do we keep this README as one long manual, or move the page manual into its own file?** The skill sets 500 to 2,000 words for the README of an app. You asked for the full documentation of the IDE, thus this README has approximately 6,800 words. The answer decides where readers look for how to use the page.
 - **Do the shared views go in `apps/project-IDE/views/`, with a `views.json` list?** We propose this. The answer decides where each custom view goes in stage one.
-- **When the working sources leave `vision/`, can we move them in one round?** The page, the server and the scripts go into `apps/project-IDE/` and `agents/system/.claude/skills/ide-build/scripts/`. The server then starts Claude Code in `agents/system/`. Until then, the copies in these folders are not the copies that run.
-- **Does the build get a script that compares the tree with `git ls-files` and fails on a difference?** Today a person does this check by hand.
 
 ## The owner's questions
 

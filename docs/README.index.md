@@ -1,16 +1,15 @@
 ---
 about: agent-os/docs/README.md
-node: n-57.2
-basis: 86a79d3273b7
-written: 2026-10-12T00:00:00Z
+basis: c8202bfbc30f
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # README.md
 
 ## What it is
 
-The exact description of the whole repository: every top part, what it holds, how the parts connect, the levels and where each level's docs are, the metadata files, the planning area, the steps of a round of work and the stages, with the path to each part's own docs.
+The exact description of the whole repository: every top part, what it holds, how the parts connect, the levels and where each level's docs are, the metadata files, the steps of a round of work and the stages, with the path to each part's own docs.
 
 ## Who looks after it
 
@@ -30,7 +29,7 @@ The project vision's last section, `agents/system/CLAUDE.md`, the front page, `R
 
 ## Related knowledge
 
-It uses the vision's words. `README.asd.md` must keep its content and section order. The READMEs of the system, trading, the apps and the project IDE describe their own parts, which this one sums up. The tree notes, decisions and inputs in `vision/docs/` are behind it.
+It uses the vision's words. `README.asd.md` must keep its content and section order. The READMEs of the system, trading, the apps and the project IDE describe their own parts, which this one sums up. The owner's inputs and the decisions in `apps/project-IDE/data/` are behind it.
 
 ## Keep in mind
 

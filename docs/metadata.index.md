@@ -1,8 +1,9 @@
 ---
 about: agent-os/docs/metadata.md
-node: r-docs-metadata.md
-written: 2026-10-14T09:05:37Z
+basis: 27f2013a07db
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # metadata.md
 
@@ -33,4 +34,4 @@ The `file-index` skill holds the same rules as steps for an agent; the project I
 ## Keep in mind
 
 - When you change a metadata rule, change this doc and the `file-index` skill in the same round.
-- When the move out of `vision/` changes how a part works, update its section and section 15.
+- When a part of the metadata logic is built or changes, update its section and the list of parts not built yet.

@@ -1,1 +1,57 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The plan to live without the vision/ folder: what vision/ holds, where each part goes, and the steps of the move.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent",
+    "change-plan",
+    "the owner"
+  ],
+  "readers": [
+    "the owner",
+    "every AI session that does the move"
+  ],
+  "changes_when": "A step of the move is done or changes, or the owner answers an open point.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/plans/2026-10-13-leave-vision-files.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/change-plan/SKILL.md",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-066",
+      "D-070",
+      "D-071"
+    ],
+    "inputs": [
+      "in-20261013-leave-vision",
+      "in-20261013-no-memory-folder",
+      "in-20261014-1241",
+      "in-20261014-1439"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/plans/2026-10-13-leave-vision-files.md",
+      "how": "Keep the list of every file the same as the plan."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

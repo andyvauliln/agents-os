@@ -8,33 +8,33 @@
   "secret": false,
   "generated_by": null,
   "writers": [
-    "knowledge base agent (vision-doc skill)",
-    "the owner, on the File Tree page"
+    "knowledge-base-agent",
+    "vision-doc",
+    "the owner"
   ],
   "readers": [
     "the owner",
-    "anyone new to the IDE",
-    "the project IDE agent",
-    "the knowledge base agent before the IDE's other docs",
-    "every AI working on the page"
+    "project-ide-agent",
+    "knowledge-base-agent",
+    "every AI session that works on the IDE"
   ],
-  "changes_when": "an owner input changes what the IDE is for, how it should behave, its plans, a principle or an open question",
+  "changes_when": "An owner input changes what the IDE is for, how it should behave, a plan, a principle or an open question.",
   "related": [
     {
       "path": "apps/project-IDE/docs/README.md",
-      "how": "goes deeper; same words in In short"
+      "how": "links to"
     },
     {
       "path": "apps/project-IDE/docs/rebuild-prompt.md",
-      "how": "must agree with it"
+      "how": "links to"
     },
     {
       "path": "apps/docs/vision.md",
-      "how": "the apps level above"
+      "how": "summed up in"
     },
     {
       "path": "agents/system/.claude/skills/vision-doc/SKILL.md",
-      "how": "written with (outline for an app)"
+      "how": "written by"
     }
   ],
   "sources": {
@@ -46,15 +46,17 @@
       "D-042",
       "D-043",
       "D-044",
-      "D-045",
       "D-046",
       "D-048",
       "D-049",
+      "D-053",
       "D-055",
       "D-057",
       "D-060",
       "D-061",
-      "D-063"
+      "D-064",
+      "D-065",
+      "D-069"
     ],
     "inputs": [
       "in-20260929-2044",
@@ -66,6 +68,7 @@
       "in-20261006-1017",
       "in-20261006-1611",
       "in-20261006-2047",
+      "in-20261006-2206",
       "in-20261009-1019",
       "in-20261009-1459",
       "in-20261009-1714",
@@ -75,53 +78,46 @@
       "in-20261012-real",
       "in-20261012-secrets",
       "in-20261012-metadisk",
-      "in-20261012-stage1"
+      "in-20261012-stage1",
+      "in-20261013-disk-tree",
+      "in-20261014-1047"
     ],
-    "notes": [
-      "vision/.claude/memory/file-tree-explorer-sync.md",
-      "vision/plans/file-set.md",
-      "vision/plans/server-ide.md",
-      "vision/plans/2026-10-12-claude-md-stage-one.md",
-      "vision/tools/README.md",
-      "vision/server/README.md"
-    ]
+    "notes": []
   },
   "update_with": [
     {
       "path": "apps/project-IDE/docs/README.md",
-      "how": "bring In short and every part in line, after the vision"
+      "how": "Bring \"In short\" and every changed part in line, after the vision."
     },
     {
       "path": "apps/project-IDE/docs/README.asd.md",
-      "how": "rewrite the changed sections in ASD-STE100"
+      "how": "Write the changed sections again in ASD-STE100, in the same order."
     },
     {
       "path": "apps/project-IDE/docs/rebuild-prompt.md",
-      "how": "last: the spec and Do not build"
+      "how": "Change the spec and \"Do not build\", last."
+    },
+    {
+      "path": "apps/docs/vision.md",
+      "how": "Change the project IDE part if its summary is no longer true."
     },
     {
       "path": "apps/project-IDE/docs/vision.example.md",
-      "how": "if the outline changed"
+      "how": "Change it if the outline changed."
     },
     {
       "path": "apps/project-IDE/docs/vision.questions.md",
-      "how": "remove answered questions, add new ones"
+      "how": "Remove answered questions and add new ones."
     }
   ],
   "inherits": [
-    "the vision-doc skill's rules for an app",
-    "human-docs-style: plain prose, no reference codes",
-    "decided means the owner decided"
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "docs/metadata.md",
+    "apps/docs/README.md#The project IDE",
+    "agents/system/.claude/skills/vision-doc/SKILL.md"
   ],
-  "features": [
-    "Project IDE"
-  ],
-  "views": [
-    "doc (Read view)"
-  ],
-  "how_it_works": {
-    "file": "vision/tree/agent-os/apps/project-IDE/docs/vision.index.md",
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "features": [],
+  "views": [],
+  "how_it_works": {}
 }

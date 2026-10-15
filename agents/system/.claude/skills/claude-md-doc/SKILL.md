@@ -30,11 +30,10 @@ Keep this order. A heading can be worded to fit, but no part moves and no part i
 
 ## What to read before writing
 
-- **The current `CLAUDE.md`** and its earlier draft in `vision/archive/2026-10-12/claude-docs/CLAUDE.md`. Keep what is still true.
-- **The memory notes** in `vision/.claude/memory/` (`MEMORY.md` is the index), only while we plan. Each rule there that holds for every session goes into the rules. The new version keeps no memory folder: it is deleted, not moved, when `vision/` goes, and from then on the rules in `CLAUDE.md` are their only home.
-- **The notes:** the newest decisions, the changelog and the owner's inputs in `vision/docs/`, and the plan of the current round in `vision/plans/`. Newest wins.
+- **The current `CLAUDE.md`.** Keep what is still true. The project keeps no memory folder: the rules in `CLAUDE.md` are the only home of the lasting rules.
+- **The records:** the newest decisions, the changelog and the owner's inputs in `apps/project-IDE/data/`, and the plan of the current round in `apps/project-IDE/data/plans/`. Newest wins.
 - **The project vision and README** (`docs/vision.md`, `docs/README.md`), for the words that say what the project is and its stage.
-- **The skills** in `vision/.claude/skills/` and the helper agents in `vision/.claude/agents/`, so each skill named in the update table exists and does what the table says.
+- **The skills** in `agents/system/.claude/skills/` and the helper agents in `agents/system/.claude/agents/`, so each skill named in the update table exists and does what the table says.
 - **The real repository** (`git ls-files`), so every path is real.
 
 ## Outline
@@ -45,7 +44,7 @@ Write `CLAUDE.example.md` next to the file from this outline: it is the file's E
 # Agent OS
 
 ## What this project is
-Three to six sentences: the Agent OS, the owner's personal system that runs AI agents of any kind; the repository that holds it; the owner builds it by vibecoding, and the project IDE is their window on the work; the planning area vision/ that holds the notes, drafts and build tools while we plan. Where this file sits and that Claude Code loads it by itself in agents/system/. Paths in this file are from the top of the repository.
+Three to six sentences: the Agent OS, the owner's personal system that runs AI agents of any kind; the repository that holds it; the owner builds it by vibecoding, and the project IDE is their window on the work. Where this file sits and that Claude Code loads it by itself in agents/system/. Paths in this file are from the top of the repository.
 
 Then the current stage in one or two sentences: which stage it is and what is built.
 
@@ -64,7 +63,7 @@ The stage, its work as a short list in the order the owner gave it, and what is 
 ## CLAUDE.md related things
 
 ### Rules
-The lasting rules every session follows, one line each. No memory folder stands behind them in the new version.
+The lasting rules every session follows, one line each. No memory folder stands behind them.
 
 ### What to do after every input or update
 Numbered steps, from the moment an input arrives to the commit.
@@ -79,24 +78,24 @@ A short table: what, and its path. Only what a new session needs to find its way
 ### What each part holds
 
 - **What this project is.** The same words as the "In short" of the project vision. The stage: today stage one, and nothing of the agents is built yet.
-- **Read first, in this order.** Exactly the six docs above, in that order. Add a doc to the list only on the owner's word. The How it works line: `vision.index.md` next to `vision.md`, `f/f.index.md` inside a folder, and `python3 vision/tools/build_map.py --context <node>` to print everything that applies to an item, the levels above included.
+- **Read first, in this order.** Exactly the six docs above, in that order. Add a doc to the list only on the owner's word. The How it works line: `vision.index.md` next to `vision.md`, `f/f.index.md` inside a folder, and `python3 agents/system/.claude/skills/ide-build/scripts/build_map.py --context <path>` to print what is needed to write an item's How it works.
 - **The current stage and its work.** For stage one: finish the project IDE; go through every file and folder; write the custom views; make all metadata correct; finish the docs at the project level, the system domain, trading in general and apps. Out of scope: the prediction-market domain and everything below it, which keep only their folders; that is stage two.
-- **Rules.** The lasting rules, one line each (taken from `vision/.claude/memory/` while it exists), for example: decided only on the owner's word, and our ideas are "proposed"; never write or read a key value, and never open a `.env` file; docs for people are plain and book-like, with no reference numbers, ids or decision codes; every owner input, every answer to the owner's question and every system change goes through `knowledge-intake`; every change request gets a plan first (`change-plan`); before a change, know the item's whole context, and after it bring everything related in line in the same round; the tree on the page always equals the files on disk, and every planned item is a real file; every file and folder outside `vision/` has its How it works and Details files; one job per code file; generated files are rebuilt, never merged by hand; use only the repository `andyvauliln/trading-oss`; ask before anything hard to undo (deleting, rewriting history, merging into `main` unless the owner allowed it, anything that acts live); show the plan and one example before a big rewrite; answer in ASD-STE100 when the owner asks for it, and keep token use low; call the owner "the owner", and "they".
+- **Rules.** The lasting rules, one line each, for example: decided only on the owner's word, and our ideas are "proposed"; never write or read a key value, and never open a `.env` file; docs for people are plain and book-like, with no reference numbers, ids or decision codes; every owner input, every answer to the owner's question and every system change goes through `knowledge-intake`; every change request gets a plan first (`change-plan`); before a change, know the item's whole context, and after it bring everything related in line in the same round; the tree on the page always equals the files on disk, and every planned item is a real file; every file and folder has its How it works and Details files; one job per code file; generated files are rebuilt, never merged by hand; use only the repository `andyvauliln/trading-oss`; ask before anything hard to undo (deleting, rewriting history, merging into `main` unless the owner allowed it, anything that acts live); show the plan and one example before a big rewrite; answer in ASD-STE100 when the owner asks for it, and keep token use low; call the owner "the owner", and "they".
 - **What to do after every input or update.** The steps in "The round" below.
 - **When and how to update each doc.** The table in "The update table" below.
-- **Where things are.** The knowledge base and notes, the memory, the plans, the drafts of the helper agents and skills, the build tools, the File Tree page and its server, the keys folder, while we plan and where each goes later.
+- **Where things are.** The docs of each level, the records (inputs, decisions, changelog, plans), the helper agents and skills, the build tools, the File Tree page and its server, the keys folder; and where to edit: every file where it is.
 
 ### The round
 
 These are the steps `CLAUDE.md` gives for every input or update:
 
 1. Pull: `git pull` on `main` on the owner's server; in the cloud, bring `origin/main` into the branch first.
-2. Store the input word for word with `knowledge-intake` (`vision/docs/inputs/`, with its row in `index.json`), and record decisions and the changelog.
+2. Store the input word for word with `knowledge-intake` (`apps/project-IDE/data/inputs/`, with its row in `index.json`), and record decisions and the changelog.
 3. If it asks for a change, write a plan with `change-plan` and show it to the owner before you build it. Small fixes need none.
 4. Build the change. Work out every related item first, from its Details file (`update_with`) and `build_map.py --context`.
 5. Update the docs it makes stale, by the update table: inside a level vision, README, `README.asd.md`, then rebuild prompt; then climb to the parent level; then `CLAUDE.md` if it is stale.
 6. Update the metadata files with `file-index`, children before parents.
-7. Rebuild and check the page with `ide-build` (this also builds `docs/file-tree.md` and copies the metadata next to each item). If the owner pressed Apply changes or asked for a sync, run `ide-sync` first.
+7. Rebuild and check the page with `ide-build` (this also builds `docs/file-tree.md` and gives new items their empty metadata files). If the owner pressed Apply changes or asked for a sync, run `ide-sync` first.
 8. Commit with a message that says what changed and which input caused it, push, and open or update the pull request into `main`. Merge only on the owner's word.
 9. Tell the owner in two to five plain lines what changed and what only they can answer.
 
@@ -105,7 +104,7 @@ These are the steps `CLAUDE.md` gives for every input or update:
 | Change | Stale | Skill, in order |
 |---|---|---|
 | Any owner input, answer or system change | the stored inputs, decisions, changelog | `knowledge-intake` |
-| A change request | a plan in `vision/plans/` | `change-plan` |
+| A change request | a plan in `apps/project-IDE/data/plans/` | `change-plan` |
 | The goals, concept, behaviour, business rules, stage, plans, ideas or open questions of a level | that level's `vision.md`, then its README, `README.asd.md` and rebuild prompt where the change reaches them, then the parent level | `vision-doc`, `readme-doc`, `readme-asd-doc`, `rebuild-prompt-doc` |
 | A part of a level added, removed, renamed or moved; a format, setting, job, link or docs path changed | that level's `README.md`, then `README.asd.md`, then `rebuild-prompt.md`; the parent's README if it names the part | `readme-doc`, `readme-asd-doc`, `rebuild-prompt-doc` |
 | A `README.md` changed | the `README.asd.md` next to it, right after | `readme-asd-doc` |
@@ -121,7 +120,7 @@ The five doc levels, each with `vision.md`, `README.md`, `README.asd.md` and `re
 
 ## Length
 
-About 1,000 to 2,000 words. Claude Code loads the whole file into every session, so every line must earn its place. Detail belongs in the docs it names, the skills and the memory notes.
+About 1,000 to 2,000 words. Claude Code loads the whole file into every session, so every line must earn its place. Detail belongs in the docs it names and the skills.
 
 ## How to write it
 
@@ -142,7 +141,7 @@ About 1,000 to 2,000 words. Claude Code loads the whole file into every session,
 - a lasting rule is added, changed or dropped, when it holds for every session;
 - the steps of a round change (a new skill in the round, a new check, a new git rule);
 - a doc is added at a level, a doc skill is added or renamed, or a change starts to make another doc stale;
-- a path in "Where things are" changes, for example when the planning area `vision/` moves into the repository's own folders;
+- a path in "Where things are" changes, for example when a folder of records or tools moves;
 - the project vision changes its "In short".
 
 ## Steps
@@ -150,7 +149,7 @@ About 1,000 to 2,000 words. Claude Code loads the whole file into every session,
 ### First build, or a full rebuild
 
 1. Read the sources above.
-2. List, in the notes, each rule from memory that holds for every session, and each change that makes a doc stale, with the skill that writes it.
+2. List, in the notes, each rule from the decisions and inputs that holds for every session, and each change that makes a doc stale, with the skill that writes it.
 3. Write the four parts in the order the owner set, from that list.
 4. Do the checks below.
 5. Write or refresh the metadata of `CLAUDE.md` with `file-index`: `CLAUDE.index.md` (How it works), `CLAUDE.meta.json` (Details), `CLAUDE.example.md` (Example, from the outline above) and `CLAUDE.questions.md` (Questions), next to the file.
@@ -177,7 +176,7 @@ The File Tree page shows a tab only when its file exists. Next to `agents/system
 - The four parts are there, in the order the owner set.
 - The reading list has exactly the six docs, in the owner's order, and each path exists.
 - The stage and its work match the project vision and the newest plan; stage two parts are out of scope and named as stage two.
-- Each rule from memory that holds for every session is in the rules, and no rule contradicts a newer decision.
+- Each lasting rule from the decisions and inputs that holds for every session is in the rules, and no rule contradicts a newer decision.
 - Every skill named in the update table exists, and every doc that a change can make stale is in the table.
 - No reference numbers, decision or input codes, hashes, history or key values.
 - It is within the length.

@@ -1,23 +1,56 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Personal overrides for system-level Claude Code sessions; meant to stay out of git, and nothing may depend on it.",
+  "kind": "file",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner, on their own machine"
+  ],
+  "readers": [
+    "Claude Code started in agents/system/ on that machine"
+  ],
+  "changes_when": "A person sets a personal model, environment value or other override.",
+  "related": [
+    {
+      "path": "agents/system/.claude/settings.json",
+      "how": "same format as"
+    },
+    {
+      "path": ".gitignore",
+      "how": "checked by"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-024",
+      "D-028"
+    ],
+    "inputs": [
+      "in-20260929-2025",
+      "in-20260930-0752"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": ".gitignore",
+      "how": "it should list `settings.local.json`, which it does not yet, so the file is still tracked"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "the part 'Each agent's AI setup', if what it says about this item changes"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Each agent's AI setup",
+    "agents/system/docs/rebuild-prompt.md#The standard .claude/ folder"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

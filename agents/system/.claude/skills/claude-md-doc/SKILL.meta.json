@@ -1,25 +1,69 @@
 {
   "schema_version": 1,
-  "about": "agent-os/agents/system/.claude/skills/claude-md-doc/SKILL.md",
-  "kind": "skill",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The skill that writes and keeps agents/system/CLAUDE.md, the file Claude Code reads first in the system folder.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "knowledge-base-agent"
+  ],
+  "changes_when": "The owner changes what CLAUDE.md must hold or how it is kept.",
+  "related": [
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "writes"
+    },
+    {
+      "path": "agents/system/.claude/agents/knowledge-base-agent.md",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
     "decisions": [
-      "D-064"
+      "D-064",
+      "D-066"
     ],
-    "inputs": [],
+    "inputs": [
+      "in-20261012-stage1",
+      "in-20261013-no-memory-folder"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/claude-md-doc/SKILL.index.md",
+      "how": "if what the skill does or when it runs changes"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "write it again if the skill's outline changes"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "the part 'The knowledge base and the docs', if what it says about this item changes"
+    },
+    {
+      "path": "agents/system/docs/README.asd.md",
+      "how": "write it again with readme-asd-doc right after the system README changes"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The knowledge base and the docs"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

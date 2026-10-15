@@ -15,7 +15,7 @@ The main way the system is developed. A change goes from a request to a plan, fr
 
 ## Where plans live
 
-- One file per request in `apps/project-IDE/data/plans/` (while we plan: `vision/plans/`), named after the request's time and subject: `YYYY-MM-DD-HHMM-<subject>.md`. Plans written before this skill keep their names.
+- One file per request in `apps/project-IDE/data/plans/`, named after the request's time and subject: `YYYY-MM-DD-HHMM-<subject>.md`. Plans written before this skill keep their names.
 - `plans/index.json` lists every plan: `id`, `title`, `status`, `inputs` (the owner's messages it answers), `decisions`, `files` (what it touches), `created`, `updated`.
 - A distributed plan moves to `archive/plans/`. Never edit an archived plan; a later change to the same thing gets a new plan.
 

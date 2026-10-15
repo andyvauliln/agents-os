@@ -1,23 +1,66 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The pattern of one test of the system's instructions or a helper: a scenario, the expected behaviour and how it is graded.",
+  "kind": "file",
+  "state": "name pattern",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the system agent or sys-self-improvement-agent, when it adds a test",
+    "the owner"
+  ],
+  "readers": [
+    "run-tests (planned shared script)",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "A test of the system's instructions or helpers is added or its expectation changes.",
+  "related": [
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/agents/",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/tests/agents/tests.config.json",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/system/docs/README.md#Tests",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-025",
+      "D-050"
+    ],
+    "inputs": [
+      "in-20260929-2036",
+      "in-20261006-2104",
+      "in-20261006-2143"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/tests/agents/tests.config.json",
+      "how": "add or change the test's entry"
+    },
+    {
+      "path": "agents/system/tests/agents/agents.questions.md",
+      "how": "keep the open question on test names in step"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Tests"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "about": "The owner commented on the people vision: end-of-run compression, run triggers (e.g. when research finishes) and a parallel-run limit set by a system helper; agreed that strategies can be code, AI or both, that each strategy has its own back-testing, that agents subscribe to each other's data (risk manager, news worker), and that a workers agent handles worker requests; deferred outside-text protection to live trading; answered most open questions (first strategy given by the owner, real money after good results, start scale, venues per strategy, reuse of Polymarket tools, own server, owner approves every new strategy configuration, SI and agents free, per-agent back-testing and memory, test/live for every action with testnets, blockchain-only actions for now, JSON CRUD scripts); asked for the pull, executor, ledger and digest ideas to be explained as problem and solution so they can decide.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-intake"
+  ],
+  "readers": [
+    "knowledge-base-agent"
+  ],
+  "changes_when": "Never in the owner's words; only its answer and what it was processed into are added once its knowledge is placed.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "summed up in"
+    },
+    {
+      "path": "apps/project-IDE/data/inputs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-035"
+    ],
+    "inputs": [
+      "in-20261001-1037"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "Keep its row (summary, categories, processed_into, answered) the same as this file."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md#16. Owner inputs",
+    "apps/project-IDE/data/inputs/README.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

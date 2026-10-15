@@ -19,7 +19,7 @@ Every level has its own `docs/` folder with the same four docs: `vision.md`, `RE
 
 | Level | Folder | What its README covers |
 |---|---|---|
-| Project | `docs/` at the top of the repository | The whole repository, part by part, and how the project is worked on: every top folder and file, the metadata next to every item, the planning area `vision/`, the keys folder, the rounds of work, the stages. |
+| Project | `docs/` at the top of the repository | The whole repository, part by part, and how the project is worked on: every top folder and file, the metadata next to every item, the records, the keys folder, the rounds of work, the stages. |
 | System | `agents/system/docs/` | The system domain: every part of the system agent's folder and the shared machinery every domain uses. |
 | Trading | `agents/trading/docs/` | What `agents/trading/` holds and what every trading domain shares, with each trading domain summed up and its docs path. |
 | Apps | `apps/docs/` | What `apps/` holds, the kinds of apps and the rules for each kind, and every app with the path to its docs. |
@@ -50,8 +50,8 @@ When every level is written fresh, take the levels in this order: project, syste
 ## What to read before writing
 
 - **The vision of the level**, already updated for this round: the README uses the same words, and its "In short" matches the vision's.
-- **The notes:** the tree notes (`vision/docs/file-tree.md`, one section per file and folder), the decisions, the changelog and the owner's inputs word for word, all in `vision/docs/` while we plan. Newest wins when they disagree.
-- **What exists today:** the real repository (`git ls-files`, leaving out `vision/archive/`), the File Tree page, the skills and agents, and each part's own docs, so every path you give is real.
+- **The records and the metadata:** the decisions, the changelog and the owner's inputs word for word, all in `apps/project-IDE/data/`, and the How it works and Details files next to each item. Newest wins when they disagree.
+- **What exists today:** the real repository (`git ls-files`), the File Tree page, the skills and agents, and each part's own docs, so every path you give is real.
 - **The level above:** its README, so this one agrees with it and does not repeat it.
 
 ## Outline
@@ -86,7 +86,7 @@ The design details not settled yet, grouped by part, one line each. Questions ab
 
 A part that does not exist at a level is left out; a new main part gets its own section where it fits.
 
-- **Project.** The top of the repository: the front page `README.md`, `.gitignore`, the project docs in `docs/` (the four docs and `docs/file-tree.md`, the plain list of every path, built by the IDE build); `agents/` with the system domain and the trading folder; `apps/` with the project IDE; the keys folder `.secrets/` (in git without the `.env` files, which stay on the machine); the planning area `vision/` (the knowledge base, the drafts, the mirror of metadata, the build tools, the archive); the metadata files next to every file and folder; how the project is worked on (the owner's inputs, plans, the knowledge base agent and the project IDE agent, the page build, git, pull requests into `main`); the stages, with what stage one holds and what waits for stage two; `agents/system/CLAUDE.md` as the way in for Claude Code.
+- **Project.** The top of the repository: the front page `README.md`, `.gitignore`, the project docs in `docs/` (the four docs and `docs/file-tree.md`, the plain list of every path, built by the IDE build); `agents/` with the system domain and the trading folder; `apps/` with the project IDE; the keys folder `.secrets/` (in git without the `.env` files, which stay on the machine); the records in `apps/project-IDE/data/` and the build tools in `agents/system/.claude/skills/ide-build/scripts/`; the metadata files next to every file and folder; how the project is worked on (the owner's inputs, plans, the knowledge base agent and the project IDE agent, the page build, git, pull requests into `main`); the stages, with what stage one holds and what waits for stage two; `agents/system/CLAUDE.md` as the way in for Claude Code.
 - **System.** Agents and their levels; the system agent and its shared files; domains (each summed up with its docs path; trading's at `agents/trading/docs/`); workers and data; jobs and the scheduler; links between agents; settings and AI models; actions in test and live; keys and secrets; logs; tests; research; self-improvement helpers; each agent's AI setup (`.claude/`, `CLAUDE.md`); the knowledge base agent, the project IDE agent and their skills; the project IDE in one short part with its docs path; the server.
 - **Trading.** What `agents/trading/` holds (`docs/`, `researches/` with the research studies, one folder per trading domain); what every trading domain shares; how a new trading domain is made; the prediction-market domain summed up as stage two, by its folder only; where the trading parts that every domain uses live.
 - **Apps.** What `apps/` holds (`docs/`, one folder per app, `temp/` for research clones that are never committed); the kinds of apps and the rules for each (our own app; an outside app we use, forked with our `main` and an `upstream` branch that follows the source; a research clone); every app with what it is, its state and its docs path (`project-IDE/`, `trading-ui/` and any other).

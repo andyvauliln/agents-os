@@ -1,10 +1,9 @@
 ---
 about: agent-os/docs/README.asd.md
-node: n-57.3
-basis: 5324dc0846f3
-written: 2026-10-12T00:00:00Z
+basis: a6541becea82
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # README.asd.md
 
@@ -30,7 +29,7 @@ The owner, to compare it with the README and to read the project in the simplest
 
 ## Related knowledge
 
-`README.md` is the only source of its content; it adds nothing of its own. The archived inputs vision in `vision/archive/` is the model for its style.
+`README.md` is the only source of its content; it adds nothing of its own.
 
 ## Keep in mind
 

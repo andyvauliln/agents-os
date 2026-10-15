@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The full logic of the metadata files, in ASD-STE100.",
+  "about": "The full logic of the metadata files in ASD-STE100: the files of each item, names, fields, staleness, build, page, status, inputs, decisions and questions.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -8,30 +8,31 @@
   "secret": false,
   "generated_by": null,
   "writers": [
-    "knowledge-base-agent with file-index"
+    "knowledge-base-agent (file-index)",
+    "the owner, on the File Tree page"
   ],
   "readers": [
     "the owner",
-    "every agent",
-    "Claude Code started in agents/system/"
+    "every agent before it writes or changes a metadata file",
+    "Claude Code started in agents/system/, from the reading list"
   ],
-  "changes_when": "a rule of the metadata files changes: a file, a field, a name, the build or the page; the way status, inputs, decisions or questions work; the state of the Details fields",
+  "changes_when": "A rule of the metadata files changes, or the way status, inputs, decisions or questions work, or the true state of the Details fields.",
   "related": [
     {
       "path": "agents/system/.claude/skills/file-index/SKILL.md",
       "how": "same format as"
     },
     {
-      "path": "docs/README.md",
-      "how": "read by"
-    },
-    {
       "path": "agents/system/CLAUDE.md",
       "how": "read by"
     },
     {
-      "path": "apps/project-IDE/docs/README.md",
+      "path": "docs/README.md",
       "how": "documented in"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "links to"
     }
   ],
   "sources": {
@@ -39,31 +40,41 @@
       "D-057",
       "D-064",
       "D-065",
-      "D-067"
+      "D-067",
+      "D-068",
+      "D-069",
+      "D-070"
     ],
     "inputs": [
       "in-20261014-metadata-logic",
-      "in-20261014-status-inputs-fields"
+      "in-20261014-status-inputs-fields",
+      "in-20261014-0950",
+      "in-20261014-1004",
+      "in-20261014-1006",
+      "in-20261014-1047",
+      "in-20261014-1241"
     ],
-    "notes": [
-      "agents/system/.claude/skills/file-index/SKILL.md"
-    ]
+    "notes": []
   },
   "update_with": [
     {
       "path": "agents/system/.claude/skills/file-index/SKILL.md",
-      "how": "the same rule, as steps for an agent"
+      "how": "Write the same rule as steps for an agent in the same round."
     },
     {
       "path": "docs/README.md",
-      "how": "the Metadata files part, if what the files are changes"
+      "how": "Update the Metadata files part if what the files are changes."
     },
     {
       "path": "docs/rebuild-prompt.md",
-      "how": "the list of its sections"
+      "how": "Update the list of its sections."
     }
   ],
-  "inherits": [],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#The project docs"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

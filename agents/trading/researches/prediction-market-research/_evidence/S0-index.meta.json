@@ -1,1 +1,60 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Index of every planned strategy file (01-34 and 50-84) with its category, maturity hypothesis and one line, used by the writers for cross-references.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+  "writers": [
+    "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+    "survey sessions, when a strategy is added or merged"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage3-synthesize.js",
+    "the survey's stage 2 writer and reviewer agents"
+  ],
+  "changes_when": "build_all.py is run again, or a session adds or merges a strategy before writing it.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+      "how": "written by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/strategies/",
+      "how": "built from"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/",
+      "how": "links to"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/args.json",
+      "how": "Keep the item list in step when a strategy is added or merged."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

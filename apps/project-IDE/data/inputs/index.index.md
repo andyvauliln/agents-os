@@ -1,16 +1,35 @@
 ---
 about: agent-os/apps/project-IDE/data/inputs/index.json
-node: n-2.10.2
-basis: 05056c88d286
-written: 2026-10-01T00:54:39Z
-by: summary-worker
-confirmed: 2026-10-07T14:22:08Z
+basis: 035e743935c0
+written: 2026-10-14T15:17:50Z
+by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # index.json
 
-## Summary
+## What it is
 
-The list of every owner input, one row each, with its categories, a one-line summary and what it was processed into. The knowledge agent adds a row when it stores an input, including File Tree page messages picked up at the next sync, and fills in what the input changed once its knowledge is placed. The knowledge map reads it. Its field list is still a proposal.
+The list of every owner input, one row each, with its categories, a one-line summary and what it was processed into. The knowledge base agent adds a row when it stores an input, page messages included, and fills in what the input changed once its knowledge is placed.
+
+## Who looks after it
+
+It is written by knowledge-base-agent and knowledge-intake.
+
+## When and how it changes
+
+It changes when an input is stored, or its knowledge is placed.
+
+## Who uses it, and when
+
+It is read by knowledge-base-agent and `agents/system/.claude/skills/ide-build/scripts/enrich.py`.
+
+## Where it is mentioned
+
+It is described in `apps/project-IDE/data/inputs/README.md` and its folder's How it works file `apps/project-IDE/data/inputs/inputs.index.md`.
+
+## Related knowledge
+
+It is read by `agents/system/.claude/skills/ide-build/scripts/enrich.py`. It is written by `agents/system/.claude/skills/knowledge-intake/SKILL.md`. The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules") and `docs/metadata.md` (section "Owner inputs").
 
 ## Keep in mind
 

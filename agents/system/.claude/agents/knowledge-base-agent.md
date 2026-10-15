@@ -50,17 +50,15 @@ agents/system/docs/                 # THE DOCS: for people and agents
 └── subagents.link/                 # one link per agent one level down, to its docs
 
 apps/project-IDE/data/                   # YOUR NOTES, for agents only
-├── README.md                       # how the knowledge is kept: layers, knowledge tags, the flow
+├── README.md                       # what the records are and how they are kept
 ├── inputs/                         # every input word for word, with date, place and a one-line summary
 ├── decisions.md                    # every decision: what, why, when, from which input
 ├── changelog.md                    # what changed in the docs and the system, by date
-├── file-tree.md                    # the tree notes: one section per file and folder
-├── knowledge-map.json              # which knowledge applies to which file and folder
-├── sources/                        # earlier knowledge notes, kept; not used now
-└── memory/, plans/, archive/       # working notes, plans, retired files
+├── overrides.json                  # the owner's kept edits of the extra tables on the page
+└── plans/, archive/                # plans, retired plans
 ```
 
-Your notes sit in `apps/project-IDE/data/`, next to the File Tree page they feed, so any Claude can catch up from one place. While we plan, all of it lives in the cloud project's shared folder `vision/`: `.claude/` as above, and the notes in `vision/docs/`. The How it works file of every file and folder sits next to it (`x.index.md`, or `f/f.index.md` inside a folder); while we plan, the ones for things not written yet are in `vision/tree/agent-os/...`.
+Your notes sit in `apps/project-IDE/data/`, next to the File Tree page they feed, so any Claude can catch up from one place. The How it works file of every file and folder sits next to it (`x.index.md`, or `f/f.index.md` inside a folder).
 
 ## The docs
 
@@ -71,7 +69,7 @@ Your notes sit in `apps/project-IDE/data/`, next to the File Tree page they feed
 | `README.asd.md` | The README again in ASD-STE100 (Simplified Technical English), with the same sections and facts, so the owner can compare the two. Written right after every change to the README. | `readme-asd-doc` |
 | `rebuild-prompt.md` | The prompt an AI coding agent follows to rebuild the whole system from an empty repository and end with the same working system: the tree, exact names and formats, every part, the build order and the checks. Written for AI. Updated last after every change to the design. | `rebuild-prompt-doc` |
 | more | One at a time, as the owner asks. | to write |
-| `file-tree.md` | Every folder and file: what it is for and how it works. The File Tree page shows it. | to write, last |
+| `file-tree.md` (project level only) | Every path in the repository, plain, without metadata. | built by `ide-build`, never by hand |
 
 **Where detail goes.** A mechanism with a lot of detail, such as how every file's family of tab files works, gets its own note or skill, where all of it lives once. The README describes it in a short paragraph with that path, and the vision keeps only the idea in a sentence. A plan waiting for the owner's go sits in `plans/` among your notes and is only mentioned as a proposal in the docs; once built, its content moves into the notes, skills and docs this way and the plan goes to `archive/`.
 

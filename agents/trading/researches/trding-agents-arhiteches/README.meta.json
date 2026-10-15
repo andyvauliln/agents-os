@@ -1,1 +1,61 @@
-{}
+{
+  "schema_version": 1,
+  "about": "The study's text: the four-axis design space and nine trading-agent architectures (TradingAgents to graded autonomy), a comparison, what the evidence supports and how to regenerate the diagrams.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the trading-agent architecture research session"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)",
+    "the prediction-market domain agent (stage two)"
+  ],
+  "changes_when": "An architecture is added or the diagrams are regenerated.",
+  "related": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/diagrams/",
+      "how": "links to"
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/specs/",
+      "how": "links to"
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/index.html",
+      "how": "links to"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/index.html",
+      "how": "Add or change the gallery card of the architecture."
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/trding-agents-arhiteches.index.md",
+      "how": "Update the summary."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

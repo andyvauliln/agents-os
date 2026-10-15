@@ -37,7 +37,7 @@ import voice  # noqa: E402
 
 CONFIG = os.environ.get("IDE_CONFIG", os.path.join(HERE, "server.config.json"))
 COLLECTIONS = {"nodes", "changes", "inputs"}       # what the page keeps (same as on claude.ai)
-SAFE_ID = re.compile(r"^[A-Za-z0-9_.:@+~-]{1,200}$")
+SAFE_ID = re.compile(r"^[A-Za-z0-9_.:@+~-]{1,600}$")   # a nodes document is keyed by its item's path with "/" and other signs as ~XX
 
 
 def now():
@@ -110,9 +110,8 @@ class Store:
 class WriteThrough:
     """Writes the owner's page edits of a file's text or its How it works into the repository."""
 
-    def __init__(self, repo, data_file, never, planning=None):
+    def __init__(self, repo, data_file, never):
         self.repo, self.data_file, self.never = repo, data_file, never
-        self.planning = planning   # while we plan, the folder that holds the drafts and How it works files ("vision")
         self._nodes, self._mtime = {}, None
 
     def nodes(self):
@@ -136,10 +135,8 @@ class WriteThrough:
         return p if inside and not any(b in rel for b in self.never) else None
 
     def file_of(self, node):
-        if node.get("src_file"):             # the file the page showed: a draft, a repository file or a real file found on disk
+        if node.get("src_file"):             # the file the page showed, by its path in the repository
             return self._safe(node["src_file"])
-        if self.planning:                    # a planned file nobody has written: the edit waits in the page store for the sync
-            return None
         segs = self._segs(node)[1:]          # drop the root name "agent-os"
         if node.get("type") != "file" or not segs or any("[" in s for s in segs):
             return None
@@ -163,13 +160,15 @@ class WriteThrough:
         return self._safe("/".join(where + [self.family(node, segs[-1]) + ending]))
 
     def index_of(self, node):
-        if self.planning:                    # How it works files sit in the planning folder (next to a draft, or in its mirror tree)
-            return self._safe(os.path.join(self.planning, node["how_file"])) if node.get("how_file") else None
+        if node.get("how_file"):             # the build names it: x.index.md beside a file, f/f.index.md inside a folder
+            return self._safe(node["how_file"])
         return self.metadata_of(node, ".index.md")
 
-    def apply(self, node_id, doc, before=None):
+    def apply(self, doc_id, doc, before=None):
         """Writes what this save changed. A field the page saved before is not written again: the same
-        document is saved again for a comment or a mark, and that must not undo what Claude Code wrote since."""
+        document is saved again for a comment or a mark, and that must not undo what Claude Code wrote since.
+        The document id is the item's id (its path) with "/" and other signs written as ~XX."""
+        node_id = unquote(doc_id.replace("~", "%"))
         n, fields, done = self.nodes().get(node_id), (doc or {}).get("fields") or {}, []
         old = (before or {}).get("fields") or {}
         if not n:
@@ -182,20 +181,15 @@ class WriteThrough:
             with open(p, "w", encoding="utf-8") as f:
                 f.write(text)
             done.append(os.path.relpath(p, self.repo))
-            real = self._safe(n["real_file"]) if n.get("real_file") else None   # the real file made from this draft
-            if real and real != p:
-                with open(real, "w", encoding="utf-8") as f:
-                    f.write(text)
-                done.append(os.path.relpath(real, self.repo))
         how = fields.get("how_md")
         p = self.index_of(n) if isinstance(how, str) and how.strip() and how != old.get("how_md") else None
         if p:
-            meta = {"about": n.get("path"), "node": n["id"]}
+            meta = {"about": n.get("path")}
             if os.path.isfile(p):
                 m = re.match(r"^---\n(.*?)\n---[ \t]*\n?", open(p, encoding="utf-8").read(), re.S)
                 for line in (m.group(1).split("\n") if m else []):
                     k, _, v = line.partition(":")
-                    if k.strip():
+                    if k.strip() and k.strip() != "node":   # items have no node ids any more: the path is the id
                         meta[k.strip()] = v.strip()
             meta.update({"written": now(), "by": "owner"})
             body = "---\n" + "".join(f"{k}: {v}\n" for k, v in meta.items() if v) + "---\n" + how.strip() + "\n"
@@ -204,15 +198,6 @@ class WriteThrough:
                 with open(p, "w", encoding="utf-8") as f:
                     f.write(body)
                 done.append(os.path.relpath(p, self.repo))
-            path = (n.get("path") or "").replace("|", "-")   # the copy next to the item on disk (materialize.py)
-            if self.planning and path.startswith("agent-os/") and not n.get("scanned"):
-                rel = path[len("agent-os/"):]
-                home = rel.rstrip("/") if n.get("type") == "folder" else os.path.dirname(rel)
-                real = self._safe(os.path.join(home, os.path.basename(p))) if home else self._safe(os.path.basename(p))
-                if real and real != p and (not os.path.isfile(real) or open(real, encoding="utf-8").read() != body):
-                    with open(real, "w", encoding="utf-8") as f:
-                        f.write(body)
-                    done.append(os.path.relpath(real, self.repo))
         return done
 
 
@@ -224,7 +209,7 @@ class App:
         self.data = self.cfg.get("data", "file-tree.data.json")
         self.store = Store(os.path.join(self.repo, self.cfg.get("store_dir", "apps/project-IDE/data/page-store")))
         never = self.cfg.get("claude", {}).get("never", [".secrets"])
-        self.write = WriteThrough(self.repo, os.path.join(self.page_dir, self.data), never, self.cfg.get("planning_dir")) if self.cfg.get("write_through", True) else None
+        self.write = WriteThrough(self.repo, os.path.join(self.page_dir, self.data), never) if self.cfg.get("write_through", True) else None
         secrets = load_secrets(self.cfg, self.repo)
         self.voice = voice.Voice(self.cfg, secrets)
         # Claude Code gets only its own keys, never the voice key
@@ -368,7 +353,7 @@ class Handler(BaseHTTPRequestHandler):
                 text = (body.get("text") or "").strip()
                 if not text:
                     return self._send(400, {"error": "empty request"})
-                node = {k: body.get(k) for k in ("node_id", "path", "name", "num")}
+                node = {k: body.get(k) for k in ("node_id", "path", "name")}
                 known = (a.write.nodes().get(node["node_id"]) if a.write else None) or {}
                 node.update({k: known[k] for k in ("type", "fam") if known.get(k)})
                 # the Delete button: Claude Code may delete exactly this item without a second click

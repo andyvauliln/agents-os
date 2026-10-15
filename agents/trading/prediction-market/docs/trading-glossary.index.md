@@ -1,12 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-glossary.md
-node: n-19.6.12
-basis: 12ff85f1770d
-written: 2026-10-07T18:56:50Z
+basis: 39ae34454be9
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-glossary.md
 
-## Summary
+## What it is
 
-The trading words of the domain, the trading layer of the system's glossary, in alphabetical order: champion and challenger, decision script, domain config, level agent in this domain, strategy, strategy agent, trading agent and variant. The money metrics such as PnL and drawdown are defined in `trading-metrics.md`, and every general term stays in the system's glossary.
+An earlier note with the trading words of the domain in alphabetical order, such as champion and challenger, decision script, domain config, strategy, strategy agent, trading agent and variant. It is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/docs.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
+
+## Keep in mind
+
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

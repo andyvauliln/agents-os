@@ -1,23 +1,67 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The guide to the records folder: what each part holds (inputs, decisions, changelog, plans, archive, sources, overrides, page store) and how the records change.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "knowledge-base-agent",
+    "knowledge-intake"
+  ],
+  "readers": [
+    "knowledge-base-agent",
+    "project-ide-agent",
+    "every AI session on the project"
+  ],
+  "changes_when": "A part of the records folder is added, removed or used differently.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/data/inputs/README.md",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-033",
+      "D-041"
+    ],
+    "inputs": [
+      "in-20260930-1533",
+      "in-20260930-1603",
+      "in-20260930-1841"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/data.index.md",
+      "how": "Keep the parts named there the same as the table."
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "Change the line on the records in \"Where each part's docs are\" if their job changed."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "apps/project-IDE/docs/README.md#Where each part's docs are"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

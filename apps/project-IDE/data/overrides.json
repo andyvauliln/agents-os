@@ -1,6 +1,6 @@
 {
- "_about": "Owner edits applied from the File Tree explorer, keyed by [n]. Fields replace the parsed values. Knowledge (rules, purpose, details) goes into docs/file-tree.md and the topic docs; only page-only fields (examples, custom tables, file content) stay here.",
- "47.1.1": {
+ "_about": "Owner edits kept from the File Tree page, keyed by the item's path from the top of the repository. The build applies only the page-only extra tabs (custom_tabs, fields); an item's text, How it works and Details come from its own files, so the other fields here are kept as a record only.",
+ ".secrets/test/.env": {
   "name": ".env",
   "status": "decided",
   "summary": "Single .env file holding all test credentials, grouped in sections with prefixed key names",
@@ -44,7 +44,7 @@
      }
     ],
     "id": "variables",
-    "note": "This table is the current picture of the real .secrets/test/.env: one row per key that is actually in the file, with the section it sits in, what it is for, which files or scripts read it, whether it is required, its format and any extra notes. Empty for now - rows are added as real keys are created. Values are never stored here; they live only in the local file (edited there or later in the trading UI [45]). A script can write .env.example from this table.",
+    "note": "This table is the current picture of the real .secrets/test/.env: one row per key that is actually in the file, with the section it sits in, what it is for, which files or scripts read it, whether it is required, its format and any extra notes. Empty for now - rows are added as real keys are created. Values are never stored here; they live only in the local file (edited there or later in the trading UI). A script can write .env.example from this table.",
     "rows": [],
     "title": "Variables",
     "type": "table"
@@ -60,7 +60,7 @@
    "Is Groq also added as a model platform in models.config.json [11.11], beyond speech to text for voice input?"
   ]
  },
- "47.2.1": {
+ ".secrets/live/.env": {
   "name": ".env",
   "status": "decided",
   "summary": "Single .env file holding all live credentials, same key names and sections as test/.env; owner only, later phase",
@@ -118,7 +118,7 @@
    "title": ".secrets/live/.env with fake values, grouped in sections"
   }
  },
- "48": {
+ ".gitignore": {
   "example": {
    "body": "# Secrets: never commit credentials (D-023, D-027)\n.secrets/\n*.env\n.env.*\n!.env.example\n\n# Claude Code local state: machine-specific, not shared (D-024)\n**/.claude/settings.local.json\n**/.claude/agent-memory-local/\n\n# Cursor local state: same rule as .claude - only local files, the rest is committed\n**/.cursor/settings.local.json\n**/.cursor/state/\n**/.cursor/cache/\n\n# Runtime logs: written by agents at run time, not source\nlogs/**\n!logs/**/\n!logs/**/.gitkeep\nagents/**/logs/**\n!agents/**/logs/**/\n!agents/**/logs/**/.gitkeep\n\n# Runtime data: produced by agents/workers, not source\ndata/**\n!data/**/\n!data/**/.gitkeep\nagents/**/data/**\n!agents/**/data/**/\n!agents/**/data/**/.gitkeep\n\n# Dependency and build artifacts: regenerated, not source\nnode_modules/\ndist/\nbuild/\n.venv/\nvenv/\n__pycache__/\n*.py[cod]\n*.egg-info/\n.pytest_cache/\n.mypy_cache/\n\n# OS and editor noise\n.DS_Store\n*.swp\n.idea/\n.vscode/\n",
    "lang": "text",
@@ -128,7 +128,7 @@
   "summary": "ignores .secrets/, *.env, local Claude and Cursor state, runtime logs/ and data/ content (folders kept with .gitkeep), and common build/OS junk, each with a comment explaining why",
   "open_questions": []
  },
- "1": {
+ "README.md": {
   "content": "# Agent OS\nAn agentic trading system: workers collect data, agents at system / domain / strategy level decide and self-improve, and a UI lets the owner watch and approve.\n\n- Start here: agents/system/.claude/docs/README.md\n- Vision: agents/system/.claude/docs/vision.md\n- File tree: project-IDE/ (the File Tree page and its data)\n- Run: ./agents/system/start.sh   UI: cd trading-ui && npm run dev"
  }
 }

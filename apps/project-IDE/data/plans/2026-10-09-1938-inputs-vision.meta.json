@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "about": "The plan \"Check all owner inputs; write the inputs vision\" (done).",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-base-agent",
+    "change-plan"
+  ],
+  "readers": [
+    "the owner",
+    "every AI session that builds a change"
+  ],
+  "changes_when": "Its status and steps change as it is built; once done it is kept as it is.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/plans/index.json",
+      "how": "summed up in"
+    },
+    {
+      "path": "agents/system/.claude/skills/change-plan/SKILL.md",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-062"
+    ],
+    "inputs": [
+      "in-20261009-1938"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/plans/index.json",
+      "how": "Change its row's status, note and date."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/.claude/skills/change-plan/SKILL.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

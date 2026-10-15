@@ -1,1 +1,62 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Stage 2 brief for strategy 18 (In-play sports feed-latency taking): scope, sub-variants, critic notes and key evidence for its writer.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+  "writers": [
+    "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+    "survey sessions, when they correct the brief by hand"
+  ],
+  "readers": [
+    "the owner",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js",
+    "the survey's stage 2 writer and reviewer agents"
+  ],
+  "changes_when": "Only if build_all.py is run again; its study is already written.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/18-sports-inplay-feed-latency-taking.md",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+      "how": "written by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S0-index.md",
+      "how": "summed up in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S0-index.md",
+      "how": "Update its line if the name, category or one line changes."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

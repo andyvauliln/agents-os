@@ -15,16 +15,18 @@ The repository is one GitHub repository, `andyvauliln/trading-oss`. In the docs 
 ```text
                          the owner
                  (chat, voice, the File Tree page)
-                              │ inputs
+                              │ inputs, kept word for word in apps/project-IDE/data/
                               ▼
-   vision/  ──── planning area: records, plans, build tools, page source ────┐
-      │ build copies drafts and metadata into place                           │ builds
-      ▼                                                                       ▼
-   agents/            apps/                 docs/            apps/project-IDE/current-ui/
-   system/            project-IDE/          (project level)  the File Tree page
-   trading/           temp/  trading-ui/                         │
-      │                  │                                       │ shows every file
-      └──── .secrets/ (key names in git; .env values never) ─────┘ and its metadata
+   agents/            apps/                 docs/
+   system/            project-IDE/          (project level)
+   trading/           temp/  trading-ui/
+      │                  │                     │
+      └──────────────────┴─────────────────────┘
+                         │ the IDE build reads every file and its metadata
+                         ▼
+          apps/project-IDE/current-ui/: the File Tree page
+
+   .secrets/: key names in git; the .env values never leave the machine
 ```
 
 | Part | What it is for | Where it lives |
@@ -40,9 +42,9 @@ The repository is one GitHub repository, `andyvauliln/trading-oss`. In the docs 
 | Keys | Every private key, kept on the machine | `.secrets/` |
 | What git ignores | Keys files, dependencies, caches, editor noise | `.gitignore` |
 | Metadata files | How it works, Details and more, next to every file and folder | beside each item |
-| The planning area | Everything used to plan the project while it is planned | `vision/` |
+| The records | Every owner input word for word, decisions, changelog, plans | `apps/project-IDE/data/` |
 
-How the parts connect, step by step. The owner's words arrive in a chat, by voice or on the File Tree page. The knowledge base agent keeps them word for word in the planning area, writes a plan, and after the owner's go brings the docs of every level touched and their metadata files in line. The project IDE agent then rebuilds the page from the repository: it reads the tree notes and the knowledge from the planning area, copies the drafts and metadata files into their places in the tree, checks that every How it works note is current, and writes the page's data file next to the page. The page shows every file and folder of the repository with its metadata as tabs. What the owner leaves on the page comes back into the files at the next sync. Keys stay in `.secrets/` on the machine; only their names travel.
+How the parts connect, step by step. The owner's words arrive in a chat, by voice or on the File Tree page. The knowledge base agent keeps them word for word in the records, `apps/project-IDE/data/`, writes a plan, and after the owner's go brings the docs of every level touched and their metadata files in line. Every file is its own source and is edited where it is. The project IDE agent then rebuilds the page from the files on disk: it gives new items their empty metadata files, checks that every How it works note is current, and writes the page's data file next to the page. The page shows every file and folder of the repository with its metadata as tabs. What the owner leaves on the page comes back into the files at the next sync. Keys stay in `.secrets/` on the machine; only their names travel.
 
 ## How the repository is laid out
 
@@ -66,7 +68,6 @@ agent-os/
 │   ├── project-IDE/             the File Tree page, its server and its data
 │   ├── temp/                    repositories cloned only to study them
 │   └── trading-ui/              the prediction-market domain's dashboard, empty
-└── vision/                      the planning area
 ```
 
 The levels and where each level's docs are:
@@ -141,7 +142,7 @@ Its docs: `agents/system/docs/README.md`.
 
 - `agents/trading/docs/` holds trading's four docs: what trading as a whole is for, how its domains relate, and how they are built.
 - `agents/trading/researches/` holds the research studies: 42 studies of ways to make money on prediction markets with their evidence and the pipeline that wrote them (`prediction-market-research/`), a study of agents that improve themselves (`self-improving-agents/`), and a study of how trading agents are built (`trding-agents-arhiteches/`).
-- `agents/trading/prediction-market/` is the first trading domain. It is stage two: only its folders exist, each empty folder holding a `.gitkeep`, including its first strategy agent `strategy-1-agent/` and that strategy's first trading agent `pm-strategy-1.momentum-v1.opus55-test/`. Its `docs/` holds earlier notes kept for stage two. Its other earlier files are kept in the planning area's archive. The build creates nothing else inside it until stage two.
+- `agents/trading/prediction-market/` is the first trading domain. It is stage two: only its folders exist, each empty folder holding a `.gitkeep`, including its first strategy agent `strategy-1-agent/` and that strategy's first trading agent `pm-strategy-1.momentum-v1.opus55-test/`. Its `docs/` holds earlier notes kept for stage two. Its other earlier files are in git history. The build creates nothing else inside it until stage two.
 
 The next trading domain, copy trading, will be copied from the prediction-market domain when the owner asks.
 
@@ -164,14 +165,14 @@ Its docs: `apps/docs/README.md`.
 
 `apps/project-IDE/` is the owner's window on the project and the context every AI works from.
 
-- `current-ui/` holds the File Tree page, `file-tree-explorer.html`, and its data file, `file-tree.data.json`. The page is published on claude.ai at https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs.
+- `current-ui/` holds the File Tree page, `file-tree-explorer.html`, its data file, `file-tree.data.json`, and `real-files.json`, the text of every file, loaded when one is opened. The page is published on claude.ai at https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs.
 - `server/` runs the same page on the owner's server, with Claude Code behind its request box: `server.py`, `claude_bridge.py`, `voice.py` (voice input through Groq), `server.config.json` and its own `README.md`.
-- `data/` is where the project's records will live: the inputs, decisions, changelog, tree notes, knowledge map, plans, working notes, the page's store and the archive. While we plan, the records are kept in the planning area and the build copies them here.
+- `data/` holds the project's records: `inputs/` with every owner input word for word and its answer (and `index.json`), `decisions.md`, `changelog.md` (newest first), `plans/` with one plan per change request (and `index.json`), `overrides.json` with the owner's kept edits of the extra tables, the page's store on the server, and the archive.
 - `docs/` holds the IDE's four docs; its README is the full documentation of the IDE.
 
 The page shows every file and folder of the repository. A file opens on its File tab, readable or editable; its metadata files show as tabs: How it works, Details, Example, Questions, the ASD-STE100 version of a README, and custom views for some kinds of file, such as the table of key names for a `.env` file. A tab shows only when its file exists. A "metadata" switch shows or hides the metadata files in the tree. Each item has a request box for questions and changes, a voice button on the owner's server, and a Delete button; "Apply changes" at the top carries everything the owner left on the page into the files.
 
-On the owner's server, while we plan, the page is started from the top of the repository with `python3 vision/server/server.py`. It listens only on the machine itself, at `127.0.0.1:8765`, reached through an SSH tunnel.
+On the owner's server the page is started from the top of the repository with `python3 apps/project-IDE/server/server.py`. It listens only on the machine itself, at `127.0.0.1:8765`, reached through an SSH tunnel.
 
 Its docs: `apps/project-IDE/docs/README.md`.
 
@@ -191,7 +192,7 @@ Its docs: `.secrets/.secrets.index.md` and `.gitignore.index.md`.
 
 ### Metadata files
 
-Every file and folder outside the planning area has its metadata files beside it. Their names are the item's name without its extension:
+Every file and folder has its metadata files beside it. Their names are the item's name without its extension:
 
 | Metadata file | Tab on the page | What it holds |
 |---|---|---|
@@ -203,39 +204,22 @@ Every file and folder outside the planning area has its metadata files beside it
 
 A folder `f/` keeps its own as `f/f.index.md` and `f/f.meta.json` inside it. A file without an extension keeps its whole name (`.gitignore.index.md`). The root's are `agent-os.index.md` and `agent-os.meta.json`. A metadata file has no metadata files of its own. For now only the main docs and the two `.env` files have Example and Questions files; the `.env` files' example is `.env.example`, with key names only.
 
-While we plan, the source of each How it works and Details file is in the planning area's mirror tree, `vision/tree/agent-os/`, and the build copies it next to its item. The knowledge base agent writes them with the `file-index` skill, children before their folders.
+Each metadata file is its own source and is edited where it sits; the build only gives a new item its empty How it works and Details files. The knowledge base agent writes them with the `file-index` skill, children before their folders.
 
 The full logic, step by step in ASD-STE100, is in `docs/metadata.md`.
 
 Its docs: `docs/metadata.md`, `agent-os.index.md` and the `file-index` skill, `agents/system/.claude/skills/file-index/SKILL.md`.
-
-### The planning area
-
-`vision/` holds everything used to plan the project while it is planned. It is the workshop; the rest of the repository is the system as designed.
-
-- `vision/docs/`: the knowledge base. `inputs/` keeps every owner input word for word with its answer (and `index.json`); `decisions.md` keeps every decision; `changelog.md`, newest first; `file-tree.md`, the tree notes, with the planned tree and one section per file and folder; the knowledge map; and earlier knowledge notes, kept but not used now.
-- `vision/plans/`: one plan per change request, with `index.json`.
-- `vision/.claude/`: the planning copies of the helper agents, skills and working memory (`memory/`), and earlier notes behind the docs, kept but not used now.
-- `vision/tools/`: the build scripts (`parse.py`, `enrich.py`, `materialize.py`, `tabs.py`, `build_map.py`, `index_files.py`, `check_page.js`) and `overrides.json`, the owner's page edits kept in the data.
-- `vision/explorer/`: the page source, its data and the texts of the real files it shows.
-- `vision/server/`: the page's server, run from here while we plan.
-- `vision/tree/agent-os/`: the mirror tree of every How it works and Details file.
-- `vision/archive/`: retired texts, by date, among them the earlier drafts of the docs and the prediction-market domain's files, kept for stage two.
-
-The build copies the drafts, records and metadata files from here into their places in the tree. The docs of every level are written in their own folders. Making every real file its own only source, and leaving the planning area as an archive, is still open. The plan for it, which waits for the owner's go, is `apps/project-IDE/data/plans/2026-10-13-leave-vision.md`: the tree notes' ids, numbers and decisions move into each item's Details file, the records move to `apps/project-IDE/data/`, the build scripts into the `ide-build` skill and the page to `apps/project-IDE/current-ui/`, the server settings are fixed, and the copying of drafts and metadata stops.
-
-Its docs: `vision/docs/README.md` and `vision/tools/README.md`.
 
 ## How a round of work goes
 
 Every round, whether it starts from a chat, the page or the AI's own work, follows the same steps.
 
 1. **Pull.** Bring the latest `main` into the working branch.
-2. **File the input.** The knowledge base agent stores the owner's words word for word in `vision/docs/inputs/`, with a summary, categories and the answer, using the `knowledge-intake` skill. A question and its answer are one input.
-3. **Plan.** A change to the system, its structure, its code or its docs gets a plan in `vision/plans/` with the `change-plan` skill, shown to the owner. Work starts on the owner's go. Small fixes need no plan.
-4. **Update the docs in order.** At each level the change touches: `vision.md`, then `README.md`, then `README.asd.md`, then `rebuild-prompt.md`. Levels in this order: project, system, apps, project IDE, trading. A change at a lower level is carried up to the levels above it. Decisions go into `vision/docs/decisions.md`, a line into `vision/docs/changelog.md`.
+2. **File the input.** The knowledge base agent stores the owner's words word for word in `apps/project-IDE/data/inputs/`, with a summary, categories and the answer, using the `knowledge-intake` skill. A question and its answer are one input.
+3. **Plan.** A change to the system, its structure, its code or its docs gets a plan in `apps/project-IDE/data/plans/` with the `change-plan` skill, shown to the owner. Work starts on the owner's go. Small fixes need no plan.
+4. **Update the docs in order.** At each level the change touches: `vision.md`, then `README.md`, then `README.asd.md`, then `rebuild-prompt.md`. Levels in this order: project, system, apps, project IDE, trading. A change at a lower level is carried up to the levels above it. Decisions go into `apps/project-IDE/data/decisions.md`, a line into `apps/project-IDE/data/changelog.md`.
 5. **Update the metadata.** Every stale How it works and Details file is rewritten with `file-index`, children first, until none is stale.
-6. **Rebuild the page.** The project IDE agent runs `ide-build` (with `ide-sync` first when the owner pressed Apply changes): parse, enrich, materialize, check the How it works notes, write `docs/file-tree.md`, test the page and publish it at the same link.
+6. **Rebuild the page.** The project IDE agent runs `ide-build` (with `ide-sync` first when the owner pressed Apply changes): give new items their metadata files and write `docs/file-tree.md`, check the How it works notes, build the page data from the files on disk, test the page and publish it at the same link.
 7. **Check the page against the disk.** The page tree must list exactly the files in git (`git ls-files --cached --others --exclude-standard`), plus the two local-only `.env` files.
 8. **Commit** with a message that says what changed and which input caused it.
 9. **Open or update a pull request** into `main`.
@@ -245,7 +229,7 @@ Every round, whether it starts from a chat, the page or the AI's own work, follo
 
 **Stage one, now.** Finish the project IDE and its full documentation; go through every file and folder, write the custom views, make all metadata correct; finish the docs at the project, system, trading and apps levels. Nothing inside the prediction-market domain is touched.
 
-**Stage two.** The prediction-market domain: its own docs, its strategies and their trading agents. Its earlier files wait in the planning area's archive.
+**Stage two.** The prediction-market domain: its own docs, its strategies and their trading agents. Its earlier files are in git history.
 
 **Later.** The system's machinery, the first strategy in test mode, more trading domains, agents of other kinds.
 
@@ -268,15 +252,14 @@ Every round, whether it starts from a chat, the page or the AI's own work, follo
 | Keys | `.secrets/.secrets.index.md` | How keys are kept |
 | What git ignores | `.gitignore.index.md` | Each ignore rule |
 | Metadata files | `docs/metadata.md`, `agents/system/.claude/skills/file-index/SKILL.md` | The full metadata logic; how every metadata file is written |
-| The planning area | `vision/docs/README.md`, `vision/tools/README.md` | The knowledge base and the build |
+| The records | `apps/project-IDE/data/README.md` | The inputs, decisions, changelog and plans |
+| The IDE build | `agents/system/.claude/skills/ide-build/SKILL.md`, its `scripts/README.md` | How the page is built and checked |
 
 ## Still open in the design
 
 - **Doc names:** whether `rebuild-prompt.md` keeps its name or becomes `reverse-prompt.md`.
 - **Repository name:** whether the repository and its top folder are renamed to `agent-os`.
 - **Front page:** what `README.md` at the top says; it is empty.
-- **Planning area:** when the real files become the only source and `vision/` becomes an archive; until then the build copies drafts over their places.
-- **Records:** whether the records move from `vision/docs/` into `apps/project-IDE/data/` as planned.
 - **The plain file tree:** whether `docs/file-tree.md` later gets a little information on each line.
 - **Metadata tabs:** which other files get Example, Questions, Tests and changelog files, and which custom views each kind of item gets.
 - **Prediction-market folder names:** whether its strategy and trading agent folders keep their current names.

@@ -4,7 +4,7 @@
 
 You are an AI coding agent, such as Claude Code, in an empty git repository. Build the top level of the Agent OS repository so that it ends up the same as the repository it was written from: the same top folders and files, the same names and formats, the same keys folder without any key value, the same project docs and the same metadata files. Then build every level below it by following that level's own rebuild prompt, in the order under "Build order". "The same repository" means every check under "Acceptance checks" passes.
 
-This prompt builds only the top level: the root files, `.gitignore`, `.secrets/`, `docs/`, and the top folders `agents/` and `apps/` with their own metadata files. It never builds the inside of a level; each level's prompt does that. The planning folder `vision/` is not built from a spec: it is the project's record, copied in as the owner hands it to you.
+This prompt builds only the top level: the root files, `.gitignore`, `.secrets/`, `docs/`, and the top folders `agents/` and `apps/` with their own metadata files. It never builds the inside of a level; each level's prompt does that. The project's records (the owner's inputs word for word, the decisions, the changelog and the plans, in `apps/project-IDE/data/`) are not built from a spec: the project IDE's prompt copies them in as the owner hands them to you.
 
 Never do any of these:
 
@@ -20,7 +20,7 @@ How to work:
 - Build what this file states, including what is marked "default, the owner may change it".
 - Where this file says a point is open, leave what it says in its place and list the point in your report. Never invent an answer.
 - Where you must choose a detail this file does not settle, choose the simplest thing that passes the checks, write it down as "default, the owner may change it" in that item's How it works file, and report it.
-- If the owner hands you material from the current repository (the planning folder, the research studies, the page, the server, the drafts), copy it in unchanged at the path this file or a lower prompt names, then check it.
+- If the owner hands you material from the current repository (the records, the research studies, the page, the server), copy it in unchanged at the path this file or a lower prompt names, then check it.
 - Call the owner "the owner", and "they" when a pronoun is needed.
 - When you finish, report in short plain lines: what you built, every default you chose, every open point you left, and the result of every acceptance check.
 
@@ -42,7 +42,7 @@ The project is in stage one: finish the project IDE, make all metadata correct, 
 
 **Names.** File and folder names are exact as written here, character for character. Names in `[brackets]` are placeholders and are created as written. In a name, `|` becomes `-`.
 
-**Metadata files.** Every file and folder outside `vision/` has metadata files beside it, named after the item without its extension:
+**Metadata files.** Every file and folder has metadata files beside it, named after the item without its extension:
 
 - `x.index.md`: How it works, plain prose for people.
 - `x.meta.json`: Details, the facts about the item.
@@ -115,7 +115,6 @@ agent-os/                          # the repository root (the GitHub repository 
 │   ├── project-IDE/               # lower prompt: apps/project-IDE/docs/rebuild-prompt.md
 │   ├── temp/                      # lower prompt: apps/docs/rebuild-prompt.md
 │   └── trading-ui/                # lower prompt: apps/docs/rebuild-prompt.md
-└── vision/                        # the planning area; copied as handed, never built from a spec
 ```
 
 ## Conventions
@@ -156,7 +155,7 @@ by: knowledge-base-agent
 - When you ..., ...
 ```
 
-`about` is the path from `agent-os/`; `node` is the item's id on the File Tree page (`n-` and its number in the tree notes). A file not yet moved to this format has one `## Summary` instead of the six headings. The build adds a `basis` line and may add `confirmed`; never write them by hand.
+`about` is the path from `agent-os/`, which is also the item's id on the File Tree page. A file not yet moved to this format has one `## Summary` instead of the six headings. The build adds a `basis` line and may add `confirmed`; never write them by hand.
 
 **Details file.** JSON with exactly these fields, filled where known and empty otherwise:
 
@@ -257,8 +256,8 @@ Check: `git ls-files .secrets` lists no file named `.env`; `grep '=.' .secrets/*
 
 Write the project docs in this order, each with its own skill when the skills exist (`vision-doc`, `readme-doc`, `readme-asd-doc`, `rebuild-prompt-doc`):
 
-1. `docs/vision.md`: what the Agent OS project is and why; the way of working (vibecoding, the project IDE as the owner's window); the concept (the system, the levels of docs, metadata next to everything, the way of working, the IDE, the planning area); a round of work as a story; the rules the project follows; examples; what the owner sees and does; the stages; principles; ideas still weighed; open questions; and last, the path `docs/README.md`. Plain prose, no paths except that one.
-2. `docs/README.md`: every part of the repository exactly, with the path to each part's own docs: the front page and handoff, the project docs, agents, the system with `agents/system/CLAUDE.md`, trading, apps, the project IDE, keys, metadata files, the planning area; then how a round of work goes, the stages, a table of every part's docs, and what is still open.
+1. `docs/vision.md`: what the Agent OS project is and why; the way of working (vibecoding, the project IDE as the owner's window); the concept (the system, the levels of docs, metadata next to everything, the way of working, the IDE, the records); a round of work as a story; the rules the project follows; examples; what the owner sees and does; the stages; principles; ideas still weighed; open questions; and last, the path `docs/README.md`. Plain prose, no paths except that one.
+2. `docs/README.md`: every part of the repository exactly, with the path to each part's own docs: the front page and handoff, the project docs, agents, the system with `agents/system/CLAUDE.md`, trading, apps, the project IDE, keys, metadata files, the records; then how a round of work goes, the stages, a table of every part's docs, and what is still open.
 3. `docs/README.asd.md`: `README.md` again in ASD-STE100, as under "Conventions".
 4. `docs/rebuild-prompt.md`: this file.
 5. Each doc's Example and Questions files.
@@ -275,36 +274,29 @@ Create `agents/` and `apps/`, each with its own How it works and Details files. 
 
 Check: both folders and their two metadata files exist.
 
-### vision/
-
-The planning area is the project's record while it is planned: the knowledge base with every owner input word for word, the decisions and the changelog (`vision/docs/`), the plans (`vision/plans/`), the planning copies of the helper agents and skills (`vision/.claude/`), the build scripts (`vision/tools/`), the page source (`vision/explorer/`), the page's server (`vision/server/`), the mirror of every How it works and Details file (`vision/tree/agent-os/`) and the archive (`vision/archive/`). Never write it from this prompt and never invent its content: copy it in unchanged as the owner hands it to you. If you have none, create only `vision/` with an empty `docs/inputs/` folder and report it. Items inside `vision/` get no metadata files.
-
-Check: when copied, `git diff --stat` against the owner's material shows no change under `vision/`.
-
 ## Build order
 
 1. Write the root files and `.gitignore`. Check: the root files and `.gitignore` checks.
 2. Create `.secrets/` (never any key value). Check: the `.secrets/` checks.
-3. Copy `vision/` if the owner handed it to you. Check: the `vision/` check.
-4. Create `agents/` and `apps/` with their metadata files. Check: their check.
-5. Write or copy `docs/` (step 7 of its list waits for the build). Check: the `docs/` check.
-6. Follow the lower rebuild prompts, in this order, running each one's own checks:
+3. Create `agents/` and `apps/` with their metadata files. Check: their check.
+4. Write or copy `docs/` (step 7 of its list waits for the build). Check: the `docs/` check.
+5. Follow the lower rebuild prompts, in this order, running each one's own checks:
    1. `agents/system/docs/rebuild-prompt.md`: the system agent, the shared parts, `agents/system/CLAUDE.md`, the helper agents and skills, the build scripts.
    2. `apps/docs/rebuild-prompt.md`: the apps folder, `apps/temp/`, `apps/trading-ui/`, and in its turn `apps/project-IDE/docs/rebuild-prompt.md`, the File Tree page, its server and its data.
    3. `agents/trading/docs/rebuild-prompt.md`: the folder of trading domains, its research studies, and the prediction-market domain as folders only (stage two).
    If a prompt in this list is still empty, create that level's folder with its four docs as empty files and their metadata files, report it, and go on.
-7. Write every missing or stale How it works file with the `file-index` skill, children before their folders, until `build_map.py --stale` prints nothing.
-8. Run the IDE build (`ide-build`), which also writes `docs/file-tree.md`. Check: the page check prints "page ok".
-9. Run every acceptance check and report to the owner.
+6. Write every missing or stale How it works file with the `file-index` skill, children before their folders, until `build_map.py --stale` prints nothing.
+7. Run the IDE build (`ide-build`), which also writes `docs/file-tree.md`. Check: the page check prints "page ok".
+8. Run every acceptance check and report to the owner.
 
 ## Acceptance checks
 
-1. The root holds exactly the entries of the tree above, and every file and folder outside `vision/` has its `x.index.md` and `x.meta.json`.
+1. The root holds exactly the entries of the tree above, and every file and folder has its `x.index.md` and `x.meta.json`.
 2. No key value is in git: `git ls-files | grep -E '(^|/)\.env$'` prints nothing, and for every key name listed in `secrets.index.json` or an `.env.example`, `git grep -E "<NAME>=.+"` finds nothing.
 3. Every JSON file you wrote parses (`python3 -m json.tool <file>`).
 4. `docs/` holds the five docs with their metadata files, and `README.asd.md` follows `README.md` section by section.
 5. Every lower prompt in the build order ran and its checks passed, or it was empty and is reported.
-6. `agents/trading/prediction-market/` holds folders, `.gitkeep` files and nothing else.
+6. `agents/trading/prediction-market/` holds its folders, `.gitkeep` files and its own How it works and Details files, and its `docs/` the earlier trading notes kept for stage two with their metadata files; nothing else.
 7. `build_map.py --stale` and `build_map.py --orphans` print nothing.
 8. The page tree equals the disk: the paths the page lists are exactly `git ls-files --cached --others --exclude-standard`, plus the two local-only `.env` files.
 9. `docs/file-tree.md` lists the same paths.
@@ -317,8 +309,6 @@ Leave each as stated, and list it in your report.
 - The front page text: `README.md` stays empty.
 - A new name for the rebuild prompt (`reverse-prompt.md`): keep `rebuild-prompt.md`.
 - A new name for the repository or its top folder: keep them.
-- Retiring the planning copies so the real files are the only source: keep the build copying from `vision/`.
-- Moving the records from `vision/docs/` into `apps/project-IDE/data/`: only the build's copies go there.
 - Extra information on each line of `docs/file-tree.md`: none.
 - Example, Questions, Tests and changelog files for items other than the main docs and the `.env` files: none.
 - Custom views (`x.{type}.{name}.view.html`): none from this prompt.

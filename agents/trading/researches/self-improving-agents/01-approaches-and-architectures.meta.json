@@ -1,1 +1,53 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Research note (2026-09-22) on self-improving trading agents: improving the research process vs the live trading policy, six architecture families, failure modes, a reference architecture and a build order.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the self-improving trading agents research session (2026-09-22)"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)",
+    "the system's self-improvement helpers, as background"
+  ],
+  "changes_when": "Not changed after the fact; a new finding becomes a new study.",
+  "related": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/README.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/trading/researches/self-improving-agents/",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/self-improving-agents/self-improving-agents.index.md",
+      "how": "Update the summary if its scope changes."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

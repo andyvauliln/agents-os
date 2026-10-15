@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "about": "Gives every new item its empty How it works and Details files, keeps .gitkeep in empty folders and writes docs/file-tree.md.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the owner",
+    "project-ide-agent"
+  ],
+  "readers": [
+    "ide-build"
+  ],
+  "changes_when": "The rule for which items get metadata files, the .gitkeep rule or the plain tree changes.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/index_files.py",
+      "how": "reads"
+    },
+    {
+      "path": "docs/file-tree.md",
+      "how": "writes"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-041",
+      "D-070"
+    ],
+    "inputs": [
+      "in-20261013-leave-vision",
+      "in-20261014-1241"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
+      "how": "if how it is run or what it does changes"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the script table in 'How the page is built and checked'"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked",
+    "agents/system/.claude/skills/ide-build/scripts/README.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

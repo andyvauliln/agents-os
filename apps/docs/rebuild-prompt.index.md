@@ -1,10 +1,9 @@
 ---
 about: agent-os/apps/docs/rebuild-prompt.md
-node: n-43.1.4
-basis: 5afb6d54bdd8
-written: 2026-10-12T00:00:00Z
+basis: 918d7d190e05
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # rebuild-prompt.md
 
@@ -30,7 +29,7 @@ The system's rebuild prompt lists it in its build order; the apps README lists i
 
 ## Related knowledge
 
-It uses the same names as the apps vision and README; the tree notes and the conventions for apps give its paths and rules; the IDE's own prompt builds the IDE's files.
+It uses the same names as the apps vision and README; the files on disk and `docs/file-tree.md` give its paths; the IDE's own prompt builds the IDE's files.
 
 ## Keep in mind
 

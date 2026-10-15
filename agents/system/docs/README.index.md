@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/docs/README.md
-node: n-2.1
-basis: eec9264e4a3c
-written: 2026-10-12T00:00:00Z
+basis: 772f9dd1eda5
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # README.md
 

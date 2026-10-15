@@ -1,1 +1,58 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Comparison-matrix row for study 22 (Weather markets: ensemble-forecast bucket trading and station-observation sniping): band, category, maturity, edge, capital, build time, size, expected results and competition.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the survey's skeptic reviewer agent for this study",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage3-synthesize.js"
+  ],
+  "changes_when": "Its study is re-verified or corrected, or stage 3's audit finds the row no longer matches the study.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/22-weather-markets.md",
+      "how": "built from"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js",
+      "how": "written by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage3-synthesize.js",
+      "how": "read by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/22-weather-markets.md",
+      "how": "Check the study still says the same; the study is the source."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

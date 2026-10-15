@@ -69,9 +69,9 @@ The IDE shows the project as a tree. Each file and each folder has tabs: the fil
 
 The IDE has four folders:
 
-- `current-ui/` has the page `file-tree-explorer.html` and its data `file-tree.data.json`. The build makes the data file. Do not edit the data file manually. The page is published on claude.ai.
+- `current-ui/` has the page `file-tree-explorer.html`, its data `file-tree.data.json` and `real-files.json`, the text of each file. The build makes the two data files. Do not edit them manually. The page is published on claude.ai.
 - `server/` has `server.py`, `claude_bridge.py`, `voice.py`, `server.config.json` and `README.md`. These files operate the same page on the server of the owner. On the server, notes and edits go directly into the files. A request on the page operates as a Claude Code session. The session starts in `agents/system/`. The service accepts connections only from the same machine. The owner connects through an SSH tunnel. Push, delete, install, live actions and access to `.secrets/` need the approval of the owner, or the server refuses them.
-- `data/` has the knowledge and records of the project: `inputs/` (each input of the owner, word for word), `decisions.md`, `changelog.md`, `file-tree.md` (the tree notes), `knowledge-map.json`, `sources/` (earlier knowledge notes that are kept but not used now), `memory/`, `plans/`, `archive/`, `overrides.json` and, on the server, `page-store/`.
+- `data/` has the records of the project: `inputs/` (each input of the owner, word for word), `decisions.md`, `changelog.md`, `plans/`, `archive/`, `overrides.json` and, on the server, `page-store/`.
 - `docs/` has the docs of the IDE: `vision.md`, `README.md` (the full documentation of the IDE), `README.asd.md` and `rebuild-prompt.md`.
 
 The logic of the IDE is not in its folder. The project IDE agent and its skills `ide-build` and `ide-sync` are in `agents/system/.claude/`. The build scripts are in the skill `ide-build`. Claude Code starts in `agents/system/`, thus it loads this agent and these skills. The IDE reads all the repository. It gives the page, writes the edits of the owner into files, and keeps a record of each request.

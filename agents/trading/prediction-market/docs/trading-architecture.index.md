@@ -1,12 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-architecture.md
-node: n-19.6.6
-basis: 7bc799d71a36
-written: 2026-10-07T18:56:50Z
+basis: be348aa37770
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-architecture.md
 
-## Summary
+## What it is
 
-The trading layer of the system's `architecture.md`: how the domain's folder nests its strategies and their variants, the strategy and trading-agent levels below the domain agent, how a strategy agent runs the strategy loop through its self-improvement sub-agent, where the trading items of the owner's first agent-folder list went, the domain config and dashboard, and how strategy and variant sessions run. Read it with the system's note; a later trading domain copies it.
+An earlier note on the trading side of the architecture: how the domain's folder nests its strategies and their variants, the strategy and trading-agent levels below the domain agent, how a strategy runs its improvement loop, the domain config, and how strategy and variant sessions run. It is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/docs.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
+
+## Keep in mind
+
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

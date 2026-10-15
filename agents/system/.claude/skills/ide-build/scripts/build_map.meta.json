@@ -1,23 +1,68 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Keeps the How it works files honest: fresh, stale, missing, empty, orphaned; context, set and confirm.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "project-ide-agent",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "ide-build",
+    "file-index",
+    "agents/system/.claude/skills/ide-build/scripts/enrich.py"
+  ],
+  "changes_when": "The rule for a fresh How it works file changes, or an option is added.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/index_files.py",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/file-index/SKILL.md",
+      "how": "read by"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-033",
+      "D-036",
+      "D-039",
+      "D-041",
+      "D-049",
+      "D-050"
+    ],
+    "inputs": [
+      "in-20261005-1041",
+      "in-20261005-1254",
+      "in-20261006-2104",
+      "in-20261005-0925"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
+      "how": "if how it is run or what it does changes"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the script table in 'How the page is built and checked'"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked",
+    "agents/system/.claude/skills/ide-build/scripts/README.md"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

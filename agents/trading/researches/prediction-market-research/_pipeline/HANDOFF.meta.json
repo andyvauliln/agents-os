@@ -1,1 +1,61 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Hand-over notes of the survey: what each session finished (42 studies by 2026-09-29), the recipe, verifier lessons, facts that supersede the packs and the next batch (58-63).",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the Polymarket strategy survey sessions (2026-09-20 to 2026-09-29)"
+  ],
+  "readers": [
+    "the owner",
+    "a session that resumes the survey",
+    "knowledge-base-agent (when it writes the trading docs)"
+  ],
+  "changes_when": "At the end of every survey session, with a new update at the top.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/args.json",
+      "how": "links to"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage2-write-verify.js",
+      "how": "links to"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage3-synthesize.js",
+      "how": "links to"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/",
+      "how": "links to"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/args.json",
+      "how": "Record the finished items and the remaining slices in the same session."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

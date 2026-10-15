@@ -1,23 +1,66 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The guide to the build scripts: how to build and publish the page and how How it works files and page saves are handled.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "project-ide-agent",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "project-ide-agent",
+    "knowledge-base-agent",
+    "the owner"
+  ],
+  "changes_when": "A script is added, removed or run differently, or the publish steps change.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "same format as"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041",
+      "D-050"
+    ],
+    "inputs": [
+      "in-20261005-1041",
+      "in-20261005-1254",
+      "in-20261006-2104"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the part 'How the page is built and checked'"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "if the steps change"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

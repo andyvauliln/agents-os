@@ -1,23 +1,119 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The File Tree page itself, one HTML file: the tree of every file and folder with search and filters, and each item's tabs.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "project-ide-agent",
+    "ide-build",
+    "the owner, by request on the page"
+  ],
+  "readers": [
+    "the owner",
+    "apps/project-IDE/server/server.py",
+    "agents/system/.claude/skills/ide-build/scripts/check_page.js",
+    "agents/system/.claude/skills/ide-build/scripts/enrich.py"
+  ],
+  "changes_when": "The owner asks for a change to the page.",
+  "related": [
+    {
+      "path": "apps/project-IDE/current-ui/file-tree.data.json",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/server/server.py",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/check_page.js",
+      "how": "checked by"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
+      "how": "read by"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "written by"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-038",
+      "D-039",
+      "D-041",
+      "D-042",
+      "D-043",
+      "D-044",
+      "D-046",
+      "D-057",
+      "D-060",
+      "D-061",
+      "D-065",
+      "D-069"
+    ],
+    "inputs": [
+      "in-20261005-0908",
+      "in-20261005-1403",
+      "in-20261005-1421",
+      "in-20261005-1433",
+      "in-20261005-1545",
+      "in-20261006-1017",
+      "in-20261006-1129",
+      "in-20261009-1019",
+      "in-20261009-1459",
+      "in-20261009-1714",
+      "in-20261009-2005",
+      "in-20261013-wysiwyg",
+      "in-20261013-disk-tree",
+      "in-20261014-1047"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "Change the section \"The page\" (and \"The three places the page runs\" if a mode changed)."
+    },
+    {
+      "path": "apps/project-IDE/docs/README.asd.md",
+      "how": "Write the changed sections again in ASD-STE100, in the same order."
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.md",
+      "how": "Change the exact spec of the same part, last."
+    },
+    {
+      "path": "apps/project-IDE/server/server.py",
+      "how": "If the way the page talks to the server changed, change the server and test both places."
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/check_page.js",
+      "how": "If a tab or a control changed, change the page check."
+    },
+    {
+      "path": "apps/project-IDE/current-ui/file-tree-explorer.questions.md",
+      "how": "Remove answered questions and add new ones."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "apps/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#The page"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

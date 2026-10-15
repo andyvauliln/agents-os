@@ -1,23 +1,71 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The decision log: every owner decision with its date, reasons, status, source inputs and the files it changed, never removed.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "knowledge-base-agent",
+    "knowledge-intake"
+  ],
+  "readers": [
+    "every AI session on the project",
+    "the owner",
+    "agents/system/.claude/skills/ide-build/scripts/enrich.py"
+  ],
+  "changes_when": "The owner decides something that changes the system, its rules or its structure.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/data/changelog.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "written by"
+    },
+    {
+      "path": "docs/metadata.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-033",
+      "D-041",
+      "D-071"
+    ],
+    "inputs": [
+      "in-20260930-1533",
+      "in-20261005-1043",
+      "in-20261014-1439"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/changelog.md",
+      "how": "Add a line for the round that recorded the decision."
+    },
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "Fill processed_into of each source input with the new decision."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md#17. Decisions"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

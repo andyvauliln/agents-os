@@ -1,1 +1,42 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Result of archify visual-check on diagrams/08-production-stack.html: status fail, because Chromium could not run on the machine (review still pending).",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the trading-agent architecture research session (archify visual-check output)"
+  ],
+  "readers": [
+    "the owner"
+  ],
+  "changes_when": "Archify visual-check is run again on the diagram.",
+  "related": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/diagrams/08-production-stack.html",
+      "how": "checked by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

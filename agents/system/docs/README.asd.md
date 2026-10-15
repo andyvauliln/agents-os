@@ -56,7 +56,7 @@ keys folder ──► one shared loader ──► only the script that needs a k
 | Research | The research of each level and its results | `agents/system/research/`, the `research/` of each level |
 | Self-improvement helpers | Make better versions at each level | the `.claude/agents/` of each level |
 | Each agent's AI setup | The instructions, settings, skills and helpers of each level | the `.claude/` of each level |
-| The knowledge base and the docs | Keep all knowledge and write the documents | `agents/system/docs/`, the planning area `vision/` |
+| The knowledge base and the docs | Keep all knowledge and write the documents | `agents/system/docs/`, the records in `apps/project-IDE/data/` |
 | The project IDE | The window of the owner on the project: the File Tree page | `apps/project-IDE/`, looked after from `agents/system/.claude/` |
 | The server | The computer that operates the system, and the page service on it | one server of the owner |
 
@@ -86,7 +86,6 @@ agent-os/
 ├── apps/                   our own apps, the outside apps we use, research clones
 │   ├── docs/               the docs for all apps
 │   └── project-IDE/        the owner's window: the File Tree page, its server, its records
-└── vision/                 the planning area: inputs, decisions, notes, plans, build tools, page source
 ```
 
 This is the folder of the system domain, `agents/system/`:
@@ -99,7 +98,7 @@ agents/system/
 ├── scripts/           system/ (the machinery), workers/ (shared collectors)
 ├── logs/              system/, services/, workers/, subagents/
 ├── data/              system/, workers/, subagents/
-├── docs/              vision.md, README.md, README.asd.md, rebuild-prompt.md
+├── docs/              vision.md, README.md, README.asd.md, rebuild-prompt.md; how-to/, the runbooks
 ├── tests/             agents/, scripts/
 ├── research/          index.json and one folder per item
 ├── package.json       the JavaScript packages the shared scripts use
@@ -538,9 +537,9 @@ Each `.claude/` contains the same parts:
 - `agent-memory/`: the memory that the helpers keep and share through the repository.
 - `agent-memory-local/`: memory on one computer only.
 
-The instructions of the system are one level up, in `agents/system/CLAUDE.md`. In the `.claude/` of the system, `agents/` contains the three helpers. `skills/` contains eight skills: `knowledge-intake`, `file-index`, `vision-doc`, `readme-doc`, `rebuild-prompt-doc`, `change-plan`, `ide-build` and `ide-sync`. Two more skills are planned for this stage. `readme-asd-doc` writes the ASD-STE100 version of each README.
+The instructions of the system are one level up, in `agents/system/CLAUDE.md`. In the `.claude/` of the system, `agents/` contains the three helpers. `skills/` contains eleven skills: `knowledge-intake`, `file-index`, `vision-doc`, `readme-doc`, `readme-asd-doc`, `rebuild-prompt-doc`, `claude-md-doc`, `change-plan`, `make-questions`, `ide-build` and `ide-sync`. `readme-asd-doc` writes the ASD-STE100 version of each README.
 
-`claude-md-doc` keeps `CLAUDE.md` correct. The other folders contain only general placeholders. The two settings files are empty. During the planning, the source of the helpers and skills is the planning area. The build copies them into their location.
+`claude-md-doc` keeps `CLAUDE.md` correct. The other folders contain only general placeholders. The two settings files are empty. Edit the helpers and skills where they are.
 
 No level links the `.claude/` of another level. No agent keeps documents in its `.claude/`. Its documents are in its own `docs/`. We propose that the instructions of each agent use one common base, the common prompt. We also propose a hook in the `settings.json` of each level. The hook runs relink when the session edits its links file.
 
@@ -582,7 +581,7 @@ The owner sees the plan before somebody builds the change. After the build, each
 
 The documents have two types of readers. The owner reads them to understand and control the project. An AI reads them before it changes an item. Thus they must be exact enough for action. For each file, an AI can get the full context.
 
-The context has the notes of the file and the knowledge that applies to it, directly and from each folder above it. It also has the related files, agents, skills and documents. When a file changes, these relations tell what else must change. All of these changes occur in the same round. Each question of the owner gets its answer in the location where the owner can find it.
+The context has the How it works file and the Details file of the file, and the How it works file of each folder above it. It also has the related files, agents, skills and documents. When a file changes, these relations tell what else must change. All of these changes occur in the same round. Each question of the owner gets its answer in the location where the owner can find it.
 
 The documents have levels:
 
@@ -599,27 +598,26 @@ Each level has four documents:
 3. `README.asd.md`: the same README in ASD-STE100. The owner uses it to compare with the source.
 4. `rebuild-prompt.md`: the exact specification that an AI coding agent uses to build the folder of that level again.
 
-In one level, write the documents in this sequence in each round. Across levels, write the lowest changed level first. Then write each level above it. `agents/system/docs/` contains the four documents of the system and `subagents.link/`.
+In one level, write the documents in this sequence in each round. Across levels, write the lowest changed level first. Then write each level above it. `agents/system/docs/` contains the four documents of the system, `how-to/` and `subagents.link/`.
+
+`how-to/` contains the earlier runbooks for usual tasks: make an agent, add a worker, a link, a key or a test, and process an input. They stay until we write each one again for the current system.
 
 `subagents.link/` has one link for each domain, to the documents of that domain. The page build makes `docs/file-tree.md` in each round. This file is a plain list of all paths in the repository.
 
 Notes and documents are separate. The documents are for persons and for AI. They are plain. A person who is not technical can read them.
 
-They contain no reference numbers, codes or history. The notes are for agents. During the planning, the notes are in the planning area `vision/`:
+They contain no reference numbers, codes or history. The notes are for agents. The notes of each item are its metadata files, next to it. The records are in `apps/project-IDE/data/`:
 
-- `vision/docs/inputs/`: each input of the owner, word for word;
-- `vision/docs/decisions.md`: the decisions and their reasons;
-- `vision/docs/changelog.md`: the changes;
-- `vision/docs/file-tree.md`: the tree notes, with one section for each file and folder;
-- the knowledge map;
-- `vision/plans/`: the plans;
-- `vision/.claude/memory/`: the work notes that each Claude reads.
+- `inputs/`: each input of the owner, word for word;
+- `decisions.md`: the decisions and their reasons;
+- `changelog.md`: the changes;
+- `plans/`: the plans.
 
-The planned location of the records is `apps/project-IDE/data/`. The build keeps a copy there.
+There is no memory folder. The lasting rules are in `agents/system/CLAUDE.md`.
 
-Open subjects: Where do the records go when the planning area closes? Does a person write the lists of agents and workers, or does a script make them? Must a check compare the tree notes with the real folders automatically?
+Open subject: Does a person write the lists of agents and workers, or does a script make them?
 
-Its docs: `agents/system/.claude/agents/knowledge-base-agent.md` and `vision/docs/README.md`
+Its docs: `agents/system/.claude/agents/knowledge-base-agent.md` and `apps/project-IDE/data/README.md`
 
 ### The project IDE
 
@@ -629,10 +627,10 @@ The File Tree page is a map of all folders and files that you can click. It show
 
 The app is in `apps/project-IDE/`, and it has its own documents. The system domain contains the items that look after it. The project IDE agent is `agents/system/.claude/agents/project-ide-agent.md`. It has two skills:
 
-- `ide-build`: makes the data of the page from the repository. It writes the plain file tree. It checks the page at the width of a desktop and of a phone. It publishes the page at the same link. Its scripts are in `agents/system/.claude/skills/ide-build/scripts/`: `parse.py`, `enrich.py`, `tabs.py`, `build_map.py`, `index_files.py` and `check_page.js`.
+- `ide-build`: makes the data of the page from the repository. It writes the plain file tree. It checks the page at the width of a desktop and of a phone. It publishes the page at the same link. Its scripts are in `agents/system/.claude/skills/ide-build/scripts/`: `materialize.py`, `enrich.py`, `tabs.py`, `build_map.py`, `index_files.py`, `check_tree.py` and `check_page.js`.
 - `ide-sync`: brings back the changes from the page. It gets all items that the owner left on the page. It writes each edit into its file, word for word. It gives each message to the knowledge base agent. It runs the requests. Then it builds the page again.
 
-During the planning, three items are in the planning area. The build scripts are in `vision/tools/`. The source of the page is in `vision/explorer/`. The code of the server is in `vision/server/`.
+The source of the page is in `apps/project-IDE/current-ui/`. The code of the server is in `apps/project-IDE/server/`. Edit each item where it is.
 
 The page shows the tree exactly as the files on the disk. A switch shows or hides the notes of each file. Each item has tabs: File, How it works and Details. On the File tab, the owner can read, edit and comment. An Example tab, a Questions tab or an ASD-STE100 tab shows only when its file exists.
 
@@ -656,7 +654,7 @@ The repository is on GitHub. The owner works on it from two locations: Claude in
 
 The File Tree page also runs on the server of the owner. Claude Code operates behind its request box. Each request on the page runs as a Claude Code session that starts in `agents/system/`. Thus the session reads the instructions, helpers and skills of the system.
 
-During the planning, you start the page from the top of the repository with `python3 vision/server/server.py`. The service listens only on its own computer. The owner gets to it through a private tunnel, never through the open internet.
+You start the page from the top of the repository with `python3 apps/project-IDE/server/server.py`. The service listens only on its own computer. The owner gets to it through a private tunnel, never through the open internet.
 
 The page cannot open the keys folder. Some actions wait for the owner to push Allow or Refuse on the page:
 
@@ -690,7 +688,7 @@ Its docs: `apps/project-IDE/docs/README.md`
 | Research | `agents/system/research/research.index.md` | The research list of the system |
 | Self-improvement helpers | `agents/system/.claude/agents/sys-self-improvement-agent.index.md` | The self-improvement helper of the system |
 | Each agent's AI setup | `agents/system/.claude/.claude.index.md` | The parts of an AI folder |
-| The knowledge base and the docs | `agents/system/.claude/agents/knowledge-base-agent.md`, `vision/docs/README.md` | How the system keeps the knowledge and writes the documents |
+| The knowledge base and the docs | `agents/system/.claude/agents/knowledge-base-agent.md`, `apps/project-IDE/data/README.md` | How the system keeps the knowledge and writes the documents |
 | The project IDE | `apps/project-IDE/docs/README.md` | The File Tree page, and how the system builds, checks and publishes it |
 | The server | `apps/project-IDE/docs/README.md` | The needs of the server, how to start it and get to it, and its settings |
 
@@ -740,9 +738,7 @@ These design subjects are not decided. The list shows them by part. The vision c
 - Which skills do all agents share? Can an agent get a shared skill as a link?
 
 **The knowledge base and the docs**
-- Where do the records go when the planning area `vision/` closes?
 - Does a person write the lists of agents, workers and other items? Or does a script make them from one list that the screens of the owner also read?
-- Must a check compare the tree notes with the real folders automatically?
 
 **The project IDE**
 - How does the server of the owner update the published page on claude.ai?

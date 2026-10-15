@@ -1,23 +1,55 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The pattern of one shared worker's output folder: dated files and a stable latest file that agents link.",
+  "kind": "folder",
+  "state": "name pattern",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the shared worker it is named after, at run time"
+  ],
+  "readers": [
+    "agents, through file links to latest files",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "A shared worker is created; then every run writes a dated file and replaces the latest one.",
+  "related": [
+    {
+      "path": "agents/system/scripts/workers/",
+      "how": "written by"
+    },
+    {
+      "path": "agents/system/logs/workers/[worker]/",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/data/workers/",
+      "how": "summed up in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-007",
+      "D-010"
+    ],
+    "inputs": [
+      "in-20260929-1545"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/data/workers/workers.index.md",
+      "how": "keep the folder summary in step"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Workers and data"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

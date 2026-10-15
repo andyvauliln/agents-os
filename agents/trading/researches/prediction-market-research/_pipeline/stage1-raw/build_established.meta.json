@@ -1,1 +1,56 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Python script that builds the established strategy list (band 01-49) from the stage 1 consolidator and critic outputs.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the Polymarket strategy survey session that ran stage 1"
+  ],
+  "readers": [
+    "a session that rebuilds the strategy lists",
+    "the owner"
+  ],
+  "changes_when": "A session changes how the established strategies are kept, split or moved to the speculative band.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/consolidate_established.json",
+      "how": "reads"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/critic_established.json",
+      "how": "reads"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S0-strategy-list-established.json",
+      "how": "writes"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S0-strategy-list-established.json",
+      "how": "Run the script again to rebuild the list."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

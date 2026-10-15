@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/trading/docs/rebuild-prompt.md
-node: n-56.1.3
-basis: ff738fca7272
-written: 2026-10-12T00:00:00Z
+basis: d578bb146c31
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # rebuild-prompt.md
 

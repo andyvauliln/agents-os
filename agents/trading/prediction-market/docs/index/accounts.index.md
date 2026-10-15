@@ -1,17 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/index/accounts.md
-node: n-19.6.18.1
-basis: 12b78d2b7f6c
-written: 2026-10-07T18:56:50Z
+basis: bb67631cfc02
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:08:15Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # accounts.md
 
-## Summary
+## What it is
 
-The list of every trading account of the domain, one row each: id, venue, mode, whether it is funded and approved by the owner, its capital, the agent that uses it and its key names, never values. It is written by hand from the domain config's `accounts` and the secrets index, and funding is tracked only here and in the config. No account exists yet; the one row is an example, and the id format is open.
+An earlier list for every trading account of the domain, one row each: id, venue, mode, whether it is funded and approved by the owner, its capital, the agent that uses it and its key names, never values. No account exists yet; the one row is an example. It is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/index/index.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
 
 ## Keep in mind
 
-- When you add or fund an account, update its row here and its entry in the domain config together; only the owner approves a live one.
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

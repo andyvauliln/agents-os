@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The prompt an AI coding agent follows to build apps/ again: tree, metadata format, clone and fork rules, build order, checks, and each app's own prompt.",
+  "about": "The prompt an AI follows to build apps/ again: tree, metadata, clone and fork rules, build order, checks and each app's own prompt.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -12,31 +12,39 @@
     "the owner, on the File Tree page"
   ],
   "readers": [
-    "an AI coding agent rebuilding the repository",
-    "an agent checking apps/ against its spec",
+    "an AI coding agent that rebuilds the repository",
+    "an agent that checks apps/ against its design",
     "the owner"
   ],
-  "changes_when": "the design of apps/ changes: an app, a rule for outside code, the metadata format or the build order; last of the four apps docs",
+  "changes_when": "The design of apps/ changes: an app, a rule for outside code, the metadata or the build order; written last of the apps docs.",
   "related": [
     {
-      "path": "agents/system/docs/rebuild-prompt.md",
-      "how": "calls it in its build order"
+      "path": "apps/docs/README.md",
+      "how": "built from"
+    },
+    {
+      "path": "apps/docs/vision.md",
+      "how": "built from"
+    },
+    {
+      "path": "docs/rebuild-prompt.md",
+      "how": "read by"
     },
     {
       "path": "apps/project-IDE/docs/rebuild-prompt.md",
-      "how": "points down to it"
-    },
-    {
-      "path": "apps/docs/README.md",
-      "how": "same names and parts"
+      "how": "links to"
     },
     {
       "path": ".gitignore",
-      "how": "must ignore apps/temp/*/repo/"
+      "how": "links to"
     },
     {
       "path": "agents/system/.claude/skills/rebuild-prompt-doc/SKILL.md",
-      "how": "written with (app outline)"
+      "how": "written by"
+    },
+    {
+      "path": "apps/docs/rebuild-prompt.example.md",
+      "how": "same format as"
     }
   ],
   "sources": {
@@ -50,36 +58,33 @@
     ],
     "inputs": [
       "in-20261005-1517",
-      "in-20261006-1016",
+      "in-20261006-1009",
       "in-20261006-2206",
       "in-20261012-stage1"
     ],
-    "notes": [
-      "conv-apps",
-      "apps-docs-clones-forks",
-      "human-docs-style"
-    ]
+    "notes": []
   },
   "update_with": [
     {
-      "path": "agents/system/docs/rebuild-prompt.md",
-      "how": "its apps step points here; keep the order consistent"
+      "path": "docs/rebuild-prompt.md",
+      "how": "Its build order calls this prompt; keep the order the same."
     },
     {
-      "path": "vision/tree/agent-os/apps/docs/rebuild-prompt.index.md",
-      "how": "How it works refreshed"
+      "path": "apps/docs/rebuild-prompt.example.md",
+      "how": "Update the outline when a section is added or renamed."
+    },
+    {
+      "path": "apps/docs/rebuild-prompt.questions.md",
+      "how": "Add or settle an open point."
     }
   ],
   "inherits": [
-    "conv-apps"
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "docs/README.md#Apps",
+    "apps/docs/README.md#The apps docs"
   ],
-  "features": [
-    "Apps and outside code",
-    "Rebuild from prompts"
-  ],
+  "features": [],
   "views": [],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "how_it_works": {}
 }

@@ -1,1 +1,52 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Nine archify diagram specs (architecture, dataflow, workflow, sequence and lifecycle) that the diagram pages are rendered from.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the trading-agent architecture research session"
+  ],
+  "readers": [
+    "the archify renderer",
+    "the owner"
+  ],
+  "changes_when": "An architecture's diagram is changed or added.",
+  "related": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/diagrams/",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/README.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/diagrams/",
+      "how": "Render the diagram again from the changed spec (see README, Regenerating the diagrams)."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

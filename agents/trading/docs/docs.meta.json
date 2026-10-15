@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "Trading's own docs: vision, README, README in ASD-STE100 and rebuild prompt.",
+  "about": "Trading's own docs for people and AI: vision, README, README in ASD-STE100 and rebuild prompt.",
   "kind": "folder",
   "state": "written",
   "status": "decided",
@@ -9,22 +9,25 @@
   "generated_by": null,
   "writers": [
     "knowledge-base-agent",
-    "the owner, on the File Tree page"
+    "the owner"
   ],
   "readers": [
     "the owner",
-    "every trading domain agent",
-    "an AI rebuilding trading"
+    "knowledge-base-agent"
   ],
-  "changes_when": "a doc is added, removed or rewritten",
+  "changes_when": "A trading doc is added, removed or rewritten.",
   "related": [
     {
       "path": "agents/system/docs/",
-      "how": "parent docs"
+      "how": "same format as"
     },
     {
-      "path": "agents/trading/prediction-market/docs/",
-      "how": "child docs, stage two"
+      "path": "docs/",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "documented in"
     }
   ],
   "sources": {
@@ -32,33 +35,37 @@
       "D-048",
       "D-053",
       "D-059",
-      "D-064"
+      "D-064",
+      "D-067"
     ],
     "inputs": [
       "in-20261009-0940",
-      "in-20261012-stage1"
+      "in-20261012-stage1",
+      "in-20261014-metadata-logic"
     ],
     "notes": []
   },
   "update_with": [
     {
       "path": "agents/trading/trading.index.md",
-      "how": "sum up the docs folder"
+      "how": "Sum up the docs folder again."
     },
     {
       "path": "agents/system/docs/README.md",
-      "how": "names trading's docs"
+      "how": "Keep the path to trading's docs right."
+    },
+    {
+      "path": "docs/README.md",
+      "how": "Keep its map of the doc levels right."
     }
   ],
   "inherits": [
-    "the docs hierarchy: vision, README, rebuild prompt at every level"
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "docs/README.md",
+    "docs/metadata.md"
   ],
-  "features": [
-    "Docs at every level"
-  ],
+  "features": [],
   "views": [],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "how_it_works": {}
 }

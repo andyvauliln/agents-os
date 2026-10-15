@@ -1,23 +1,61 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The field guides and extra tabs of the page: settings keys, agent overviews, jobs, links, tests and key names, never key values.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "project-ide-agent"
+  ],
+  "readers": [
+    "agents/system/.claude/skills/ide-build/scripts/enrich.py"
+  ],
+  "changes_when": "A field guide or an extra tab of the page changes, or a settings file gains a key.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/enrich.py",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/configs/models.config.json",
+      "how": "links to"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041",
+      "D-050"
+    ],
+    "inputs": [
+      "in-20261005-1041",
+      "in-20261005-1254",
+      "in-20261006-2104",
+      "in-20260930-0905"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
+      "how": "if how it is run or what it does changes"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the script table in 'How the page is built and checked'"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked",
+    "agents/system/.claude/skills/ide-build/scripts/README.md"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

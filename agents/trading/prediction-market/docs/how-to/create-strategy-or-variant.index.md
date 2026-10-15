@@ -1,16 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/how-to/create-strategy-or-variant.md
-node: n-19.6.17.1
-basis: 8740f00afb25
-written: 2026-10-07T18:56:50Z
+basis: 5b4b81c95926
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # create-strategy-or-variant.md
 
-## Summary
+## What it is
 
-The runbook for creating a strategy or a variant, the trading steps added to the system's `how-to/create-agent.md`. Most new variants come from a strategy's self-improvement sub-agent; the name starts with the strategy's ID, the config may only tighten the domain's risk caps, funding is tracked in `index/accounts.md`, and a variant from the loop gets a research item and a line in the strategy's history. The steps are proposed.
+An earlier runbook for creating a strategy or a variant: the name starts with the strategy's id, the config may only tighten the domain's risk caps, and a variant from the improvement loop gets a research item and a line in the strategy's history. The steps are proposals; it is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/how-to/how-to.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
 
 ## Keep in mind
 
-- When you create a variant, check its name starts with its strategy's ID and its platform/model part matches its route.
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

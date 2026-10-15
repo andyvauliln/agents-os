@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/docs/
-node: n-2
-basis: 0ce9b58830db
-written: 2026-10-12T00:00:00Z
+basis: 2f047acb49bc
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # docs/
 
@@ -14,11 +13,11 @@ The system domain's docs: four docs about the system, read in order. `vision.md`
 
 ## Who looks after it
 
-The knowledge base agent writes the four docs and their notes; the owner can edit them on the File Tree page; `relink` makes the child links.
+The knowledge base agent writes the four docs; the owner can edit them on the File Tree page; `relink` makes the child links.
 
 ## When and how it changes
 
-After every owner input or change that touches the system, the docs are updated in the order vision, README, README.asd, rebuild prompt, then the notes of each changed doc.
+After every owner input or change that touches the system, the docs are updated in the order vision, README, README.asd, rebuild prompt.
 
 ## Who uses it, and when
 
@@ -30,10 +29,10 @@ The owner, every Claude that works on the system (through `CLAUDE.md`'s reading 
 
 ## Related knowledge
 
-The project's docs are in `docs/`; trading's in `agents/trading/docs/`; the apps' in `apps/docs/` and `apps/project-IDE/docs/`. The records the docs are built from are in the planning area, `vision/docs/`.
+The project's docs are in `docs/`; trading's in `agents/trading/docs/`; the apps' in `apps/docs/` and `apps/project-IDE/docs/`. The records the docs are built from (the owner's inputs and the decisions) are in `apps/project-IDE/data/`.
 
 ## Keep in mind
 
 - When a lower level's docs change, check these four, then the project's.
-- When you add a doc here, add its notes and list it in the README and the rebuild prompt.
+- When you add a doc here, list it in the README and the rebuild prompt.
 - When you write for people, use no reference numbers, ids or decision codes.

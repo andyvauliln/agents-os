@@ -1,23 +1,62 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "On the owner's server, the page's own store as files: one JSON document per note, edit, change or message.",
+  "kind": "folder",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "apps/project-IDE/server/server.py"
+  ],
+  "readers": [
+    "project-ide-agent",
+    "ide-sync"
+  ],
+  "changes_when": "The owner saves a note, an edit or a message on the server page; a sync folds the documents into the files.",
+  "related": [
+    {
+      "path": "apps/project-IDE/server/server.py",
+      "how": "written by"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-sync/SKILL.md",
+      "how": "read by"
+    },
+    {
+      "path": "apps/project-IDE/server/server.config.json",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-043"
+    ],
+    "inputs": [
+      "in-20261005-1517"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "If a collection or its fields change, change \"How the owner's work comes back\"."
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-sync/SKILL.md",
+      "how": "Keep the way it reads the store the same."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "apps/project-IDE/docs/README.md#How the owner's work comes back"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

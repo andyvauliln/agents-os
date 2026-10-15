@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "about": "The system's README again in ASD-STE100 Simplified Technical English, same content and order; README.md is the source.",
+  "about": "The system's README again in ASD-STE100 Simplified Technical English, with the same content and order; README.md is the source.",
   "kind": "file",
   "state": "written",
   "status": "decided",
@@ -8,29 +8,35 @@
   "secret": false,
   "generated_by": null,
   "writers": [
-    "knowledge-base-agent, right after the README (planned skill readme-asd-doc)"
+    "knowledge-base-agent with the readme-asd-doc skill, right after the README"
   ],
   "readers": [
     "the owner, to compare with the README"
   ],
-  "changes_when": "every time README.md changes",
+  "changes_when": "Every time README.md changes.",
   "related": [
     {
       "path": "agents/system/docs/README.md",
-      "how": "source"
+      "how": "built from"
+    },
+    {
+      "path": "docs/README.asd.md",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/.claude/skills/readme-asd-doc/",
+      "how": "written by"
+    },
+    {
+      "path": "agents/system/docs/README.asd.example.md",
+      "how": "documented in"
     }
   ],
   "sources": {
     "decisions": [
-      "D-062",
       "D-064"
     ],
     "inputs": [
-      "in-20261009-0940",
-      "in-20261012-tree",
-      "in-20261012-real",
-      "in-20261012-secrets",
-      "in-20261012-metadisk",
       "in-20261012-stage1"
     ],
     "notes": []
@@ -46,16 +52,11 @@
     }
   ],
   "inherits": [
-    "README.md in this folder"
+    "agents/system/docs/README.md",
+    "docs/metadata.md",
+    "agents/system/CLAUDE.md#Rules"
   ],
-  "features": [
-    "Knowledge base"
-  ],
-  "views": [
-    "doc (shared view)"
-  ],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "features": [],
+  "views": [],
+  "how_it_works": {}
 }

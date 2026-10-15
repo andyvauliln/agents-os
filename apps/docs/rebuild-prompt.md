@@ -48,10 +48,10 @@ apps/
 │   ├── project-IDE.index.md
 │   ├── project-IDE.meta.json
 │   ├── docs/                          # vision.md, README.md, README.asd.md, rebuild-prompt.md
-│   ├── current-ui/                    # file-tree-explorer.html, file-tree.data.json
+│   ├── current-ui/                    # file-tree-explorer.html, file-tree.data.json, real-files.json
 │   ├── server/                        # README.md, server.py, claude_bridge.py, voice.py, server.config.json
-│   └── data/                          # README.md, file-tree.md, decisions.md, changelog.md, inputs/, knowledge-map.json,
-│                                      # sources/, page-store/, overrides.json, memory/, plans/, archive/
+│   └── data/                          # README.md, decisions.md, changelog.md, inputs/, plans/, archive/,
+│                                      # overrides.json, page-store/
 ├── temp/                              # research clones
 │   ├── temp.index.md
 │   ├── temp.meta.json

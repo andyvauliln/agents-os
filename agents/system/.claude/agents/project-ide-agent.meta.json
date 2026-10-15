@@ -1,23 +1,100 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The project IDE agent: builds and publishes the File Tree page and brings the owner's page work back into the files.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "Claude Code started in agents/system/ (as a helper)",
+    "the server's Claude Code session behind the page's request box",
+    "the owner"
+  ],
+  "changes_when": "The way the page is built, synced or deleted from changes, or its skills change.",
+  "related": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-sync/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/file-index/SKILL.md",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/current-ui/file-tree-explorer.html",
+      "how": "writes"
+    },
+    {
+      "path": "apps/project-IDE/current-ui/file-tree.data.json",
+      "how": "writes"
+    },
+    {
+      "path": "agents/system/.claude/agents/knowledge-base-agent.md",
+      "how": "links to"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041",
+      "D-042",
+      "D-043",
+      "D-044",
+      "D-046",
+      "D-049"
+    ],
+    "inputs": [
+      "in-20261005-1041",
+      "in-20261005-1043",
+      "in-20261005-1254",
+      "in-20261005-1545",
+      "in-20261006-1017",
+      "in-20261006-2047"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/.claude/agents/project-ide-agent.index.md",
+      "how": "if its job or skills change"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "the part 'The project IDE', if what it says about this item changes"
+    },
+    {
+      "path": "agents/system/docs/README.asd.md",
+      "how": "write it again with readme-asd-doc right after the system README changes"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the part 'Who looks after it'"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.asd.md",
+      "how": "write it again after the IDE README"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

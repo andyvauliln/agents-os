@@ -21,7 +21,7 @@ Every level has its own `docs/` folder with the same four docs: `vision.md`, `RE
 
 | Level | Folder | What its prompt builds | Children's prompts it lists |
 |---|---|---|---|
-| Project | `docs/` at the top of the repository | The top of the repository: the front page `README.md`, `.gitignore`, `docs/` (with how `docs/file-tree.md` is built), the keys folder `.secrets/` (folders, `secrets.index.json` with key names only, empty `.env` files that git ignores), the rule that every file and folder outside `vision/` has its metadata files, the planning area `vision/` and its build tools, `agents/` and `apps/` as folders, and how the project is worked on (git, branches, pull requests into `main`). | system, apps, trading |
+| Project | `docs/` at the top of the repository | The top of the repository: the front page `README.md`, `.gitignore`, `docs/` (with how `docs/file-tree.md` is built), the keys folder `.secrets/` (folders, `secrets.index.json` with key names only, empty `.env` files that git ignores), the rule that every file and folder has its metadata files, `agents/` and `apps/` as folders, and how the project is worked on (git, branches, pull requests into `main`). | system, apps, trading |
 | System | `agents/system/docs/` | `agents/system/`: `CLAUDE.md`, the system agent's `.claude/` with its helper agents and skills, configs, scripts, logs, data, docs, tests, research, the start and init scripts. | none in stage one; each domain's prompt in stage two |
 | Trading | `agents/trading/docs/` | `agents/trading/`: its `docs/`, its `researches/` (named as existing content, not generated), and one folder per trading domain, with the stage two domains as empty folders. | each trading domain's prompt, in stage two |
 | Apps | `apps/docs/` | `apps/`: its `docs/`, one folder per app with its `docs/`, the `temp/` rule for research clones. | each app's prompt |
@@ -43,10 +43,10 @@ Inside a level the docs are always written in this order: `vision.md` (`vision-d
 
 ## What to read before writing
 
-- **The tree notes** (`vision/docs/file-tree.md`, one section per file and folder, with every name, format and rule) and the real repository (`git ls-files`, leaving out `vision/archive/`). Every path in the prompt comes from them; where they disagree, the newest decision wins, and the conflict goes in your report.
+- **The real repository** (`git ls-files`) and the How it works and Details files of each item, with every name, format and rule. Every path in the prompt comes from them; where they disagree with a decision, the newest decision wins, and the conflict goes in your report.
 - **The how-to guides** in `agents/system/docs/how-to/` and the metadata files of each item, for the exact formats and rules.
 - **The decisions and the changelog**, so you know what is decided, what is our proposal and what is open.
-- **What exists today:** the helper agents and their skills, the build tools in `vision/tools/`, the File Tree page and its server. Where a part exists, the prompt describes it as it is.
+- **What exists today:** the helper agents and their skills, the build tools in `agents/system/.claude/skills/ide-build/scripts/`, the File Tree page and its server. Where a part exists, the prompt describes it as it is.
 - **The vision, the README and `README.asd.md` of the level**, already updated for this round: the prompt uses the same names and never contradicts them.
 - **The prompt of the level above**, so this one takes from it exactly what it builds.
 
@@ -85,7 +85,7 @@ Numbered steps from what exists above to the finished level, each ending with it
 The prompt of every level below, by path, in build order, with what each builds in one line.
 
 ## Acceptance checks
-The list that proves the rebuilt level is the same: the tree matches, every settings file parses and fits its schema, every link is built and none is broken, the tests pass, nothing can act live without the owner's approval, no secret value is in git, every file and folder outside `vision/` has its `.index.md` and `.meta.json`, the File Tree page builds and its tree equals the files on disk.
+The list that proves the rebuilt level is the same: the tree matches, every settings file parses and fits its schema, every link is built and none is broken, the tests pass, nothing can act live without the owner's approval, no secret value is in git, every file and folder has its `.index.md` and `.meta.json`, the File Tree page builds and its tree equals the files on disk.
 
 ## Do not build
 Ideas still being weighed, questions still open and stage two parts, one line each, with what to leave in their place: nothing, an empty folder, a placeholder or a setting switched off.
@@ -108,7 +108,7 @@ Every word must help the agent build the right thing. Long is fine; vague is not
 This doc is written for AI, so the rules for docs for people bend here; the knowledge base agent's other rules still hold.
 
 - **Instructions, in the second person and the imperative:** "Create `agents/system/configs/system.config.json` with these keys."
-- **Exact everywhere.** Real paths, file names, keys, formats and name patterns, the same as in the tree notes and on disk, character for character. When a format is decided, give it here with a short example.
+- **Exact everywhere.** Real paths, file names, keys, formats and name patterns, the same as on disk and in the metadata files, character for character. When a format is decided, give it here with a short example.
 - **Complete for its own folder.** Every item in this level's tree is covered. If the agent would have to guess, the prompt is not finished: give the detail, or say that the point is open and what to leave in its place. Do not describe the inside of a child level; name its prompt.
 - **Status is explicit.** Build what is decided. Build our proposals as they stand, since they are part of the design today, and mark them "default, the owner may change it". Never build an idea still being weighed, an open question or a stage two part: list them under "Do not build".
 - **No references from the notes.** No `[n]` numbers, decision or input codes, hashes or hidden tags. Name things by their paths.
@@ -135,7 +135,7 @@ The rebuild prompt of a level is stale when anything in the level's design chang
 
 1. Read the sources above.
 2. In the notes (never in the doc), list every part and every file the prompt must cover, with its status (decided, proposed, open, stage two) and where it came from.
-3. Write the doc section by section from that list. Take every path and format from the tree notes and the disk, never from memory.
+3. Write the doc section by section from that list. Take every path and format from the disk and the metadata files, never from memory.
 4. Run the checks below.
 5. Write or refresh the metadata of `rebuild-prompt.md` with `file-index`: its How it works, its Details, its Example and its Questions.
 6. Check the parent level's prompt: its tree and its list of children's prompts must match this one.
@@ -170,7 +170,7 @@ The File Tree page shows a tab only when its file exists. For `rebuild-prompt.md
 ## Checks
 
 - An AI agent that has never seen the project could build this level from this file and the levels above without guessing. Read it once as that agent, step by step.
-- Every path and name matches the tree notes and the disk; every format matches the README of the level and the metadata files.
+- Every path and name matches the disk; every format matches the README of the level and the metadata files.
 - Every item of this level's tree is covered, every build step has a check, and every child level's prompt is listed.
 - Nothing still weighed, open or stage two is told to be built; every proposal is marked as a default.
 - No `[n]` numbers, decision or input codes, hashes, hidden tags or history.

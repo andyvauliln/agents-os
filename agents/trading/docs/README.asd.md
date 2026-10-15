@@ -95,7 +95,7 @@ Its docs: `agents/trading/docs/docs.index.md`
 
 - `prediction-market-research/`: 42 studies of ways to make money on prediction markets. The numbers are `01` to `34` and `50` to `57`. Each study is one Markdown file, for example `01-maker-reward-pool-farming.md`. Some studies describe practices that you must not do, for example wash trading and insider trading. `_evidence/` contains the background evidence `E1` to `E9`, the strategy lists and one row for each study. `_pipeline/` contains the pipeline that wrote the studies.
 - `self-improving-agents/`: one study of methods and architectures for agents that make themselves better.
-- `trding-agents-arhiteches/`: one study of how trading agents are built. It contains `README.md`, 29 architecture specifications in `specs/`, their diagrams in `diagrams/` and a gallery page `index.html`.
+- `trding-agents-arhiteches/`: one study of how trading agents are built. It contains `README.md`, 9 architecture specifications in `specs/`, their diagrams in `diagrams/` and a gallery page `index.html`.
 
 The domain agents read these studies when they look for strategies. The owner reads them on the File Tree page. Do not change a study after it is complete. If a study causes a decision, record the decision in the notes.
 
@@ -115,7 +115,7 @@ Each trading domain is a full domain of the Agent OS. Each domain has its own fo
 - one strategy, `strategy-1-agent/`;
 - one example trading agent below the strategy, `pm-strategy-1.momentum-v1.opus55-test/`. The word "momentum" is only a placeholder.
 
-The old files of the domain are in `vision/archive/2026-10-12/prediction-market/`. Its docs folder `agents/trading/prediction-market/docs/` contains earlier notes. They are kept for stage two. In stage two, the project writes the domain again from these files. The domain then gets its own vision, README and rebuild prompt.
+The old files of the domain are in the git history. Its docs folder `agents/trading/prediction-market/docs/` contains earlier notes. They are kept for stage two. In stage two, the project writes the domain again from these files. The domain then gets its own vision, README and rebuild prompt.
 
 **Later trading domains** are copies of the prediction-market domain, for example copy trading. The owner asks for them. At this time, none is in the tree.
 

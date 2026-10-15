@@ -1,10 +1,9 @@
 ---
 about: agent-os/docs/file-tree.md
-node: n-57.5
-basis: ee97d1330373
-written: 2026-10-12T00:00:00Z
+basis: 981c7ce4dc3d
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T15:07:13Z
 ---
 # file-tree.md
 
@@ -30,7 +29,7 @@ Claude Code started in the system folder reads it after the project and system d
 
 ## Related knowledge
 
-It lists the same paths as the File Tree page and as git (`git ls-files --cached --others --exclude-standard`). The tree notes in `vision/docs/file-tree.md` are a different file: the planned tree with one section per item. Adding a little information to each line later is an idea still weighed.
+It lists the same paths as the File Tree page and as git (`git ls-files --cached --others --exclude-standard`). Adding a little information to each line later is an idea still weighed.
 
 ## Keep in mind
 

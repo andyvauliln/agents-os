@@ -1,1 +1,56 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Interactive diagram page: Production Trading Agent: Seven-Layer Reference Stack Diagram.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the trading-agent architecture research session (rendered with archify deliver)"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)"
+  ],
+  "changes_when": "Its spec changes and it is rendered again.",
+  "related": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/specs/08-production-stack.architecture.json",
+      "how": "built from"
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/index.html",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/diagrams/08-production-stack.visual-check.json",
+      "how": "checked by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/diagrams/08-production-stack.visual-check.json",
+      "how": "Run archify visual-check again."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

@@ -1,13 +1,36 @@
 ---
 about: agent-os/.secrets/live/
-node: n-47.2
-basis: e75df462e284
-written: 2026-09-30T20:11:26Z
-by: knowledge-agent
-confirmed: 2026-10-07T14:22:08Z
+basis: d2136df4d930
+written: 2026-10-14T15:17:50Z
+by: knowledge-base-agent
+confirmed: 2026-10-14T19:42:37Z
 ---
 # live/
 
-## Summary
+## What it is
 
-The live side of the secrets store, for a later phase. It will hold one `.env` with the same key names as the test file and real values, edited only by the owner and never read by an agent.
+The live side of the keys store, for a later phase. It holds `.env`, git-ignored and empty for now, which only the owner will fill with live values and no agent reads; `.env.example`, the same key names with no values; and the metadata files of the keys file.
+
+## Who looks after it
+
+It is written by the owner.
+
+## When and how it changes
+
+It changes when a file is added to or removed from the live side of the keys store.
+
+## Who uses it, and when
+
+It is read by the owner; and load-secret (the proposed shared loader, not written yet), only for owner-approved live runs.
+
+## Where it is mentioned
+
+It is described in `agents/system/docs/README.md` and its folder's How it works file `.secrets/.secrets.index.md`.
+
+## Related knowledge
+
+It has the same format as `.secrets/test/`. The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `docs/metadata.md`, `docs/README.md` (section "Keys and secrets") and `agents/system/docs/README.md` (section "Keys and secrets").
+
+## Keep in mind
+
+

@@ -1,1 +1,43 @@
-{}
+{
+  "schema_version": 1,
+  "about": "An earlier note kept for stage two, not referenced now: the trading layer of the common prompt: draft prompt text for the strategy manager and the trading agent.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [],
+  "readers": [],
+  "changes_when": "Not changed until the owner starts stage two; then the domain's docs are written from it.",
+  "related": [
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-058",
+      "D-064",
+      "D-067",
+      "D-070"
+    ],
+    "inputs": [
+      "in-20261007-0904",
+      "in-20261012-stage1",
+      "in-20261014-metadata-logic",
+      "in-20261014-1241"
+    ],
+    "notes": []
+  },
+  "update_with": [],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#Where the project is now: stage one",
+    "agents/trading/docs/README.md#The trading domains"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

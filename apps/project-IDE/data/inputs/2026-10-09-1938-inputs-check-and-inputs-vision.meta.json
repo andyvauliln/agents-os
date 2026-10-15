@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "about": "The owner asks to check that every one of their inputs is stored as a file, then write system/docs/inputs-vision.md: a detailed overview of the project from all their inputs, without repeated or overruled logic, divided by scope (system agent, common file rules and so on), in ASD-STE100 style.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-intake"
+  ],
+  "readers": [
+    "knowledge-base-agent"
+  ],
+  "changes_when": "Never in the owner's words; only its answer and what it was processed into are added once its knowledge is placed.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "summed up in"
+    },
+    {
+      "path": "apps/project-IDE/data/inputs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-062"
+    ],
+    "inputs": [
+      "in-20261009-1938"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "Keep its row (summary, categories, processed_into, answered) the same as this file."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md#16. Owner inputs",
+    "apps/project-IDE/data/inputs/README.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

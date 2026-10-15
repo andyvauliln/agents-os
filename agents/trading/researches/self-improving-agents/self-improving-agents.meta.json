@@ -1,23 +1,63 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "One study of how trading agents improve themselves: approaches, architecture families, the control plane and a build order.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the self-improving trading agents research session (2026-09-22)",
+    "the owner (moved it here with the research folder)"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)",
+    "the system's self-improvement helpers, as background"
+  ],
+  "changes_when": "A new study on self-improving agents is added, or the owner moves it to the system's research.",
+  "related": [
+    {
+      "path": "agents/trading/researches/self-improving-agents/01-approaches-and-architectures.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/",
+      "how": "links to"
+    },
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-045",
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261006-1007",
+      "in-20261009-1230"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/trading/researches/self-improving-agents/self-improving-agents.index.md",
+      "how": "Update the summary when a study is added."
+    },
+    {
+      "path": "agents/trading/docs/README.md",
+      "how": "Update the part Research studies."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

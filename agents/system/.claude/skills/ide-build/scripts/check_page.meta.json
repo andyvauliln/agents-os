@@ -1,23 +1,65 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The page check before publishing: desktop and phone width, How it works and File tabs; fails on any error.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "project-ide-agent"
+  ],
+  "readers": [
+    "ide-build",
+    "project-ide-agent"
+  ],
+  "changes_when": "The page gains a tab or a mode that must be checked, or the check rules change.",
+  "related": [
+    {
+      "path": "apps/project-IDE/current-ui/file-tree-explorer.html",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/SKILL.md",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-041",
+      "D-050"
+    ],
+    "inputs": [
+      "in-20261005-1041",
+      "in-20261005-1254",
+      "in-20261006-2104"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/README.md",
+      "how": "if how it is run or what it does changes"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the part 'Tests and checks'"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "the script table in 'How the page is built and checked'"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#The File Tree page",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#How the page is built and checked",
+    "agents/system/.claude/skills/ide-build/scripts/README.md"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

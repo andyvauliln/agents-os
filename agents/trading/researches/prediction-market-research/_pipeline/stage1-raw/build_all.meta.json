@@ -1,1 +1,76 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Python script that builds the speculative strategy list, every strategy brief, S0-index.md and args.json from the stage 1 outputs (and saves the speculative critic from the run journal).",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the Polymarket strategy survey session that ran stage 1"
+  ],
+  "readers": [
+    "a session that rebuilds the strategy lists",
+    "the owner"
+  ],
+  "changes_when": "A session changes how briefs are merged, split or numbered.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S0-strategy-list-established.json",
+      "how": "reads"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S1-discovery-candidates.json",
+      "how": "reads"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/consolidate_speculative.json",
+      "how": "reads"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/critic_speculative.json",
+      "how": "writes"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S0-strategy-list-speculative.json",
+      "how": "writes"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/strategies/",
+      "how": "writes"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/S0-index.md",
+      "how": "writes"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/args.json",
+      "how": "writes"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/HANDOFF.md",
+      "how": "Describe the change; its paths are the old machine's absolute paths."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

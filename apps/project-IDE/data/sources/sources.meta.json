@@ -1,23 +1,44 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The earlier knowledge notes the docs were written from, kept but not referenced by any doc, skill or agent.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
+  "writers": [
+    "knowledge-base-agent"
+  ],
   "readers": [],
-  "changes_when": "",
-  "related": [],
+  "changes_when": "Not changed; whether to use the notes again is the owner's later decision.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/",
+      "how": "summed up in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-034",
+      "D-041",
+      "D-070"
+    ],
+    "inputs": [
+      "in-20261014-1241"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/data.index.md",
+      "how": "Change the line on sources/ if its job changes."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

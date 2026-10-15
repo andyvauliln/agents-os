@@ -1,23 +1,87 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The File Tree page on the owner's own server, with Claude Code behind its request box.",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "project-ide-agent"
+  ],
+  "readers": [
+    "the owner",
+    "project-ide-agent"
+  ],
+  "changes_when": "The owner asks for a change to the server page.",
+  "related": [
+    {
+      "path": "apps/project-IDE/server/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "apps/project-IDE/current-ui/file-tree-explorer.html",
+      "how": "reads"
+    },
+    {
+      "path": "apps/project-IDE/data/page-store/",
+      "how": "writes"
+    },
+    {
+      "path": "agents/system/CLAUDE.md",
+      "how": "reads"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-042",
+      "D-043",
+      "D-044",
+      "D-060"
+    ],
+    "inputs": [
+      "in-20261005-1433",
+      "in-20261005-1452",
+      "in-20261005-1517",
+      "in-20261009-1019",
+      "in-20261009-2219",
+      "in-20261013-ide-on-server"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "apps/project-IDE/docs/README.md",
+      "how": "Change the section \"The server\"."
+    },
+    {
+      "path": "apps/project-IDE/docs/README.asd.md",
+      "how": "Write the changed sections again in ASD-STE100, in the same order."
+    },
+    {
+      "path": "apps/project-IDE/docs/rebuild-prompt.md",
+      "how": "Change the exact spec of the same part, last."
+    },
+    {
+      "path": "apps/project-IDE/server/README.md",
+      "how": "Change the steps or the settings the owner reads."
+    },
+    {
+      "path": "apps/project-IDE/project-IDE.index.md",
+      "how": "Change the summary of server/ if it is no longer true."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "apps/docs/README.md#The project IDE",
+    "apps/project-IDE/docs/README.md#The server"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

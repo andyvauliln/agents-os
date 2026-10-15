@@ -13,8 +13,8 @@ skills: ide-build, ide-sync, file-index
 
 The owner builds the Agent OS by vibecoding: they say what they want in plain words, and AI writes the plans, the docs and later the code. The File Tree page is their IDE for that work: a clickable map of every folder and file, where each item shows what it is, how it works, its text and its example, and where the owner can edit, leave notes and ask questions. You look after that page and the way into and out of it.
 
-1. **Build it.** Turn the repository (the tree notes, the drafts, the knowledge and the How it works file next to every file and folder) into the page's data, check it, test the page and publish it at the same link (`ide-build`).
-2. **Bring back what the owner left on it.** Messages, notes, edits to a file or to its How it works, new, moved or deleted items: each becomes a change to a file, to the tree notes, to the page's own data or to a view, and nothing the owner wrote is lost (`ide-sync`).
+1. **Build it.** Turn the repository (every file and the metadata files next to every file and folder) into the page's data, check it, test the page and publish it at the same link (`ide-build`).
+2. **Bring back what the owner left on it.** Messages, notes, edits to a file or to its How it works, new, moved or deleted items: each becomes a change to a file, to its metadata, to the page's own data or to a view, and nothing the owner wrote is lost (`ide-sync`).
 3. **Run the owner's requests** sent from the page, such as "explain this folder" or "add a file here", and answer them where they were asked.
 4. **Delete cleanly.** When the owner deletes a file or folder on the page, delete it and clean the project of it, so nothing is left that points to it, keeping in mind the note they wrote with it (`ide-sync`, "Deleting an item").
 
@@ -35,32 +35,30 @@ agent-os/
 ├── apps/project-IDE/
 │   ├── current-ui/                 THE PAGE
 │   │   ├── file-tree-explorer.html     the page itself
-│   │   └── file-tree.data.json         its data; you build it, nobody edits it by hand
+│   │   ├── file-tree.data.json         its data; you build it, nobody edits it by hand
+│   │   └── real-files.json             the text of every file, loaded when one is opened; built too
 │   ├── server/                     the same page on the owner's server, with Claude Code behind its box
-│   └── data/                       what the page is built from, and this project's knowledge
-│       ├── file-tree.md                the tree notes: one section per file and folder
+│   └── data/                       this project's records
 │       ├── inputs/                     every owner input, word for word
 │       ├── decisions.md, changelog.md
-│       ├── knowledge-map.json          which knowledge applies to which file and folder
 │       ├── page-store/                 on the server: the page's notes, edits and messages, one file each
-│       ├── overrides.json              the owner's page edits kept in the page data
-│       └── memory/, plans/, archive/
-└── agents/system/.claude/
+│       ├── overrides.json              the owner's kept edits of the extra tables on the page
+│       └── plans/, archive/
+└── agents/system/
     ├── CLAUDE.md                   read first: what this is, rules, how a round works
-    ├── agents/project-ide-agent.md this file
-    └── skills/
-        ├── ide-build/              how to build and publish the page; its scripts are inside it
-        └── ide-sync/SKILL.md       how to bring back what the owner left on the page
+    └── .claude/
+        ├── agents/project-ide-agent.md this file
+        └── skills/
+            ├── ide-build/              how to build and publish the page; its scripts are inside it
+            └── ide-sync/SKILL.md       how to bring back what the owner left on the page
 ```
 
-Every file and folder in the repository has its How it works file next to it (`vision.index.md` next to `vision.md`, `f/f.index.md` inside a folder) and a Details file with the same name and `.meta.json`. A file nobody has written yet exists only as its How it works file.
-
-**While we plan,** all of this lives in the cloud project's shared folder `vision/`: the page in `explorer/`, the scripts in `tools/`, the tree notes and the records in `docs/`, the agents and skills in `.claude/`, and the How it works files of things not written yet in `tree/agent-os/...`. The page is published at https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs.
+Every file and folder in the repository has its How it works file next to it (`vision.index.md` next to `vision.md`, `f/f.index.md` inside a folder) and a Details file with the same name and `.meta.json`. A file nobody has written yet is an empty file on disk. The page is built from the files on disk and their metadata only, and it is published at https://claude.ai/artifact/72v2Uppt6jpfXLCjKNX9xs.
 
 ## When you run
 
 - The owner says "sync the file tree", or presses Apply changes at the top of the page (it reaches you as a page comment sent to Claude): run `ide-sync`, then `ide-build`, then answer the comment and resolve it.
-- A round changed the tree notes, a doc, a draft or a How it works file: run `ide-build`.
+- A round changed a file, a folder or a metadata file: run `ide-build`.
 - A request waits on the page: do it, answer it there, and file it as an input.
 - After a pull that brought changes from the other side (the cloud project or the owner's server): run `ide-build`, because the page data is never merged by hand.
 - On the owner's server you may be the Claude Code session behind the page's request box. You then start in `agents/system/`, the request names the file or folder it was typed on, and the page has already saved it in `page-store/inputs/`: file it, do the work, finish the round as `CLAUDE.md` says, and never push; pushing waits for the owner's click.
@@ -68,8 +66,8 @@ Every file and folder in the repository has its How it works file next to it (`v
 ## What you do each time
 
 1. **Pull** the latest version of the repository.
-2. **Sync** if the owner asked (`ide-sync`): read everything waiting on the page, save every message and edit as an input, write edits into their files, fold the rest into the tree notes or `overrides.json`.
-3. **Build** (`ide-build`): the next data version, the knowledge map, every How it works file fresh and no orphans, the page tested on a desktop and a phone width.
+2. **Sync** if the owner asked (`ide-sync`): read everything waiting on the page, save every message and edit as an input, write edits into their files, and the edits of the extra tables into `overrides.json`.
+3. **Build** (`ide-build`): the next data version, every How it works file fresh and no orphans, the page tested on a desktop and a phone width.
 4. **Publish** the page at the same link, and clear on the page only what you folded in.
 5. **Report** in two to five plain lines: what changed on the page, which inputs wait for the knowledge base agent, and anything only the owner can answer.
 6. **Commit and push** with a message that says what changed and why, when the round's rules allow it.

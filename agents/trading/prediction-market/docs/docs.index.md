@@ -1,20 +1,37 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/
-node: n-19.6
-basis: 6cca2820fc4c
-written: 2026-10-07T18:56:50Z
+basis: 48361a1ba201
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T08:00:17Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # docs/
 
-## Summary
+## What it is
 
-The domain's own docs, real Markdown files. Like every level, it has a `vision.md` (why this domain and how it makes money), a `README.md` (every part of the domain, with each strategy's docs path) and a `rebuild-prompt.md`, none written yet, plus the proposed `decisions.md` and `notes.md`. It also holds the domain's trading notes, each the trading layer of the system note of the same name: `trading-overview.md`, `trading-safety.md`, `trading-metrics.md` and seven more, `doc-outlines.md`, `common/`, the `how-to/` runbooks with money and `index/accounts.md`. Trading agents link the notes they need, and `subagents.link/` gives the domain every strategy's docs. A later trading domain copies these notes. In stage one these notes are all the trading knowledge the project has; next to them are `trading-vision-notes.md`, the ideas for the domain's vision, and `README-trading-parts.md` and `rebuild-prompt-trading-parts.md`, the trading text taken out of the system's README and rebuild prompt, which the domain's own README and rebuild prompt are written from in stage two.
+The prediction-market domain's docs folder. The domain's own vision, README and rebuild prompt are not written yet; they come in stage two. Today it holds only earlier trading notes, kept for stage two and not referenced by any doc, skill or agent: ten notes named `trading-*.md` (overview, architecture, conventions, data schemas, feature map, flows, glossary, metrics, roadmap, safety), `trading-vision-notes.md`, `doc-outlines.md`, `README-trading-parts.md` and `rebuild-prompt-trading-parts.md`, and the folders `common/`, `how-to/` and `index/`. `subagents.link/` holds the name pattern for the link to each strategy's docs.
+
+## Who looks after it
+
+It is written by knowledge-base-agent.
+
+## When and how it changes
+
+It changes when the owner starts stage two and the domain's own docs are written; until then nothing changes.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/prediction-market.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
 
 ## Keep in mind
 
-- When you read or change a trading note, read the system note of the same name with it; the trading note only adds the trading layer.
-- When you record an owner comment or an answer in `notes.md`, put it under a `## YYYY-MM-DD HH:MM [who]` heading, newest last.
+- When stage two starts, write the domain's vision, README and rebuild prompt here from these notes; until then, do not point to the notes from another file.
 - When you need a shared doc, link it through the links file; never copy it.
-- When this level's docs change, check its parent's vision, README and rebuild prompt, in that order, up to the system.

@@ -1,1 +1,53 @@
-{}
+{
+  "schema_version": 1,
+  "about": "About 260 raw strategy candidates from 12 stage 1 lenses (7 discovery, 5 ideation), with notes on each lens's web access and the evidence URLs.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the survey's stage 1 discovery and ideation agents"
+  ],
+  "readers": [
+    "the owner",
+    "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+    "the survey's stage 2 writer agents (by grep; the file is about 1.1 MB)"
+  ],
+  "changes_when": "Not changed after stage 1; only a new stage 1 run would replace it.",
+  "related": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_pipeline/stage1-raw/build_all.py",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/strategies/",
+      "how": "read by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/prediction-market-research/_evidence/strategies/",
+      "how": "Rebuild the briefs with build_all.py if it is ever replaced."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

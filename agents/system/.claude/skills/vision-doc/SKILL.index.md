@@ -1,16 +1,35 @@
 ---
 about: agent-os/agents/system/.claude/skills/vision-doc/SKILL.md
-node: n-10.1.2.3
-basis: ccb2a8125078
-written: 2026-10-06T21:56:21Z
+basis: d68df4e4687e
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T19:02:04Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # vision-doc/SKILL.md
 
-## Summary
+## What it is
 
 The skill the knowledge base agent uses to write the vision, the top-level doc: what we are building and why, the concept, how the system should work, the business logic, worked examples, where we are and what is open, ending with where to go deeper. Its outline lists the twelve sections and what goes in each, and the File Tree page shows that outline as the vision's Example. It keeps the vision high, with no folders or files, sets lengths for each level, says how to update the doc after a new input, and what the vision's How it works panel answers.
+
+## Who looks after it
+
+It is written by the owner and knowledge-base-agent.
+
+## When and how it changes
+
+It changes when the owner changes what a vision must hold, its sections, lengths or update steps.
+
+## Who uses it, and when
+
+It is read by knowledge-base-agent.
+
+## Where it is mentioned
+
+It is described in its folder's How it works file `agents/system/.claude/skills/vision-doc/vision-doc.index.md`.
+
+## Related knowledge
+
+It writes `agents/system/docs/vision.md` and `docs/vision.md`. It links to `agents/system/.claude/skills/readme-doc/SKILL.md`. It is read by `agents/system/.claude/agents/knowledge-base-agent.md`. The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "When and how to update each doc"), `docs/metadata.md` and `agents/system/docs/README.md` (section "The knowledge base and the docs").
 
 ## Keep in mind
 

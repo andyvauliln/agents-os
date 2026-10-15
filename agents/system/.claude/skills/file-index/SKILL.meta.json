@@ -1,23 +1,89 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The skill that writes and keeps every metadata file: How it works, Details, and the Example, Questions and ASD-STE100 tab files.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the owner",
+    "knowledge-base-agent"
+  ],
+  "readers": [
+    "knowledge-base-agent",
+    "project-ide-agent"
+  ],
+  "changes_when": "A rule of the metadata files changes: their names, fields, headings, lengths or how they are kept.",
+  "related": [
+    {
+      "path": "docs/metadata.md",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/build_map.py",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/skills/ide-build/scripts/index_files.py",
+      "how": "reads"
+    },
+    {
+      "path": "agents/system/.claude/agents/knowledge-base-agent.md",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/.claude/agents/project-ide-agent.md",
+      "how": "read by"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-036",
+      "D-039",
+      "D-057",
+      "D-064",
+      "D-067",
+      "D-068",
+      "D-069",
+      "D-070",
+      "D-071"
+    ],
+    "inputs": [
+      "in-20261005-0925",
+      "in-20261005-1024",
+      "in-20261007-0904",
+      "in-20261014-1004",
+      "in-20261014-1047",
+      "in-20261014-1241"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/.claude/skills/file-index/SKILL.index.md",
+      "how": "if what the skill does or when it runs changes"
+    },
+    {
+      "path": "docs/metadata.md",
+      "how": "the same rules for people, in ASD-STE100; keep the two in step"
+    },
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "the part 'The knowledge base and the docs', if what it says about this item changes"
+    },
+    {
+      "path": "agents/system/docs/README.asd.md",
+      "how": "write it again with readme-asd-doc right after the system README changes"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#The knowledge base and the docs"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

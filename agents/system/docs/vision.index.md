@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/docs/vision.md
-node: n-2.2
-basis: 4613e386242d
-written: 2026-10-12T00:00:00Z
+basis: c29919c5f5da
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # vision.md
 
@@ -30,7 +29,7 @@ The owner and anyone new to the system read it first, after the project's vision
 
 ## Related knowledge
 
-It sits below the project's vision (`docs/vision.md`) and above trading's vision (`agents/trading/docs/vision.md`). The system's README describes the same things exactly, with paths. It is built from the owner's inputs and the decisions in `vision/docs/`.
+It sits below the project's vision (`docs/vision.md`) and above trading's vision (`agents/trading/docs/vision.md`). The system's README describes the same things exactly, with paths. It is built from the owner's inputs and the decisions in `apps/project-IDE/data/`.
 
 ## Keep in mind
 

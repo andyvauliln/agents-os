@@ -8,43 +8,56 @@
   "secret": false,
   "generated_by": null,
   "writers": [
-    "knowledge-base-agent with the readme-doc skill",
-    "the owner, on the File Tree page"
+    "knowledge-base-agent",
+    "readme-doc",
+    "the owner"
   ],
   "readers": [
-    "readers after the vision",
-    "the owner after each round",
-    "every agent before it works on a part of trading"
+    "the owner",
+    "knowledge-base-agent",
+    "readme-asd-doc",
+    "rebuild-prompt-doc"
   ],
-  "changes_when": "a part of trading changes: a domain, a study, names, accounts, test and live, metrics or a settled design point",
+  "changes_when": "A part of trading changes: a domain, a study, names, accounts, test and live, metrics or a settled design point.",
   "related": [
     {
       "path": "agents/trading/docs/vision.md",
-      "how": "same words in In short"
+      "how": "built from"
     },
     {
       "path": "agents/trading/docs/README.asd.md",
-      "how": "rewritten from it in ASD-STE100"
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/docs/rebuild-prompt.md",
+      "how": "read by"
     },
     {
       "path": "agents/system/docs/README.md",
-      "how": "parent README; its Domains part points here"
+      "how": "same format as"
     },
     {
-      "path": "agents/trading/researches/",
-      "how": "documented in"
+      "path": "agents/trading/docs/docs.index.md",
+      "how": "links to"
     },
     {
-      "path": "agents/trading/prediction-market/",
-      "how": "documented in"
+      "path": "agents/trading/researches/researches.index.md",
+      "how": "links to"
     },
     {
-      "path": "vision/docs/prediction-market-agents/",
-      "how": "built from"
+      "path": "agents/trading/prediction-market/prediction-market.index.md",
+      "how": "links to"
+    },
+    {
+      "path": "agents/system/.claude/skills/readme-doc/SKILL.md",
+      "how": "written by"
     }
   ],
   "sources": {
     "decisions": [
+      "D-030",
+      "D-032",
+      "D-035",
       "D-048",
       "D-053",
       "D-054",
@@ -52,65 +65,52 @@
       "D-058",
       "D-059",
       "D-061",
+      "D-063",
       "D-064",
-      "D-030",
-      "D-032",
-      "D-035",
-      "D-063"
+      "D-066",
+      "D-067",
+      "D-070"
     ],
     "inputs": [
-      "in-20261009-0940",
-      "in-20261012-stage1",
       "in-20261007-0904",
-      "in-20261009-1230"
+      "in-20261009-0940",
+      "in-20261009-1230",
+      "in-20261012-stage1",
+      "in-20261013-no-memory-folder",
+      "in-20261014-metadata-logic",
+      "in-20261014-1241"
     ],
-    "notes": [
-      "tr-ov-parts-levels",
-      "tr-conv-variant-name-format",
-      "tr-conv-script-kinds",
-      "tr-safe-live-gate",
-      "tr-safe-secrets-store",
-      "metric-pnl",
-      "metric-drawdown",
-      "metric-calibration"
-    ]
+    "notes": []
   },
   "update_with": [
     {
       "path": "agents/trading/docs/README.asd.md",
-      "how": "rewrite the changed sections, same headings"
+      "how": "Write the changed sections again in ASD-STE100, same headings."
     },
     {
       "path": "agents/trading/docs/rebuild-prompt.md",
-      "how": "update the tree, parts and checks"
+      "how": "Update the tree, the parts and the checks."
     },
     {
       "path": "agents/system/docs/README.md",
-      "how": "update its summary of trading's domains"
+      "how": "Update its Domains part when the trading domains change."
     },
     {
       "path": "agents/trading/docs/README.example.md",
-      "how": "keep the outline in step"
+      "how": "Keep the outline in step."
     },
     {
       "path": "agents/trading/docs/README.questions.md",
-      "how": "keep the open questions in step"
+      "how": "Remove answered questions and add new open ones."
     }
   ],
   "inherits": [
-    "the system's README: the standard agent folder, child links, keys by name only"
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "agents/system/docs/README.md",
+    "docs/README.md"
   ],
-  "features": [
-    "Trading domains",
-    "Research",
-    "Test and live with money",
-    "Metrics"
-  ],
-  "views": [
-    "doc (shared view)"
-  ],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "features": [],
+  "views": [],
+  "how_it_works": {}
 }

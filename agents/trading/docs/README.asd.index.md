@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/trading/docs/README.asd.md
-node: n-56.1.4
-basis: 62c33cc1380e
-written: 2026-10-12T00:00:00Z
+basis: 2809cce92c9f
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-12T15:40:56Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # README.asd.md
 

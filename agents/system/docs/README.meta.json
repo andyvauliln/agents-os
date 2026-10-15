@@ -14,33 +14,37 @@
   "readers": [
     "the owner",
     "every Claude working on the system (CLAUDE.md reading list)",
-    "domain agents learning what they share"
+    "domain agents, to learn what they share"
   ],
-  "changes_when": "a part of the system changes: a folder, an agent, a config, a job, a script or how parts connect",
+  "changes_when": "A part of the system changes: a folder, an agent, a config, a job, a script or how parts connect.",
   "related": [
     {
       "path": "agents/system/docs/vision.md",
-      "how": "gives the why"
+      "how": "built from"
     },
     {
       "path": "agents/system/docs/README.asd.md",
-      "how": "ASD-STE100 twin"
+      "how": "read by"
     },
     {
       "path": "agents/system/docs/rebuild-prompt.md",
-      "how": "same parts as a spec"
+      "how": "read by"
     },
     {
       "path": "docs/README.md",
-      "how": "parent README"
+      "how": "same format as"
     },
     {
       "path": "agents/trading/docs/README.md",
-      "how": "child README"
+      "how": "same format as"
     },
     {
-      "path": "apps/project-IDE/docs/README.md",
-      "how": "the IDE in full"
+      "path": "agents/system/.claude/skills/readme-doc/",
+      "how": "written by"
+    },
+    {
+      "path": "agents/system/docs/README.example.md",
+      "how": "documented in"
     }
   ],
   "sources": {
@@ -51,15 +55,16 @@
       "D-056",
       "D-059",
       "D-063",
-      "D-064"
+      "D-064",
+      "D-066"
     ],
     "inputs": [
+      "in-20261005-0735",
+      "in-20261006-1259",
       "in-20261009-0940",
-      "in-20261012-tree",
-      "in-20261012-real",
       "in-20261012-secrets",
-      "in-20261012-metadisk",
-      "in-20261012-stage1"
+      "in-20261012-stage1",
+      "in-20261013-no-memory-folder"
     ],
     "notes": []
   },
@@ -70,7 +75,7 @@
     },
     {
       "path": "agents/system/docs/rebuild-prompt.md",
-      "how": "bring parts, formats and checks in line"
+      "how": "bring the parts, formats and checks in line"
     },
     {
       "path": "agents/system/docs/README.example.md",
@@ -79,25 +84,19 @@
     {
       "path": "agents/system/docs/README.questions.md",
       "how": "keep the open questions in step"
+    },
+    {
+      "path": "docs/README.md",
+      "how": "update the project README if the system's part there changes"
     }
   ],
   "inherits": [
-    "the project's README: the layout of the repository"
+    "docs/README.md#The system",
+    "docs/metadata.md",
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc"
   ],
-  "features": [
-    "Agents and domains",
-    "Jobs and scheduler",
-    "Links",
-    "Keys",
-    "Tests",
-    "Knowledge base",
-    "Project IDE"
-  ],
-  "views": [
-    "doc (shared view)"
-  ],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "features": [],
+  "views": [],
+  "how_it_works": {}
 }

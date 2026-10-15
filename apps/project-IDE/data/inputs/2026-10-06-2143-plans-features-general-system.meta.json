@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "about": "The owner asks where agent and subagent tests live and how they are named; sets a rule that every change request gets a stored plan, with its logic distributed after the build, and planning as the main development skill; asks for features as their own knowledge files mapped both ways to files, small features inside bigger ones; wants the vision, README and rebuild prompt as a hierarchy across levels with updates climbing to the top; and says the system is no longer a trading OS: the top level is general and agents can be any kind (trading, social media, management), each kind with its own levels and a parent.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-intake"
+  ],
+  "readers": [
+    "knowledge-base-agent"
+  ],
+  "changes_when": "Never in the owner's words; only its answer and what it was processed into are added once its knowledge is placed.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "summed up in"
+    },
+    {
+      "path": "apps/project-IDE/data/inputs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-051",
+      "D-052",
+      "D-053",
+      "D-054"
+    ],
+    "inputs": [
+      "in-20261006-2143"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "Keep its row (summary, categories, processed_into, answered) the same as this file."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md#16. Owner inputs",
+    "apps/project-IDE/data/inputs/README.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

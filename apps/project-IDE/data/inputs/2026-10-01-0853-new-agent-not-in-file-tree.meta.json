@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "about": "The owner asked why the new knowledge base agent and vision skill did not show on their File Tree page; the page was rebuilt so they do.",
+  "kind": "file",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "knowledge-intake"
+  ],
+  "readers": [
+    "knowledge-base-agent"
+  ],
+  "changes_when": "Never in the owner's words; only its answer and what it was processed into are added once its knowledge is placed.",
+  "related": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "summed up in"
+    },
+    {
+      "path": "apps/project-IDE/data/inputs/README.md",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/.claude/skills/knowledge-intake/SKILL.md",
+      "how": "written by"
+    }
+  ],
+  "sources": {
+    "decisions": [],
+    "inputs": [
+      "in-20261001-0853"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "apps/project-IDE/data/inputs/index.json",
+      "how": "Keep its row (summary, categories, processed_into, answered) the same as this file."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md#16. Owner inputs",
+    "apps/project-IDE/data/inputs/README.md"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

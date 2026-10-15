@@ -1,16 +1,36 @@
 ---
 about: agent-os/agents/trading/prediction-market/docs/trading-flows.md
-node: n-19.6.10
-basis: 0815dd024e5a
-written: 2026-10-07T18:56:50Z
+basis: fcb6b723e682
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
+confirmed: 2026-10-14T15:07:13Z
 ---
 # trading-flows.md
 
-## Summary
+## What it is
 
-The trading layer of the system's `flows.md`: the order steps of a trading run; decision to execution, from the decision script through the risk check in code to a simulated fill in test or a real order in live, each logged in the order log; logs to the dashboard; the self-improvement wheel with the strategy loop; and the owner's flows for creating, reviewing, going live, stopping and approving risk or account changes. The flows are proposed.
+An earlier note on the trading flows: the order steps of a trading run, from the decision script through the risk check to a simulated fill in test or a real order in live, each logged; the improvement loop; and the owner's flows for creating, reviewing, going live, stopping and approving risk or account changes. The flows are proposals; it is kept for stage two and not referenced now.
+
+## Who looks after it
+
+Nobody writes it now.
+
+## When and how it changes
+
+Not changed until the owner starts stage two; then the domain's docs are written from it.
+
+## Who uses it, and when
+
+Nobody reads it now.
+
+## Where it is mentioned
+
+It is described in `agents/trading/docs/README.md` and its folder's How it works file `agents/trading/prediction-market/docs/docs.index.md`.
+
+## Related knowledge
+
+The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules"), `agents/system/CLAUDE.md` (section "Where the project is now: stage one") and `agents/trading/docs/README.md` (section "The trading domains").
 
 ## Keep in mind
 
-- When you block an order on a risk cap or a stop switch, log it in the order log and send the owner `risk_limit_hit`.
+- When stage two starts, write the domain's own docs from this note; until then, do not point to it from another file.

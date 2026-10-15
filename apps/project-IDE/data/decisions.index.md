@@ -1,19 +1,38 @@
 ---
 about: agent-os/apps/project-IDE/data/decisions.md
-node: n-2.6
-basis: ce974958f067
-written: 2026-10-05T13:25:49Z
+basis: 1c36bd90dcbe
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-07T14:22:08Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # decisions.md
 
-## Summary
+## What it is
 
-The decision log: an append-only history of what the owner decided, when, why and from which input, so settled questions are not reopened. Each entry has an id, date, decision, reasons, sources and a status (active, partly superseded, superseded); the rule itself lives in a topic doc that points back here. The knowledge base agent records owner decisions while processing an input. It sits with the project's records in `apps/project-IDE/data/`. Self-improvement and support agents may add proposals marked "pending owner", which the owner approves or rejects in the UI.
+The decision log: a history of what the owner decided, when, why and from which input, so settled questions are not reopened. Each entry has its number, date, decision, reasons, sources and a status: decided, proposed (an agent's idea waiting for the owner's yes) or replaced (kept for history, with what replaced it). The rule a decision made lives in the doc or metadata file that owns it. The page reads the log to show a decision when one is named. It sits with the project's other records in `apps/project-IDE/data/`.
+
+## Who looks after it
+
+It is written by knowledge-base-agent and knowledge-intake.
+
+## When and how it changes
+
+It changes when the owner decides something that changes the system, its rules or its structure. The page reads it in every build, through `enrich.py`, to show a decision when one is named.
+
+## Who uses it, and when
+
+It is read by every AI session on the project and the owner.
+
+## Where it is mentioned
+
+It is described in `docs/metadata.md` and its folder's How it works file `apps/project-IDE/data/data.index.md`.
+
+## Related knowledge
+
+It links to `apps/project-IDE/data/inputs/index.json` and `apps/project-IDE/data/changelog.md`. It is written by `agents/system/.claude/skills/knowledge-intake/SKILL.md`. The rules that apply to it come from `agents/system/CLAUDE.md` (section "Rules") and `docs/metadata.md` (section "Decisions").
 
 ## Keep in mind
 
-- When you record a decision, write the rule in the topic doc that owns it; this log only says when and why.
-- When you propose a change to a shared file or the common prompt, add it here marked "pending owner" and wait for the owner.
-- When a decision is replaced, mark the old entry superseded instead of editing or deleting it.
+- When you record a decision, write the rule in the file that owns it; this log only says what, when and why.
+- When an agent proposes a change, add it here as proposed and wait for the owner.
+- When a decision is replaced, mark the old entry replaced instead of editing or deleting it.

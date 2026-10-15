@@ -1,1 +1,56 @@
-{}
+{
+  "schema_version": 1,
+  "about": "Nine standalone interactive diagram pages rendered by archify from the specs, each with its visual-check result (all nine failed: Chromium could not run).",
+  "kind": "folder",
+  "state": "written",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
+  "generated_by": null,
+  "writers": [
+    "the trading-agent architecture research session (with the archify renderer)"
+  ],
+  "readers": [
+    "the owner",
+    "knowledge-base-agent (when it writes the trading docs)"
+  ],
+  "changes_when": "A spec changes and its diagram is rendered or checked again.",
+  "related": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/specs/",
+      "how": "built from"
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/index.html",
+      "how": "read by"
+    },
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/README.md",
+      "how": "documented in"
+    }
+  ],
+  "sources": {
+    "decisions": [
+      "D-061"
+    ],
+    "inputs": [
+      "in-20261009-1230"
+    ],
+    "notes": []
+  },
+  "update_with": [
+    {
+      "path": "agents/trading/researches/trding-agents-arhiteches/index.html",
+      "how": "Keep the gallery links in step."
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/trading/docs/README.md#Research studies",
+    "agents/trading/researches/researches.index.md#Keep in mind"
+  ],
+  "features": [],
+  "views": [],
+  "how_it_works": {}
+}

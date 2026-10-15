@@ -1,10 +1,9 @@
 ---
 about: agent-os/agents/system/configs/subagents.link/
-node: n-11.2
-basis: df2ab74c0c6c
-written: 2026-10-07T19:01:11Z
+basis: 0b29a051dc53
+written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-09T10:03:12Z
+confirmed: 2026-10-14T19:42:37Z
 ---
 # subagents.link/
 
@@ -22,7 +21,7 @@ When a domain is added or removed. Relink adds or removes its link.
 
 ## Who uses it, and when
 
-The system agent and the dashboard when they show or check the settings and jobs of all domains; the self-improvement helpers when they compare domains.
+The system agent and the File Tree page when they show or check the settings and jobs of all domains; the self-improvement helpers when they compare domains.
 
 ## Where it is mentioned
 

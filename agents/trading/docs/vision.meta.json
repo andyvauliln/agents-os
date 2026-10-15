@@ -8,36 +8,39 @@
   "secret": false,
   "generated_by": null,
   "writers": [
-    "knowledge-base-agent with the vision-doc skill",
-    "the owner, on the File Tree page"
+    "knowledge-base-agent",
+    "vision-doc",
+    "the owner"
   ],
   "readers": [
     "the owner",
-    "people new to trading",
-    "every trading domain agent",
-    "knowledge-base-agent before trading's other docs"
+    "knowledge-base-agent",
+    "readme-doc",
+    "rebuild-prompt-doc"
   ],
-  "changes_when": "an input or decision changes what every trading domain shares, the stage, an idea or an open question",
+  "changes_when": "An input or decision changes what every trading domain shares, the stage, an idea or an open question.",
   "related": [
     {
-      "path": "agents/trading/docs/README.md",
-      "how": "same words in In short; describes the same parts exactly"
-    },
-    {
       "path": "agents/system/docs/vision.md",
-      "how": "parent vision"
+      "how": "same format as"
     },
     {
-      "path": "vision/docs/prediction-market-agents/trading-vision-notes.md",
-      "how": "built from"
+      "path": "agents/trading/docs/README.md",
+      "how": "read by"
     },
     {
-      "path": "vision/docs/prediction-market-agents/trading-safety.md",
-      "how": "built from"
+      "path": "agents/trading/docs/rebuild-prompt.md",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/.claude/skills/vision-doc/SKILL.md",
+      "how": "written by"
     }
   ],
   "sources": {
     "decisions": [
+      "D-032",
+      "D-035",
       "D-048",
       "D-053",
       "D-054",
@@ -46,65 +49,53 @@
       "D-059",
       "D-061",
       "D-064",
-      "D-032",
-      "D-035"
+      "D-067",
+      "D-070"
     ],
     "inputs": [
+      "in-20260930-1453-2",
+      "in-20261001-1037",
+      "in-20261007-0904",
       "in-20261009-0940",
       "in-20261012-stage1",
-      "in-20261007-0904",
-      "in-20261001-1037",
-      "in-20260930-1453-2"
+      "in-20261014-metadata-logic",
+      "in-20261014-1241"
     ],
-    "notes": [
-      "vis-domains",
-      "tr-vis-requirements",
-      "tr-vis-action-scope",
-      "tr-safe-owner-approval",
-      "tr-safe-risk-limits",
-      "tr-safe-kill-switch",
-      "conv-variant-names",
-      "metric-champion",
-      "vis-idea-executor",
-      "vis-idea-ledger",
-      "vis-q-real-money",
-      "vis-q-si-scope"
-    ]
+    "notes": []
   },
   "update_with": [
     {
       "path": "agents/trading/docs/README.md",
-      "how": "bring In short and every changed fact in line"
+      "how": "Bring In short and every changed fact in line."
     },
     {
       "path": "agents/trading/docs/README.asd.md",
-      "how": "follows the README"
+      "how": "Write it again after the README changes."
     },
     {
       "path": "agents/trading/docs/rebuild-prompt.md",
-      "how": "update the brief and Do not build"
+      "how": "Update the brief and what not to build."
+    },
+    {
+      "path": "agents/system/docs/vision.md",
+      "how": "Update it when what changed is mentioned there."
     },
     {
       "path": "agents/trading/docs/vision.example.md",
-      "how": "keep the outline in step"
+      "how": "Keep the outline in step."
     },
     {
       "path": "agents/trading/docs/vision.questions.md",
-      "how": "keep the open questions in step"
+      "how": "Remove answered questions and add new open ones."
     }
   ],
   "inherits": [
-    "the system's vision: test and live, the owner's approval, new versions instead of changes in place"
+    "agents/system/CLAUDE.md#Rules",
+    "agents/system/CLAUDE.md#When and how to update each doc",
+    "agents/system/docs/vision.md",
+    "docs/vision.md"
   ],
-  "features": [
-    "Trading domains",
-    "Test and live with money"
-  ],
-  "views": [
-    "doc (shared view)"
-  ],
-  "how_it_works": {
-    "written": "2026-10-12T00:00:00Z",
-    "by": "knowledge-base-agent"
-  }
+  "features": [],
+  "views": [],
+  "how_it_works": {}
 }

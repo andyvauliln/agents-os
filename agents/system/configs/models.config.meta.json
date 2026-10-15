@@ -1,23 +1,73 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "Which AI platform, model and effort every agent, helper and AI job uses, and which platforms can be used.",
+  "kind": "file",
+  "state": "empty",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "the system's helpers",
+    "sys-self-improvement-agent (proposes changes)",
+    "the owner"
+  ],
+  "readers": [
+    "the scripts that start every run (planned run-agent and run-job)",
+    "create-agent (planned), to check model names",
+    "the owner, on the File Tree page"
+  ],
+  "changes_when": "A platform or model is added or changes status, or an agent or job should use another model.",
+  "related": [
+    {
+      "path": "agents/system/configs/system.config.json",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/configs/system.workers.json",
+      "how": "read by"
+    },
+    {
+      "path": "agents/system/docs/README.md#Settings and AI models",
+      "how": "documented in"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md#7. Settings and AI models",
+      "how": "documented in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-011"
+    ],
+    "inputs": [
+      "in-20260929-1545"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/docs/README.md",
+      "how": "update the table of models"
+    },
+    {
+      "path": "agents/system/docs/rebuild-prompt.md",
+      "how": "update the models part"
+    },
+    {
+      "path": "agents/system/docs/README.questions.md",
+      "how": "keep the open question on the model defaults in step"
+    },
+    {
+      "path": "agents/system/configs/configs.index.md",
+      "how": "keep the folder summary in step"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Settings and AI models"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

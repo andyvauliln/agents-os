@@ -92,7 +92,6 @@ header.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px
 .row .tw { width: 16px; flex: none; text-align: center; color: var(--muted); font-size: 10px; }
 .row .ic { flex: none; width: 15px; color: var(--muted); display: flex; }
 .row .nm { font: 13px var(--f-mono); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-.row .num { margin-left: auto; font: 11px var(--f-mono); color: var(--muted); padding-left: 8px; font-variant-numeric: tabular-nums; }
 .guide { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--line); }
 .tree .empty { padding: 16px; color: var(--muted); }
 
@@ -194,13 +193,6 @@ details.dec[open] summary .tx { white-space: normal; color: var(--fg); }
 .inherited { font-size: 13px; color: var(--muted); }
 .inherited summary { cursor: pointer; }
 .history { display: flex; flex-direction: column; gap: 8px; }
-.klist { display: flex; flex-direction: column; gap: 6px; max-width: 84ch; }
-details.kentry { border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
-details.kentry > summary { cursor: pointer; padding: 7px 10px; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; list-style: none; }
-details.kentry > summary::-webkit-details-marker { display: none; }
-details.kentry > summary .kh { font-weight: 600; font-size: 13.5px; flex: 1 1 220px; min-width: 0; }
-details.kentry > summary .kdoc { font: 11.5px var(--f-mono); color: var(--muted); }
-details.kentry .kbody { padding: 2px 12px 10px; font-size: 13.5px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .kbody p { margin: 0; max-width: 76ch; }
 .kbody h4.mdh { margin: 4px 0 0; font-size: 13px; }
 .kbody pre.mdpre { margin: 0; padding: 8px 10px; background: var(--sunk); border-radius: 6px; overflow: auto; max-height: 360px; font: 12px/1.5 var(--f-mono); white-space: pre; }
@@ -565,7 +557,7 @@ del.w { background: var(--danger-soft); }
     <div class="brand"><h1>Agent OS File Tree</h1><span class="ver" id="ver">loading…</span></div>
     <button class="btn primary applybtn" id="apply" type="button" hidden aria-controls="applybox" aria-expanded="false" title="Carry every change marked on this page into the files, then show the new tree"><span id="applyl">Apply changes</span><span class="n" id="applyn">0</span></button>
     <label class="search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" type="search" placeholder="Filter: name, .md, *.json, agents/system/, [27]" aria-label="Filter the tree by name, file type, path or number"></label>
+      <input id="q" type="search" placeholder="Filter: name, .md, *.json, agents/system/" aria-label="Filter the tree by name, file type or path"></label>
     <div class="applybox" id="applybox" hidden aria-live="polite"></div>
   </header>
   <div class="panes">
@@ -611,7 +603,7 @@ const store = { get(k) { try { return localStorage.getItem(k); } catch { return 
 const nowIso = () => new Date().toISOString();
 const when = ts => { try { return new Date(ts).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }); } catch { return ts; } };
 
-let DATA = null, BASE = {}, NODES = {}, BYNUM = {}, CONCEPTS = {}, DECS = {}, KNOW = {}, INIDX = {};
+let DATA = null, BASE = {}, NODES = {}, CONCEPTS = {}, DECS = {};
 let INPUTS = [];        // db inputs: every message the owner sends on this page, waiting for the knowledge agent
 let OV = {};            // db nodes/{id}: saved changes on top of the data file
 let CHANGES = [];       // db changes: history of saves
@@ -665,7 +657,6 @@ function inline(t) {
   let s = esc(t);
   s = s.replace(/`([^`]+)`/g, (_, c) => `<code>${c}</code>`);
   s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  s = s.replace(/\[(\d+(?:\.\d+)*)\]/g, (m, n) => BYNUM[n] ? `<button class="ref" data-num="${n}" type="button">[${n}]</button>` : m);
   s = s.replace(/\bD-(\d{3})\b/g, m => DECS[m] ? `<button class="ref dec" data-dec="${m}" type="button">${m}</button>` : m);
   return s;
 }
@@ -691,7 +682,7 @@ function bullets(text) {
 /* ---------- merge: data file + saved changes ---------- */
 const blankNode = () => ({ children: [], details: [], rules: [], open_questions: [], concepts: [], decisions: [], features: [], qa: [], custom_tabs: [], fields: null, example: null, content: null });
 function rebuild() {
-  NODES = {}; BYNUM = {};
+  NODES = {};
   for (const id in BASE) NODES[id] = { ...BASE[id], children: [...BASE[id].children] };
   for (const [id, o] of Object.entries(OV)) {
     if (o.new_node && !NODES[id]) NODES[id] = { ...blankNode(), ...o.new_node, id };
@@ -725,25 +716,29 @@ function rebuild() {
     else if (o.worked && !CHANGED[id]) CHANGED[id] = "worked";
   }
   for (const id in NODES) { const n = NODES[id]; if (n.name && n.parent && NODES[n.parent] && !n._deleted) n.path = NODES[n.parent].path.replace(/\/?$/, "/") + n.name; }
-  for (const id in NODES) { const n = NODES[id]; if (n.num && !n._deleted && !BYNUM[n.num]) BYNUM[n.num] = id; }
 }
 const alive = id => NODES[id] && !NODES[id]._deleted;
+/* an item's id is its path from the top of the repository ("agent-os" is the top); a store document id may not hold "/",
+   so the nodes collection keys each item by its id with every other sign written as ~XX (docKey) */
+const docKey = id => encodeURIComponent(id).replace(/[!'()*~]/g, c => "%" + c.charCodeAt(0).toString(16).toUpperCase()).replace(/%/g, "~");
+const keyId = k => { try { return decodeURIComponent(String(k).replace(/~/g, "%")); } catch { return k; } };
+const hashOf = id => id.split("/").map(encodeURIComponent).join("/");
 function resolveRef(ref) {
   const r = String(ref ?? "").trim().replace(/^\[|\]$/g, "");
   if (!r) return null;
   if (alive(r)) return r;
-  if (BYNUM[r]) return BYNUM[r];
-  if (alive("n-" + r)) return "n-" + r;
+  const rel = r.replace(/^agent-os\/?/, "").replace(/\/$/, "");
+  if (!rel) return DATA.root;
+  if (alive(rel)) return rel;
   const tail = r.replace(/^\/+/, "");
   return Object.keys(NODES).find(k => alive(k) && (NODES[k].path === r || NODES[k].path.replace(/\/$/, "").endsWith("/" + tail.replace(/\/$/, "")))) || null;
 }
 
 /* ---------- tree ---------- */
 const relPath = n => n.path.replace(/^agent-os\/?/, "");
-// Filter rules: [27] or 27.2 -> by number; contains * -> glob on the name; contains / -> path; otherwise part of the name (".md" finds every .md file).
+// Filter rules: contains * -> glob on the name; contains / -> path; otherwise part of the name (".md" finds every .md file).
 function makeMatcher(raw) {
   const q = raw.trim().toLowerCase(); if (!q) return null;
-  if (/^\[?\d+(\.\d+)*\]?$/.test(q)) { const p = "[" + q.replace(/^\[|\]$/g, ""); const exact = q.endsWith("]"); return { test: n => !!n.num && (exact ? "[" + n.num + "]" === q : ("[" + n.num + "]").startsWith(p)), mark: null }; }
   if (q.includes("*")) { const re = new RegExp("^" + q.split("*").map(x => x.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join(".*") + "$"); return { test: n => re.test(n.name.toLowerCase().replace(/\/$/, "")), mark: null }; }
   if (q.includes("/")) { const t = q.replace(/^\/+/, "").replace(/^agent-os\//, ""); return { test: n => relPath(n).toLowerCase().includes(t) || (n.path.toLowerCase() + "/").includes(t), mark: null }; }
   return { test: n => n.name.toLowerCase().includes(q), mark: q };
@@ -784,8 +779,7 @@ function renderTree() {
     out.push(`<div class="${cls}" role="treeitem" data-id="${esc(id)}" aria-selected="${id === selected}" ${hasKids ? `aria-expanded="${isOpen}"` : ""} style="padding-left:${14 + depth * 16}px">${guides}
       <span class="tw">${hasKids ? (isOpen ? "▾" : "▸") : ""}</span><span class="ic">${icon}</span>
       <span class="nm">${markName(n.name, matcher && matcher.mark)}</span>
-      ${n.empty ? '<span class="etag" title="Empty file: nothing written in it yet">empty</span>' : ""}${chgTag(id)}
-      <span class="num">${n.num ? "[" + esc(n.num) + "]" : ""}</span></div>`);
+      ${n.empty ? '<span class="etag" title="Empty file: nothing written in it yet">empty</span>' : ""}${chgTag(id)}</div>`);
     if (hasKids && isOpen) kids.forEach(c => walk(c, depth + 1));
   };
   walk(DATA.root, 0);
@@ -808,7 +802,7 @@ function revealPath(id) { let c = NODES[id]?.parent; while (c) { expanded.add(c)
 function select(id) {
   if (!NODES[id]) return;
   selected = id; revealPath(id);
-  try { history.replaceState(null, "", "#" + id.replace(/[^A-Za-z0-9._~-]/g, "")); } catch {}
+  try { history.replaceState(null, "", "#" + hashOf(id)); } catch {}
   store.set("ftx-sel", id);
   renderTree(); renderSheet(true); renderChat();
   $("#ask").value = store.get("ftx-ask-" + id) || "";
@@ -866,7 +860,7 @@ function renderSheet(reset) {
   el.innerHTML = `<div class="head">
       <button class="btn backbtn" type="button" id="back">‹ Tree</button>
       <nav class="crumbs" aria-label="Path">${crumbs}</nav>
-      <div class="titleline">${n.num ? `<span class="nb">[${esc(n.num)}]</span>` : ""}<h2>${esc(n.name)}</h2>${canDelete && DEL_OPEN !== n.id ? `<button class="btn quiet danger delbtn" type="button" id="del-open" title="Delete this ${n.type === "folder" ? "folder" : "file"}; Claude cleans the project of it">Delete</button>` : ""}</div>
+      <div class="titleline"><h2>${esc(n.name)}</h2>${canDelete && DEL_OPEN !== n.id ? `<button class="btn quiet danger delbtn" type="button" id="del-open" title="Delete this ${n.type === "folder" ? "folder" : "file"}; Claude cleans the project of it">Delete</button>` : ""}</div>
       <div class="meta">${CHANGED[n.id] ? `<span class="chip s-changed" title="${esc(scLabel(n))}">Changed · ${esc(CHG_WHY[CHANGED[n.id]])}</span>` : ""}<span class="chip">${kind}</span></div>
       ${canDelete && DEL_OPEN === n.id ? deleteBox(n) : ""}
       ${n._deleted ? deletedNote(n) : ""}
@@ -1121,7 +1115,7 @@ function fileTab(n) {
   if (n.type === "folder") {
     const kids = n.children.filter(alive);
     const cards = kids.length ? `<div class="children">${kids.map(cid => { const c = NODES[cid]; return `<button class="child" type="button" data-go="${esc(cid)}" title="${esc(scLabel(c) || c.name)}">
-      <span class="cn"><span class="t">${esc(c.name)}</span>${chgTag(cid)}<span class="note-muted mono" style="margin-left:auto;font-size:11px">${c.num ? "[" + esc(c.num) + "]" : ""}</span></span>
+      <span class="cn"><span class="t">${esc(c.name)}</span>${chgTag(cid)}</span>
       <span class="cs">${esc(plain(c.purpose || c.summary || ""))}</span></button>`; }).join("")}</div>` : `<p class="note-muted">Empty folder.</p>`;
     const add = ADD_OPEN === n.id ? `<div class="addform">
         <label>Name<input id="add-name" type="text" placeholder="notes.md, or reports/ for a folder" autocomplete="off"></label>
@@ -1189,10 +1183,10 @@ function exampleTab(n) {
 }
 
 function insideSummary(n, depth) {
-  return n.children.filter(alive).map(c => { const x = NODES[c]; return { name: x.name, type: x.type, num: x.num, about: plain(x.purpose || x.summary || "").slice(0, 300), inside: depth > 0 && x.type === "folder" ? insideSummary(x, depth - 1) : undefined }; });
+  return n.children.filter(alive).map(c => { const x = NODES[c]; return { name: x.name, type: x.type, about: plain(x.purpose || x.summary || "").slice(0, 300), inside: depth > 0 && x.type === "folder" ? insideSummary(x, depth - 1) : undefined }; });
 }
 function nodeBasis(n) { const o = {}; for (const k of EDITABLE) o[k] = n[k] ?? null; o.qa = n.qa || []; if (n.type === "folder") o.inside = insideSummary(n, 1); const s = JSON.stringify(o); let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return String(h); }
-/* ---------- How it works: summary of the knowledge base + the knowledge that applies here (D-033) ---------- */
+/* ---------- How it works: the item's own x.index.md, shown like a file ---------- */
 function md(t) {
   const out = [], L = String(t ?? "").split("\n"); let i = 0;
   const isList = l => /^\s*([-*]|\d+\.)\s+/.test(l), isTbl = l => /^\s*\|/.test(l), isFence = l => /^\s*(```|~~~)/.test(l), isHead = l => /^#{1,6}\s/.test(l);
@@ -1218,15 +1212,6 @@ function md(t) {
     out.push(`<p>${inline(buf.join(" "))}</p>`);
   }
   return out.join("");
-}
-const KSTATUS = { decided: ["Decided", "s-decided"], proposed: ["Proposed", "s-proposed"], open: ["Open question", "s-example"], retired: ["Retired", ""] };
-const docTitle = d => { const v = DATA.docs && DATA.docs[d], t = typeof v === "string" ? v : v && v.title; return t ? t.replace(/^Agent OS:\s*/, "").replace(/\s*\(v[\d.]+\)\s*$/, "") : d; };
-function kentry(eid, hereId) {
-  const e = KNOW[eid]; if (!e) return "";
-  const [lab, cls] = KSTATUS[e.status] || [e.status, ""];
-  const others = (e.nodes || []).filter(x => x !== hereId && alive(x));
-  const applies = others.length ? `<div class="applies"><span>Also applies to</span>${others.slice(0, 10).map(x => `<button class="fchip" type="button" data-go="${esc(x)}">${esc(NODES[x].num ? "[" + NODES[x].num + "] " : "")}${esc(NODES[x].name)}</button>`).join("")}${others.length > 10 ? `<span>and ${others.length - 10} more</span>` : ""}</div>` : "";
-  return `<details class="kentry"><summary><span class="kh">${inline(e.heading)}</span><span class="chip ${cls}">${esc(lab)}</span><span class="kdoc" title="${esc(e.doc)}">${esc(docTitle(e.doc))}</span></summary><div class="kbody">${md(e.text)}${applies}</div></details>`;
 }
 const underNode = (id, x) => x === id || ancestors(x).includes(id);
 const editedUnder = id => Object.keys(CHANGED).some(x => ["new", "edited", "removed"].includes(CHANGED[x]) && underNode(id, x));
@@ -1276,47 +1261,22 @@ function howTab(n) {
   const btn = label => sample ? ` <button class="btn quiet" type="button" id="how-go">${label}</button>` : "";
   let top;
   if (bgExplaining === n.id) top = `<div class="thinking">Updating this summary after a change…</div>${howText(n) ? `<div class="plain" style="opacity:.55">${paras(howText(n))}</div>` : ""}`;
-  else if (howBusy === n.id) top = `<div class="thinking">Summarising the knowledge that applies here… <button class="btn quiet" type="button" id="how-stop">Stop</button></div><div class="stream" id="how-stream"></div>`;
-  else if (pn) top = `<div class="plain">${paras(n.plain.text)}</div><p class="note-muted" style="margin:0">Updated on this page ${esc(when(n.plain.at))} after your changes. The knowledge base agent checks it against the docs at the next sync.${btn("Rewrite")} <button class="btn quiet" type="button" id="how-edit">Edit</button></p>`;
+  else if (howBusy === n.id) top = `<div class="thinking">Writing a summary of this ${n.type}… <button class="btn quiet" type="button" id="how-stop">Stop</button></div><div class="stream" id="how-stream"></div>`;
+  else if (pn) top = `<div class="plain">${paras(n.plain.text)}</div><p class="note-muted" style="margin:0">Updated on this page ${esc(when(n.plain.at))} after your changes. The knowledge base agent checks it against the files at the next sync.${btn("Rewrite")} <button class="btn quiet" type="button" id="how-edit">Edit</button></p>`;
   else if (n.how_md != null) {
     const note = mine ? `You edited this on the page${OV[n.id] && OV[n.id].updated_at ? " " + esc(when(OV[n.id].updated_at)) : ""}. The knowledge base agent writes it into the file at the next sync.`
-      : `Written by the knowledge base agent ${esc(when(h && h.at))}.${h && h.state === "stale" ? " The docs changed since; it is refreshed at the next sync." : ""}${edited ? " Something here was changed on this page since then." + btn("Update it now") : ""}`;
+      : `Written ${h && h.by ? "by " + esc(h.by) + " " : ""}${esc(when(h && h.at))}.${n.how_state === "stale" ? " The " + n.type + " changed since; it is refreshed at the next sync." : ""}${edited ? " Something here was changed on this page since then." + btn("Update it now") : ""}`;
     top = docView("how", howFileName(n), n.how_md.replace(/^---\n[\s\S]*?\n---[ \t]*\n?/, ""), `${mine ? `<span class="src">Edited on this page</span>` : ""}<button class="btn" type="button" id="how-edit">Edit</button>`) + `<p class="note-muted" style="margin:0">${note}</p>`;
   }
-  else if (h) top = `<div class="plain">${paras(h.text)}</div><p class="note-muted" style="margin:0">Summarised from the knowledge base ${esc(when(h.at))}.${h.state === "stale" ? " The docs changed since; it is refreshed at the next sync." : ""}${edited ? " Something here was changed on this page since then." + btn("Update it now") : ""}</p>`;
   else top = sample ? `<p class="note-muted">No summary yet. The knowledge base agent writes one at the next sync.</p><div><button class="btn" type="button" id="how-go">Draft one now</button></div>` : `<p class="note-muted">No summary yet. The knowledge base agent writes one at the next sync.</p>`;
-  // fixed headings for files moved to the new format (owner, 2026-10-05): only these, the keep lines and the owner's own messages and changes
-  const fromFile = n.how_md != null && !pn && howBusy !== n.id && bgExplaining !== n.id;
-  const secs = !fromFile && h && !pn && howBusy !== n.id && bgExplaining !== n.id && (h.sections || []).length ? h.sections : null;
-  if (secs) top = `<div class="howsec">${secs.map(x => `<section><h4>${esc(x.title)}</h4>${md(x.text)}</section>`).join("")}</div><p class="note-muted" style="margin:0">Written by the knowledge base agent ${esc(when(h.at))}.${h.state === "stale" ? " The docs changed since; it is refreshed at the next sync." : ""}${edited ? " Something here was changed on this page since then." : ""}</p>`;
-  // "Always keep in mind" (owner, in-20260930-1603): written by the knowledge agent with each summary
-  const keep = (!fromFile && h && h.keep) || [];
-  if (keep.length && howBusy !== n.id) {
-    const kb = `<div class="keep"><span class="keep-h">${secs ? "Keep in mind" : "Always keep in mind"}</span><ul class="list">${keep.map(x => `<li>${inline(x)}</li>`).join("")}</ul></div>`;
-    top = secs ? top.replace('<p class="note-muted" style="margin:0">Written by', kb + '<p class="note-muted" style="margin:0">Written by') : top + kb;
-  }
-  const k = n.knowledge || { direct: [], inherited: [] };
-  const direct = (k.direct || []).filter(e => KNOW[e]), inh = (k.inherited || []).filter(e => KNOW[e]);
-  const klist = direct.length ? `<div class="klist">${direct.map(e => kentry(e, n.id)).join("")}</div>` : `<p class="note-muted">No shared knowledge points here yet; this ${n.type} is described only by its own notes below.</p>`;
-  const inherited = inh.length ? `<details class="inherited"><summary>From the folders above (${inh.length})</summary><div class="klist" style="margin-top:8px">${inh.map(e => kentry(e, n.id)).join("")}</div></details>` : "";
-  // the object's own notes from the file tree
-  const link = n.link_target ? `<p class="prose">Points to ${inline(n.link_target)}. The linked file is read-only here; its owner writes the real file.</p>` : "";
-  const sameAs = n.same_as && NODES[n.same_as] ? `<p class="prose note-muted">Same kind as ${inline("[" + (NODES[n.same_as].num || "") + "]")} <code>${esc(NODES[n.same_as].name)}</code> in the example agent; its notes apply here too.</p>` : "";
-  const details = (n.details || []).length ? `<dl class="kv">${n.details.map(d => `<dt>${inline(d.label)}</dt><dd>${bullets(d.text)}</dd>`).join("")}</dl>` : "";
-  const who = (n.writers_readers || n.updated_when) ? `<dl class="kv">${n.writers_readers ? `<dt>Writers / readers</dt><dd>${inline(n.writers_readers)}</dd>` : ""}${n.updated_when ? `<dt>Updated when</dt><dd>${inline(n.updated_when)}</dd>` : ""}</dl>` : "";
-  const own = link + sameAs + details + who;
-  // inputs that shaped it
-  const ins = [...new Set([...direct, ...inh].flatMap(e => (KNOW[e].sources || []).filter(x => INIDX[x])))].sort().reverse();
-  const shaped = ins.length ? `<div class="history">${ins.slice(0, 8).map(x => `<div class="hitem"><span class="when">${esc(when(INIDX[x].at))} · ${esc(INIDX[x].where || "")}</span><span>${inline(INIDX[x].summary || x)}</span></div>`).join("")}${ins.length > 8 ? `<p class="note-muted">and ${ins.length - 8} earlier inputs</p>` : ""}</div>` : "";
+  const link = n.link_target ? `<p class="note-muted" style="margin:0">Points to <code>${esc(n.link_target)}</code>. The linked file is read-only here; its owner writes the real file.</p>` : "";
   const waiting = INPUTS.filter(x => x.status === "new" && x.node_id && underNode(n.id, x.node_id)).sort((a, b) => String(b.at).localeCompare(String(a.at)));
   const totalWaiting = INPUTS.filter(x => x.status === "new").length;
   const pend = waiting.length ? `<div class="history">${waiting.slice(0, 6).map(x => `<div class="pending-in"><span class="when">${esc(when(x.at))} · ${esc(relPath({ path: x.path || "" }) || "root")}</span><span>${esc(String(x.text).slice(0, 400))}</span>${x.answer ? `<span class="note-muted">Claude said: ${esc(String(x.answer).slice(0, 240))}${String(x.answer).length > 240 ? "…" : ""}</span>` : ""}</div>`).join("")}</div>` : "";
   const hist = CHANGES.filter(c => (c.items || []).some(i => i.node_id === n.id)).sort((a, b) => String(b.at).localeCompare(String(a.at)));
   const history = hist.length ? `<div class="history">${hist.map(c => `<div class="hitem ${c.undone ? "undone" : ""}"><span class="when">${esc(when(c.at))}${c.undone ? " · undone" : ""}</span><span>${inline(c.title || "")}</span>${c.instruction ? `<span class="note-muted">You said: ${esc(c.instruction)}</span>` : ""}${!c.undone && c.kind !== "qa" ? `<span><button class="btn quiet" type="button" data-undo="${esc(c.id)}">Undo this change</button></span>` : ""}</div>`).join("")}</div>` : "";
-  const retired = n.id === DATA.root && DATA.retired.length ? `<details class="inherited"><summary>Retired numbers (${DATA.retired.length})</summary><ul class="list" style="margin-top:8px">${DATA.retired.map(r => `<li><strong>${inline(r.heading)}</strong> ${inline(r.text)}</li>`).join("")}</ul></details>` : "";
-  const foot = totalWaiting ? `<p class="note-muted">${totalWaiting} ${totalWaiting === 1 ? "message" : "messages"} from this page ${totalWaiting === 1 ? "is" : "are"} waiting for the next sync. When you press Apply changes at the top, or say "sync the file tree" in the project, the project IDE agent saves them, writes your edits into the files and hands the rest to the knowledge base agent, which updates the docs and these summaries.</p>` : "";
-  if (secs || (fromFile && howParts(n.how_md).fixed)) return blk("", top) + blk("Waiting for the next sync", pend, waiting.length || null) + blk("Changes made on this page", history, hist.length || null) + foot;
-  return blk("", top) + blk("Knowledge that applies here", klist + inherited, direct.length || null) + blk("This " + (n.type === "folder" ? "folder" : "file") + " in the file tree", own) + blk("Waiting for the next sync", pend, waiting.length || null) + blk("Shaped by your inputs", shaped, ins.length || null) + blk("Changes made on this page", history, hist.length || null) + blk("", retired) + foot;
+  const foot = totalWaiting ? `<p class="note-muted">${totalWaiting} ${totalWaiting === 1 ? "message" : "messages"} from this page ${totalWaiting === 1 ? "is" : "are"} waiting for the next sync. When you press Apply changes at the top, or say "sync the file tree" in the project, the project IDE agent saves them, writes your edits into the files and hands the rest to the knowledge base agent, which updates the docs and the How it works files.</p>` : "";
+  return blk("", top + link) + blk("Waiting for the next sync", pend, waiting.length || null) + blk("Changes made on this page", history, hist.length || null) + foot;
 }
 
 function questionsTab(n) {
@@ -1324,19 +1284,9 @@ function questionsTab(n) {
   return qf + questionsTabOld(n);
 }
 function questionsTabOld(n) {
-  const oq = (n.open_questions || []);
-  const open = oq.length ? `<div class="openq">${oq.map((q, i) => `<div class="item"><span>${inline(q)}</span><button class="btn" type="button" data-discuss="${i}">Discuss</button></div>`).join("")}</div>` : `<p class="note-muted">No open questions.</p>`;
   const qa = (n.qa || []).slice().reverse();
   const answered = qa.length ? `<div class="qa">${qa.map(x => `<div class="item"><span class="q">${inline(x.q)}</span><span>${inline(x.a)}</span><span class="when">${esc(when(x.at))}</span></div>`).join("")}</div>` : "";
-  let inside = "";
-  if (n.type === "folder") {
-    const found = [];
-    const walk = id => NODES[id].children.filter(alive).forEach(c => { const x = NODES[c]; if ((x.open_questions || []).length) found.push(x); if (x.type === "folder") walk(c); });
-    walk(n.id);
-    const total = found.reduce((a, x) => a + x.open_questions.length, 0);
-    if (total) inside = `<details class="inherited"><summary>Open questions in files inside this folder (${total})</summary><div class="openq" style="margin-top:8px">${found.map(x => x.open_questions.map(q => `<div class="item"><span><span class="mono" style="font-size:12px">${esc(relPath(x).slice(relPath(n).length) || x.name)}</span><br>${inline(q)}</span><button class="btn" type="button" data-go="${esc(x.id)}">Open</button></div>`).join("")).join("")}</div></details>`;
-  }
-  return blk(n.type === "folder" ? "Open questions about this folder" : "Open questions", open, oq.length || null) + (inside ? blk("", inside) : "") + blk("Answered here", answered, qa.length || null);
+  return blk("Answered here", answered, qa.length || null);
 }
 
 /* agents: overview and the list of what the agent uses (built live from the tree) */
@@ -1390,7 +1340,7 @@ function agentsTab(n) {
   const about = x => plain(x.summary || x.purpose || "").slice(0, 220);
   const subs = p.sub.items;
   const out = [];
-  out.push(sect("Sub-agents", subs, p.sub.folder, "Add a sub-agent", x => aitem(x, x.link ? "Links to the sub-agents of " + about(x).replace(/^->\s*/, "") : about(x), chipFor(x) + (x.num ? `<span class="note-muted mono" style="font-size:11px">[${esc(x.num)}]</span>` : ""))));
+  out.push(sect("Sub-agents", subs, p.sub.folder, "Add a sub-agent", x => aitem(x, x.link ? "Links to the sub-agents of " + about(x).replace(/^->\s*/, "") : about(x), chipFor(x))));
   out.push(sect(n.agent.level === "system" ? "Domain agents it manages" : "Strategy agents", p.children, null, "", x => {
     const pc = agentParts(x);
     return aitem(x, about(x), `<span class="chip">${pc.children.length} ${x.agent ? "strateg" + (pc.children.length === 1 ? "y" : "ies") : "variant" + (pc.children.length === 1 ? "" : "s")}</span><span class="chip">${pc.sub.items.filter(y => !y.link && !y.placeholder).length} sub-agents</span>${chipFor(x)}`);
@@ -1410,7 +1360,7 @@ const jobsTabOf = n => n ? (n.custom_tabs || []).find(c => c.layout === "jobs") 
 const jobRowsOf = n => { const t = jobsTabOf(n); return t ? (TABLE_EDIT[n.id + "|" + t.id] || t.rows || []) : []; };
 const jobFiles = () => Object.values(NODES).filter(x => alive(x.id) && !x.link && jobsTabOf(x));
 const domainOf = x => (x.path.match(/\/agents\/([^/]+)\//) || [])[1] || "";
-function linkTargetNode(n) { const m = String(n.link_target || "").match(/\[([\d.]+)\]/); return m && BYNUM[m[1]] && alive(BYNUM[m[1]]) ? NODES[BYNUM[m[1]]] : null; }
+function linkTargetNode(n) { const id = n.link_target ? resolveRef(n.link_target) : null; return id ? NODES[id] : null; }
 function jobsScope(n) {
   if (n.link && /\.workers\.link\.json$/.test(n.name)) { const t = linkTargetNode(n); return { label: "Jobs", files: t && jobsTabOf(t) ? [t] : [], link: t }; }
   // configs/subagents.link/ at any level (D-030): every job of the agents below this one
@@ -1647,7 +1597,7 @@ async function writeOV(id, patch) {
   const prev = OV[id] || {};
   const next = { ...prev, ...patch, updated_at: nowIso(), by: uid };
   if (patch.fields) next.fields = { ...(prev.fields || {}), ...patch.fields };
-  await db.doc("nodes/" + id).set(next);
+  await db.doc("nodes/" + docKey(id)).set(next);
   OV[id] = next;
 }
 // changes: [{node_id, set:{}} | {node_id, remove:true} | {new:true, parent_id, name, type, set:{}}]
@@ -1659,13 +1609,13 @@ async function applyChanges(changes, title, instruction, kind) {
       const id = "new-" + Math.random().toString(36).slice(2, 10);
       const parent = NODES[c.parent_id]; if (!parent) continue;
       const set = c.set || {};
-      const node = { id, parent: parent.id, name: c.name, type: c.type === "folder" || String(c.name).endsWith("/") ? "folder" : "file", num: null, link: String(c.name).includes(".link"), placeholder: String(c.name).includes("[") };
+      const node = { id, parent: parent.id, name: c.name, type: c.type === "folder" || String(c.name).endsWith("/") ? "folder" : "file", link: String(c.name).includes(".link"), placeholder: String(c.name).includes("[") };
       for (const [k, v] of Object.entries(set)) if (EDITABLE.includes(k)) node[k] = v;
       await writeOV(id, { new_node: node });
       items.push({ node_id: id, path: parent.path.replace(/\/?$/, "/") + c.name, kind: "new" });
     } else if (c.remove) {
       const x = NODES[c.node_id]; if (!x) continue;
-      await writeOV(c.node_id, { deleted: true, was: { parent: x.parent, name: x.name, type: x.type, path: x.path, num: x.num || null, link: !!x.link, purpose: x.purpose || "" }, delete_note: c.note || "", cleanup: c.cleanup || "sync" });
+      await writeOV(c.node_id, { deleted: true, was: { parent: x.parent, name: x.name, type: x.type, path: x.path, link: !!x.link, purpose: x.purpose || "" }, delete_note: c.note || "", cleanup: c.cleanup || "sync" });
       items.push({ node_id: c.node_id, path: NODES[c.node_id].path, kind: "remove" });
     } else if (c.node_id && NODES[c.node_id]) {
       const n = NODES[c.node_id]; const fields = {};
@@ -1926,7 +1876,7 @@ function hint(t, err) { const h = $("#hint"); h.textContent = t; h.className = "
 let DEFAULT_HINT = "Ask anything or say what to change: requests get a draft you can check and save. Every message and answer is kept and brought into the files at the next sync. Enter sends, Shift+Enter adds a line.";
 
 function nodeJSON(n, full) {
-  const o = { id: n.id, num: n.num, name: n.name, path: n.path, type: n.type };
+  const o = { id: n.id, name: n.name, path: n.path, type: n.type };
   for (const k of EDITABLE) o[k] = n[k] ?? null;
   o.children = n.children.filter(alive).map(c => ({ id: c, name: NODES[c].name, summary: plain(NODES[c].summary || "").slice(0, 120) }));
   o.qa = (n.qa || []).slice(-8);
@@ -1956,8 +1906,8 @@ Rules for changes:
   "custom_tabs" = extra tabs for this node, e.g. [{"id","title","type":"table","columns":[{"key","label","kind":"text|bool|select","options"}],"rows":[...],"note"}].
   "content" = the file's full text as it should be (files only; null = not created yet). When you change it, return the COMPLETE new text, not a fragment.
   "owner_comments" on a node are the owner's notes on lines of the file (or the whole file). Take them into account; when asked to apply them, change "content" or other fields to do what they say.
-- Rules, formats and concepts shared by many files live in the knowledge docs (listed below as "Knowledge that applies"). You cannot edit the docs from here: change the node fields that are specific to these nodes, and say in "reply" when a shared rule changes too. The owner's message is saved as an input, and the knowledge agent updates the docs and the summaries at the next sync.
-- Keep [n] numbers and D-xxx ids as written. Plain, direct English.
+- Rules, formats and concepts shared by many files live in the docs. You cannot edit the docs from here: change the node fields that are specific to these nodes, and say in "reply" when a shared rule changes too. The owner's message is saved as an input, and the knowledge base agent updates the docs and the How it works files at the next sync.
+- A node's id is its path from the top of the repository. Keep D-xxx ids as written. Plain, direct English.
 - To remove a node: {"node_id":"...","remove":true}. To add one: {"new":true,"parent_id":"...","name":"file-or-folder/","type":"file|folder","set":{...fields}}.
 
 Reply with ONLY this JSON:
@@ -1969,9 +1919,6 @@ ${DATA.decisions.map(d => d.id + ": " + plain(d.text).slice(0, 140)).join("\n")}
 Parent: ${parent ? parent.path + " — " + plain(parent.purpose || "").slice(0, 300) : "(root)"}
 
 How it works (current summary of this node): ${howText(n) || "(none yet)"}
-
-Knowledge that applies to this node (from the knowledge docs):
-${JSON.stringify(knowledgeFor(n, 1400), null, 1).slice(0, 14000)}
 
 The node the owner is looking at:
 ${JSON.stringify(nodeJSON(n, true), null, 1)}
@@ -1986,7 +1933,7 @@ Owner's new message:
 ${msg}`;
 }
 const TOOLS = [
-  { name: "get_node", description: "Read one node of the file tree with all its fields. ref = node id, [n] number like 27.2, or a path.",
+  { name: "get_node", description: "Read one node of the file tree with all its fields. ref = the node id, which is its path from the top of the repository (the top is agent-os).",
     inputSchema: { type: "object", properties: { ref: { type: "string" } }, required: ["ref"] },
     execute: ({ ref }) => {
       const id = resolveRef(ref);
@@ -1994,11 +1941,11 @@ const TOOLS = [
       const t = $("#think"); if (t) t.textContent = "Reading " + NODES[id].path.replace(/^agent-os\//, "") + "…";
       return nodeJSON(NODES[id], false);
     } },
-  { name: "search_nodes", description: "Find nodes whose name, path, summary or purpose contain the text. Returns up to 15 {id, num, path, summary}.",
+  { name: "search_nodes", description: "Find nodes whose name, path, summary or purpose contain the text. Returns up to 15 {id, path, summary}.",
     inputSchema: { type: "object", properties: { text: { type: "string" } }, required: ["text"] },
     execute: ({ text }) => {
       const q = String(text || "").toLowerCase();
-      return Object.values(NODES).filter(x => !x._deleted && (x.path + " " + (x.summary || "") + " " + (x.purpose || "")).toLowerCase().includes(q)).slice(0, 15).map(x => ({ id: x.id, num: x.num, path: x.path, summary: plain(x.summary || "").slice(0, 140) }));
+      return Object.values(NODES).filter(x => !x._deleted && (x.path + " " + (x.summary || "") + " " + (x.purpose || "")).toLowerCase().includes(q)).slice(0, 15).map(x => ({ id: x.id, path: x.path, summary: plain(x.summary || "").slice(0, 140) }));
     } },
 ];
 function errText(e) {
@@ -2071,20 +2018,16 @@ function relatedCandidates(ids) {
   const out = new Map();
   for (const id of ids) {
     const n = NODES[id]; if (!n) continue;
-    const needles = [n.num ? "[" + n.num + "]" : null, n.name && n.name.length > 4 && !/^(README\.md|CLAUDE\.md|index\.json|init\.sh|start\.sh)$/.test(n.name) ? n.name.replace(/\/$/, "") : null].filter(Boolean);
+    const needles = [n.name && n.name.length > 4 && !/^(README\.md|CLAUDE\.md|index\.json|init\.sh|start\.sh)$/.test(n.name) ? n.name.replace(/\/$/, "") : null].filter(Boolean);
     for (const k in NODES) {
       if (out.size >= 14) break;
       const x = NODES[k]; if (!alive(k) || ids.includes(k) || out.has(k)) continue;
       const text = [x.summary, x.purpose, x.link_target, x.writers_readers, x.updated_when, ...(x.rules || []), ...(x.open_questions || []), ...(x.details || []).map(d => d.text)].join(" \n ");
       const hit = needles.find(nd => text.includes(nd));
-      if (hit) { const i = text.indexOf(hit); out.set(k, { id: k, num: x.num, path: x.path, mentions: hit, around: text.slice(Math.max(0, i - 120), i + 160) }); }
+      if (hit) { const i = text.indexOf(hit); out.set(k, { id: k, path: x.path, mentions: hit, around: text.slice(Math.max(0, i - 120), i + 160) }); }
     }
   }
   return [...out.values()];
-}
-function sharedKnowledge(ids) {
-  return [...new Set(ids.flatMap(id => (NODES[id] && NODES[id].knowledge && NODES[id].knowledge.direct) || []))].filter(e => KNOW[e]).slice(0, 10)
-    .map(e => ({ heading: KNOW[e].heading, doc: KNOW[e].doc, text: KNOW[e].text.slice(0, 700), also_applies_to: (KNOW[e].nodes || []).filter(x => !ids.includes(x) && alive(x)).slice(0, 12).map(x => ({ id: x, path: NODES[x].path })) }));
 }
 function ripplePrompt(items, instruction) {
   const ids = [...new Set(items.map(i => i.node_id))].filter(id => NODES[id]);
@@ -2100,7 +2043,7 @@ Review and update, only where something is now out of date, wrong or missing:
 1. The changed items themselves: summary, purpose, details, open_questions (remove the ones this change answers or makes moot, add ones it clearly raises), example, fields, writers_readers, updated_when. If "content" changed, make the description, field guide and example match the new content.
 2. Their parent folders: summary, purpose, details and open_questions where they describe these items.
 3. Other nodes that reference these items or depend on the same logic (candidates below; use search_nodes and get_node to check them and to find more).
-The saved values are the owner's decision: never undo, weaken or contradict them. Do not change "content" of other files unless the change plainly breaks them. Never change "how_md" (the How it works file): the owner edits it on the page and the knowledge base agent keeps it. Keep [n] numbers and D-xxx ids as written. Each field value is the COMPLETE new value. Editable fields: ${EDITABLE.join(", ")}. If nothing needs an update, return an empty list.
+The saved values are the owner's decision: never undo, weaken or contradict them. Do not change "content" of other files unless the change plainly breaks them. Never change "how_md" (the How it works file): the owner edits it on the page and the knowledge base agent keeps it. Keep D-xxx ids as written. Each field value is the COMPLETE new value. Editable fields: ${EDITABLE.join(", ")}. If nothing needs an update, return an empty list.
 
 Reply with ONLY this JSON:
 {"reply":"1-2 plain sentences: what you updated and why, or that nothing else needed it","title":"short title","changes":[{"node_id":"...","set":{"field":"new value"}}]}
@@ -2112,10 +2055,7 @@ Parent folders:
 ${JSON.stringify(parents, null, 1).slice(0, 8000)}
 
 Nodes that mention them:
-${JSON.stringify(relatedCandidates(ids), null, 1)}
-
-Shared knowledge (from the docs) that applies to the changed items, with the other files it applies to. Those files follow the same rule, so check whether they need the same update:
-${JSON.stringify(sharedKnowledge(ids), null, 1).slice(0, 10000)}`;
+${JSON.stringify(relatedCandidates(ids), null, 1)}`;
 }
 let rippleRuns = 0;
 async function ripple(items, instruction, hostId) {
@@ -2192,30 +2132,25 @@ async function saveDraft(mi, id) {
 }
 
 let howBusy = null, howCtl = null; const howAsked = new Set();
-function knowledgeFor(n, lim) {
-  return ((n.knowledge && n.knowledge.direct) || []).filter(e => KNOW[e]).map(e => ({ heading: KNOW[e].heading, doc: KNOW[e].doc, status: KNOW[e].status, text: KNOW[e].text.slice(0, lim) }));
-}
 async function explainText(n, signal, onText) {
   const parent = n.parent ? NODES[n.parent] : null;
   const big = n.id === DATA.root || !!n.agent || isAgentFolder(n) || /^(agents\/|apps\/)$/.test(n.name);
   const words = n.type === "folder" ? (big ? 200 : 130) : 80;
-  const kids = n.children.filter(alive).map(c => { const x = NODES[c]; return { name: x.name, num: x.num, type: x.type, how: howText(x) || plain(x.purpose || x.summary || "").slice(0, 300) }; });
+  const kids = n.children.filter(alive).map(c => { const x = NODES[c]; return { name: x.name, type: x.type, how: howText(x) || plain(x.purpose || x.summary || "").slice(0, 300) }; });
   const prompt = `You write the "How it works" summary of one ${n.type} in the file tree of "Agent OS" (an agentic trading system: system, domain and strategy level agents plus trading variants, with workers, jobs, links, self-improvement and a UI). The owner, who may not be a developer, reads it as the main view of this ${n.type}; agents read it to understand this part fast. It describes how things work now.
 
-Build it from the material below: the node's own notes, the knowledge from the docs that applies to it${n.type === "folder" ? ", and the summaries of what is inside it" : ""}.
+Build it from the material below: the node itself and its Details${n.type === "folder" ? ", and the summaries of what is inside it" : ""}.
 - Start with what it is and what it is for, in one sentence.
 - Then how it works: what it holds or does, who writes it and who reads it, when it changes, what it connects to.${n.type === "folder" ? "\n- Roll up the children: group them by what they do, name the two to four that matter most, never contradict a child's summary." : ""}
 - Say plainly what is still a proposal or open ("The format is still a proposal."). Never present a proposal as decided.
-- No decision ids (D-0xx), no input ids. [n] numbers only where they help. File and folder names in backticks. No headings, no lists, no em-dashes.
+- No decision ids (D-0xx), no input ids. File and folder names in backticks. No headings, no lists, no em-dashes.
 - At most ${words} words.
 - If the current summary is still right, return it unchanged or with small edits.
 
 Current summary: ${howText(n) || "(none)"}
 Parent folder: ${parent ? parent.path + " — " + plain(howText(parent) || parent.purpose || "").slice(0, 400) : "(root)"}
 Node notes:
-${JSON.stringify({ ...nodeJSON(n, false), children: undefined }, null, 1).slice(0, 12000)}
-Knowledge that applies:
-${JSON.stringify(knowledgeFor(n, 1800), null, 1).slice(0, 16000)}${n.type === "folder" ? `
+${JSON.stringify({ ...nodeJSON(n, false), children: undefined, meta: n.meta || undefined }, null, 1).slice(0, 12000)}${n.type === "folder" ? `
 Inside it:
 ${JSON.stringify(kids, null, 1).slice(0, 14000)}` : ""}
 
@@ -2270,7 +2205,6 @@ document.addEventListener("click", ev => {
   }
   const d = t.dataset;
   if (d.go) return select(d.go);
-  if (d.num) { const id = BYNUM[d.num]; if (id) select(id); return; }
   if (d.dec) { showPop(t, `<div class="id">${esc(d.dec)}</div><div>${inline(DECS[d.dec])}</div>`); return; }
   if (d.side) { side = d.side; store.set("ftx-side", side); renderTree(); const r = $(`#tree .row[data-id="${CSS.escape(selected || "")}"]`); r && r.scrollIntoView({ block: "nearest" }); return; }
   if (t.id === "clearq") { $("#q").value = ""; query = ""; matcher = null; renderTree(); return; }
@@ -2523,10 +2457,9 @@ function applyData(raw) {
   const d = JSON.parse(raw); DATA_TEXT = raw; DATA = d;
   BASE = {}; CONCEPTS = {}; DECS = {};
   for (const n of DATA.nodes) { if (n.content_self) n.content = DATA_TEXT; BASE[n.id] = n; }   // the page data shows itself, as loaded
-  for (const c of DATA.concepts) CONCEPTS[c.id] = c;
-  for (const x of DATA.decisions) DECS[x.id] = x.text;
-  KNOW = DATA.knowledge || {}; INIDX = DATA.inputs || {};
-  $("#ver").textContent = `${DATA.source.doc_version} · ${DATA.nodes.length} objects` + (SERVER ? " · on your server" : "");
+  for (const c of DATA.concepts || []) CONCEPTS[c.id] = c;
+  for (const x of DATA.decisions || []) DECS[x.id] = x.text;
+  $("#ver").textContent = `v${DATA.data_version} · ${DATA.nodes.length} items` + (SERVER ? " · on your server" : "");
 }
 async function reloadData() {   // on the server, after Claude Code changed files
   try { const r = await fetch("file-tree.data.json", { cache: "no-cache" }); if (!r.ok) return; applyData(await r.text()); } catch { return; }
@@ -2538,9 +2471,9 @@ async function boot() {
     applyData(await r.text());
   } catch (e) { $("#tree").innerHTML = `<div class="empty">The data file did not load (${esc(e.message)}). Reload the page.</div>`; return; }
   rebuild();
-  if (!expanded.size) ["n-0", "n-4", "n-10", "n-19", "n-21", "n-23"].forEach(id => BASE[id] && expanded.add(id));
-  const h = (location.hash || "").slice(1);
-  const start = alive(h) ? h : alive(store.get("ftx-sel")) ? store.get("ftx-sel") : "n-23";
+  if (!expanded.size) [DATA.root, "agents", "apps", "docs"].forEach(id => BASE[id] && expanded.add(id));
+  let h = (location.hash || "").slice(1); try { h = decodeURIComponent(h); } catch {}
+  const start = alive(h) ? h : alive(store.get("ftx-sel")) ? store.get("ftx-sel") : "README.md";
   selected = alive(start) ? start : DATA.root;
   revealPath(selected); renderTree(); renderSheet(true); renderChat();
   $("#ask").value = store.get("ftx-ask-" + selected) || "";
@@ -2558,7 +2491,7 @@ function connect() {
 function attachDb(d) {
     dbArrived(d);
     if (!db) return;
-    db.collection("nodes").onSnapshot(snap => { OV = {}; snap.docs.forEach(x => { OV[x.id] = x.data(); }); rebuild(); if (!NODES[selected]) selected = DATA.root; renderTree(); renderSheet(); }, () => {});
+    db.collection("nodes").onSnapshot(snap => { OV = {}; snap.docs.forEach(x => { OV[keyId(x.id)] = x.data(); }); rebuild(); if (!NODES[selected]) selected = DATA.root; renderTree(); renderSheet(); }, () => {});
     db.collection("changes").onSnapshot(snap => { CHANGES = snap.docs.map(x => ({ id: x.id, ...x.data() })); if (tab === "how") renderSheet(); }, () => {});
     db.collection("inputs").onSnapshot(snap => { INPUTS = snap.docs.map(x => ({ id: x.id, ...x.data() })); watchApply(); rebuild(); renderTree(); if (tab === "how") renderSheet(); }, () => {});
 }
@@ -2600,7 +2533,7 @@ async function serverAsk(id, n, c, text, inputId, answerInput, extra) {
   const done = () => { m.live = false; RUN = null; setBusy(null); hint(DEFAULT_HINT); saveChat(id); if (selected === id) renderChatKeep(); };
   if (!SERVER.agent) { m.text = "Claude Code is not set up on this server yet, so your message is only saved. " + (SERVER.agent_error || ""); return done(); }
   let r = null;
-  try { r = await fetch("api/agent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text, node_id: id, path: n.path, name: n.name, num: n.num || null, session: c.session || null, input_id: inputId, ...(extra || {}) }) }).then(x => x.json()); }
+  try { r = await fetch("api/agent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text, node_id: id, path: n.path, name: n.name, session: c.session || null, input_id: inputId, ...(extra || {}) }) }).then(x => x.json()); }
   catch (e) { m.text = "Could not reach the server (" + (e.message || e) + ")."; return done(); }
   if (!r || !r.run) { m.text = (r && r.error) || "The server did not start the request."; return done(); }
   RUN = { id: r.run, node: id }; m.run = r.run;

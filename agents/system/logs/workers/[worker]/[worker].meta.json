@@ -1,23 +1,58 @@
 {
   "schema_version": 1,
-  "about": "",
-  "kind": "",
-  "state": "",
-  "status": "",
-  "git": "",
-  "secret": null,
+  "about": "The pattern of one shared worker's log folder, named after the worker, with dated logs and a stable latest log.",
+  "kind": "folder",
+  "state": "name pattern",
+  "status": "decided",
+  "git": "tracked",
+  "secret": false,
   "generated_by": null,
-  "writers": [],
-  "readers": [],
-  "changes_when": "",
-  "related": [],
+  "writers": [
+    "a shared worker, when one is built"
+  ],
+  "readers": [
+    "the system agent",
+    "sys-self-improvement-agent",
+    "the owner, on the File Tree page",
+    "agents that link the latest log"
+  ],
+  "changes_when": "A shared worker is created; then every run adds lines.",
+  "related": [
+    {
+      "path": "agents/system/scripts/workers/",
+      "how": "written by"
+    },
+    {
+      "path": "agents/system/data/workers/[worker]/",
+      "how": "same format as"
+    },
+    {
+      "path": "agents/system/logs/workers/",
+      "how": "summed up in"
+    }
+  ],
   "sources": {
-    "decisions": [],
-    "inputs": [],
+    "decisions": [
+      "D-007",
+      "D-009"
+    ],
+    "inputs": [
+      "in-20260929-1545"
+    ],
     "notes": []
   },
-  "update_with": [],
-  "inherits": [],
+  "update_with": [
+    {
+      "path": "agents/system/logs/workers/workers.index.md",
+      "how": "keep the folder summary in step"
+    }
+  ],
+  "inherits": [
+    "agents/system/CLAUDE.md#Rules",
+    "docs/metadata.md",
+    "agents/system/docs/README.md#Logs",
+    "agents/system/docs/README.md#Workers and data"
+  ],
   "features": [],
   "views": [],
   "how_it_works": {}

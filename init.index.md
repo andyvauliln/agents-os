@@ -1,8 +1,9 @@
 ---
 about: agent-os/init.sh
-basis: b9212fded114
+basis: 4080a1624910
 written: 2026-10-15T07:10:39Z
 by: knowledge-base-agent
+confirmed: 2026-10-15T11:08:51Z
 ---
 # init.sh
 
@@ -34,3 +35,4 @@ It writes `~/.config/systemd/user/project-ide.service`, which runs `start.sh ser
 
 - When you change it, never let it read or write a keys file; the server reads the keys it names itself.
 - When lingering is off and cannot be turned on, the IDE starts only at login; the owner runs the `sudo loginctl enable-linger` line it prints.
+- Step 4 finds a browser for the page check and writes its paths to `.playwright.env` (git ignores it): a Playwright module already on the machine, the newest Chromium in `~/.cache/ms-playwright/`, and any libraries the system lacks, unpacked from their packages into `~/.local/share/agent-os/browser-libs/` without `sudo`. On this server the module is the one the kidtube project installed; if that project goes, step 4 installs its own into `~/.local/share/agent-os/playwright/`.

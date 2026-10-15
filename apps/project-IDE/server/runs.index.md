@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/server/runs.py
-basis: a0dd6e47c287
+basis: 0203ad88cc86
 written: 2026-10-15T10:32:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T10:40:41Z
+confirmed: 2026-10-15T11:08:51Z
 ---
 # runs.py
 
@@ -35,3 +35,4 @@ It reads Claude Code's transcripts in its settings folder (`runs.claude_config_d
 
 - When Claude Code is updated and the run page shows wrong or empty steps, check the transcript format here first.
 - Never write into the transcripts: they belong to Claude Code.
+- The list shows only sessions that started at or after `runs.since` in `server.config.json` (now the start of the session that built the panel); empty it to list every session again.

@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/scripts/README.md
-basis: 4fb55c97cf1a
+basis: 70ab016ea8a9
 written: 2026-10-15T07:11:30Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T07:11:37Z
+confirmed: 2026-10-15T11:08:51Z
 ---
 # README.md
 

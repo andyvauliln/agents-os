@@ -96,6 +96,7 @@ class Transcripts:
         base = cfg.get("claude_config_dir") or os.environ.get("CLAUDE_CONFIG_DIR") or os.path.expanduser("~/.claude")
         self.projects = os.path.join(os.path.expanduser(base), "projects")
         self.live_seconds = cfg.get("live_seconds", 90)
+        self.since = cfg.get("since") or ""    # sessions that started before this time are not listed
         self.max_text = cfg.get("max_text", 1200)
         self._rows = {}      # path -> (mtime, size, row)
         self.lock = threading.Lock()
@@ -153,6 +154,9 @@ class Transcripts:
                     except OSError:
                         pass
         files.sort(reverse=True)
+        if self.since:   # a session's start is in its file; files changed before the cut-off cannot have started after it
+            files = [(m, p) for m, p in files if time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(m)) >= self.since[:19]]
+            files = [(m, p) for m, p in files if (self.row(p).get("start") or "") >= self.since]
         return [self.row(p) for _, p in files[offset:offset + limit]], len(files)
 
     def row(self, path):

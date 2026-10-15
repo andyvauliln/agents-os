@@ -191,7 +191,7 @@ The open folders, the selected item and tab, the switches, the Read or Source ch
 
 A spoken or typed request is easy to lose: it goes into one item's chat, and once a run ends, its steps are gone from view after a reload. On the owner's server the page keeps all of them in sight. Every note the owner makes for Claude Code, and every Claude Code run in this repository, from the page or from a terminal, is one row in one panel. The owner sees what waits, what works and what is done, sends several notes as one run, and opens any run to see what it did. The panel exists only on the server page; on claude.ai and anywhere else its button is hidden.
 
-**The panel.** The Notes and runs button in the header opens it under the header, and the page remembers whether it was open. It has three tabs, All, Notes and Runs, with Refresh and Hide. Rows that need the owner come first, then the rows at work, then the rest, newest first. Ten rows show at a time, with a line such as "10 of 34" and Show more for ten more.
+**The panel.** The Notes and runs button in the header opens it. Open, it fills the whole page under the header and scrolls as one; Close, the button again, opening a run or clicking an item's path returns to the tree. The page remembers whether it was open. It lists the runs that started on or after the date in the server's `runs.since` setting, so older sessions stay out. It has three tabs, All, Notes and Runs, with Refresh and Hide. Rows that need the owner come first, then the rows at work, then the rest, newest first. Ten rows show at a time, with a line such as "10 of 34" and Show more for ten more.
 
 **Making a note.** A note is anything the owner types or says for Claude Code on the server page. There are four ways to make one:
 
@@ -391,7 +391,7 @@ The server listens only on the machine itself, at `127.0.0.1:8765`, and refuses 
 | `claude.never` | Paths nothing may touch: the keys folder |
 | `send_options` | The defaults of the send options: where, merge, tests, bug check, report |
 | `worktrees.folder`, `worktrees.main` | Where each run's checkout goes (`.worktrees`) and the branch runs start from and merge into (`main`) |
-| `runs.claude_config_dir`, `runs.live_seconds`, `runs.max_text`, `runs.summary_model` | Where Claude Code's transcripts are, how long a terminal run counts as live, how much of a step's text comes at once, and the model that writes summaries |
+| `runs.claude_config_dir`, `runs.live_seconds`, `runs.max_text`, `runs.summary_model`, `runs.since` | Where Claude Code's transcripts are, how long a terminal run counts as live, how much of a step's text comes at once, and the model that writes summaries |
 
 The settings point at the page in `apps/project-IDE/current-ui/`, the store in `apps/project-IDE/data/page-store/` and the logs in `agents/system/logs/subagents/project-ide-agent/`. Claude Code starts in `agents/system/`, or in the `agents/system/` of a run's own checkout, so the system's `CLAUDE.md`, agents and skills load as its own. A How it works edit from the page goes into the `x.index.md` next to its item.
 

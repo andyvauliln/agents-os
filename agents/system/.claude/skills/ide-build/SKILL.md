@@ -35,7 +35,7 @@ An item's id is its path from the top of the repository (`docs/README.md`, `apps
 | `rebuild.py` | The rebuild for a start of the IDE (`./start.sh`): materializes, builds in a scratch folder, and builds in place with the next data version only when the data changed; then the How it works report and the tree check. Writes no How it works file, never publishes. |
 | `check_page.js` | Opens the page on a desktop and a phone width with a stand-in for the artifact runtime; fails on a page error, a missing tab, an address that does not open its item, or a page wider than the phone. |
 
-All but `check_page.js` are Python with the standard library only. `check_page.js` needs Node and Playwright with Chromium.
+All but `check_page.js` are Python with the standard library only. `check_page.js` needs Node and Playwright with Chromium; on a machine where `./init.sh` ran, it finds them in `.playwright.env` at the top of the repository (git ignores it), so no paths are given by hand.
 
 ## Steps
 

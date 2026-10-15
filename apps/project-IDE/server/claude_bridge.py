@@ -157,7 +157,9 @@ class Bridge:
             return None
         rec = dict(prev or {})
         sent = self.versions()
+        title = " ".join(((run.notes[0]["text"] if run.notes else run.text) or "").split())
         rec.update({"id": run.id, "origin": "page", "kind": kind, "session": run.session, "status": "working",
+                    "title": rec.get("title") or (title[:89] + "…" if len(title) > 90 else title),
                     "request": run.text[:4000], "node": run.node, "notes": sorted(set((rec.get("notes") or []) + [n["id"] for n in run.notes])),
                     "options": run.options if run.notes else None, "worktree": run.worktree, "started": rec.get("started") or now(),
                     "sent": rec.get("sent") or sent, "ended": None, "error": None})

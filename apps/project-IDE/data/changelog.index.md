@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/data/changelog.md
-basis: 57d2fc45dc48
+basis: 8aa0767c3550
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T10:40:56Z
+confirmed: 2026-10-15T11:09:30Z
 ---
 # changelog.md
 

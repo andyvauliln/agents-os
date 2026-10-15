@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/server/server.py
-basis: df9edcc076c5
+basis: ea5a2cac0b6e
 written: 2026-10-15T10:35:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T10:40:41Z
+confirmed: 2026-10-15T11:08:51Z
 ---
 # server.py
 

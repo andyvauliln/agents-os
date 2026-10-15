@@ -557,6 +557,10 @@ del.w { background: var(--danger-soft); }
 .jobsbtn.need .n { background: var(--danger-soft); }
 .jobs { flex: none; max-height: 44vh; display: flex; flex-direction: column; border-bottom: 1px solid var(--line); background: var(--panel); min-height: 0; }
 .jobs[hidden] { display: none; }
+/* open, the panel is the whole page under the header: the tree and the item wait behind it */
+body.jobsfull .panes { display: none; }
+body.jobsfull .jobs { flex: 1 1 auto; max-height: none; border-bottom: 0; }
+body.jobsfull .jrows { padding-bottom: 16px; }
 .jhead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 8px 16px 0; }
 .jhead h2 { font: 600 15px var(--f-display); margin: 0; }
 .jtabs { display: flex; gap: 2px; margin-right: auto; }
@@ -651,7 +655,7 @@ body.runfull .detail { grid-column: 1 / -1; }
 .substeps { border-left: 2px solid var(--exists-soft); padding-left: 8px; margin-top: 6px; }
 @media (max-width: 760px) {
   .jhead, .jnew, .jrows, .jfoot { padding-left: 12px; padding-right: 12px; }
-  .jobs { max-height: 72vh; }
+  .jobs { max-height: none; }
   .jhead { gap: 4px 8px; }
   .runpage { padding: 12px 16px 60px; }
   .sm { display: none; }
@@ -2846,7 +2850,7 @@ function jobsPaint() {
   const need = JOBS.rows.filter(r => r.status === "need human").length, act = JOBS.rows.filter(r => ACTIVE_ST.includes(r.status)).length;
   $("#jobsn").textContent = need ? need + " need you" : String(act);
   btn.classList.toggle("need", !!need); btn.setAttribute("aria-expanded", JOBS.open ? "true" : "false");
-  const box = $("#jobs"); box.hidden = !JOBS.open; if (!JOBS.open) return;
+  const box = $("#jobs"); box.hidden = !JOBS.open; document.body.classList.toggle("jobsfull", JOBS.open); if (!JOBS.open) return;
   const a = document.activeElement;
   if (a && box.contains(a) && /INPUT|TEXTAREA/.test(a.tagName) && a.type !== "checkbox") { JOBS.pending = true; return; }
   JOBS.pending = false;
@@ -2857,7 +2861,7 @@ function jobsPaint() {
   const dc = JOBS.draftCtx;
   const opt = (k, v, label, dis) => `<label class="jopt${dis ? " off" : ""}"><input type="radio" name="jo-${k}" data-jo="${k}" value="${v}"${o[k] === v ? " checked" : ""}${dis ? " disabled" : ""}> ${label}</label>`;
   const chk = (k, label) => `<label class="jopt"><input type="checkbox" data-jo="${k}"${o[k] ? " checked" : ""}> ${label}</label>`;
-  box.innerHTML = `<div class="jhead"><h2>Notes and runs</h2><div class="jtabs" role="tablist">${tabsH}</div><button class="btn quiet" type="button" data-j="refresh">Refresh</button><button class="btn quiet" type="button" data-j="hide">Hide</button></div>
+  box.innerHTML = `<div class="jhead"><h2>Notes and runs</h2><div class="jtabs" role="tablist">${tabsH}</div><button class="btn quiet" type="button" data-j="refresh">Refresh</button><button class="btn quiet" type="button" data-j="hide" title="Close the panel and go back to the tree">Close</button></div>
     <div class="jnew"><textarea id="jnew" rows="1" placeholder="A new note to Claude Code${NODES[selected] ? " about " + esc(NODES[selected].name) : ""}…" aria-label="New note">${esc(store.get("ftx-jnew") || "")}</textarea>${voiceOn() ? `<button class="btn mic" type="button" data-voice="jnew" title="Record a note (up to 5 minutes)" aria-label="Record a note">${MIC_ICON}<span></span></button>` : ""}<button class="btn" type="button" data-j="add">Add note</button></div>
     ${dc && dc.selection ? `<div class="jctx">About <code>${esc(dc.path || "")}</code>${dc.line ? ", line " + dc.line : ""}: “${esc(clip(dc.selection, 160))}” <button class="btn quiet" type="button" data-j="dropctx">Remove</button></div>` : ""}
     ${JOBS.err ? `<div class="jerr">${esc(JOBS.err)}</div>` : ""}
@@ -2917,7 +2921,7 @@ async function jobsAction(t) {
     const ctx = JOBS.draftCtx || noteCtx("notes panel");
     return go(async () => { await jpost("notes", { text, context: ctx }); ta.value = ""; store.set("ftx-jnew", ""); JOBS.draftCtx = null; });
   }
-  if (k === "openrun") { if (JOBS.open) jobsToggle(false); return openRun(v); }
+  if (k === "openrun") return openRun(v);
   if (k === "stoprun") return go(() => jpost(`runs/${encodeURIComponent(v)}/stop`));
   if (k === "merge") return go(() => jpost(`runs/${encodeURIComponent(v)}/merge`), "Merged into main.");
   if (k === "inc") return go(() => jpost("notes/" + v, { include: t.checked }, "PATCH"));
@@ -2955,7 +2959,7 @@ document.addEventListener("change", ev => {
   JOBS.optsOpen = true; jobsPaint();
 });
 $("#jobs").addEventListener("click", ev => {
-  const g = ev.target.closest("[data-go]"); if (g && g.dataset.go && NODES[g.dataset.go]) { select(g.dataset.go); return; }
+  const g = ev.target.closest("[data-go]"); if (g && g.dataset.go && NODES[g.dataset.go]) { jobsToggle(false); select(g.dataset.go); return; }
   const t = ev.target.closest("[data-j]"); if (t) jobsAction(t);
 });
 $("#jobs").addEventListener("keydown", ev => {
@@ -3011,6 +3015,7 @@ const KIND_ICON = { prompt: "◆", notification: "◇", text: "¶", read: "R", e
 const KIND_NAME = { prompt: "request", notification: "notification", text: "answer text", read: "read", edit: "edit", command: "command", skill: "skill", subagent: "subagent", mcp: "MCP", web: "web", workflow: "workflow", tool: "tool" };
 function openRun(id) {
   if (!jobsOn() || !id) return;
+  if (JOBS.open) jobsToggle(false);   // the run takes the page; the header button opens the panel again
   if (!RUNVIEW || RUNVIEW.id !== id) RUNVIEW = { id, data: null, open: new Set(), filter: null, full: {}, err: "" };
   try { history.replaceState(null, "", "#run/" + encodeURIComponent(id)); } catch {}
   $("#detail").classList.add("runmode"); document.body.classList.add("show-detail", "runfull");

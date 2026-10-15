@@ -362,7 +362,7 @@ class App:
                     todo.append(t["id"])
                 rows.append(self._run_row(t, rec))
             for r in recs:
-                if r["id"] not in seen and r.get("origin") == "page":
+                if r["id"] not in seen and r.get("origin") == "page" and (r.get("started") or "") >= self.transcripts.since:
                     rows.append(self._run_row(None, r))
             self.queue_summaries(todo[:limit + offset])
         order = {"need human": 0, "transcribing": 1, "queued": 1, "sending": 1, "planning": 1, "working": 1}
@@ -376,7 +376,7 @@ class App:
         if t.get("live") and status in ("done", "failed"):
             status = "working"
         return {"type": "run", "id": rec.get("id") or t.get("id"), "session": rec.get("session") or t.get("id"),
-                "title": t.get("title") or (rec.get("request") or "")[:90], "status": status, "detail": rec.get("status_detail"),
+                "title": rec.get("title") or t.get("title") or (rec.get("request") or "")[:90], "status": status, "detail": rec.get("status_detail"),
                 "origin": rec.get("origin") or t.get("origin") or "terminal", "kind": rec.get("kind"), "tags": rec.get("tags") or [],
                 "summary": bool(rec.get("summary")), "notes": rec.get("notes") or [], "branch": (rec.get("worktree") or {}).get("branch") or t.get("branch"),
                 "cwd": t.get("cwd"), "steps": t.get("steps"), "cost_usd": (rec.get("result") or {}).get("cost_usd"),

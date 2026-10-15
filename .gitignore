@@ -61,3 +61,5 @@ agents/**/data/**
 # (a note's words are filed as an owner input by the run that takes it)
 .worktrees/
 apps/project-IDE/data/page-store/notes/
+# Where this machine keeps the browser for the page check (init.sh writes it; check_page.js reads it)
+.playwright.env

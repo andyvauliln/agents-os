@@ -3,9 +3,18 @@
 // and fails when the page throws, a tab is missing, or the page is wider than a phone screen.
 //   node check_page.js <page dir> [out dir for screenshots, or -] [item ids...]
 // An item's id is its path from the top of the repository; the top is agent-os. The page dir defaults to apps/project-IDE/current-ui.
-// Needs Playwright with Chromium: PLAYWRIGHT (module path) and CHROMIUM (browser path) override the defaults.
+// Needs Playwright with Chromium: PLAYWRIGHT (module path), CHROMIUM (browser path) and PLAYWRIGHT_LIBS (a folder of
+// libraries the browser needs and the system lacks) override the defaults. When they are not set, they are read from
+// .playwright.env at the top of the repository, which init.sh writes on a machine (git ignores it).
 const fs = require('fs'), path = require('path');
+try {
+  for (const line of fs.readFileSync(path.join(__dirname, '../../../../../../.playwright.env'), 'utf8').split('\n')) {
+    const m = line.match(/^(PLAYWRIGHT|CHROMIUM|PLAYWRIGHT_LIBS)=(.+)$/);
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim();
+  }
+} catch {}
 const { chromium } = require(process.env.PLAYWRIGHT || '/opt/node22/lib/node_modules/playwright');
+const LIBS = process.env.PLAYWRIGHT_LIBS ? { env: { ...process.env, LD_LIBRARY_PATH: [process.env.PLAYWRIGHT_LIBS, process.env.LD_LIBRARY_PATH].filter(Boolean).join(':') } } : {};
 const DIR = path.resolve(process.argv[2] || path.join(__dirname, '../../../../../../apps/project-IDE/current-ui'));
 const OUT = process.argv[3] && process.argv[3] !== '-' ? path.resolve(process.argv[3]) : null;
 const IDS = process.argv.slice(4).length ? process.argv.slice(4) : ['agent-os', 'docs/README.md', 'apps/project-IDE', 'agents/system/.claude/skills/file-index/SKILL.md', '.gitignore'];
@@ -27,8 +36,8 @@ const mock = () => {   // in-memory db, sample and user, the parts of window.cla
   window.claude = { use: async n => n === 'db' ? db : n === 'sample' ? sample : n === 'user' ? { id: async () => 'u1' } : null };
 };
 (async () => {
-  const b = await chromium.launch(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } :
-    fs.existsSync('/opt/pw-browsers/chromium-1194/chrome-linux/chrome') ? { executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' } : {});
+  const b = await chromium.launch({ ...LIBS, ...(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } :
+    fs.existsSync('/opt/pw-browsers/chromium-1194/chrome-linux/chrome') ? { executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' } : {}) });
   const data = JSON.parse(fs.readFileSync(path.join(DIR, 'file-tree.data.json'), 'utf8'));
   const known = new Set(data.nodes.map(n => n.id));
   let bad = 0;

@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/scripts/
-basis: 5d4965ba12cc
+basis: f4d96530f15d
 written: 2026-10-15T07:11:30Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T07:11:37Z
+confirmed: 2026-10-15T11:08:51Z
 ---
 # scripts/
 

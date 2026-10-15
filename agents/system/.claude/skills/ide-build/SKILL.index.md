@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/SKILL.md
-basis: e310bab68afb
+basis: d5fff2f3cc0b
 written: 2026-10-15T07:11:30Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T07:11:37Z
+confirmed: 2026-10-15T11:08:51Z
 ---
 # SKILL.md
 

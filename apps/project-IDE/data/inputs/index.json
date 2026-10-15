@@ -2574,6 +2574,29 @@
     "docs/README.md"
    ],
    "answered": true
+  },
+  {
+   "id": "in-20261015-1110",
+   "at": "2026-10-15T11:10",
+   "where": "Claude Code chat on the owner's server",
+   "source": "chat",
+   "ref": null,
+   "file": "2026-10-15-1110-full-panel-fewer-runs.md",
+   "chars": 322,
+   "categories": [
+    "ui",
+    "setup"
+   ],
+   "summary": "Use the GitHub and Playwright already on this profile and server; list only runs from this session on; the Notes and runs panel full page.",
+   "processed_into": [
+    "init.sh",
+    "agents/system/.claude/skills/ide-build/scripts/check_page.js",
+    "apps/project-IDE/server/runs.py",
+    "apps/project-IDE/current-ui/file-tree-explorer.html",
+    "apps/project-IDE/server/README.md",
+    "apps/project-IDE/docs/README.md"
+   ],
+   "answered": true
   }
  ]
 }

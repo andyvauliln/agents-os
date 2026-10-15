@@ -4,6 +4,7 @@
 #   ./init.sh             check the tools, install the Python package the request box needs into .venv/,
 #                         install the service that starts the IDE at boot, and run ./start.sh
 #   ./init.sh --no-service   the same without the service (start it by hand with ./start.sh)
+# It also finds a browser for the page check (check_page.js) and writes where it is to .playwright.env.
 #
 # Safe to run again: it only adds what is missing and writes the service file anew.
 # It never reads or writes a keys file; the server reads the keys it names itself (apps/project-IDE/server/README.md).
@@ -96,6 +97,50 @@ else
     fi
 fi
 
-# ---------- 4. start it ----------
-say "4. start"
+# ---------- 4. the browser for the page check (check_page.js), found once and written to .playwright.env ----------
+say "4. browser for the page check"
+browser_setup() {
+    local mod="" chrome="" libs="$HOME/.local/share/agent-os/browser-libs" missing pkg lib i
+    # the Playwright module: a global one, or one another project on this machine already has
+    for d in "$(npm root -g 2>/dev/null)/playwright" "$(npm root -g 2>/dev/null)/playwright-core" /opt/node22/lib/node_modules/playwright; do
+        [ -f "$d/package.json" ] && { mod=$d; break; }
+    done
+    [ -n "$mod" ] || mod=$(find "$HOME" -maxdepth 5 -type d \( -path '*/node_modules/playwright-core' -o -path '*/node_modules/playwright' \) -not -path '*/.cache/*' -not -path '*/.npm/*' 2>/dev/null | head -1)
+    if [ -z "$mod" ] && command -v npm >/dev/null; then
+        npm install -s --prefix "$HOME/.local/share/agent-os/playwright" playwright-core >/dev/null 2>&1 && mod="$HOME/.local/share/agent-os/playwright/node_modules/playwright-core"
+    fi
+    [ -n "$mod" ] || { warn "no Playwright module found: the page check (check_page.js) cannot run here"; return 0; }
+    # the browser: the newest headless Chromium Playwright downloaded, else the full one
+    chrome=$(ls -d "$HOME"/.cache/ms-playwright/chromium_headless_shell-*/*/chrome-headless-shell 2>/dev/null | sort -V | tail -1)
+    [ -n "$chrome" ] || chrome=$(ls -d "$HOME"/.cache/ms-playwright/chromium-*/chrome-linux*/chrome 2>/dev/null | sort -V | tail -1)
+    if [ -z "$chrome" ]; then
+        (cd "$(dirname "$mod")/.." && node "$mod/cli.js" install chromium-headless-shell >/dev/null 2>&1)
+        chrome=$(ls -d "$HOME"/.cache/ms-playwright/chromium_headless_shell-*/*/chrome-headless-shell 2>/dev/null | sort -V | tail -1)
+    fi
+    [ -n "$chrome" ] || { warn "no Chromium found: the page check cannot run here"; return 0; }
+    # libraries the system lacks: unpacked from their packages into our own folder, without sudo
+    for i in 1 2 3 4 5; do
+        missing=$(LD_LIBRARY_PATH="$libs/root/usr/lib/x86_64-linux-gnu" ldd "$chrome" 2>/dev/null | awk '/not found/{print $1}')
+        [ -z "$missing" ] && break
+        command -v apt-get >/dev/null || { warn "missing browser libraries ($missing) and no apt-get to fetch them"; break; }
+        mkdir -p "$libs/deb"
+        for lib in $missing; do
+            pkg=$(printf '%s' "$lib" | sed -E 's/\.so\.?([0-9]*).*/\1/')   # libgbm.so.1 -> libgbm1, libwayland-server.so.0 -> libwayland-server0
+            (cd "$libs/deb" && apt-get download -q "$pkg" >/dev/null 2>&1) || warn "could not fetch $pkg for $lib"
+        done
+        for f in "$libs"/deb/*.deb; do [ -f "$f" ] && dpkg -x "$f" "$libs/root"; done
+    done
+    local libdir=""
+    [ -d "$libs/root/usr/lib/x86_64-linux-gnu" ] && libdir="$libs/root/usr/lib/x86_64-linux-gnu"
+    if LD_LIBRARY_PATH="$libdir" "$chrome" --headless --no-sandbox --dump-dom about:blank >/dev/null 2>&1; then
+        printf 'PLAYWRIGHT=%s\nCHROMIUM=%s\nPLAYWRIGHT_LIBS=%s\n' "$mod" "$chrome" "$libdir" > "$ROOT/.playwright.env"
+        say "   page check ready: $(basename "$(dirname "$chrome")") with $(basename "$mod") ($ROOT/.playwright.env)"
+    else
+        warn "Chromium does not start here; the page check cannot run (try: sudo npx playwright install-deps chromium)"
+    fi
+}
+browser_setup
+
+# ---------- 5. start it ----------
+say "5. start"
 exec "$ROOT/start.sh"

@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/server/server.config.json
-basis: a26eefe22391
+basis: 22bc65554507
 written: 2026-10-15T10:35:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T10:40:41Z
+confirmed: 2026-10-15T11:08:51Z
 ---
 # server.config.json
 

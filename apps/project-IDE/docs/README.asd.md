@@ -338,7 +338,7 @@ It is easy to lose a request that you say or type. The request goes into the con
 
 Each note that the owner makes for Claude Code is one row in one panel. Each Claude Code run in this repository is also one row, from the page or from a terminal. The owner sees what waits, what operates and what is done. The owner can send many notes as one run. The owner can open each run and see what it did. The panel is only on the server page. On claude.ai and in other locations, the page does not show its button.
 
-**The panel.** The Notes and runs button in the header opens the panel under the header. The page keeps the open or closed state. The panel has three tabs: All, Notes and Runs. It also has Refresh and Hide. The rows that need the owner are first. Then come the rows that are at work. Then come the other rows, the newest first. The panel shows ten rows at a time. A line shows, for example, "10 of 34". Show more shows ten more rows.
+**The panel.** The Notes and runs button in the header opens the panel. The open panel fills the full page under the header. The full panel scrolls as one. "Close", the button again, a run that opens, or a click on the path of an item goes back to the tree. The panel shows only the runs that started on or after the date in the setting `runs.since` of the server. The page keeps the open or closed state. The panel has three tabs: All, Notes and Runs. It also has Refresh and Hide. The rows that need the owner are first. Then come the rows that are at work. Then come the other rows, the newest first. The panel shows ten rows at a time. A line shows, for example, "10 of 34". Show more shows ten more rows.
 
 **How to make a note.** A note is a text that the owner types or says for Claude Code on the server page. There are four ways to make a note:
 
@@ -698,7 +698,7 @@ The settings are in `server.config.json`. The file contains only the names of ke
 | `claude.never` | Paths that nothing can touch: the keys folder |
 | `send_options` | The defaults of the send options: where, merge, tests, bug check, report |
 | `worktrees.folder`, `worktrees.main` | The location of the checkout of each run (`.worktrees`), and the branch where runs start and merge (`main`) |
-| `runs.claude_config_dir`, `runs.live_seconds`, `runs.max_text`, `runs.summary_model` | The location of the transcripts of Claude Code, how long a terminal run is live, how much text of a step comes at one time, and the model for summaries |
+| `runs.claude_config_dir`, `runs.live_seconds`, `runs.max_text`, `runs.summary_model`, `runs.since` | The location of the transcripts of Claude Code, how long a terminal run is live, how much text of a step comes at one time, and the model for summaries |
 
 The settings point to these locations:
 

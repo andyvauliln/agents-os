@@ -1,9 +1,9 @@
 ---
 about: agent-os/agents/system/.claude/skills/ide-build/scripts/check_page.js
-basis: 83bc69f4a57e
+basis: 522d19e12243
 written: 2026-10-14T15:17:50Z
 by: knowledge-base-agent
-confirmed: 2026-10-14T15:07:13Z
+confirmed: 2026-10-15T11:08:51Z
 ---
 # check_page.js
 
@@ -34,3 +34,4 @@ It reads `apps/project-IDE/current-ui/file-tree-explorer.html`. The rules that a
 ## Keep in mind
 
 - When a check fails, fix it before you publish; never publish a failing page.
+- When `PLAYWRIGHT`, `CHROMIUM` or `PLAYWRIGHT_LIBS` are not set, it reads them from `.playwright.env` at the top of the repository, which `./init.sh` writes on each machine; run `./init.sh` again when the check cannot find its browser.

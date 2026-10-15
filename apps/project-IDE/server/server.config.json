@@ -111,10 +111,11 @@
   "main": "main"
  },
  "runs": {
-  "_about": "Runs are read from Claude Code's transcripts in <claude_config_dir>/projects/ (null: CLAUDE_CONFIG_DIR, else ~/.claude). A run is live while its transcript changed in the last live_seconds. max_text: characters of a step's input or output sent with the run; the rest loads on demand. summary_model writes each run's ASD-STE100 summary and tags.",
+  "_about": "Runs are read from Claude Code's transcripts in <claude_config_dir>/projects/ (null: CLAUDE_CONFIG_DIR, else ~/.claude). A run is live while its transcript changed in the last live_seconds. max_text: characters of a step's input or output sent with the run; the rest loads on demand. summary_model writes each run's ASD-STE100 summary and tags. since: list only the sessions that started at or after this time (UTC, ISO); empty lists them all.",
   "claude_config_dir": null,
   "live_seconds": 90,
   "max_text": 1200,
-  "summary_model": "haiku"
+  "summary_model": "haiku",
+  "since": "2026-10-15T06:59:00Z"
  }
 }

@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/server/claude_bridge.py
-basis: 8d62241e46c7
+basis: b63d388c96b2
 written: 2026-10-15T10:35:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T10:40:41Z
+confirmed: 2026-10-15T11:08:51Z
 ---
 # claude_bridge.py
 

@@ -1,9 +1,9 @@
 ---
 about: agent-os/apps/project-IDE/server/
-basis: dd835944ef0d
+basis: 504d62842442
 written: 2026-10-15T10:37:00Z
 by: knowledge-base-agent
-confirmed: 2026-10-15T10:40:56Z
+confirmed: 2026-10-15T11:08:51Z
 ---
 # server/
 

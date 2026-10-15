@@ -255,6 +255,8 @@ Settings and docs give the names of keys. They do not give the values. Two of th
 - Python caches
 - OS files and editor files
 - the local state of Cursor
+- the `settings.local.json` file of each person, and the contents of `agent-memory-local/`
+- the files that agents write when they run, in the `logs/` and `data/` folders under `agents/`. The folders and their metadata files stay in git.
 
 Each entry in `.gitignore` has a comment that tells why.
 

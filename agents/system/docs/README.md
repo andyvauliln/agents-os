@@ -343,10 +343,10 @@ Each level has its own Claude Code folder, `.claude/`, so a session started in a
 
 Every `.claude/` holds the same parts:
 
-- `settings.json`, its permissions, hooks, environment and model, saved to the repository, and `settings.local.json`, each person's own changes, meant to stay out of it;
+- `settings.json`, its permissions, hooks, environment and model, saved to the repository, and `settings.local.json`, each person's own changes, which git ignores;
 - `rules/`, instructions on one topic each; `skills/`, one folder per skill; `commands/`, short prompts started by name; `workflows/`, scripts that become commands; `output-styles/`;
 - `agents/`, the level's helpers;
-- `agent-memory/`, the memory its helpers keep and share through the repository, and `agent-memory-local/`, memory kept on one machine only.
+- `agent-memory/`, the memory its helpers keep and share through the repository, and `agent-memory-local/`, memory kept on one machine only, which git ignores.
 
 The system's instructions sit one level up, at `agents/system/CLAUDE.md`. In the system's `.claude/` today, `agents/` holds the three helpers and `skills/` holds eleven skills: `knowledge-intake`, `file-index`, `vision-doc`, `readme-doc`, `readme-asd-doc` (each README's twin in Simplified Technical English), `rebuild-prompt-doc`, `claude-md-doc` (keeps `CLAUDE.md`), `change-plan`, `make-questions`, `ide-build` and `ide-sync`. The other folders hold only general placeholders, and both settings files are empty. The helpers and skills are edited where they are.
 

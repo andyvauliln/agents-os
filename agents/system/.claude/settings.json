@@ -1,1 +1,10 @@
-{}
+{
+  "permissions": {
+    "deny": [
+      "Read(**/.secrets/live/**)",
+      "Edit(**/.secrets/live/**)",
+      "Read(**/.env)",
+      "Edit(**/.env)"
+    ]
+  }
+}

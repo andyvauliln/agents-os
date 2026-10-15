@@ -25,7 +25,6 @@ agents/system/.claude/output-styles/[style-name].md
 agents/system/.claude/rules/
 agents/system/.claude/rules/[topic].md
 agents/system/.claude/settings.json
-agents/system/.claude/settings.local.json
 agents/system/.claude/skills/
 agents/system/.claude/skills/[skill-name]/
 agents/system/.claude/skills/[skill-name]/SKILL.md
@@ -492,6 +491,7 @@ apps/project-IDE/data/inputs/2026-10-14-1241-no-refs-no-tree-numbers.md
 apps/project-IDE/data/inputs/2026-10-14-1439-go-move-fill-metadata.md
 apps/project-IDE/data/inputs/2026-10-14-terminal-vs-page.md
 apps/project-IDE/data/inputs/2026-10-14-trading-docs-metadata-logic.md
+apps/project-IDE/data/inputs/2026-10-15-0641-ignore-local-block-live-keys.md
 apps/project-IDE/data/inputs/index.json
 apps/project-IDE/data/inputs/README.md
 apps/project-IDE/data/inputs/YYYY-MM-DD-HHMM-[topic].md

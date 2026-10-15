@@ -697,3 +697,11 @@ Status words: **active** (in force), **partly superseded by D-0xx** (some of it 
 - **Why:** the owner: "let's feel all data in metadata also in the building plan for current files when we not moved from vision"; "3. ok 4. ok. 5 ok, 1 go".
 - **Status:** decided.
 - **Changed:** the leave-vision plan, every Details file, decisions.md, docs/metadata.md, knowledge-intake.
+
+### D-072: Block the live keys in settings; git ignores local state and run-time files
+<!-- k: id=d-072 sources=in-20261015-0641 status=decided -->
+- **Decision:** `agents/system/.claude/settings.json` denies Read and Edit of `.secrets/live/**` and of every `.env` file. `.gitignore` ignores each person's `.claude/settings.local.json`, the contents of `.claude/agent-memory-local/`, and what agents write at run time into `logs/` and `data/` under `agents/`; the folders, their How it works, Details and Questions files and `.gitkeep` stay in git. The empty `settings.local.json` placeholder leaves git.
+- **Date:** 2026-10-15
+- **Why:** the docs said the block and the ignore lines existed, but they did not; the owner: "about that yes".
+- **Status:** decided.
+- **Changed:** settings.json, .gitignore, their How it works files, the system README and rebuild prompt, the project README and their twins.

@@ -9,7 +9,7 @@ confirmed: 2026-10-14T19:42:37Z
 
 ## What it is
 
-The system's shared data, sorted by source, as JSON and Markdown files with no database. `system/` is for the machinery's state (every job's last and next run, the links index of who reads which file); `workers/` for the shared workers' outputs, each a dated file plus a stable `latest.*` that agents link; `subagents/` for sub-agent digests, built once for many readers. Through `subagents.link/` the system reaches each domain's data and the levels below. Each agent keeps its own data in its own `data/`. Nothing runs yet, so it holds only name patterns. `.gitignore` does not keep runtime data out of git today; whether it should is open, as is how "new since the last run" is tracked.
+The system's shared data, sorted by source, as JSON and Markdown files with no database. `system/` is for the machinery's state (every job's last and next run, the links index of who reads which file); `workers/` for the shared workers' outputs, each a dated file plus a stable `latest.*` that agents link; `subagents/` for sub-agent digests, built once for many readers. Through `subagents.link/` the system reaches each domain's data and the levels below. Each agent keeps its own data in its own `data/`. Nothing runs yet, so it holds only name patterns. Git ignores the files written at run time; the folders and their metadata files stay in git. Still open is how "new since the last run" is tracked.
 
 ## Who looks after it
 

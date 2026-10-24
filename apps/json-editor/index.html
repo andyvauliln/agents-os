@@ -1,0 +1,114 @@
+<title>Agent OS State</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style id="page-style">
+/* One full-height editor: thin toolbar, then the JSON. */
+:root{--bg:#f6f7f9;--panel:#ffffff;--fg:#1c2330;--muted:#5d6878;--line:#d9dee6;--accent:#2f5bd3;--ok:#1f7a4a;--bad:#b3261e;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11151c;--panel:#171c25;--fg:#e3e8ef;--muted:#93a0b2;--line:#2a3240;--accent:#7f9fff;--ok:#5cc28c;--bad:#ff8a80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#11151c;--panel:#171c25;--fg:#e3e8ef;--muted:#93a0b2;--line:#2a3240;--accent:#7f9fff;--ok:#5cc28c;--bad:#ff8a80;color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans)}
+#root{height:100%;display:flex;flex-direction:column;gap:10px;box-sizing:border-box;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.status{font-size:13px;color:var(--muted);margin-right:auto;min-width:0}
+.status.ok{color:var(--ok)}.status.bad{color:var(--bad)}
+button{font:inherit;font-size:13px;padding:6px 12px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+button:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+button:disabled{opacity:.45;cursor:default}
+textarea{flex:1;min-height:0;width:100%;box-sizing:border-box;resize:none;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg);font:13px/1.55 var(--mono);tab-size:2;white-space:pre;overflow:auto}
+</style>
+<main id="root">
+  <div class="bar">
+    <span id="status" class="status" role="status">Loading</span>
+    <button id="format" type="button">Format</button>
+    <button id="revert" type="button">Revert</button>
+    <button id="save" type="button" class="primary">Save</button>
+  </div>
+  <textarea id="editor" spellcheck="false" aria-label="JSON"></textarea>
+</main>
+<script type="application/json" id="page-data">{
+  "agents": {
+    "agent-oss": {
+      "connection": {},
+      "files": {
+        ".claude": {
+          "CLAUDE.md": {},
+          "settings.json": {},
+          "settings.local.json": {},
+          "agents": {},
+          "commands": {},
+          "skills": {},
+          "hooks": {},
+          "output-styles": {}
+        }
+      }
+    }
+  },
+  "extension": {
+    "view": {
+      "header-view": {
+        "rundown_button": { "shown_on": "tablet and phone", "open": false },
+        "brand": { "name": "Slide", "recording_lamp": false },
+        "connections": {
+          "apps":    { "label": "Profiles and apps", "state": "ok",   "detail": "3 profiles · 3 apps · now Profile 2, Instagram Slide app" },
+          "agent":   { "label": "Agent",             "state": "mock", "detail": "agent-oss on This Claude project (cloud session) · Test flow uses the mock agent" },
+          "mcp":     { "label": "MCP",               "state": "off",  "detail": "Agent → extension over MCP. Off in this test." },
+          "storage": { "label": "Storage",           "state": "mock", "detail": "Shared state: not connected, so this browser only." }
+        },
+        "model_chip": { "text": "opus 5.5 · f2a63aba", "shown_on": "desktop" },
+        "docs_button": { "pressed": false },
+        "notifications_button": { "pressed": false, "count": 2 },
+        "apps_button": { "pressed": false, "profile_badge": "2" },
+        "back_button": {},
+        "theme_button": { "theme": "system" },
+        "state_button": { "pressed": false }
+      }
+    },
+    "data": {},
+    "common_app_storage": {},
+    "apps": {}
+  }
+}</script>
+<script id="page-app">
+(function(){
+  var saved=document.getElementById('page-data').textContent.replace(/<\\\//g,'</');
+  var ed=document.getElementById('editor'),st=document.getElementById('status');
+  var bSave=document.getElementById('save'),bFmt=document.getElementById('format'),bRev=document.getElementById('revert');
+  var api=null,canSave=false,busy=false;
+  ed.value=saved;
+  function check(){
+    var err=null;try{JSON.parse(ed.value)}catch(e){err=e.message}
+    var dirty=ed.value!==saved;
+    bSave.disabled=!canSave||!dirty||!!err||busy;bRev.disabled=!dirty||busy;bFmt.disabled=!!err;
+    st.className='status '+(err?'bad':dirty?'':'ok');
+    st.textContent=err?'Invalid JSON: '+err:busy?'Saving…':dirty?(canSave?'Unsaved changes':'Unsaved changes (you can only view this page)'):(canSave?'Saved':'Read only');
+    return !err;
+  }
+  function esc(s){return s.replace(/<\//g,'<\\/')}
+  function build(text){
+    var css=document.getElementById('page-style').textContent;
+    var main=document.getElementById('root').cloneNode(true);
+    main.querySelector('#editor').textContent='';
+    return '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>'+
+      '<title>'+document.title+'</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n<style id="page-style">'+css+'</style>\n'+main.outerHTML+
+      '\n<script type="application/json" id="page-data">'+esc(text)+'<\/script>\n<script id="page-app">'+document.getElementById('page-app').textContent+'<\/script></body></html>';
+  }
+  ed.addEventListener('input',check);
+  ed.addEventListener('keydown',function(e){
+    if(e.key==='Tab'){e.preventDefault();ed.setRangeText('  ',ed.selectionStart,ed.selectionEnd,'end');check()}
+    if((e.metaKey||e.ctrlKey)&&e.key==='s'){e.preventDefault();if(!bSave.disabled)bSave.click()}
+  });
+  bFmt.onclick=function(){try{ed.value=JSON.stringify(JSON.parse(ed.value),null,2);check()}catch(e){}};
+  bRev.onclick=function(){ed.value=saved;check()};
+  bSave.onclick=function(){
+    if(!api||!check())return;busy=true;check();
+    api.publish(build(ed.value)).then(function(){saved=ed.value;busy=false;check()},function(e){
+      busy=false;var c=e&&e.code;
+      if(c==='not_granted'||c==='not_writer'){canSave=false;check()}
+      else{check();st.className='status bad';st.textContent=c==='conflict'?'Someone else saved first. The page will reload with their version.':'Could not save: '+((e&&e.message)||c||'unknown error')}
+    });
+  };
+  check();
+  if(window.claude&&claude.use){claude.use('artifact').then(function(a){api=a;canSave=!!a;check()},function(){check()})}
+})();
+</script>

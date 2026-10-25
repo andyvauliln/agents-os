@@ -329,8 +329,8 @@
 
   // Checks a run against a function's expected-state-change: {path: rule}. Rules: "changes", "toggles",
   // "input" (becomes the input), "same", "may change", or a value the path must hold. A path "*" allows any change;
-  // otherwise a change outside the listed paths is reported.
-  function checkStateChange(spec, before, after, input) {
+  // otherwise a change outside the listed paths is reported. Paths in `ignore` (what nested calls changed) are not counted.
+  function checkStateChange(spec, before, after, input, ignore) {
     var fails = [], keys = Object.keys(spec || {});
     keys.forEach(function (p) {
       if (p === '*') return;
@@ -344,6 +344,7 @@
     });
     if (keys.indexOf('*') < 0) diff(before, after).forEach(function (c) {
       var p = pathText(c.path);
+      if ((ignore || []).some(function (k) { return p === k || p.indexOf(k + '.') === 0; })) return;
       if (!keys.some(function (k) { return p === k || p.indexOf(k + '.') === 0; })) fails.push('unexpected change: ' + c.type + ' ' + p);
     });
     return fails;

@@ -62,11 +62,15 @@ function loadImports(imports){
   })},Promise.resolve()).then(function(){return out});
 }
 // After every run: output (or the error), performance, errors, and a check against expected-state-change.
-function finish(path,def,input,before,t0,out,err){
+// What nested calls changed counts for them, not for the caller: frames[callId] collects their changed paths.
+var frames={};
+function finish(path,def,input,before,t0,out,err,id,parent){
   var d=core.getPath(live,path)||def,ms=Math.round((performance.now()-t0)*10)/10,p=d.performance||{};
   d.performance={last:ms,min:p.min===undefined?ms:Math.min(p.min,ms),max:p.max===undefined?ms:Math.max(p.max,ms),count:(p.count||0)+1};
-  var after=core.stripRuntime(live),fails=err?['threw: '+(err&&err.message||err)]:[];
-  fails=fails.concat(core.checkStateChange(d['expected-state-change'],before,after,input));
+  var after=core.stripRuntime(live),fails=err?['threw: '+(err&&err.message||err)]:[],nested=frames[id]||[];delete frames[id];
+  var changed=core.diff(before,after).map(function(x){return x.path.join('.')});
+  if(frames[parent])frames[parent]=frames[parent].concat(changed);
+  fails=fails.concat(core.checkStateChange(d['expected-state-change'],before,after,input,nested));
   d.output=err?{error:String(err&&err.message||err)}:core.brief(out);
   d.errors=fails;
   return {changes:core.diff(before,after).map(function(x){return x.type+' '+x.path.join('.')}),errors:fails,performance:d.performance};
@@ -76,7 +80,7 @@ function call(name,input,viewPath,parent){
   var run=tracker.track(name,{input:input===undefined?null:input,view:viewPath||null},function(ctx){
     if(!r)throw new Error('No function '+name+(viewPath?' in '+viewPath:''));
     var def=r.def,before=core.stripRuntime(live),t0=performance.now();
-    ctx.relate({fn:r.path,parent:parent||null});
+    ctx.relate({fn:r.path,parent:parent||null});frames[ctx.id]=[];
     var c={id:ctx.id,input:input,view:r.view,root:r.view?document.getElementById(r.view.split('.').pop()):null,
       call:function(n,i){return call(n,i,r.view,ctx.id)}};
     return loadImports(def.imports).then(function(imports){
@@ -91,9 +95,9 @@ function call(name,input,viewPath,parent){
     }).then(function(out){
       var d=core.getPath(live,r.path)||def;
       if(d.calls)Object.keys(d.calls).forEach(function(n){var last=tracker.records.slice().reverse().find(function(x){return x.name===n&&x.related.parent===ctx.id});if(last)d.calls[n].output=last.output});
-      ctx.relate(finish(r.path,def,input,before,t0,out,null));
+      ctx.relate(finish(r.path,def,input,before,t0,out,null,ctx.id,parent));
       return out;
-    },function(e){if(r)ctx.relate(finish(r.path,def,input,before,t0,null,e));throw e});
+    },function(e){if(r)ctx.relate(finish(r.path,def,input,before,t0,null,e,ctx.id,parent));throw e});
   });
   return parent?run:run.then(function(o){return afterTop(name).then(function(){return o})},function(e){return afterTop(name).then(function(){throw e})});
 }

@@ -189,4 +189,6 @@ test('each run is checked against expected-state-change', () => {
   assert.deepEqual(core.checkStateChange({ 'v.ui.open': 'toggles', 'v.ui.pos': 'input' }, before, after, 2), ['unexpected change: added v.extra']);
   assert.deepEqual(core.checkStateChange({ 'v.ui.n': 'changes', '*': 'may change' }, before, after), ['v.ui.n did not change']);
   assert.deepEqual(core.checkStateChange({}, before, before), []);
+  // changes made by nested calls are theirs, not the caller's
+  assert.deepEqual(core.checkStateChange({ 'v.ui.open': 'toggles', 'v.ui.pos': 'input' }, before, after, 2, ['v.extra']), []);
 });

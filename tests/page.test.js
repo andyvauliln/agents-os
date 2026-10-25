@@ -100,13 +100,21 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // long strings show "…"; html opens in the html viewer, rendered with the view's ui-data
     const marks = await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().filter(m => m.replacedWith).map(m => m.replacedWith.title));
     assert.ok(marks.length >= 5 && marks.every(t => t.includes(':')), marks.join(' | '));
+    assert.ok(await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().filter(m => m.replacedWith).every(m => m.replacedWith.textContent === '"..."')));
+
+    // code opens in the viewer on its own
+    await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().find(m => m.replacedWith && m.replacedWith.title.startsWith('extension/views/state-view/functions/local.save/code'))
+      .replacedWith.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true })));
+    await page.waitForSelector('#sv-viewer:not([hidden]) .sv-viewer-body.code-only');
+    assert.match(await page.evaluate(() => document.querySelector('#sv-viewer-code .CodeMirror').CodeMirror.getValue()), /^const core = imports/);
+    await page.click('#sv-viewer-close');
     await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().find(m => m.replacedWith && m.replacedWith.title.startsWith('extension/views/header-view/html'))
       .replacedWith.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true })));
-    await page.waitForSelector('#sv-html:not([hidden]) #sv-html-code .CodeMirror');
-    assert.match(await page.getAttribute('#sv-html-view', 'srcdoc'), /id="state-button" aria-pressed="true"/);
-    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['state-view']['ui-data'].html_path), 'extension/views/header-view/html');
-    await page.click('#sv-html-close');
-    assert.equal(await page.isHidden('#sv-html'), true);
+    await page.waitForSelector('#sv-viewer:not([hidden]) #sv-viewer-code .CodeMirror');
+    assert.match(await page.getAttribute('#sv-viewer-view', 'srcdoc'), /id="state-button" aria-pressed="true"/);
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['state-view']['ui-data'].viewer_path), 'extension/views/header-view/html');
+    await page.click('#sv-viewer-close');
+    assert.equal(await page.isHidden('#sv-viewer'), true);
 
     // edit extension.data and save: a new version, and the border flashes green
     await page.evaluate(() => {
@@ -164,7 +172,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].items.some(i => i.name === 'local.step')), null, { timeout: 5000 });
     const log = await page.evaluate(() => Object.entries(window.__docs).find(([k]) => k.startsWith('calls/'))[1]);
     const names = new Set(log.items.map(i => i.name));
-    for (const n of ['loadState', 'extension.functions.render', 'local.open.state-view', 'local.save', 'local.toggle-changes', 'local.step', 'local.edit', 'local.refresh', 'local.open-html', 'local.close-html', 'runTest']) assert.ok(names.has(n), n);
+    for (const n of ['loadState', 'extension.functions.render', 'local.open.state-view', 'local.save', 'local.toggle-changes', 'local.step', 'local.edit', 'local.refresh', 'local.open-viewer', 'local.close-viewer', 'runTest']) assert.ok(names.has(n), n);
     assert.ok(log.items.every(i => i.ok && i.at && typeof i.ms === 'number'), JSON.stringify(log.items.filter(i => !i.ok).slice(0, 3)));
     assert.deepEqual(errors, []);
   } finally {

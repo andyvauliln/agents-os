@@ -23,17 +23,17 @@ test('diff of equal states is empty', () => {
 test('changes view keeps only what changed, with line marks', () => {
   const before = JSON.parse(seed);
   const after = JSON.parse(seed);
-  after.extension.view['header-view'].notifications_button.count = 5;
-  delete after.extension.view['header-view'].back_button;
+  after.extension.views['header-view']['ui-data'].notifications_button.count = 5;
+  delete after.extension.views['header-view']['ui-data'].back_button;
   after.extension.data.note = 'hi';
   const v = core.changesView(before, after);
   const parsed = JSON.parse(v.text);
   assert.deepEqual(Object.keys(parsed), ['extension']);
-  assert.deepEqual(parsed.extension.view['header-view'], { notifications_button: { count: 5 }, back_button: {} });
+  assert.deepEqual(parsed.extension.views['header-view']['ui-data'], { notifications_button: { count: 5 }, back_button: {} });
   assert.deepEqual(parsed.extension.data, { note: 'hi' });
   assert.deepEqual(v.marks.map(m => [m.type, m.path.join('.')]), [
-    ['updated', 'extension.view.header-view.notifications_button.count'],
-    ['deleted', 'extension.view.header-view.back_button'],
+    ['updated', 'extension.views.header-view.ui-data.notifications_button.count'],
+    ['deleted', 'extension.views.header-view.ui-data.back_button'],
     ['added', 'extension.data.note']
   ]);
   const lines = v.text.split('\n');
@@ -53,12 +53,12 @@ test('commits chain and record what changed', () => {
   assert.equal(c1.parent, null);
   assert.equal(c1.summary.added, 2);
   const next = JSON.parse(seed);
-  next.extension.view['header-view'].state_button.pressed = true;
+  next.extension.views['header-view']['ui-data'].state_button.pressed = true;
   const c2 = core.makeCommit(c1, JSON.stringify(next, null, 2), 't2');
   assert.equal(c2.n, 2);
   assert.equal(c2.parent, 1);
   assert.deepEqual(c2.summary, { added: 0, updated: 1, deleted: 0 });
-  assert.deepEqual(c2.paths, ['updated extension.view.header-view.state_button.pressed']);
+  assert.deepEqual(c2.paths, ['updated extension.views.header-view.ui-data.state_button.pressed']);
   assert.equal(core.commitId(2), 'c000002');
 });
 
@@ -88,4 +88,48 @@ test('tracker records name, input, output, related data and errors', async () =>
   ]);
   assert.equal(tr.records[0].ms, 5);
   assert.deepEqual(seen, ['save', 'bad', 'later']);
+});
+
+test('paths read keys that hold dots', () => {
+  const s = { extension: { views: { 'header-view': { functions: { 'local.open.state-view': { code: 'x' } } } } }, files: { 'CLAUDE.md': 1 } };
+  assert.equal(core.getPath(s, 'extension.views.header-view.functions.local.open.state-view.code'), 'x');
+  assert.equal(core.getPath(s, 'files.CLAUDE.md'), 1);
+  assert.equal(core.getPath(s, 'extension.nothing'), undefined);
+  core.setPath(s, 'files.CLAUDE.md', 2);
+  assert.equal(s.files['CLAUDE.md'], 2);
+});
+
+test('runtime fields are left out of comparisons', () => {
+  const s = { v: { functions: { 'local.init': { code: '', output: { a: 1 }, performance: { last: 2 }, calls: { f: { input: 'x', output: 3 } }, tests: { t: { input: 1, result: { ok: true } } } } } } };
+  assert.deepEqual(core.stripRuntime(s), { v: { functions: { 'local.init': { code: '', calls: { f: { input: 'x' } }, tests: { t: { input: 1 } } } } } });
+  assert.equal(s.v.functions['local.init'].output.a, 1);
+});
+
+test('templates fill ui-data and escape text', () => {
+  assert.equal(core.template('<b>${e(d.name)}</b>${d.n ? `<i>${d.n}</i>` : ""}', { name: '<Slide>', n: 2 }), '<b>&lt;Slide&gt;</b><i>2</i>');
+});
+
+test('test expectations report each failure', () => {
+  const has = sel => sel === '#a';
+  assert.deepEqual(core.checkExpect({ output: { open: true }, 'output-has': ['x'], dom: ['#a'], 'dom-absent': ['#b'] }, { open: true, x: 1 }, has), []);
+  assert.deepEqual(core.checkExpect({ output: { open: true }, dom: ['#b'] }, { open: false }, has), ['output.open is false, expected true', 'no element #b']);
+});
+
+test('brief keeps logs small', () => {
+  assert.deepEqual(core.brief({ a: 1 }), { a: 1 });
+  assert.deepEqual(core.brief('x'.repeat(300)), { type: 'text', length: 300 });
+  assert.equal(core.brief(undefined), null);
+});
+
+test('state.json runs from index-view and every function is complete', () => {
+  const s = JSON.parse(seed);
+  const views = s.extension.views;
+  assert.deepEqual(Object.keys(views), ['index-view', 'header-view', 'state-view']);
+  core.walk(s, [], (v, p) => {
+    if (p[p.length - 2] !== 'functions') return;
+    for (const k of ['input', 'output', 'imports', 'tests', 'expected-state-change', 'docs', 'performance', 'code', 'calls']) assert.ok(k in v, `${p.join('.')} has ${k}`);
+    assert.ok(v.docs.length > 10, `${p.join('.')} has docs`);
+    for (const name of Object.keys(v.calls)) assert.ok(name.startsWith('local.') || core.getPath(s, name), `${name} exists`);
+  });
+  Object.values(views).forEach(v => assert.doesNotThrow(() => core.template(v.html, v['ui-data'])));
 });

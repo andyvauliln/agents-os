@@ -1,4 +1,5 @@
-// Pure logic for the Agent OS page: diffs, the changes view, commits, history steps and the call log.
+// Pure logic for the Agent OS page: state paths, templates, diffs, the changes view, commits,
+// history steps, test checks and the call log.
 // Works in the browser (window.StateCore) and in Node (require) so it can be tested without a page.
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -81,10 +82,11 @@
     return { text: empty ? '{}' : lines.join('\n'), marks: marks, empty: empty };
   }
 
-  // A commit records the whole state as text, plus what changed against its parent.
+  // A commit records the whole state as text, plus what changed against its parent
+  // (outputs, timings and test results filled in by the runtime do not count as changes).
   function makeCommit(parent, text, at) {
-    var state = JSON.parse(text);
-    var base = parent ? JSON.parse(parent.state) : {};
+    var state = stripRuntime(JSON.parse(text));
+    var base = parent ? stripRuntime(JSON.parse(parent.state)) : {};
     var changes = diff(base, state);
     return {
       n: parent ? parent.n + 1 : 1,
@@ -120,6 +122,7 @@
     var now = opts.now || function () { return new Date().toISOString(); };
     var clock = opts.clock || function () { return Date.now(); };
     var records = [], seq = 0;
+    var keep = opts.brief || function (v) { return v === undefined ? null : v; };
     function finish(rec, t0) {
       rec.ms = clock() - t0;
       records.push(rec);
@@ -128,21 +131,92 @@
     }
     function track(name, input, fn) {
       var rec = { id: ++seq, name: name, at: now(), input: input === undefined ? null : input, ok: true, output: null, error: null, related: {} };
-      var ctx = { relate: function (o) { Object.keys(o).forEach(function (k) { rec.related[k] = o[k]; }); } };
+      var ctx = { id: rec.id, relate: function (o) { Object.keys(o).forEach(function (k) { rec.related[k] = o[k]; }); } };
       var t0 = clock(), out;
       try { out = fn(ctx); } catch (e) { rec.ok = false; rec.error = String(e && e.message || e); finish(rec, t0); throw e; }
       if (out && typeof out.then === 'function') {
-        return out.then(function (v) { rec.output = v === undefined ? null : v; finish(rec, t0); return v; },
+        return out.then(function (v) { rec.output = keep(v); finish(rec, t0); return v; },
           function (e) { rec.ok = false; rec.error = String(e && (e.message || e.code) || e); finish(rec, t0); throw e; });
       }
-      rec.output = out === undefined ? null : out;
+      rec.output = keep(out);
       finish(rec, t0);
       return out;
     }
     return { track: track, records: records };
   }
 
+  function clone(v) { return v === undefined ? undefined : JSON.parse(JSON.stringify(v)); }
+  function walk(v, path, fn) {
+    fn(v, path);
+    if (v !== null && typeof v === 'object') Object.keys(v).forEach(function (k) { walk(v[k], path.concat(k), fn); });
+  }
+  // Paths are dotted, and keys can hold dots ("local.init", "CLAUDE.md"):
+  // when a segment does not exist, it is joined with the next one and tried again.
+  function getPath(obj, path) {
+    var parts = String(path).split('.'), v = obj, i = 0;
+    while (i < parts.length) {
+      if (v === null || typeof v !== 'object') return undefined;
+      var k = parts[i], j = i;
+      while (!(k in v) && j < parts.length - 1) { j++; k += '.' + parts[j]; }
+      if (!(k in v)) return undefined;
+      v = v[k]; i = j + 1;
+    }
+    return v;
+  }
+  function setPath(obj, path, value) {
+    var parts = String(path).split('.');
+    // Prefer a parent that already has the key (the key may hold dots); otherwise the last segment is the key.
+    for (var i = 1; i < parts.length; i++) {
+      var parent = getPath(obj, parts.slice(0, i).join('.')), key = parts.slice(i).join('.');
+      if (isObj(parent) && key in parent) { parent[key] = value; return; }
+    }
+    var p = parts.length > 1 ? getPath(obj, parts.slice(0, -1).join('.')) : obj;
+    if (!isObj(p)) throw new Error('No object at ' + parts.slice(0, -1).join('.'));
+    p[parts[parts.length - 1]] = value;
+  }
+
+  // Fields the runtime fills in while functions run; they are not part of what the owner edits.
+  function stripRuntime(state) {
+    var copy = clone(state);
+    walk(copy, [], function (v, path) {
+      if (path[path.length - 2] !== 'functions' || !isObj(v)) return;
+      delete v.output; delete v.performance;
+      if (isObj(v.calls)) Object.keys(v.calls).forEach(function (k) { if (isObj(v.calls[k])) delete v.calls[k].output; });
+      if (isObj(v.tests)) Object.keys(v.tests).forEach(function (k) { if (isObj(v.tests[k])) delete v.tests[k].result; });
+    });
+    return copy;
+  }
+
+  // A small, JSON-safe version of a value for logs and output fields.
+  function brief(v) {
+    if (v === undefined || typeof v === 'function') return null;
+    if (typeof v === 'string') return v.length > 200 ? { type: 'text', length: v.length } : v;
+    if (v === null || typeof v !== 'object') return v;
+    if (typeof Node !== 'undefined' && v instanceof Node) return { type: 'element', tag: v.nodeName };
+    var text;
+    try { text = JSON.stringify(v); } catch (e) { return { type: 'object' }; }
+    return text.length > 600 ? { type: Array.isArray(v) ? 'list' : 'object', keys: Object.keys(v).slice(0, 30) } : JSON.parse(text);
+  }
+
+  // Fills a view's html: ${...} expressions see the view's ui-data as d, and e() escapes text.
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function template(html, data) { return new Function('d', 'e', 'return `' + html + '`;')(data, esc); }
+
+  // Checks a test's expect block: output (fields that must match), output-has (keys), dom / dom-absent (selectors).
+  function checkExpect(expect, out, hasDom) {
+    var fails = [];
+    if (expect.output !== undefined) Object.keys(expect.output).forEach(function (k) {
+      if (!out || !same(out[k], expect.output[k])) fails.push('output.' + k + ' is ' + JSON.stringify(out && out[k]) + ', expected ' + JSON.stringify(expect.output[k]));
+    });
+    (expect['output-has'] || []).forEach(function (k) { if (!out || !(k in out)) fails.push('output has no ' + k); });
+    (expect.dom || []).forEach(function (sel) { if (!hasDom(sel)) fails.push('no element ' + sel); });
+    (expect['dom-absent'] || []).forEach(function (sel) { if (hasDom(sel)) fails.push('element still there: ' + sel); });
+    return fails;
+  }
+
   return {
+    clone: clone, walk: walk, getPath: getPath, setPath: setPath, stripRuntime: stripRuntime,
+    brief: brief, template: template, esc: esc, checkExpect: checkExpect,
     diff: diff, summarize: summarize, changesView: changesView,
     makeCommit: makeCommit, commitId: commitId,
     historyLength: historyLength, step: step, textAt: textAt, pairAt: pairAt,

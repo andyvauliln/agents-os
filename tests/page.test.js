@@ -42,7 +42,7 @@ function fakeDb() {
   window.claude = { use: async name => (name === 'db' ? { doc, collection } : null) };
 }
 
-test('page: load, open, edit, save, changes, history and call log', async () => {
+test('page: boots from state, renders the header, runs state tests, saves and steps history', async () => {
   const server = await serve();
   const browser = await chromium.launch();
   try {
@@ -59,62 +59,58 @@ test('page: load, open, edit, save, changes, history and call log', async () => 
     }
     await page.addInitScript(fakeDb);
     await page.goto(`http://localhost:${server.address().port}/`);
+    await page.evaluate(() => window.agentOS.ready);
 
-    // load: header from state, state view closed (state_button.pressed is false), first commit created
-    await page.waitForSelector('#state-button');
-    assert.equal(await page.isHidden('#state-view'), true);
-    const load = await page.evaluate(() => window.agentOS.calls[0]);
-    assert.equal(load.name, 'loadState');
-    assert.deepEqual(load.related, { created: 1, store: 'db', commits: 1, head: 1 });
+    // boot: version 1 from state.json, index-view rendered, which rendered header-view with all its data
     assert.ok(await page.evaluate(() => !!window.__docs['commits/c000001']));
+    assert.equal(await page.textContent('.hv-brand'), 'Slide');
+    assert.equal(await page.locator('.hv-conn').count(), 4);
+    assert.equal(await page.textContent('.hv-conn[data-key=mcp] em'), 'off');
+    assert.equal(await page.isHidden('#state-view'), true);
+    const boot = await page.evaluate(() => window.agentOS.calls.map(c => [c.name, c.related.parent]));
+    assert.deepEqual(boot.map(b => b[0]).sort(), ['extension.functions.get-state', 'extension.functions.render', 'extension.functions.render', 'loadState', 'local.init', 'local.init']);
 
-    // open the state view
+    // outputs and performance are filled in on the functions that ran
+    const init = await page.evaluate(() => window.agentOS.state.extension.views['index-view'].functions['local.init']);
+    assert.equal(init.performance.count, 1);
+    assert.ok(init.calls['extension.functions.render'].output.view, 'render output filled');
+
+    // the tests written in the state pass
+    const results = await page.evaluate(() => window.agentOS.os.runTests());
+    assert.ok(results.length >= 5);
+    assert.deepEqual(results.filter(r => !r.ok), []);
+
+    // open the state view from the header and edit the brand name
     await page.click('#state-button');
-    assert.equal(await page.isVisible('#state-view'), true);
-    assert.match(await page.textContent('#pos'), /Version 1 of 1/);
-
-    // edit like an editor, then save as version 2
+    await page.waitForSelector('#state-view .CodeMirror');
     await page.evaluate(() => {
-      const cm = window.agentOS.editor;
-      const line = cm.getValue().split('\n').findIndex(l => l.includes('"Slide"'));
+      const cm = document.querySelector('.CodeMirror').CodeMirror;
+      const line = cm.getValue().split('\n').findIndex(l => l.includes('"name": "Slide"'));
       const ch = cm.getLine(line).indexOf('"Slide"') + 6;
       cm.replaceRange('s', { line, ch });
     });
     assert.match(await page.textContent('#status'), /Unsaved changes/);
     await page.click('#save');
-    await page.waitForFunction(() => window.agentOS.state.commits.length === 2);
+    await page.waitForFunction(() => window.agentOS.history.commits.length === 2);
+    assert.equal(await page.textContent('.hv-brand'), 'Slides');
     const commit = await page.evaluate(() => window.__docs['commits/c000002']);
-    assert.deepEqual(commit.summary, { added: 0, updated: 1, deleted: 0 });
-    assert.deepEqual(commit.paths, ['updated extension.view.header-view.brand.name']);
-    const save = await page.evaluate(() => window.agentOS.calls.find(c => c.name === 'saveCommit'));
-    assert.equal(save.ok, true);
-    assert.equal(save.related.commit, 2);
+    assert.deepEqual(commit.paths, ['updated extension.views.header-view.ui-data.brand.name']);
 
-    // changes: only the changed entry, marked as updated, with the old value
+    // changes view and history steps
     await page.click('#changes');
-    const text = await page.evaluate(() => window.agentOS.editor.getValue());
-    assert.deepEqual(JSON.parse(text), { extension: { view: { 'header-view': { brand: { name: 'Slides' } } } } });
     assert.equal(await page.locator('.chg-updated').count(), 1);
     assert.equal(await page.textContent('.was'), 'was "Slide"');
-
-    // arrow left steps back to version 1, where everything is new
     await page.focus('#changes');
     await page.keyboard.press('ArrowLeft');
     assert.match(await page.textContent('#pos'), /Version 1 of 2/);
-    assert.ok(await page.locator('.chg-added').count() > 0);
     await page.keyboard.press('ArrowRight');
     assert.match(await page.textContent('#pos'), /Version 2 of 2/);
 
-    // collapse all folds nested objects
-    await page.click('#changes');
-    await page.click('#collapse');
-    assert.ok(await page.locator('.CodeMirror-foldmarker').count() >= 2);
-
-    // every call is in the stored call log
-    await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].count >= 8), null, { timeout: 5000 });
+    // every call, with its parent, is in the stored call log
+    await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].items.some(i => i.name === 'local.step')), null, { timeout: 5000 });
     const log = await page.evaluate(() => Object.entries(window.__docs).find(([k]) => k.startsWith('calls/'))[1]);
-    assert.deepEqual([...new Set(log.items.map(i => i.name))].sort(),
-      ['collapseAll', 'editDraft', 'loadState', 'saveCommit', 'stepHistory', 'toggleChanges', 'toggleStateView']);
+    const names = new Set(log.items.map(i => i.name));
+    for (const n of ['loadState', 'extension.functions.render', 'local.open.state-view', 'local.save', 'local.toggle-changes', 'local.step', 'runTest']) assert.ok(names.has(n), n);
     assert.ok(log.items.every(i => i.ok && i.at && typeof i.ms === 'number'));
     assert.deepEqual(errors, []);
   } finally {

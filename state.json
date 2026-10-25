@@ -17,23 +17,301 @@
     }
   },
   "extension": {
-    "view": {
+    "views": {
+      "index-view": {
+        "mount": "#app",
+        "html": "<header id=\"header-view\" class=\"wrap\"></header>\n<main id=\"state-view\" class=\"wrap\" hidden></main>",
+        "css": "",
+        "ui-data": {},
+        "functions": {
+          "local.init": {
+            "input": {},
+            "output": {},
+            "imports": {},
+            "tests": {
+              "renders the header": {
+                "input": {},
+                "expect": {
+                  "dom": [
+                    "#header-view .hv-brand",
+                    "#state-button"
+                  ]
+                }
+              }
+            },
+            "expected-state-change": {},
+            "docs": "Runs when the page loads, after index-view is rendered: reads header-view and renders it.",
+            "performance": {},
+            "code": "",
+            "calls": {
+              "extension.functions.get-state": {
+                "input": "extension.views.header-view",
+                "output": null
+              },
+              "extension.functions.render": {
+                "input": "extension.views.header-view",
+                "output": null
+              }
+            }
+          }
+        }
+      },
       "header-view": {
-        "rundown_button": { "shown_on": "tablet and phone", "open": false },
-        "brand": { "name": "Slide", "recording_lamp": false },
-        "connections": {
-          "apps":    { "label": "Profiles and apps", "state": "ok",   "detail": "3 profiles · 3 apps · now Profile 2, Instagram Slide app" },
-          "agent":   { "label": "Agent",             "state": "mock", "detail": "agent-oss on This Claude project (cloud session) · Test flow uses the mock agent" },
-          "mcp":     { "label": "MCP",               "state": "off",  "detail": "Agent → extension over MCP. Off in this test." },
-          "storage": { "label": "Storage",           "state": "mock", "detail": "Shared state: not connected, so this browser only." }
+        "mount": "#header-view",
+        "html": "<div class=\"hv\">\n  <button class=\"hv-btn\" data-shown=\"${e(d.rundown_button.shown_on)}\" aria-expanded=\"${d.rundown_button.open}\" aria-label=\"Rundown\" title=\"Rundown\">&#9776;</button>\n  <button class=\"hv-btn\" aria-label=\"Back\" title=\"Back\">&larr;</button>\n  <div class=\"hv-brand\"><span class=\"hv-lamp${d.brand.recording_lamp ? ' on' : ''}\" title=\"Recording ${d.brand.recording_lamp ? 'on' : 'off'}\"></span>${e(d.brand.name)}</div>\n  <div class=\"hv-conns\">${Object.keys(d.connections).map(k => `<span class=\"hv-conn\" data-key=\"${e(k)}\" title=\"${e(d.connections[k].detail)}\"><i class=\"hv-dot ${e(d.connections[k].state)}\"></i>${e(d.connections[k].label)}<em class=\"${e(d.connections[k].state)}\">${e(d.connections[k].state)}</em></span>`).join('')}</div>\n  <span class=\"hv-model\" data-shown=\"${e(d.model_chip.shown_on)}\">${e(d.model_chip.text)}</span>\n  <button class=\"hv-btn\" aria-pressed=\"${d.docs_button.pressed}\" title=\"Docs\">Docs</button>\n  <button class=\"hv-btn hv-badged\" aria-pressed=\"${d.notifications_button.pressed}\" aria-label=\"Notifications, ${d.notifications_button.count} new\" title=\"Notifications\">&#9993;${d.notifications_button.count ? `<b>${d.notifications_button.count}</b>` : ''}</button>\n  <button class=\"hv-btn hv-badged\" aria-pressed=\"${d.apps_button.pressed}\" title=\"Profiles and apps\">Apps<b>${e(d.apps_button.profile_badge)}</b></button>\n  <button class=\"hv-btn\" title=\"Theme: ${e(d.theme_button.theme)}\">&#9680; ${e(d.theme_button.theme)}</button>\n  <button class=\"hv-btn hv-state\" id=\"state-button\" aria-pressed=\"${d.state_button.pressed}\" data-call=\"local.open.state-view\" title=\"State view\">{ } State</button>\n</div>",
+        "css": ".hv{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:40px}\n.hv-btn{position:relative;padding:6px 10px;border-radius:7px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer;font-size:13px;white-space:nowrap}\n.hv-btn[aria-pressed=\"true\"]{background:var(--sel);border-color:var(--accent);color:var(--accent)}\n.hv-badged b{position:absolute;top:-6px;right:-6px;min-width:16px;height:16px;padding:0 4px;box-sizing:border-box;border-radius:8px;background:var(--accent);color:var(--on-accent);font:600 10px/16px var(--sans)}\n.hv-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;margin-right:4px}\n.hv-lamp{width:9px;height:9px;border-radius:50%;background:var(--line)}\n.hv-lamp.on{background:var(--del);box-shadow:0 0 0 3px var(--del-bg)}\n.hv-conns{display:flex;gap:6px;flex-wrap:wrap;margin-right:auto}\n.hv-conn{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 8px;border-radius:99px;background:var(--gutter);border:1px solid var(--line);cursor:default}\n.hv-conn em{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.06em;font-style:normal;color:var(--muted)}\n.hv-dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}\n.hv-dot.ok{background:var(--add)}.hv-dot.mock{background:var(--upd)}.hv-dot.off{background:var(--muted)}\n.hv-conn em.ok{color:var(--add)}.hv-conn em.mock{color:var(--upd)}\n.hv-model{font:12px var(--mono);color:var(--muted);padding:4px 8px;border:1px dashed var(--line);border-radius:6px}\n[data-shown=\"desktop\"]{display:none}\n@media (min-width:1024px){[data-shown=\"desktop\"]{display:inline-flex}[data-shown=\"tablet and phone\"]{display:none}}",
+        "ui-data": {
+          "rundown_button": {
+            "shown_on": "tablet and phone",
+            "open": false
+          },
+          "brand": {
+            "name": "Slide",
+            "recording_lamp": false
+          },
+          "connections": {
+            "apps": {
+              "label": "Profiles and apps",
+              "state": "ok",
+              "detail": "3 profiles · 3 apps · now Profile 2, Instagram Slide app"
+            },
+            "agent": {
+              "label": "Agent",
+              "state": "mock",
+              "detail": "agent-oss on This Claude project (cloud session) · Test flow uses the mock agent"
+            },
+            "mcp": {
+              "label": "MCP",
+              "state": "off",
+              "detail": "Agent → extension over MCP. Off in this test."
+            },
+            "storage": {
+              "label": "Storage",
+              "state": "mock",
+              "detail": "Shared state: not connected, so this browser only."
+            }
+          },
+          "model_chip": {
+            "text": "opus 5.5 · f2a63aba",
+            "shown_on": "desktop"
+          },
+          "docs_button": {
+            "pressed": false
+          },
+          "notifications_button": {
+            "pressed": false,
+            "count": 2
+          },
+          "apps_button": {
+            "pressed": false,
+            "profile_badge": "2"
+          },
+          "back_button": {},
+          "theme_button": {
+            "theme": "system"
+          },
+          "state_button": {
+            "pressed": false
+          }
         },
-        "model_chip": { "text": "opus 5.5 · f2a63aba", "shown_on": "desktop" },
-        "docs_button": { "pressed": false },
-        "notifications_button": { "pressed": false, "count": 2 },
-        "apps_button": { "pressed": false, "profile_badge": "2" },
-        "back_button": {},
-        "theme_button": { "theme": "system" },
-        "state_button": { "pressed": false }
+        "functions": {
+          "local.init": {
+            "input": {},
+            "output": {},
+            "imports": {},
+            "tests": {},
+            "expected-state-change": {},
+            "docs": "Runs after header-view is rendered. Nothing to set up yet.",
+            "performance": {},
+            "code": "",
+            "calls": {}
+          },
+          "local.open.state-view": {
+            "input": {},
+            "output": {},
+            "imports": {},
+            "tests": {
+              "opens the state view": {
+                "before": {
+                  "extension.functions.unmount": "extension.views.state-view"
+                },
+                "input": {},
+                "expect": {
+                  "output": {
+                    "open": true
+                  },
+                  "dom": [
+                    "#state-view .CodeMirror"
+                  ]
+                }
+              },
+              "closes it when open": {
+                "before": {
+                  "extension.functions.render": "extension.views.state-view"
+                },
+                "input": {},
+                "expect": {
+                  "output": {
+                    "open": false
+                  },
+                  "dom-absent": [
+                    "#state-view .CodeMirror"
+                  ]
+                }
+              }
+            },
+            "expected-state-change": {},
+            "docs": "The State button: renders state-view, or closes it when it is open, and marks the button pressed.",
+            "performance": {},
+            "code": "const open = os.mounted('extension.views.state-view');\nif (open) await ctx.call('extension.functions.unmount', 'extension.views.state-view');\nelse await ctx.call('extension.functions.render', 'extension.views.state-view');\nctx.root.querySelector('#state-button').setAttribute('aria-pressed', String(!open));\nreturn { open: !open };",
+            "calls": {
+              "extension.functions.render": {
+                "input": "extension.views.state-view",
+                "output": null
+              },
+              "extension.functions.unmount": {
+                "input": "extension.views.state-view",
+                "output": null
+              }
+            }
+          }
+        }
+      },
+      "state-view": {
+        "mount": "#state-view",
+        "html": "<div class=\"sv-bar\">\n  <button class=\"btn icon\" id=\"older\" data-call=\"local.step\" data-input=\"-1\" aria-label=\"Older version\" title=\"Older version (&larr;)\">&larr;</button>\n  <button class=\"btn icon\" id=\"newer\" data-call=\"local.step\" data-input=\"1\" aria-label=\"Newer version\" title=\"Newer version (&rarr;)\">&rarr;</button>\n  <span class=\"pos\" id=\"pos\" aria-live=\"polite\"></span>\n  <button class=\"btn\" id=\"changes\" data-call=\"local.toggle-changes\" aria-pressed=\"false\">Changes</button>\n  <button class=\"btn\" id=\"collapse\" data-call=\"local.collapse-all\">Collapse all</button>\n  <span class=\"legend\" id=\"legend\" hidden><span><i class=\"lg-add\"></i>added</span><span><i class=\"lg-upd\"></i>updated</span><span><i class=\"lg-del\"></i>deleted</span></span>\n  <span class=\"status\" id=\"status\" role=\"status\"></span>\n  <button class=\"btn primary\" id=\"save\" data-call=\"local.save\">Save</button>\n</div>\n<div id=\"sv-editor\"></div>",
+        "css": "#state-view{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding-block:12px}\n.sv-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px}\n#sv-editor{flex:1;min-height:240px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}\n.lg-add{background:var(--add)}.lg-upd{background:var(--upd)}.lg-del{background:var(--del)}",
+        "ui-data": {},
+        "functions": {
+          "local.init": {
+            "input": {},
+            "output": {},
+            "imports": {
+              "codemirror": [
+                "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js",
+                "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js",
+                "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldcode.min.js",
+                "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.js",
+                "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/brace-fold.min.js",
+                "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js",
+                "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"
+              ]
+            },
+            "tests": {},
+            "expected-state-change": {},
+            "docs": "Runs after state-view is rendered: loads the editor and shows the current state at the newest version.",
+            "performance": {},
+            "code": "return os.editor.mount(ctx.root);",
+            "calls": {}
+          },
+          "local.step": {
+            "input": -1,
+            "output": {},
+            "imports": {},
+            "tests": {},
+            "expected-state-change": {},
+            "docs": "Moves one version back (input -1) or forward (input 1) in the history. Also runs on the arrow keys.",
+            "performance": {},
+            "code": "return os.editor.step(input);",
+            "calls": {}
+          },
+          "local.toggle-changes": {
+            "input": {},
+            "output": {},
+            "imports": {},
+            "tests": {},
+            "expected-state-change": {},
+            "docs": "Shows only what changed in the version on screen: added green, updated yellow, deleted red.",
+            "performance": {},
+            "code": "return os.editor.toggleChanges();",
+            "calls": {}
+          },
+          "local.collapse-all": {
+            "input": {},
+            "output": {},
+            "imports": {},
+            "tests": {},
+            "expected-state-change": {},
+            "docs": "Folds every object in the editor.",
+            "performance": {},
+            "code": "return os.editor.collapseAll();",
+            "calls": {}
+          },
+          "local.save": {
+            "input": {},
+            "output": {},
+            "imports": {},
+            "tests": {},
+            "expected-state-change": {
+              "history": "one more version"
+            },
+            "docs": "Saves the edited state as a new version and renders the header from it.",
+            "performance": {},
+            "code": "const out = await os.editor.save();\nawait ctx.call('extension.functions.render', 'extension.views.header-view');\nreturn out;",
+            "calls": {
+              "extension.functions.render": {
+                "input": "extension.views.header-view",
+                "output": null
+              }
+            }
+          }
+        }
+      }
+    },
+    "functions": {
+      "get-state": {
+        "input": "extension.views.header-view",
+        "output": {},
+        "imports": {},
+        "tests": {
+          "reads header-view": {
+            "input": "extension.views.header-view",
+            "expect": {
+              "output-has": [
+                "mount",
+                "html",
+                "ui-data",
+                "functions"
+              ]
+            }
+          }
+        },
+        "expected-state-change": {},
+        "docs": "Returns a copy of the state at a path, for example extension.views.header-view.",
+        "performance": {},
+        "code": "const v = os.get(input);\nif (v === undefined) throw new Error('Nothing at ' + input);\nreturn os.clone(v);",
+        "calls": {}
+      },
+      "render": {
+        "input": "extension.views.header-view",
+        "output": {},
+        "imports": {},
+        "tests": {
+          "renders header-view": {
+            "input": "extension.views.header-view",
+            "expect": {
+              "dom": [
+                "#header-view .hv-conn[data-key=mcp]"
+              ]
+            }
+          }
+        },
+        "expected-state-change": {},
+        "docs": "Renders a view: puts its css and html (with its ui-data) into its mount, wires its buttons, then runs its local.init.",
+        "performance": {},
+        "code": "const view = os.get(input);\nif (!view) throw new Error('No view at ' + input);\nconst root = document.querySelector(view.mount);\nif (!root) throw new Error('No element for ' + view.mount);\nos.style(input, view.css || '');\nroot.innerHTML = os.template(view.html || '', view['ui-data'] || {});\nos.bind(root, input);\nroot.hidden = false;\nos.setMounted(input, true);\nif (view.functions && view.functions['local.init']) await os.call('local.init', {}, input, ctx.id);\nreturn { view: input, mount: view.mount, elements: root.querySelectorAll('*').length };",
+        "calls": {}
+      },
+      "unmount": {
+        "input": "extension.views.state-view",
+        "output": {},
+        "imports": {},
+        "tests": {},
+        "expected-state-change": {},
+        "docs": "Empties a view's mount and hides it.",
+        "performance": {},
+        "code": "const view = os.get(input);\nconst root = document.querySelector(view.mount);\nroot.innerHTML = '';\nroot.hidden = true;\nos.setMounted(input, false);\nreturn { view: input };",
+        "calls": {}
       }
     },
     "data": {},

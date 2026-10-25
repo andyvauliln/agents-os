@@ -21,8 +21,9 @@ test('diff of equal states is empty', () => {
 });
 
 test('changes view keeps only what changed, with line marks', () => {
-  const before = JSON.parse(seed);
-  const after = JSON.parse(seed);
+  const fixture = { agents: {}, extension: { views: { 'header-view': { 'ui-data': { notifications_button: { pressed: false, count: 2 }, back_button: {} } } }, data: {} } };
+  const before = JSON.parse(JSON.stringify(fixture));
+  const after = JSON.parse(JSON.stringify(fixture));
   after.extension.views['header-view']['ui-data'].notifications_button.count = 5;
   delete after.extension.views['header-view']['ui-data'].back_button;
   after.extension.data.note = 'hi';
@@ -53,12 +54,12 @@ test('commits chain and record what changed', () => {
   assert.equal(c1.parent, null);
   assert.equal(c1.summary.added, 2);
   const next = JSON.parse(seed);
-  next.extension.views['header-view']['ui-data'].state_button.pressed = true;
+  next.extension.views['header-view']['ui-data'].state_button = { pressed: true };
   const c2 = core.makeCommit(c1, JSON.stringify(next, null, 2), 't2');
   assert.equal(c2.n, 2);
   assert.equal(c2.parent, 1);
-  assert.deepEqual(c2.summary, { added: 0, updated: 1, deleted: 0 });
-  assert.deepEqual(c2.paths, ['updated extension.views.header-view.ui-data.state_button.pressed']);
+  assert.deepEqual(c2.summary, { added: 1, updated: 0, deleted: 0 });
+  assert.deepEqual(c2.paths, ['added extension.views.header-view.ui-data.state_button']);
   assert.equal(core.commitId(2), 'c000002');
 });
 

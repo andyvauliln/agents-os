@@ -61,11 +61,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.goto(`http://localhost:${server.address().port}/`);
     await page.evaluate(() => window.agentOS.ready);
 
-    // boot: version 1 from state.json, index-view rendered, which rendered header-view with all its data
+    // boot: version 1 from state.json, index-view rendered, which rendered header-view: only the State view button
     assert.ok(await page.evaluate(() => !!window.__docs['commits/c000001']));
-    assert.equal(await page.textContent('.hv-brand'), 'Slide');
-    assert.equal(await page.locator('.hv-conn').count(), 4);
-    assert.equal(await page.textContent('.hv-conn[data-key=mcp] em'), 'off');
+    assert.equal(await page.textContent('#header-view'), 'State view');
     assert.equal(await page.isHidden('#state-view'), true);
     const boot = await page.evaluate(() => window.agentOS.calls.map(c => [c.name, c.related.parent]));
     assert.deepEqual(boot.map(b => b[0]).sort(), ['extension.functions.get-state', 'extension.functions.render', 'extension.functions.render', 'loadState', 'local.init', 'local.init']);
@@ -80,26 +78,24 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.ok(results.length >= 5);
     assert.deepEqual(results.filter(r => !r.ok), []);
 
-    // open the state view from the header and edit the brand name
+    // open the state view from the header and edit extension.data
     await page.click('#state-button');
     await page.waitForSelector('#state-view .CodeMirror');
     await page.evaluate(() => {
       const cm = document.querySelector('.CodeMirror').CodeMirror;
-      const line = cm.getValue().split('\n').findIndex(l => l.includes('"name": "Slide"'));
-      const ch = cm.getLine(line).indexOf('"Slide"') + 6;
-      cm.replaceRange('s', { line, ch });
+      const line = cm.getValue().split('\n').findIndex(l => l.trim() === '"data": {},');
+      const ch = cm.getLine(line).indexOf('{}') + 1;
+      cm.replaceRange('"x": 1', { line, ch });
     });
     assert.match(await page.textContent('#status'), /Unsaved changes/);
     await page.click('#save');
     await page.waitForFunction(() => window.agentOS.history.commits.length === 2);
-    assert.equal(await page.textContent('.hv-brand'), 'Slides');
     const commit = await page.evaluate(() => window.__docs['commits/c000002']);
-    assert.deepEqual(commit.paths, ['updated extension.views.header-view.ui-data.brand.name']);
+    assert.deepEqual(commit.paths, ['added extension.data.x']);
 
     // changes view and history steps
     await page.click('#changes');
-    assert.equal(await page.locator('.chg-updated').count(), 1);
-    assert.equal(await page.textContent('.was'), 'was "Slide"');
+    assert.equal(await page.locator('.chg-added').count(), 1);
     await page.focus('#changes');
     await page.keyboard.press('ArrowLeft');
     assert.match(await page.textContent('#pos'), /Version 1 of 2/);

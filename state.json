@@ -19,7 +19,7 @@
   "extension": {
     "views": {
       "index-view": {
-        "html": "<header id=\"header-view\"></header>\n<main id=\"state-view\" hidden></main>",
+        "html": "<style>\n@import url(\"https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap\");\n:root{--bg:#f3f5f8;--panel:#ffffff;--gutter:#f7f8fa;--fg:#17202c;--muted:#6a7584;--line:#dde2e9;--accent:#3152d4;--on-accent:#ffffff;--sel:#dbe3fb;\n  --key:#17202c;--key-empty:#8b95a5;--str:#18794e;--num:#b4530b;--atom:#7b3fc4;--warn:#a35a00;--bad:#c0322b;--ok:#1f9d55;\n  --add:#18794e;--add-bg:#e3f4ea;--upd:#a35a00;--upd-bg:#fbefd6;--del:#c0322b;--del-bg:#fbe4e2;\n  --mono:\"JetBrains Mono\",ui-monospace,\"SF Mono\",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,\"Segoe UI\",sans-serif}\n@media (prefers-color-scheme:dark){:root:not([data-theme=\"light\"]){--bg:#0f141b;--panel:#161d27;--gutter:#131922;--fg:#e4e9f0;--muted:#8c98aa;--line:#263040;--accent:#8aa4ff;--on-accent:#0f141b;--sel:#27355c;\n  --key:#e4e9f0;--key-empty:#77839a;--str:#6fd3a0;--num:#f0a35e;--atom:#c39bff;--warn:#f0b35e;--bad:#ff8a80;--ok:#4ade80;\n  --add:#6fd3a0;--add-bg:#163325;--upd:#f0c05e;--upd-bg:#3a2e12;--del:#ff8a80;--del-bg:#3d1a1a;color-scheme:dark}}\n:root[data-theme=\"dark\"]{--bg:#0f141b;--panel:#161d27;--gutter:#131922;--fg:#e4e9f0;--muted:#8c98aa;--line:#263040;--accent:#8aa4ff;--on-accent:#0f141b;--sel:#27355c;\n  --key:#e4e9f0;--key-empty:#77839a;--str:#6fd3a0;--num:#f0a35e;--atom:#c39bff;--warn:#f0b35e;--bad:#ff8a80;--ok:#4ade80;\n  --add:#6fd3a0;--add-bg:#163325;--upd:#f0c05e;--upd-bg:#3a2e12;--del:#ff8a80;--del-bg:#3d1a1a;color-scheme:dark}\n[hidden]{display:none!important}\nbody{background:var(--bg);color:var(--fg);font-family:var(--sans)}\nbody::before{content:\"\";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}\n#index-view{height:100%;display:flex;flex-direction:column}\nbutton{font:inherit}\nbutton:focus-visible{outline:2px solid var(--accent);outline-offset:1px}\n#header-view,#state-view{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}\n#header-view{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;background:var(--panel);border-bottom:1px solid var(--line);padding-block:8px;min-height:36px;display:flex;justify-content:flex-end;align-items:center}\n#state-view{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding-block:12px;position:relative}\n.sv-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px}\n#sv-editor{flex:1;min-height:240px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);transition:border-color .3s,box-shadow .3s}\n#sv-editor.saved{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok)}\n.btn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:32px;padding:0;border-radius:7px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}\n.btn[aria-pressed=\"true\"]{background:var(--sel);border-color:var(--accent);color:var(--accent)}\n.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}\n.btn:disabled{opacity:.4;cursor:default}\n.pos{font:12px var(--mono);color:var(--muted)}\n.pos b{color:var(--fg);font-weight:500}\n.path{font:12px var(--mono);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}\n.status{font-size:12px;color:var(--warn);margin-left:auto}\n.status.bad{color:var(--bad)}\n.legend{display:flex;gap:10px;font:11px var(--mono);color:var(--muted)}\n.legend span{display:inline-flex;align-items:center;gap:4px}\n.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}\n.lg-add{background:var(--add)}.lg-upd{background:var(--upd)}.lg-del{background:var(--del)}\n.long{color:var(--str);cursor:pointer;border-bottom:1px dotted currentColor}\n.sv-html{position:absolute;inset:12px max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px));z-index:4;display:flex;flex-direction:column;gap:8px;background:var(--bg)}\n.sv-html-bar{display:flex;align-items:center;gap:8px;justify-content:space-between}\n.sv-html-body{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}\n@media (max-width:640px){.sv-html-body{grid-template-columns:1fr;grid-template-rows:1fr 1fr}}\n#sv-html-code,#sv-html-view{min-height:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}\n#sv-html-view{width:100%;height:100%;box-sizing:border-box}\n.CodeMirror{height:100%;font:13px/1.6 var(--mono);background:var(--panel);color:var(--fg)}\n.CodeMirror-gutters{background:var(--gutter);border-right:1px solid var(--line)}\n.CodeMirror-linenumber{color:var(--muted)}\n.CodeMirror-cursor{border-left-color:var(--fg)}\n.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected{background:var(--sel)}\n.CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler{background:var(--panel)}\n.CodeMirror-foldgutter{width:14px}\n.CodeMirror-foldgutter-open,.CodeMirror-foldgutter-folded{cursor:pointer;color:var(--muted);text-align:center}\n.CodeMirror-foldgutter-open:after{content:\"▾\"}\n.CodeMirror-foldgutter-folded:after{content:\"▸\";color:var(--accent)}\n.CodeMirror-foldmarker{color:var(--accent);background:var(--sel);border-radius:4px;padding:0 5px;margin:0 2px;cursor:pointer;font-family:var(--mono)}\ndiv.CodeMirror span.CodeMirror-matchingbracket{color:var(--accent);font-weight:600}\ndiv.CodeMirror span.CodeMirror-nonmatchingbracket{color:var(--bad)}\n.cm-s-agent .cm-string{color:var(--str)}\n.cm-s-agent .cm-string.cm-key{color:var(--key);font-weight:500}\n.cm-s-agent .cm-string.cm-key.cm-emptykey{color:var(--key-empty);font-weight:400}\n.cm-s-agent .cm-number{color:var(--num)}\n.cm-s-agent .cm-atom{color:var(--atom)}\n.cm-s-agent .cm-emptyobj{color:var(--key-empty)}\n.cm-s-agent .cm-comment{color:var(--muted);font-style:italic}\n.cm-s-agent .cm-tag{color:var(--accent)}\n.cm-s-agent .cm-attribute{color:var(--num)}\n.bad-line{background:var(--del-bg)}\n.chg-added{background:var(--add-bg);box-shadow:inset 3px 0 var(--add)}\n.chg-updated{background:var(--upd-bg);box-shadow:inset 3px 0 var(--upd)}\n.chg-deleted{background:var(--del-bg);box-shadow:inset 3px 0 var(--del)}\n.chg-deleted .CodeMirror-line{text-decoration:line-through;text-decoration-color:var(--del)}\n.was{font:11px var(--mono);color:var(--upd);margin-left:10px;opacity:.9}\n.CodeMirror-readonly .CodeMirror-cursor{display:none}\n</style>\n<header id=\"header-view\"></header>\n<main id=\"state-view\" hidden></main>",
         "ui-data": {},
         "functions": {
           "local.init": {
@@ -36,7 +36,9 @@
                 }
               }
             },
-            "expected-state-change": {},
+            "expected-state-change": {
+              "extension.views.state-view.ui-data": "may change"
+            },
             "docs": "Runs when the page loads, after index-view is rendered: reads header-view and renders it.",
             "performance": {},
             "code": "",
@@ -54,19 +56,28 @@
         }
       },
       "header-view": {
-        "html": "<button class=\"btn\" id=\"state-button\" aria-pressed=\"false\" data-call=\"local.open.state-view\">State view</button>",
-        "ui-data": {},
+        "html": "<button class=\"btn\" id=\"state-button\" aria-pressed=\"${d.state_open}\" data-call=\"local.open.state-view\" aria-label=\"State view\" title=\"State view\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M6 2.5C4 2.5 4.5 5 4.5 6.5S3 8 3 8s1.5 0 1.5 1.5S4 13.5 6 13.5M10 2.5c2 0 1.5 2.5 1.5 4S13 8 13 8s-1.5 0-1.5 1.5.5 4-1.5 4\"/></svg></button>",
+        "ui-data": {
+          "state_open": false
+        },
         "functions": {
           "local.init": {
             "input": {},
             "output": {},
             "imports": {},
             "tests": {},
-            "expected-state-change": {},
-            "docs": "Runs after header-view is rendered. Nothing to set up yet.",
+            "expected-state-change": {
+              "extension.views.state-view.ui-data": "may change"
+            },
+            "docs": "Runs after header-view is rendered: opens state-view when ui-data.state_open says it is open.",
             "performance": {},
-            "code": "",
-            "calls": {}
+            "code": "const d = os.get('extension.views.header-view.ui-data');\nif (d.state_open && !os.mounted('extension.views.state-view')) await ctx.call('extension.functions.render', 'extension.views.state-view');\nreturn { state_open: d.state_open };",
+            "calls": {
+              "extension.functions.render": {
+                "input": "extension.views.state-view",
+                "output": null
+              }
+            }
           },
           "local.open.state-view": {
             "input": {},
@@ -82,8 +93,12 @@
                   "output": {
                     "open": true
                   },
+                  "state": {
+                    "extension.views.header-view.ui-data.state_open": true
+                  },
                   "dom": [
-                    "#state-view .CodeMirror"
+                    "#state-view .CodeMirror",
+                    "#state-button[aria-pressed=\"true\"]"
                   ]
                 }
               },
@@ -96,16 +111,22 @@
                   "output": {
                     "open": false
                   },
+                  "state": {
+                    "extension.views.header-view.ui-data.state_open": false
+                  },
                   "dom-absent": [
                     "#state-view .CodeMirror"
                   ]
                 }
               }
             },
-            "expected-state-change": {},
-            "docs": "The State button: renders state-view, or closes it when it is open, and marks the button pressed.",
+            "expected-state-change": {
+              "extension.views.header-view.ui-data.state_open": "may change",
+              "extension.views.state-view.ui-data": "may change"
+            },
+            "docs": "The State button: renders state-view, or closes it when it is open, and keeps ui-data.state_open in step.",
             "performance": {},
-            "code": "const open = os.mounted('extension.views.state-view');\nif (open) await ctx.call('extension.functions.unmount', 'extension.views.state-view');\nelse await ctx.call('extension.functions.render', 'extension.views.state-view');\nctx.root.querySelector('#state-button').setAttribute('aria-pressed', String(!open));\nreturn { open: !open };",
+            "code": "const d = os.get('extension.views.header-view.ui-data');\nd.state_open = !os.mounted('extension.views.state-view');\nif (d.state_open) await ctx.call('extension.functions.render', 'extension.views.state-view');\nelse await ctx.call('extension.functions.unmount', 'extension.views.state-view');\nawait ctx.call('extension.functions.render', 'extension.views.header-view');\nreturn { open: d.state_open };",
             "calls": {
               "extension.functions.render": {
                 "input": "extension.views.state-view",
@@ -120,72 +141,334 @@
         }
       },
       "state-view": {
-        "html": "<div class=\"sv-bar\">\n  <button class=\"btn icon\" id=\"older\" data-call=\"local.step\" data-input=\"-1\" aria-label=\"Older version\" title=\"Older version (&larr;)\">&larr;</button>\n  <button class=\"btn icon\" id=\"newer\" data-call=\"local.step\" data-input=\"1\" aria-label=\"Newer version\" title=\"Newer version (&rarr;)\">&rarr;</button>\n  <span class=\"pos\" id=\"pos\" aria-live=\"polite\"></span>\n  <button class=\"btn\" id=\"changes\" data-call=\"local.toggle-changes\" aria-pressed=\"false\">Changes</button>\n  <button class=\"btn\" id=\"collapse\" data-call=\"local.collapse-all\">Collapse all</button>\n  <span class=\"legend\" id=\"legend\" hidden><span><i class=\"lg-add\"></i>added</span><span><i class=\"lg-upd\"></i>updated</span><span><i class=\"lg-del\"></i>deleted</span></span>\n  <span class=\"status\" id=\"status\" role=\"status\"></span>\n  <button class=\"btn primary\" id=\"save\" data-call=\"local.save\">Save</button>\n</div>\n<div id=\"sv-editor\"></div>",
-        "ui-data": {},
+        "html": "<div class=\"sv-bar\">\n  <button class=\"btn\" id=\"older\" data-call=\"local.step\" data-input=\"-1\" ${d.position <= 0 ? 'disabled' : ''} aria-label=\"Older version\" title=\"Older version (&larr;)\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10 3 5 8l5 5\"/></svg></button>\n  <button class=\"btn\" id=\"newer\" data-call=\"local.step\" data-input=\"1\" ${d.position >= d.current_state_version - (d.unsaved ? 0 : 1) ? 'disabled' : ''} aria-label=\"Newer version\" title=\"Newer version (&rarr;)\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 3 5 5-5 5\"/></svg></button>\n  <span class=\"pos\" id=\"pos\"><b>${e(d.version)}</b> ${e(d.version_ago)}</span>\n  <span class=\"path\" id=\"path\">${e(d.path)}</span>\n  <span class=\"status ${d.error && !d.fixable ? 'bad' : ''}\" id=\"status\" role=\"status\">${d.error ? (d.fixable ? 'JSON has slips, save fixes them' : 'Invalid JSON: ' + e(d.error)) : d.unsaved ? 'Unsaved' : ''}</span>\n  <span class=\"legend\" id=\"legend\" ${d.changes ? '' : 'hidden'}><span><i class=\"lg-add\"></i>added</span><span><i class=\"lg-upd\"></i>updated</span><span><i class=\"lg-del\"></i>deleted</span></span>\n  <button class=\"btn\" id=\"changes\" data-call=\"local.toggle-changes\" aria-pressed=\"${d.changes}\" aria-label=\"Changes in this version\" title=\"Changes in this version\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 2v6M5 5h6M5 12h6\"/></svg></button>\n  <button class=\"btn\" id=\"collapse\" data-call=\"local.collapse-all\" aria-label=\"Collapse all\" title=\"Collapse all\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m4 2 4 4 4-4M4 14l4-4 4 4\"/></svg></button>\n  <button class=\"btn primary\" id=\"save\" data-call=\"local.save\" ${!d.unsaved || (d.error && !d.fixable) ? 'disabled' : ''} aria-label=\"Save\" title=\"Save (Cmd+S)\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 2.5h8l2.5 2.5v8.5h-10.5z\"/><path d=\"M5.5 2.5v3h4.5v-3M5.5 13.5v-4h5v4\"/></svg></button>\n</div>\n<div id=\"sv-editor\"></div>\n<div id=\"sv-html\" class=\"sv-html\" hidden>\n  <div class=\"sv-html-bar\"><span class=\"path\" id=\"sv-html-path\"></span><button class=\"btn\" id=\"sv-html-close\" data-call=\"local.close-html\" aria-label=\"Close\" title=\"Close\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m4 4 8 8M12 4l-8 8\"/></svg></button></div>\n  <div class=\"sv-html-body\"><div id=\"sv-html-code\"></div><iframe id=\"sv-html-view\" title=\"Rendered html\"></iframe></div>\n</div>",
+        "ui-data": {
+          "path": "extension/views/state-view",
+          "current_state_version": 1,
+          "position": 0,
+          "version": "v1",
+          "version_ago": "",
+          "changes": false,
+          "unsaved": false,
+          "error": "",
+          "fixable": false,
+          "html_path": "",
+          "expanded": []
+        },
         "functions": {
           "local.init": {
             "input": {},
             "output": {},
             "imports": {
               "codemirror": [
+                "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css",
                 "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js",
                 "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js",
+                "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js",
+                "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js",
+                "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js",
                 "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldcode.min.js",
                 "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.js",
                 "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/brace-fold.min.js",
                 "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js",
                 "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"
-              ]
+              ],
+              "state-core": "// Pure logic for the Agent OS page: state paths, templates, diffs, the changes view, commits,\n// history steps, test checks and the call log.\n// Works in the browser (window.StateCore) and in Node (require) so it can be tested without a page.\n(function (root, factory) {\n  if (typeof module === 'object' && module.exports) module.exports = factory();\n  else root.StateCore = factory();\n})(typeof self !== 'undefined' ? self : this, function () {\n  'use strict';\n\n  function isObj(v) { return v !== null && typeof v === 'object' && !Array.isArray(v); }\n  function same(a, b) { return JSON.stringify(a) === JSON.stringify(b); }\n  function pathText(path) { return path.join('.'); }\n\n  // Every change between two states: objects are compared key by key, anything else as a whole value.\n  function diff(before, after, path) {\n    path = path || [];\n    var out = [];\n    if (isObj(before) && isObj(after)) {\n      Object.keys(after).forEach(function (k) {\n        var p = path.concat(k);\n        if (!(k in before)) out.push({ type: 'added', path: p, after: after[k] });\n        else out = out.concat(diff(before[k], after[k], p));\n      });\n      Object.keys(before).forEach(function (k) {\n        if (!(k in after)) out.push({ type: 'deleted', path: path.concat(k), before: before[k] });\n      });\n      return out;\n    }\n    if (!same(before, after)) out.push({ type: 'updated', path: path, before: before, after: after });\n    return out;\n  }\n\n  function summarize(changes) {\n    var s = { added: 0, updated: 0, deleted: 0 };\n    changes.forEach(function (c) { s[c.type]++; });\n    return s;\n  }\n\n  // The state cut down to what changed, as JSON text, with the line range and kind of each change.\n  // Kept keys follow the new state's order; deleted keys come back where they stood in the old one.\n  function changesView(before, after) {\n    var lines = [], marks = [];\n    function keysOf(b, a) {\n      var keys = Object.keys(a);\n      Object.keys(b).forEach(function (k, i) {\n        if (k in a) return;\n        var prev = Object.keys(b).slice(0, i).reverse().find(function (x) { return keys.indexOf(x) >= 0; });\n        keys.splice(prev === undefined ? 0 : keys.indexOf(prev) + 1, 0, k);\n      });\n      return keys;\n    }\n    function changed(b, a) { return !same(b, a); }\n    function emitValue(value, indent, prefix, suffix, type, path, before) {\n      var text = JSON.stringify(value, null, 2).split('\\n');\n      var from = lines.length;\n      text.forEach(function (t, i) {\n        lines.push((i === 0 ? indent + prefix : indent) + t + (i === text.length - 1 ? suffix : ''));\n      });\n      marks.push({ type: type, path: path, from: from, to: lines.length - 1, before: before });\n    }\n    function emitObject(b, a, indent, path) {\n      var keys = keysOf(b, a).filter(function (k) { return changed(b[k], a[k]) || !(k in a) || !(k in b); });\n      keys.forEach(function (k, i) {\n        var comma = i < keys.length - 1 ? ',' : '';\n        var prefix = JSON.stringify(k) + ': ';\n        var p = path.concat(k);\n        if (!(k in b)) emitValue(a[k], indent, prefix, comma, 'added', p);\n        else if (!(k in a)) emitValue(b[k], indent, prefix, comma, 'deleted', p);\n        else if (isObj(b[k]) && isObj(a[k])) {\n          lines.push(indent + prefix + '{');\n          emitObject(b[k], a[k], indent + '  ', p);\n          lines.push(indent + '}' + comma);\n        } else emitValue(a[k], indent, prefix, comma, 'updated', p, b[k]);\n      });\n    }\n    if (isObj(before) && isObj(after)) {\n      lines.push('{');\n      emitObject(before, after, '  ', []);\n      lines.push('}');\n    } else if (changed(before, after)) emitValue(after, '', '', '', 'updated', [], before);\n    var empty = marks.length === 0;\n    return { text: empty ? '{}' : lines.join('\\n'), marks: marks, empty: empty };\n  }\n\n  // JSON with comments. Comments stay in the saved text; they are skipped when the text is read.\n  function tokenize(text) {\n    var toks = [], i = 0, n = text.length, j;\n    while (i < n) {\n      var c = text[i];\n      if (/\\s/.test(c)) { j = i; while (j < n && /\\s/.test(text[j])) j++; toks.push({ t: 'ws', v: text.slice(i, j) }); i = j; continue; }\n      if (c === '/' && text[i + 1] === '/') { j = text.indexOf('\\n', i); if (j < 0) j = n; toks.push({ t: 'comment', v: text.slice(i, j) }); i = j; continue; }\n      if (c === '/' && text[i + 1] === '*') { j = text.indexOf('*/', i + 2); j = j < 0 ? n : j + 2; toks.push({ t: 'comment', v: text.slice(i, j) }); i = j; continue; }\n      if (c === '\"' || c === \"'\") {\n        j = i + 1;\n        while (j < n && text[j] !== c && text[j] !== '\\n') { if (text[j] === '\\\\') j++; j++; }\n        var closed = j < n && text[j] === c;\n        toks.push({ t: 'string', q: c, closed: closed, v: text.slice(i, closed ? j + 1 : j) }); i = closed ? j + 1 : j; continue;\n      }\n      if ('{}[]:,'.indexOf(c) >= 0) { toks.push({ t: c, v: c }); i++; continue; }\n      j = i; while (j < n && !/[\\s{}\\[\\]:,\"'\\/]/.test(text[j])) j++; if (j === i) j = i + 1;\n      toks.push({ t: 'word', v: text.slice(i, j) }); i = j;\n    }\n    return toks;\n  }\n  function stripComments(text) {\n    return tokenize(text).map(function (t) { return t.t === 'comment' ? t.v.replace(/[^\\n]/g, ' ') : t.v; }).join('');\n  }\n  function parseJsonc(text) { return JSON.parse(stripComments(text)); }\n\n  // Repairs the usual slips and keeps comments: trailing and doubled commas, missing commas,\n  // unquoted keys, single quotes, unclosed strings, and brackets left open at the end.\n  function autofix(text) {\n    var toks = tokenize(text), out = [], stack = [];\n    function next(k) { for (var m = k + 1; m < toks.length; m++) if (toks[m].t !== 'ws' && toks[m].t !== 'comment') return toks[m]; return null; }\n    function ends(t) { return t && (t.t === 'string' || t.t === 'word' || t.t === '}' || t.t === ']'); }\n    function starts(t) { return t && (t.t === 'string' || t.t === 'word' || t.t === '{' || t.t === '['); }\n    toks.forEach(function (tok, k) {\n      var v = tok.v, nx = next(k);\n      if (tok.t === 'string') {\n        var inner = tok.closed ? v.slice(1, -1) : v.slice(1);\n        if (tok.q === \"'\") inner = inner.replace(/\\\\'/g, \"'\").replace(/(^|[^\\\\])\"/g, '$1\\\\\"');\n        v = '\"' + inner + '\"';\n      } else if (tok.t === 'word') {\n        if (nx && nx.t === ':') v = JSON.stringify(v);\n        else if (/^(True|TRUE)$/.test(v)) v = 'true';\n        else if (/^(False|FALSE)$/.test(v)) v = 'false';\n        else if (/^(None|undefined|NULL)$/.test(v)) v = 'null';\n      } else if (tok.t === ',' && (!nx || nx.t === '}' || nx.t === ']' || nx.t === ',')) v = '';\n      if (tok.t === '{' || tok.t === '[') stack.push(tok.t === '{' ? '}' : ']');\n      if ((tok.t === '}' || tok.t === ']') && stack[stack.length - 1] === tok.t) stack.pop();\n      out.push(v);\n      if (ends(tok) && starts(nx)) out.push(',');\n    });\n    while (stack.length) out.push('\\n' + stack.pop());\n    return out.join('');\n  }\n\n  // Where each value sits in the text: path (as JSON) -> {from, start, end}; objects also list their members.\n  function spans(text) {\n    var pos = 0, sig = [], map = {}, i = 0;\n    tokenize(text).forEach(function (t) { t.at = pos; pos += t.v.length; if (t.t !== 'ws' && t.t !== 'comment') sig.push(t); });\n    function keyOf(t) { try { return t.t === 'string' ? JSON.parse('\"' + t.v.slice(1, -1) + '\"') : t.v; } catch (e) { return t.v.slice(1, -1); } }\n    function value(path) {\n      var t = sig[i];\n      if (!t) return null;\n      var rec = { from: t.at, start: t.at };\n      if (t.t === '{') {\n        i++; rec.obj = true; rec.members = [];\n        while (sig[i] && sig[i].t !== '}') {\n          if (sig[i].t === ',') { i++; continue; }\n          var k = sig[i], key = keyOf(k); i++;\n          if (sig[i] && sig[i].t === ':') i++;\n          var r = value(path.concat(key));\n          if (!r) break;\n          r.from = k.at;\n          rec.members.push({ key: key, keyStart: k.at, end: r.end });\n        }\n        rec.end = sig[i] ? sig[i].at + 1 : text.length; i++;\n      } else if (t.t === '[') {\n        i++; var n = 0;\n        while (sig[i] && sig[i].t !== ']') { if (sig[i].t === ',') { i++; continue; } if (!value(path.concat(n++))) break; }\n        rec.end = sig[i] ? sig[i].at + 1 : text.length; i++;\n      } else { rec.end = t.at + t.v.length; i++; }\n      map[JSON.stringify(path)] = rec;\n      return rec;\n    }\n    value([]);\n    return map;\n  }\n\n  // The path of the innermost entry at a character offset, e.g. [\"extension\", \"views\", \"state-view\"].\n  function pathAt(text, offset) {\n    var map = spans(text), best = [], size = Infinity;\n    Object.keys(map).forEach(function (k) {\n      var r = map[k];\n      if (r.from <= offset && offset <= r.end && r.end - r.from < size) { size = r.end - r.from; best = JSON.parse(k); }\n    });\n    return best;\n  }\n\n  // Edits that make the text hold the given state, keeping comments and layout everywhere else.\n  function patchText(text, target) {\n    var edits = [];\n    diff(parseJsonc(text), target).forEach(function (c) {\n      var m = spans(text), key = JSON.stringify(c.path), parent = m[JSON.stringify(c.path.slice(0, -1))], e = null;\n      if (c.type === 'updated' && m[key]) e = { from: m[key].start, to: m[key].end, insert: JSON.stringify(c.after) };\n      else if (c.type === 'added' && parent && parent.obj) {\n        var ins = JSON.stringify(c.path[c.path.length - 1]) + ': ' + JSON.stringify(c.after);\n        var last = parent.members[parent.members.length - 1];\n        e = last ? { from: last.end, to: last.end, insert: ', ' + ins } : { from: parent.start + 1, to: parent.end - 1, insert: ins };\n      } else if (c.type === 'deleted' && parent && parent.obj) {\n        var idx = parent.members.findIndex(function (x) { return x.key === c.path[c.path.length - 1]; }), mem = parent.members[idx];\n        if (idx > 0) e = { from: parent.members[idx - 1].end, to: mem.end, insert: '' };\n        else if (parent.members.length > 1) e = { from: mem.keyStart, to: parent.members[1].keyStart, insert: '' };\n        else e = { from: parent.start + 1, to: parent.end - 1, insert: '' };\n      }\n      if (e) { text = text.slice(0, e.from) + e.insert + text.slice(e.to); edits.push(e); }\n    });\n    return { text: text, edits: edits };\n  }\n\n  function ago(iso, now) {\n    var s = Math.max(0, Math.round(((now || Date.now()) - new Date(iso).getTime()) / 1000));\n    if (s < 45) return 'just now';\n    if (s < 3600) return Math.round(s / 60) + ' min ago';\n    if (s < 86400) return Math.round(s / 3600) + ' h ago';\n    return Math.round(s / 86400) + ' d ago';\n  }\n\n  // A commit records the whole state as text, plus what changed against its parent\n  // (outputs, timings and test results filled in by the runtime do not count as changes).\n  function makeCommit(parent, text, at) {\n    var state = stripRuntime(parseJsonc(text));\n    var base = parent ? stripRuntime(parseJsonc(parent.state)) : {};\n    var changes = diff(base, state);\n    return {\n      n: parent ? parent.n + 1 : 1,\n      parent: parent ? parent.n : null,\n      at: at,\n      state: text,\n      summary: summarize(changes),\n      paths: changes.slice(0, 100).map(function (c) { return c.type + ' ' + pathText(c.path); })\n    };\n  }\n  function commitId(n) { return 'c' + String(n).padStart(6, '0'); }\n\n  // Positions run over the commits, then the unsaved draft if there is one.\n  function historyLength(commits, draft) { return commits.length + (draft !== null ? 1 : 0); }\n  function step(pos, delta, commits, draft) {\n    var last = historyLength(commits, draft) - 1;\n    return Math.max(0, Math.min(last, pos + delta));\n  }\n  function textAt(pos, commits, draft) {\n    return pos < commits.length ? commits[pos].state : draft;\n  }\n  // What the changes view compares at a position: the version before it, and it.\n  function pairAt(pos, commits, draft) {\n    var after = textAt(pos, commits, draft);\n    var before = pos === 0 ? '{}' : textAt(pos - 1, commits, draft);\n    return { before: parseJsonc(before), after: parseJsonc(after) };\n  }\n\n  // Every call goes through track(): its name, input, result or error, time taken, and related data\n  // the call adds with ctx.relate({...}) (commit numbers, paths, positions).\n  function createTracker(opts) {\n    opts = opts || {};\n    var now = opts.now || function () { return new Date().toISOString(); };\n    var clock = opts.clock || function () { return Date.now(); };\n    var records = [], seq = 0;\n    var keep = opts.brief || function (v) { return v === undefined ? null : v; };\n    function finish(rec, t0) {\n      rec.ms = clock() - t0;\n      records.push(rec);\n      if (opts.onRecord) opts.onRecord(rec, records);\n      return rec;\n    }\n    function track(name, input, fn) {\n      var rec = { id: ++seq, name: name, at: now(), input: input === undefined ? null : input, ok: true, output: null, error: null, related: {} };\n      var ctx = { id: rec.id, relate: function (o) { Object.keys(o).forEach(function (k) { rec.related[k] = o[k]; }); } };\n      var t0 = clock(), out;\n      try { out = fn(ctx); } catch (e) { rec.ok = false; rec.error = String(e && e.message || e); finish(rec, t0); throw e; }\n      if (out && typeof out.then === 'function') {\n        return out.then(function (v) { rec.output = keep(v); finish(rec, t0); return v; },\n          function (e) { rec.ok = false; rec.error = String(e && (e.message || e.code) || e); finish(rec, t0); throw e; });\n      }\n      rec.output = keep(out);\n      finish(rec, t0);\n      return out;\n    }\n    return { track: track, records: records };\n  }\n\n  function clone(v) { return v === undefined ? undefined : JSON.parse(JSON.stringify(v)); }\n  function walk(v, path, fn) {\n    fn(v, path);\n    if (v !== null && typeof v === 'object') Object.keys(v).forEach(function (k) { walk(v[k], path.concat(k), fn); });\n  }\n  // Paths are dotted, and keys can hold dots (\"local.init\", \"CLAUDE.md\"):\n  // when a segment does not exist, it is joined with the next one and tried again.\n  function getPath(obj, path) {\n    var parts = String(path).split('.'), v = obj, i = 0;\n    while (i < parts.length) {\n      if (v === null || typeof v !== 'object') return undefined;\n      var k = parts[i], j = i;\n      while (!(k in v) && j < parts.length - 1) { j++; k += '.' + parts[j]; }\n      if (!(k in v)) return undefined;\n      v = v[k]; i = j + 1;\n    }\n    return v;\n  }\n  function setPath(obj, path, value) {\n    var parts = String(path).split('.');\n    // Prefer a parent that already has the key (the key may hold dots); otherwise the last segment is the key.\n    for (var i = 1; i < parts.length; i++) {\n      var parent = getPath(obj, parts.slice(0, i).join('.')), key = parts.slice(i).join('.');\n      if (isObj(parent) && key in parent) { parent[key] = value; return; }\n    }\n    var p = parts.length > 1 ? getPath(obj, parts.slice(0, -1).join('.')) : obj;\n    if (!isObj(p)) throw new Error('No object at ' + parts.slice(0, -1).join('.'));\n    p[parts[parts.length - 1]] = value;\n  }\n\n  // Fields the runtime fills in while functions run; they are not part of what the owner edits.\n  function stripRuntime(state) {\n    var copy = clone(state);\n    walk(copy, [], function (v, path) {\n      if (path[path.length - 2] !== 'functions' || !isObj(v)) return;\n      delete v.output; delete v.performance; delete v.errors;\n      if (isObj(v.calls)) Object.keys(v.calls).forEach(function (k) { if (isObj(v.calls[k])) delete v.calls[k].output; });\n      if (isObj(v.tests)) Object.keys(v.tests).forEach(function (k) { if (isObj(v.tests[k])) delete v.tests[k].result; });\n    });\n    return copy;\n  }\n\n  // A small, JSON-safe version of a value for logs and output fields.\n  function brief(v) {\n    if (v === undefined || typeof v === 'function') return null;\n    if (typeof v === 'string') return v.length > 200 ? { type: 'text', length: v.length } : v;\n    if (v === null || typeof v !== 'object') return v;\n    if (typeof Node !== 'undefined' && v instanceof Node) return { type: 'element', tag: v.nodeName };\n    var text;\n    try { text = JSON.stringify(v); } catch (e) { return { type: 'object' }; }\n    return text.length > 600 ? { type: Array.isArray(v) ? 'list' : 'object', keys: Object.keys(v).slice(0, 30) } : JSON.parse(text);\n  }\n\n  // Fills a view's html: ${...} expressions see the view's ui-data as d, and e() escapes text.\n  function esc(s) { return String(s).replace(/[&<>\"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', \"'\": '&#39;' }[c]; }); }\n  function template(html, data) { return new Function('d', 'e', 'return `' + html + '`;')(data, esc); }\n\n  // Checks a run against a function's expected-state-change: {path: rule}. Rules: \"changes\", \"toggles\",\n  // \"input\" (becomes the input), \"same\", \"may change\", or a value the path must hold. A path \"*\" allows any change;\n  // otherwise a change outside the listed paths is reported.\n  function checkStateChange(spec, before, after, input) {\n    var fails = [], keys = Object.keys(spec || {});\n    keys.forEach(function (p) {\n      if (p === '*') return;\n      var rule = spec[p], b = getPath(before, p), a = getPath(after, p);\n      if (rule === 'may change') return;\n      if (rule === 'changes' && same(a, b)) fails.push(p + ' did not change');\n      else if (rule === 'toggles' && a !== !b) fails.push(p + ' did not toggle');\n      else if (rule === 'input' && !same(a, input)) fails.push(p + ' is ' + JSON.stringify(a) + ', expected the input ' + JSON.stringify(input));\n      else if (rule === 'same' && !same(a, b)) fails.push(p + ' changed');\n      else if (['changes', 'toggles', 'input', 'same'].indexOf(rule) < 0 && !same(a, rule)) fails.push(p + ' is ' + JSON.stringify(a) + ', expected ' + JSON.stringify(rule));\n    });\n    if (keys.indexOf('*') < 0) diff(before, after).forEach(function (c) {\n      var p = pathText(c.path);\n      if (!keys.some(function (k) { return p === k || p.indexOf(k + '.') === 0; })) fails.push('unexpected change: ' + c.type + ' ' + p);\n    });\n    return fails;\n  }\n\n  // Checks a test's expect block: output (fields that must match), output-has (keys), dom / dom-absent (selectors),\n  // state (paths that must hold these values after the run), state-changed (paths the run must have changed).\n  function checkExpect(expect, out, hasDom, st) {\n    var fails = [];\n    st = st || {};\n    if (expect.state) Object.keys(expect.state).forEach(function (p) {\n      var v = st.get ? st.get(p) : undefined;\n      if (!same(v, expect.state[p])) fails.push(p + ' is ' + JSON.stringify(v) + ', expected ' + JSON.stringify(expect.state[p]));\n    });\n    (expect['state-changed'] || []).forEach(function (p) {\n      if (!(st.changed || []).some(function (c) { return c === p || c.indexOf(p + '.') === 0; })) fails.push(p + ' did not change');\n    });\n    if (expect.output !== undefined) Object.keys(expect.output).forEach(function (k) {\n      if (!out || !same(out[k], expect.output[k])) fails.push('output.' + k + ' is ' + JSON.stringify(out && out[k]) + ', expected ' + JSON.stringify(expect.output[k]));\n    });\n    (expect['output-has'] || []).forEach(function (k) { if (!out || !(k in out)) fails.push('output has no ' + k); });\n    (expect.dom || []).forEach(function (sel) { if (!hasDom(sel)) fails.push('no element ' + sel); });\n    (expect['dom-absent'] || []).forEach(function (sel) { if (hasDom(sel)) fails.push('element still there: ' + sel); });\n    return fails;\n  }\n\n  return {\n    clone: clone, walk: walk, getPath: getPath, setPath: setPath, stripRuntime: stripRuntime,\n    parseJsonc: parseJsonc, stripComments: stripComments, autofix: autofix,\n    spans: spans, pathAt: pathAt, patchText: patchText, ago: ago,\n    brief: brief, template: template, esc: esc, checkExpect: checkExpect, checkStateChange: checkStateChange,\n    diff: diff, summarize: summarize, changesView: changesView,\n    makeCommit: makeCommit, commitId: commitId,\n    historyLength: historyLength, step: step, textAt: textAt, pairAt: pairAt,\n    createTracker: createTracker\n  };\n});\n"
             },
-            "tests": {},
-            "expected-state-change": {},
-            "docs": "Runs after state-view is rendered: loads the editor and shows the current state at the newest version.",
+            "tests": {
+              "starts at the newest version": {
+                "before": {
+                  "extension.functions.render": "extension.views.state-view"
+                },
+                "input": {},
+                "expect": {
+                  "state": {
+                    "extension.views.state-view.ui-data.unsaved": false,
+                    "extension.views.state-view.ui-data.changes": false,
+                    "extension.views.state-view.ui-data.html_path": ""
+                  },
+                  "dom": [
+                    "#state-view .CodeMirror"
+                  ]
+                }
+              }
+            },
+            "expected-state-change": {
+              "extension.views.state-view.ui-data": "may change"
+            },
+            "docs": "Runs after state-view is rendered: starts the editor at the newest version and watches the state (local.refresh runs after each call).",
             "performance": {},
-            "code": "return os.editor.mount(ctx.root);",
+            "code": "const core = imports['state-core'], v = 'extension.views.state-view', d = os.get(v + '.ui-data'), H = os.history.commits;\nconst R = os.refs['state-view'] = { cm: null, draft: null, base: H[H.length - 1].state, timer: null, setting: false, shownEditable: false, lines: [], long: [], widgets: [], bad: null, html: null, htmlCm: null };\nObject.assign(d, { current_state_version: H[H.length - 1].n, position: H.length - 1, changes: false, unsaved: false, error: '', fixable: false, html_path: '', expanded: [] });\n\n// Keys get their own color, empty keys and {} a quieter one.\nconst overlay = { token(s) {\n  if (s.match(/^\"(?:[^\"\\\\]|\\\\.)*\"(?=\\s*:\\s*\\{\\s*\\})/)) return 'key emptykey';\n  if (s.match(/^\"(?:[^\"\\\\]|\\\\.)*\"(?=\\s*:)/)) return 'key';\n  if (s.match(/^\\{\\s*\\}/)) return 'emptyobj';\n  while (s.next() != null && !s.match(/^(?=[\"{])/, false)) {}\n  return null;\n} };\nR.cm = CodeMirror(ctx.root.querySelector('#sv-editor'), { value: '', mode: { name: 'javascript', json: true }, theme: 'agent', lineNumbers: true, indentUnit: 2, tabSize: 2,\n  foldGutter: true, gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'], matchBrackets: true, autoCloseBrackets: true });\nR.cm.addOverlay(overlay);\nR.cm.on('change', () => {\n  if (R.setting) return;\n  clearTimeout(R.timer);\n  R.timer = setTimeout(() => os.call('local.edit', {}, v).catch(console.error), 250);\n});\n\n// Arrow keys step through versions; Cmd+S / Ctrl+S saves from anywhere, on any keyboard layout.\nif (!os.refs.keys) {\n  os.refs.keys = true;\n  document.addEventListener('keydown', e => {\n    const r = os.refs['state-view'];\n    if (!r || e.altKey || e.metaKey || e.ctrlKey || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;\n    if ((r.cm.hasFocus() && r.shownEditable) || /^(INPUT|TEXTAREA)$/.test(e.target.tagName) || r.html) return;\n    e.preventDefault();\n    os.call('local.step', e.key === 'ArrowLeft' ? -1 : 1, v).catch(console.error);\n  });\n  document.addEventListener('keydown', e => {\n    const r = os.refs['state-view'];\n    if (!(e.metaKey || e.ctrlKey) || e.code !== 'KeyS') return;\n    e.preventDefault();\n    if (r && r.cm.getValue() !== r.base && r.shownEditable) os.call('local.save', {}, v).catch(console.error);\n  }, true);\n}\nos.watch(v, 'local.refresh');\nsetTimeout(() => R.cm && R.cm.refresh(), 0);\nreturn { version: d.current_state_version };",
+            "calls": {}
+          },
+          "local.refresh": {
+            "input": {},
+            "output": {},
+            "imports": {
+              "state-core": "extension.views.state-view.functions.local.init.imports.state-core"
+            },
+            "tests": {
+              "names the version on screen": {
+                "before": {
+                  "extension.functions.render": "extension.views.state-view"
+                },
+                "input": {},
+                "expect": {
+                  "output-has": [
+                    "version",
+                    "editable"
+                  ],
+                  "dom": [
+                    "#state-view .sv-bar #pos b"
+                  ]
+                }
+              }
+            },
+            "expected-state-change": {
+              "extension.views.state-view.ui-data.current_state_version": "may change",
+              "extension.views.state-view.ui-data.version": "may change",
+              "extension.views.state-view.ui-data.version_ago": "may change"
+            },
+            "docs": "Draws the view from ui-data and the state: the bar, and what the editor shows (changes, draft, live state or an older version). Runs after every call.",
+            "performance": {},
+            "code": "const core = imports['state-core'], v = 'extension.views.state-view', view = os.get(v), d = view['ui-data'], R = os.refs['state-view'], cm = R.cm, H = os.history.commits;\n// Typing that local.edit has not picked up yet: leave the editor alone.\nif (R.shownEditable && cm.getValue() !== (R.draft === null ? R.base : R.draft)) return { pending: true };\nconst head = H[H.length - 1], atDraft = R.draft !== null && d.position === H.length;\nd.current_state_version = head.n;\nd.version = atDraft ? 'draft' : 'v' + H[d.position].n;\nd.version_ago = atDraft ? '' : core.ago(H[d.position].at);\nconst editable = !d.changes && (atDraft || (R.draft === null && d.position === H.length - 1));\n\n// What the editor shows: the changes in a version, the draft, the live state (newest version), or an older version.\nlet text, marks = [], edits = null;\nif (d.changes) {\n  const p = core.pairAt(d.position, H, R.draft), cv = core.changesView(core.stripRuntime(p.before), core.stripRuntime(p.after));\n  text = cv.text; marks = cv.marks;\n} else if (atDraft) text = R.draft;\nelse if (editable) {\n  // The newest version follows the live state; comments and layout stay, only changed values are rewritten.\n  const p = core.patchText(R.base, os.get());\n  text = p.text;\n  if (JSON.stringify(core.parseJsonc(text)) !== JSON.stringify(os.get())) text = JSON.stringify(os.get(), null, 2);\n  else if (cm.getValue() === R.base) edits = p.edits;\n  R.base = text;\n} else text = H[d.position].state;\n\nR.setting = true;\nif (cm.getValue() !== text) {\n  if (edits) cm.operation(() => edits.forEach(x => cm.replaceRange(x.insert, cm.posFromIndex(x.from), cm.posFromIndex(x.to))));\n  if (cm.getValue() !== text) { cm.setValue(text); cm.clearHistory(); }\n}\nR.setting = false;\nR.shownEditable = editable;\ncm.setOption('readOnly', editable ? false : 'nocursor');\ncm.getWrapperElement().classList.toggle('CodeMirror-readonly', !editable);\n\n// Changes: added green, updated yellow (with the old value), deleted red.\nR.lines.forEach(l => cm.removeLineClass(l.h, 'background', l.cls)); R.lines = [];\nR.widgets.forEach(w => w.clear()); R.widgets = [];\nmarks.forEach(m => {\n  for (let l = m.from; l <= m.to; l++) R.lines.push({ h: cm.addLineClass(l, 'background', 'chg-' + m.type), cls: 'chg-' + m.type });\n  if (m.type === 'updated') {\n    const w = document.createElement('span'); w.className = 'was'; w.textContent = 'was ' + JSON.stringify(m.before);\n    R.widgets.push(cm.setBookmark(CodeMirror.Pos(m.to, cm.getLine(m.to).length), { widget: w }));\n  }\n});\nif (R.bad !== null) { cm.removeLineClass(R.bad, 'background', 'bad-line'); R.bad = null; }\nconst at = /line (\\d+)/.exec(d.error) || /position (\\d+)/.exec(d.error);\nif (d.error && at) { R.bad = /line/.test(at[0]) ? +at[1] - 1 : cm.posFromIndex(+at[1]).line; cm.addLineClass(R.bad, 'background', 'bad-line'); }\n\n// Long strings show their start and \"…\"; a click opens html in the html viewer, anything else expands.\nR.long.forEach(m => m.clear()); R.long = [];\nlet spans = {};\ntry { spans = core.spans(text); } catch (e) {}\nObject.keys(spans).forEach(k => {\n  const r = spans[k], path = JSON.parse(k), p = path.join('/');\n  if (r.obj || text[r.start] !== '\"' || r.end - r.start < 90 || d.expanded.includes(p)) return;\n  const isHtml = path[path.length - 1] === 'html', w = document.createElement('span');\n  w.className = 'long'; w.textContent = text.slice(r.start, r.start + 48) + '…\"';\n  w.title = p + (isHtml ? ': open in the html viewer' : ': show all');\n  w.addEventListener('mousedown', e => { e.preventDefault(); os.call(isHtml ? 'local.open-html' : 'local.expand', p, v).catch(console.error); });\n  R.long.push(cm.markText(cm.posFromIndex(r.start), cm.posFromIndex(r.end), { replacedWith: w, atomic: true }));\n});\n\n// The bar is drawn again from ui-data; the html viewer opens and closes with ui-data.html_path.\nconst tmp = document.createElement('div');\ntmp.innerHTML = os.template(view.html, d);\nconst bar = tmp.querySelector('.sv-bar');\nctx.root.querySelector('.sv-bar').replaceWith(bar);\nos.bind(bar, v);\nctx.root.querySelector('#sv-html').hidden = !d.html_path;\nctx.root.querySelector('#sv-html-path').textContent = d.html_path;\nreturn { version: d.version, editable, long: R.long.length, changes: marks.length };",
+            "calls": {}
+          },
+          "local.edit": {
+            "input": {},
+            "output": {},
+            "imports": {
+              "state-core": "extension.views.state-view.functions.local.init.imports.state-core"
+            },
+            "tests": {
+              "nothing typed, nothing unsaved": {
+                "before": {
+                  "extension.functions.render": "extension.views.state-view"
+                },
+                "input": {},
+                "expect": {
+                  "output": {
+                    "unsaved": false,
+                    "error": ""
+                  },
+                  "state": {
+                    "extension.views.state-view.ui-data.unsaved": false
+                  }
+                }
+              }
+            },
+            "expected-state-change": {
+              "extension.views.state-view.ui-data.unsaved": "may change",
+              "extension.views.state-view.ui-data.position": "may change",
+              "extension.views.state-view.ui-data.error": "may change",
+              "extension.views.state-view.ui-data.fixable": "may change"
+            },
+            "docs": "Runs as you type: keeps the unsaved draft and checks the JSON.",
+            "performance": {},
+            "code": "const core = imports['state-core'], v = 'extension.views.state-view', d = os.get(v + '.ui-data'), R = os.refs['state-view'], H = os.history.commits;\nclearTimeout(R.timer);\nconst text = R.cm.getValue();\n// Text back to what was saved is no draft (a comment counts as a change).\nR.draft = text === R.base ? null : text;\nd.unsaved = R.draft !== null;\nd.position = d.unsaved ? H.length : H.length - 1;\nd.error = ''; d.fixable = false;\ntry { core.parseJsonc(text); }\ncatch (e) { d.error = e.message; try { core.parseJsonc(core.autofix(text)); d.fixable = true; } catch (_) {} }\nreturn { unsaved: d.unsaved, error: d.error, fixable: d.fixable };",
             "calls": {}
           },
           "local.step": {
             "input": -1,
             "output": {},
             "imports": {},
-            "tests": {},
-            "expected-state-change": {},
+            "tests": {
+              "stops at the newest version": {
+                "before": {
+                  "extension.functions.render": "extension.views.state-view"
+                },
+                "input": 1,
+                "expect": {
+                  "output-has": [
+                    "from",
+                    "to"
+                  ],
+                  "state": {
+                    "extension.views.state-view.ui-data.unsaved": false
+                  }
+                }
+              }
+            },
+            "expected-state-change": {
+              "extension.views.state-view.ui-data.position": "may change"
+            },
             "docs": "Moves one version back (input -1) or forward (input 1) in the history. Also runs on the arrow keys.",
             "performance": {},
-            "code": "return os.editor.step(input);",
+            "code": "const d = os.get('extension.views.state-view.ui-data'), R = os.refs['state-view'], H = os.history.commits;\nconst last = H.length - (R.draft === null ? 1 : 0), from = d.position;\nd.position = Math.max(0, Math.min(last, from + (+input || 0)));\nreturn { from, to: d.position };",
             "calls": {}
           },
           "local.toggle-changes": {
             "input": {},
             "output": {},
             "imports": {},
-            "tests": {},
-            "expected-state-change": {},
+            "tests": {
+              "turns the changes view on": {
+                "before": {
+                  "extension.functions.render": "extension.views.state-view"
+                },
+                "input": {},
+                "expect": {
+                  "output": {
+                    "on": true
+                  },
+                  "state": {
+                    "extension.views.state-view.ui-data.changes": true
+                  },
+                  "dom": [
+                    "#changes[aria-pressed=\"true\"]"
+                  ]
+                }
+              }
+            },
+            "expected-state-change": {
+              "extension.views.state-view.ui-data.changes": "toggles"
+            },
             "docs": "Shows only what changed in the version on screen: added green, updated yellow, deleted red.",
             "performance": {},
-            "code": "return os.editor.toggleChanges();",
+            "code": "const d = os.get('extension.views.state-view.ui-data');\nd.changes = !d.changes;\nreturn { on: d.changes };",
             "calls": {}
           },
           "local.collapse-all": {
             "input": {},
             "output": {},
             "imports": {},
-            "tests": {},
+            "tests": {
+              "folds the editor": {
+                "before": {
+                  "extension.functions.render": "extension.views.state-view"
+                },
+                "input": {},
+                "expect": {
+                  "output-has": [
+                    "folded"
+                  ],
+                  "dom": [
+                    ".CodeMirror-foldmarker"
+                  ]
+                }
+              }
+            },
             "expected-state-change": {},
             "docs": "Folds every object in the editor.",
             "performance": {},
-            "code": "return os.editor.collapseAll();",
+            "code": "const cm = os.refs['state-view'].cm;\nlet folded = 0;\ncm.operation(() => {\n  for (let l = cm.lastLine(); l > 0; l--) {\n    if (CodeMirror.fold.brace(cm, CodeMirror.Pos(l, 0))) { cm.foldCode(CodeMirror.Pos(l, 0), { rangeFinder: CodeMirror.fold.brace, widget: '…' }, 'fold'); folded++; }\n  }\n});\nreturn { folded };",
             "calls": {}
+          },
+          "local.expand": {
+            "input": "extension/views/index-view/html",
+            "output": {},
+            "imports": {},
+            "tests": {
+              "shows index-view html in full": {
+                "before": {
+                  "extension.functions.render": "extension.views.state-view"
+                },
+                "input": "extension/views/index-view/html",
+                "expect": {
+                  "state": {
+                    "extension.views.state-view.ui-data.expanded": [
+                      "extension/views/index-view/html"
+                    ]
+                  }
+                }
+              }
+            },
+            "expected-state-change": {
+              "extension.views.state-view.ui-data.expanded": "changes"
+            },
+            "docs": "Shows a long string in full (input: its path, like extension/views/index-view/html).",
+            "performance": {},
+            "code": "const d = os.get('extension.views.state-view.ui-data');\nif (!d.expanded.includes(input)) d.expanded = d.expanded.concat([input]);\nreturn { expanded: input };",
+            "calls": {}
+          },
+          "local.open-html": {
+            "input": "extension/views/header-view/html",
+            "output": {},
+            "imports": {
+              "state-core": "extension.views.state-view.functions.local.init.imports.state-core"
+            },
+            "tests": {
+              "opens header-view html": {
+                "before": {
+                  "extension.functions.render": "extension.views.state-view"
+                },
+                "input": "extension/views/header-view/html",
+                "expect": {
+                  "state": {
+                    "extension.views.state-view.ui-data.html_path": "extension/views/header-view/html"
+                  },
+                  "dom": [
+                    "#sv-html:not([hidden]) #sv-html-view",
+                    "#sv-html-code .CodeMirror"
+                  ]
+                }
+              }
+            },
+            "expected-state-change": {
+              "extension.views.state-view.ui-data.html_path": "input"
+            },
+            "docs": "Opens an html value in the html viewer: code on the left, rendered on the right with the view's ui-data.",
+            "performance": {},
+            "code": "const core = imports['state-core'], v = 'extension.views.state-view', d = os.get(v + '.ui-data'), R = os.refs['state-view'];\nconst path = String(input).split('/');\n// The html as it is on screen (an older version shows its own html), and the ui-data of the view it belongs to.\nlet shown;\ntry { shown = core.parseJsonc(R.cm.getValue()); } catch (e) { shown = os.get(); }\nconst at = p => p.reduce((o, k) => (o && typeof o === 'object' ? o[k] : undefined), shown);\nconst html = at(path);\nif (typeof html !== 'string') throw new Error('No html at ' + input);\nconst data = (at(path.slice(0, -1)) || {})['ui-data'] || {};\nd.html_path = input;\nR.html = { path, original: html, editable: R.shownEditable && !d.changes };\nconst box = ctx.root.querySelector('#sv-html');\nif (!R.htmlCm) {\n  R.htmlCm = CodeMirror(box.querySelector('#sv-html-code'), { mode: 'htmlmixed', theme: 'agent', lineNumbers: true, lineWrapping: true, indentUnit: 2 });\n  R.htmlCm.on('change', () => R.html && R.html.show());\n}\n// Rendered with the page's styles and the view's ui-data; it follows the code as you edit it.\nconst style = (os.get('extension.views.index-view.html').match(/<style>[\\s\\S]*?<\\/style>/) || [''])[0];\nR.html.show = () => {\n  let out;\n  try { out = os.template(R.htmlCm.getValue(), data); } catch (e) { out = '<pre>' + os.template('${e(d)}', e.message) + '</pre>'; }\n  box.querySelector('#sv-html-view').srcdoc = style + out;\n};\nR.htmlCm.setValue(html);\nR.htmlCm.setOption('readOnly', R.html.editable ? false : 'nocursor');\nR.html.show();\nbox.hidden = false;\nsetTimeout(() => R.htmlCm.refresh(), 0);\nreturn { path: input, length: html.length, editable: R.html.editable };",
+            "calls": {}
+          },
+          "local.close-html": {
+            "input": {},
+            "output": {},
+            "imports": {
+              "state-core": "extension.views.state-view.functions.local.init.imports.state-core"
+            },
+            "tests": {
+              "closes without changes": {
+                "before": {
+                  "extension.functions.render": "extension.views.state-view",
+                  "local.open-html": "extension/views/header-view/html"
+                },
+                "input": {},
+                "expect": {
+                  "output": {
+                    "applied": false
+                  },
+                  "state": {
+                    "extension.views.state-view.ui-data.html_path": ""
+                  },
+                  "dom-absent": [
+                    "#sv-html:not([hidden])"
+                  ]
+                }
+              }
+            },
+            "expected-state-change": {
+              "extension.views.state-view.ui-data.html_path": "",
+              "extension.views.state-view.ui-data.unsaved": "may change",
+              "extension.views.state-view.ui-data.position": "may change",
+              "extension.views.state-view.ui-data.error": "may change",
+              "extension.views.state-view.ui-data.fixable": "may change"
+            },
+            "docs": "Closes the html viewer; edited html goes into the state editor as an unsaved change.",
+            "performance": {},
+            "code": "const core = imports['state-core'], v = 'extension.views.state-view', d = os.get(v + '.ui-data'), R = os.refs['state-view'];\nlet applied = false;\n// Edited html goes back into the state editor as an unsaved change.\nif (R.html && R.html.editable && R.htmlCm.getValue() !== R.html.original) {\n  const text = R.cm.getValue(), r = core.spans(text)[JSON.stringify(R.html.path)];\n  if (r) { R.cm.replaceRange(JSON.stringify(R.htmlCm.getValue()), R.cm.posFromIndex(r.start), R.cm.posFromIndex(r.end)); applied = true; }\n}\nd.html_path = '';\nR.html = null;\nctx.root.querySelector('#sv-html').hidden = true;\nif (applied) await ctx.call('local.edit', {});\nreturn { applied };",
+            "calls": {
+              "local.edit": {
+                "input": {},
+                "output": null
+              }
+            }
           },
           "local.save": {
             "input": {},
             "output": {},
-            "imports": {},
+            "imports": {
+              "state-core": "extension.views.state-view.functions.local.init.imports.state-core"
+            },
             "tests": {},
-            "expected-state-change": {},
-            "docs": "Saves the edited state as a new version and renders the header from it.",
+            "expected-state-change": {
+              "extension.views.state-view.ui-data.current_state_version": "changes",
+              "*": "may change"
+            },
+            "docs": "Saves the editor's text as a new version (fixing JSON slips first), flashes the editor border green, and renders the header from the new state.",
             "performance": {},
-            "code": "const out = await os.editor.save();\nawait ctx.call('extension.functions.render', 'extension.views.header-view');\nreturn out;",
+            "code": "const core = imports['state-core'], v = 'extension.views.state-view', R = os.refs['state-view'], cm = R.cm, H = os.history;\nclearTimeout(R.timer);\nlet text = cm.getValue(), fixed = false, next;\nif (text === R.base) throw new Error('Nothing to save');\n// Broken JSON is repaired first; the repaired text is what gets saved.\ntry { next = core.parseJsonc(text); } catch (e) { text = core.autofix(text); next = core.parseJsonc(text); fixed = true; }\nconst head = H.commits[H.commits.length - 1];\n// The new version records this view as it is after saving.\nconst d = core.getPath(next, v + '.ui-data');\nif (d) {\n  Object.assign(d, { current_state_version: head.n + 1, position: H.commits.length, version: 'v' + (head.n + 1), version_ago: 'just now', unsaved: false, error: '', fixable: false });\n  text = core.patchText(text, next).text;\n}\nconst c = await H.put(core.makeCommit(head, text, new Date().toISOString()));\nos.replace(next);\nR.draft = null; R.base = text;\nR.setting = true;\nif (cm.getValue() !== text) { const cur = cm.getCursor(); cm.setValue(text); cm.setCursor(cur); }\nR.setting = false;\n// Saved: the editor's border turns green for a moment.\nconst box = ctx.root.querySelector('#sv-editor');\nbox.classList.remove('saved'); void box.offsetWidth; box.classList.add('saved');\nsetTimeout(() => box.classList.remove('saved'), 2000);\nawait ctx.call('extension.functions.render', 'extension.views.header-view');\nreturn { commit: c.n, parent: c.parent, summary: c.summary, paths: c.paths.slice(0, 50), fixed };",
             "calls": {
               "extension.functions.render": {
                 "input": "extension.views.header-view",
@@ -233,7 +516,9 @@
             }
           }
         },
-        "expected-state-change": {},
+        "expected-state-change": {
+          "extension.views": "may change"
+        },
         "docs": "Renders a view: puts its html (with its ui-data) into the element whose id is the view's name, wires its buttons, then runs its local.init.",
         "performance": {},
         "code": "const view = os.get(input);\nif (!view) throw new Error('No view at ' + input);\nconst id = input.split('.').pop();\nconst root = document.getElementById(id);\nif (!root) throw new Error('No element #' + id);\nroot.innerHTML = os.template(view.html || '', view['ui-data'] || {});\nos.bind(root, input);\nroot.hidden = false;\nos.setMounted(input, true);\nif (view.functions && view.functions['local.init']) await os.call('local.init', {}, input, ctx.id);\nreturn { view: input, elements: root.querySelectorAll('*').length };",

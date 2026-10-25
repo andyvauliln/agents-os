@@ -158,3 +158,35 @@ test('autofix handles other common slips', () => {
   assert.deepEqual(core.parseJsonc(core.autofix('{"a": {"b": 1')), { a: { b: 1 } });
   assert.equal(core.autofix('{"a": 1}'), '{"a": 1}');
 });
+
+test('patching text keeps comments and layout', () => {
+  const text = '{\n  // views\n  "a": {"x": 1},\n  "b": {},\n  "c": 2 // two\n}';
+  const target = { a: { x: 5, y: true }, b: { k: 'v' } };
+  const out = core.patchText(text, target);
+  assert.deepEqual(core.parseJsonc(out.text), target);
+  assert.ok(out.text.includes('// views'));
+  assert.equal(out.edits.length, 4);
+  let t = text;
+  out.edits.forEach(e => { t = t.slice(0, e.from) + e.insert + t.slice(e.to); });
+  assert.equal(t, out.text);
+});
+
+test('pathAt names the entry under the cursor', () => {
+  const text = '{\n  "extension": {\n    "views": {\n      "state-view": { "html": "<b>" }\n    }\n  }\n}';
+  assert.deepEqual(core.pathAt(text, text.indexOf('<b>')), ['extension', 'views', 'state-view', 'html']);
+  assert.deepEqual(core.pathAt(text, text.indexOf('"state-view"') + 2), ['extension', 'views', 'state-view']);
+});
+
+test('ago and state expectations', () => {
+  assert.equal(core.ago('2026-10-25T12:00:00Z', Date.parse('2026-10-25T12:05:00Z')), '5 min ago');
+  const fails = core.checkExpect({ state: { 'a.b': 1 }, 'state-changed': ['a.c'] }, {}, () => false, { get: p => (p === 'a.b' ? 2 : undefined), changed: ['a.d'] });
+  assert.deepEqual(fails, ['a.b is 2, expected 1', 'a.c did not change']);
+});
+
+test('each run is checked against expected-state-change', () => {
+  const before = { v: { ui: { open: false, pos: 3, n: 1 } } };
+  const after = { v: { ui: { open: true, pos: 2, n: 1 }, extra: 1 } };
+  assert.deepEqual(core.checkStateChange({ 'v.ui.open': 'toggles', 'v.ui.pos': 'input' }, before, after, 2), ['unexpected change: added v.extra']);
+  assert.deepEqual(core.checkStateChange({ 'v.ui.n': 'changes', '*': 'may change' }, before, after), ['v.ui.n did not change']);
+  assert.deepEqual(core.checkStateChange({}, before, before), []);
+});

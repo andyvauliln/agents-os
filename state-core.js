@@ -135,6 +135,78 @@
     return out.join('');
   }
 
+  // Where each value sits in the text: path (as JSON) -> {from, start, end}; objects also list their members.
+  function spans(text) {
+    var pos = 0, sig = [], map = {}, i = 0;
+    tokenize(text).forEach(function (t) { t.at = pos; pos += t.v.length; if (t.t !== 'ws' && t.t !== 'comment') sig.push(t); });
+    function keyOf(t) { try { return t.t === 'string' ? JSON.parse('"' + t.v.slice(1, -1) + '"') : t.v; } catch (e) { return t.v.slice(1, -1); } }
+    function value(path) {
+      var t = sig[i];
+      if (!t) return null;
+      var rec = { from: t.at, start: t.at };
+      if (t.t === '{') {
+        i++; rec.obj = true; rec.members = [];
+        while (sig[i] && sig[i].t !== '}') {
+          if (sig[i].t === ',') { i++; continue; }
+          var k = sig[i], key = keyOf(k); i++;
+          if (sig[i] && sig[i].t === ':') i++;
+          var r = value(path.concat(key));
+          if (!r) break;
+          r.from = k.at;
+          rec.members.push({ key: key, keyStart: k.at, end: r.end });
+        }
+        rec.end = sig[i] ? sig[i].at + 1 : text.length; i++;
+      } else if (t.t === '[') {
+        i++; var n = 0;
+        while (sig[i] && sig[i].t !== ']') { if (sig[i].t === ',') { i++; continue; } if (!value(path.concat(n++))) break; }
+        rec.end = sig[i] ? sig[i].at + 1 : text.length; i++;
+      } else { rec.end = t.at + t.v.length; i++; }
+      map[JSON.stringify(path)] = rec;
+      return rec;
+    }
+    value([]);
+    return map;
+  }
+
+  // The path of the innermost entry at a character offset, e.g. ["extension", "views", "state-view"].
+  function pathAt(text, offset) {
+    var map = spans(text), best = [], size = Infinity;
+    Object.keys(map).forEach(function (k) {
+      var r = map[k];
+      if (r.from <= offset && offset <= r.end && r.end - r.from < size) { size = r.end - r.from; best = JSON.parse(k); }
+    });
+    return best;
+  }
+
+  // Edits that make the text hold the given state, keeping comments and layout everywhere else.
+  function patchText(text, target) {
+    var edits = [];
+    diff(parseJsonc(text), target).forEach(function (c) {
+      var m = spans(text), key = JSON.stringify(c.path), parent = m[JSON.stringify(c.path.slice(0, -1))], e = null;
+      if (c.type === 'updated' && m[key]) e = { from: m[key].start, to: m[key].end, insert: JSON.stringify(c.after) };
+      else if (c.type === 'added' && parent && parent.obj) {
+        var ins = JSON.stringify(c.path[c.path.length - 1]) + ': ' + JSON.stringify(c.after);
+        var last = parent.members[parent.members.length - 1];
+        e = last ? { from: last.end, to: last.end, insert: ', ' + ins } : { from: parent.start + 1, to: parent.end - 1, insert: ins };
+      } else if (c.type === 'deleted' && parent && parent.obj) {
+        var idx = parent.members.findIndex(function (x) { return x.key === c.path[c.path.length - 1]; }), mem = parent.members[idx];
+        if (idx > 0) e = { from: parent.members[idx - 1].end, to: mem.end, insert: '' };
+        else if (parent.members.length > 1) e = { from: mem.keyStart, to: parent.members[1].keyStart, insert: '' };
+        else e = { from: parent.start + 1, to: parent.end - 1, insert: '' };
+      }
+      if (e) { text = text.slice(0, e.from) + e.insert + text.slice(e.to); edits.push(e); }
+    });
+    return { text: text, edits: edits };
+  }
+
+  function ago(iso, now) {
+    var s = Math.max(0, Math.round(((now || Date.now()) - new Date(iso).getTime()) / 1000));
+    if (s < 45) return 'just now';
+    if (s < 3600) return Math.round(s / 60) + ' min ago';
+    if (s < 86400) return Math.round(s / 3600) + ' h ago';
+    return Math.round(s / 86400) + ' d ago';
+  }
+
   // A commit records the whole state as text, plus what changed against its parent
   // (outputs, timings and test results filled in by the runtime do not count as changes).
   function makeCommit(parent, text, at) {
@@ -233,7 +305,7 @@
     var copy = clone(state);
     walk(copy, [], function (v, path) {
       if (path[path.length - 2] !== 'functions' || !isObj(v)) return;
-      delete v.output; delete v.performance;
+      delete v.output; delete v.performance; delete v.errors;
       if (isObj(v.calls)) Object.keys(v.calls).forEach(function (k) { if (isObj(v.calls[k])) delete v.calls[k].output; });
       if (isObj(v.tests)) Object.keys(v.tests).forEach(function (k) { if (isObj(v.tests[k])) delete v.tests[k].result; });
     });
@@ -255,9 +327,40 @@
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function template(html, data) { return new Function('d', 'e', 'return `' + html + '`;')(data, esc); }
 
-  // Checks a test's expect block: output (fields that must match), output-has (keys), dom / dom-absent (selectors).
-  function checkExpect(expect, out, hasDom) {
+  // Checks a run against a function's expected-state-change: {path: rule}. Rules: "changes", "toggles",
+  // "input" (becomes the input), "same", "may change", or a value the path must hold. A path "*" allows any change;
+  // otherwise a change outside the listed paths is reported.
+  function checkStateChange(spec, before, after, input) {
+    var fails = [], keys = Object.keys(spec || {});
+    keys.forEach(function (p) {
+      if (p === '*') return;
+      var rule = spec[p], b = getPath(before, p), a = getPath(after, p);
+      if (rule === 'may change') return;
+      if (rule === 'changes' && same(a, b)) fails.push(p + ' did not change');
+      else if (rule === 'toggles' && a !== !b) fails.push(p + ' did not toggle');
+      else if (rule === 'input' && !same(a, input)) fails.push(p + ' is ' + JSON.stringify(a) + ', expected the input ' + JSON.stringify(input));
+      else if (rule === 'same' && !same(a, b)) fails.push(p + ' changed');
+      else if (['changes', 'toggles', 'input', 'same'].indexOf(rule) < 0 && !same(a, rule)) fails.push(p + ' is ' + JSON.stringify(a) + ', expected ' + JSON.stringify(rule));
+    });
+    if (keys.indexOf('*') < 0) diff(before, after).forEach(function (c) {
+      var p = pathText(c.path);
+      if (!keys.some(function (k) { return p === k || p.indexOf(k + '.') === 0; })) fails.push('unexpected change: ' + c.type + ' ' + p);
+    });
+    return fails;
+  }
+
+  // Checks a test's expect block: output (fields that must match), output-has (keys), dom / dom-absent (selectors),
+  // state (paths that must hold these values after the run), state-changed (paths the run must have changed).
+  function checkExpect(expect, out, hasDom, st) {
     var fails = [];
+    st = st || {};
+    if (expect.state) Object.keys(expect.state).forEach(function (p) {
+      var v = st.get ? st.get(p) : undefined;
+      if (!same(v, expect.state[p])) fails.push(p + ' is ' + JSON.stringify(v) + ', expected ' + JSON.stringify(expect.state[p]));
+    });
+    (expect['state-changed'] || []).forEach(function (p) {
+      if (!(st.changed || []).some(function (c) { return c === p || c.indexOf(p + '.') === 0; })) fails.push(p + ' did not change');
+    });
     if (expect.output !== undefined) Object.keys(expect.output).forEach(function (k) {
       if (!out || !same(out[k], expect.output[k])) fails.push('output.' + k + ' is ' + JSON.stringify(out && out[k]) + ', expected ' + JSON.stringify(expect.output[k]));
     });
@@ -270,7 +373,8 @@
   return {
     clone: clone, walk: walk, getPath: getPath, setPath: setPath, stripRuntime: stripRuntime,
     parseJsonc: parseJsonc, stripComments: stripComments, autofix: autofix,
-    brief: brief, template: template, esc: esc, checkExpect: checkExpect,
+    spans: spans, pathAt: pathAt, patchText: patchText, ago: ago,
+    brief: brief, template: template, esc: esc, checkExpect: checkExpect, checkStateChange: checkStateChange,
     diff: diff, summarize: summarize, changesView: changesView,
     makeCommit: makeCommit, commitId: commitId,
     historyLength: historyLength, step: step, textAt: textAt, pairAt: pairAt,

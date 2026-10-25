@@ -328,7 +328,7 @@
   function template(html, data) { return new Function('d', 'e', 'return `' + html + '`;')(data, esc); }
 
   // Checks a run against a function's expected-state-change: {path: rule}. Rules: "changes", "toggles",
-  // "input" (becomes the input), "same", "may change", or a value the path must hold. A path "*" allows any change;
+  // "input" (becomes the input), "input.name" (becomes that input parameter), "same", "may change", or a value the path must hold. A path "*" allows any change;
   // otherwise a change outside the listed paths is reported. Paths in `ignore` (what nested calls changed) are not counted.
   function checkStateChange(spec, before, after, input, ignore) {
     var fails = [], keys = Object.keys(spec || {});
@@ -339,8 +339,9 @@
       if (rule === 'changes' && same(a, b)) fails.push(p + ' did not change');
       else if (rule === 'toggles' && a !== !b) fails.push(p + ' did not toggle');
       else if (rule === 'input' && !same(a, input)) fails.push(p + ' is ' + JSON.stringify(a) + ', expected the input ' + JSON.stringify(input));
+      else if (/^input\./.test(rule) && !same(a, getPath(input, rule.slice(6)))) fails.push(p + ' is ' + JSON.stringify(a) + ', expected ' + rule + ' ' + JSON.stringify(getPath(input, rule.slice(6))));
       else if (rule === 'same' && !same(a, b)) fails.push(p + ' changed');
-      else if (['changes', 'toggles', 'input', 'same'].indexOf(rule) < 0 && !same(a, rule)) fails.push(p + ' is ' + JSON.stringify(a) + ', expected ' + JSON.stringify(rule));
+      else if (['changes', 'toggles', 'input', 'same'].indexOf(rule) < 0 && !/^input\./.test(rule) && !same(a, rule)) fails.push(p + ' is ' + JSON.stringify(a) + ', expected ' + JSON.stringify(rule));
     });
     if (keys.indexOf('*') < 0) diff(before, after).forEach(function (c) {
       var p = pathText(c.path);

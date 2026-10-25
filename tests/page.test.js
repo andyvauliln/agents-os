@@ -65,9 +65,12 @@ test('page: boots from state, renders the header, runs state tests, saves and st
 
     // boot: version 1 from state.json, index-view rendered (page html and styles from the state), then header-view: only the State view button
     assert.ok(await page.evaluate(() => !!window.__docs['commits/c000001']));
-    assert.equal(await page.locator('#header-view button').count(), 1);
+    assert.equal(await page.locator('#header-view button').count(), 2);
+    assert.ok(await page.isVisible('#docs-button[aria-label="Docs"] svg'));
     assert.ok(await page.isVisible('#state-button[aria-label="State view"] svg'));
     assert.equal(await page.isHidden('#state-view'), true);
+    // every rule of the page styles in index-view html is read by the browser (a broken rule drops the rest)
+    assert.ok(await page.evaluate(() => document.querySelector('#index-view style').sheet.cssRules.length) > 150);
     const boot = await page.evaluate(() => window.agentOS.calls.map(c => c.name));
     assert.deepEqual(boot.sort(), ['extension.functions.get-state', 'extension.functions.render', 'extension.functions.render', 'loadState', 'local.init', 'local.init']);
 
@@ -75,13 +78,26 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const init = await page.evaluate(() => window.agentOS.state.extension.views['index-view'].functions['local.init']);
     assert.equal(init.performance.count, 1);
     assert.deepEqual(init.errors, []);
-    assert.ok(init.calls['extension.functions.render'].output.view, 'render output filled');
+    // output is what a function returned: get-state returns the JSON state, render returns nothing
+    assert.deepEqual(Object.keys(init.calls['extension.functions.get-state'].output).sort(), ['functions', 'html', 'ui-data']);
+    assert.deepEqual(init.calls['extension.functions.render'].output, {});
+    assert.match(init.code, /^async function init\(\) \{/);
 
     // the tests written in the state pass, each checked against the state after it ran
     const results = await page.evaluate(() => window.agentOS.os.runTests());
     assert.ok(results.length >= 12, results.length);
     assert.deepEqual(results.filter(r => !r.ok), []);
-    await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', 'extension.views.state-view'));
+    await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.state-view' }));
+    await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.docs-view' }));
+
+    // the docs button lists the docs folder of the agent; a click shows a doc
+    await page.click('#docs-button');
+    assert.equal(await page.locator('#docs-view .doc-link').count(), 4);
+    await page.click('#docs-view .doc-link:has-text("render-steps.md")');
+    assert.equal(await page.textContent('#docs-view .doc h2'), 'How the page renders from the state');
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['docs-view']['ui-data'].selected), 'render-steps.md');
+    await page.click('#docs-button');
+    assert.equal(await page.isHidden('#docs-view'), true);
 
     // open the state view from the header: icon buttons, the view path, the version time as "ago"
     await page.click('#state-button');
@@ -106,12 +122,12 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().find(m => m.replacedWith && m.replacedWith.title.startsWith('extension/views/state-view/functions/local.save/code'))
       .replacedWith.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true })));
     await page.waitForSelector('#sv-viewer:not([hidden]) .sv-viewer-body.code-only');
-    assert.match(await page.evaluate(() => document.querySelector('#sv-viewer-code .CodeMirror').CodeMirror.getValue()), /^const core = imports/);
+    assert.match(await page.evaluate(() => document.querySelector('#sv-viewer-code .CodeMirror').CodeMirror.getValue()), /^async function save\(\) \{/);
     await page.click('#sv-viewer-close');
     await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().find(m => m.replacedWith && m.replacedWith.title.startsWith('extension/views/header-view/html'))
       .replacedWith.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true })));
     await page.waitForSelector('#sv-viewer:not([hidden]) #sv-viewer-code .CodeMirror');
-    assert.match(await page.getAttribute('#sv-viewer-view', 'srcdoc'), /id="state-button" aria-pressed="true"/);
+    assert.match(await page.getAttribute('#sv-viewer-view', 'srcdoc'), /id="state-button"[^>]*aria-pressed="true"/);
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['state-view']['ui-data'].viewer_path), 'extension/views/header-view/html');
     await page.click('#sv-viewer-close');
     assert.equal(await page.isHidden('#sv-viewer'), true);
@@ -135,7 +151,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
 
     // changes view and history steps
     await page.click('#changes');
-    assert.ok(await page.locator('.chg-added').count() >= 1);
+    const added = await page.evaluate(() => { const cm = document.querySelector('.CodeMirror').CodeMirror; let n = 0; cm.eachLine(l => { if (/chg-added/.test(l.bgClass || '')) n++; }); return n; });
+    assert.ok(added >= 1, 'added lines marked');
     await page.focus('#changes');
     await page.keyboard.press('ArrowLeft');
     assert.match(await page.textContent('#pos'), /^v1 /);

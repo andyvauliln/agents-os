@@ -62,6 +62,12 @@ function loadImports(imports){
   })},Promise.resolve()).then(function(){return out});
 }
 // After every run: output (or the error), performance, errors, and a check against expected-state-change.
+// output is what the function returned, as JSON (nothing returned: {}); page elements are named, not copied.
+function plain(v){
+  if(v===undefined||typeof v==='function')return {};
+  if(typeof Node!=='undefined'&&v instanceof Node)return core.brief(v);
+  try{return core.stripRuntime(JSON.parse(JSON.stringify(v)))}catch(e){return core.brief(v)}
+}
 // What nested calls changed counts for them, not for the caller: frames[callId] collects their changed paths.
 var frames={};
 function finish(path,def,input,before,t0,out,err,id,parent){
@@ -71,7 +77,7 @@ function finish(path,def,input,before,t0,out,err,id,parent){
   var changed=core.diff(before,after).map(function(x){return x.path.join('.')});
   if(frames[parent])frames[parent]=frames[parent].concat(changed);
   fails=fails.concat(core.checkStateChange(d['expected-state-change'],before,after,input,nested));
-  d.output=err?{error:String(err&&err.message||err)}:core.brief(out);
+  d.output=err?{error:String(err&&err.message||err)}:plain(out);
   d.errors=fails;
   return {changes:core.diff(before,after).map(function(x){return x.type+' '+x.path.join('.')}),errors:fails,performance:d.performance};
 }
@@ -85,6 +91,12 @@ function call(name,input,viewPath,parent){
       call:function(n,i){return call(n,i,r.view,ctx.id)}};
     return loadImports(def.imports).then(function(imports){
       if(def.code&&def.code.trim()){
+        // code is a function as it looks in code, async function name({ params }) { ... }, called with the input.
+        // It can also use ctx, os and imports. (Older versions keep a bare body that gets input as a variable.)
+        if(/^\s*(async\s+)?function\b/.test(def.code)){
+          var g=new Function('ctx','os','imports','"use strict";return ('+def.code+');')(c,OS,imports);
+          return g(input&&typeof input==='object'?input:{});
+        }
         var f=new Function('ctx','input','os','imports','"use strict";return (async function(){\n'+def.code+'\n})();');
         return f(c,input,OS,imports);
       }
@@ -94,7 +106,8 @@ function call(name,input,viewPath,parent){
         .then(function(){return {calls:names}});
     }).then(function(out){
       var d=core.getPath(live,r.path)||def;
-      if(d.calls)Object.keys(d.calls).forEach(function(n){var last=tracker.records.slice().reverse().find(function(x){return x.name===n&&x.related.parent===ctx.id});if(last)d.calls[n].output=last.output});
+      // Each declared call gets the output of its last run.
+      if(d.calls)Object.keys(d.calls).forEach(function(n){var x=resolve(n,r.view);if(x&&x.def.output!==undefined)d.calls[n].output=core.clone(x.def.output)});
       ctx.relate(finish(r.path,def,input,before,t0,out,null,ctx.id,parent));
       return out;
     },function(e){if(r)ctx.relate(finish(r.path,def,input,before,t0,null,e,ctx.id,parent));throw e});
@@ -180,7 +193,9 @@ function bootError(e,canRetry){
 }
 function start(){
   mounted={};watchers={};
-  return call('extension.functions.render','extension.views.index-view',null).catch(function(e){bootError(e,history.commits.length>1);throw e});
+  // Older versions take the view path itself as input; newer ones take { view_path }.
+  var r=core.getPath(live,'extension.functions.render'),sig=r&&/^\s*(async\s+)?function\b/.test(r.code||'');
+  return call('extension.functions.render',sig?{view_path:'extension.views.index-view'}:'extension.views.index-view',null).catch(function(e){bootError(e,history.commits.length>1);throw e});
 }
 var ready=tracker.track('loadState',{session:session},function(ctx){
   return fetch('state.json').then(function(r){if(!r.ok)throw new Error('state.json: HTTP '+r.status);return r.text()}).then(function(seed){

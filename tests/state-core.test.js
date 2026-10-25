@@ -125,11 +125,12 @@ test('brief keeps logs small', () => {
 test('state.json runs from index-view and every function is complete', () => {
   const s = JSON.parse(seed);
   const views = s.extension.views;
-  assert.deepEqual(Object.keys(views), ['index-view', 'header-view', 'state-view']);
+  assert.deepEqual(Object.keys(views), ['index-view', 'header-view', 'docs-view', 'state-view']);
   core.walk(s, [], (v, p) => {
     if (p[p.length - 2] !== 'functions') return;
     for (const k of ['input', 'output', 'imports', 'tests', 'expected-state-change', 'docs', 'performance', 'code', 'calls']) assert.ok(k in v, `${p.join('.')} has ${k}`);
     assert.ok(v.docs.length > 10, `${p.join('.')} has docs`);
+    assert.match(v.code, /^async function [A-Za-z]+\(/, `${p.join('.')} code has a signature`);
     for (const name of Object.keys(v.calls)) assert.ok(name.startsWith('local.') || core.getPath(s, name), `${name} exists`);
   });
   Object.values(views).forEach(v => assert.doesNotThrow(() => core.template(v.html, v['ui-data'])));
@@ -189,6 +190,8 @@ test('each run is checked against expected-state-change', () => {
   assert.deepEqual(core.checkStateChange({ 'v.ui.open': 'toggles', 'v.ui.pos': 'input' }, before, after, 2), ['unexpected change: added v.extra']);
   assert.deepEqual(core.checkStateChange({ 'v.ui.n': 'changes', '*': 'may change' }, before, after), ['v.ui.n did not change']);
   assert.deepEqual(core.checkStateChange({}, before, before), []);
+  assert.deepEqual(core.checkStateChange({ 'v.ui.pos': 'input.to' }, before, after, { to: 2 }, ['v.extra', 'v.ui.open']), []);
+  assert.deepEqual(core.checkStateChange({ 'v.ui.pos': 'input.to' }, before, after, { to: 5 }, ['v.extra', 'v.ui.open']), ['v.ui.pos is 2, expected input.to 5']);
   // changes made by nested calls are theirs, not the caller's
   assert.deepEqual(core.checkStateChange({ 'v.ui.open': 'toggles', 'v.ui.pos': 'input' }, before, after, 2, ['v.extra']), []);
 });

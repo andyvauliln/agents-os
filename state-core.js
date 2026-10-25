@@ -82,11 +82,64 @@
     return { text: empty ? '{}' : lines.join('\n'), marks: marks, empty: empty };
   }
 
+  // JSON with comments. Comments stay in the saved text; they are skipped when the text is read.
+  function tokenize(text) {
+    var toks = [], i = 0, n = text.length, j;
+    while (i < n) {
+      var c = text[i];
+      if (/\s/.test(c)) { j = i; while (j < n && /\s/.test(text[j])) j++; toks.push({ t: 'ws', v: text.slice(i, j) }); i = j; continue; }
+      if (c === '/' && text[i + 1] === '/') { j = text.indexOf('\n', i); if (j < 0) j = n; toks.push({ t: 'comment', v: text.slice(i, j) }); i = j; continue; }
+      if (c === '/' && text[i + 1] === '*') { j = text.indexOf('*/', i + 2); j = j < 0 ? n : j + 2; toks.push({ t: 'comment', v: text.slice(i, j) }); i = j; continue; }
+      if (c === '"' || c === "'") {
+        j = i + 1;
+        while (j < n && text[j] !== c && text[j] !== '\n') { if (text[j] === '\\') j++; j++; }
+        var closed = j < n && text[j] === c;
+        toks.push({ t: 'string', q: c, closed: closed, v: text.slice(i, closed ? j + 1 : j) }); i = closed ? j + 1 : j; continue;
+      }
+      if ('{}[]:,'.indexOf(c) >= 0) { toks.push({ t: c, v: c }); i++; continue; }
+      j = i; while (j < n && !/[\s{}\[\]:,"'\/]/.test(text[j])) j++; if (j === i) j = i + 1;
+      toks.push({ t: 'word', v: text.slice(i, j) }); i = j;
+    }
+    return toks;
+  }
+  function stripComments(text) {
+    return tokenize(text).map(function (t) { return t.t === 'comment' ? t.v.replace(/[^\n]/g, ' ') : t.v; }).join('');
+  }
+  function parseJsonc(text) { return JSON.parse(stripComments(text)); }
+
+  // Repairs the usual slips and keeps comments: trailing and doubled commas, missing commas,
+  // unquoted keys, single quotes, unclosed strings, and brackets left open at the end.
+  function autofix(text) {
+    var toks = tokenize(text), out = [], stack = [];
+    function next(k) { for (var m = k + 1; m < toks.length; m++) if (toks[m].t !== 'ws' && toks[m].t !== 'comment') return toks[m]; return null; }
+    function ends(t) { return t && (t.t === 'string' || t.t === 'word' || t.t === '}' || t.t === ']'); }
+    function starts(t) { return t && (t.t === 'string' || t.t === 'word' || t.t === '{' || t.t === '['); }
+    toks.forEach(function (tok, k) {
+      var v = tok.v, nx = next(k);
+      if (tok.t === 'string') {
+        var inner = tok.closed ? v.slice(1, -1) : v.slice(1);
+        if (tok.q === "'") inner = inner.replace(/\\'/g, "'").replace(/(^|[^\\])"/g, '$1\\"');
+        v = '"' + inner + '"';
+      } else if (tok.t === 'word') {
+        if (nx && nx.t === ':') v = JSON.stringify(v);
+        else if (/^(True|TRUE)$/.test(v)) v = 'true';
+        else if (/^(False|FALSE)$/.test(v)) v = 'false';
+        else if (/^(None|undefined|NULL)$/.test(v)) v = 'null';
+      } else if (tok.t === ',' && (!nx || nx.t === '}' || nx.t === ']' || nx.t === ',')) v = '';
+      if (tok.t === '{' || tok.t === '[') stack.push(tok.t === '{' ? '}' : ']');
+      if ((tok.t === '}' || tok.t === ']') && stack[stack.length - 1] === tok.t) stack.pop();
+      out.push(v);
+      if (ends(tok) && starts(nx)) out.push(',');
+    });
+    while (stack.length) out.push('\n' + stack.pop());
+    return out.join('');
+  }
+
   // A commit records the whole state as text, plus what changed against its parent
   // (outputs, timings and test results filled in by the runtime do not count as changes).
   function makeCommit(parent, text, at) {
-    var state = stripRuntime(JSON.parse(text));
-    var base = parent ? stripRuntime(JSON.parse(parent.state)) : {};
+    var state = stripRuntime(parseJsonc(text));
+    var base = parent ? stripRuntime(parseJsonc(parent.state)) : {};
     var changes = diff(base, state);
     return {
       n: parent ? parent.n + 1 : 1,
@@ -112,7 +165,7 @@
   function pairAt(pos, commits, draft) {
     var after = textAt(pos, commits, draft);
     var before = pos === 0 ? '{}' : textAt(pos - 1, commits, draft);
-    return { before: JSON.parse(before), after: JSON.parse(after) };
+    return { before: parseJsonc(before), after: parseJsonc(after) };
   }
 
   // Every call goes through track(): its name, input, result or error, time taken, and related data
@@ -216,6 +269,7 @@
 
   return {
     clone: clone, walk: walk, getPath: getPath, setPath: setPath, stripRuntime: stripRuntime,
+    parseJsonc: parseJsonc, stripComments: stripComments, autofix: autofix,
     brief: brief, template: template, esc: esc, checkExpect: checkExpect,
     diff: diff, summarize: summarize, changesView: changesView,
     makeCommit: makeCommit, commitId: commitId,

@@ -1,0 +1,71 @@
+{
+  "agents": {
+    "agent-oss": {
+      "connection": {},
+      "files": {
+        ".claude": {
+          "CLAUDE.md": {},
+          "settings.json": {},
+          "settings.local.json": {},
+          "agents": {},
+          "commands": {},
+          "skills": {},
+          "hooks": {},
+          "output-styles": {}
+        }
+      }
+    }
+  },
+  "extension": {
+    "views": {
+      "index-view": {
+        "html": "",
+        "ui-data": {},
+        "functions": {
+          "local.init":{
+            "input": {},
+            "output": {},
+            "imports": {},
+            "tests":{},
+            "expected-state-change":{},
+            "docs": {},
+            "perfomance": {},
+            "code": "",
+            "calls":{
+              "extension.functions.get-state":{"input":"extention.views.header-view", "output": null},
+            	"extension.functions.render":{"input":"extention.views.header-view", "output": null}
+          	},
+          }
+        }
+     },
+     "header-view": {
+  			"html": "",
+        "ui-data": {},
+        "functions": {
+          "local.init":{
+            "input": {},
+            "output": {},
+            "tests":{},
+            "expected-state-change":{},
+            "docs": {},
+            "perfomance": {}, // last minimum and maximum
+            "code": ""
+            "calls":{
+          	}
+          },
+       		"local.open.state-view": {
+          	"extension.functions.render":{"input":"extention.views.state-view", "output": null},
+          }
+        }
+
+      }
+     "state-view": {
+    
+	   }
+    },
+		"functions": {} 
+    "data": {},
+    "common_app_storage": {},
+    "apps": {}
+  }
+}

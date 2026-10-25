@@ -63,6 +63,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket{color:var(--bad)}
 .cm-s-agent .cm-number{color:var(--num)}
 .cm-s-agent .cm-atom{color:var(--atom)}
 .cm-s-agent .cm-emptyobj{color:var(--key-empty)}
+.cm-s-agent .cm-comment{color:var(--muted);font-style:italic}
 .bad-line{background:var(--del-bg)}
 .chg-added{background:var(--add-bg);box-shadow:inset 3px 0 var(--add)}
 .chg-updated{background:var(--upd-bg);box-shadow:inset 3px 0 var(--upd)}
@@ -166,8 +167,7 @@ var editor=OS.editor=(function(){
   function atDraft(){return H.draft!==null&&H.pos===H.commits.length}
   function atHead(){return H.draft===null&&H.pos===H.commits.length-1}
   function editable(){return !H.changes&&(atDraft()||atHead())}
-  function liveText(){return JSON.stringify(live,null,2)}
-  function textAt(pos){return atHeadPos(pos)?liveText():core.textAt(pos,H.commits,H.draft)}
+  function textAt(pos){return core.textAt(pos,H.commits,H.draft)}
   function atHeadPos(pos){return pos===H.commits.length-1}
   function pair(){var p=core.pairAt(H.pos,H.commits,H.draft);return [core.stripRuntime(p.before),core.stripRuntime(p.after)]}
   function label(pos){return pos<H.commits.length?'v'+H.commits[pos].n:'draft'}
@@ -182,7 +182,7 @@ var editor=OS.editor=(function(){
     root=r;
     cm=CodeMirror(r.querySelector('#sv-editor'),{value:'',mode:{name:'javascript',json:true},theme:'agent',lineNumbers:true,indentUnit:2,tabSize:2,
       foldGutter:true,gutters:['CodeMirror-linenumbers','CodeMirror-foldgutter'],matchBrackets:true,autoCloseBrackets:true,
-      extraKeys:{'Cmd-S':saveKey,'Ctrl-S':saveKey}});
+      });
     cm.addOverlay(overlay);
     cm.on('change',function(){
       if(settingValue)return;
@@ -196,11 +196,10 @@ var editor=OS.editor=(function(){
     return {version:label(H.pos),lines:cm.lineCount()};
   }
   function unmount(){cm=null;root=null;marks=[];widgets=[]}
-  function saveKey(){call('local.save',{},'extension.views.state-view').catch(report)}
-  // A draft that matches the newest version (ignoring outputs and timings) is no draft.
+  // A draft with the same text as the newest version is no draft (comments count as changes).
   function settleDraft(){
     if(H.draft===null)return;
-    try{if(JSON.stringify(core.stripRuntime(JSON.parse(H.draft)))===JSON.stringify(core.stripRuntime(live))){H.draft=null;H.pos=H.commits.length-1}}catch(e){}
+    if(H.draft===head().state){H.draft=null;H.pos=H.commits.length-1}
     bar();
   }
   function render(){
@@ -221,10 +220,10 @@ var editor=OS.editor=(function(){
     check();bar();
   }
   function check(){
-    H.err=null;
+    H.err=null;H.fixable=false;
     if(badLine!==null){cm.removeLineClass(badLine,'background','bad-line');badLine=null}
-    if(!H.changes){try{JSON.parse(cm.getValue())}catch(e){
-      H.err=e.message;var m=/line (\d+)/.exec(e.message),p=/position (\d+)/.exec(e.message);
+    if(!H.changes){try{core.parseJsonc(cm.getValue())}catch(e){
+      H.err=e.message;try{core.parseJsonc(core.autofix(cm.getValue()));H.fixable=true}catch(_){}var m=/line (\d+)/.exec(e.message),p=/position (\d+)/.exec(e.message);
       var ln=m?+m[1]-1:p?cm.posFromIndex(+p[1]).line:null;if(ln!==null){badLine=ln;cm.addLineClass(ln,'background','bad-line')}
     }}
   }
@@ -237,9 +236,9 @@ var editor=OS.editor=(function(){
     if(!atDraft())pos.appendChild(document.createTextNode(' · '+fmt(H.commits[p].at)));
     $('changes').setAttribute('aria-pressed',String(H.changes));$('legend').hidden=!H.changes;
     var st=$('status'),dirty=H.draft!==null;
-    $('save').disabled=!dirty||!!H.err||H.busy||!H.canWrite;
-    st.className='status'+(H.err?' bad':dirty?' dirty':'');
-    st.textContent=H.err&&editable()?'Invalid JSON: '+H.err
+    $('save').disabled=!dirty||(!!H.err&&!H.fixable)||H.busy||!H.canWrite;
+    st.className='status'+(H.err&&!H.fixable?' bad':dirty?' dirty':'');
+    st.textContent=H.err&&editable()?(H.fixable?'JSON has slips; Save fixes them':'Invalid JSON: '+H.err)
       :H.busy?'Saving…':!H.canWrite?'View only'
       :H.changes?(lastView&&lastView.empty?'No changes in this version':'')
       :!editable()?'Older version · read only'
@@ -262,14 +261,17 @@ var editor=OS.editor=(function(){
     save:function(){
       clearTimeout(editTimer);settleDraft();
       if(H.draft===null)throw new Error('Nothing to save');
-      var next=JSON.parse(H.draft);
-      var c=core.makeCommit(head(),JSON.stringify(next,null,2),new Date().toISOString());
+      // Broken JSON is repaired first; the repaired text goes into the editor and is what gets saved.
+      var text=H.draft,fixed=false,next;
+      try{next=core.parseJsonc(text)}catch(e){text=core.autofix(text);next=core.parseJsonc(text);fixed=true;
+        settingValue=true;var cur=cm.getCursor();cm.setValue(text);cm.setCursor(cur);settingValue=false;H.draft=text;check()}
+      var c=core.makeCommit(head(),text,new Date().toISOString());
       H.busy=true;bar();
       return store.put(c).then(function(){
         H.commits.push(c);H.draft=null;H.pos=H.commits.length-1;H.busy=false;
         live=next;
         render();
-        return {commit:c.n,parent:c.parent,summary:c.summary,paths:c.paths.slice(0,50),store:H.storeKind};
+        return {commit:c.n,parent:c.parent,summary:c.summary,paths:c.paths.slice(0,50),store:H.storeKind,fixed:fixed};
       },function(e){H.busy=false;if(e&&e.code==='invalid_argument')H.canWrite=false;bar();throw e});
     },
     keys:function(e){
@@ -281,6 +283,12 @@ var editor=OS.editor=(function(){
   };
 })();
 document.addEventListener('keydown',function(e){editor.keys(e)});
+// Cmd+S / Ctrl+S saves from anywhere on the page, on any keyboard layout (e.code is the physical key).
+document.addEventListener('keydown',function(e){
+  if(!(e.metaKey||e.ctrlKey)||e.code!=='KeyS')return;
+  e.preventDefault();
+  if(mounted['extension.views.state-view']&&H.draft!==null)call('local.save',{},'extension.views.state-view').catch(report);
+},true);
 
 /* ---------- tests written in the state ---------- */
 function runTests(){
@@ -317,7 +325,7 @@ function bootError(e,canRetry){
   var h=document.createElement('strong');h.textContent='This version of the state did not start';box.appendChild(h);
   var pre=document.createElement('pre');pre.textContent=String(e&&e.stack||e&&e.message||e);box.appendChild(pre);
   if(canRetry){var b=document.createElement('button');b.className='btn';b.textContent='Run version '+H.commits[H.commits.length-2].n+' instead';
-    b.onclick=function(){live=JSON.parse(H.commits[H.commits.length-2].state);start()};box.appendChild(b)}
+    b.onclick=function(){live=core.parseJsonc(H.commits[H.commits.length-2].state);start()};box.appendChild(b)}
   app.appendChild(box);
 }
 function start(){
@@ -334,7 +342,7 @@ var loaded=tracker.track('loadState',{session:session},function(ctx){
       return store.put(c1).then(function(){H.commits=[c1];ctx.relate({created:1})},function(e){H.canWrite=false;H.commits=[c1];ctx.relate({created:0,writeError:e&&e.code||String(e)})});
     }).then(function(){
       var head=H.commits[H.commits.length-1];
-      live=JSON.parse(head.state);H.pos=H.commits.length-1;
+      live=core.parseJsonc(head.state);H.pos=H.commits.length-1;
       ctx.relate({store:H.storeKind,commits:H.commits.length,head:head.n});
       return {commits:H.commits.length,head:head.n};
     });

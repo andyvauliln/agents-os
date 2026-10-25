@@ -102,6 +102,26 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.keyboard.press('ArrowRight');
     assert.match(await page.textContent('#pos'), /Version 2 of 2/);
 
+    // comments are kept, a slip is fixed on save, and Cmd+S saves from anywhere
+    await page.click('#changes');
+    await page.evaluate(() => {
+      const cm = document.querySelector('.CodeMirror').CodeMirror;
+      const line = cm.getValue().split('\n').findIndex(l => l.includes('"common_app_storage": {}'));
+      cm.replaceRange('// shared by all apps\n    ', { line, ch: cm.getLine(line).indexOf('"common') });
+      const apps = cm.getValue().split('\n').findIndex(l => l.includes('"apps": {}'));
+      cm.replaceRange(',', { line: apps, ch: cm.getLine(apps).length });
+    });
+    assert.match(await page.textContent('#status'), /Save fixes them/);
+    await page.focus('#changes');
+    await page.keyboard.press('Meta+s');
+    await page.waitForFunction(() => window.agentOS.history.commits.length === 3);
+    const c3 = await page.evaluate(() => window.__docs['commits/c000003']);
+    assert.ok(c3.state.includes('// shared by all apps'));
+    assert.doesNotThrow(() => JSON.parse(c3.state.replace('// shared by all apps', '')));
+    assert.deepEqual(c3.summary, { added: 0, updated: 0, deleted: 0 });
+    const fixedSave = await page.evaluate(() => window.agentOS.calls.filter(c => c.name === 'local.save').pop());
+    assert.equal(fixedSave.output.fixed, true);
+
     // every call, with its parent, is in the stored call log
     await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].items.some(i => i.name === 'local.step')), null, { timeout: 5000 });
     const log = await page.evaluate(() => Object.entries(window.__docs).find(([k]) => k.startsWith('calls/'))[1]);

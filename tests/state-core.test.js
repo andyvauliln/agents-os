@@ -134,3 +134,27 @@ test('state.json runs from index-view and every function is complete', () => {
   });
   Object.values(views).forEach(v => assert.doesNotThrow(() => core.template(v.html, v['ui-data'])));
 });
+
+test('comments are allowed and kept out of the data', () => {
+  const text = '{\n  // the header\n  "a": 1, /* inline */ "b": "x // not a comment"\n}';
+  assert.deepEqual(core.parseJsonc(text), { a: 1, b: 'x // not a comment' });
+  const c = core.makeCommit(null, text, 't');
+  assert.equal(c.state, text);
+});
+
+test('autofix repairs the owner draft and keeps its comment', () => {
+  const draft = fs.readFileSync(path.join(__dirname, 'fixtures', 'owner-draft.jsonc'), 'utf8');
+  assert.throws(() => core.parseJsonc(draft));
+  const fixed = core.autofix(draft);
+  const s = core.parseJsonc(fixed);
+  assert.ok(fixed.includes('// last minimum and maximum'));
+  assert.deepEqual(Object.keys(s.extension), ['views', 'functions', 'data', 'common_app_storage', 'apps']);
+  assert.deepEqual(Object.keys(s.extension.views), ['index-view', 'header-view', 'state-view']);
+  assert.equal(s.extension.views['header-view'].functions['local.init'].code, '');
+});
+
+test('autofix handles other common slips', () => {
+  assert.deepEqual(core.parseJsonc(core.autofix("{a: 'x', b: [1 2,], c: True,}")), { a: 'x', b: [1, 2], c: true });
+  assert.deepEqual(core.parseJsonc(core.autofix('{"a": {"b": 1')), { a: { b: 1 } });
+  assert.equal(core.autofix('{"a": 1}'), '{"a": 1}');
+});

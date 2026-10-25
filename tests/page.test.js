@@ -50,7 +50,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
     if (process.env.CM_DIR) {
+      // claude.ai's page policy lets scripts load from cdnjs but not stylesheets, so stylesheets fail here too.
       await page.route('https://cdnjs.cloudflare.com/**', route => {
+        if (route.request().url().endsWith('.css')) return route.abort();
         const f = route.request().url().split('5.65.16/')[1];
         const local = f === 'codemirror.min.js' ? 'lib/codemirror.js' : f === 'codemirror.min.css' ? 'lib/codemirror.css' : f.replace('.min.js', '.js');
         route.fulfill({ body: fs.readFileSync(path.join(process.env.CM_DIR, local)), contentType: f.endsWith('.css') ? 'text/css' : 'application/javascript' });

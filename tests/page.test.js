@@ -1,5 +1,6 @@
 // Drives index.html in Chromium with Playwright, against a fake db, and checks each tracked call.
-// Run: node --test tests/  (set CM_DIR to a local codemirror@5.65.16 package to work offline)
+// Run: node --test tests/  (set CM_DIR to a local codemirror@5.65.16 package to work offline,
+// and JSB_DIR to a local js-beautify@1.15.1 package: by default <CM_DIR>/../../jsb/package)
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('node:http');
@@ -54,6 +55,10 @@ test('page: boots from state, renders the header, runs state tests, saves and st
       // claude.ai's page policy lets scripts load from cdnjs but not stylesheets, so stylesheets fail here too.
       await page.route('https://cdnjs.cloudflare.com/**', route => {
         if (route.request().url().endsWith('.css')) return route.abort();
+        if (route.request().url().includes('/js-beautify/1.15.1/')) {
+          const jsb = process.env.JSB_DIR || path.join(process.env.CM_DIR, '..', '..', 'jsb', 'package');
+          return route.fulfill({ body: fs.readFileSync(path.join(jsb, 'js', 'lib', route.request().url().split('1.15.1/')[1].replace('.min.js', '.js'))), contentType: 'application/javascript' });
+        }
         const f = route.request().url().split('5.65.16/')[1];
         const local = f === 'codemirror.min.js' ? 'lib/codemirror.js' : f === 'codemirror.min.css' ? 'lib/codemirror.css' : f.replace('.min.js', '.js');
         route.fulfill({ body: fs.readFileSync(path.join(process.env.CM_DIR, local)), contentType: f.endsWith('.css') ? 'text/css' : 'application/javascript' });
@@ -124,18 +129,24 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const part = name => page.locator('#tl-detail .tl-part', { has: page.locator('.tl-name', { hasText: name }) });
     await part('Download index.html').locator('.tl-call-head').click();
     await part('Download index.html').locator('.tl-code').waitFor();
-    assert.match(await part('Download index.html').locator('.tl-code').textContent(), /<div id="index-view"><\/div>/);
+    assert.match(await part('Download index.html').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /<div id="index-view"><\/div>/);
     await part('Load state-core.js').locator('.tl-call-head').click();
     await part('Load state-core.js').locator('.tl-code').waitFor();
-    assert.match(await part('Load state-core.js').locator('.tl-code').textContent(), /StateCore/);
+    assert.match(await part('Load state-core.js').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /StateCore/);
     await part('Run the runtime script').locator('.tl-call-head').click();
     assert.match(await part('Run the runtime script').locator('.tl-table').textContent(), /loadState/);
-    assert.match(await part('Run the runtime script').locator('.tl-code').textContent(), /window\.agentOS=/);
+    assert.match(await part('Run the runtime script').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /window\.agentOS = \{/);
     await part('Download index.html').locator('.tl-call-head').click();
     assert.equal(await part('Download index.html').locator('.tl-code').count(), 0);
     await page.click('#tl-next');
     await page.waitForFunction(() => document.querySelector('#tl-detail .tl-kind').textContent === 'Run index.html');
-    assert.match(await page.textContent('#tl-detail'), /session = s\w+/);
+    assert.match(await page.textContent('#tl-detail'), /a name for this page load: s\w+/);
+    // each part says what happens and why, and shows the lines of index.html that do it
+    assert.match(await part('Note the start time').textContent(), /What happens The runtime writes down when it started.*Why Only the timeline uses it/);
+    await part('Note the start time').locator('.tl-call-head').first().click();
+    await part('Note the start time').locator('.tl-code').first().waitFor();
+    assert.match(await part('Note the start time').locator('.tl-file-head').first().textContent(), /^index\.html, line \d+/);
+    assert.match(await part('Note the start time').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /var startedAt=performance\.now\(\);/);
     await part('Create the call tracker').locator('.tl-call-head').click();
     assert.match(await part('Create the call tracker').locator('.tl-table').textContent(), /extension\.functions\.render/);
     // Build os: each part of os opens with the functions that use it and its code, the runtime's call() too
@@ -143,7 +154,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const osCall = page.locator('#tl-detail .tl-more .tl-part', { has: page.locator(':scope > .tl-call-head .tl-name', { hasText: /^os\.call$/ }) });
     await osCall.locator(':scope > .tl-call-head').click();
     assert.match(await osCall.locator(".tl-table").textContent(), /extension\.functions\.render\d+ times/);
-    assert.match(await osCall.locator('.tl-code').textContent(), /function call\(name,input,viewPath,parent,via\)/);
+    assert.match(await osCall.locator('.tl-code').first().evaluate(e => e.cm.getValue()), /function call\(name, input, viewPath, parent, via\)/);
     // a click in the timeline is a step too
     assert.ok((await page.$$eval('#tl-strip .tl-step .tl-step-name', els => els.map(x => x.textContent))).includes('local.select'));
     assert.equal((await tl()).selected, 'runtime');
@@ -159,7 +170,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // each call says what it does and why it ran, and its name opens its code
     assert.match(await page.locator('#tl-detail .tl-call').first().textContent(), /Why it ran You clicked a button of header-view/);
     await page.locator('#tl-detail .tl-call').first().locator('.tl-call-head').first().click();
-    assert.match(await page.locator('#tl-detail .tl-call').first().locator('.tl-code').textContent(), /async function openTimelineView/);
+    assert.match(await page.locator('#tl-detail .tl-call').first().locator('.tl-code').first().evaluate(e => e.cm.getValue()), /async function openTimelineView/);
     assert.ok((await page.locator('#tl-detail .tl-change').allTextContents()).includes('extension.views.header-view.ui-data.timeline_open' + 'false  \u2192  true'));
 
     // the List tab: the page load in blocks, then each call with the calls inside it and what each changed

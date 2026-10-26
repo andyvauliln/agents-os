@@ -163,6 +163,17 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForSelector('#sv-viewer-doc:not([hidden]) .md-page h2');
     assert.equal(await page.textContent('.md-page h2'), 'The state view');
     assert.equal(await page.isHidden('#sv-viewer-code'), true);
+    // themes: a button switches the theme and keeps it in ui-data (the state tests left it on black)
+    assert.equal(JSON.parse(await page.evaluate(() => window.__docs['commits/c000001'].state)).extension.views['state-view']['ui-data'].md_theme, 'reader');
+    await page.click('#md-themes [data-md-theme="reader"]');
+    assert.equal(await page.getAttribute('#sv-viewer-doc', 'data-md-theme'), 'reader');
+    assert.equal(await page.locator('#md-themes:not([hidden]) .md-theme').count(), 6);
+    await page.click('#md-themes [data-md-theme="black"]');
+    assert.equal(await page.getAttribute('#sv-viewer-doc', 'data-md-theme'), 'black');
+    assert.equal(await page.getAttribute('#md-themes [data-md-theme="black"]', 'aria-pressed'), 'true');
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['state-view']['ui-data'].md_theme), 'black');
+    await page.waitForFunction(() => getComputedStyle(document.getElementById('sv-viewer-doc')).backgroundColor === 'rgb(0, 0, 0)');
+    await page.click('#md-themes [data-md-theme="reader"]');
     await page.click('.md-sec >> nth=0 >> .md-fold');
     assert.equal(await page.isHidden('.md-sec >> nth=0 >> .md-body'), true);
     await page.click('.md-sec >> nth=0 >> .md-fold');

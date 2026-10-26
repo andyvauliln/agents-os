@@ -82,7 +82,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // output is what a function returned: get-state returns the JSON state, render returns nothing
     assert.deepEqual(Object.keys(init.calls['extension.functions.get-state'].output).sort(), ['functions', 'html', 'ui-data']);
     assert.deepEqual(init.calls['extension.functions.render'].output, {});
-    assert.match(init.code, /^async function init\(\) \{/);
+    assert.match(init.code, /^import ctx from 'ctx';\n\nasync function init\(\) \{/);
+    assert.deepEqual(init.imports, { ctx: 'index.html' });
 
     // the tests written in the state pass, each checked against the state after it ran
     const results = await page.evaluate(() => window.agentOS.os.runTests());
@@ -98,7 +99,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.textContent('#docs-view .doc h2'), 'How the page renders from the state');
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['docs-view']['ui-data'].selected), 'render-steps.md');
     assert.ok(await page.locator('#docs-view .doc pre.code').count() >= 5);
-    assert.match(await page.textContent('#docs-view .doc pre.code >> nth=1'), /^async function render\(\{ view_path \}\) \{/);
+    assert.match(await page.textContent('#docs-view .doc pre.code >> nth=1'), /^import os from 'os';\nimport ctx from 'ctx';\n\nasync function render\(\{ view_path \}\) \{/);
     await page.click('#docs-view .doc-link:has-text("how-it-works.md")');
     assert.ok(await page.isVisible('#docs-view .doc .diagram svg'));
     assert.equal(await page.locator('#docs-view .doc .diagram svg text.num').count(), 7);
@@ -121,20 +122,39 @@ test('page: boots from state, renders the header, runs state tests, saves and st
 
     // long strings show "…"; html opens in the html viewer, rendered with the view's ui-data
     const marks = await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().filter(m => m.replacedWith).map(m => m.replacedWith.title));
-    assert.ok(marks.length >= 5 && marks.every(t => t.includes(':')), marks.join(' | '));
+    assert.ok(marks.includes('agents/agent-oss/files/.claude/settings.json') && marks.includes('agents/agent-oss/files/.claude/CLAUDE.md') && marks.includes('agents/agent-oss/files/docs/how-it-works.md'), marks.join(' | '));
+    // the pointer on "..." shows the start of the text
+    await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().find(m => m.replacedWith && m.replacedWith.title === 'agents/agent-oss/files/.claude/CLAUDE.md')
+      .replacedWith.dispatchEvent(new MouseEvent('mouseenter')));
+    assert.match(await page.textContent('.long-tip:not([hidden])'), /^# Agent OS/);
     assert.ok(await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().filter(m => m.replacedWith).every(m => m.replacedWith.textContent === '"..."')));
 
     // code opens in the viewer on its own
     await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().find(m => m.replacedWith && m.replacedWith.title.startsWith('extension/views/state-view/functions/local.save/code'))
       .replacedWith.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true })));
     await page.waitForSelector('#sv-viewer:not([hidden]) .sv-viewer-body.code-only');
-    assert.match(await page.evaluate(() => document.querySelector('#sv-viewer-code .CodeMirror').CodeMirror.getValue()), /^async function save\(\) \{/);
+    assert.match(await page.evaluate(() => document.querySelector('#sv-viewer-code .CodeMirror').CodeMirror.getValue()), /^import os from 'os';\nimport ctx from 'ctx';\nimport core from 'state-core';\n\nasync function save\(\) \{/);
     await page.click('#sv-viewer-close');
     await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().find(m => m.replacedWith && m.replacedWith.title.startsWith('extension/views/header-view/html'))
       .replacedWith.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true })));
     await page.waitForSelector('#sv-viewer:not([hidden]) #sv-viewer-code .CodeMirror');
-    assert.match(await page.getAttribute('#sv-viewer-view', 'srcdoc'), /id="state-button"[^>]*aria-pressed="true"/);
+    // the view runs in the viewer with a copy of the state: its buttons work, and its ui-data shows below it
+    const frame = page.frameLocator('#sv-viewer-view');
+    await frame.locator('#header-view #state-button[aria-pressed="true"]').waitFor();
+    await page.waitForFunction(() => /"state_open": true/.test(document.getElementById('sv-viewer-state').textContent));
+    await frame.locator('#state-button').click();
+    await frame.locator('#state-button[aria-pressed="false"]').waitFor();
+    await page.waitForFunction(() => /after local\.open\.state-view/.test(document.getElementById('sv-viewer-state-head').textContent));
+    assert.equal(await page.textContent('#sv-viewer-state .chg-updated'), '  "state_open": false');
+    await frame.locator('#docs-button').click();
+    await frame.locator('#docs-view .doc-link').first().waitFor();
+    // the copy changed, the live state did not
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].state_open), true);
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].docs_open), false);
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['state-view']['ui-data'].viewer_path), 'extension/views/header-view/html');
+    // editing the html starts the view again with the new html
+    await page.evaluate(() => { const cm = document.querySelector('#sv-viewer-code .CodeMirror').CodeMirror; cm.setValue(cm.getValue().replace('aria-label="Docs"', 'aria-label="Docs" data-edited="yes"')); });
+    await frame.locator('#docs-button[data-edited="yes"]').waitFor();
     await page.click('#sv-viewer-close');
     assert.equal(await page.isHidden('#sv-viewer'), true);
 
@@ -204,7 +224,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.evaluate(() => window.agentOS.history.commits.length), 4);
 
     // every call, with its parent, is in the stored call log
-    await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].items.some(i => i.name === 'local.step')), null, { timeout: 5000 });
+    await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].items.some(i => i.name === 'loadNewerVersion')), null, { timeout: 5000 });
     const log = await page.evaluate(() => Object.entries(window.__docs).find(([k]) => k.startsWith('calls/'))[1]);
     const names = new Set(log.items.map(i => i.name));
     for (const n of ['loadState', 'loadNewerVersion', 'extension.functions.render', 'local.open.state-view', 'local.save', 'local.toggle-changes', 'local.step', 'local.edit', 'local.refresh', 'local.open-viewer', 'local.close-viewer', 'runTest']) assert.ok(names.has(n), n);

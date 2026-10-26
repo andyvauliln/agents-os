@@ -130,10 +130,14 @@ test('state.json runs from index-view and every function is complete', () => {
     if (p[p.length - 2] !== 'functions') return;
     for (const k of ['input', 'output', 'imports', 'tests', 'expected-state-change', 'docs', 'performance', 'code', 'calls']) assert.ok(k in v, `${p.join('.')} has ${k}`);
     assert.ok(v.docs.length > 10, `${p.join('.')} has docs`);
-    assert.match(v.code, /^async function [A-Za-z]+\(/, `${p.join('.')} code has a signature`);
+    // import lines, then the function with its signature; each import is in imports
+    assert.match(v.code, /^(import \w+ from '[^']+';\n)*\n?async function [A-Za-z]+\(/, `${p.join('.')} code has a signature`);
+    for (const [, name] of v.code.matchAll(/^import \w+ from '([^']+)';$/gm)) assert.ok(name in v.imports, `${p.join('.')} imports ${name}`);
+    if (/\bos\./.test(v.code)) assert.match(v.code, /^import os from 'os';$/m, `${p.join('.')} imports os`);
     for (const name of Object.keys(v.calls)) assert.ok(name.startsWith('local.') || core.getPath(s, name), `${name} exists`);
   });
-  Object.values(views).forEach(v => assert.doesNotThrow(() => core.template(v.html, v['ui-data'])));
+  // each view's html starts with one root element whose id is the view's name
+  Object.entries(views).forEach(([name, v]) => assert.match(core.template(v.html, v['ui-data']).trim(), new RegExp('^<[a-z]+ id="' + name + '"')));
 });
 
 test('comments are allowed and kept out of the data', () => {

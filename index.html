@@ -14,6 +14,12 @@ body{background:#f3f5f8;color:#17202c;font-family:system-ui,-apple-system,"Segoe
 (function(){
 'use strict';
 var core=window.StateCore;
+// The runtime's own source: a preview page runs a copy of it.
+var SRC=document.currentScript?document.currentScript.textContent:window.agentOSPreview?window.agentOSPreview.src:'';
+var coreText=null;
+function coreSource(){return coreText||(coreText=fetch('state-core.js').then(function(r){if(!r.ok)throw new Error('state-core.js: HTTP '+r.status);return r.text()}))}
+// Set when this page is a preview of one view (see os.preview): {id, view, state}.
+var SB=window.agentOSPreview||null;
 var session='s'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 var live=null,db=null,store=null,mounted={},loaded={},watchers={};
 var own={};
@@ -42,13 +48,15 @@ function resolve(name,viewPath){
   if(name.indexOf('local.')===0){var v=core.getPath(live,viewPath);var f=v&&v.functions&&v.functions[name];return f?{def:f,path:viewPath+'.functions.'+name,view:viewPath}:null}
   var def=core.getPath(live,name);return def?{def:def,path:name,view:viewPath}:null;
 }
-// imports: {name: url | [urls] | source | path}. URLs load once as scripts (or stylesheets); source is run as a module
-// and what it exports is passed to the function as imports[name]; a path in the state points at source kept there once.
-function loadImports(imports){
+// imports: {name: "index.html" | url | [urls] | source | path}. "index.html" is this runtime: os (the state and the page)
+// and ctx (this call). URLs load once as scripts (or stylesheets); source is run as a module and gives what it exports;
+// a path in the state points at source or URLs kept there once.
+function loadImports(imports,c){
   var out={};
   return Object.keys(imports||{}).reduce(function(p,k){return p.then(function(){
     var v=imports[k];
-    if(typeof v==='string'&&/^extension\./.test(v)&&typeof core.getPath(live,v)==='string')v=core.getPath(live,v);
+    if(v==='index.html'){out[k]=k==='os'?OS:k==='ctx'?c:undefined;return}
+    if(typeof v==='string'&&/^(extension|agents)\./.test(v)){var at=core.getPath(live,v);if(typeof at==='string'||Array.isArray(at))v=at}
     if(typeof v==='string'&&!/^https?:\/\//.test(v)){
       if(!loaded[v]){var m={exports:{}};new Function('module','exports','self',v)(m,m.exports,{});loaded[v]=Promise.resolve(m.exports)}
       return loaded[v].then(function(x){out[k]=x});
@@ -62,6 +70,20 @@ function loadImports(imports){
       });
     })},Promise.resolve()).then(function(){out[k]=true});
   })},Promise.resolve()).then(function(){return out});
+}
+// import os from 'os'; import { a, b } from 'name'; import CodeMirror from 'codemirror' (a script gives its global).
+function withImports(def,imports){
+  var re=/^\s*import\s+(\w+|\{[^}]*\})\s+from\s+['"]([^'"]+)['"]\s*;?/,rest=def.code,names=[],values=[],m;
+  while((m=re.exec(rest))){
+    rest=rest.slice(m[0].length);
+    var spec=m[2];
+    if(!def.imports||!(spec in def.imports))throw new Error("import '"+spec+"' is not in imports");
+    var mod=imports[spec];
+    if(m[1].charAt(0)==='{')m[1].slice(1,-1).split(',').map(function(s){return s.trim()}).filter(Boolean).forEach(function(s){var a=s.split(/\s+as\s+/);names.push(a[1]||a[0]);values.push(mod&&mod[a[0]])});
+    else{names.push(m[1]);values.push(mod===true?window[m[1]]:mod)}
+  }
+  if(!names.length)return null;
+  return new Function(names.join(','),'"use strict";return ('+rest+');').apply(null,values);
 }
 // After every run: output (or the error), performance, errors, and a check against expected-state-change.
 // output is what the function returned, as JSON (nothing returned: {}); page elements are named, not copied.
@@ -91,10 +113,13 @@ function call(name,input,viewPath,parent){
     ctx.relate({fn:r.path,parent:parent||null});frames[ctx.id]=[];
     var c={id:ctx.id,input:input,view:r.view,root:r.view?document.getElementById(r.view.split('.').pop()):null,
       call:function(n,i){return call(n,i,r.view,ctx.id)}};
-    return loadImports(def.imports).then(function(imports){
+    return loadImports(def.imports,c).then(function(imports){
       if(def.code&&def.code.trim()){
-        // code is a function as it looks in code, async function name({ params }) { ... }, called with the input.
-        // It can also use ctx, os and imports. (Older versions keep a bare body that gets input as a variable.)
+        // code is a module as it looks in code: import lines, then async function name({ params }) { ... },
+        // called with the input. Each import names a key of imports.
+        var m=withImports(def,imports);
+        if(m)return m(input&&typeof input==='object'?input:{});
+        // Older versions: no import lines, and ctx, os and imports are given to the code; older still, a bare body.
         if(/^\s*(async\s+)?function\b/.test(def.code)){
           var g=new Function('ctx','os','imports','"use strict";return ('+def.code+');')(c,OS,imports);
           return g(input&&typeof input==='object'?input:{});
@@ -121,7 +146,15 @@ function afterTop(name){
   return Object.keys(watchers).reduce(function(p,v){return p.then(function(){
     if(!mounted[v]||watchers[v]===name)return;
     return call(watchers[v],{after:name},v,'watch').catch(report);
-  })},Promise.resolve());
+  })},Promise.resolve()).then(function(){if(SB)tell(name)});
+}
+// A preview tells the page that opened it what each action changed, and the view's ui-data after it.
+var seen=null;
+function tell(name,error){
+  var now=core.stripRuntime(live),view=core.getPath(live,SB.view)||{};
+  var changes=seen?core.diff(seen,now).map(function(x){return x.type+' '+x.path.join('.')}):[];
+  seen=now;
+  try{parent.postMessage({agentOSPreview:SB.id,call:name,error:error||'',changes:changes,uiData:core.clone(view['ui-data']||{})},'*')}catch(e){}
 }
 
 /* ---------- the os object every function gets ---------- */
@@ -141,6 +174,28 @@ var OS={
     });
   },
   runTests:function(){return runTests()},
+  // Runs one view with a copy of the state in a frame: its buttons work, and nothing is saved.
+  // The frame posts {agentOSPreview: id, call, changes, uiData, error} to this page after each action.
+  // The runtime and state-core run in the frame's own window. (preview(state, view, id) gives the page as html.)
+  preview:function(frame,state,viewPath,id){
+    if(!frame||!frame.contentWindow&&!frame.tagName){
+      var cfg=JSON.stringify({id:viewPath,view:state,state:frame,src:SRC}).replace(/</g,'\\u003c');
+      return '<!doctype html><meta charset="utf-8"><style>html,body{margin:0}</style><div id="index-view"></div>'+
+        '<script src="state-core.js"><\/script><script>window.agentOSPreview='+cfg+'<\/script><script>'+SRC+'<\/script>';
+    }
+    frame.setAttribute('data-preview',id);
+    frame.onload=function(){
+      var w=frame.contentWindow;
+      if(!w||frame.getAttribute('data-preview')!==id)return;
+      coreSource().then(function(src){
+        if(frame.getAttribute('data-preview')!==id)return;
+        w.agentOSPreview={id:id,view:viewPath,state:state,src:SRC};
+        w.eval(src);
+        w.eval(SRC);
+      }).catch(report);
+    };
+    frame.srcdoc='<!doctype html><meta charset="utf-8"><style>html,body{margin:0}</style><div id="index-view"></div>';
+  },
   history:history,
   // What a view keeps while it is on screen that cannot live in the state (an editor instance, unsaved text).
   refs:{}
@@ -182,7 +237,7 @@ function runTests(){
 }
 
 /* ---------- boot ---------- */
-function report(e){console.error(e)}
+function report(e){console.error(e);if(SB)tell(null,String(e&&e.message||e))}
 function bootError(e,canRetry){
   var app=document.getElementById('index-view');app.textContent='';
   var box=document.createElement('div');box.className='boot-error';
@@ -195,11 +250,28 @@ function bootError(e,canRetry){
 }
 function start(){
   mounted={};watchers={};
+  if(SB)return startPreview();
   // Older versions take the view path itself as input; newer ones take { view_path }.
-  var r=core.getPath(live,'extension.functions.render'),sig=r&&/^\s*(async\s+)?function\b/.test(r.code||'');
+  var r=core.getPath(live,'extension.functions.render'),sig=r&&/^\s*(import\b|(async\s+)?function\b)/.test(r.code||'');
   return call('extension.functions.render',sig?{view_path:'extension.views.index-view'}:'extension.views.index-view',null).catch(function(e){bootError(e,history.commits.length>1);throw e});
 }
-var ready=tracker.track('loadState',{session:session},function(ctx){
+// A preview: index-view's html is put on the page without running it, then the one view renders.
+function startPreview(){
+  seen=core.stripRuntime(live);
+  if(SB.view!=='extension.views.index-view'){
+    var iv=core.getPath(live,'extension.views.index-view')||{},t=document.createElement('template'),host=document.getElementById('index-view');
+    t.innerHTML=core.template(iv.html||'',iv['ui-data']||{});
+    var el=t.content.firstElementChild;
+    if(el&&el.id==='index-view')host.replaceWith(el);else host.innerHTML=t.innerHTML;
+  }
+  return call('extension.functions.render',{view_path:SB.view},null).catch(function(e){report(e);throw e});
+}
+var ready=SB?Promise.resolve().then(function(){
+  live=core.clone(SB.state);history.canWrite=false;history.kind='preview';
+  try{history.commits=parent.agentOS.history.commits.slice()}catch(e){history.commits=[]}
+  store={kind:'preview',list:function(){return Promise.resolve(history.commits)},put:function(){return Promise.reject(new Error('A preview does not save'))}};
+  return {preview:SB.view};
+}):tracker.track('loadState',{session:session},function(ctx){
   return fetch('state.json').then(function(r){if(!r.ok)throw new Error('state.json: HTTP '+r.status);return r.text()}).then(function(seed){
     var getDb=window.claude&&claude.use?claude.use('db'):Promise.resolve(null);
     return getDb.then(function(d){db=d;store=d?dbStore(d):memoryStore();history.kind=store.kind;return store.list()}).then(function(list){
@@ -235,6 +307,6 @@ function follow(){
   },function(e){report(e)});
 }
 window.agentOS={os:OS,calls:tracker.records,history:history,get state(){return live},ready:ready.then(start).then(function(o){follow();return o})};
-window.agentOS.ready.catch(function(e){if(!document.querySelector('.boot-error'))bootError(e,false)});
+window.agentOS.ready.catch(function(e){if(!SB&&!document.querySelector('.boot-error'))bootError(e,false)});
 })();
 </script>

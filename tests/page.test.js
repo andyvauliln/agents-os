@@ -228,28 +228,48 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar .sv-group button')].filter(b => b.textContent.trim()).length), 0);
     assert.equal(await page.locator('#state-view .sv-foot #pos').count(), 1);
     assert.equal(await page.locator('#state-view .sv-bar #path').count(), 0);
-    // the filter lists matching files, views and functions; a kind can be turned off; a click shows the entry in the editor
-    await page.fill('#sv-filter-input', 'render');
-    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter === 'render');
-    await page.locator('#sv-results:not([hidden]) .sv-item').first().waitFor();
-    assert.ok(await page.locator('#sv-results .sv-item b', { hasText: 'render-steps.md' }).count() === 1);
-    // (the state tests left some kinds off)
+    // the filter shows only the paths that have the text; a switch hides files, views or functions
+    const shownText = () => page.evaluate(() => [...document.querySelectorAll('#sv-editor .CodeMirror-line')].map(l => l.textContent).join('\n'));
+    const hiddenMarks = () => page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().filter(m => m.replacedWith && m.replacedWith.classList.contains('sv-hidden')).length);
+    // (the state tests left some switches off)
     for (const kind of ['files', 'views', 'functions']) {
       if (await page.evaluate(k => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds[k], kind)) continue;
-      await page.click(`.sv-kind input[data-input*="${kind}"]`);
+      await page.click(`#sv-switches [data-input*="${kind}"]`);
       await page.waitForFunction(k => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds[k], kind);
     }
-    await page.click('.sv-kind input[data-input*="files"]');
-    await page.waitForFunction(() => !document.querySelector('#sv-results .k-files'));
-    assert.ok(await page.locator('#sv-results .k-functions').count() > 0);
-    await page.click('.sv-kind input[data-input*="files"]');
-    await page.click('#sv-results .sv-item:has(b:text-is("render"))');
-    await page.locator('#sv-editor .sv-revealed').waitFor();
+    // (and the filter text)
+    await page.fill('#sv-filter-input', '');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter === '');
+    assert.equal(await page.locator('#sv-results').count(), 0);
+    assert.equal(await hiddenMarks(), 0);
+    await page.fill('#sv-filter-input', 'docs/render-steps');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter === 'docs/render-steps');
+    await page.locator('#sv-editor .sv-hidden').first().waitFor();
+    let shown = await shownText();
+    assert.match(shown, /"agents"/);
+    assert.match(shown, /"render-steps\.md"/);
+    assert.doesNotMatch(shown, /"extension"/);
+    assert.match(await page.textContent('#sv-editor .sv-hidden'), /^⋯ \d+ lines?$/);
+    // files off: the match is in a file, so it hides
+    await page.click('#sv-switches [data-input*="files"]');
+    await page.waitForFunction(() => !window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds.files);
+    assert.equal(await page.getAttribute('#sv-switches [data-input*="files"]', 'aria-checked'), 'false');
+    assert.doesNotMatch(await shownText(), /render-steps/);
+    await page.click('#sv-switches [data-input*="files"]');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds.files);
     await page.press('#sv-filter-input', 'Escape');
-    await page.waitForFunction(() => document.getElementById('sv-results').hidden);
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter === '');
+    assert.equal(await hiddenMarks(), 0);
+    // without text, functions off hides every functions object
+    await page.click('#sv-switches [data-input*="functions"]');
+    await page.waitForFunction(() => !window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds.functions);
+    assert.ok(await hiddenMarks() > 0);
+    await page.click('#sv-switches [data-input*="functions"]');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds.functions);
+    assert.equal(await hiddenMarks(), 0);
 
     // the editor follows the live state: ui-data and runtime fills show up, comments stay
-    const shown = await page.evaluate(() => JSON.parse(document.querySelector('.CodeMirror').CodeMirror.getValue()));
+    shown = await page.evaluate(() => JSON.parse(document.querySelector('.CodeMirror').CodeMirror.getValue()));
     assert.equal(shown.extension.views['header-view']['ui-data'].state_open, true);
     assert.equal(shown.extension.views['state-view']['ui-data'].version, 'v1');
 

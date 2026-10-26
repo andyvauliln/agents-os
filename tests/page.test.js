@@ -108,8 +108,32 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#docs-button');
     assert.equal(await page.isHidden('#docs-view'), true);
 
-    // the timeline: the page load in blocks, then each call with the calls inside it and what each changed
+    // the timeline, Steps tab: the steps in a row; a click on a step shows what happens inside it; replay
+    const tl = () => page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data']);
     await page.click('#timeline-button');
+    if ((await tl()).tab !== 'steps') await page.click('#tl-tab-steps');
+    await page.waitForSelector('#tl-strip .tl-step');
+    const stepKinds = await page.$$eval('#tl-strip .tl-step .tl-kind', els => els.map(x => x.textContent));
+    assert.deepEqual(stepKinds.slice(0, 2), ['Open the page', 'Run index.html']);
+    await page.locator('#tl-strip .tl-step').first().click();
+    await page.waitForFunction(() => document.querySelector('#tl-detail .tl-kind').textContent === 'Open the page');
+    assert.equal((await tl()).selected, 'open');
+    await page.click('#tl-next');
+    await page.waitForFunction(() => document.querySelector('#tl-detail .tl-kind').textContent === 'Run index.html');
+    assert.equal((await tl()).selected, 'runtime');
+    await page.click('#tl-play');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].selected !== 'runtime', null, { timeout: 5000 });
+    assert.equal((await tl()).playing, true);
+    await page.click('#tl-play');
+    await page.waitForFunction(() => !window.agentOS.state.extension.views['timeline-view']['ui-data'].playing);
+    if (!(await tl()).show_changes) await page.click('#tl-changes');
+    await page.locator('#tl-strip .tl-step', { has: page.locator('.tl-step-name', { hasText: 'local.open.timeline-view' }) }).last().click();
+    await page.locator('#tl-detail .tl-call').first().waitFor();
+    assert.deepEqual((await page.locator('#tl-detail .tl-call .tl-name').allTextContents()).slice(0, 2), ['local.open.timeline-view', 'extension.functions.render']);
+    assert.ok((await page.locator('#tl-detail .tl-change').allTextContents()).includes('extension.views.header-view.ui-data.timeline_open' + 'false  \u2192  true'));
+
+    // the List tab: the page load in blocks, then each call with the calls inside it and what each changed
+    await page.click('#tl-tab-list');
     await page.waitForSelector('#timeline-view .tl-block');
     const kinds = await page.$$eval('#tl-list .tl-kind', els => els.map(x => x.textContent));
     assert.deepEqual(kinds.slice(0, 4), ['Open the page', 'Run index.html', 'Load the state', 'Start the page']);

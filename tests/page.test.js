@@ -126,12 +126,24 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.isHidden('#step-view'), true);
     assert.equal(await page.isChecked('#tl-track'), false);
 
-    // a click on a block shows it under the header, State changes first; with tracking off the click is not a block
+    // a click on a block shows it under the header: Details first when it changed nothing; with tracking off the click is not a block
     const before = await blockNames();
     await page.locator('#tl-strip .tl-step').first().click();
     await page.waitForFunction(() => (document.querySelector('#step-view #st-title .tl-kind') || {}).textContent === 'Open the page');
     assert.equal((await tl()).selected, 'open');
-    if ((await stv()).tab !== 'state') await page.click('#st-tab-state');
+    assert.equal((await stv()).tab, 'details');
+    // a click on the chosen block again hides it, and so does the close button
+    await page.locator('#tl-strip .tl-step').first().click();
+    await page.waitForFunction(() => document.querySelector('#step-view').hidden);
+    assert.equal((await tl()).selected, null);
+    await page.locator('#tl-strip .tl-step').first().click();
+    await page.waitForSelector('#step-view #st-title .tl-kind');
+    await page.click('#st-close');
+    await page.waitForFunction(() => document.querySelector('#step-view').hidden);
+    assert.equal((await tl()).selected, null);
+    await page.locator('#tl-strip .tl-step').first().click();
+    await page.waitForSelector('#step-view #st-title .tl-kind');
+    await page.click('#st-tab-state');
     await page.waitForFunction(() => /There is no state yet/.test(document.querySelector('#tl-detail').textContent));
     assert.deepEqual(await blockNames(), before);
     assert.ok(await page.evaluate(() => document.querySelector('#header-view').compareDocumentPosition(document.querySelector('#step-view')) & Node.DOCUMENT_POSITION_FOLLOWING));
@@ -140,7 +152,10 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#st-tab-details');
     await page.waitForSelector('#tl-detail .tl-part');
     assert.equal((await stv()).tab, 'details');
-    assert.deepEqual(await page.$$eval('#tl-detail .tl-part .tl-name', els => els.map(x => x.textContent)), ['Download index.html', 'Load state-core.js', 'Run the runtime script']);
+    // block 1 lists every file the page downloaded: index.html, state-core.js, the runtime script, then the rest
+    const openParts = await page.$$eval('#tl-detail .tl-part .tl-name', els => els.map(x => x.textContent));
+    assert.deepEqual(openParts.slice(0, 3), ['Download index.html', 'Load state-core.js', 'The runtime script']);
+    assert.ok(openParts.some(n => /^Download codemirror/.test(n)) && openParts.includes('Download state.json'), openParts.join(' | '));
     // a part opens on click: index.html shows its html, state-core.js its code, the runtime script what it did and its code
     const part = name => page.locator('#tl-detail .tl-part', { has: page.locator('.tl-name', { hasText: name }) });
     await part('Download index.html').locator('.tl-call-head').click();
@@ -149,14 +164,16 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await part('Load state-core.js').locator('.tl-call-head').click();
     await part('Load state-core.js').locator('.tl-code').waitFor();
     assert.match(await part('Load state-core.js').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /StateCore/);
-    await part('Run the runtime script').locator('.tl-call-head').click();
-    assert.match(await part('Run the runtime script').locator('.tl-table').textContent(), /loadState/);
-    assert.match(await part('Run the runtime script').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /window\.agentOS = \{/);
+    await part('The runtime script').locator('.tl-call-head').click();
+    assert.match(await part('The runtime script').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /window\.agentOS = \{/);
     await part('Download index.html').locator('.tl-call-head').click();
     assert.equal(await part('Download index.html').locator('.tl-code').count(), 0);
     await page.click('#tl-next');
     await page.waitForFunction(() => document.querySelector('#st-title .tl-kind').textContent === 'Run index.html');
     assert.match(await page.textContent('#tl-detail'), /a name for this page load: s\w+/);
+    // block 2 runs the runtime script
+    await part('Run the runtime script').locator('.tl-call-head').click();
+    assert.match(await part('Run the runtime script').locator('.tl-table').textContent(), /loadState/);
     // each part says what happens and why, and shows the lines of index.html that do it
     assert.match(await part('Note the start time').textContent(), /What happens The runtime writes down when it started.*Why Only the timeline uses it/);
     await part('Note the start time').locator('.tl-call-head').first().click();
@@ -180,6 +197,23 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#tl-play');
     await page.waitForFunction(() => !window.agentOS.state.extension.views['timeline-view']['ui-data'].playing);
     assert.deepEqual(await blockNames(), before);
+
+    // the blocks button hides the row of blocks
+    await page.click('#tl-blocks');
+    await page.waitForFunction(() => document.querySelector('#tl-strip').hidden);
+    await page.click('#tl-blocks');
+    await page.waitForFunction(() => !document.querySelector('#tl-strip').hidden);
+    // Flows: the saved flows; First enter plays the first 4 blocks and stops
+    await page.click('#tl-flows');
+    await page.waitForSelector('#tl-flows-list:not([hidden]) .tl-flow');
+    assert.match(await page.textContent('#tl-flows-list'), /First enter4 blocks: index\.html, runtime, loadState, extension\.functions\.render/);
+    await page.click('#tl-flows-list .tl-flow button');
+    await page.waitForFunction(() => document.querySelector('#tl-flows-list').hidden);
+    assert.equal((await tl()).selected, 'open');
+    assert.match(await page.textContent('#tl-pos'), /^First enter: block 1 of 4/);
+    await page.waitForFunction(() => /^First enter: block 4 of 4/.test(document.querySelector('#tl-pos').textContent), null, { timeout: 8000 });
+    await page.waitForFunction(() => !window.agentOS.state.extension.views['timeline-view']['ui-data'].playing);
+    assert.equal(await page.textContent('#st-title .tl-kind'), 'Start the page');
 
     // Track the timeline: what you do in the timeline is added as blocks
     await page.click('#tl-track');

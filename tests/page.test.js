@@ -331,6 +331,18 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const names = new Set(log.items.map(i => i.name));
     for (const n of ['loadState', 'loadNewerVersion', 'extension.functions.render', 'local.open.state-view', 'local.save', 'local.toggle-changes', 'local.step', 'local.edit', 'local.refresh', 'local.open-viewer', 'local.close-viewer', 'runTest']) assert.ok(names.has(n), n);
     assert.ok(log.items.every(i => i.ok && i.at && typeof i.ms === 'number'), JSON.stringify(log.items.filter(i => !i.ok).slice(0, 3)));
+
+    // the Reload button of the timeline: the page loads again, the timeline opens and replays from the first step
+    await page.click('#timeline-button');
+    await Promise.all([page.waitForNavigation(), page.click('#tl-reload')]);
+    await page.waitForSelector('#tl-strip .tl-step.on');
+    const replay = await page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data']);
+    assert.equal(replay.tab, 'steps');
+    assert.equal(replay.playing, true);
+    assert.equal(replay.selected, 'open');
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].timeline_open), true);
+    assert.equal(await page.evaluate(() => sessionStorage.getItem('agent-os.timeline-replay')), null);
+    await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].selected === 'runtime', null, { timeout: 5000 });
     assert.deepEqual(errors, []);
   } finally {
     await browser.close();

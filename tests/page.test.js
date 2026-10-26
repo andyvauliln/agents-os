@@ -35,7 +35,8 @@ function fakeDb() {
         if (order) docs.sort((a, b) => a[order] - b[order]);
         return { docs: docs.map(d => snap('', d)), size: docs.length, empty: !docs.length };
       },
-      doc: id => doc(c + '/' + id)
+      doc: id => doc(c + '/' + id),
+      onSnapshot(next) { (window.__listeners = window.__listeners || []).push(() => q.get().then(next)); return () => {}; }
     };
     return q;
   };
@@ -185,11 +186,23 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.deepEqual(errs, []);
     assert.ok(await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getValue().includes('// shared by all apps')));
 
+    // a newer version saved somewhere else runs here without a reload
+    await page.evaluate(() => {
+      const head = window.agentOS.history.commits[window.agentOS.history.commits.length - 1];
+      const st = JSON.parse(head.state.replace('// shared by all apps', ''));
+      st.extension.data.from_elsewhere = true;
+      window.__docs['commits/c000004'] = { n: 4, parent: 3, at: new Date().toISOString(), state: JSON.stringify(st, null, 2), summary: { added: 1, updated: 0, deleted: 0 }, paths: ['added extension.data.from_elsewhere'] };
+      window.__listeners.forEach(f => f());
+    });
+    await page.waitForFunction(() => window.agentOS.state.extension.data.from_elsewhere === true);
+    await page.waitForFunction(() => /^v4 /.test(document.querySelector('#pos') && document.querySelector('#pos').textContent));
+    assert.equal(await page.evaluate(() => window.agentOS.history.commits.length), 4);
+
     // every call, with its parent, is in the stored call log
     await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].items.some(i => i.name === 'local.step')), null, { timeout: 5000 });
     const log = await page.evaluate(() => Object.entries(window.__docs).find(([k]) => k.startsWith('calls/'))[1]);
     const names = new Set(log.items.map(i => i.name));
-    for (const n of ['loadState', 'extension.functions.render', 'local.open.state-view', 'local.save', 'local.toggle-changes', 'local.step', 'local.edit', 'local.refresh', 'local.open-viewer', 'local.close-viewer', 'runTest']) assert.ok(names.has(n), n);
+    for (const n of ['loadState', 'loadNewerVersion', 'extension.functions.render', 'local.open.state-view', 'local.save', 'local.toggle-changes', 'local.step', 'local.edit', 'local.refresh', 'local.open-viewer', 'local.close-viewer', 'runTest']) assert.ok(names.has(n), n);
     assert.ok(log.items.every(i => i.ok && i.at && typeof i.ms === 'number'), JSON.stringify(log.items.filter(i => !i.ok).slice(0, 3)));
     assert.deepEqual(errors, []);
   } finally {

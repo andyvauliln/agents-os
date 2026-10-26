@@ -16,7 +16,9 @@ body{background:#f3f5f8;color:#17202c;font-family:system-ui,-apple-system,"Segoe
 var core=window.StateCore;
 var session='s'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 var live=null,db=null,store=null,mounted={},loaded={},watchers={};
-var history={commits:[],canWrite:true,kind:'memory',put:function(c){return store.put(c).then(function(){history.commits.push(c);return c},function(e){if(e&&e.code==='invalid_argument')history.canWrite=false;throw e})}};
+var own={};
+function addCommit(c){if(!history.commits.some(function(x){return x.n===c.n}))history.commits.push(c)}
+var history={commits:[],canWrite:true,kind:'memory',put:function(c){own[c.n]=true;return store.put(c).then(function(){addCommit(c);return c},function(e){delete own[c.n];if(e&&e.code==='invalid_argument')history.canWrite=false;throw e})}};
 
 /* ---------- storage: commits/c000001...; one calls/<session> log per page load ---------- */
 function memoryStore(){var list=[];return{kind:'memory',list:function(){return Promise.resolve(list.slice())},put:function(c){list.push(c);return Promise.resolve()}}}
@@ -213,7 +215,26 @@ var ready=tracker.track('loadState',{session:session},function(ctx){
     });
   });
 });
-window.agentOS={os:OS,calls:tracker.records,history:history,get state(){return live},ready:ready.then(start)};
+// A newer version saved somewhere else (another tab, or a release) runs here as soon as it is saved,
+// unless this page has unsaved edits. A page that stays open never shows an old version.
+function follow(){
+  if(!db)return;
+  var q=db.collection('commits').orderBy('n');
+  if(!q.onSnapshot)return;
+  q.onSnapshot(function(s){
+    var known=history.commits.length?history.commits[history.commits.length-1].n:0;
+    var fresh=s.docs.map(function(d){return d.data()}).filter(function(c){return c&&c.n>known&&!own[c.n]});
+    if(!fresh.length)return;
+    fresh.sort(function(a,b){return a.n-b.n}).forEach(addCommit);
+    var sv=OS.refs['state-view'];
+    if(sv&&sv.draft!==null)return;
+    tracker.track('loadNewerVersion',{head:history.commits[history.commits.length-1].n},function(){
+      live=core.parseJsonc(history.commits[history.commits.length-1].state);
+      return start();
+    }).catch(report);
+  },function(e){report(e)});
+}
+window.agentOS={os:OS,calls:tracker.records,history:history,get state(){return live},ready:ready.then(start).then(function(o){follow();return o})};
 window.agentOS.ready.catch(function(e){if(!document.querySelector('.boot-error'))bootError(e,false)});
 })();
 </script>

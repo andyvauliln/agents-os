@@ -14,6 +14,8 @@ body{background:#f3f5f8;color:#17202c;font-family:system-ui,-apple-system,"Segoe
 (function(){
 'use strict';
 var core=window.StateCore;
+// When the runtime started, in ms after the page opened (the timeline starts from the page opening).
+var startedAt=performance.now();
 // The runtime's own source: a preview page runs a copy of it.
 var SRC=document.currentScript?document.currentScript.textContent:window.agentOSPreview?window.agentOSPreview.src:'';
 var coreText=null;
@@ -103,11 +105,16 @@ function finish(path,def,input,before,t0,out,err,id,parent){
   fails=fails.concat(core.checkStateChange(d['expected-state-change'],before,after,input,nested));
   d.output=err?{error:String(err&&err.message||err)}:plain(out);
   d.errors=fails;
-  return {changes:core.diff(before,after).map(function(x){return x.type+' '+x.path.join('.')}),errors:fails,performance:d.performance};
+  // What this function changed itself (not its nested calls), with the value before and after.
+  var own=core.diff(before,after).filter(function(x){var p=x.path.join('.');return !nested.some(function(k){return p===k||p.indexOf(k+'.')===0})})
+    .map(function(x){return {type:x.type,path:x.path.join('.'),before:core.brief(x.before),after:core.brief(x.after)}});
+  return {changes:core.diff(before,after).map(function(x){return x.type+' '+x.path.join('.')}),stateChanges:own,errors:fails,performance:d.performance};
 }
-function call(name,input,viewPath,parent){
-  var r=resolve(name,viewPath);
-  var run=tracker.track(name,{input:input===undefined?null:input,view:viewPath||null},function(ctx){
+// via: what started a call that nothing else called: start, click, watch or test (code that calls os.call gives none).
+function call(name,input,viewPath,parent,via){
+  var r=resolve(name,viewPath),top=null;
+  var run=tracker.track(name,{input:input===undefined?null:input,view:viewPath||null,via:via||null},function(ctx){
+    top=ctx.id;
     if(!r)throw new Error('No function '+name+(viewPath?' in '+viewPath:''));
     var def=r.def,before=core.stripRuntime(live),t0=performance.now();
     ctx.relate({fn:r.path,parent:parent||null});frames[ctx.id]=[];
@@ -139,13 +146,14 @@ function call(name,input,viewPath,parent){
       return out;
     },function(e){if(r)ctx.relate(finish(r.path,def,input,before,t0,null,e,ctx.id,parent));throw e});
   });
-  return parent?run:run.then(function(o){return afterTop(name).then(function(){return o})},function(e){return afterTop(name).then(function(){throw e})});
+  return parent?run:run.then(function(o){return afterTop(name,top).then(function(){return o})},function(e){return afterTop(name,top).then(function(){throw e})});
 }
 // A view can watch the state: after each top-level call, the function it named with os.watch runs.
-function afterTop(name){
+// The watch calls count as calls inside the call that ran (parent), so the timeline shows them under it.
+function afterTop(name,parent){
   return Object.keys(watchers).reduce(function(p,v){return p.then(function(){
     if(!mounted[v]||watchers[v]===name)return;
-    return call(watchers[v],{after:name},v,'watch').catch(report);
+    return call(watchers[v],{after:name},v,parent||'watch','watch').catch(report);
   })},Promise.resolve()).then(function(){if(SB)tell(name)});
 }
 // A preview tells the page that opened it what each action changed, and the view's ui-data after it.
@@ -170,10 +178,14 @@ var OS={
   watch:function(viewPath,fnName){watchers[viewPath]=fnName},
   bind:function(root,viewPath){
     Array.prototype.forEach.call(root.querySelectorAll('[data-call]'),function(b){
-      b.addEventListener('click',function(){var i=b.getAttribute('data-input');call(b.getAttribute('data-call'),i===null?{}:JSON.parse(i),viewPath).catch(report)});
+      b.addEventListener('click',function(){var i=b.getAttribute('data-input');call(b.getAttribute('data-call'),i===null?{}:JSON.parse(i),viewPath,null,'click').catch(report)});
     });
   },
   runTests:function(){return runTests()},
+  // Every call of this page load, in the order they ended: {id, name, at, input: {input, view, via}, ok, output, error, ms,
+  // related: {fn, parent, stateChanges, errors, ...}}. started: when the runtime started, in ms after the page opened.
+  calls:tracker.records,
+  started:startedAt,
   // Runs one view with a copy of the state in a frame: its buttons work, and nothing is saved.
   // The frame posts {agentOSPreview: id, call, changes, uiData, error} to this page after each action.
   // The runtime and state-core run in the frame's own window. (preview(state, view, id) gives the page as html.)
@@ -215,11 +227,11 @@ function runTests(){
     return tracker.track('runTest',{fn:item.fn,test:item.test},function(ctx){
       var t0=performance.now(),before=spec.before||{},start=null;
       // "before" lists calls that put the page in the state the test needs.
-      return Object.keys(before).reduce(function(p,n){return p.then(function(){return call(n,before[n],item.view,ctx.id)}).then(function(){return afterTop(n)})},Promise.resolve()).then(function(){
+      return Object.keys(before).reduce(function(p,n){return p.then(function(){return call(n,before[n],item.view,ctx.id)}).then(function(){return afterTop(n,ctx.id)})},Promise.resolve()).then(function(){
         start=core.stripRuntime(live);
         return call(item.fn,spec.input,item.view,ctx.id);
       }).then(function(out){
-        return afterTop(item.fn).then(function(){
+        return afterTop(item.fn,ctx.id).then(function(){
           // The state after the run: expected-state-change errors, then the test's own expect (output, dom, state).
           var errs=core.getPath(live,item.path).errors||[];
           var st={get:function(p){return core.getPath(live,p)},changed:core.diff(start,core.stripRuntime(live)).map(function(x){return x.path.join('.')})};
@@ -253,7 +265,7 @@ function start(){
   if(SB)return startPreview();
   // Older versions take the view path itself as input; newer ones take { view_path }.
   var r=core.getPath(live,'extension.functions.render'),sig=r&&/^\s*(import\b|(async\s+)?function\b)/.test(r.code||'');
-  return call('extension.functions.render',sig?{view_path:'extension.views.index-view'}:'extension.views.index-view',null).catch(function(e){bootError(e,history.commits.length>1);throw e});
+  return call('extension.functions.render',sig?{view_path:'extension.views.index-view'}:'extension.views.index-view',null,null,'start').catch(function(e){bootError(e,history.commits.length>1);throw e});
 }
 // A preview: index-view's html is put on the page without running it, then the one view renders.
 function startPreview(){

@@ -66,7 +66,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
 
     // boot: version 1 from state.json, index-view rendered (page html and styles from the state), then header-view: only the State view button
     assert.ok(await page.evaluate(() => !!window.__docs['commits/c000001']));
-    assert.equal(await page.locator('#header-view button').count(), 2);
+    assert.equal(await page.locator('#header-view button').count(), 3);
+    assert.ok(await page.isVisible('#timeline-button[aria-label="Timeline"] svg'));
     assert.ok(await page.isVisible('#docs-button[aria-label="Docs"] svg'));
     assert.ok(await page.isVisible('#state-button[aria-label="State view"] svg'));
     assert.equal(await page.isHidden('#state-view'), true);
@@ -91,6 +92,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.deepEqual(results.filter(r => !r.ok), []);
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.state-view' }));
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.docs-view' }));
+    await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.timeline-view' }));
 
     // the docs button lists the docs folder of the agent; a click shows a doc
     await page.click('#docs-button');
@@ -106,6 +108,29 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#docs-button');
     assert.equal(await page.isHidden('#docs-view'), true);
 
+    // the timeline: the page load in blocks, then each call with the calls inside it and what each changed
+    await page.click('#timeline-button');
+    await page.waitForSelector('#timeline-view .tl-block');
+    const kinds = await page.$$eval('#tl-list .tl-kind', els => els.map(x => x.textContent));
+    assert.deepEqual(kinds.slice(0, 4), ['Open the page', 'Run index.html', 'Load the state', 'Start the page']);
+    assert.equal(kinds[kinds.length - 1], 'Click');
+    // (the state tests left the changes hidden)
+    if (!(await page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].show_changes))) await page.click('#tl-changes');
+    const block = page.locator('#tl-list .tl-block', { has: page.locator('summary .tl-name', { hasText: 'local.open.timeline-view' }) }).last();
+    await block.locator('summary').click();
+    await block.locator('.tl-call').first().waitFor();
+    const calls = await block.locator('.tl-call .tl-name').allTextContents();
+    assert.deepEqual(calls.slice(0, 2), ['local.open.timeline-view', 'extension.functions.render']);
+    const change = await block.locator('.tl-change').allTextContents();
+    assert.ok(change.includes('extension.views.header-view.ui-data.timeline_open' + 'false  \u2192  true'), change.join(' | '));
+    await page.click('#tl-changes');
+    await page.waitForFunction(() => !document.querySelector('#tl-list .tl-change'));
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].show_changes), false);
+    await page.click('#tl-changes');
+    await page.locator('#tl-list .tl-change').first().waitFor();
+    await page.click('#timeline-button');
+    assert.equal(await page.isHidden('#timeline-view'), true);
+
     // open the state view from the header: icon buttons, the view path, the version time as "ago"
     await page.click('#state-button');
     await page.waitForSelector('#state-view .CodeMirror');
@@ -113,7 +138,29 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].state_open), true);
     assert.equal(await page.textContent('#path'), 'extension/views/state-view');
     assert.match(await page.textContent('#pos'), /^v1 just now$/);
-    assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar button')].filter(b => b.textContent.trim()).length), 0);
+    // the top bar has only icon buttons and the filter; the version, the path and the status are in the bottom bar
+    assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar .sv-group button')].filter(b => b.textContent.trim()).length), 0);
+    assert.equal(await page.locator('#state-view .sv-foot #pos').count(), 1);
+    assert.equal(await page.locator('#state-view .sv-bar #path').count(), 0);
+    // the filter lists matching files, views and functions; a kind can be turned off; a click shows the entry in the editor
+    await page.fill('#sv-filter-input', 'render');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter === 'render');
+    await page.locator('#sv-results:not([hidden]) .sv-item').first().waitFor();
+    assert.ok(await page.locator('#sv-results .sv-item b', { hasText: 'render-steps.md' }).count() === 1);
+    // (the state tests left some kinds off)
+    for (const kind of ['files', 'views', 'functions']) {
+      if (await page.evaluate(k => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds[k], kind)) continue;
+      await page.click(`.sv-kind input[data-input*="${kind}"]`);
+      await page.waitForFunction(k => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds[k], kind);
+    }
+    await page.click('.sv-kind input[data-input*="files"]');
+    await page.waitForFunction(() => !document.querySelector('#sv-results .k-files'));
+    assert.ok(await page.locator('#sv-results .k-functions').count() > 0);
+    await page.click('.sv-kind input[data-input*="files"]');
+    await page.click('#sv-results .sv-item:has(b:text-is("render"))');
+    await page.locator('#sv-editor .sv-revealed').waitFor();
+    await page.press('#sv-filter-input', 'Escape');
+    await page.waitForFunction(() => document.getElementById('sv-results').hidden);
 
     // the editor follows the live state: ui-data and runtime fills show up, comments stay
     const shown = await page.evaluate(() => JSON.parse(document.querySelector('.CodeMirror').CodeMirror.getValue()));

@@ -118,8 +118,11 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.locator('#tl-strip .tl-step').first().click();
     await page.waitForFunction(() => document.querySelector('#tl-detail .tl-kind').textContent === 'Open the page');
     assert.equal((await tl()).selected, 'open');
+    // the steps before the first call show their parts
+    assert.deepEqual(await page.$$eval('#tl-detail .tl-part .tl-name', els => els.map(x => x.textContent)), ['Download index.html', 'Load state-core.js', 'Run the runtime script']);
     await page.click('#tl-next');
     await page.waitForFunction(() => document.querySelector('#tl-detail .tl-kind').textContent === 'Run index.html');
+    assert.match(await page.textContent('#tl-detail'), /session = s\w+/);
     assert.equal((await tl()).selected, 'runtime');
     await page.click('#tl-play');
     await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].selected !== 'runtime', null, { timeout: 5000 });

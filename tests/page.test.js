@@ -98,6 +98,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.state-view' }));
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.docs-view' }));
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.timeline-view' }));
+    await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.step-view' }));
 
     // the docs button lists the docs folder of the agent; a click shows a doc
     await page.click('#docs-button');
@@ -113,17 +114,32 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#docs-button');
     assert.equal(await page.isHidden('#docs-view'), true);
 
-    // the timeline, Steps tab: the steps in a row; a click on a step shows what happens inside it; replay
+    // the timeline: its blocks at the top of the page, above the header; nothing chosen yet
     const tl = () => page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data']);
+    const stv = () => page.evaluate(() => window.agentOS.state.extension.views['step-view']['ui-data']);
+    const blockNames = () => page.$$eval('#tl-strip .tl-step .tl-step-name', els => els.map(x => x.textContent));
     await page.click('#timeline-button');
-    if ((await tl()).tab !== 'steps') await page.click('#tl-tab-steps');
     await page.waitForSelector('#tl-strip .tl-step');
+    assert.ok(await page.evaluate(() => document.querySelector('#timeline-view').compareDocumentPosition(document.querySelector('#header-view')) & Node.DOCUMENT_POSITION_FOLLOWING));
     const stepKinds = await page.$$eval('#tl-strip .tl-step .tl-kind', els => els.map(x => x.textContent));
-    assert.deepEqual(stepKinds.slice(0, 2), ['Open the page', 'Run index.html']);
+    assert.deepEqual(stepKinds.slice(0, 4), ['Open the page', 'Run index.html', 'Load the state', 'Start the page']);
+    assert.equal(await page.isHidden('#step-view'), true);
+    assert.equal(await page.isChecked('#tl-track'), false);
+
+    // a click on a block shows it under the header, State changes first; with tracking off the click is not a block
+    const before = await blockNames();
     await page.locator('#tl-strip .tl-step').first().click();
-    await page.waitForFunction(() => document.querySelector('#tl-detail .tl-kind').textContent === 'Open the page');
+    await page.waitForFunction(() => (document.querySelector('#step-view #st-title .tl-kind') || {}).textContent === 'Open the page');
     assert.equal((await tl()).selected, 'open');
-    // the steps before the first call show their parts
+    if ((await stv()).tab !== 'state') await page.click('#st-tab-state');
+    await page.waitForFunction(() => /There is no state yet/.test(document.querySelector('#tl-detail').textContent));
+    assert.deepEqual(await blockNames(), before);
+    assert.ok(await page.evaluate(() => document.querySelector('#header-view').compareDocumentPosition(document.querySelector('#step-view')) & Node.DOCUMENT_POSITION_FOLLOWING));
+
+    // the Details tab: the steps before the first call show their parts
+    await page.click('#st-tab-details');
+    await page.waitForSelector('#tl-detail .tl-part');
+    assert.equal((await stv()).tab, 'details');
     assert.deepEqual(await page.$$eval('#tl-detail .tl-part .tl-name', els => els.map(x => x.textContent)), ['Download index.html', 'Load state-core.js', 'Run the runtime script']);
     // a part opens on click: index.html shows its html, state-core.js its code, the runtime script what it did and its code
     const part = name => page.locator('#tl-detail .tl-part', { has: page.locator('.tl-name', { hasText: name }) });
@@ -139,7 +155,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await part('Download index.html').locator('.tl-call-head').click();
     assert.equal(await part('Download index.html').locator('.tl-code').count(), 0);
     await page.click('#tl-next');
-    await page.waitForFunction(() => document.querySelector('#tl-detail .tl-kind').textContent === 'Run index.html');
+    await page.waitForFunction(() => document.querySelector('#st-title .tl-kind').textContent === 'Run index.html');
     assert.match(await page.textContent('#tl-detail'), /a name for this page load: s\w+/);
     // each part says what happens and why, and shows the lines of index.html that do it
     assert.match(await part('Note the start time').textContent(), /What happens The runtime writes down when it started.*Why Only the timeline uses it/);
@@ -155,46 +171,51 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await osCall.locator(':scope > .tl-call-head').click();
     assert.match(await osCall.locator(".tl-table").textContent(), /extension\.functions\.render\d+ times/);
     assert.match(await osCall.locator('.tl-code').first().evaluate(e => e.cm.getValue()), /function call\(name, input, viewPath, parent, via\)/);
-    // a click in the timeline is a step too
-    assert.ok((await page.$$eval('#tl-strip .tl-step .tl-step-name', els => els.map(x => x.textContent))).includes('local.select'));
+
+    // the replay moves to the next block every 1.6 s
     assert.equal((await tl()).selected, 'runtime');
     await page.click('#tl-play');
     await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].selected !== 'runtime', null, { timeout: 5000 });
     assert.equal((await tl()).playing, true);
     await page.click('#tl-play');
     await page.waitForFunction(() => !window.agentOS.state.extension.views['timeline-view']['ui-data'].playing);
+    assert.deepEqual(await blockNames(), before);
+
+    // Track the timeline: what you do in the timeline is added as blocks
+    await page.click('#tl-track');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].track_timeline === true);
+    assert.ok((await blockNames()).includes('local.toggle-tracking'));
+    await page.locator('#tl-strip .tl-step').first().click();
+    await page.waitForFunction(() => Array.from(document.querySelectorAll('#tl-strip .tl-step-name')).some(x => x.textContent === 'local.select'));
+    await page.click('#tl-track');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].track_timeline === false);
+    assert.equal((await blockNames()).includes('local.select'), false);
+
+    // the block of the Timeline click: State changes shows the state cut down to what it changed, and who changed it
     if (!(await tl()).show_changes) await page.click('#tl-changes');
     await page.locator('#tl-strip .tl-step', { has: page.locator('.tl-step-name', { hasText: 'local.open.timeline-view' }) }).last().click();
+    await page.click('#st-tab-state');
+    await page.waitForSelector('#tl-detail .st-legend');
+    assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"timeline_open": true/);
+    assert.ok(await page.locator('#tl-detail .tl-code .chg-updated').count() > 0);
+    assert.match(await page.locator('#tl-detail .tl-table').textContent(), /extension\.views\.header-view\.ui-data\.timeline_openfalse {2}→ {2}truelocal\.open\.timeline-view/);
+    // its Details: each call says what it does and why it ran, its name opens its code, and what it changed
+    await page.click('#st-tab-details');
     await page.locator('#tl-detail .tl-call').first().waitFor();
     assert.deepEqual((await page.locator('#tl-detail .tl-call .tl-name').allTextContents()).slice(0, 2), ['local.open.timeline-view', 'extension.functions.render']);
-    // each call says what it does and why it ran, and its name opens its code
     assert.match(await page.locator('#tl-detail .tl-call').first().textContent(), /Why it ran You clicked a button of header-view/);
     await page.locator('#tl-detail .tl-call').first().locator('.tl-call-head').first().click();
     assert.match(await page.locator('#tl-detail .tl-call').first().locator('.tl-code').first().evaluate(e => e.cm.getValue()), /async function openTimelineView/);
-    assert.ok((await page.locator('#tl-detail .tl-change').allTextContents()).includes('extension.views.header-view.ui-data.timeline_open' + 'false  \u2192  true'));
-
-    // the List tab: the page load in blocks, then each call with the calls inside it and what each changed
-    await page.click('#tl-tab-list');
-    await page.waitForSelector('#timeline-view .tl-block');
-    const kinds = await page.$$eval('#tl-list .tl-kind', els => els.map(x => x.textContent));
-    assert.deepEqual(kinds.slice(0, 4), ['Open the page', 'Run index.html', 'Load the state', 'Start the page']);
-    assert.equal(kinds[kinds.length - 1], 'Click');
-    // (the state tests left the changes hidden)
-    if (!(await page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].show_changes))) await page.click('#tl-changes');
-    const block = page.locator('#tl-list .tl-block', { has: page.locator('summary .tl-name', { hasText: 'local.open.timeline-view' }) }).last();
-    await block.locator('summary').click();
-    await block.locator('.tl-call').first().waitFor();
-    const calls = await block.locator('.tl-call .tl-name').allTextContents();
-    assert.deepEqual(calls.slice(0, 2), ['local.open.timeline-view', 'extension.functions.render']);
-    const change = await block.locator('.tl-change').allTextContents();
-    assert.ok(change.includes('extension.views.header-view.ui-data.timeline_open' + 'false  \u2192  true'), change.join(' | '));
+    assert.ok((await page.locator('#tl-detail .tl-change').allTextContents()).includes('extension.views.header-view.ui-data.timeline_open' + 'false  →  true'));
     await page.click('#tl-changes');
-    await page.waitForFunction(() => !document.querySelector('#tl-list .tl-change'));
-    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].show_changes), false);
+    await page.waitForFunction(() => !document.querySelector('#tl-detail .tl-change'));
+    assert.equal((await tl()).show_changes, false);
     await page.click('#tl-changes');
-    await page.locator('#tl-list .tl-change').first().waitFor();
+    await page.locator('#tl-detail .tl-change').first().waitFor();
+    // closing the timeline closes the block's view too
     await page.click('#timeline-button');
     assert.equal(await page.isHidden('#timeline-view'), true);
+    assert.equal(await page.isHidden('#step-view'), true);
 
     // open the state view from the header: icon buttons, the view path, the version time as "ago"
     await page.click('#state-button');
@@ -370,7 +391,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].items.some(i => i.name === 'loadNewerVersion')), null, { timeout: 5000 });
     const log = await page.evaluate(() => Object.entries(window.__docs).find(([k]) => k.startsWith('calls/'))[1]);
     const names = new Set(log.items.map(i => i.name));
-    for (const n of ['loadState', 'loadNewerVersion', 'extension.functions.render', 'local.open.state-view', 'local.save', 'local.toggle-changes', 'local.step', 'local.edit', 'local.refresh', 'local.open-viewer', 'local.close-viewer', 'runTest']) assert.ok(names.has(n), n);
+    // (the log keeps the newest 400 calls: after that many, the first ones, like loadState, are not in it)
+    assert.ok(log.count <= 400 ? names.has('loadState') : log.items.length === 400, 'loadState or 400 items');
+    for (const n of ['loadNewerVersion', 'extension.functions.render', 'local.open.state-view', 'local.save', 'local.toggle-changes', 'local.step', 'local.edit', 'local.refresh', 'local.open-viewer', 'local.close-viewer', 'runTest']) assert.ok(names.has(n), n);
     assert.ok(log.items.every(i => i.ok && i.at && typeof i.ms === 'number'), JSON.stringify(log.items.filter(i => !i.ok).slice(0, 3)));
 
     // the Reload button of the timeline: the page loads again, the timeline opens and replays from the first step
@@ -378,7 +401,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await Promise.all([page.waitForNavigation(), page.click('#tl-reload')]);
     await page.waitForSelector('#tl-strip .tl-step.on');
     const replay = await page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data']);
-    assert.equal(replay.tab, 'steps');
+    await page.waitForSelector('#step-view #st-title .tl-kind');
     assert.equal(replay.playing, true);
     assert.equal(replay.selected, 'open');
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].timeline_open), true);

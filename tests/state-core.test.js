@@ -199,3 +199,14 @@ test('each run is checked against expected-state-change', () => {
   // changes made by nested calls are theirs, not the caller's
   assert.deepEqual(core.checkStateChange({ 'v.ui.open': 'toggles', 'v.ui.pos': 'input' }, before, after, 2, ['v.extra']), []);
 });
+
+test('markdown parts give the same text back, and lines know their kind', () => {
+  const docs = JSON.parse(seed).agents['agent-oss'].files.docs;
+  for (const [name, text] of Object.entries(docs)) assert.equal(core.mdText(core.mdParse(text)), text, name);
+  const parts = core.mdParse('# T\n\n## S\n- a\n2. b\ntext\n```js\nx()\n```\n```svg<svg></svg>```');
+  assert.deepEqual(parts.map(p => p.kind), ['lines', 'code', 'lines', 'svg', 'lines']);
+  assert.equal(parts[1].text, 'x()');
+  assert.deepEqual(['# T', '## S', '- a', '2. b', 'text', ''].map(l => core.mdLine(l).type), ['h1', 'h2', 'item', 'step', 'p', 'blank']);
+  assert.deepEqual(core.mdLine('12. go'), { mark: '12. ', text: 'go', type: 'step' });
+});
+

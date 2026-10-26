@@ -156,6 +156,26 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.evaluate(() => { const cm = document.querySelector('#sv-viewer-code .CodeMirror').CodeMirror; cm.setValue(cm.getValue().replace('aria-label="Docs"', 'aria-label="Docs" data-edited="yes"')); });
     await frame.locator('#docs-button[data-edited="yes"]').waitFor();
     await page.click('#sv-viewer-close');
+
+    // an md file opens as a document you edit in place; its sections fold
+    await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().find(m => m.replacedWith && m.replacedWith.title === 'agents/agent-oss/files/docs/state-view.md')
+      .replacedWith.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true })));
+    await page.waitForSelector('#sv-viewer-doc:not([hidden]) .md-page h2');
+    assert.equal(await page.textContent('.md-page h2'), 'The state view');
+    assert.equal(await page.isHidden('#sv-viewer-code'), true);
+    await page.click('.md-sec >> nth=0 >> .md-fold');
+    assert.equal(await page.isHidden('.md-sec >> nth=0 >> .md-body'), true);
+    await page.click('.md-sec >> nth=0 >> .md-fold');
+    assert.equal(await page.isVisible('.md-sec >> nth=0 >> .md-body'), true);
+    await page.click('.md-sec >> nth=0 >> h3 .md-t');
+    await page.keyboard.press('End');
+    await page.keyboard.type(' now');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('A new line');
+    const md = await page.evaluate(() => document.querySelector('#sv-viewer-code .CodeMirror').CodeMirror.getValue());
+    assert.match(md, /\n## Open the state view now\nA new line\n1\. Click the State button/);
+    await page.click('#sv-viewer-close');
+    assert.match(await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getValue()), /Open the state view now\\nA new line/);
     assert.equal(await page.isHidden('#sv-viewer'), true);
 
     // edit extension.data and save: a new version, and the border flashes green

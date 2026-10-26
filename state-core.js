@@ -270,6 +270,26 @@
     return { track: track, records: records };
   }
 
+  // Markdown as the docs use it: ``` fences (code, or ```svg diagrams) between parts made of lines.
+  // mdText(mdParse(text)) gives the same text back, so an edit changes only what was edited.
+  function mdParse(text) {
+    return String(text).split('```').map(function (part, i) {
+      if (!(i % 2)) return { kind: 'lines', lines: part.split('\n') };
+      if (part.indexOf('svg') === 0) return { kind: 'svg', head: 'svg', text: part.slice(3), tail: '' };
+      var m = /^([a-z]*\n)?([\s\S]*?)(\n?)$/.exec(part);
+      return { kind: 'code', head: m[1] || '', text: m[2], tail: m[3] };
+    });
+  }
+  function mdText(parts) {
+    return parts.map(function (p) { return p.kind === 'lines' ? p.lines.join('\n') : p.head + p.text + p.tail; }).join('```');
+  }
+  // One line of markdown: its mark ("# ", "## ", "### ", "- ", "1. ") and its text.
+  function mdLine(raw) {
+    var m = /^(#{1,3} |- |\d+\. )?([\s\S]*)$/.exec(raw), mark = m[1] || '';
+    var type = !mark ? (raw.trim() ? 'p' : 'blank') : mark.charAt(0) === '#' ? 'h' + (mark.length - 1) : mark === '- ' ? 'item' : 'step';
+    return { mark: mark, text: m[2], type: type };
+  }
+
   function clone(v) { return v === undefined ? undefined : JSON.parse(JSON.stringify(v)); }
   function walk(v, path, fn) {
     fn(v, path);
@@ -375,6 +395,7 @@
   return {
     clone: clone, walk: walk, getPath: getPath, setPath: setPath, stripRuntime: stripRuntime,
     parseJsonc: parseJsonc, stripComments: stripComments, autofix: autofix,
+    mdParse: mdParse, mdText: mdText, mdLine: mdLine,
     spans: spans, pathAt: pathAt, patchText: patchText, ago: ago,
     brief: brief, template: template, esc: esc, checkExpect: checkExpect, checkStateChange: checkStateChange,
     diff: diff, summarize: summarize, changesView: changesView,

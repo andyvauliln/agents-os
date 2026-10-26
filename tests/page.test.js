@@ -138,6 +138,14 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await page.textContent('#tl-detail'), /session = s\w+/);
     await part('Create the call tracker').locator('.tl-call-head').click();
     assert.match(await part('Create the call tracker').locator('.tl-table').textContent(), /extension\.functions\.render/);
+    // Build os: each part of os opens with the functions that use it and its code, the runtime's call() too
+    await part('Build os').locator('.tl-call-head').first().click();
+    const osCall = page.locator('#tl-detail .tl-more .tl-part', { has: page.locator(':scope > .tl-call-head .tl-name', { hasText: /^os\.call$/ }) });
+    await osCall.locator(':scope > .tl-call-head').click();
+    assert.match(await osCall.locator(".tl-table").textContent(), /extension\.functions\.render\d+ times/);
+    assert.match(await osCall.locator('.tl-code').textContent(), /function call\(name,input,viewPath,parent,via\)/);
+    // a click in the timeline is a step too
+    assert.ok((await page.$$eval('#tl-strip .tl-step .tl-step-name', els => els.map(x => x.textContent))).includes('local.select'));
     assert.equal((await tl()).selected, 'runtime');
     await page.click('#tl-play');
     await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].selected !== 'runtime', null, { timeout: 5000 });
@@ -148,6 +156,10 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.locator('#tl-strip .tl-step', { has: page.locator('.tl-step-name', { hasText: 'local.open.timeline-view' }) }).last().click();
     await page.locator('#tl-detail .tl-call').first().waitFor();
     assert.deepEqual((await page.locator('#tl-detail .tl-call .tl-name').allTextContents()).slice(0, 2), ['local.open.timeline-view', 'extension.functions.render']);
+    // each call says what it does and why it ran, and its name opens its code
+    assert.match(await page.locator('#tl-detail .tl-call').first().textContent(), /Why it ran You clicked a button of header-view/);
+    await page.locator('#tl-detail .tl-call').first().locator('.tl-call-head').first().click();
+    assert.match(await page.locator('#tl-detail .tl-call').first().locator('.tl-code').textContent(), /async function openTimelineView/);
     assert.ok((await page.locator('#tl-detail .tl-change').allTextContents()).includes('extension.views.header-view.ui-data.timeline_open' + 'false  \u2192  true'));
 
     // the List tab: the page load in blocks, then each call with the calls inside it and what each changed

@@ -461,6 +461,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].timeline_open), true);
     assert.equal(await page.evaluate(() => sessionStorage.getItem('agent-os.timeline-replay')), null);
     await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].selected === 'runtime', null, { timeout: 5000 });
+    // the replay goes on past the blocks that were there when it started (the page was still starting)
+    await page.waitForFunction(() => (document.querySelector('#st-title .tl-kind') || {}).textContent === 'Start the page', null, { timeout: 8000 });
     assert.deepEqual(errors, []);
   } finally {
     await browser.close();

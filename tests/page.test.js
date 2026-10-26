@@ -120,9 +120,24 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal((await tl()).selected, 'open');
     // the steps before the first call show their parts
     assert.deepEqual(await page.$$eval('#tl-detail .tl-part .tl-name', els => els.map(x => x.textContent)), ['Download index.html', 'Load state-core.js', 'Run the runtime script']);
+    // a part opens on click: index.html shows its html, state-core.js its code, the runtime script what it did and its code
+    const part = name => page.locator('#tl-detail .tl-part', { has: page.locator('.tl-name', { hasText: name }) });
+    await part('Download index.html').locator('.tl-call-head').click();
+    await part('Download index.html').locator('.tl-code').waitFor();
+    assert.match(await part('Download index.html').locator('.tl-code').textContent(), /<div id="index-view"><\/div>/);
+    await part('Load state-core.js').locator('.tl-call-head').click();
+    await part('Load state-core.js').locator('.tl-code').waitFor();
+    assert.match(await part('Load state-core.js').locator('.tl-code').textContent(), /StateCore/);
+    await part('Run the runtime script').locator('.tl-call-head').click();
+    assert.match(await part('Run the runtime script').locator('.tl-table').textContent(), /loadState/);
+    assert.match(await part('Run the runtime script').locator('.tl-code').textContent(), /window\.agentOS=/);
+    await part('Download index.html').locator('.tl-call-head').click();
+    assert.equal(await part('Download index.html').locator('.tl-code').count(), 0);
     await page.click('#tl-next');
     await page.waitForFunction(() => document.querySelector('#tl-detail .tl-kind').textContent === 'Run index.html');
     assert.match(await page.textContent('#tl-detail'), /session = s\w+/);
+    await part('Create the call tracker').locator('.tl-call-head').click();
+    assert.match(await part('Create the call tracker').locator('.tl-table').textContent(), /extension\.functions\.render/);
     assert.equal((await tl()).selected, 'runtime');
     await page.click('#tl-play');
     await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].selected !== 'runtime', null, { timeout: 5000 });

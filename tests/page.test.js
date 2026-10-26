@@ -97,6 +97,11 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#docs-view .doc-link:has-text("render-steps.md")');
     assert.equal(await page.textContent('#docs-view .doc h2'), 'How the page renders from the state');
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['docs-view']['ui-data'].selected), 'render-steps.md');
+    assert.ok(await page.locator('#docs-view .doc pre.code').count() >= 5);
+    assert.match(await page.textContent('#docs-view .doc pre.code >> nth=1'), /^async function render\(\{ view_path \}\) \{/);
+    await page.click('#docs-view .doc-link:has-text("how-it-works.md")');
+    assert.ok(await page.isVisible('#docs-view .doc .diagram svg'));
+    assert.equal(await page.locator('#docs-view .doc .diagram svg text.num').count(), 7);
     await page.click('#docs-button');
     assert.equal(await page.isHidden('#docs-view'), true);
 

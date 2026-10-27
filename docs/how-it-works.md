@@ -72,6 +72,11 @@
    - On the right: the one that you click, in tabs. The first tab is its content: File (the text of the file), View (its html and ui-data), Function (its code and its other fields), Request (a request of network) or Value (a part of environment).
    - When the block changed it, the Changes tab shows the change. A text (a file, html, code) shows side by side: red lines are only before, green lines are only after. An object shows cut down to what changed.
    - The filter text keeps only the items whose path has it.
+   - A file shows in the file viewer for its kind. The head has a badge for the kind (JS, HTML, CSS, JSON, MD, PY), the name, the language, the lines, the size, the tokens (about) and Copy.
+     - md: reads as a page, with the look and the theme of the md viewer of the state view. Contents on the left lists the headings: click one to go to it. Source shows the text.
+     - json: a tree. Click an object or a list to open or close it. The first two levels are open. Find opens the parts that have the text and marks them. Open all, Close all. Source shows the text.
+     - Code (js, html, css, python and more): the outline on the left (functions, classes and constants; ids, scripts and styles; selectors), each with its line. Click one to go to the line. Find marks every match: Enter goes to the next one, Shift+Enter to the one before. Wrap wraps long lines.
+   - A click on "..." opens the text in the same file viewer.
 3. Details: what happens inside the block. The function, then each function it called, in the order they started, with their input and time.
    Each function says what it does (its docs), why it ran (a click, a watch, or the function that called it) and what it changed in the state. Click its name to see its code.
    The first blocks happen before any function runs, so they show their parts instead:

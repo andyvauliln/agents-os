@@ -163,7 +163,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // no step chosen: the files of the whole run, as a tree of folders
     assert.match(await page.textContent('#tl-detail .ar-files .tl-detail-sub'), /^The whole run/);
     assert.equal(await page.locator('#tl-detail .ar-file').count(), lastRun.files.length);
-    assert.ok(await page.locator('#tl-detail .ar-tree > details.ar-folder > summary', { hasText: /^scripts\/$/ }).count() === 1);
+    const top = lastRun.files.find(f => /^[^/]+\//.test(f.path)).path.split('/')[0];
+    assert.equal(await page.locator('#tl-detail .ar-tree > details.ar-folder > summary', { hasText: new RegExp('^' + top.replace('.', '\\.') + '/$') }).count(), 1);
     // the buttons filter the files by action
     await page.click('#tl-detail .ar-filter button[data-f="read"]');
     assert.equal(await page.getAttribute('#tl-detail .ar-filter button[data-f="read"]', 'aria-pressed'), 'true');

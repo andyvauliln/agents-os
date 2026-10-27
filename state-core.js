@@ -168,6 +168,55 @@
     return map;
   }
 
+  // The kind of an entry, for the switches of a filter: files, views, functions, network or environment.
+  function kindOf(p) {
+    if (p[0] === 'agents' && p.length === 3 && p[2] === 'files') return 'files';
+    if (p[0] === 'extension' && p[1] === 'views' && p.length === 3) return 'views';
+    if (p[0] === 'extension' && p[p.length - 1] === 'functions' && (p.length === 2 || (p[1] === 'views' && p.length === 4))) return 'functions';
+    if ((p[0] === 'network' || p[0] === 'environment') && p.length === 1) return p[0];
+    return null;
+  }
+
+  // The filter of a JSON text: with q, only the entries whose path has q show, with the first and last lines of the
+  // objects around them; a kind that is off (kinds[kind] === false) hides its entries. Returns the hidden lines as [from, to].
+  function filterLines(text, map, q, kinds) {
+    map = map || spans(text);
+    q = String(q || '').trim().toLowerCase(); kinds = kinds || {};
+    var starts = [0], i;
+    for (i = 0; i < text.length; i++) if (text.charCodeAt(i) === 10) starts.push(i + 1);
+    function line(at) { var lo = 0, hi = starts.length - 1; while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (starts[mid] <= at) lo = mid; else hi = mid - 1; } return lo; }
+    var entries = Object.keys(map).map(function (k) { return [JSON.parse(k), map[k]]; });
+    var off = entries.filter(function (e) { var k = kindOf(e[0]); return k && kinds[k] === false; }).map(function (e) { return e[1]; });
+    var root = map['[]'];
+    if (!entries.length || !root || (!q && !off.length)) return [];
+    var show = []; for (i = 0; i < starts.length; i++) show.push(!q);
+    show[line(root.from)] = show[line(root.end - 1)] = true;
+    if (q) entries.forEach(function (e) {
+      var p = e[0], r = e[1];
+      if (!p.length || off.some(function (o) { return r.from >= o.from && r.end <= o.end; }) || p.join('/').toLowerCase().indexOf(q) < 0) return;
+      for (var l = line(r.from); l <= line(r.end - 1); l++) show[l] = true;
+      for (var j = 1; j < p.length; j++) { var a = map[JSON.stringify(p.slice(0, j))]; show[line(a.from)] = show[line(a.end - 1)] = true; }
+    });
+    off.forEach(function (o) { for (var l = line(o.from); l <= line(o.end - 1); l++) show[l] = false; });
+    var out = [], from = -1;
+    for (var l = 0; l <= show.length; l++) {
+      if (l < show.length && !show[l]) { if (from < 0) from = l; }
+      else if (from >= 0) { out.push([from, l - 1]); from = -1; }
+    }
+    return out;
+  }
+
+  // The colors of a JSON editor (a CodeMirror overlay): keys, empty keys and {}.
+  var keyOverlay = {
+    token: function (s) {
+      if (s.match(/^"(?:[^"\\]|\\.)*"(?=\s*:\s*\{\s*\})/)) return 'key emptykey';
+      if (s.match(/^"(?:[^"\\]|\\.)*"(?=\s*:)/)) return 'key';
+      if (s.match(/^\{\s*\}/)) return 'emptyobj';
+      while (s.next() != null && !s.match(/^(?=["{])/, false)) {}
+      return null;
+    }
+  };
+
   // The path of the innermost entry at a character offset, e.g. ["extension", "views", "state-view"].
   function pathAt(text, offset) {
     var map = spans(text), best = [], size = Infinity;
@@ -396,7 +445,7 @@
     clone: clone, walk: walk, getPath: getPath, setPath: setPath, stripRuntime: stripRuntime,
     parseJsonc: parseJsonc, stripComments: stripComments, autofix: autofix,
     mdParse: mdParse, mdText: mdText, mdLine: mdLine,
-    spans: spans, pathAt: pathAt, patchText: patchText, ago: ago,
+    spans: spans, kindOf: kindOf, filterLines: filterLines, keyOverlay: keyOverlay, pathAt: pathAt, patchText: patchText, ago: ago,
     brief: brief, template: template, esc: esc, checkExpect: checkExpect, checkStateChange: checkStateChange,
     diff: diff, summarize: summarize, changesView: changesView,
     makeCommit: makeCommit, commitId: commitId,

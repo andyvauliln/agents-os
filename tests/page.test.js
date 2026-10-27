@@ -112,6 +112,12 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.timeline-view' }));
     // (and no block chosen: the tests chose some)
     await page.evaluate(() => window.agentOS.os.call('extension.views.step-view.functions.local.close', {}));
+    // (and the filter of State changes back to empty, every switch on: the tests changed them)
+    await page.evaluate(async () => {
+      const os = window.agentOS.os, d = os.get('extension.views.step-view.ui-data');
+      await os.call('extension.views.step-view.functions.local.filter', { text: '' });
+      for (const k of Object.keys(d.filter_kinds)) if (!d.filter_kinds[k]) await os.call('extension.views.step-view.functions.local.filter-kind', { kind: k });
+    });
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.step-view' }));
 
     // the docs button lists the docs folder of the agent; a click shows a doc
@@ -177,6 +183,22 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForFunction(() => /changes? in the state, made by /.test(document.querySelector('#tl-detail').textContent));
     assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"network"/);
     assert.match(await page.textContent('#tl-detail .tl-table'), /network\.scripts\.state-core\.js\.ms.*loadState/);
+    // the filter of State changes works like the filter of the state view: text, then switches
+    await page.fill('#st-filter-input', 'state-core');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['step-view']['ui-data'].filter === 'state-core');
+    await page.waitForSelector('#tl-detail .sv-hidden');
+    assert.ok((await page.$$eval('#tl-detail .tl-table tr', rows => rows.slice(1).map(r => r.textContent))).every(t => t.includes('state-core')));
+    await page.fill('#st-filter-input', '');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['step-view']['ui-data'].filter === '');
+    await page.click('#st-switches [data-input*="environment"]');
+    await page.waitForSelector('#st-switches [data-input*="environment"][aria-checked="false"]');
+    // (the editor draws only the lines in sight: the fold is asked from CodeMirror)
+    await page.waitForFunction(() => document.querySelector('#tl-detail .tl-code').cm.getAllMarks().some(m => m.collapsed && m.type === 'range'));
+    assert.ok(!/environment\./.test(await page.textContent('#tl-detail .tl-table')));
+    await page.click('#st-switches [data-input*="environment"]');
+    await page.waitForSelector('#st-switches [data-input*="environment"][aria-checked="true"]');
+    // updated values show the old value, as in the state view
+    assert.ok(await page.$('#tl-detail .tl-code .was'));
 
     // its Details: Network (all requests, in groups) next to Environment
     await page.click('#st-tab-details');

@@ -64,7 +64,8 @@
 ### A block
 1. Click a block. It opens under the header, in step-view, with two tabs. It opens on State changes, or on Details when the block changed nothing in the state.
    Click the block again, or the close button (×), to hide it.
-2. State changes: the state cut down to what this block changed, before and after, in the colors of the Changes of the state view: green is added, yellow is updated, red is deleted. Under it, a table says which function changed what. Long values are shortened.
+2. State changes: the state cut down to what this block changed, in the same editor as the state view: green is added, yellow is updated (with the old value), red is deleted. Under it, a table says which function changed what. Long values are shortened.
+   The filter is the same as in the state view. Type in Filter paths to see only the paths that have the text. The switches Files, Views, Functions, Network and Environment hide those entries. The table shows only the paths that the filter shows.
 3. Details: what happens inside the block. The function, then each function it called, in the order they started, with their input and time.
    Each function says what it does (its docs), why it ran (a click, a watch, or the function that called it) and what it changed in the state. Click its name to see its code.
    The first blocks happen before any function runs, so they show their parts instead:

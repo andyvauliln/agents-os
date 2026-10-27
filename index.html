@@ -14,6 +14,68 @@ body{background:#f3f5f8;color:#17202c;font-family:system-ui,-apple-system,"Segoe
 (function(){
 'use strict';
 var core=window.StateCore;
+/* ---------- what the page's code registers: event listeners, timers, observers, connections ---------- */
+// The runtime wraps the browser functions that register them, before any other code of the page runs, so the
+// environment of the state shows each one and who added it: the call that was running (running), or the page.
+var running=[];
+function by(){return running.length?running[running.length-1]:'the page (no call)'}
+function labelOf(t){
+  try{
+    if(t===window)return 'window';
+    if(t===document)return 'document';
+    if(t&&t.nodeType===1)return t.id?'#'+t.id:t.tagName.toLowerCase()+(t.classList&&t.classList[0]?'.'+t.classList[0]:'');
+    if(t&&t.nodeType)return t.nodeName.toLowerCase();
+    return t&&t.constructor&&t.constructor.name||'object';
+  }catch(e){return 'object'}
+}
+var reg={listeners:[],timeouts:{},intervals:{},frames:{},observers:[],connections:[]};
+(function(){
+  var ET=window.EventTarget&&EventTarget.prototype;
+  if(ET&&ET.addEventListener){
+    var add=ET.addEventListener,remove=ET.removeEventListener;
+    var same=function(x,t,type,fn,cap){return x.target===t&&x.type===type&&x.fn===fn&&x.capture===cap};
+    var capOf=function(o){return typeof o==='boolean'?o:!!(o&&o.capture)};
+    ET.addEventListener=function(type,fn,o){
+      var cap=capOf(o),t=this;
+      if(fn&&!reg.listeners.some(function(x){return same(x,t,type,fn,cap)}))
+        reg.listeners.push({target:t,type:String(type),fn:fn,capture:cap,once:!!(o&&o.once),passive:!!(o&&o.passive),by:by()});
+      return add.apply(this,arguments);
+    };
+    ET.removeEventListener=function(type,fn,o){
+      var cap=capOf(o),t=this;
+      reg.listeners=reg.listeners.filter(function(x){return !same(x,t,type,fn,cap)});
+      return remove.apply(this,arguments);
+    };
+  }
+  var st=window.setTimeout,ct=window.clearTimeout,si=window.setInterval,ci=window.clearInterval,raf=window.requestAnimationFrame,caf=window.cancelAnimationFrame;
+  window.setTimeout=function(fn,ms){
+    var who=by(),args=Array.prototype.slice.call(arguments,2),id;
+    id=st.call(window,function(){delete reg.timeouts[id];return typeof fn==='function'?fn.apply(this,args):undefined},ms);
+    reg.timeouts[id]={ms:+ms||0,by:who};return id;
+  };
+  window.clearTimeout=function(id){delete reg.timeouts[id];return ct.call(window,id)};
+  window.setInterval=function(fn,ms){var id=si.apply(window,arguments);reg.intervals[id]={ms:+ms||0,by:by()};return id};
+  window.clearInterval=function(id){delete reg.intervals[id];return ci.call(window,id)};
+  if(raf){
+    window.requestAnimationFrame=function(fn){var id;id=raf.call(window,function(t){delete reg.frames[id];return fn(t)});reg.frames[id]={by:by()};return id};
+    window.cancelAnimationFrame=function(id){delete reg.frames[id];return caf.call(window,id)};
+  }
+  ['MutationObserver','ResizeObserver','IntersectionObserver','PerformanceObserver'].forEach(function(k){
+    var O=window[k];if(!O||!O.prototype.observe)return;
+    var ob=O.prototype.observe,dis=O.prototype.disconnect,un=O.prototype.unobserve;
+    O.prototype.observe=function(t){var o=this;if(!reg.observers.some(function(x){return x.o===o&&x.target===t}))reg.observers.push({o:o,kind:k,target:t,by:by()});return ob.apply(this,arguments)};
+    if(dis)O.prototype.disconnect=function(){var o=this;reg.observers=reg.observers.filter(function(x){return x.o!==o});return dis.apply(this,arguments)};
+    if(un)O.prototype.unobserve=function(t){var o=this;reg.observers=reg.observers.filter(function(x){return !(x.o===o&&x.target===t)});return un.apply(this,arguments)};
+  });
+  // Connections that stay open: WebSocket, EventSource, BroadcastChannel.
+  ['WebSocket','EventSource','BroadcastChannel'].forEach(function(k){
+    var C=window[k];if(!C)return;
+    var W=function(a,b){var x=arguments.length>1?new C(a,b):new C(a);reg.connections.push({x:x,kind:k,to:String(a),by:by()});return x};
+    W.prototype=C.prototype;Object.keys(C).forEach(function(n){try{W[n]=C[n]}catch(e){}});
+    ['CONNECTING','OPEN','CLOSING','CLOSED'].forEach(function(n){if(n in C)try{Object.defineProperty(W,n,{value:C[n]})}catch(e){}});
+    window[k]=W;
+  });
+})();
 // When the runtime started, in ms after the page opened (the timeline starts from the page opening).
 var startedAt=performance.now();
 // The runtime's own source: a preview page runs a copy of it.
@@ -154,6 +216,16 @@ function askLater(){
   try{if(navigator.storage&&navigator.storage.estimate)navigator.storage.estimate().then(function(x){later.quota={usage_bytes:x.usage,quota_bytes:x.quota}},function(e){later.quota={available:false,why:String(e&&e.name||e)}})}catch(e){later.quota={available:false,why:String(e&&e.name||e)}}
   try{if(window.indexedDB&&indexedDB.databases)indexedDB.databases().then(function(x){later.idb={available:true,databases:x.map(function(d){return d.name})}},function(e){later.idb={available:false,why:String(e&&e.name||e)}});else later.idb={available:!!window.indexedDB}}catch(e){later.idb={available:false,why:String(e&&e.name||e)}}
   try{if(window.caches)caches.keys().then(function(x){later.caches={available:true,caches:x}},function(e){later.caches={available:false,why:String(e&&e.name||e)}});else later.caches={available:false}}catch(e){later.caches={available:false,why:String(e&&e.name||e)}}
+  // Devices and permissions: the browser answers later. A device has no name until the page has its permission.
+  try{if(navigator.mediaDevices&&navigator.mediaDevices.enumerateDevices)navigator.mediaDevices.enumerateDevices().then(function(x){
+    var n={};x.forEach(function(d){n[d.kind]=(n[d.kind]||0)+1});later.media=n;
+  },function(e){later.media={available:false,why:String(e&&e.name||e)}});else later.media={available:false}}catch(e){later.media={available:false,why:String(e&&e.name||e)}}
+  try{if(navigator.getBattery)navigator.getBattery().then(function(b){later.battery={level:Math.round(b.level*100)+'%',charging:b.charging}},function(e){later.battery={available:false,why:String(e&&e.name||e)}});else later.battery={available:false}}catch(e){later.battery={available:false,why:String(e&&e.name||e)}}
+  later.permissions=later.permissions||{};
+  ['geolocation','notifications','camera','microphone','clipboard-read','clipboard-write','persistent-storage','midi','accelerometer','gyroscope','magnetometer','screen-wake-lock','local-fonts','storage-access','window-management','idle-detection','background-sync'].forEach(function(name){
+    try{if(!navigator.permissions||!navigator.permissions.query){later.permissions[name]='no permissions api';return}
+      navigator.permissions.query({name:name}).then(function(x){later.permissions[name]=x.state},function(){later.permissions[name]='not known to this browser'})}catch(e){later.permissions[name]='not known to this browser'}
+  });
   try{if(navigator.serviceWorker&&navigator.serviceWorker.getRegistrations)navigator.serviceWorker.getRegistrations().then(function(x){later.sw={available:true,registered:x.length}},function(e){later.sw={available:false,why:String(e&&e.name||e)}});else later.sw={available:false}}catch(e){later.sw={available:false,why:String(e&&e.name||e)}}
 }
 function browserName(){
@@ -215,6 +287,41 @@ function senseEnvironment(){
     'views that watch the state':Object.keys(watchers).filter(function(v){return mounted[v]}).map(function(v){return v.split('.').pop()+': '+watchers[v]})};
   env['background services']={'save the call log':'1.2 s after the last call'+(api['save the call log']?', saved '+api['save the call log'].count+(api['save the call log'].count===1?' time':' times'):''),
     'service workers':later.sw||{}};
+  // What the code of the page registered (see the wrappers at the top), and who added it.
+  var ls={};
+  reg.listeners=reg.listeners.filter(function(x){return !(x.target&&x.target.nodeType&&!x.target.isConnected&&x.target!==document)});
+  reg.listeners.forEach(function(x){
+    var t=ls[labelOf(x.target)]||(ls[labelOf(x.target)]={}),e=t[x.type]||(t[x.type]={count:0,by:[]});
+    e.count++;if(e.by.indexOf(x.by)<0)e.by.push(x.by);
+    if(x.capture)e.capture=true;if(x.once)e.once=true;if(x.passive)e.passive=true;
+  });
+  [['window',window],['document',document]].forEach(function(w){
+    for(var k in w[1])if(/^on/.test(k)){try{if(typeof w[1][k]==='function'){var t=ls[w[0]]||(ls[w[0]]={});t[k+' (property)']={count:1,by:['not known']}}}catch(e){}}
+  });
+  env['event listeners']=ls;
+  var count=function(o,key){var n={};Object.keys(o).forEach(function(id){var k=key(o[id]);n[k]=(n[k]||0)+1});return n};
+  env.timers={'timeouts waiting':count(reg.timeouts,function(x){return x.by+' (after '+x.ms+' ms)'}),
+    intervals:count(reg.intervals,function(x){return x.by+' (every '+x.ms+' ms)'}),
+    'animation frames waiting':count(reg.frames,function(x){return x.by})};
+  var obs={};
+  reg.observers=reg.observers.filter(function(x){return !(x.target&&x.target.nodeType&&!x.target.isConnected)});
+  reg.observers.forEach(function(x){var k=obs[x.kind]||(obs[x.kind]={}),l=x.kind==='PerformanceObserver'?'performance entries':labelOf(x.target),e=k[l]||(k[l]={count:0,by:[]});e.count++;if(e.by.indexOf(x.by)<0)e.by.push(x.by)});
+  env.observers=obs;
+  var STATES=['connecting','open','closing','closed'];
+  reg.connections=reg.connections.filter(function(x){return x.kind==='BroadcastChannel'||x.x.readyState<2});
+  env.connections=reg.connections.map(function(x){return {kind:x.kind,to:x.to,state:x.kind==='BroadcastChannel'?'open':STATES[x.x.readyState],by:x.by}});
+  var d=document,ae=d.activeElement;
+  env.document={title:d.title,ready_state:d.readyState,visibility:d.visibilityState,has_focus:d.hasFocus(),elements:d.getElementsByTagName('*').length,
+    active_element:ae?labelOf(ae):'',url:location.href.split('?')[0],referrer:d.referrer.split('?')[0],charset:d.characterSet,content_type:d.contentType,
+    style_sheets:d.styleSheets.length,scripts:d.scripts.length,iframes:d.getElementsByTagName('iframe').length,images:d.images.length,
+    fonts:d.fonts?{status:d.fonts.status,faces:d.fonts.size}:'not available',fullscreen:!!d.fullscreenElement,design_mode:d.designMode};
+  env.window={inner_size:innerWidth+' x '+innerHeight,outer_size:outerWidth+' x '+outerHeight,scroll:Math.round(scrollX)+', '+Math.round(scrollY),
+    history_length:window.history.length,origin:location.origin,secure_context:!!window.isSecureContext,cross_origin_isolated:!!window.crossOriginIsolated,
+    name:window.name,frames:window.length,opener:!!window.opener};
+  env.devices={'media devices':later.media||{},battery:later.battery||{},
+    gamepads:(function(){try{return Array.prototype.filter.call(n.getGamepads?n.getGamepads():[],Boolean).length}catch(e){return 'not available'}})(),
+    usb:'usb' in n,bluetooth:'bluetooth' in n,hid:'hid' in n,serial:'serial' in n,midi:'requestMIDIAccess' in n,xr:'xr' in n,geolocation:'geolocation' in n};
+  env.permissions=later.permissions||{};
   env.other={visibility:document.visibilityState,'page opened at':new Date(performance.timeOrigin).toISOString(),session:session};
 }
 
@@ -284,12 +391,15 @@ function finish(path,def,input,before,t0,out,err,id,parent){
     .map(function(x){return {type:x.type,path:x.path.join('.'),before:core.brief(x.before),after:core.brief(x.after)}});
   return {changes:core.diff(before,after).map(function(x){return x.type+' '+x.path.join('.')}),stateChanges:own,errors:fails,performance:d.performance};
 }
+// A call that ended leaves the list of running calls (the newest one with its name).
+function done(name){var i=running.lastIndexOf(name);if(i>=0)running.splice(i,1)}
 // via: what started a call that nothing else called: start, click, watch or test (code that calls os.call gives none).
 function call(name,input,viewPath,parent,via){
   var r=resolve(name,viewPath),top=null;
   var run=tracker.track(name,{input:input===undefined?null:input,view:viewPath||null,via:via||null},function(ctx){
     top=ctx.id;
     if(!r)throw new Error('No function '+name+(viewPath?' in '+viewPath:''));
+    running.push(name);
     sense();
     var def=r.def,before=core.stripRuntime(live),t0=performance.now();
     ctx.relate({fn:r.path,parent:parent||null});frames[ctx.id]=[];
@@ -317,9 +427,10 @@ function call(name,input,viewPath,parent,via){
       var d=core.getPath(live,r.path)||def;
       // Each declared call gets the output of its last run.
       if(d.calls)Object.keys(d.calls).forEach(function(n){var x=resolve(n,r.view);if(x&&x.def.output!==undefined)d.calls[n].output=core.clone(x.def.output)});
+      done(name);
       ctx.relate(finish(r.path,def,input,before,t0,out,null,ctx.id,parent));
       return out;
-    },function(e){if(r)ctx.relate(finish(r.path,def,input,before,t0,null,e,ctx.id,parent));throw e});
+    },function(e){done(name);if(r)ctx.relate(finish(r.path,def,input,before,t0,null,e,ctx.id,parent));throw e});
   });
   return parent?run:run.then(function(o){return afterTop(name,top).then(function(){return o})},function(e){return afterTop(name,top).then(function(){throw e})});
 }
@@ -459,6 +570,7 @@ var ready=SB?Promise.resolve().then(function(){
   store={kind:'preview',list:function(){return Promise.resolve(history.commits)},put:function(){return Promise.reject(new Error('A preview does not save'))}};
   return {preview:SB.view};
 }):tracker.track('loadState',{session:session},function(ctx){
+  running.push('loadState');
   return fetch('state.json').then(function(r){if(!r.ok)throw new Error('state.json: HTTP '+r.status);return r.text()}).then(function(seed){
     var getDb=window.claude&&claude.use?apiCall('connect to the database',"window.claude.use('db')",claude.use('db')):Promise.resolve(null);
     return getDb.then(function(d){db=d;store=d?dbStore(d):memoryStore();history.kind=store.kind;return store.list()}).then(function(list){
@@ -470,7 +582,7 @@ var ready=SB?Promise.resolve().then(function(){
       var head=history.commits[history.commits.length-1];
       live=core.parseJsonc(head.state);
       // What this load downloaded (state.json, the database calls) goes into network: these are the changes of this block.
-      var loaded=core.stripRuntime(live);sense();
+      var loaded=core.stripRuntime(live);done('loadState');sense();
       var ch=core.diff(loaded,core.stripRuntime(live));
       ctx.relate({store:history.kind,commits:history.commits.length,head:head.n,changes:ch.map(function(x){return x.type+' '+x.path.join('.')}),
         stateChanges:ch.map(function(x){return {type:x.type,path:x.path.join('.'),before:core.brief(x.before),after:core.brief(x.after)}})});

@@ -179,6 +179,21 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(st0.environment['browser data'].storages['claude.ai database'].limits, /256 KB/);
     assert.equal(typeof st0.environment.browser.cpu_cores, 'number');
     assert.equal(typeof st0.environment.browser.gpu, 'string');
+    // everything the code registered, with who added it
+    const env0 = await page.evaluate(() => window.agentOS.state.environment);
+    assert.ok(env0['event listeners']['#st-filter-input'].input.by.includes('local.init'), JSON.stringify(env0['event listeners']['#st-filter-input']));
+    assert.ok(env0['event listeners'].document.keydown.count >= 1);
+    assert.equal(env0.document.title, 'Agent OS');
+    assert.ok(env0.document.elements > 50);
+    assert.equal(typeof env0.window.history_length, 'number');
+    assert.ok('timeouts waiting' in env0.timers && 'intervals' in env0.timers);
+    assert.ok(Array.isArray(env0.connections));
+    assert.ok('geolocation' in env0.permissions && 'battery' in env0.devices);
+    // a listener added in a call is a change of that call
+    await page.evaluate(() => window.agentOS.os.call('extension.views.step-view.functions.local.filter', { text: '' }));
+    await page.evaluate(() => { window.__probe = () => {}; document.body.addEventListener('dblclick', window.__probe); });
+    await page.evaluate(() => window.agentOS.os.call('extension.views.step-view.functions.local.filter', { text: '' }));
+    assert.deepEqual(await page.evaluate(() => window.agentOS.state.environment['event listeners'].body.dblclick), { count: 1, by: ['the page (no call)'] });
     // its State changes: the same view as the other blocks, with which function changed what
     await page.waitForFunction(() => /changes? in the state, made by /.test(document.querySelector('#tl-detail').textContent));
     assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"network"/);
@@ -532,9 +547,13 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].items.some(i => i.name === 'loadNewerVersion')), null, { timeout: 5000 });
     const log = await page.evaluate(() => Object.entries(window.__docs).find(([k]) => k.startsWith('calls/'))[1]);
     const names = new Set(log.items.map(i => i.name));
-    // (the log keeps the newest 400 calls: after that many, the first ones, like loadState, are not in it)
-    assert.ok(log.count <= 400 ? names.has('loadState') : log.items.length === 400, 'loadState or 400 items');
-    for (const n of ['loadNewerVersion', 'extension.functions.render', 'local.open.state-view', 'local.save', 'local.toggle-changes', 'local.step', 'local.edit', 'local.refresh', 'local.open-viewer', 'local.close-viewer', 'runTest']) assert.ok(names.has(n), n);
+    // (the log keeps the newest calls: at most 400, and at most 240 KB; the first ones, like loadState, can be cut)
+    assert.ok(names.has('loadState') || log.items.length < log.count, 'loadState, or a log that was cut');
+    assert.ok(JSON.stringify(log).length <= 240000);
+    // the log is the newest calls of the page, in order, without a gap
+    const all = await page.evaluate(() => window.agentOS.calls.map(c => c.id));
+    assert.deepEqual(log.items.map(i => i.id), all.slice(all.indexOf(log.items[0].id), all.indexOf(log.items[0].id) + log.items.length));
+    for (const n of ['loadNewerVersion', 'extension.functions.render', 'local.refresh']) assert.ok(names.has(n), n);
     assert.ok(log.items.every(i => i.ok && i.at && typeof i.ms === 'number'), JSON.stringify(log.items.filter(i => !i.ok).slice(0, 3)));
 
     // the Reload button of the timeline: the page loads again, the timeline opens and replays from the first step

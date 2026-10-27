@@ -102,9 +102,10 @@
 4. Click an Agent run block. It opens on Details:
    - The chips: the agent, the session, the run, the start and end time, the version that the run made, the context at the start and at the end, the cached part of the context, and whether the session was compacted.
    - Timeline (Agent run): the start card, then each step from left to right. Each step is in the lane of the agent that did it: the main agent or a subagent. A step shows what it did (for example "read index.html", "create scripts/run-log.js"), why, its time and the context at its end.
+   - Click a step. Under the timeline, you see only this step: its lane, its time, its context, what it did (each item with its kind), why, and its files as a tree. Click the step again to see the whole run.
    - Next to it: MCP use, Skill use, Subagents and Workflow, each with how many times and why.
    - Details: what started the session, the run, the workflow, the subagents and the skills, then the context sizes.
-   - Files: only the files that the agent read (they went into its context), created, updated or deleted. Each file has its size in tokens, "in the cached context" when it is in the cached part of the context at the end, and why the agent used it. Click read, created, updated or deleted to see only those files.
+   - Files, as a tree of folders: only the files that the agent read (they went into its context), created, updated or deleted, in the chosen step or in the whole run. Each file has its size in tokens, "in the cached context" when it is in the cached part of the context at the end, and why the agent used it. Click read, created, updated or deleted to see only those files.
 5. State changes of an Agent run: the differences between the version before the run and the version that the run made, if this page has both versions.
 
 ### Network and environment

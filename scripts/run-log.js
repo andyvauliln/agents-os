@@ -121,8 +121,33 @@ const pathsIn = cmd => {
   }
   return Array.from(new Set(out));
 };
-const add = (p, action, tokens, at) => {
+// Shell commands that change files: a python script that writes p = '...' or open('...', 'w'), sed -i, a redirect (>), rm. A relative
+// path is from the folder of the last "cd" before it. Redirects, sed and rm are not looked for inside a heredoc.
+const changedIn = cmd => {
+  const out = [], abs = (p, at) => {
+    let dir = null, m;
+    const cd = /(?:^|&&|;|\n)\s*cd\s+(\S+)/g;
+    while ((m = cd.exec(cmd)) && m.index < at) dir = m[1];
+    return p.startsWith('/') || !dir || /^\$/.test(dir) ? p : path.join(dir, p);
+  };
+  let m;
+  const py = /\bp\s*=\s*['"]([^'"]+)['"][\s\S]*?open\(p,\s*['"]w['"]\)/g;
+  while ((m = py.exec(cmd))) out.push([abs(m[1], m.index), 'edited']);
+  const py2 = /\bopen\(\s*['"]([^'"]+)['"],\s*['"]w['"]\)/g;
+  while ((m = py2.exec(cmd))) out.push([abs(m[1], m.index), 'written']);
+  const shell = cmd.replace(/<<-?\s*'?(\w+)'?[^\n]*\n[\s\S]*?\n\1\b/g, m => ' '.repeat(m.length));
+  const sed = /\bsed -i\S*\s+(?:"[^"]*"|'[^']*')\s+([^\s;&|]+)/g;
+  while ((m = sed.exec(shell))) out.push([abs(m[1], m.index), 'edited']);
+  const to = /(?:^|\s)>{1,2}\s*([\w./-]+\.[A-Za-z]\w*)/g;
+  while ((m = to.exec(shell))) out.push([abs(m[1], m.index), 'written']);
+  const rm = /(?:^|&&|;|\n)\s*rm\s+(?:-\w+\s+)*([\w./*-]+)/g;
+  while ((m = rm.exec(shell))) out.push([abs(m[1], m.index), 'deleted']);
+  return out.filter(([p]) => !/^\$/.test(p));
+};
+const add = (p, action, tokens, at, e) => {
   const k = short(p), f = files[k] || (files[k] = { path: k, actions: [], tokens: 0 });
+  // each tool use keeps the files it read or changed, so the steps can show their own files
+  if (e) { e.files = e.files || []; if (!e.files.some(x => x.path === k && x.action === action)) e.files.push({ path: k, action, tokens: tokens || 0 }); }
   if (!f.actions.includes(action)) f.actions.push(action);
   f.tokens += tokens || 0;
   f.first = f.first || at;
@@ -132,10 +157,11 @@ events.forEach(e => {
   const ev = part.find(r => r.type === 'assistant' && (r.message.content || []).some(x => x.id === e.id));
   const input = ((ev.message.content || []).find(x => x.id === e.id) || {}).input || {};
   const tokens = Math.round(e.result_chars / 4);
-  if (e.tool === 'Read') add(input.file_path, 'read', tokens, e.at);
-  else if (e.tool === 'Write') add(input.file_path, 'written', Math.round((input.content || '').length / 4), e.at);
-  else if (e.tool === 'Edit') add(input.file_path, 'edited', 0, e.at);
-  else if (e.tool === 'Bash' && e.kind === 'read') { const ps = pathsIn(input.command || ''); ps.forEach(p => add(p, 'read', Math.round(tokens / ps.length), e.at)); }
+  if (e.tool === 'Read') add(input.file_path, 'read', tokens, e.at, e);
+  else if (e.tool === 'Write') add(input.file_path, 'written', Math.round((input.content || '').length / 4), e.at, e);
+  else if (e.tool === 'Edit') add(input.file_path, 'edited', 0, e.at, e);
+  else if (e.tool === 'Bash' && e.kind === 'read') { const ps = pathsIn(input.command || ''); ps.forEach(p => add(p, 'read', Math.round(tokens / ps.length), e.at, e)); }
+  else if (e.tool === 'Bash') changedIn(input.command || '').forEach(([p, a]) => add(p, a, 0, e.at, e));
 });
 let git = null;
 if (repo && opt.from && opt.to) {

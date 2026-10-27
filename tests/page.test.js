@@ -160,13 +160,26 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.deepEqual(await page.$$eval('#tl-detail .ar-use b', els => els.map(x => x.textContent)), ['MCP use', 'Skill use', 'Subagents', 'Workflow']);
     assert.deepEqual(await page.$$eval('#tl-detail .ar-why dt', els => els.map(x => x.textContent)),
       ['What started this session', 'What started this run', 'What started this workflow', 'What started the subagents', 'What started the skills', 'Context']);
+    // no step chosen: the files of the whole run, as a tree of folders
+    assert.match(await page.textContent('#tl-detail .ar-files .tl-detail-sub'), /^The whole run/);
     assert.equal(await page.locator('#tl-detail .ar-file').count(), lastRun.files.length);
+    assert.ok(await page.locator('#tl-detail .ar-tree > details.ar-folder > summary', { hasText: /^scripts\/$/ }).count() === 1);
     // the buttons filter the files by action
     await page.click('#tl-detail .ar-filter button[data-f="read"]');
     assert.equal(await page.getAttribute('#tl-detail .ar-filter button[data-f="read"]', 'aria-pressed'), 'true');
     assert.equal(await page.locator('#tl-detail .ar-file').count(), lastRun.files.filter(f => f.action === 'read').length);
     assert.ok((await page.$$eval('#tl-detail .ar-file .tl-chip:first-child', els => els.map(x => x.textContent))).every(t => t === 'read'));
     await page.click('#tl-detail .ar-filter button[data-f="all"]');
+    // a click on a step shows only that step: what it did, why, and its own files; a click again shows the whole run
+    const k = lastRun.steps.findIndex(x => (x.files || []).length > 1);
+    await page.click('#tl-detail .ar-card.step[data-step="' + k + '"]');
+    assert.equal(await page.textContent('#tl-detail .ar-files .tl-detail-sub'), 'Step ' + (k + 1) + ': ' + lastRun.steps[k].title);
+    assert.equal(await page.locator('#tl-detail .ar-card.step.on').count(), 1);
+    assert.equal(await page.locator('#tl-detail .ar-items li').count(), lastRun.steps[k].items.length);
+    assert.equal(await page.locator('#tl-detail .ar-file').count(), lastRun.steps[k].files.length);
+    assert.deepEqual((await page.$$eval('#tl-detail .ar-file > code', els => els.map(x => x.textContent))).sort(), lastRun.steps[k].files.map(f => f.path.split('/').pop()).sort());
+    await page.click('#tl-detail .ar-card.step[data-step="' + k + '"]');
+    assert.match(await page.textContent('#tl-detail .ar-files .tl-detail-sub'), /^The whole run/);
     // its State changes: from the version before the run to the version it made (this page has only v1)
     await page.click('#st-tab-state');
     await page.waitForFunction(() => /The run made v\d+\./.test(document.querySelector('#tl-detail').textContent));

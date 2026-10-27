@@ -64,8 +64,14 @@
 ### A block
 1. Click a block. It opens under the header, in step-view, with two tabs. It opens on State changes, or on Details when the block changed nothing in the state.
    Click the block again, or the close button (×), to hide it.
-2. State changes: the state cut down to what this block changed, in the same editor as the state view: green is added, yellow is updated (with the old value), red is deleted. Under it, a table says which function changed what. Long values are shortened.
-   The filter is the same as in the state view. Type in Filter paths to see only the paths that have the text. The switches Files, Views, Functions, Network and Environment hide those entries. The table shows only the paths that the filter shows.
+2. State changes: the state cut down to what this block changed, in the same editor as the state view: green is added, yellow is updated (with the old value), red is deleted. Under it, a table says which function changed what.
+   A long text, or a text of more than one line, shows as "...", as in the state view. Put the pointer on it to see its start. Click it to open the whole text in the viewer. Press Escape or × to close the viewer.
+   Type in Filter paths to see only the paths that have the text. The table shows only the paths that the filter shows.
+   The buttons All, Files, Views, Functions, Network and Environment choose what shows. All shows the changes as above. Each other button shows only that kind, in its own view:
+   - On the left: a tree of all of them in the state after the block (for example all the files, in their folders). A changed one has the color of its change: green added, yellow updated, red deleted. A folder that holds a change is yellow.
+   - On the right: the one that you click, in tabs. The first tab is its content: File (the text of the file), View (its html and ui-data), Function (its code and its other fields), Request (a request of network) or Value (a part of environment).
+   - When the block changed it, the Changes tab shows the change. A text (a file, html, code) shows side by side: red lines are only before, green lines are only after. An object shows cut down to what changed.
+   - The filter text keeps only the items whose path has it.
 3. Details: what happens inside the block. The function, then each function it called, in the order they started, with their input and time.
    Each function says what it does (its docs), why it ran (a click, a watch, or the function that called it) and what it changed in the state. Click its name to see its code.
    The first blocks happen before any function runs, so they show their parts instead:

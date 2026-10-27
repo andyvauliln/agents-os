@@ -210,3 +210,22 @@ test('markdown parts give the same text back, and lines know their kind', () => 
   assert.deepEqual(core.mdLine('12. go'), { mark: '12. ', text: 'go', type: 'step' });
 });
 
+
+test('filterLines shows one kind only, and can hide empty values', () => {
+  const text = JSON.stringify({ agents: { a: { files: { 'x.md': 'hi' }, connection: {} } }, extension: { views: { v: { html: '' } }, functions: { f: {} } } }, null, 2);
+  const lines = text.split('\n'), shown = hidden => lines.filter((l, i) => !hidden.some(([a, b]) => i >= a && i <= b)).join('\n');
+  // only files: the files and the objects around them
+  let s = shown(core.filterLines(text, null, '', 'files'));
+  assert.match(s, /"x\.md"/);
+  assert.doesNotMatch(s, /"extension"|"connection"/);
+  // all: nothing hidden
+  assert.deepEqual(core.filterLines(text, null, '', 'all'), []);
+  // a kind and a text together: the text inside that kind
+  s = shown(core.filterLines(text, null, 'views', 'views'));
+  assert.match(s, /"html"/);
+  assert.doesNotMatch(s, /"agents"/);
+  // empty values hide: {}, "" (the html), and the object of f
+  s = shown(core.filterLines(text, null, '', 'all', { hideEmpty: true }));
+  assert.doesNotMatch(s, /"connection"|"html"|"f"/);
+  assert.match(s, /"x\.md"/);
+});

@@ -178,26 +178,37 @@
   }
 
   // The filter of a JSON text: with q, only the entries whose path has q show, with the first and last lines of the
-  // objects around them; a kind that is off (kinds[kind] === false) hides its entries. Returns the hidden lines as [from, to].
-  function filterLines(text, map, q, kinds) {
+  // objects around them. kinds is an object (a kind that is off, kinds[kind] === false, hides its entries) or the name of
+  // one kind: then only the entries of that kind show ('all' shows all). opts.hideEmpty hides the entries with an empty
+  // value ({}, [], "" or null). Returns the hidden lines as [from, to].
+  function filterLines(text, map, q, kinds, opts) {
     map = map || spans(text);
-    q = String(q || '').trim().toLowerCase(); kinds = kinds || {};
+    q = String(q || '').trim().toLowerCase(); opts = opts || {};
+    var only = typeof kinds === 'string' && kinds !== 'all' ? kinds : null;
+    if (!kinds || typeof kinds !== 'object') kinds = {};
     var starts = [0], i;
     for (i = 0; i < text.length; i++) if (text.charCodeAt(i) === 10) starts.push(i + 1);
     function line(at) { var lo = 0, hi = starts.length - 1; while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (starts[mid] <= at) lo = mid; else hi = mid - 1; } return lo; }
     var entries = Object.keys(map).map(function (k) { return [JSON.parse(k), map[k]]; });
     var off = entries.filter(function (e) { var k = kindOf(e[0]); return k && kinds[k] === false; }).map(function (e) { return e[1]; });
+    var empty = opts.hideEmpty ? entries.filter(function (e) { return e[0].length && /^(\{\s*\}|\[\s*\]|""|null)$/.test(text.slice(e[1].start, e[1].end)); }).map(function (e) { return e[1]; }) : [];
+    var kept = only ? entries.filter(function (e) { return kindOf(e[0]) === only; }) : null;
     var root = map['[]'];
-    if (!entries.length || !root || (!q && !off.length)) return [];
-    var show = []; for (i = 0; i < starts.length; i++) show.push(!q);
+    if (!entries.length || !root || (!q && !off.length && !only && !empty.length)) return [];
+    var show = []; for (i = 0; i < starts.length; i++) show.push(!q && !only);
     show[line(root.from)] = show[line(root.end - 1)] = true;
-    if (q) entries.forEach(function (e) {
-      var p = e[0], r = e[1];
-      if (!p.length || off.some(function (o) { return r.from >= o.from && r.end <= o.end; }) || p.join('/').toLowerCase().indexOf(q) < 0) return;
+    function inside(r, list) { return list.some(function (o) { return r.from >= o.from && r.end <= o.end; }); }
+    function keep(p, r) {
       for (var l = line(r.from); l <= line(r.end - 1); l++) show[l] = true;
       for (var j = 1; j < p.length; j++) { var a = map[JSON.stringify(p.slice(0, j))]; show[line(a.from)] = show[line(a.end - 1)] = true; }
+    }
+    if (q) entries.forEach(function (e) {
+      var p = e[0], r = e[1];
+      if (!p.length || inside(r, off) || (kept && !inside(r, kept.map(function (k) { return k[1]; }))) || p.join('/').toLowerCase().indexOf(q) < 0) return;
+      keep(p, r);
     });
-    off.forEach(function (o) { for (var l = line(o.from); l <= line(o.end - 1); l++) show[l] = false; });
+    else if (kept) kept.forEach(function (e) { keep(e[0], e[1]); });
+    off.concat(empty).forEach(function (o) { for (var l = line(o.from); l <= line(o.end - 1); l++) show[l] = false; });
     var out = [], from = -1;
     for (var l = 0; l <= show.length; l++) {
       if (l < show.length && !show[l]) { if (from < 0) from = l; }

@@ -151,34 +151,53 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const runs = await page.evaluate(() => Object.keys(window.agentOS.state.agents['agent-oss'].files.runs).sort());
     const lastRun = await page.evaluate(n => JSON.parse(window.agentOS.state.agents['agent-oss'].files.runs[n]), runs[runs.length - 1]);
     await page.locator('#tl-strip .tl-step').first().click();
-    await page.waitForSelector('#tl-detail .ar-board');
+    await page.waitForSelector('#tl-detail .ar-lanes');
     assert.equal((await tl()).selected, 'run:runs/' + runs[runs.length - 1]);
     assert.equal((await stv()).tab, 'details');
     assert.equal(await page.textContent('#st-title .tl-name'), 'session ' + lastRun.session.slice(0, 8) + ' · run ' + lastRun.run);
     assert.match(await page.textContent('#tl-detail .ar-card.start'), new RegExp('Run ' + lastRun.run));
     assert.equal(await page.locator('#tl-detail .ar-card:not(.start)').count(), lastRun.steps.length);
-    assert.deepEqual(await page.$$eval('#tl-detail .ar-use b', els => els.map(x => x.textContent)), ['MCP use', 'Skill use', 'Subagents', 'Workflow']);
-    assert.deepEqual(await page.$$eval('#tl-detail .ar-why dt', els => els.map(x => x.textContent)),
-      ['What started this session', 'What started this run', 'What started this workflow', 'What started the subagents', 'What started the skills', 'Context']);
-    // no step chosen: the files of the whole run, as a tree of folders
+    // a subagent has its own lane: its name, and a line that tells what it is and which steps are its own
+    const subLanes = [...new Set(lastRun.steps.map(x => x.lane || 'main'))].filter(l => l !== 'main');
+    assert.equal(await page.locator('#tl-detail .ar-lane.sub').count(), subLanes.length);
+    if (subLanes.length) assert.match(await page.textContent('#tl-detail .ar-lane.sub .ar-branch'), new RegExp('^' + subLanes[0] + ' is a subagent'));
+    // the MCP, skill, subagent and workflow uses are in the Details
+    assert.deepEqual(await page.$$eval('#tl-detail .ar-why:not(.ar-info) dt', els => els.map(x => x.textContent)),
+      ['What started this session', 'What started this run', 'What started this workflow', 'What started the subagents', 'What started the skills', 'MCP use', 'Skill use', 'Subagents', 'Workflow', 'Context']);
+    // no step chosen: the whole run, in two tabs: Changes and Reads
     assert.match(await page.textContent('#tl-detail .ar-files .tl-detail-sub'), /^The whole run/);
-    assert.equal(await page.locator('#tl-detail .ar-file').count(), lastRun.files.length);
-    const top = lastRun.files.find(f => /^[^/]+\//.test(f.path)).path.split('/')[0];
-    assert.equal(await page.locator('#tl-detail .ar-tree > details.ar-folder > summary', { hasText: new RegExp('^' + top.replace('.', '\\.') + '/$') }).count(), 1);
-    // the buttons filter the files by action
-    await page.click('#tl-detail .ar-filter button[data-f="read"]');
-    assert.equal(await page.getAttribute('#tl-detail .ar-filter button[data-f="read"]', 'aria-pressed'), 'true');
-    assert.equal(await page.locator('#tl-detail .ar-file').count(), lastRun.files.filter(f => f.action === 'read').length);
-    assert.ok((await page.$$eval('#tl-detail .ar-file .tl-chip:first-child', els => els.map(x => x.textContent))).every(t => t === 'read'));
-    await page.click('#tl-detail .ar-filter button[data-f="all"]');
+    const changed = lastRun.files.filter(f => f.action !== 'read'), read = lastRun.files.filter(f => f.action === 'read');
+    assert.match(await page.textContent('#tl-detail .ar-tabs [data-tab="changes"]'), /^Changes \(\d+\)$/);
+    assert.equal(await page.getAttribute('#tl-detail .ar-tabs [data-tab="changes"]', 'aria-selected'), 'true');
+    // the changed files are a tree of folders under Files/
+    const top = changed.find(f => /^[^/]+\//.test(f.path)).path.split('/')[0];
+    assert.equal(await page.locator('#tl-detail .ar-kv .kv-tree summary', { hasText: new RegExp('^' + top.replace('.', '\\.') + '/$') }).count(), 1);
+    assert.ok(await page.locator('#tl-detail .ar-kv .kv-item.ar-item').count() >= new Set(changed.map(f => f.path)).size);
+    // the buttons show only what the main agent, a subagent or an MCP call did
+    assert.equal(await page.getAttribute('#tl-detail .ar-by [data-by="all"]', 'aria-pressed'), 'true');
+    if (subLanes.length) {
+      await page.click('#tl-detail .ar-by [data-by="subagent"]');
+      assert.equal(await page.getAttribute('#tl-detail .ar-by [data-by="subagent"]', 'aria-pressed'), 'true');
+      assert.ok((await page.$$eval('#tl-detail .ar-kv .kv-item', els => els.map(x => x.querySelector('.src') ? 1 : 0))).every(Boolean));
+      await page.click('#tl-detail .ar-by [data-by="all"]');
+    }
+    // Reads: the files it read, and what came into its context
+    await page.click('#tl-detail .ar-tabs [data-tab="reads"]');
+    assert.equal(await page.getAttribute('#tl-detail .ar-tabs [data-tab="reads"]', 'aria-selected'), 'true');
+    for (const f of read.slice(0, 3)) assert.ok((await page.$$eval('#tl-detail .ar-kv .kv-item', els => els.map(x => x.title))).some(t => t.startsWith(f.path)), f.path);
+    // a click on an item shows why: who did it, in which steps
+    await page.locator('#tl-detail .ar-kv .kv-item').first().click();
+    await page.click('#tl-detail .ar-kv .kv-tabs button:has-text("Why")');
+    assert.match(await page.textContent('#tl-detail .ar-kv .kv-main .ar-info'), /By.*Steps/s);
+    await page.click('#tl-detail .ar-tabs [data-tab="changes"]');
     // a click on a step shows only that step: what it did, why, and its own files; a click again shows the whole run
-    const k = lastRun.steps.findIndex(x => (x.files || []).length > 1);
+    const k = lastRun.steps.findIndex(x => (x.files || []).filter(f => f.action !== 'read').length > 1);
     await page.click('#tl-detail .ar-card.step[data-step="' + k + '"]');
     assert.equal(await page.textContent('#tl-detail .ar-files .tl-detail-sub'), 'Step ' + (k + 1) + ': ' + lastRun.steps[k].title);
     assert.equal(await page.locator('#tl-detail .ar-card.step.on').count(), 1);
     assert.equal(await page.locator('#tl-detail .ar-items li').count(), lastRun.steps[k].items.length);
-    assert.equal(await page.locator('#tl-detail .ar-file').count(), lastRun.steps[k].files.length);
-    assert.deepEqual((await page.$$eval('#tl-detail .ar-file > code', els => els.map(x => x.textContent))).sort(), lastRun.steps[k].files.map(f => f.path.split('/').pop()).sort());
+    const own = lastRun.steps[k].files.filter(f => f.action !== 'read');
+    assert.deepEqual((await page.$$eval('#tl-detail .ar-kv .kv-item', els => els.map(x => x.title))).filter(t => !t.startsWith('mcp ') && / \((created|updated|deleted)\)$/.test(t)).map(t => t.replace(/ \(\w+\)$/, '')).sort(), [...new Set(own.map(f => f.path))].sort());
     await page.click('#tl-detail .ar-card.step[data-step="' + k + '"]');
     assert.match(await page.textContent('#tl-detail .ar-files .tl-detail-sub'), /^The whole run/);
     // its State changes: from the version before the run to the version it made (this page has only v1)
@@ -380,18 +399,24 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].state_open), true);
     assert.equal(await page.textContent('#path'), 'extension/views/state-view');
     assert.match(await page.textContent('#pos'), /^v1 (just now|\d+ min ago)$/);
-    // the top bar has only icon buttons and the filter; the version, the path and the status are in the bottom bar
-    assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar .sv-group button')].filter(b => b.textContent.trim()).length), 0);
+    // the top bar: the kind buttons and Changes on the left, the filter and Show empty, then icon buttons, older and newer at the end
+    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-switches button', els => els.map(b => b.textContent.trim())), ['All', 'Files', 'Views', 'Functions', 'Changes']);
+    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-right button', els => els.map(b => b.id)), ['collapse', 'save', 'older', 'newer']);
+    assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar #sv-right button')].filter(b => b.textContent.trim()).length), 0);
     assert.equal(await page.locator('#state-view .sv-foot #pos').count(), 1);
     assert.equal(await page.locator('#state-view .sv-bar #path').count(), 0);
     // the filter shows only the paths that have the text; a switch hides files, views or functions
     const shownText = () => page.evaluate(() => [...document.querySelectorAll('#sv-editor .CodeMirror-line')].map(l => l.textContent).join('\n'));
     const hiddenMarks = () => page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().filter(m => m.replacedWith && m.replacedWith.classList.contains('sv-hidden')).length);
-    // (the state tests left some switches off)
-    for (const kind of ['files', 'views', 'functions']) {
-      if (await page.evaluate(k => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds[k], kind)) continue;
-      await page.click(`#sv-switches [data-input*="${kind}"]`);
-      await page.waitForFunction(k => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds[k], kind);
+    const svd = () => page.evaluate(() => window.agentOS.state.extension.views['state-view']['ui-data']);
+    // (the state tests left another kind on, and Show empty off)
+    if ((await svd()).filter_kind !== 'all') {
+      await page.click('#sv-switches [data-input*="all"]');
+      await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kind === 'all');
+    }
+    if (!(await svd()).show_empty) {
+      await page.click('#sv-empty');
+      await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].show_empty);
     }
     // (and the filter text)
     await page.fill('#sv-filter-input', '');
@@ -406,22 +431,34 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(shown, /"render-steps\.md"/);
     assert.doesNotMatch(shown, /"extension"/);
     assert.match(await page.textContent('#sv-editor .sv-hidden'), /^⋯ \d+ lines?$/);
-    // files off: the match is in a file, so it hides
-    await page.click('#sv-switches [data-input*="files"]');
-    await page.waitForFunction(() => !window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds.files);
-    assert.equal(await page.getAttribute('#sv-switches [data-input*="files"]', 'aria-checked'), 'false');
+    // Functions: only functions show, so the match in a file hides
+    await page.click('#sv-switches [data-input*="functions"]');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kind === 'functions');
+    assert.equal(await page.getAttribute('#sv-switches [data-input*="functions"]', 'aria-pressed'), 'true');
+    assert.equal(await page.getAttribute('#sv-switches [data-input*="all"]', 'aria-pressed'), 'false');
     assert.doesNotMatch(await shownText(), /render-steps/);
-    await page.click('#sv-switches [data-input*="files"]');
-    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds.files);
     await page.press('#sv-filter-input', 'Escape');
     await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter === '');
+    // without text, Functions shows only the functions objects; Files only the files
+    shown = await shownText();
+    assert.match(shown, /"local\.init"/);
+    assert.doesNotMatch(shown, /^ {8}"ui-data": \{|"render-steps\.md"/m);
+    await page.click('#sv-switches [data-input*="files"]');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kind === 'files');
+    shown = await shownText();
+    assert.match(shown, /"render-steps\.md"/);
+    assert.doesNotMatch(shown, /"local\.init"/);
+    await page.click('#sv-switches [data-input*="all"]');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kind === 'all');
     assert.equal(await hiddenMarks(), 0);
-    // without text, functions off hides every functions object
-    await page.click('#sv-switches [data-input*="functions"]');
-    await page.waitForFunction(() => !window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds.functions);
-    assert.ok(await hiddenMarks() > 0);
-    await page.click('#sv-switches [data-input*="functions"]');
-    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kinds.functions);
+    // Show empty off hides the entries with an empty value ({} here)
+    assert.match(await shownText(), /"connection": \{\}/);
+    await page.click('#sv-empty');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].show_empty === false);
+    assert.equal(await page.isChecked('#sv-empty'), false);
+    assert.doesNotMatch(await shownText(), /"connection": \{\}/);
+    await page.click('#sv-empty');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].show_empty);
     assert.equal(await hiddenMarks(), 0);
 
     // the editor follows the live state: ui-data and runtime fills show up, comments stay

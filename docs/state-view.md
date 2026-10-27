@@ -14,8 +14,11 @@
 1. Type in the filter at the top of the state view.
 2. The editor shows only the entries whose path has the text, with the first and last lines of the objects around them.
 3. The other lines fold into "⋯ N lines". You can still edit the lines that show.
-4. Turn a switch off to hide a kind: Files, Views or Functions. This works with or without text.
-5. Push Escape to clear the filter.
+4. Click Files, Views or Functions to see only that kind. Click All to see all. This works with or without text.
+5. Click Changes to see only what changed in the version on the screen.
+6. Clear Show empty to hide the entries with an empty value: {}, [], "" or null.
+7. Push Escape to clear the filter.
+- Older and newer (the arrows) are at the right end of the bar.
 - The version, the path and the status are in the bar at the bottom of the state view.
 
 ## Look at older versions

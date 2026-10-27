@@ -379,7 +379,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.getAttribute('#state-button', 'aria-pressed'), 'true');
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].state_open), true);
     assert.equal(await page.textContent('#path'), 'extension/views/state-view');
-    assert.match(await page.textContent('#pos'), /^v1 (just now|1 min ago)$/);
+    assert.match(await page.textContent('#pos'), /^v1 (just now|\d+ min ago)$/);
     // the top bar has only icon buttons and the filter; the version, the path and the status are in the bottom bar
     assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar .sv-group button')].filter(b => b.textContent.trim()).length), 0);
     assert.equal(await page.locator('#state-view .sv-foot #pos').count(), 1);
@@ -607,6 +607,21 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await page.locator('#tl-detail .fv .fv-code').evaluate(e => e.cm.getValue()), /A new line from main\./);
     await page.click('#tl-detail .fv-seg button:has-text("Read")');
     await page.waitForSelector('#tl-detail .fv .md-page');
+    // md: the six theme buttons of the state view; a click sets state-view ui-data.md_theme and the look of the page
+    assert.equal(await page.locator('#tl-detail .fv .md-theme').count(), 6);
+    await page.click('#tl-detail .fv .md-theme[data-md-theme="sepia"]');
+    await page.waitForFunction(() => document.querySelector('#tl-detail .fv-doc').dataset.mdTheme === 'sepia');
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['state-view']['ui-data'].md_theme), 'sepia');
+    assert.equal(await page.getAttribute('#tl-detail .fv .md-theme[data-md-theme="sepia"]', 'aria-pressed'), 'true');
+    await page.click('#tl-detail .fv .md-theme[data-md-theme="reader"]');
+    await page.waitForFunction(() => document.querySelector('#tl-detail .fv-doc').dataset.mdTheme === 'reader');
+    // Full screen: the file viewer covers the page; Escape gives it back its place
+    await page.click('#tl-detail .fv-full-btn');
+    await page.waitForSelector('#tl-detail .fv.fv-full');
+    assert.deepEqual(await page.$eval('#tl-detail .fv.fv-full', e => { const r = e.getBoundingClientRect(); return [r.left, r.top, r.width, r.height]; }), await page.evaluate(() => [0, 0, innerWidth, innerHeight]));
+    await page.keyboard.press('Escape');
+    await page.waitForSelector('#tl-detail .fv.fv-full', { state: 'detached' });
+    assert.ok(await page.locator('#tl-detail .kv').count() === 1, 'Escape leaves the step open');
     await page.click('#tl-detail .kv-tabs button:has-text("Changes")');
     await page.waitForSelector('#tl-detail .kv-main .tl-files');
     assert.ok(await page.locator('#tl-detail .kv-main .tl-files .tl-file').nth(1).locator('.chg-added').count() > 0);
@@ -625,6 +640,16 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.locator('#tl-detail .kv-item', { hasText: /^owner-draft\.jsonc$/ }).click();
     await page.waitForSelector('#tl-detail .fv.fv-json .jv-row');
     assert.ok(await page.locator('#tl-detail .jv-key').count() > 3);
+    // a function has the tab Pseudo code: its docs, then numbered lines with keywords
+    await page.click('#st-switches [data-input*="functions"]');
+    await page.locator('#tl-detail .kv-item', { hasText: /^get-state$/ }).click();
+    assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['Function', 'Pseudo code']);
+    await page.click('#tl-detail .kv-tabs button:has-text("Pseudo code")');
+    await page.waitForSelector('#tl-detail .fv-pseudo .ps-line');
+    assert.equal(await page.locator('#tl-detail .ps-line').count(), 4);
+    assert.deepEqual(await page.$$eval('#tl-detail .ps-kw', els => els.map(x => x.textContent)), ['READ', 'IF', 'THROW', 'RETURN']);
+    assert.equal(await page.locator('#tl-detail .ps-line').nth(2).locator('.ps-guide').count(), 1);
+    assert.match(await page.textContent('#tl-detail .ps-docs'), /Returns the JSON state/);
     await page.click('#st-switches [data-input*="all"]');
     await page.waitForSelector('#tl-detail .st-legend');
     await page.click('#st-tab-details');

@@ -70,10 +70,12 @@
    The buttons All, Files, Views, Functions, Network and Environment choose what shows. All shows the changes as above. Each other button shows only that kind, in its own view:
    - On the left: a tree of all of them in the state after the block (for example all the files, in their folders). A changed one has the color of its change: green added, yellow updated, red deleted. A folder that holds a change is yellow.
    - On the right: the one that you click, in tabs. The first tab is its content: File (the text of the file), View (its html and ui-data), Function (its code and its other fields), Request (a request of network) or Value (a part of environment).
+   - A function also has the Pseudo code tab: its docs, then what its code does, step by step. Each line has a number. The keywords have colors: IF, ELSE and FOR EACH (the flow) are purple, CALL is blue, SET, READ, DRAW and the other actions are green, RETURN and THROW are red. A line inside a step is indented, with a guide line.
    - When the block changed it, the Changes tab shows the change. A text (a file, html, code) shows side by side: red lines are only before, green lines are only after. An object shows cut down to what changed.
    - The filter text keeps only the items whose path has it.
-   - A file shows in the file viewer for its kind. The head has a badge for the kind (JS, HTML, CSS, JSON, MD, PY), the name, the language, the lines, the size, the tokens (about) and Copy.
-     - md: reads as a page, with the look and the theme of the md viewer of the state view. Contents on the left lists the headings: click one to go to it. Source shows the text.
+   - A file shows in the file viewer for its kind. The head has a badge for the kind (JS, HTML, CSS, JSON, MD, PY), the name, the language, the lines, the size, the tokens (about), Copy and Full screen.
+     - Full screen: the file viewer covers the page. Click Exit full screen or push Escape to go back.
+     - md: reads as a page, with the look and the theme of the md viewer of the state view. Contents on the left lists the headings: click one to go to it. The "Aa" buttons choose the theme: Reader, White, Black, Sepia, Night or Mono. The theme stays in state-view ui-data.md_theme, so the md viewer of the state view uses it too. Source shows the text.
      - json: a tree. Click an object or a list to open or close it. The first two levels are open. Find opens the parts that have the text and marks them. Open all, Close all. Source shows the text.
      - Code (js, html, css, python and more): the outline on the left (functions, classes and constants; ids, scripts and styles; selectors), each with its line. Click one to go to the line. Find marks every match: Enter goes to the next one, Shift+Enter to the one before. Wrap wraps long lines.
    - A click on "..." opens the text in the same file viewer.

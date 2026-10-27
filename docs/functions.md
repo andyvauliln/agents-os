@@ -7,6 +7,7 @@
 - tests: the checks for the function.
 - expected-state-change: the parts of the state that the function can change, and how.
 - docs: a short text that tells what the function does.
+- pseudo: what the code does, step by step, in short lines with keywords (SET, READ, IF, ELSE, FOR EACH, CALL, DRAW, WATCH, WAIT, RETURN, THROW). A line inside a step starts with 2 more spaces. When you change the code, change the pseudo code too.
 - performance: the time of the last run, the shortest and longest time, and the number of runs. The unit is milliseconds.
 - code: the function as JavaScript, with its name and its parameters.
 - calls: the functions that this function calls, with their input and their last output.
@@ -23,6 +24,7 @@
   },
   "expected-state-change": {},
   "docs": "Returns the JSON state: all of it, or the part at path (for example extension.views.header-view).",
+  "pseudo": "READ the state at path (all the state when there is no path)\nIF nothing is at path\n  THROW \"Nothing at <path>\"\nRETURN a copy of the value",
   "performance": { "last": 0.1, "min": 0.1, "max": 0.4, "count": 3 },
   "code": "import os from 'os';\n\nasync function getState({ path }) { ... }",
   "calls": {},

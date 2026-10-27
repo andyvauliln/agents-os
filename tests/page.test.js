@@ -112,11 +112,11 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.timeline-view' }));
     // (and no block chosen: the tests chose some)
     await page.evaluate(() => window.agentOS.os.call('extension.views.step-view.functions.local.close', {}));
-    // (and the filter of State changes back to empty, every switch on: the tests changed them)
+    // (and the filter of State changes back to empty, on All: the tests changed them)
     await page.evaluate(async () => {
-      const os = window.agentOS.os, d = os.get('extension.views.step-view.ui-data');
+      const os = window.agentOS.os;
       await os.call('extension.views.step-view.functions.local.filter', { text: '' });
-      for (const k of Object.keys(d.filter_kinds)) if (!d.filter_kinds[k]) await os.call('extension.views.step-view.functions.local.filter-kind', { kind: k });
+      await os.call('extension.views.step-view.functions.local.filter-kind', { kind: 'all' });
     });
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.step-view' }));
 
@@ -245,13 +245,23 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.ok((await page.$$eval('#tl-detail .tl-table tr', rows => rows.slice(1).map(r => r.textContent))).every(t => t.includes('state-core')));
     await page.fill('#st-filter-input', '');
     await page.waitForFunction(() => window.agentOS.state.extension.views['step-view']['ui-data'].filter === '');
+    // buttons, not switches: one kind shows in its own view, a tree of all of them on the left, the chosen one on the right
+    assert.deepEqual(await page.$$eval('#st-switches button', els => els.map(x => x.textContent.trim())), ['All', 'Files', 'Views', 'Functions', 'Network', 'Environment']);
     await page.click('#st-switches [data-input*="environment"]');
-    await page.waitForSelector('#st-switches [data-input*="environment"][aria-checked="false"]');
-    // (the editor draws only the lines in sight: the fold is asked from CodeMirror)
-    await page.waitForFunction(() => document.querySelector('#tl-detail .tl-code').cm.getAllMarks().some(m => m.collapsed && m.type === 'range'));
-    assert.ok(!/environment\./.test(await page.textContent('#tl-detail .tl-table')));
-    await page.click('#st-switches [data-input*="environment"]');
-    await page.waitForSelector('#st-switches [data-input*="environment"][aria-checked="true"]');
+    await page.waitForSelector('#st-switches [data-input*="environment"][aria-pressed="true"]');
+    assert.equal((await stv()).filter_kind, 'environment');
+    await page.waitForSelector('#tl-detail .kv .kv-tree .kv-item');
+    assert.ok((await page.$$eval('#tl-detail .kv-item', els => els.map(x => x.textContent))).includes('event listeners'));
+    // a changed item opens first, on its Value; Changes shows what changed in it
+    assert.ok(await page.locator('#tl-detail .kv-item.on.updated, #tl-detail .kv-item.on.added').count() === 1);
+    assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['Value', 'Changes']);
+    await page.click('#tl-detail .kv-tabs button:has-text("Changes")');
+    await page.waitForSelector('#tl-detail .kv-main .st-legend');
+    await page.locator('#tl-detail .kv-item', { hasText: /^document$/ }).click();
+    assert.match(await page.textContent('#tl-detail .kv-head'), /^environment\.document/);
+    await page.click('#st-switches [data-input*="all"]');
+    await page.waitForSelector('#st-switches [data-input*="all"][aria-pressed="true"]');
+    await page.waitForSelector('#tl-detail .st-legend');
     // updated values show the old value, as in the state view
     assert.ok(await page.$('#tl-detail .tl-code .was'));
 
@@ -572,6 +582,29 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForSelector('#tl-detail .st-legend');
     assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"from_elsewhere": true/);
     assert.match(await page.textContent('#tl-detail'), /from v3 to v4/);
+    // a long text shows as "...", as in the state view: a click opens it in the viewer
+    const long = page.locator('#tl-detail .tl-code .long').first();
+    await long.waitFor();
+    await long.dispatchEvent('mousedown');
+    await page.waitForSelector('.tl-viewer .tl-code');
+    assert.ok((await page.locator('.tl-viewer .tl-code').evaluate(e => e.cm.getValue())).length > 90);
+    await page.keyboard.press('Escape');
+    await page.waitForSelector('.tl-viewer', { state: 'detached' });
+    // Files: the tree of all the files on the left; the changed file opens first, with File and Changes tabs
+    await page.click('#st-switches [data-input*="files"]');
+    await page.waitForSelector('#tl-detail .kv-tree');
+    assert.ok(await page.locator('#tl-detail .kv-tree summary', { hasText: /^docs\/$/ }).count() === 1);
+    assert.equal(await page.textContent('#tl-detail .kv-item.on'), 'state-view.md');
+    assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['File', 'Changes']);
+    assert.match(await page.locator('#tl-detail .kv-main .tl-code').first().evaluate(e => e.cm.getValue()), /A new line from main\./);
+    await page.click('#tl-detail .kv-tabs button:has-text("Changes")');
+    await page.waitForSelector('#tl-detail .kv-main .tl-files');
+    assert.ok(await page.locator('#tl-detail .kv-main .tl-files .tl-file').nth(1).locator('.chg-added').count() > 0);
+    // a file the block did not change has only its File tab
+    await page.locator('#tl-detail .kv-item', { hasText: /^index\.html$/ }).click();
+    assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['File']);
+    await page.click('#st-switches [data-input*="all"]');
+    await page.waitForSelector('#tl-detail .st-legend');
     await page.click('#st-tab-details');
     await page.waitForSelector('#tl-detail .tl-explain');
     assert.match(await page.textContent('#tl-detail .tl-part'), /git commit 0123456 \(Add a line\)/);

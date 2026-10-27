@@ -587,8 +587,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const long = page.locator('#tl-detail .tl-code .long').first();
     await long.waitFor();
     await long.dispatchEvent('mousedown');
-    await page.waitForSelector('.tl-viewer .tl-code');
-    assert.ok((await page.locator('.tl-viewer .tl-code').evaluate(e => e.cm.getValue())).length > 90);
+    // (the viewer is the file viewer: a file shows by its kind, with its size)
+    await page.waitForSelector('.tl-viewer .fv .fv-body');
+    assert.match(await page.textContent('.tl-viewer .fv-title span'), /\d+ lines? · [\d.]+ KB/);
     await page.keyboard.press('Escape');
     await page.waitForSelector('.tl-viewer', { state: 'detached' });
     // Files: the tree of all the files on the left; the changed file opens first, with File and Changes tabs
@@ -597,13 +598,33 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.ok(await page.locator('#tl-detail .kv-tree summary', { hasText: /^docs\/$/ }).count() === 1);
     assert.equal(await page.textContent('#tl-detail .kv-item.on'), 'state-view.md');
     assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['File', 'Changes']);
-    assert.match(await page.locator('#tl-detail .kv-main .tl-code').first().evaluate(e => e.cm.getValue()), /A new line from main\./);
+    // the file viewer: an md file reads as a page with its contents on the left; Source shows its text
+    await page.waitForSelector('#tl-detail .fv.fv-md .md-page');
+    assert.match(await page.textContent('#tl-detail .fv .md-page'), /A new line from main\./);
+    assert.equal(await page.textContent('#tl-detail .fv-badge'), 'MD');
+    assert.ok(await page.locator('#tl-detail .fv-side .fv-sym').count() >= 3);
+    await page.click('#tl-detail .fv-seg button:has-text("Source")');
+    assert.match(await page.locator('#tl-detail .fv .fv-code').evaluate(e => e.cm.getValue()), /A new line from main\./);
+    await page.click('#tl-detail .fv-seg button:has-text("Read")');
+    await page.waitForSelector('#tl-detail .fv .md-page');
     await page.click('#tl-detail .kv-tabs button:has-text("Changes")');
     await page.waitForSelector('#tl-detail .kv-main .tl-files');
     assert.ok(await page.locator('#tl-detail .kv-main .tl-files .tl-file').nth(1).locator('.chg-added').count() > 0);
     // a file the block did not change has only its File tab
     await page.locator('#tl-detail .kv-item', { hasText: /^index\.html$/ }).click();
     assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['File']);
+    // code has its outline (here the ids and scripts of index.html); a click on it goes to the line; Find marks the matches
+    await page.waitForSelector('#tl-detail .fv.fv-html .fv-side .fv-sym');
+    assert.ok((await page.$$eval('#tl-detail .fv-sym-name', els => els.map(x => x.textContent))).includes('div#index-view'));
+    await page.locator('#tl-detail .fv-sym', { hasText: 'div#index-view' }).first().click();
+    await page.fill('#tl-detail .fv-find', 'agentOS');
+    assert.match(await page.textContent('#tl-detail .fv-count'), /^\d+ match/);
+    await page.press('#tl-detail .fv-find', 'Enter');
+    assert.match(await page.textContent('#tl-detail .fv-count'), /^1 of \d+/);
+    // a json file is a tree
+    await page.locator('#tl-detail .kv-item', { hasText: /^owner-draft\.jsonc$/ }).click();
+    await page.waitForSelector('#tl-detail .fv.fv-json .jv-row');
+    assert.ok(await page.locator('#tl-detail .jv-key').count() > 3);
     await page.click('#st-switches [data-input*="all"]');
     await page.waitForSelector('#tl-detail .st-legend');
     await page.click('#st-tab-details');

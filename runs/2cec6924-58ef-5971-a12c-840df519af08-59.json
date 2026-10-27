@@ -1,0 +1,851 @@
+{
+ "session": "2cec6924-58ef-5971-a12c-840df519af08",
+ "run": 59,
+ "runs_in_session": 59,
+ "agent": "Claude Code (main agent)",
+ "title": "Add the record button and select mode",
+ "started": "2026-10-27T20:31:35.354Z",
+ "ended": "2026-10-27T20:51:04.086Z",
+ "version": 35,
+ "git": {
+  "from": "323deae",
+  "to": "ac50fe6"
+ },
+ "started_by": {
+  "session": {
+   "who": "the coordinator (a relay)",
+   "words": "Reading of the ask: (1) set up a workspace with a git repo for this project's work. No repos are attached yet; check list_repos for a suitable one (e.g. agent_os/agents_os). If none exists, init a local git repo in the workspace and ask Andrei to create a GitHub repo so you can attach and push. (2) Publish an HTML artifact that's otherwise empty and holds the user's JSON, exactly as given in the m",
+   "at": "2026-10-24T18:17:55.197Z",
+   "why": "The session started on 2026-10-24. Its goal is to build the Agent OS page. The page is an artifact. It runs from its JSON state."
+  },
+  "run": {
+   "who": "Andrei (a message)",
+   "words": "add on the screen fixed bottom right recoding button bottom one click recording, two click video recording, two times arrow up also start recoring and two arrow up and arrouw down at the same time video recording, when recording started show change this icon to stop and show timer somewhere in a header, also when recording start i am in a select mode and can select any block and view when selected show this element path",
+   "at": "2026-10-27T20:31:35.354Z",
+   "why": "Andrei asked for a record button at the bottom right of the page. One click or two arrow-up keys record audio. Two clicks or arrow-up with arrow-down record video. While it records, the button shows stop, the header shows a timer, and Andrei can select a block or a view to see its element path. The run had to make this in version 35."
+  },
+  "workflow": null,
+  "subagents": [
+   {
+    "name": "run-recorder (general-purpose)",
+    "why": "The main agent started it at the end of the run. It records this run in runs/<session>-<run>.json from the session log. The timeline shows this file as an Agent run block."
+   }
+  ],
+  "skills": [
+   {
+    "name": "artifact-capabilities",
+    "why": "The agent loaded it at the start. It had to know if a page may use the camera, the microphone or the screen, and how a page gives a file to the viewer."
+   }
+  ]
+ },
+ "context": {
+  "at_start": 268626,
+  "at_end": 360340,
+  "peak": 360340,
+  "cached_at_end": 358711,
+  "output_tokens": 48174,
+  "requests": 41,
+  "compacted": false
+ },
+ "steps": [
+  {
+   "title": "Answer Andrei and check what a page may record",
+   "lane": "main",
+   "from": "2026-10-27T20:31:35.354Z",
+   "to": "2026-10-27T20:32:03.726Z",
+   "items": [
+    {
+     "text": "mcp hearthbot post_message: a short first answer to Andrei",
+     "kind": "mcp"
+    },
+    {
+     "text": "load the skill artifact-capabilities",
+     "kind": "skill"
+    },
+    {
+     "text": "search the capability type definitions for camera, microphone, screen and media: no such capability on this contract",
+     "kind": "search"
+    },
+    {
+     "text": "search index.html for microphone, display-capture and askLater",
+     "kind": "search"
+    },
+    {
+     "text": "read state.json (environment: permissions and devices)",
+     "kind": "read"
+    }
+   ],
+   "why": "Andrei asked for audio and video recording on the page. The agent had to know if the page has a capability for the camera, the microphone or the screen. There is none, so the page must use getUserMedia and getDisplayMedia of the browser.",
+   "context_tokens": 283604,
+   "cached_tokens": 283178,
+   "files": [
+    {
+     "path": "index.html",
+     "action": "read"
+    },
+    {
+     "path": "state.json",
+     "action": "read"
+    }
+   ]
+  },
+  {
+   "title": "Read the header, index-view and step-view code",
+   "lane": "main",
+   "from": "2026-10-27T20:32:35.464Z",
+   "to": "2026-10-27T20:33:51.000Z",
+   "items": [
+    {
+     "text": "read scratchpad/gen/make_state.py (index_html, header_html, INDEX_INIT, HEADER_INIT, ST_INIT, ST_CLOSE, ST_REFRESH)",
+     "kind": "read"
+    },
+    {
+     "text": "read tests/state-core.test.js (the test: every function is complete)",
+     "kind": "read"
+    },
+    {
+     "text": "read index.html (render, lines 540 to 600)",
+     "kind": "read"
+    },
+    {
+     "text": "mcp hearthbot update_progress_checklist: the plan of v35",
+     "kind": "mcp"
+    },
+    {
+     "text": "read the styles, WHERE and the functions list in make_state.py",
+     "kind": "read"
+    }
+   ],
+   "why": "The new button is a new view. The agent had to know how the views, their ui-data and their functions are made, and how the tests check them.",
+   "context_tokens": 307470,
+   "cached_tokens": 305015,
+   "files": [
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "read"
+    },
+    {
+     "path": "tests/state-core.test.js",
+     "action": "read"
+    },
+    {
+     "path": "index.html",
+     "action": "read"
+    }
+   ]
+  },
+  {
+   "title": "Read how a page saves a file",
+   "lane": "main",
+   "from": "2026-10-27T20:35:00.000Z",
+   "to": "2026-10-27T20:35:03.063Z",
+   "items": [
+    {
+     "text": "read downloads.d.ts of the skill artifact-capabilities (lines 1 to 130)",
+     "kind": "read"
+    },
+    {
+     "text": "decide: the Save file button uses the downloads capability",
+     "kind": "read"
+    }
+   ],
+   "why": "A recording must go to a file that Andrei can keep. The downloads type definitions tell how a page gives a file to the viewer.",
+   "context_tokens": 317963,
+   "cached_tokens": 308072,
+   "files": []
+  },
+  {
+   "title": "Write the recorder-view",
+   "lane": "main",
+   "from": "2026-10-27T20:36:19.661Z",
+   "to": "2026-10-27T20:36:28.494Z",
+   "items": [
+    {
+     "text": "copy make_state.py, pseudo.py and docs_part.py to the _v34 copies",
+     "kind": "create"
+    },
+    {
+     "text": "create scratchpad/edit35.py: the new view recorder-view (html; ui-data recording, started_at, selected, selections, result, error)",
+     "kind": "create"
+    },
+    {
+     "text": "add the functions local.init, local.refresh, local.start, local.stop, local.select, local.save, local.clear, with pseudo code for each",
+     "kind": "edit"
+    },
+    {
+     "text": "add the timer element #rec-timer to the header; index-view renders recorder-view",
+     "kind": "edit"
+    },
+    {
+     "text": "edit gen/pseudo.py and make_state.py: the pseudo words REMOVE and FORGET",
+     "kind": "edit"
+    },
+    {
+     "text": "edit tests/state-core.test.js for the new view",
+     "kind": "edit"
+    }
+   ],
+   "why": "Andrei asked for a fixed button at the bottom right. One click or two arrow-up keys start audio. Two clicks or arrow-up with arrow-down start video. While it records, the button shows stop, the header shows a timer, and a click on a block shows its element path.",
+   "context_tokens": 330058,
+   "cached_tokens": 318808,
+   "files": [
+    {
+     "path": "scratchpad/gen/make_state_v34.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/pseudo_v34.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/docs_part_v34.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/edit35.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/gen/pseudo.py",
+     "action": "updated"
+    },
+    {
+     "path": "tests/state-core.test.js",
+     "action": "updated"
+    }
+   ]
+  },
+  {
+   "title": "Try the recorder in a browser",
+   "lane": "main",
+   "from": "2026-10-27T20:36:48.869Z",
+   "to": "2026-10-27T20:37:38.092Z",
+   "items": [
+    {
+     "text": "create scratchpad/build35x.js from build34.js: version 35",
+     "kind": "create"
+    },
+    {
+     "text": "create scratchpad/shot35.js: fake media (a tone for the microphone, a moving canvas for the screen)",
+     "kind": "create"
+    },
+    {
+     "text": "run make_state.py, build35x.js and shot35.js: screenshots r35-*.png",
+     "kind": "run"
+    },
+    {
+     "text": "edit make_state.py: an icon selects its button, a part of a timeline block selects the block",
+     "kind": "edit"
+    },
+    {
+     "text": "read r35-select.png, r35-video.png and r35-phone.png",
+     "kind": "read"
+    }
+   ],
+   "why": "The agent cannot use a real camera or microphone here. Fake media let it see the button, the timer and the select mode in a real browser.",
+   "context_tokens": 334408,
+   "cached_tokens": 333521,
+   "files": [
+    {
+     "path": "scratchpad/build35x.js",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/shot35.js",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/c000035.json",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/realdocs35x.json",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/r35-idle.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/r35-card.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/r35-select.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/r35-video.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/r35-phone.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "updated"
+    },
+    {
+     "path": "state.json",
+     "action": "updated"
+    }
+   ]
+  },
+  {
+   "title": "Fix the select mode and the layout",
+   "lane": "main",
+   "from": "2026-10-27T20:37:47.000Z",
+   "to": "2026-10-27T20:38:22.000Z",
+   "items": [
+    {
+     "text": "read the track_timeline code in make_state.py",
+     "kind": "read"
+    },
+    {
+     "text": "edit make_state.py: find the frame again after the timeline draws itself again",
+     "kind": "edit"
+    },
+    {
+     "text": "edit make_state.py: Save file does not wrap, the label wraps",
+     "kind": "edit"
+    },
+    {
+     "text": "run make_state.py, build35x.js and shot35.js again",
+     "kind": "run"
+    },
+    {
+     "text": "read r35-select.png again",
+     "kind": "read"
+    }
+   ],
+   "why": "The screenshots showed that the frame of the selected block was lost when the timeline drew itself again. On a phone the Save file button wrapped.",
+   "context_tokens": 341298,
+   "cached_tokens": 339773,
+   "files": [
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/r35-select.png",
+     "action": "updated"
+    },
+    {
+     "path": "state.json",
+     "action": "updated"
+    }
+   ]
+  },
+  {
+   "title": "Add the recorder to the page test",
+   "lane": "main",
+   "from": "2026-10-27T20:38:37.280Z",
+   "to": "2026-10-27T20:39:20.000Z",
+   "items": [
+    {
+     "text": "read tests/page.test.js (the start, the boot test, the call list)",
+     "kind": "read"
+    },
+    {
+     "text": "edit tests/page.test.js: add fakeMedia and addInitScript(fakeMedia)",
+     "kind": "edit"
+    },
+    {
+     "text": "mcp hearthbot update_progress_checklist: the view works in the browser",
+     "kind": "mcp"
+    },
+    {
+     "text": "edit the boot call list: index-view renders header-view and recorder-view",
+     "kind": "edit"
+    },
+    {
+     "text": "run the page test (scratchpad/t35.log)",
+     "kind": "test"
+    }
+   ],
+   "why": "The page test opens the page with no real media. The test must give fake media, and it must expect the new render and init calls at boot.",
+   "context_tokens": 351552,
+   "cached_tokens": 351021,
+   "files": [
+    {
+     "path": "tests/page.test.js",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/t35.log",
+     "action": "created"
+    }
+   ]
+  },
+  {
+   "title": "Keep the recorder calls out of the timeline",
+   "lane": "main",
+   "from": "2026-10-27T20:41:56.000Z",
+   "to": "2026-10-27T20:42:06.259Z",
+   "items": [
+    {
+     "text": "read tests/page.test.js (lines 420 to 432)",
+     "kind": "read"
+    },
+    {
+     "text": "edit make_state.py: the recorder calls are timeline blocks only with Track the timeline on",
+     "kind": "edit"
+    },
+    {
+     "text": "edit gen/pseudo.py: the same rule in the pseudo code",
+     "kind": "edit"
+    },
+    {
+     "text": "run make_state.py and all tests",
+     "kind": "test"
+    }
+   ],
+   "why": "A test failed. The recorder function local.select has the same name as the timeline function. So a select in the recorder made a timeline block.",
+   "context_tokens": 352990,
+   "cached_tokens": 352514,
+   "files": [
+    {
+     "path": "tests/page.test.js",
+     "action": "read"
+    },
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/gen/pseudo.py",
+     "action": "updated"
+    },
+    {
+     "path": "state.json",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/t35.log",
+     "action": "updated"
+    }
+   ]
+  },
+  {
+   "title": "Write the docs and run the tests",
+   "lane": "main",
+   "from": "2026-10-27T20:46:10.936Z",
+   "to": "2026-10-27T20:46:30.616Z",
+   "items": [
+    {
+     "text": "mcp hearthbot update_progress_checklist: the tests pass",
+     "kind": "mcp"
+    },
+    {
+     "text": "read the sections of scratchpad/gen/docs_part.py",
+     "kind": "read"
+    },
+    {
+     "text": "edit docs_part.py: a new section \"Record\"",
+     "kind": "edit"
+    },
+    {
+     "text": "edit .claude/CLAUDE.md: the recorder-view",
+     "kind": "edit"
+    },
+    {
+     "text": "run make_state.py: state.json, docs/how-it-works.md and docs/render-steps.md",
+     "kind": "run"
+    },
+    {
+     "text": "run all tests: 23 of 23 pass",
+     "kind": "test"
+    }
+   ],
+   "why": "The docs in the state tell how the page works. A new view needs its own section, and the repo guide must name it.",
+   "context_tokens": 355673,
+   "cached_tokens": 355061,
+   "files": [
+    {
+     "path": "scratchpad/gen/docs_part.py",
+     "action": "updated"
+    },
+    {
+     "path": ".claude/CLAUDE.md",
+     "action": "updated"
+    },
+    {
+     "path": "docs/how-it-works.md",
+     "action": "updated"
+    },
+    {
+     "path": "docs/render-steps.md",
+     "action": "updated"
+    },
+    {
+     "path": "state.json",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/t35.log",
+     "action": "updated"
+    }
+   ]
+  },
+  {
+   "title": "Commit and publish version 35",
+   "lane": "main",
+   "from": "2026-10-27T20:50:30.000Z",
+   "to": "2026-10-27T20:51:04.086Z",
+   "items": [
+    {
+     "text": "run git commit: ac50fe6",
+     "kind": "run"
+    },
+    {
+     "text": "compare index.html and state-core.js with scratchpad/pub34: the same",
+     "kind": "read"
+    },
+    {
+     "text": "publish the page again with the capabilities db and downloads (Artifact tool, version 27)",
+     "kind": "publish"
+    },
+    {
+     "text": "start the subagent run-recorder",
+     "kind": "subagent"
+    },
+    {
+     "text": "mcp hearthbot update_progress_checklist: all lines done",
+     "kind": "mcp"
+    },
+    {
+     "text": "mcp hearthbot no_reply_needed: end the turn while the subagent works",
+     "kind": "mcp"
+    }
+   ],
+   "why": "The page shell did not change, but the Save file button needs the downloads capability. A publish with the capabilities db and downloads gives the page this capability.",
+   "context_tokens": 360340,
+   "cached_tokens": 358711,
+   "files": [
+    {
+     "path": "index.html",
+     "action": "read"
+    },
+    {
+     "path": "state-core.js",
+     "action": "read"
+    },
+    {
+     "path": "scratchpad/pub34/index.html",
+     "action": "read"
+    },
+    {
+     "path": "scratchpad/pub34/state-core.js",
+     "action": "read"
+    }
+   ]
+  },
+  {
+   "title": "Record the run",
+   "lane": "run-recorder",
+   "from": "2026-10-27T20:51:10.000Z",
+   "to": "2026-10-27T20:53:30.000Z",
+   "items": [
+    {
+     "text": "read .claude/agents/run-recorder.md",
+     "kind": "read"
+    },
+    {
+     "text": "run node scripts/run-log.js for run 59 (and for the parts 59 and 60 of the script)",
+     "kind": "run"
+    },
+    {
+     "text": "read the raw run data, the session log and the record of run 58",
+     "kind": "read"
+    },
+    {
+     "text": "join the two parts of the script: the first answer and the skill load are in this run",
+     "kind": "edit"
+    },
+    {
+     "text": "create runs/2cec6924-58ef-5971-a12c-840df519af08-59.json",
+     "kind": "create"
+    }
+   ],
+   "why": "The timeline shows each run from its run file. The subagent groups the tool uses into steps and writes why for each item.",
+   "context_tokens": null,
+   "cached_tokens": null,
+   "files": [
+    {
+     "path": ".claude/agents/run-recorder.md",
+     "action": "read"
+    },
+    {
+     "path": "scratchpad/run59raw.json",
+     "action": "created"
+    },
+    {
+     "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-58.json",
+     "action": "read"
+    },
+    {
+     "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-59.json",
+     "action": "created"
+    }
+   ]
+  }
+ ],
+ "uses": {
+  "mcp": [
+   {
+    "name": "hearthbot / post_message",
+    "count": 2,
+    "why": "It gave Andrei a short first answer, then sent the result of the run."
+   },
+   {
+    "name": "hearthbot / update_progress_checklist",
+    "count": 4,
+    "why": "It shows Andrei the progress checklist of version 35."
+   },
+   {
+    "name": "hearthbot / no_reply_needed",
+    "count": 1,
+    "why": "It ended the turn while the run-recorder worked."
+   }
+  ],
+  "skills": [
+   {
+    "name": "artifact-capabilities",
+    "count": 1,
+    "why": "It tells what a page may record and how a page saves a file (downloads)."
+   }
+  ],
+  "subagents": [
+   {
+    "name": "general-purpose (run-recorder)",
+    "count": 1,
+    "why": "It records this run as runs/<session>-<run>.json for the timeline."
+   }
+  ],
+  "workflows": []
+ },
+ "files": [
+  {
+   "path": ".claude/CLAUDE.md",
+   "action": "updated",
+   "tokens": 0,
+   "cached": false,
+   "why": "The repo guide now names the recorder-view and the Record section."
+  },
+  {
+   "path": ".claude/agents/run-recorder.md",
+   "action": "read",
+   "tokens": 940,
+   "cached": false,
+   "why": "The instructions of the run-recorder. The subagent read them."
+  },
+  {
+   "path": "docs/how-it-works.md",
+   "action": "updated",
+   "tokens": 0,
+   "cached": false,
+   "why": "The generator made it again with the Record section."
+  },
+  {
+   "path": "docs/render-steps.md",
+   "action": "updated",
+   "tokens": 0,
+   "cached": false,
+   "why": "The generator made it again: index-view now renders recorder-view."
+  },
+  {
+   "path": "index.html",
+   "action": "read",
+   "tokens": 2116,
+   "cached": true,
+   "why": "The page shell. The agent read how it asks for permissions and how it renders a view. It did not change."
+  },
+  {
+   "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-58.json",
+   "action": "read",
+   "tokens": 0,
+   "cached": false,
+   "why": "The record of run 58. It is the model for the format of this file."
+  },
+  {
+   "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-59.json",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "The record of this run, for the timeline."
+  },
+  {
+   "path": "scratchpad/build35x.js",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "It builds the version 35 docs for the browser check."
+  },
+  {
+   "path": "scratchpad/c000035.json",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "The state that build35x.js made for the browser check."
+  },
+  {
+   "path": "scratchpad/edit35.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "The script that adds the recorder-view, the header timer and the pseudo words."
+  },
+  {
+   "path": "scratchpad/gen/docs_part.py",
+   "action": "updated",
+   "tokens": 609,
+   "cached": true,
+   "why": "The docs of the state. It has the new section Record."
+  },
+  {
+   "path": "scratchpad/gen/docs_part_v34.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "A copy of docs_part.py before the changes of version 35."
+  },
+  {
+   "path": "scratchpad/gen/make_state.py",
+   "action": "updated",
+   "tokens": 7146,
+   "cached": true,
+   "why": "The generator of state.json. It has the new recorder-view, the header timer and the fixes."
+  },
+  {
+   "path": "scratchpad/gen/make_state_v34.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "A copy of make_state.py before the changes of version 35."
+  },
+  {
+   "path": "scratchpad/gen/pseudo.py",
+   "action": "updated",
+   "tokens": 0,
+   "cached": false,
+   "why": "The pseudo code of the functions. It has the recorder functions and the timeline rule."
+  },
+  {
+   "path": "scratchpad/gen/pseudo_v34.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "A copy of pseudo.py before the changes of version 35."
+  },
+  {
+   "path": "scratchpad/pub34/index.html",
+   "action": "read",
+   "tokens": 0,
+   "cached": false,
+   "why": "The published page shell. The agent published it again with the capabilities db and downloads."
+  },
+  {
+   "path": "scratchpad/pub34/state-core.js",
+   "action": "read",
+   "tokens": 0,
+   "cached": false,
+   "why": "The published state core. It is the same as the one in the repo."
+  },
+  {
+   "path": "scratchpad/r35-card.png",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "A screenshot of the recorder card from the browser check."
+  },
+  {
+   "path": "scratchpad/r35-idle.png",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "A screenshot of the button before a recording."
+  },
+  {
+   "path": "scratchpad/r35-phone.png",
+   "action": "created",
+   "tokens": 1600,
+   "cached": true,
+   "why": "A screenshot at phone width. The agent looked at it."
+  },
+  {
+   "path": "scratchpad/r35-select.png",
+   "action": "created",
+   "tokens": 3200,
+   "cached": true,
+   "why": "A screenshot of the select mode with an element path. The agent looked at it two times."
+  },
+  {
+   "path": "scratchpad/r35-video.png",
+   "action": "created",
+   "tokens": 1600,
+   "cached": true,
+   "why": "A screenshot of a video recording with the timer. The agent looked at it."
+  },
+  {
+   "path": "scratchpad/realdocs35x.json",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "The docs that build35x.js made for the browser check."
+  },
+  {
+   "path": "scratchpad/run59raw.json",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "The raw run data from scripts/run-log.js."
+  },
+  {
+   "path": "scratchpad/shot35.js",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "It opens the page with fake media and takes the screenshots r35-*.png."
+  },
+  {
+   "path": "scratchpad/t35.log",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "The output of the tests. The last run shows 23 of 23 pass."
+  },
+  {
+   "path": "state-core.js",
+   "action": "read",
+   "tokens": 0,
+   "cached": false,
+   "why": "The state core. The agent compared it with the published copy. It did not change."
+  },
+  {
+   "path": "state.json",
+   "action": "updated",
+   "tokens": 32,
+   "cached": true,
+   "why": "The state of the page, version 35, with the recorder-view and its functions."
+  },
+  {
+   "path": "tests/page.test.js",
+   "action": "updated",
+   "tokens": 1843,
+   "cached": true,
+   "why": "The page test gives fake media and expects the new boot calls."
+  },
+  {
+   "path": "tests/state-core.test.js",
+   "action": "updated",
+   "tokens": 162,
+   "cached": true,
+   "why": "The core test knows the new view."
+  }
+ ]
+}

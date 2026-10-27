@@ -56,7 +56,7 @@
 
 ## The timeline
 1. Click the Timeline button in the header. The timeline opens at the top of the page, above the header.
-2. It shows what happened since the page opened, as blocks in a row from left to right. The first blocks are: Network (every request and the environment), index.html runs, the runtime loads the state, the page starts.
+2. It shows what happened since the page opened, as blocks in a row from left to right. The first block is the last agent run (if the state has one). Then: Network (every request and the environment), index.html runs, the runtime loads the state, the page starts.
 3. Each next block is one call that nothing else called, for example a click on a button.
 4. Each block shows its number, the time since the page opened, the function, its time in ms and how many state changes it made.
 5. What you do in the timeline (clicks on blocks, the replay, its buttons) is not a block. Turn on the Track the timeline checkbox to add it as blocks too.
@@ -78,7 +78,7 @@
 ### The buttons of the timeline
 1. The arrow buttons show the block before and the next block.
 2. The Replay button shows the next block every 1.6 seconds. From the last block, it starts again at the first. It goes on to the newest block. With Track the timeline on, each move adds a block, so it stops at the block that was the newest when it started. It also stops when you click it again, or when you click a block.
-3. The Reload button reloads the page, so the history starts again at block 1. The timeline opens again and replays the blocks from the first one. If the state has unsaved changes, it does not reload: save them first.
+3. The Reload button reloads the page, so the history starts again at block 1. The timeline opens again and replays the blocks from the first one: the last agent run, then the page start. If the state has unsaved changes, it does not reload: save them first.
 4. The State changes button (±) hides or shows what each function changed, in the Details.
 5. The blocks button hides or shows the row of blocks.
 6. The Flows button opens the list of saved flows. Click the play button of a flow to replay only its blocks. First enter is the page opening: its first 4 blocks (index.html, runtime, loadState, the render of index-view).
@@ -91,6 +91,21 @@
 4. The timeline adds a New version block.
 5. State changes: the differences between the version that ran before and the new version. Long texts are cut.
 6. Details: where the version came from (the git commit, the request and the session), how each part worked before and how it works now, side by side, and each changed file side by side. Red lines are only in the old version. Green lines are only in the new version.
+
+### Agent runs
+1. An agent run is one request to an agent (Claude Code): from a message (of a person, the coordinator or a notification) to the next message.
+2. After each run that changes the files of main, the agent records the run in runs/<session>-<run>.json:
+   - scripts/run-log.js reads the session log (the .jsonl file of Claude Code). It makes the raw data: the requests, the context sizes, each tool use and the files.
+   - The run-recorder subagent (.claude/agents/run-recorder.md) reads the raw data. It groups the tool uses into steps and writes why for each step, use and file. It does not copy secrets or the content of files.
+   - The release puts the files of main into the state, so the run is in agents.agent-oss.files.runs.
+3. The timeline shows the last run of the state as block 1, before the page start. A new version that comes with new runs gets an Agent run block after the New version block, for each new run.
+4. Click an Agent run block. It opens on Details:
+   - The chips: the agent, the session, the run, the start and end time, the version that the run made, the context at the start and at the end, the cached part of the context, and whether the session was compacted.
+   - Timeline (Agent run): the start card, then each step from left to right. Each step is in the lane of the agent that did it: the main agent or a subagent. A step shows what it did (for example "read index.html", "create scripts/run-log.js"), why, its time and the context at its end.
+   - Next to it: MCP use, Skill use, Subagents and Workflow, each with how many times and why.
+   - Details: what started the session, the run, the workflow, the subagents and the skills, then the context sizes.
+   - Files: only the files that the agent read (they went into its context), created, updated or deleted. Each file has its size in tokens, "in the cached context" when it is in the cached part of the context at the end, and why the agent used it. Click read, created, updated or deleted to see only those files.
+5. State changes of an Agent run: the differences between the version before the run and the version that the run made, if this page has both versions.
 
 ### Network and environment
 1. The state has two parts that the runtime fills: network and environment.

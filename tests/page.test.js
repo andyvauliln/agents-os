@@ -169,8 +169,14 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.ok(st0.network.packages['codemirror.min.js'].count >= 1);
     assert.equal(st0.environment['browser data'].storages['local storage'].limit, 'about 5 MB (the usual limit of a browser)');
     assert.equal(typeof st0.environment.browser.viewport, 'string');
-    await page.waitForFunction(() => /changes? in network and environment, from the version this page loaded \(v1\) to now/.test(document.querySelector('#tl-detail').textContent));
+    assert.equal(st0.environment['browser data'].storages['claude.ai database']['versions (commits)'].documents, 1);
+    assert.match(st0.environment['browser data'].storages['claude.ai database'].limits, /256 KB/);
+    assert.equal(typeof st0.environment.browser.cpu_cores, 'number');
+    assert.equal(typeof st0.environment.browser.gpu, 'string');
+    // its State changes: the same view as the other blocks, with which function changed what
+    await page.waitForFunction(() => /changes? in the state, made by /.test(document.querySelector('#tl-detail').textContent));
     assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"network"/);
+    assert.match(await page.textContent('#tl-detail .tl-table'), /network\.scripts\.state-core\.js\.ms.*loadState/);
 
     // its Details: Network (all requests, in groups) next to Environment
     await page.click('#st-tab-details');
@@ -186,6 +192,12 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await req('state-core.js').locator('.tl-req-top').click();
     await req('state-core.js').locator('.tl-code').waitFor();
     assert.match(await req('state-core.js').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /StateCore/);
+    // a file the browser does not let the page download as text says why, with a link
+    await page.route('https://cdnjs.cloudflare.com/**/xml.min.js', route => route.request().resourceType() === 'fetch' ? route.abort() : route.fallback());
+    await req('xml.min.js').locator('.tl-req-top').click();
+    await req('xml.min.js').locator('.tl-error').waitFor();
+    assert.match(await req('xml.min.js').locator('.tl-error').textContent(), /did not let this page download this file as text.*cdnjs\.cloudflare\.com.*Open the file in a new tab/);
+    assert.match(await req('xml.min.js').locator('.tl-error a').getAttribute('href'), /^https:\/\/cdnjs\.cloudflare\.com\/.*xml\.min\.js$/);
     assert.match(await page.textContent('#tl-detail .tl-netenv .tl-panel:last-child'), /browser data \/ storages \/ local storage|storages \/ local storage \/ limit/);
     const part = name => page.locator('#tl-detail .tl-part', { has: page.locator('.tl-name', { hasText: name }) });
     await page.click('#tl-next');
@@ -445,8 +457,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(c3.state, /^[ \t]*\/\/ shared by all apps[ \t]*$/m);
     assert.doesNotThrow(() => JSON.parse(c3.state.replace(/^[ \t]*\/\/ shared by all apps[ \t]*$/m, '')));
     assert.ok(c3.paths.filter(p => !/ (network|environment)\./.test(p)).every(p => p.includes('.ui-data.')), c3.paths.join(', '));
-    const fixedSave = await page.evaluate(() => window.agentOS.calls.filter(c => c.name === 'local.save').pop());
-    assert.equal(fixedSave.output.fixed, true);
+    // the call log keeps a short form of a long output; the function's output in the state is whole
+    const fixedSave = await page.evaluate(() => window.agentOS.state.extension.views['state-view'].functions['local.save'].output);
+    assert.equal(fixedSave.fixed, true);
 
     // no function reported errors, and the editor still shows the comment after the live state synced in
     const errs = await page.evaluate(() => { const out = []; (function walk(o, p) { if (!o || typeof o !== 'object') return; if (Array.isArray(o.errors) && o.errors.length) out.push(p + ': ' + o.errors.join('; ')); Object.keys(o).forEach(k => k !== 'output' && walk(o[k], p + '.' + k)); })(window.agentOS.state, ''); return out; });

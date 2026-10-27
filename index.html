@@ -57,7 +57,11 @@ function writeCalls(){
   if(!db)return;if(callsWriting){callsAgain=true;return}
   callsWriting=true;
   var items=tracker.records.slice(-400).map(function(r){return JSON.parse(JSON.stringify(r))});
-  var log={session:session,started:items.length?items[0].at:null,count:tracker.records.length,items:items};
+  var log={session:session,started:null,count:tracker.records.length,items:items};
+  // A database document holds at most 256 KB: the oldest calls go first.
+  var size=JSON.stringify(log).length;
+  while(size>240000&&items.length>1)size-=JSON.stringify(items.shift()).length+1;
+  log.started=items.length?items[0].at:null;
   apiCall('save the call log',"db.doc('calls/"+session+"').set(log)",db.doc('calls/'+session).set(log).then(function(){return log}))
     .catch(function(){}).then(function(){callsWriting=false;if(callsAgain){callsAgain=false;writeCalls()}});
 }
@@ -84,6 +88,8 @@ function groupOf(e){
   var u=e.name.split('#')[0].split('?')[0],same=u.indexOf(location.origin)===0;
   if(e.entryType==='navigation')return 'html';
   if(same&&/\/state\.json$/.test(u))return 'state';
+  // The scripts of the claude.ai artifact page (the database, comments and others), not of this page.
+  if(same&&/\/_runtime\//.test(u))return 'claude.ai';
   if(same&&e.initiatorType==='script')return 'scripts';
   if(same)return 'file code';
   if(/fonts\.(googleapis|gstatic)\.com/.test(u)||/\.css$/.test(u)||e.initiatorType==='css'||e.initiatorType==='link')return 'styles';
@@ -95,6 +101,8 @@ function keyOf(e,g){
   if(g==='html'||u===page)return 'index.html';
   if(/fonts\.gstatic\.com/.test(u))return 'font files (fonts.gstatic.com)';
   var last=u.split('/').pop();
+  // db.zFlAA4qL.js -> db.js: the hash changes with each version of claude.ai.
+  if(g==='claude.ai')return last.replace(/\.[\w-]{6,}(\.m?js)$/,'$1');
   if(/fonts\.googleapis\.com/.test(u))return 'fonts.googleapis.com/'+last;
   return last||u;
 }
@@ -159,6 +167,34 @@ function browserName(){
   if((m=/Version\/([\d.]+).*Safari/.exec(ua)))return {name:'Safari',version:m[1]};
   return {name:'unknown',version:''};
 }
+// What the browser says once and does not change while the page is open.
+var fixed=null;
+function fixedInfo(){
+  if(fixed)return fixed;
+  var n=navigator,mq=function(q){return !!(window.matchMedia&&matchMedia(q).matches)},gpu='';
+  try{var gl=document.createElement('canvas').getContext('webgl'),x=gl&&gl.getExtension('WEBGL_debug_renderer_info');gpu=gl?(x?gl.getParameter(x.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER)):'no WebGL'}catch(e){gpu='unknown'}
+  fixed={user_agent:n.userAgent,vendor:n.vendor||'',languages:(n.languages||[]).join(', '),cookies_enabled:n.cookieEnabled,
+    do_not_track:n.doNotTrack==='1',cpu_cores:n.hardwareConcurrency||null,memory_gb:n.deviceMemory||null,touch_points:n.maxTouchPoints||0,
+    color_depth:screen.colorDepth,gpu:gpu,reduced_motion:mq('(prefers-reduced-motion: reduce)'),more_contrast:mq('(prefers-contrast: more)'),
+    wide_colors:mq('(color-gamut: p3)'),pdf_viewer:!!n.pdfViewerEnabled,automated:!!n.webdriver,secure_context:!!window.isSecureContext,
+    in_a_frame:window.top!==window.self};
+  try{if(n.userAgentData&&n.userAgentData.getHighEntropyValues)n.userAgentData.getHighEntropyValues(['architecture','bitness','model','platformVersion','fullVersionList']).then(function(h){
+    fixed.architecture=[h.architecture,h.bitness&&h.bitness+'-bit'].filter(Boolean).join(' ');fixed.platform_version=h.platformVersion||'';fixed.model=h.model||'';
+    fixed.full_versions=(h.fullVersionList||[]).filter(function(b){return !/Not.?A.?Brand/i.test(b.brand)}).map(function(b){return b.brand+' '+b.version}).join(', ');
+  },function(){})}catch(e){}
+  return fixed;
+}
+// The database of the page on claude.ai: what this page knows of it without reading more.
+var dbBytes={n:-1,bytes:0};
+function claudeDb(){
+  if(!db)return {available:false};
+  if(dbBytes.n!==history.commits.length){dbBytes.n=history.commits.length;dbBytes.bytes=history.commits.reduce(function(t,c){try{return t+JSON.stringify(c).length}catch(e){return t}},0)}
+  var log=api['save the call log'];
+  return {available:true,'versions (commits)':{documents:history.commits.length,bytes:dbBytes.bytes},
+    'call log of this page':{document:'calls/'+session,calls:tracker.records.length,bytes:log&&log.size||0},
+    'call logs of other page loads':'not counted: the page does not read them',
+    limits:'a document at most 256 KB, the database at most 100 MB and 25000 documents'};
+}
 function senseEnvironment(){
   askLater();
   var env=live.environment&&typeof live.environment==='object'?live.environment:(live.environment={}),n=navigator,bn=browserName(),cookies;
@@ -167,8 +203,11 @@ function senseEnvironment(){
     screen:screen.width+' x '+screen.height,viewport:innerWidth+' x '+innerHeight,pixel_ratio:devicePixelRatio,online:n.onLine,
     time_zone:(function(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){return ''}})(),
     dark_mode:!!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)};
+  Object.assign(env.browser,fixedInfo());
+  var c=n.connection;if(c)env.browser.connection={type:c.effectiveType||'',downlink_mbps:c.downlink,rtt_ms:c.rtt,save_data:!!c.saveData};
+  if(performance.memory)env.browser.js_memory_mb={used:Math.round(performance.memory.usedJSHeapSize/1048576),limit:Math.round(performance.memory.jsHeapSizeLimit/1048576)};
   env['browser data']={storages:{'local storage':storageOf('localStorage'),'session storage':storageOf('sessionStorage'),
-    'indexed db':later.idb||{},'cache storage':later.caches||{},cookies:cookies,'all storage of this page':later.quota||{}}};
+    'indexed db':later.idb||{},'cache storage':later.caches||{},cookies:cookies,'all storage of this page':later.quota||{},'claude.ai database':claudeDb()}};
   env['browser api']={fetch:typeof fetch==='function','performance timings':!!(window.performance&&performance.getEntriesByType),
     'gzip (CompressionStream)':typeof CompressionStream==='function','window.claude (the database)':!!(window.claude&&claude.use),
     indexedDB:!!window.indexedDB,'service workers':'serviceWorker' in n,clipboard:!!n.clipboard,'storage estimate':!!(n.storage&&n.storage.estimate)};

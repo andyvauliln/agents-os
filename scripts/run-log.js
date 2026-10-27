@@ -67,13 +67,15 @@ part.forEach(r => {
   const u = r.message && r.message.usage, id = r.requestId || r.message.id;
   if (!u || seen.has(id)) return;
   seen.add(id);
-  requests.push({ at: r.timestamp, context: (u.input_tokens || 0) + (u.cache_read_input_tokens || 0) + (u.cache_creation_input_tokens || 0), cached: u.cache_read_input_tokens || 0, output: u.output_tokens || 0 });
+  requests.push({ id, at: r.timestamp, context: (u.input_tokens || 0) + (u.cache_read_input_tokens || 0) + (u.cache_creation_input_tokens || 0), cached: u.cache_read_input_tokens || 0, output: u.output_tokens || 0 });
 });
 const compacted = part.some(r => r.type === 'system' && r.subtype === 'compact_boundary');
 
 // Events: each tool use with its target and the size of its result.
 const results = {};
-part.forEach(r => { if (isResult(r)) r.message.content.forEach(x => { if (x.type === 'tool_result') results[x.tool_use_id] = { chars: JSON.stringify(x.content || '').length, error: !!x.is_error, at: r.timestamp }; }); });
+// (an image goes into the context as about 1600 tokens, not as the length of its base64 text)
+const isImage = c => Array.isArray(c) && c.some(y => y && y.type === 'image');
+part.forEach(r => { if (isResult(r)) r.message.content.forEach(x => { if (x.type === 'tool_result') results[x.tool_use_id] = { chars: isImage(x.content) ? 6400 : JSON.stringify(x.content || '').length, error: !!x.is_error, at: r.timestamp }; }); });
 const kindOf = (name, input) =>
   /^mcp__/.test(name) ? 'mcp' : name === 'Skill' ? 'skill' : name === 'Agent' || name === 'Task' ? 'subagent' : /workflow/i.test(name) ? 'workflow'
   : name === 'Read' ? 'read' : name === 'Write' ? 'write' : name === 'Edit' || name === 'NotebookEdit' ? 'edit' : name === 'Grep' || name === 'Glob' ? 'search'
@@ -81,17 +83,17 @@ const kindOf = (name, input) =>
 const targetOf = (name, input) => short(input.file_path || input.path || input.pattern || input.skill || input.subagent_type || input.url || input.collection || input.query ||
   (input.command ? input.command.split('\n')[0].slice(0, 160) : '') || (input.text ? input.text.slice(0, 80) : ''));
 const events = [];
-let req = 0;
 part.forEach(r => {
   if (r.type !== 'assistant' || r.isSidechain) return;
   const id = r.requestId || r.message.id;
   (r.message.content || []).forEach(x => {
     if (x.type !== 'tool_use') return;
     const input = x.input || {}, res = results[x.id] || {};
+    // request: the number of the request (1 = the first of the run) that asked for this tool use; context and cached:
+    // the tokens of that request
     events.push({ at: r.timestamp, tool: x.name, kind: kindOf(x.name, input), target: targetOf(x.name, input), result_chars: res.chars || 0, error: res.error || undefined,
-      request: requests.findIndex(q => q.at === r.timestamp) >= 0 ? requests.findIndex(q => q.at === r.timestamp) + 1 : req, id: x.id });
+      request: requests.findIndex(q => q.id === id) + 1, context: (requests.find(q => q.id === id) || {}).context, cached: (requests.find(q => q.id === id) || {}).cached, id: x.id });
   });
-  req = requests.length;
 });
 
 // Uses: MCP tools, skills, subagents, workflows.

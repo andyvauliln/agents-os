@@ -31,8 +31,9 @@ var history={commits:[],canWrite:true,kind:'memory',put:function(c){own[c.n]=tru
 /* ---------- storage: commits/c000001...; one calls/<session> log per page load ---------- */
 function memoryStore(){var list=[];return{kind:'memory',list:function(){return Promise.resolve(list.slice())},put:function(c){list.push(c);return Promise.resolve()}}}
 function dbStore(db){return{kind:'db',
-  list:function(){return db.collection('commits').orderBy('n').get().then(function(s){return Promise.all(s.docs.map(function(d){return unpackCommit(d.data())}))})},
-  put:function(c){return packCommit(c).then(function(doc){return db.collection('commits').doc(core.commitId(c.n)).set(doc)})}}}
+  list:function(){return apiCall('read the versions',"db.collection('commits').orderBy('n').get()",db.collection('commits').orderBy('n').get().then(function(s){return s.docs.map(function(d){return d.data()})}))
+    .then(function(list){return Promise.all(list.map(unpackCommit))})},
+  put:function(c){return packCommit(c).then(function(doc){return apiCall('save a version',"db.collection('commits').doc('"+core.commitId(c.n)+"').set(version)",db.collection('commits').doc(core.commitId(c.n)).set(doc).then(function(){return doc}))})}}}
 // A database document holds at most 256 KB. A bigger version keeps its state gzipped, in base64 (stateGz, not state).
 function packCommit(c){
   if(JSON.stringify(c).length<=200000||!window.CompressionStream)return Promise.resolve(c);
@@ -56,12 +57,128 @@ function writeCalls(){
   if(!db)return;if(callsWriting){callsAgain=true;return}
   callsWriting=true;
   var items=tracker.records.slice(-400).map(function(r){return JSON.parse(JSON.stringify(r))});
-  db.doc('calls/'+session).set({session:session,started:items.length?items[0].at:null,count:tracker.records.length,items:items})
+  var log={session:session,started:items.length?items[0].at:null,count:tracker.records.length,items:items};
+  apiCall('save the call log',"db.doc('calls/"+session+"').set(log)",db.doc('calls/'+session).set(log).then(function(){return log}))
     .catch(function(){}).then(function(){callsWriting=false;if(callsAgain){callsAgain=false;writeCalls()}});
 }
 var tracker=core.createTracker({onRecord:queueCalls,brief:core.brief});
 
 /* ---------- running functions from state ---------- */
+/* ---------- network and environment: the runtime keeps them in the state, in network and environment ---------- */
+// Each call writes them into the state when it starts and when it ends, so a call's changes show what it loaded and
+// what changed around the page while it ran. expected-state-change does not check them.
+function bare(x){var y=Object.assign({},x);delete y.network;delete y.environment;return y}
+// The database calls of the page: name -> {what, start, ms, size, count}.
+var api={};
+function apiCall(name,what,p){
+  var t0=performance.now();
+  return p.then(function(x){
+    var a=api[name]||(api[name]={what:what,count:0});
+    a.what=what;a.start=Math.round(t0);a.ms=Math.round(performance.now()-t0);a.count++;
+    try{a.size=JSON.stringify(x===undefined?null:x).length}catch(e){}
+    return x;
+  });
+}
+var page=location.href.split('#')[0].split('?')[0];
+function groupOf(e){
+  var u=e.name.split('#')[0].split('?')[0],same=u.indexOf(location.origin)===0;
+  if(e.entryType==='navigation')return 'html';
+  if(same&&/\/state\.json$/.test(u))return 'state';
+  if(same&&e.initiatorType==='script')return 'scripts';
+  if(same)return 'file code';
+  if(/fonts\.(googleapis|gstatic)\.com/.test(u)||/\.css$/.test(u)||e.initiatorType==='css'||e.initiatorType==='link')return 'styles';
+  if(/\.m?js$/.test(u))return 'packages';
+  return 'other';
+}
+function keyOf(e,g){
+  var u=e.name.split('#')[0].split('?')[0];
+  if(g==='html'||u===page)return 'index.html';
+  if(/fonts\.gstatic\.com/.test(u))return 'font files (fonts.gstatic.com)';
+  var last=u.split('/').pop();
+  if(/fonts\.googleapis\.com/.test(u))return 'fonts.googleapis.com/'+last;
+  return last||u;
+}
+var MEASURED=['url','start','ms','size','count','parallel'];
+function sense(){
+  if(SB||!live||typeof live!=='object')return;
+  var net=live.network&&typeof live.network==='object'?live.network:(live.network={});
+  var list=performance.getEntriesByType('navigation').concat(performance.getEntriesByType('resource')),now={};
+  list.forEach(function(e){
+    var g=groupOf(e),k=keyOf(e,g),id=g+'\u0000'+k,start=e.startTime,end=e.responseEnd||e.startTime+e.duration;
+    var x=now[id]||(now[id]={g:g,k:k,url:e.name.split('#')[0],start:start,end:end,size:0,count:0});
+    x.start=Math.min(x.start,start);x.end=Math.max(x.end,end);x.size+=e.decodedBodySize||e.encodedBodySize||0;x.count++;
+  });
+  var rows=Object.keys(now).map(function(id){return now[id]});
+  rows.forEach(function(x){
+    var grp=net[x.g]&&typeof net[x.g]==='object'?net[x.g]:(net[x.g]={});
+    var y=grp[x.k]&&typeof grp[x.k]==='object'?grp[x.k]:(grp[x.k]={expected:false});
+    y.url=x.url;y.start=Math.round(x.start);y.ms=Math.round(x.end-x.start);y.size=x.size;y.count=x.count;
+    // What downloaded at the same time.
+    y.parallel=rows.filter(function(o){return o!==x&&o.start<x.end&&o.end>x.start}).map(function(o){return o.k}).slice(0,12);
+  });
+  var apis=net.api&&typeof net.api==='object'?net.api:(net.api={});
+  Object.keys(api).forEach(function(k){
+    var y=apis[k]&&typeof apis[k]==='object'?apis[k]:(apis[k]={expected:false}),a=api[k];
+    ['what','start','ms','size','count','last'].forEach(function(f){if(a[f]!==undefined)y[f]=a[f]});
+  });
+  // What the state lists and this page load did not ask for (yet): no values now.
+  Object.keys(net).forEach(function(g){
+    var grp=net[g];if(!grp||typeof grp!=='object')return;
+    Object.keys(grp).forEach(function(k){
+      var y=grp[k],seen=g==='api'?api[k]:now[g+'\u0000'+k];
+      if(seen||!y||typeof y!=='object')return;
+      ['start','ms','size','parallel','last'].forEach(function(f){if(f in y)y[f]=null});y.count=0;
+    });
+  });
+  senseEnvironment();
+}
+function storageOf(name){
+  try{
+    var s=window[name],n=0;
+    for(var i=0;i<s.length;i++){var k=s.key(i);n+=(k.length+String(s.getItem(k)).length)*2}
+    return {available:true,keys:s.length,used_bytes:n,limit:'about 5 MB (the usual limit of a browser)'};
+  }catch(e){return {available:false,why:String(e&&e.name||e)}}
+}
+// What the browser tells only later (estimate, databases, caches): the newest answer, asked again at most every 2 s.
+var later={},laterAt=0;
+function askLater(){
+  if(performance.now()-laterAt<2000)return;laterAt=performance.now();
+  try{if(navigator.storage&&navigator.storage.estimate)navigator.storage.estimate().then(function(x){later.quota={usage_bytes:x.usage,quota_bytes:x.quota}},function(e){later.quota={available:false,why:String(e&&e.name||e)}})}catch(e){later.quota={available:false,why:String(e&&e.name||e)}}
+  try{if(window.indexedDB&&indexedDB.databases)indexedDB.databases().then(function(x){later.idb={available:true,databases:x.map(function(d){return d.name})}},function(e){later.idb={available:false,why:String(e&&e.name||e)}});else later.idb={available:!!window.indexedDB}}catch(e){later.idb={available:false,why:String(e&&e.name||e)}}
+  try{if(window.caches)caches.keys().then(function(x){later.caches={available:true,caches:x}},function(e){later.caches={available:false,why:String(e&&e.name||e)}});else later.caches={available:false}}catch(e){later.caches={available:false,why:String(e&&e.name||e)}}
+  try{if(navigator.serviceWorker&&navigator.serviceWorker.getRegistrations)navigator.serviceWorker.getRegistrations().then(function(x){later.sw={available:true,registered:x.length}},function(e){later.sw={available:false,why:String(e&&e.name||e)}});else later.sw={available:false}}catch(e){later.sw={available:false,why:String(e&&e.name||e)}}
+}
+function browserName(){
+  var b=navigator.userAgentData&&navigator.userAgentData.brands||[],m;
+  b=b.filter(function(x){return !/Not.?A.?Brand|Chromium/i.test(x.brand)})[0];
+  if(b)return {name:b.brand,version:b.version};
+  var ua=navigator.userAgent;
+  if((m=/Edg\/([\d.]+)/.exec(ua)))return {name:'Edge',version:m[1]};
+  if((m=/Firefox\/([\d.]+)/.exec(ua)))return {name:'Firefox',version:m[1]};
+  if((m=/Chrome\/([\d.]+)/.exec(ua)))return {name:'Chrome',version:m[1]};
+  if((m=/Version\/([\d.]+).*Safari/.exec(ua)))return {name:'Safari',version:m[1]};
+  return {name:'unknown',version:''};
+}
+function senseEnvironment(){
+  askLater();
+  var env=live.environment&&typeof live.environment==='object'?live.environment:(live.environment={}),n=navigator,bn=browserName(),cookies;
+  try{cookies={available:true,count:document.cookie?document.cookie.split(';').length:0}}catch(e){cookies={available:false,why:String(e&&e.name||e)}}
+  env.browser={name:bn.name,version:bn.version,platform:(n.userAgentData&&n.userAgentData.platform)||n.platform||'',language:n.language,
+    screen:screen.width+' x '+screen.height,viewport:innerWidth+' x '+innerHeight,pixel_ratio:devicePixelRatio,online:n.onLine,
+    time_zone:(function(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){return ''}})(),
+    dark_mode:!!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)};
+  env['browser data']={storages:{'local storage':storageOf('localStorage'),'session storage':storageOf('sessionStorage'),
+    'indexed db':later.idb||{},'cache storage':later.caches||{},cookies:cookies,'all storage of this page':later.quota||{}}};
+  env['browser api']={fetch:typeof fetch==='function','performance timings':!!(window.performance&&performance.getEntriesByType),
+    'gzip (CompressionStream)':typeof CompressionStream==='function','window.claude (the database)':!!(window.claude&&claude.use),
+    indexedDB:!!window.indexedDB,'service workers':'serviceWorker' in n,clipboard:!!n.clipboard,'storage estimate':!!(n.storage&&n.storage.estimate)};
+  env.subscriptions={'new versions (commits in the database)':api['follow new versions']?{since:api['follow new versions'].start,events:api['follow new versions'].count}:'off',
+    'views that watch the state':Object.keys(watchers).filter(function(v){return mounted[v]}).map(function(v){return v.split('.').pop()+': '+watchers[v]})};
+  env['background services']={'save the call log':'1.2 s after the last call'+(api['save the call log']?', saved '+api['save the call log'].count+(api['save the call log'].count===1?' time':' times'):''),
+    'service workers':later.sw||{}};
+  env.other={visibility:document.visibilityState,'page opened at':new Date(performance.timeOrigin).toISOString(),session:session};
+}
+
 // "extension.functions.render" is a path in the state; "local.x" is a function of the calling view.
 function resolve(name,viewPath){
   if(name.indexOf('local.')===0){var v=core.getPath(live,viewPath);var f=v&&v.functions&&v.functions[name];return f?{def:f,path:viewPath+'.functions.'+name,view:viewPath}:null}
@@ -116,10 +233,11 @@ var frames={};
 function finish(path,def,input,before,t0,out,err,id,parent){
   var d=core.getPath(live,path)||def,ms=Math.round((performance.now()-t0)*10)/10,p=d.performance||{};
   d.performance={last:ms,min:p.min===undefined?ms:Math.min(p.min,ms),max:p.max===undefined?ms:Math.max(p.max,ms),count:(p.count||0)+1};
+  sense();
   var after=core.stripRuntime(live),fails=err?['threw: '+(err&&err.message||err)]:[],nested=frames[id]||[];delete frames[id];
   var changed=core.diff(before,after).map(function(x){return x.path.join('.')});
   if(frames[parent])frames[parent]=frames[parent].concat(changed);
-  fails=fails.concat(core.checkStateChange(d['expected-state-change'],before,after,input,nested));
+  fails=fails.concat(core.checkStateChange(d['expected-state-change'],bare(before),bare(after),input,nested));
   d.output=err?{error:String(err&&err.message||err)}:plain(out);
   d.errors=fails;
   // What this function changed itself (not its nested calls), with the value before and after.
@@ -133,6 +251,7 @@ function call(name,input,viewPath,parent,via){
   var run=tracker.track(name,{input:input===undefined?null:input,view:viewPath||null,via:via||null},function(ctx){
     top=ctx.id;
     if(!r)throw new Error('No function '+name+(viewPath?' in '+viewPath:''));
+    sense();
     var def=r.def,before=core.stripRuntime(live),t0=performance.now();
     ctx.relate({fn:r.path,parent:parent||null});frames[ctx.id]=[];
     var c={id:ctx.id,input:input,view:r.view,root:r.view?document.getElementById(r.view.split('.').pop()):null,
@@ -302,7 +421,7 @@ var ready=SB?Promise.resolve().then(function(){
   return {preview:SB.view};
 }):tracker.track('loadState',{session:session},function(ctx){
   return fetch('state.json').then(function(r){if(!r.ok)throw new Error('state.json: HTTP '+r.status);return r.text()}).then(function(seed){
-    var getDb=window.claude&&claude.use?claude.use('db'):Promise.resolve(null);
+    var getDb=window.claude&&claude.use?apiCall('connect to the database',"window.claude.use('db')",claude.use('db')):Promise.resolve(null);
     return getDb.then(function(d){db=d;store=d?dbStore(d):memoryStore();history.kind=store.kind;return store.list()}).then(function(list){
       history.commits=list;
       if(list.length)return;
@@ -311,7 +430,11 @@ var ready=SB?Promise.resolve().then(function(){
     }).then(function(){
       var head=history.commits[history.commits.length-1];
       live=core.parseJsonc(head.state);
-      ctx.relate({store:history.kind,commits:history.commits.length,head:head.n});
+      // What this load downloaded (state.json, the database calls) goes into network: these are the changes of this block.
+      var loaded=core.stripRuntime(live);sense();
+      var ch=core.diff(loaded,core.stripRuntime(live));
+      ctx.relate({store:history.kind,commits:history.commits.length,head:head.n,changes:ch.map(function(x){return x.type+' '+x.path.join('.')}),
+        stateChanges:ch.map(function(x){return {type:x.type,path:x.path.join('.'),before:core.brief(x.before),after:core.brief(x.after)}})});
       return {commits:history.commits.length,head:head.n};
     });
   });
@@ -332,6 +455,9 @@ function follow(){
   var q=db.collection('commits').orderBy('n');
   if(!q.onSnapshot)return;
   q.onSnapshot(function(s){
+    var a=api['follow new versions']||(api['follow new versions']={what:"db.collection('commits').orderBy('n').onSnapshot(...)",count:0});
+    if(a.start===undefined)a.start=Math.round(performance.now());
+    a.count++;a.last=Math.round(performance.now());
     var known=history.commits.length?history.commits[history.commits.length-1].n:0;
     var fresh=s.docs.map(function(d){return d.data()}).filter(function(c){return c&&c.n>known&&!own[c.n]});
     if(!fresh.length)return;

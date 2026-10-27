@@ -136,16 +136,16 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForSelector('#tl-strip .tl-step');
     assert.ok(await page.evaluate(() => document.querySelector('#timeline-view').compareDocumentPosition(document.querySelector('#header-view')) & Node.DOCUMENT_POSITION_FOLLOWING));
     const stepKinds = await page.$$eval('#tl-strip .tl-step .tl-kind', els => els.map(x => x.textContent));
-    assert.deepEqual(stepKinds.slice(0, 4), ['Open the page', 'Run index.html', 'Load the state', 'Start the page']);
+    assert.deepEqual(stepKinds.slice(0, 4), ['Network', 'Run index.html', 'Load the state', 'Start the page']);
     assert.equal(await page.isHidden('#step-view'), true);
     assert.equal(await page.isChecked('#tl-track'), false);
 
-    // a click on a block shows it under the header: Details first when it changed nothing; with tracking off the click is not a block
+    // a click on a block shows it under the header, State changes first; with tracking off the click is not a block
     const before = await blockNames();
     await page.locator('#tl-strip .tl-step').first().click();
-    await page.waitForFunction(() => (document.querySelector('#step-view #st-title .tl-kind') || {}).textContent === 'Open the page');
+    await page.waitForFunction(() => (document.querySelector('#step-view #st-title .tl-kind') || {}).textContent === 'Network');
     assert.equal((await tl()).selected, 'open');
-    assert.equal((await stv()).tab, 'details');
+    assert.equal((await stv()).tab, 'state');
     // a click on the chosen block again hides it, and so does the close button
     await page.locator('#tl-strip .tl-step').first().click();
     await page.waitForFunction(() => document.querySelector('#step-view').hidden);
@@ -157,37 +157,45 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal((await tl()).selected, null);
     await page.locator('#tl-strip .tl-step').first().click();
     await page.waitForSelector('#step-view #st-title .tl-kind');
-    await page.click('#st-tab-state');
-    await page.waitForFunction(() => /There is no state yet/.test(document.querySelector('#tl-detail').textContent));
     assert.deepEqual(await blockNames(), before);
     assert.ok(await page.evaluate(() => document.querySelector('#header-view').compareDocumentPosition(document.querySelector('#step-view')) & Node.DOCUMENT_POSITION_FOLLOWING));
 
-    // the Details tab: the steps before the first call show their parts
+    // network and environment are in the state; block 1 shows what changed in them since the version this page loaded
+    const st0 = await page.evaluate(() => window.agentOS.state);
+    assert.equal(st0.network.scripts['state-core.js'].expected, true);
+    assert.equal(typeof st0.network.scripts['state-core.js'].ms, 'number');
+    assert.ok(st0.network.scripts['state-core.js'].size > 1000);
+    assert.equal(st0.network.api['read the versions'].count, 1);
+    assert.ok(st0.network.packages['codemirror.min.js'].count >= 1);
+    assert.equal(st0.environment['browser data'].storages['local storage'].limit, 'about 5 MB (the usual limit of a browser)');
+    assert.equal(typeof st0.environment.browser.viewport, 'string');
+    await page.waitForFunction(() => /changes? in network and environment, from the version this page loaded \(v1\) to now/.test(document.querySelector('#tl-detail').textContent));
+    assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"network"/);
+
+    // its Details: Network (all requests, in groups) next to Environment
     await page.click('#st-tab-details');
-    await page.waitForSelector('#tl-detail .tl-part');
+    await page.waitForSelector('#tl-detail .tl-netenv .tl-panel');
     assert.equal((await stv()).tab, 'details');
-    // block 1 lists every file the page downloaded: index.html, state-core.js, the runtime script, then the rest
-    const openParts = await page.$$eval('#tl-detail .tl-part .tl-name', els => els.map(x => x.textContent));
-    assert.deepEqual(openParts.slice(0, 3), ['Download index.html', 'Load state-core.js', 'The runtime script']);
-    assert.ok(openParts.some(n => /^Download codemirror/.test(n)) && openParts.includes('Download state.json'), openParts.join(' | '));
-    // a part opens on click: index.html shows its html, state-core.js its code, the runtime script what it did and its code
+    assert.deepEqual(await page.$$eval('#tl-detail .tl-netenv .tl-panel h3', els => els.map(x => x.textContent)), ['Network (all requests)', 'Environment']);
+    const groups = await page.$$eval('#tl-detail .tl-netenv .tl-panel:first-child h4', els => els.map(x => x.textContent.split(' · ')[0]));
+    for (const g of ['Html', 'Our scripts', 'API', 'State', 'Packages']) assert.ok(groups.includes(g), groups.join(' | '));
+    const req = name => page.locator('#tl-detail .tl-req', { has: page.locator('.tl-req-top b', { hasText: new RegExp('^' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$') }) }).first();
+    assert.match(await req('state-core.js').textContent(), /time: last — · now \d+ ms.*expected.*Used for: The library of the runtime/);
+    assert.match(await req('read the versions').textContent(), /db\.collection\('commits'\)\.orderBy\('n'\)\.get\(\)/);
+    // a request opens its code on click
+    await req('state-core.js').locator('.tl-req-top').click();
+    await req('state-core.js').locator('.tl-code').waitFor();
+    assert.match(await req('state-core.js').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /StateCore/);
+    assert.match(await page.textContent('#tl-detail .tl-netenv .tl-panel:last-child'), /browser data \/ storages \/ local storage|storages \/ local storage \/ limit/);
     const part = name => page.locator('#tl-detail .tl-part', { has: page.locator('.tl-name', { hasText: name }) });
-    await part('Download index.html').locator('.tl-call-head').click();
-    await part('Download index.html').locator('.tl-code').waitFor();
-    assert.match(await part('Download index.html').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /<div id="index-view"><\/div>/);
-    await part('Load state-core.js').locator('.tl-call-head').click();
-    await part('Load state-core.js').locator('.tl-code').waitFor();
-    assert.match(await part('Load state-core.js').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /StateCore/);
-    await part('The runtime script').locator('.tl-call-head').click();
-    assert.match(await part('The runtime script').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /window\.agentOS = \{/);
-    await part('Download index.html').locator('.tl-call-head').click();
-    assert.equal(await part('Download index.html').locator('.tl-code').count(), 0);
     await page.click('#tl-next');
     await page.waitForFunction(() => document.querySelector('#st-title .tl-kind').textContent === 'Run index.html');
     assert.match(await page.textContent('#tl-detail'), /a name for this page load: s\w+/);
-    // block 2 runs the runtime script
+    // block 2 runs the runtime script; it changed nothing in the state, so it opens on Details
+    assert.equal((await stv()).tab, 'details');
     await part('Run the runtime script').locator('.tl-call-head').click();
     assert.match(await part('Run the runtime script').locator('.tl-table').textContent(), /loadState/);
+    assert.match(await part('Run the runtime script').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /window\.agentOS = \{/);
     // each part says what happens and why, and shows the lines of index.html that do it
     assert.match(await part('Note the start time').textContent(), /What happens The runtime writes down when it started.*Why Only the timeline uses it/);
     await part('Note the start time').locator('.tl-call-head').first().click();
@@ -220,7 +228,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // Flows: the saved flows; First enter plays the first 4 blocks and stops
     await page.click('#tl-flows');
     await page.waitForSelector('#tl-flows-list:not([hidden]) .tl-flow');
-    assert.match(await page.textContent('#tl-flows-list'), /First enter4 blocks: index\.html, runtime, loadState, extension\.functions\.render/);
+    assert.match(await page.textContent('#tl-flows-list'), /First enter4 blocks: network, runtime, loadState, extension\.functions\.render/);
     await page.click('#tl-flows-list .tl-flow button');
     await page.waitForFunction(() => document.querySelector('#tl-flows-list').hidden);
     assert.equal((await tl()).selected, 'open');
@@ -271,7 +279,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.getAttribute('#state-button', 'aria-pressed'), 'true');
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].state_open), true);
     assert.equal(await page.textContent('#path'), 'extension/views/state-view');
-    assert.match(await page.textContent('#pos'), /^v1 just now$/);
+    assert.match(await page.textContent('#pos'), /^v1 (just now|1 min ago)$/);
     // the top bar has only icon buttons and the filter; the version, the path and the status are in the bottom bar
     assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar .sv-group button')].filter(b => b.textContent.trim()).length), 0);
     assert.equal(await page.locator('#state-view .sv-foot #pos').count(), 1);
@@ -403,7 +411,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForFunction(() => window.agentOS.history.commits.length === 2);
     assert.ok(await page.isVisible('#sv-editor.saved'));
     const commit = await commitDoc('c000002');
-    assert.ok(commit.paths.includes('added extension.data.x'), commit.paths.join(', '));
+    // (a version also keeps network and environment as they were when it was saved)
+    assert.equal(JSON.parse(commit.state).extension.data.x, 1);
+    assert.ok(JSON.parse(commit.state).network.scripts['state-core.js'].ms >= 0);
     assert.equal(JSON.parse(commit.state).extension.views['state-view']['ui-data'].current_state_version, 2);
     assert.match(await page.textContent('#pos'), /^v2 just now$/);
 
@@ -434,7 +444,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const c3 = await commitDoc('c000003');
     assert.match(c3.state, /^[ \t]*\/\/ shared by all apps[ \t]*$/m);
     assert.doesNotThrow(() => JSON.parse(c3.state.replace(/^[ \t]*\/\/ shared by all apps[ \t]*$/m, '')));
-    assert.ok(c3.paths.every(p => p.includes('.ui-data.')), c3.paths.join(', '));
+    assert.ok(c3.paths.filter(p => !/ (network|environment)\./.test(p)).every(p => p.includes('.ui-data.')), c3.paths.join(', '));
     const fixedSave = await page.evaluate(() => window.agentOS.calls.filter(c => c.name === 'local.save').pop());
     assert.equal(fixedSave.output.fixed, true);
 

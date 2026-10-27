@@ -56,7 +56,7 @@
 
 ## The timeline
 1. Click the Timeline button in the header. The timeline opens at the top of the page, above the header.
-2. It shows what happened since the page opened, as blocks in a row from left to right. The first blocks are: the page opens, index.html runs, the runtime loads the state, the page starts.
+2. It shows what happened since the page opened, as blocks in a row from left to right. The first blocks are: Network (every request and the environment), index.html runs, the runtime loads the state, the page starts.
 3. Each next block is one call that nothing else called, for example a click on a button.
 4. Each block shows its number, the time since the page opened, the function, its time in ms and how many state changes it made.
 5. What you do in the timeline (clicks on blocks, the replay, its buttons) is not a block. Turn on the Track the timeline checkbox to add it as blocks too.
@@ -68,12 +68,10 @@
 3. Details: what happens inside the block. The function, then each function it called, in the order they started, with their input and time.
    Each function says what it does (its docs), why it ran (a click, a watch, or the function that called it) and what it changed in the state. Click its name to see its code.
    The first blocks happen before any function runs, so they show their parts instead:
-   - Open the page: every file the page load downloaded. index.html (its size and what is in it), state-core.js, the runtime script inside index.html, then the files that come later: fonts, CodeMirror, js-beautify, state.json. Each part has its time and says what asks for the file.
    - Run index.html: the runtime script runs. What it did, with times, the start time (os.started), the session id of the call log, the call tracker, and the functions in os.
    - Load the state: state.json downloads, the page connects to the database, reads the saved versions and parses the newest one.
    Each part says what happens and why it is needed. Click a part to open it: it shows the lines of index.html that do it (with their line numbers), then what it made:
-   - Download index.html shows the html of index.html. Load state-core.js shows its code. The runtime script shows its code. A downloaded script, style or json shows its text.
-   - Run the runtime script shows what the runtime did, with times.
+   - Run the runtime script shows what the runtime did, with times, and the code of the runtime script.
    - Note the start time shows the browser's timings. Make a session id shows the first record of the call log. Create the call tracker counts the calls by name. Build os lists what is in os: click one to see what it is for, which functions use it, how often they ran, and its code.
    - Download state.json shows state.json. Connect to the database shows where the versions and the call log are. Read the saved versions lists the versions. Parse the newest version shows the parts of the state and their sizes.
 ### The buttons of the timeline
@@ -92,6 +90,17 @@
 4. The timeline adds a New version block.
 5. State changes: the differences between the version that ran before and the new version. Long texts are cut.
 6. Details: where the version came from (the git commit, the request and the session), how each part worked before and how it works now, side by side, and each changed file side by side. Red lines are only in the old version. Green lines are only in the new version.
+
+### Network and environment
+1. The state has two parts that the runtime fills: network and environment.
+2. network has a group for each kind of request: html, scripts (our scripts), api (the database calls), state, file code (code that the timeline downloads as text), packages, styles. Other requests go in other.
+3. Each request has url, start (ms after the page opened), ms (download time), size (bytes), count, and parallel (what downloaded at the same time).
+4. The state lists the requests that the page expects. Each has used_for (what the page uses it for) and expected: true. A request that is not in the list gets expected: false.
+5. A request that this page load did not ask for (yet) has no values: count is 0.
+6. environment has browser, browser data (the storages and how much they use), browser api, subscriptions, background services and other.
+7. Each call writes network and environment into the state when it starts and when it ends. So the State changes of a block show what the block loaded and what changed around the page. expected-state-change does not check network and environment.
+8. Block 1, Network, shows every request in its group: the url, the size, the time (in the version that this page loaded, now, and the difference), what downloaded in parallel, expected and used for. Click a request to see its code. Environment is next to it. A yellow value is not the same as in the version that this page loaded.
+9. When you save a version, it keeps network and environment as they are. The next page load shows the difference.
 
 ### Where it comes from
 1. The timeline comes from the call log of the runtime (os.calls), not from the state. If the state kept the timeline, each call would change the state again.

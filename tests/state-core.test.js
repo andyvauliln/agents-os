@@ -52,7 +52,7 @@ test('commits chain and record what changed', () => {
   const c1 = core.makeCommit(null, seed, 't1');
   assert.equal(c1.n, 1);
   assert.equal(c1.parent, null);
-  assert.equal(c1.summary.added, 2);
+  assert.equal(c1.summary.added, 4);
   const next = JSON.parse(seed);
   next.extension.views['header-view']['ui-data'].state_button = { pressed: true };
   const c2 = core.makeCommit(c1, JSON.stringify(next, null, 2), 't2');

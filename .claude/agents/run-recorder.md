@@ -21,7 +21,7 @@ You record one agent run. A run is one request to the agent: from a message (a p
      - `items`: 2 to 8 short lines, for example "read index.html (sense, call)" or "create scripts/run-log.js". Each item is `{text, kind}`. kind is one of read, search, create, edit, delete, run, test, mcp, skill, subagent, workflow, publish.
      - `why`: one or two sentences: why the agent did this step.
      - `context_tokens` and `cached_tokens`: the context at the end of the step (from the events and `context`).
-   - `uses`: for each MCP tool, skill, subagent and workflow: `{name, count, why}`.
+   - `uses`: `{mcp, skills, subagents, workflows}`. Each is a list with one `{name, count, why}` for each MCP tool, skill, subagent or workflow.
    - `files`: each file from the raw data: `{path, action, tokens, cached, why}`. action is read, created, updated or deleted (git wins over the tools). tokens is the size that went into the context (about). cached is true when the file is in the cached part of the context at the end. why: one sentence.
 3. Do not put secrets, tokens or passwords into the file. Do not copy the content of files: only paths and sizes.
 4. Give the path of the file. The release (CLAUDE.md, Releases) puts the files of main into the state, so the run is in `agents.agent-oss.files.runs`.

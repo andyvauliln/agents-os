@@ -44,6 +44,19 @@ function fakeDb() {
   window.claude = { use: async name => (name === 'db' ? { doc, collection } : null) };
 }
 
+// Fake media for the record button: a tone for the microphone, a canvas that changes color for the screen.
+function fakeMedia() {
+  const tone = () => { const ac = new AudioContext(), o = ac.createOscillator(), d = ac.createMediaStreamDestination(); o.connect(d); o.start(); return d.stream; };
+  navigator.mediaDevices.getUserMedia = async () => tone();
+  navigator.mediaDevices.getDisplayMedia = async () => {
+    const c = document.createElement('canvas'), g = c.getContext('2d');
+    c.width = 160; c.height = 100;
+    let i = 0;
+    setInterval(() => { g.fillStyle = 'hsl(' + (i++ * 20 % 360) + ',70%,50%)'; g.fillRect(0, 0, 160, 100); }, 50);
+    return c.captureStream(20);
+  };
+}
+
 test('page: boots from state, renders the header, runs state tests, saves and steps history', async () => {
   const server = await serve();
   const browser = await chromium.launch();
@@ -66,6 +79,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
       await page.route('https://fonts.googleapis.com/**', route => route.fulfill({ body: '' }));
     }
     await page.addInitScript(fakeDb);
+    await page.addInitScript(fakeMedia);
     await page.goto(`http://localhost:${server.address().port}/`);
     await page.evaluate(() => window.agentOS.ready);
 
@@ -91,7 +105,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // every rule of the page styles in index-view html is read by the browser (a broken rule drops the rest)
     assert.ok(await page.evaluate(() => document.querySelector('#index-view style').sheet.cssRules.length) > 150);
     const boot = await page.evaluate(() => window.agentOS.calls.map(c => c.name));
-    assert.deepEqual(boot.sort(), ['extension.functions.get-state', 'extension.functions.render', 'extension.functions.render', 'loadState', 'local.init', 'local.init']);
+    // (index-view renders header-view and recorder-view; recorder-view draws itself in its init, and after the start)
+    assert.deepEqual(boot.sort(), ['extension.functions.get-state', 'extension.functions.render', 'extension.functions.render', 'extension.functions.render', 'loadState', 'local.init', 'local.init', 'local.init', 'local.refresh', 'local.refresh']);
 
     // outputs and performance are filled in on the functions that ran
     const init = await page.evaluate(() => window.agentOS.state.extension.views['index-view'].functions['local.init']);
@@ -119,6 +134,53 @@ test('page: boots from state, renders the header, runs state tests, saves and st
       await os.call('extension.views.step-view.functions.local.filter-kind', { kind: 'all' });
     });
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.step-view' }));
+
+    // the record button, at the bottom right: one click records audio, two clicks record video
+    const rec = () => page.evaluate(() => window.agentOS.state.extension.views['recorder-view']['ui-data']);
+    const recording = mode => page.waitForFunction(m => window.agentOS.state.extension.views['recorder-view']['ui-data'].recording === m, mode);
+    await page.waitForSelector('#recorder-view #rec-button[aria-label="Record"]');
+    const rb = await page.locator('#rec-button').boundingBox(), vp = page.viewportSize();
+    assert.ok(rb.x + rb.width > vp.width - 40 && rb.y + rb.height > vp.height - 40, 'bottom right');
+    await page.click('#rec-button');
+    await recording('audio');
+    assert.equal(await page.getAttribute('#rec-button', 'aria-label'), 'Stop recording');
+    // the timer is in the header
+    await page.waitForFunction(() => { const t = document.querySelector('#header-view #rec-timer'); return !t.hidden && /^Audio \d\d:\d\d$/.test(t.textContent); });
+    // select mode: a click selects the element (the page does not get it) and its path shows above it
+    await page.click('#docs-button');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['recorder-view']['ui-data'].selected === 'extension.views.header-view › #docs-button');
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].docs_open), false);
+    await page.waitForSelector('.rec-label:not([hidden])');
+    assert.equal(await page.textContent('.rec-label'), 'extension.views.header-view › #docs-button');
+    // a click on the button stops it: the card plays it and lists what was selected
+    await page.click('#rec-button');
+    await page.waitForSelector('#rec-card audio');
+    assert.match(await page.textContent('#rec-card .rec-sel'), /^\d\d:\d\dextension\.views\.header-view › #docs-button$/);
+    assert.equal((await rec()).result.kind, 'audio');
+    assert.ok(await page.evaluate(() => document.querySelector('#rec-timer').hidden));
+    assert.ok(await page.evaluate(() => document.querySelector('.rec-label').hidden));
+    // the keys: Arrow Up two times records audio; Arrow Up and Arrow Down together stop it, and again record video
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowUp');
+    await recording('audio');
+    const upDown = async () => { await page.keyboard.down('ArrowUp'); await page.keyboard.down('ArrowDown'); await page.keyboard.up('ArrowDown'); await page.keyboard.up('ArrowUp'); };
+    await upDown();
+    await recording('');
+    await upDown();
+    await recording('video');
+    await upDown();
+    await recording('');
+    await page.waitForSelector('#rec-card video');
+    // two clicks: video
+    await page.dblclick('#rec-button');
+    await recording('video');
+    await page.waitForFunction(() => /^Video /.test(document.querySelector('#rec-timer').textContent));
+    await page.click('#rec-button');
+    await recording('');
+    // the close button forgets the recording
+    await page.click('#rec-close');
+    await page.waitForSelector('#rec-card', { state: 'detached' });
+    assert.equal((await rec()).result, null);
 
     // the docs button lists the docs folder of the agent; a click shows a doc
     await page.click('#docs-button');

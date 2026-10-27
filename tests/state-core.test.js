@@ -125,7 +125,7 @@ test('brief keeps logs small', () => {
 test('state.json runs from index-view and every function is complete', () => {
   const s = JSON.parse(seed);
   const views = s.extension.views;
-  assert.deepEqual(Object.keys(views), ['index-view', 'header-view', 'docs-view', 'timeline-view', 'step-view', 'state-view']);
+  assert.deepEqual(Object.keys(views), ['index-view', 'header-view', 'docs-view', 'timeline-view', 'step-view', 'state-view', 'recorder-view']);
   core.walk(s, [], (v, p) => {
     if (p[p.length - 2] !== 'functions') return;
     for (const k of ['input', 'output', 'imports', 'tests', 'expected-state-change', 'docs', 'performance', 'code', 'calls']) assert.ok(k in v, `${p.join('.')} has ${k}`);

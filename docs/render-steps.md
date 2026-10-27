@@ -75,6 +75,7 @@ async function init() {
   const view = await ctx.call('extension.functions.get-state', { path: 'extension.views.header-view' });
   if (!view) throw new Error('No header-view in the state');
   await ctx.call('extension.functions.render', { view_path: 'extension.views.header-view' });
+  await ctx.call('extension.functions.render', { view_path: 'extension.views.recorder-view' });
 }
 ```
 The call to get-state returns the header-view part of the state. Its output is that JSON. This is the code of get-state:

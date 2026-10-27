@@ -144,6 +144,17 @@
 1. The timeline comes from the call log of the runtime (os.calls), not from the state. If the state kept the timeline, each call would change the state again.
 2. The ui-data of timeline-view keeps the chosen block (selected), whether the replay runs (playing), show_changes, track_timeline, show_blocks, flows_open, and the saved flows (flows: each has a name and the names of its blocks). The ui-data of step-view keeps its tab (state or details).
 
+## Record
+The red button at the bottom right of the page records (recorder-view).
+1. Click it one time to record audio (the microphone). Click it two times to record video (a screen, a window or a tab that you choose, with its sound and the microphone).
+2. Or use the keys (not while you type in a field or an editor): push Arrow Up two times to record audio. Push Arrow Up and Arrow Down at the same time to record video.
+3. While it records, the button is a stop button, and the header shows the kind and the time (for example "Audio 00:12").
+4. While it records, you are in select mode. The element under the pointer has a red frame. Click an element to select it: the page does not get the click. A timeline block or a view part has a purple frame, and its path shows above it: the view in the state, then the elements down to it, and the block (for example "extension.views.timeline-view › #tl-strip > button.tl-step:nth-of-type(3) (block 3: Run index.html)").
+5. To stop, click the button, push the same keys again, or stop the sharing of the browser.
+6. The card above the button plays the recording and lists the elements that you selected, with their time. Save file saves it (webm). On claude.ai, you confirm the download. The close button forgets the recording. The recording is in the memory of the page only, not in the state.
+7. The browser asks you to let the page use the microphone or the screen. If it does not let the page record, a red note above the button tells why.
+8. The ui-data of recorder-view keeps: recording ("", audio or video), started_at, selected (the last path), selections (each {at, path}), result (kind, time, size, type) and error. The calls of the record button are timeline blocks only when Track the timeline is on.
+
 ## Where the parts are
 - Views: extension.views.
 - Shared functions: extension.functions.

@@ -69,8 +69,20 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.goto(`http://localhost:${server.address().port}/`);
     await page.evaluate(() => window.agentOS.ready);
 
+    // a saved version as the page reads it: a big state is kept gzipped (stateGz)
+    const commitDoc = id => page.evaluate(async id => {
+      const c = window.__docs['commits/' + id];
+      if (!c || typeof c.state === 'string') return c;
+      const bin = atob(c.stateGz), u = Uint8Array.from(bin, ch => ch.charCodeAt(0));
+      const state = await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+      return Object.assign({}, c, { state, stateGz: undefined });
+    }, id);
+
     // boot: version 1 from state.json, index-view rendered (page html and styles from the state), then header-view: only the State view button
     assert.ok(await page.evaluate(() => !!window.__docs['commits/c000001']));
+    // (the state is bigger than a database document can hold: it is saved gzipped, and reads back the same)
+    assert.equal(typeof (await page.evaluate(() => window.__docs['commits/c000001'].stateGz)), 'string');
+    assert.equal((await commitDoc('c000001')).state, await page.evaluate(() => window.agentOS.history.commits[0].state));
     assert.equal(await page.locator('#header-view button').count(), 3);
     assert.ok(await page.isVisible('#timeline-button[aria-label="Timeline"] svg'));
     assert.ok(await page.isVisible('#docs-button[aria-label="Docs"] svg'));
@@ -98,6 +110,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.state-view' }));
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.docs-view' }));
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.timeline-view' }));
+    // (and no block chosen: the tests chose some)
+    await page.evaluate(() => window.agentOS.os.call('extension.views.step-view.functions.local.close', {}));
     await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.step-view' }));
 
     // the docs button lists the docs folder of the agent; a click shows a doc
@@ -351,7 +365,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.textContent('.md-page h2'), 'The state view');
     assert.equal(await page.isHidden('#sv-viewer-code'), true);
     // themes: a button switches the theme and keeps it in ui-data (the state tests left it on black)
-    assert.equal(JSON.parse(await page.evaluate(() => window.__docs['commits/c000001'].state)).extension.views['state-view']['ui-data'].md_theme, 'reader');
+    assert.equal(JSON.parse((await commitDoc('c000001')).state).extension.views['state-view']['ui-data'].md_theme, 'reader');
     await page.click('#md-themes [data-md-theme="reader"]');
     assert.equal(await page.getAttribute('#sv-viewer-doc', 'data-md-theme'), 'reader');
     assert.equal(await page.locator('#md-themes:not([hidden]) .md-theme').count(), 6);
@@ -388,7 +402,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#save');
     await page.waitForFunction(() => window.agentOS.history.commits.length === 2);
     assert.ok(await page.isVisible('#sv-editor.saved'));
-    const commit = await page.evaluate(() => window.__docs['commits/c000002']);
+    const commit = await commitDoc('c000002');
     assert.ok(commit.paths.includes('added extension.data.x'), commit.paths.join(', '));
     assert.equal(JSON.parse(commit.state).extension.views['state-view']['ui-data'].current_state_version, 2);
     assert.match(await page.textContent('#pos'), /^v2 just now$/);
@@ -417,9 +431,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.focus('#changes');
     await page.keyboard.press('Meta+s');
     await page.waitForFunction(() => window.agentOS.history.commits.length === 3);
-    const c3 = await page.evaluate(() => window.__docs['commits/c000003']);
-    assert.ok(c3.state.includes('// shared by all apps'));
-    assert.doesNotThrow(() => JSON.parse(c3.state.replace('// shared by all apps', '')));
+    const c3 = await commitDoc('c000003');
+    assert.match(c3.state, /^[ \t]*\/\/ shared by all apps[ \t]*$/m);
+    assert.doesNotThrow(() => JSON.parse(c3.state.replace(/^[ \t]*\/\/ shared by all apps[ \t]*$/m, '')));
     assert.ok(c3.paths.every(p => p.includes('.ui-data.')), c3.paths.join(', '));
     const fixedSave = await page.evaluate(() => window.agentOS.calls.filter(c => c.name === 'local.save').pop());
     assert.equal(fixedSave.output.fixed, true);
@@ -427,19 +441,47 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // no function reported errors, and the editor still shows the comment after the live state synced in
     const errs = await page.evaluate(() => { const out = []; (function walk(o, p) { if (!o || typeof o !== 'object') return; if (Array.isArray(o.errors) && o.errors.length) out.push(p + ': ' + o.errors.join('; ')); Object.keys(o).forEach(k => k !== 'output' && walk(o[k], p + '.' + k)); })(window.agentOS.state, ''); return out; });
     assert.deepEqual(errs, []);
-    assert.ok(await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getValue().includes('// shared by all apps')));
+    assert.match(await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getValue()), /^[ \t]*\/\/ shared by all apps[ \t]*$/m);
 
-    // a newer version saved somewhere else runs here without a reload
+    // a newer version saved somewhere else runs here without a reload; the open views stay open
+    if (!(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].timeline_open))) await page.click('#timeline-button');
+    await page.waitForSelector('#tl-strip .tl-step');
     await page.evaluate(() => {
       const head = window.agentOS.history.commits[window.agentOS.history.commits.length - 1];
-      const st = JSON.parse(head.state.replace('// shared by all apps', ''));
+      const st = JSON.parse(head.state.replace(/^[ \t]*\/\/ shared by all apps[ \t]*$/m, ''));
       st.extension.data.from_elsewhere = true;
-      window.__docs['commits/c000004'] = { n: 4, parent: 3, at: new Date().toISOString(), state: JSON.stringify(st, null, 2), summary: { added: 1, updated: 0, deleted: 0 }, paths: ['added extension.data.from_elsewhere'] };
+      st.agents['agent-oss'].files.docs['state-view.md'] += '\nA new line from main.';
+      // as saved: the views closed
+      st.extension.views['header-view']['ui-data'].timeline_open = false;
+      const source = { git: '0123456789abcdef', branch: 'main', message: 'Add a line', request: 'add a line', session: 'https://claude.ai/code/test',
+        explain: [{ part: 'state-view.md', before: 'It had no last line.', now: 'It has a last line.' }] };
+      window.__docs['commits/c000004'] = { n: 4, parent: 3, at: new Date().toISOString(), state: JSON.stringify(st, null, 2), summary: { added: 1, updated: 1, deleted: 0 }, paths: ['added extension.data.from_elsewhere'], source };
       window.__listeners.forEach(f => f());
     });
     await page.waitForFunction(() => window.agentOS.state.extension.data.from_elsewhere === true);
     await page.waitForFunction(() => /^v4 /.test(document.querySelector('#pos') && document.querySelector('#pos').textContent));
     assert.equal(await page.evaluate(() => window.agentOS.history.commits.length), 4);
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].timeline_open), true);
+    // the timeline shows a New version block: State changes from v3 to v4, then where it came from, before and now, and the file side by side
+    const newer = page.locator('#tl-strip .tl-step', { has: page.locator('.tl-step-name', { hasText: /^loadNewerVersion$/ }) }).last();
+    await newer.waitFor();
+    assert.match(await newer.textContent(), /New version.*\d+ changes?/);
+    await newer.click();
+    await page.waitForFunction(() => (document.querySelector('#st-title .tl-kind') || {}).textContent === 'New version');
+    assert.equal((await stv()).tab, 'state');
+    await page.waitForSelector('#tl-detail .st-legend');
+    assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"from_elsewhere": true/);
+    assert.match(await page.textContent('#tl-detail'), /from v3 to v4/);
+    await page.click('#st-tab-details');
+    await page.waitForSelector('#tl-detail .tl-explain');
+    assert.match(await page.textContent('#tl-detail .tl-part'), /git commit 0123456 \(Add a line\)/);
+    assert.match(await page.textContent('#tl-detail .tl-explain'), /state-view\.mdIt had no last line\.It has a last line\./);
+    const filePart = part('docs/state-view.md');
+    assert.match(await filePart.textContent(), /This file was updated/);
+    await filePart.locator('.tl-call-head').click();
+    await filePart.locator('.tl-files .tl-code').nth(1).waitFor();
+    assert.ok(await filePart.locator('.tl-files .tl-code').nth(1).locator('.chg-added').count() > 0);
+    await page.click('#st-close');
 
     // every call, with its parent, is in the stored call log
     await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].items.some(i => i.name === 'loadNewerVersion')), null, { timeout: 5000 });
@@ -451,7 +493,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.ok(log.items.every(i => i.ok && i.at && typeof i.ms === 'number'), JSON.stringify(log.items.filter(i => !i.ok).slice(0, 3)));
 
     // the Reload button of the timeline: the page loads again, the timeline opens and replays from the first step
-    await page.click('#timeline-button');
+    // (the timeline stayed open after the new version)
+    assert.equal(await page.isHidden('#timeline-view'), false);
     await Promise.all([page.waitForNavigation(), page.click('#tl-reload')]);
     await page.waitForSelector('#tl-strip .tl-step.on');
     const replay = await page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data']);

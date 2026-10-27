@@ -31,8 +31,25 @@ var history={commits:[],canWrite:true,kind:'memory',put:function(c){own[c.n]=tru
 /* ---------- storage: commits/c000001...; one calls/<session> log per page load ---------- */
 function memoryStore(){var list=[];return{kind:'memory',list:function(){return Promise.resolve(list.slice())},put:function(c){list.push(c);return Promise.resolve()}}}
 function dbStore(db){return{kind:'db',
-  list:function(){return db.collection('commits').orderBy('n').get().then(function(s){return s.docs.map(function(d){return d.data()})})},
-  put:function(c){return db.collection('commits').doc(core.commitId(c.n)).set(c)}}}
+  list:function(){return db.collection('commits').orderBy('n').get().then(function(s){return Promise.all(s.docs.map(function(d){return unpackCommit(d.data())}))})},
+  put:function(c){return packCommit(c).then(function(doc){return db.collection('commits').doc(core.commitId(c.n)).set(doc)})}}}
+// A database document holds at most 256 KB. A bigger version keeps its state gzipped, in base64 (stateGz, not state).
+function packCommit(c){
+  if(JSON.stringify(c).length<=200000||!window.CompressionStream)return Promise.resolve(c);
+  return new Response(new Blob([c.state]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer().then(function(b){
+    var u=new Uint8Array(b),bin='';
+    for(var i=0;i<u.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));
+    var doc=Object.assign({},c);delete doc.state;doc.stateGz=btoa(bin);return doc;
+  });
+}
+function unpackCommit(c){
+  if(!c||typeof c.state==='string'||typeof c.stateGz!=='string')return Promise.resolve(c);
+  var bin=atob(c.stateGz),u=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+  return new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text().then(function(t){
+    var x=Object.assign({},c);delete x.stateGz;x.state=t;return x;
+  });
+}
 var callsTimer=null,callsWriting=false,callsAgain=false;
 function queueCalls(){clearTimeout(callsTimer);callsTimer=setTimeout(writeCalls,1200)}
 function writeCalls(){
@@ -301,6 +318,15 @@ var ready=SB?Promise.resolve().then(function(){
 });
 // A newer version saved somewhere else (another tab, or a release) runs here as soon as it is saved,
 // unless this page has unsaved edits. A page that stays open never shows an old version.
+// The page stays as it was: each view keeps its ui-data values, for the keys the new version still has.
+function keepUiData(old,next){
+  var ov=core.getPath(old,'extension.views')||{},nv=core.getPath(next,'extension.views')||{};
+  Object.keys(nv).forEach(function(k){
+    var a=ov[k]&&ov[k]['ui-data'],b=nv[k]&&nv[k]['ui-data'];
+    if(!a||!b||typeof a!=='object'||typeof b!=='object')return;
+    Object.keys(b).forEach(function(f){if(Object.prototype.hasOwnProperty.call(a,f))b[f]=core.clone(a[f])});
+  });
+}
 function follow(){
   if(!db)return;
   var q=db.collection('commits').orderBy('n');
@@ -309,12 +335,18 @@ function follow(){
     var known=history.commits.length?history.commits[history.commits.length-1].n:0;
     var fresh=s.docs.map(function(d){return d.data()}).filter(function(c){return c&&c.n>known&&!own[c.n]});
     if(!fresh.length)return;
-    fresh.sort(function(a,b){return a.n-b.n}).forEach(addCommit);
-    var sv=OS.refs['state-view'];
-    if(sv&&sv.draft!==null)return;
-    tracker.track('loadNewerVersion',{head:history.commits[history.commits.length-1].n},function(){
-      live=core.parseJsonc(history.commits[history.commits.length-1].state);
-      return start();
+    Promise.all(fresh.map(unpackCommit)).then(function(fresh){
+      // (a later snapshot got here first)
+      if(history.commits.length&&history.commits[history.commits.length-1].n!==known)return;
+      fresh.sort(function(a,b){return a.n-b.n}).forEach(addCommit);
+      var sv=OS.refs['state-view'];
+      if(sv&&sv.draft!==null)return;
+      return tracker.track('loadNewerVersion',{head:history.commits[history.commits.length-1].n,from:known},function(){
+        var next=core.parseJsonc(history.commits[history.commits.length-1].state);
+        keepUiData(live,next);
+        live=next;
+        return start();
+      }).then(function(){return afterTop('loadNewerVersion')});
     }).catch(report);
   },function(e){report(e)});
 }

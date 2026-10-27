@@ -1,0 +1,112 @@
+# How Agent OS works
+
+## Architecture
+```svg<svg viewBox="0 0 780 500" role="img" aria-label="Architecture of Agent OS">
+<defs><marker id="arrow-head" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto"><path class="head" d="M0,0 L8,4 L0,8 z"/></marker></defs>
+<rect class="box" x="20" y="20" width="140" height="56" rx="8"/>
+<text class="title" x="36" y="44">Browser</text><text class="mono" x="36" y="62">opens the artifact</text>
+<rect class="key" x="230" y="20" width="220" height="56" rx="8"/>
+<text class="title" x="246" y="44">index.html (runtime)</text><text class="mono" x="246" y="62">+ state-core.js</text>
+<rect class="box" x="540" y="20" width="220" height="74" rx="8"/>
+<text class="title" x="556" y="44">Page database</text><text class="mono" x="556" y="62">commits/c000001 ... (versions)</text><text class="mono" x="556" y="78">calls/&lt;session&gt; (call records)</text>
+<rect class="group" x="20" y="150" width="740" height="190" rx="10"/>
+<text class="title" x="36" y="174">Live state (JSON): the newest version</text>
+<rect class="box" x="36" y="188" width="320" height="136" rx="8"/>
+<text class="title" x="50" y="210">extension.views</text>
+<text class="mono" x="50" y="232">index-view   html, ui-data, functions</text>
+<text class="mono" x="50" y="252">header-view  html, ui-data, functions</text>
+<text class="mono" x="50" y="272">docs-view    html, ui-data, functions</text>
+<text class="mono" x="50" y="292">state-view   html, ui-data, functions</text>
+<text class="mono" x="50" y="312">local.init, local.save, ...</text>
+<rect class="box" x="372" y="188" width="180" height="136" rx="8"/>
+<text class="title" x="386" y="210">extension.functions</text>
+<text class="mono" x="386" y="232">render</text><text class="mono" x="386" y="252">get-state</text><text class="mono" x="386" y="272">unmount</text>
+<rect class="box" x="568" y="188" width="176" height="136" rx="8"/>
+<text class="title" x="582" y="210">agents.agent-oss.files</text>
+<text class="mono" x="582" y="232">docs (these docs)</text><text class="mono" x="582" y="252">.claude</text>
+<rect class="group" x="20" y="400" width="740" height="84" rx="10"/>
+<text class="title" x="36" y="424">Page (DOM): #index-view</text>
+<rect class="box" x="36" y="436" width="200" height="34" rx="6"/><text class="mono" x="50" y="458">#header-view</text>
+<rect class="box" x="290" y="436" width="200" height="34" rx="6"/><text class="mono" x="304" y="458">#docs-view</text>
+<rect class="box" x="544" y="436" width="200" height="34" rx="6"/><text class="mono" x="558" y="458">#state-view</text>
+<path class="flow" marker-end="url(#arrow-head)" d="M160 48 H228"/>
+<path class="flow" marker-end="url(#arrow-head)" d="M450 48 H538"/><text class="num" x="470" y="40">1</text>
+<path class="flow" marker-end="url(#arrow-head)" d="M610 94 V148"/><text class="num" x="618" y="126">2</text>
+<path class="flow" marker-end="url(#arrow-head)" d="M340 76 V110 H462 V186"/><text class="num" x="350" y="102">3</text>
+<path class="flow" marker-end="url(#arrow-head)" d="M462 324 V398"/><text class="num" x="470" y="366">4</text>
+<path class="flow" marker-end="url(#arrow-head)" d="M136 434 V326"/><text class="num" x="144" y="384">5</text>
+<path class="flow" marker-end="url(#arrow-head)" d="M196 326 V360 H300 V340"/><text class="num" x="240" y="354">6</text>
+<path class="flow" marker-end="url(#arrow-head)" d="M710 150 V96"/><text class="num" x="718" y="126">7</text>
+</svg>```
+1. The runtime reads all saved versions from the page database.
+2. The newest version becomes the live state.
+3. The runtime calls the function render for index-view.
+4. render fills the html of a view with its ui-data and puts it into the element of the view.
+5. You click a button. The button calls a function of its view.
+6. The function changes the state, for example the ui-data of a view. Then the views show the new state.
+7. The Save button of the state view saves the state as a new version in the page database.
+
+## The parts
+- The state is one JSON document. It holds all the data, views and functions of the page.
+- The runtime is the file index.html. It loads the state and starts the first view. It has no page content.
+- A view is one part of the page. A view has html, ui-data and functions. The html starts with one root element. The id of this element is the name of the view.
+- A function is JavaScript code in the state. The runtime runs it and records the result.
+- The code of a function starts with import lines. Each line names a thing that the function uses. The imports field of the function tells where each thing comes from.
+- A version is a saved copy of the state. The page keeps all versions in its database.
+
+## The timeline
+1. Click the Timeline button in the header. The timeline opens at the top of the page, above the header.
+2. It shows what happened since the page opened, as blocks in a row from left to right. The first blocks are: the page opens, index.html runs, the runtime loads the state, the page starts.
+3. Each next block is one call that nothing else called, for example a click on a button.
+4. Each block shows its number, the time since the page opened, the function, its time in ms and how many state changes it made.
+5. What you do in the timeline (clicks on blocks, the replay, its buttons) is not a block. Turn on the Track the timeline checkbox to add it as blocks too.
+
+### A block
+1. Click a block. It opens under the header, in step-view, with two tabs. It opens on State changes, or on Details when the block changed nothing in the state.
+   Click the block again, or the close button (×), to hide it.
+2. State changes: the state cut down to what this block changed, before and after, in the colors of the Changes of the state view: green is added, yellow is updated, red is deleted. Under it, a table says which function changed what. Long values are shortened.
+3. Details: what happens inside the block. The function, then each function it called, in the order they started, with their input and time.
+   Each function says what it does (its docs), why it ran (a click, a watch, or the function that called it) and what it changed in the state. Click its name to see its code.
+   The first blocks happen before any function runs, so they show their parts instead:
+   - Open the page: every file the page load downloaded. index.html (its size and what is in it), state-core.js, the runtime script inside index.html, then the files that come later: fonts, CodeMirror, js-beautify, state.json. Each part has its time and says what asks for the file.
+   - Run index.html: the runtime script runs. What it did, with times, the start time (os.started), the session id of the call log, the call tracker, and the functions in os.
+   - Load the state: state.json downloads, the page connects to the database, reads the saved versions and parses the newest one.
+   Each part says what happens and why it is needed. Click a part to open it: it shows the lines of index.html that do it (with their line numbers), then what it made:
+   - Download index.html shows the html of index.html. Load state-core.js shows its code. The runtime script shows its code. A downloaded script, style or json shows its text.
+   - Run the runtime script shows what the runtime did, with times.
+   - Note the start time shows the browser's timings. Make a session id shows the first record of the call log. Create the call tracker counts the calls by name. Build os lists what is in os: click one to see what it is for, which functions use it, how often they ran, and its code.
+   - Download state.json shows state.json. Connect to the database shows where the versions and the call log are. Read the saved versions lists the versions. Parse the newest version shows the parts of the state and their sizes.
+### The buttons of the timeline
+1. The arrow buttons show the block before and the next block.
+2. The Replay button shows the next block every 1.6 seconds. From the last block, it starts again at the first. It goes on to the newest block. With Track the timeline on, each move adds a block, so it stops at the block that was the newest when it started. It also stops when you click it again, or when you click a block.
+3. The Reload button reloads the page, so the history starts again at block 1. The timeline opens again and replays the blocks from the first one. If the state has unsaved changes, it does not reload: save them first.
+4. The State changes button (±) hides or shows what each function changed, in the Details.
+5. The blocks button hides or shows the row of blocks.
+6. The Flows button opens the list of saved flows. Click the play button of a flow to replay only its blocks. First enter is the page opening: its first 4 blocks (index.html, runtime, loadState, the render of index-view).
+7. Closing the timeline closes the view of the block too.
+
+### A new version
+1. A Claude Code session changes the files of main. It commits the change, pushes it and saves a new version of the state.
+2. An open page gets the new version and runs it immediately. You do not reload the page.
+3. Each view keeps its ui-data. The views that were open stay open.
+4. The timeline adds a New version block.
+5. State changes: the differences between the version that ran before and the new version. Long texts are cut.
+6. Details: where the version came from (the git commit, the request and the session), how each part worked before and how it works now, side by side, and each changed file side by side. Red lines are only in the old version. Green lines are only in the new version.
+
+### Where it comes from
+1. The timeline comes from the call log of the runtime (os.calls), not from the state. If the state kept the timeline, each call would change the state again.
+2. The ui-data of timeline-view keeps the chosen block (selected), whether the replay runs (playing), show_changes, track_timeline, show_blocks, flows_open, and the saved flows (flows: each has a name and the names of its blocks). The ui-data of step-view keeps its tab (state or details).
+
+## Where the parts are
+- Views: extension.views.
+- Shared functions: extension.functions.
+- Files of the agent: agents.agent-oss.files. These are the files of main, except state.json (state.json is the state).
+- These docs: agents.agent-oss.files.docs (docs/ in the repo).
+
+## Rules
+- All the data that a view shows is in the ui-data of that view.
+- A function changes the state. Then the view shows the new state.
+- The expected-state-change of a function tells which parts of the state it can change. If the function changes nothing, it is empty.
+- After each run, the runtime updates the output, performance and errors of the function.
+- When a newer version is saved in a different place, an open page shows it immediately. Each view keeps its ui-data. Unsaved edits in the state view stop this.
+- To change the page, change the state and save it. Do not change index.html.

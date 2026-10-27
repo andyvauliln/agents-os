@@ -1,0 +1,914 @@
+{
+  "session": "2cec6924-58ef-5971-a12c-840df519af08",
+  "run": 58,
+  "runs_in_session": 58,
+  "agent": "Claude Code (main agent)",
+  "title": "Address the 4 open page comments",
+  "started": "2026-10-27T16:20:27.995Z",
+  "ended": "2026-10-27T16:42:14.177Z",
+  "version": 34,
+  "git": {
+    "from": "2b6f9c0",
+    "to": "c88be2d"
+  },
+  "started_by": {
+    "session": {
+      "who": "the coordinator (a relay)",
+      "words": "Reading of the ask: (1) set up a workspace with a git repo for this project's work. No repos are attached yet; check list_repos for a suitable one (e.g. agent_os/agents_os). If none exists, init a local git repo in the workspace and ask Andrei to create a GitHub repo so you can attach and push. (2) Publish an HTML artifact that's otherwise empty and holds the user's JSON, exactly as given in the m",
+      "at": "2026-10-24T18:17:55.197Z",
+      "why": "The session started on 2026-10-24. Its goal is to build the Agent OS page. The page is an artifact. It runs from its JSON state."
+    },
+    "run": {
+      "who": "Andrei (a message)",
+      "words": "addres not handled notes in a comments",
+      "at": "2026-10-27T16:20:27.995Z",
+      "why": "Andrei left 4 open comment threads on the Agent OS page. Three are about the Agent run panel: the files panel, the MCP panel and the run-recorder lane. One is about the switches of the state view. The run had to read the threads and make these changes in version 34."
+    },
+    "workflow": null,
+    "subagents": [
+      {
+        "name": "run-recorder (general-purpose)",
+        "why": "The main agent started it at the end of the run. It records this run in runs/<session>-<run>.json from the session log. The timeline shows this file as an Agent run block."
+      }
+    ],
+    "skills": []
+  },
+  "context": {
+    "at_start": 137969,
+    "at_end": 256142,
+    "peak": 256142,
+    "cached_at_end": 255240,
+    "output_tokens": 53786,
+    "requests": 47,
+    "compacted": false
+  },
+  "steps": [
+    {
+      "title": "Read the 4 open comments",
+      "lane": "main",
+      "from": "2026-10-27T16:20:27.995Z",
+      "to": "2026-10-27T16:20:45.192Z",
+      "items": [
+        {
+          "text": "mcp hearthbot post_message: tell Andrei what the run understood",
+          "kind": "mcp"
+        },
+        {
+          "text": "load the ArtifactComments tool",
+          "kind": "search"
+        },
+        {
+          "text": "read the comments of the Agent OS page (ArtifactComments): 4 open threads",
+          "kind": "read"
+        },
+        {
+          "text": "mcp hearthbot update_progress_checklist: one line for each comment",
+          "kind": "mcp"
+        }
+      ],
+      "why": "Andrei asked the agent to address the comments that are not handled. The agent had to read the open threads on the page first.",
+      "context_tokens": 146582,
+      "cached_tokens": 140142,
+      "files": []
+    },
+    {
+      "title": "Screenshot the Agent run and the state view",
+      "lane": "main",
+      "from": "2026-10-27T16:20:46.379Z",
+      "to": "2026-10-27T16:22:03.903Z",
+      "items": [
+        {
+          "text": "read the runDetails code in scratchpad/gen/make_state.py",
+          "kind": "read"
+        },
+        {
+          "text": "create scratchpad/shotnow.js from shot33.js",
+          "kind": "create"
+        },
+        {
+          "text": "run shotnow.js: screenshots of the Agent run details and the state view",
+          "kind": "run"
+        },
+        {
+          "text": "read 4 screenshots of the page as it was",
+          "kind": "read"
+        },
+        {
+          "text": "read the record of run 57 and .claude/agents/run-recorder.md",
+          "kind": "read"
+        }
+      ],
+      "why": "The comments are about the Agent run panel and the state view. The agent looked at these views as they were before it changed them.",
+      "context_tokens": 160849,
+      "cached_tokens": 157578,
+      "files": [
+        {
+          "path": "scratchpad/gen/make_state.py",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/shotnow.js",
+          "action": "created"
+        },
+        {
+          "path": "scratchpad/now-run-details.png",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/now-state-view.png",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/now-run-details-0.png",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/now-run-details-1.png",
+          "action": "read"
+        },
+        {
+          "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-57.json",
+          "action": "read"
+        },
+        {
+          "path": ".claude/agents/run-recorder.md",
+          "action": "read"
+        }
+      ]
+    },
+    {
+      "title": "Find the code of the state view filter",
+      "lane": "main",
+      "from": "2026-10-27T16:22:29.545Z",
+      "to": "2026-10-27T16:23:58.690Z",
+      "items": [
+        {
+          "text": "read the state view code in scratchpad/gen/make_state.py",
+          "kind": "read"
+        },
+        {
+          "text": "search state-core.js for kindOf and filterLines",
+          "kind": "search"
+        },
+        {
+          "text": "search tests/page.test.js for the switches, filter_kinds and the run panel",
+          "kind": "search"
+        },
+        {
+          "text": "search gen/docs_part.py and .claude/CLAUDE.md for the same names",
+          "kind": "search"
+        }
+      ],
+      "why": "The switches of the state view use filterLines in state-core.js. The agent had to know the code and the tests that use it before the change.",
+      "context_tokens": 193978,
+      "cached_tokens": 184178,
+      "files": [
+        {
+          "path": "scratchpad/gen/make_state.py",
+          "action": "read"
+        },
+        {
+          "path": "state-core.js",
+          "action": "read"
+        },
+        {
+          "path": "tests/page.test.js",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/gen/docs_part.py",
+          "action": "read"
+        },
+        {
+          "path": ".claude/CLAUDE.md",
+          "action": "read"
+        }
+      ]
+    },
+    {
+      "title": "Change filterLines in state-core",
+      "lane": "main",
+      "from": "2026-10-27T16:24:10.593Z",
+      "to": "2026-10-27T16:24:25.001Z",
+      "items": [
+        {
+          "text": "edit state-core.js: filterLines takes one kind only and the hideEmpty option",
+          "kind": "edit"
+        },
+        {
+          "text": "read the tests of tests/state-core.test.js",
+          "kind": "read"
+        },
+        {
+          "text": "edit tests/state-core.test.js: add a unit test for one kind and hideEmpty",
+          "kind": "test"
+        }
+      ],
+      "why": "Comment d asks for buttons that show one kind only and a Show empty box. The filter must support one kind and hide empty values.",
+      "context_tokens": 198861,
+      "cached_tokens": 197492,
+      "files": [
+        {
+          "path": "state-core.js",
+          "action": "updated"
+        },
+        {
+          "path": "tests/state-core.test.js",
+          "action": "updated"
+        }
+      ]
+    },
+    {
+      "title": "Make the state view bar",
+      "lane": "main",
+      "from": "2026-10-27T16:24:30.417Z",
+      "to": "2026-10-27T16:24:58.671Z",
+      "items": [
+        {
+          "text": "keep copies of make_state.py, pseudo.py and docs_part.py as v33",
+          "kind": "run"
+        },
+        {
+          "text": "create scratchpad/edit34a.py: kind buttons All / Files / Views / Functions and Changes on the left",
+          "kind": "create"
+        },
+        {
+          "text": "edit the bar: the filter and the Show empty box, then collapse, save, older and newer at the end",
+          "kind": "edit"
+        },
+        {
+          "text": "add the ui-data fields filter_kind (it replaces filter_kinds) and show_empty",
+          "kind": "edit"
+        },
+        {
+          "text": "add the function local.toggle-empty and its pseudo code in scratchpad/gen/pseudo.py",
+          "kind": "edit"
+        },
+        {
+          "text": "search index.html for data-call",
+          "kind": "search"
+        }
+      ],
+      "why": "Comment d asks to move the switches to the left and the pagination to the end. All the switches must be buttons, and Show empty must be a checkbox.",
+      "context_tokens": 204103,
+      "cached_tokens": 200467,
+      "files": [
+        {
+          "path": "scratchpad/gen/make_state_v33.py",
+          "action": "created"
+        },
+        {
+          "path": "scratchpad/gen/pseudo_v33.py",
+          "action": "created"
+        },
+        {
+          "path": "scratchpad/gen/docs_part_v33.py",
+          "action": "created"
+        },
+        {
+          "path": "scratchpad/edit34a.py",
+          "action": "created"
+        },
+        {
+          "path": "scratchpad/gen/make_state.py",
+          "action": "updated"
+        },
+        {
+          "path": "scratchpad/gen/pseudo.py",
+          "action": "updated"
+        },
+        {
+          "path": "index.html",
+          "action": "read"
+        }
+      ]
+    },
+    {
+      "title": "Make the Agent run panel again",
+      "lane": "main",
+      "from": "2026-10-27T16:25:31.783Z",
+      "to": "2026-10-27T16:27:05.142Z",
+      "items": [
+        {
+          "text": "create scratchpad/edit34b.py: a subagent lane with a dashed line that tells what the subagent is",
+          "kind": "create"
+        },
+        {
+          "text": "edit the run cards: short cards, and the uses go into the Details",
+          "kind": "edit"
+        },
+        {
+          "text": "edit the files panel: tabs Changes / Reads, source buttons All / Main agent / Subagents / MCP / Skills / Workflows",
+          "kind": "edit"
+        },
+        {
+          "text": "edit the file view: a tree and the tabs File / Changes / Why",
+          "kind": "edit"
+        },
+        {
+          "text": "mcp hearthbot update_progress_checklist: the comments are read",
+          "kind": "mcp"
+        },
+        {
+          "text": "delete 13 lines of old CSS (ar-board, ar-uses, ar-filter, ar-file)",
+          "kind": "delete"
+        },
+        {
+          "text": "run gen/make_state.py and build34x.js: make state.json and version 34",
+          "kind": "run"
+        }
+      ],
+      "why": "Comments a, b and c are about the Agent run panel. The files panel must look like the state view, show the reads, and split them by source. The MCP panel must go into the Details, and the run-recorder lane must tell what it is.",
+      "context_tokens": 222986,
+      "cached_tokens": 222737,
+      "files": [
+        {
+          "path": "scratchpad/edit34b.py",
+          "action": "created"
+        },
+        {
+          "path": "scratchpad/gen/make_state.py",
+          "action": "updated"
+        },
+        {
+          "path": "scratchpad/build34x.js",
+          "action": "created"
+        },
+        {
+          "path": "scratchpad/shot34.js",
+          "action": "created"
+        },
+        {
+          "path": "state.json",
+          "action": "updated"
+        }
+      ]
+    },
+    {
+      "title": "Check the new views on screenshots",
+      "lane": "main",
+      "from": "2026-10-27T16:27:45.754Z",
+      "to": "2026-10-27T16:29:09.861Z",
+      "items": [
+        {
+          "text": "run shot34.js: screenshots of the run, MCP, Reads and the state view",
+          "kind": "run"
+        },
+        {
+          "text": "run python: cut the long run screenshot into 3 parts",
+          "kind": "run"
+        },
+        {
+          "text": "read 6 screenshots of version 34",
+          "kind": "read"
+        },
+        {
+          "text": "edit make_state.py: no empty space under the subagent lane",
+          "kind": "edit"
+        },
+        {
+          "text": "edit make_state.py: \"an MCP call\", and no kind chip for a source",
+          "kind": "edit"
+        },
+        {
+          "text": "read the run screenshot again",
+          "kind": "read"
+        }
+      ],
+      "why": "The agent must see the new views before it tells Andrei that they are done. The screenshots showed an empty space under the subagent lane and \"a MCP\".",
+      "context_tokens": 233771,
+      "cached_tokens": 230129,
+      "files": [
+        {
+          "path": "scratchpad/shot34.js",
+          "action": "updated"
+        },
+        {
+          "path": "scratchpad/n34-run-0.png",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/n34-run-1.png",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/n34-run-2.png",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/n34-mcp.png",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/n34-reads.png",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/n34-sv-empty.png",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/gen/make_state.py",
+          "action": "updated"
+        },
+        {
+          "path": "state.json",
+          "action": "updated"
+        }
+      ]
+    },
+    {
+      "title": "Update the tests and fix 2 failures",
+      "lane": "main",
+      "from": "2026-10-27T16:30:29.348Z",
+      "to": "2026-10-27T16:34:53.874Z",
+      "items": [
+        {
+          "text": "edit tests/page.test.js: the kind buttons, Show empty, the new run panel",
+          "kind": "test"
+        },
+        {
+          "text": "run all tests: 1 failure",
+          "kind": "test"
+        },
+        {
+          "text": "mcp hearthbot update_progress_checklist: the views are done",
+          "kind": "mcp"
+        },
+        {
+          "text": "edit make_state.py: the Why list gets its own class ar-info, not the class of the Details list",
+          "kind": "edit"
+        },
+        {
+          "text": "run the page test: a regex found \"ui-data\" in a place that is correct",
+          "kind": "test"
+        },
+        {
+          "text": "edit tests/page.test.js: the regex looks only for the ui-data key of the view",
+          "kind": "test"
+        },
+        {
+          "text": "run the page test: it passes",
+          "kind": "test"
+        }
+      ],
+      "why": "The tests must check the new bar and the new run panel. Two checks failed because of a shared class and a regex that was too wide.",
+      "context_tokens": 247499,
+      "cached_tokens": 244599,
+      "files": [
+        {
+          "path": "tests/page.test.js",
+          "action": "updated"
+        },
+        {
+          "path": "scratchpad/t34.log",
+          "action": "created"
+        },
+        {
+          "path": "scratchpad/gen/make_state.py",
+          "action": "updated"
+        },
+        {
+          "path": "state.json",
+          "action": "updated"
+        }
+      ]
+    },
+    {
+      "title": "Update the docs and CLAUDE.md",
+      "lane": "main",
+      "from": "2026-10-27T16:38:01.369Z",
+      "to": "2026-10-27T16:38:26.161Z",
+      "items": [
+        {
+          "text": "mcp hearthbot update_progress_checklist: the tests pass",
+          "kind": "mcp"
+        },
+        {
+          "text": "search scratchpad/gen/docs_part.py and .claude/CLAUDE.md for lane, MCP and the switches",
+          "kind": "search"
+        },
+        {
+          "text": "edit docs_part.py: the subagent lane, the Changes / Reads tabs and the state view bar",
+          "kind": "edit"
+        },
+        {
+          "text": "edit .claude/CLAUDE.md: filter_kind, show_empty and filterLines",
+          "kind": "edit"
+        },
+        {
+          "text": "run gen/make_state.py: docs/how-it-works.md and docs/state-view.md",
+          "kind": "run"
+        },
+        {
+          "text": "run all tests: 23 of 23 pass",
+          "kind": "test"
+        }
+      ],
+      "why": "The docs and the repo guide must tell the new fields and the new views. The next agent reads them before it changes the page.",
+      "context_tokens": 250707,
+      "cached_tokens": 249488,
+      "files": [
+        {
+          "path": "scratchpad/gen/docs_part.py",
+          "action": "updated"
+        },
+        {
+          "path": ".claude/CLAUDE.md",
+          "action": "updated"
+        },
+        {
+          "path": "docs/how-it-works.md",
+          "action": "updated"
+        },
+        {
+          "path": "docs/state-view.md",
+          "action": "updated"
+        },
+        {
+          "path": "state.json",
+          "action": "updated"
+        },
+        {
+          "path": "scratchpad/t34.log",
+          "action": "updated"
+        }
+      ]
+    },
+    {
+      "title": "Commit c88be2d and publish the page",
+      "lane": "main",
+      "from": "2026-10-27T16:41:36.758Z",
+      "to": "2026-10-27T16:42:12.525Z",
+      "items": [
+        {
+          "text": "run git commit c88be2d (version 34)",
+          "kind": "run"
+        },
+        {
+          "text": "list the published files of the page (Artifact list)",
+          "kind": "read"
+        },
+        {
+          "text": "publish index.html and state-core.js: refused, the repo path is not allowed",
+          "kind": "publish"
+        },
+        {
+          "text": "copy index.html and state-core.js to scratchpad/pub34",
+          "kind": "run"
+        },
+        {
+          "text": "publish the page again with the new state-core.js (Artifact publish, version 26)",
+          "kind": "publish"
+        },
+        {
+          "text": "start the run-recorder subagent",
+          "kind": "subagent"
+        }
+      ],
+      "why": "The page loads filterLines from its own copy of state-core.js. The agent published the new state-core.js, so that the kind buttons and Show empty work on the page.",
+      "context_tokens": 256142,
+      "cached_tokens": 255240,
+      "files": [
+        {
+          "path": "index.html",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/gen/make_state.py",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/pub34/index.html",
+          "action": "created"
+        },
+        {
+          "path": "scratchpad/pub34/state-core.js",
+          "action": "created"
+        }
+      ]
+    },
+    {
+      "title": "Record the run",
+      "lane": "run-recorder",
+      "from": "2026-10-27T16:42:14.177Z",
+      "to": "2026-10-27T16:46:00.000Z",
+      "items": [
+        {
+          "text": "read .claude/agents/run-recorder.md",
+          "kind": "read"
+        },
+        {
+          "text": "run node scripts/run-log.js for run 58",
+          "kind": "run"
+        },
+        {
+          "text": "read the raw run data, the session log and the record of run 57",
+          "kind": "read"
+        },
+        {
+          "text": "create runs/2cec6924-58ef-5971-a12c-840df519af08-58.json",
+          "kind": "create"
+        }
+      ],
+      "why": "The timeline shows each run from its run file. The subagent groups the tool uses into steps and writes why for each item.",
+      "context_tokens": null,
+      "cached_tokens": null,
+      "files": [
+        {
+          "path": ".claude/agents/run-recorder.md",
+          "action": "read"
+        },
+        {
+          "path": "scratchpad/run58raw.json",
+          "action": "created"
+        },
+        {
+          "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-57.json",
+          "action": "read"
+        },
+        {
+          "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-58.json",
+          "action": "created"
+        }
+      ]
+    }
+  ],
+  "uses": {
+    "mcp": [
+      {
+        "name": "hearthbot / post_message",
+        "count": 2,
+        "why": "It told Andrei what the run understood, then sent the result of the run."
+      },
+      {
+        "name": "hearthbot / update_progress_checklist",
+        "count": 4,
+        "why": "It shows Andrei the progress checklist: one line for each comment."
+      }
+    ],
+    "skills": [],
+    "subagents": [
+      {
+        "name": "general-purpose (run-recorder)",
+        "count": 1,
+        "why": "It records this run as runs/<session>-<run>.json for the timeline."
+      }
+    ],
+    "workflows": []
+  },
+  "files": [
+    {
+      "path": ".claude/CLAUDE.md",
+      "action": "updated",
+      "tokens": 1275,
+      "cached": true,
+      "why": "The repo guide now tells about filter_kind, show_empty and the new filterLines."
+    },
+    {
+      "path": ".claude/agents/run-recorder.md",
+      "action": "read",
+      "tokens": 940,
+      "cached": true,
+      "why": "The instructions of the run-recorder. The main agent and the subagent read them."
+    },
+    {
+      "path": "docs/how-it-works.md",
+      "action": "updated",
+      "tokens": 0,
+      "cached": false,
+      "why": "The generator made it again with the subagent lane, the Changes / Reads tabs and the uses in Details."
+    },
+    {
+      "path": "docs/state-view.md",
+      "action": "updated",
+      "tokens": 0,
+      "cached": false,
+      "why": "The generator made it again with the kind buttons and the Show empty box."
+    },
+    {
+      "path": "index.html",
+      "action": "read",
+      "tokens": 95,
+      "cached": true,
+      "why": "The agent looked for data-call and for filterLines before it published the page."
+    },
+    {
+      "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-57.json",
+      "action": "read",
+      "tokens": 800,
+      "cached": true,
+      "why": "The model for the format of this run file."
+    },
+    {
+      "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-58.json",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "This record of run 58."
+    },
+    {
+      "path": "scratchpad/build34x.js",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "It builds the commit and the docs of version 34 for the screenshots."
+    },
+    {
+      "path": "scratchpad/edit34a.py",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "The script that changed the state view bar."
+    },
+    {
+      "path": "scratchpad/edit34b.py",
+      "action": "created",
+      "tokens": 34,
+      "cached": true,
+      "why": "The script that changed the Agent run panel."
+    },
+    {
+      "path": "scratchpad/gen/docs_part.py",
+      "action": "updated",
+      "tokens": 638,
+      "cached": true,
+      "why": "The docs part of the generator now tells about the new views."
+    },
+    {
+      "path": "scratchpad/gen/docs_part_v33.py",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "A copy of docs_part.py as it was in version 33."
+    },
+    {
+      "path": "scratchpad/gen/make_state.py",
+      "action": "updated",
+      "tokens": 13295,
+      "cached": true,
+      "why": "The generator of the page and the state. The agent changed the state view bar and the Agent run panel."
+    },
+    {
+      "path": "scratchpad/gen/make_state_v33.py",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "A copy of make_state.py as it was in version 33."
+    },
+    {
+      "path": "scratchpad/gen/pseudo.py",
+      "action": "updated",
+      "tokens": 0,
+      "cached": false,
+      "why": "It has the pseudo code of the new function local.toggle-empty."
+    },
+    {
+      "path": "scratchpad/gen/pseudo_v33.py",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "A copy of pseudo.py as it was in version 33."
+    },
+    {
+      "path": "scratchpad/n34-mcp.png",
+      "action": "read",
+      "tokens": 1600,
+      "cached": true,
+      "why": "A screenshot of the MCP uses in the Details of a block."
+    },
+    {
+      "path": "scratchpad/n34-reads.png",
+      "action": "read",
+      "tokens": 1600,
+      "cached": true,
+      "why": "A screenshot of the Reads tab of the files panel."
+    },
+    {
+      "path": "scratchpad/n34-run-0.png",
+      "action": "read",
+      "tokens": 3200,
+      "cached": true,
+      "why": "The first part of the new Agent run. The agent read it again after the fix of the empty space."
+    },
+    {
+      "path": "scratchpad/n34-run-1.png",
+      "action": "read",
+      "tokens": 1600,
+      "cached": true,
+      "why": "The second part of the new Agent run."
+    },
+    {
+      "path": "scratchpad/n34-run-2.png",
+      "action": "read",
+      "tokens": 1600,
+      "cached": true,
+      "why": "The third part of the new Agent run."
+    },
+    {
+      "path": "scratchpad/n34-sv-empty.png",
+      "action": "read",
+      "tokens": 1600,
+      "cached": true,
+      "why": "A screenshot of the state view with Show empty off."
+    },
+    {
+      "path": "scratchpad/now-run-details-0.png",
+      "action": "read",
+      "tokens": 1600,
+      "cached": true,
+      "why": "The first part of the Agent run details before the change."
+    },
+    {
+      "path": "scratchpad/now-run-details-1.png",
+      "action": "read",
+      "tokens": 1600,
+      "cached": true,
+      "why": "The second part of the Agent run details before the change."
+    },
+    {
+      "path": "scratchpad/now-run-details.png",
+      "action": "read",
+      "tokens": 1600,
+      "cached": true,
+      "why": "The Agent run details before the change."
+    },
+    {
+      "path": "scratchpad/now-state-view.png",
+      "action": "read",
+      "tokens": 1600,
+      "cached": true,
+      "why": "The state view before the change."
+    },
+    {
+      "path": "scratchpad/pub34/index.html",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "A copy of index.html in a path that the Artifact tool accepts."
+    },
+    {
+      "path": "scratchpad/pub34/state-core.js",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "A copy of state-core.js in a path that the Artifact tool accepts."
+    },
+    {
+      "path": "scratchpad/run58raw.json",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "The raw run data from scripts/run-log.js."
+    },
+    {
+      "path": "scratchpad/shot34.js",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "It takes the screenshots of version 34."
+    },
+    {
+      "path": "scratchpad/shotnow.js",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "It took the screenshots of the views before the change."
+    },
+    {
+      "path": "scratchpad/t34.log",
+      "action": "created",
+      "tokens": 0,
+      "cached": false,
+      "why": "The output of the test runs."
+    },
+    {
+      "path": "state-core.js",
+      "action": "updated",
+      "tokens": 1383,
+      "cached": true,
+      "why": "filterLines now shows one kind only and can hide empty values."
+    },
+    {
+      "path": "state.json",
+      "action": "updated",
+      "tokens": 0,
+      "cached": false,
+      "why": "The state of version 34: the new views, the ui-data fields and local.toggle-empty."
+    },
+    {
+      "path": "tests/page.test.js",
+      "action": "updated",
+      "tokens": 1162,
+      "cached": true,
+      "why": "The page test checks the kind buttons, Show empty and the new Agent run panel."
+    },
+    {
+      "path": "tests/state-core.test.js",
+      "action": "updated",
+      "tokens": 492,
+      "cached": true,
+      "why": "A new unit test checks filterLines with one kind and hideEmpty."
+    }
+  ]
+}

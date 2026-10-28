@@ -97,8 +97,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // (the state is bigger than a database document can hold: it is saved gzipped, and reads back the same)
     assert.equal(typeof (await page.evaluate(() => window.__docs['commits/c000001'].stateGz)), 'string');
     assert.equal((await commitDoc('c000001')).state, await page.evaluate(() => window.agentOS.history.commits[0].state));
-    assert.equal(await page.locator('#header-view button').count(), 3);
-    assert.ok(await page.isVisible('#timeline-button[aria-label="Timeline"] svg'));
+    // (the Timeline button is in the bar of the state view)
+    assert.equal(await page.locator('#header-view button').count(), 2);
     assert.ok(await page.isVisible('#docs-button[aria-label="Docs"] svg'));
     assert.ok(await page.isVisible('#state-button[aria-label="State view"] svg'));
     assert.equal(await page.isHidden('#state-view'), true);
@@ -122,18 +122,19 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const results = await page.evaluate(() => window.agentOS.os.runTests());
     assert.ok(results.length >= 12, results.length);
     assert.deepEqual(results.filter(r => !r.ok), []);
-    await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.state-view' }));
-    await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.docs-view' }));
-    await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.timeline-view' }));
-    // (and no block chosen: the tests chose some)
-    await page.evaluate(() => window.agentOS.os.call('extension.views.step-view.functions.local.close', {}));
-    // (and the filter of State changes back to empty, on All: the tests changed them)
+    // (the tests chose blocks and changed the state view: no block, the filter empty, All, no Changes, no Details,
+    // no Track state, the timeline hidden)
     await page.evaluate(async () => {
-      const os = window.agentOS.os;
-      await os.call('extension.views.step-view.functions.local.filter', { text: '' });
-      await os.call('extension.views.step-view.functions.local.filter-kind', { kind: 'all' });
+      const os = window.agentOS.os, sv = 'extension.views.state-view', d = os.get(sv + '.ui-data');
+      await os.call('extension.views.timeline-view.functions.local.select', { id: null });
+      await os.call(sv + '.functions.local.filter', { text: '' });
+      await os.call(sv + '.functions.local.filter-kind', { kind: 'all' });
+      if (d.changes) await os.call(sv + '.functions.local.toggle-changes', {});
+      if (d.track_state) await os.call(sv + '.functions.local.toggle-tracking', {});
+      if (d.timeline_open) await os.call(sv + '.functions.local.toggle-timeline', {});
     });
-    await page.evaluate(() => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.step-view' }));
+    for (const v of ['state-view', 'docs-view', 'timeline-view', 'notes-view'])
+      await page.evaluate(v => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.' + v }), v);
 
     // the record button, at the bottom right: one click records audio, two clicks record video
     const rec = () => page.evaluate(() => window.agentOS.state.extension.views['recorder-view']['ui-data']);
@@ -181,6 +182,25 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#rec-close');
     await page.waitForSelector('#rec-card', { state: 'detached' });
     assert.equal((await rec()).result, null);
+    // hold the button 4 s: the Notes page opens (empty for now); the click when you let go does not record
+    await page.hover('#rec-button');
+    await page.mouse.down();
+    await page.waitForTimeout(3000);
+    assert.equal(await page.isHidden('#notes-view'), true);
+    await page.waitForSelector('#notes-view .notes-bar', { timeout: 3000 });
+    await page.mouse.up();
+    await page.waitForTimeout(450);
+    assert.equal((await rec()).recording, '');
+    assert.deepEqual(await page.$eval('#notes-view', e => { const r = e.getBoundingClientRect(); return [r.left, r.top, r.width, r.height]; }), await page.evaluate(() => [0, 0, innerWidth, innerHeight]));
+    await page.click('#notes-close');
+    await page.waitForFunction(() => document.querySelector('#notes-view').hidden);
+    // a short press is still a click: audio
+    await page.click('#rec-button');
+    await recording('audio');
+    await page.click('#rec-button');
+    await recording('');
+    await page.click('#rec-close');
+    await page.waitForSelector('#rec-card', { state: 'detached' });
 
     // the docs button lists the docs folder of the agent; a click shows a doc
     await page.click('#docs-button');
@@ -196,27 +216,64 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#docs-button');
     assert.equal(await page.isHidden('#docs-view'), true);
 
-    // the timeline: its blocks at the top of the page, above the header; nothing chosen yet
+    // the state view: the one view for the state and its changes; the Timeline button is at the left of its bar
     const tl = () => page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data']);
-    const stv = () => page.evaluate(() => window.agentOS.state.extension.views['step-view']['ui-data']);
+    const svd = () => page.evaluate(() => window.agentOS.state.extension.views['state-view']['ui-data']);
     const blockNames = () => page.$$eval('#tl-strip .tl-step .tl-step-name', els => els.map(x => x.textContent));
+    const shownBlock = () => page.textContent('#sv-block');
+    await page.click('#state-button');
+    await page.waitForSelector('#state-view .CodeMirror');
+    assert.equal(await page.getAttribute('#state-button', 'aria-pressed'), 'true');
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].state_open), true);
+    assert.equal(await page.textContent('#path'), 'extension/views/state-view');
+    assert.match(await page.textContent('#pos'), /^v1 (just now|\d+ min ago)$/);
+    // the bar: the Timeline button, the kind buttons, Changes and Details; the filter with Show empty and Track state;
+    // then icon buttons, older and newer at the end
+    assert.equal(await page.locator('#state-view .sv-bar #sv-switches > #timeline-button:first-child svg').count(), 1);
+    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-switches .st-kind', els => els.map(b => b.textContent.trim())), ['All', 'Files', 'Views', 'Functions', 'Network', 'Environment', 'Changes', 'Details']);
+    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-checks label', els => els.map(b => b.textContent.trim())), ['Show empty', 'Track state']);
+    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-right button', els => els.map(b => b.id)), ['collapse', 'save', 'older', 'newer']);
+    assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar #sv-right button')].filter(b => b.textContent.trim()).length), 0);
+    assert.equal(await page.locator('#state-view .sv-foot #pos').count(), 1);
+    assert.equal(await page.locator('#state-view .sv-bar #path').count(), 0);
+    assert.equal(await page.isChecked('#sv-track'), false);
+    // no block chosen: the state view shows the last agent run (block 1)
+    await page.waitForFunction(() => /^Block 1: Agent run session /.test(document.querySelector('#sv-block').textContent));
+
+    // the timeline: hidden until its button; then its blocks at the top of the page, above the header
+    assert.equal(await page.isHidden('#timeline-view'), true);
     await page.click('#timeline-button');
     await page.waitForSelector('#tl-strip .tl-step');
+    assert.equal((await svd()).timeline_open, true);
+    assert.equal(await page.getAttribute('#timeline-button', 'aria-pressed'), 'true');
     assert.ok(await page.evaluate(() => document.querySelector('#timeline-view').compareDocumentPosition(document.querySelector('#header-view')) & Node.DOCUMENT_POSITION_FOLLOWING));
     const stepKinds = await page.$$eval('#tl-strip .tl-step .tl-kind', els => els.map(x => x.textContent));
     // the last agent run comes first (runs/ of the repo), then the page start
     assert.deepEqual(stepKinds.slice(0, 5), ['Agent run', 'Network', 'Run index.html', 'Load the state', 'Start the page']);
-    assert.equal(await page.isHidden('#step-view'), true);
-    assert.equal(await page.isChecked('#tl-track'), false);
+    // (no Changes button and no Track box in the timeline)
+    assert.equal(await page.locator('#tl-changes, #tl-track').count(), 0);
+    assert.equal(await page.locator('#tl-strip .tl-step.on.pin-left').count(), 1);
+    // when the row scrolls, the last agent run stays at the left and the newest block at the right
+    assert.equal(await page.locator('#tl-strip .tl-step:last-child.pin-right').count(), 1);
+    await page.evaluate(() => { const s = document.querySelector('#tl-strip'); s.style.scrollSnapType = 'none'; s.scrollLeft = (s.scrollWidth - s.clientWidth) / 2; });
+    await page.waitForTimeout(100);
+    const inSight = await page.evaluate(() => {
+      const s = document.querySelector('#tl-strip').getBoundingClientRect(), a = document.querySelector('.tl-step.pin-left').getBoundingClientRect(), b = document.querySelector('.tl-step.pin-right').getBoundingClientRect();
+      return [a.left >= s.left - 1 && a.right <= s.right + 1, b.left >= s.left - 1 && b.right <= s.right + 1, document.querySelector('#tl-strip').scrollWidth > s.width];
+    });
+    assert.deepEqual(inSight, [true, true, true]);
 
-    // the Agent run block opens on Details: the timeline of the agent, what started each part, the context, the files
+    // the Agent run block: Details shows the timeline of the agent, what started each part, the context, the files
     const runs = await page.evaluate(() => Object.keys(window.agentOS.state.agents['agent-oss'].files.runs).sort());
     const lastRun = await page.evaluate(n => JSON.parse(window.agentOS.state.agents['agent-oss'].files.runs[n]), runs[runs.length - 1]);
     await page.locator('#tl-strip .tl-step').first().click();
-    await page.waitForSelector('#tl-detail .ar-lanes');
     assert.equal((await tl()).selected, 'run:runs/' + runs[runs.length - 1]);
-    assert.equal((await stv()).tab, 'details');
-    assert.equal(await page.textContent('#st-title .tl-name'), 'session ' + lastRun.session.slice(0, 8) + ' · run ' + lastRun.run);
+    await page.click('#details');
+    await page.waitForSelector('#tl-detail .ar-lanes');
+    assert.equal((await svd()).details, true);
+    assert.equal(await page.getAttribute('#details', 'aria-pressed'), 'true');
+    assert.equal(await page.isHidden('#sv-editor'), true);
+    assert.match(await shownBlock(), new RegExp('^Block 1: Agent run session ' + lastRun.session.slice(0, 8) + ' · run ' + lastRun.run + ' · '));
     assert.match(await page.textContent('#tl-detail .ar-card.start'), new RegExp('Run ' + lastRun.run));
     assert.equal(await page.locator('#tl-detail .ar-card:not(.start)').count(), lastRun.steps.length);
     // a subagent has its own lane: its name, and a line that tells what it is and which steps are its own
@@ -262,33 +319,24 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.deepEqual((await page.$$eval('#tl-detail .ar-kv .kv-item', els => els.map(x => x.title))).filter(t => !t.startsWith('mcp ') && / \((created|updated|deleted)\)$/.test(t)).map(t => t.replace(/ \(\w+\)$/, '')).sort(), [...new Set(own.map(f => f.path))].sort());
     await page.click('#tl-detail .ar-card.step[data-step="' + k + '"]');
     assert.match(await page.textContent('#tl-detail .ar-files .tl-detail-sub'), /^The whole run/);
-    // its State changes: from the version before the run to the version it made (this page has only v1)
-    await page.click('#st-tab-state');
+    // its Changes: from the version before the run to the version it made (this page has only v1)
+    await page.click('#changes');
     await page.waitForFunction(() => /The run made v\d+\./.test(document.querySelector('#tl-detail').textContent));
-    await page.click('#st-close');
-    await page.waitForFunction(() => document.querySelector('#step-view').hidden);
+    assert.deepEqual([(await svd()).changes, (await svd()).details], [true, false]);
 
-    // a click on a block shows it under the header, State changes first; with tracking off the click is not a block
+    // a click on a block: the state view shows it; with Track state off the click is not a block
     const before = await blockNames();
     await page.locator('#tl-strip .tl-step').nth(1).click();
-    await page.waitForFunction(() => (document.querySelector('#step-view #st-title .tl-kind') || {}).textContent === 'Network');
+    await page.waitForFunction(() => /^Block 2: Network/.test(document.querySelector('#sv-block').textContent));
     assert.equal((await tl()).selected, 'open');
-    assert.equal((await stv()).tab, 'state');
-    // a click on the chosen block again hides it, and so does the close button
-    await page.locator('#tl-strip .tl-step').nth(1).click();
-    await page.waitForFunction(() => document.querySelector('#step-view').hidden);
-    assert.equal((await tl()).selected, null);
-    await page.locator('#tl-strip .tl-step').nth(1).click();
-    await page.waitForSelector('#step-view #st-title .tl-kind');
-    await page.click('#st-close');
-    await page.waitForFunction(() => document.querySelector('#step-view').hidden);
-    assert.equal((await tl()).selected, null);
-    await page.locator('#tl-strip .tl-step').nth(1).click();
-    await page.waitForSelector('#step-view #st-title .tl-kind');
     assert.deepEqual(await blockNames(), before);
-    assert.ok(await page.evaluate(() => document.querySelector('#header-view').compareDocumentPosition(document.querySelector('#step-view')) & Node.DOCUMENT_POSITION_FOLLOWING));
+    // (no block chosen again: the last agent run)
+    await page.evaluate(() => window.agentOS.os.call('extension.views.timeline-view.functions.local.select', { id: null }));
+    await page.waitForFunction(() => /^Block 1: Agent run/.test(document.querySelector('#sv-block').textContent));
+    await page.locator('#tl-strip .tl-step').nth(1).click();
+    await page.waitForFunction(() => /^Block 2: Network/.test(document.querySelector('#sv-block').textContent));
 
-    // network and environment are in the state; block 1 shows what changed in them since the version this page loaded
+    // network and environment are in the state; block 2 shows what changed in them since the version this page loaded
     const st0 = await page.evaluate(() => window.agentOS.state);
     assert.equal(st0.network.scripts['state-core.js'].expected, true);
     assert.equal(typeof st0.network.scripts['state-core.js'].ms, 'number');
@@ -303,7 +351,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(typeof st0.environment.browser.gpu, 'string');
     // everything the code registered, with who added it
     const env0 = await page.evaluate(() => window.agentOS.state.environment);
-    assert.ok(env0['event listeners']['#st-filter-input'].input.by.includes('local.init'), JSON.stringify(env0['event listeners']['#st-filter-input']));
+    assert.ok(env0['event listeners']['#sv-filter-input'].input.by.includes('local.init'), JSON.stringify(env0['event listeners']['#sv-filter-input']));
     assert.ok(env0['event listeners'].document.keydown.count >= 1);
     assert.equal(env0.document.title, 'Agent OS');
     assert.ok(env0.document.elements > 50);
@@ -312,26 +360,25 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.ok(Array.isArray(env0.connections));
     assert.ok('geolocation' in env0.permissions && 'battery' in env0.devices);
     // a listener added in a call is a change of that call
-    await page.evaluate(() => window.agentOS.os.call('extension.views.step-view.functions.local.filter', { text: '' }));
+    await page.evaluate(() => window.agentOS.os.call('extension.views.state-view.functions.local.filter', { text: '' }));
     await page.evaluate(() => { window.__probe = () => {}; document.body.addEventListener('dblclick', window.__probe); });
-    await page.evaluate(() => window.agentOS.os.call('extension.views.step-view.functions.local.filter', { text: '' }));
+    await page.evaluate(() => window.agentOS.os.call('extension.views.state-view.functions.local.filter', { text: '' }));
     assert.deepEqual(await page.evaluate(() => window.agentOS.state.environment['event listeners'].body.dblclick), { count: 1, by: ['the page (no call)'] });
-    // its State changes: the same view as the other blocks, with which function changed what
+    // its Changes: the state cut down to the changes, with which function changed what
     await page.waitForFunction(() => /changes? in the state, made by /.test(document.querySelector('#tl-detail').textContent));
     assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"network"/);
     assert.match(await page.textContent('#tl-detail .tl-table'), /network\.scripts\.state-core\.js\.ms.*loadState/);
-    // the filter of State changes works like the filter of the state view: text, then switches
-    await page.fill('#st-filter-input', 'state-core');
-    await page.waitForFunction(() => window.agentOS.state.extension.views['step-view']['ui-data'].filter === 'state-core');
+    // the filter of the state view works on the changes too
+    await page.fill('#sv-filter-input', 'state-core');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter === 'state-core');
     await page.waitForSelector('#tl-detail .sv-hidden');
     assert.ok((await page.$$eval('#tl-detail .tl-table tr', rows => rows.slice(1).map(r => r.textContent))).every(t => t.includes('state-core')));
-    await page.fill('#st-filter-input', '');
-    await page.waitForFunction(() => window.agentOS.state.extension.views['step-view']['ui-data'].filter === '');
-    // buttons, not switches: one kind shows in its own view, a tree of all of them on the left, the chosen one on the right
-    assert.deepEqual(await page.$$eval('#st-switches button', els => els.map(x => x.textContent.trim())), ['All', 'Files', 'Views', 'Functions', 'Network', 'Environment']);
-    await page.click('#st-switches [data-input*="environment"]');
-    await page.waitForSelector('#st-switches [data-input*="environment"][aria-pressed="true"]');
-    assert.equal((await stv()).filter_kind, 'environment');
+    await page.fill('#sv-filter-input', '');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter === '');
+    // one kind shows in its own view, a tree of all of them on the left, the chosen one on the right
+    await page.click('#sv-switches [data-input*="environment"]');
+    await page.waitForSelector('#sv-switches [data-input*="environment"][aria-pressed="true"]');
+    assert.equal((await svd()).filter_kind, 'environment');
     await page.waitForSelector('#tl-detail .kv .kv-tree .kv-item');
     assert.ok((await page.$$eval('#tl-detail .kv-item', els => els.map(x => x.textContent))).includes('event listeners'));
     // a changed item opens first, on its Value; Changes shows what changed in it
@@ -341,16 +388,16 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForSelector('#tl-detail .kv-main .st-legend');
     await page.locator('#tl-detail .kv-item', { hasText: /^document$/ }).click();
     assert.match(await page.textContent('#tl-detail .kv-head'), /^environment\.document/);
-    await page.click('#st-switches [data-input*="all"]');
-    await page.waitForSelector('#st-switches [data-input*="all"][aria-pressed="true"]');
+    await page.click('#sv-switches [data-input*="all"]');
+    await page.waitForSelector('#sv-switches [data-input*="all"][aria-pressed="true"]');
     await page.waitForSelector('#tl-detail .st-legend');
-    // updated values show the old value, as in the state view
+    // updated values show the old value
     assert.ok(await page.$('#tl-detail .tl-code .was'));
 
     // its Details: Network (all requests, in groups) next to Environment
-    await page.click('#st-tab-details');
+    await page.click('#details');
     await page.waitForSelector('#tl-detail .tl-netenv .tl-panel');
-    assert.equal((await stv()).tab, 'details');
+    assert.equal((await svd()).details, true);
     assert.deepEqual(await page.$$eval('#tl-detail .tl-netenv .tl-panel h3', els => els.map(x => x.textContent)), ['Network (all requests)', 'Environment']);
     const groups = await page.$$eval('#tl-detail .tl-netenv .tl-panel:first-child h4', els => els.map(x => x.textContent.split(' · ')[0]));
     for (const g of ['Html', 'Our scripts', 'API', 'State', 'Packages']) assert.ok(groups.includes(g), groups.join(' | '));
@@ -370,10 +417,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await page.textContent('#tl-detail .tl-netenv .tl-panel:last-child'), /browser data \/ storages \/ local storage|storages \/ local storage \/ limit/);
     const part = name => page.locator('#tl-detail .tl-part', { has: page.locator('.tl-name', { hasText: name }) });
     await page.click('#tl-next');
-    await page.waitForFunction(() => document.querySelector('#st-title .tl-kind').textContent === 'Run index.html');
+    await page.waitForFunction(() => /^Block 3: Run index\.html/.test(document.querySelector('#sv-block').textContent));
     assert.match(await page.textContent('#tl-detail'), /a name for this page load: s\w+/);
-    // block 2 runs the runtime script; it changed nothing in the state, so it opens on Details
-    assert.equal((await stv()).tab, 'details');
     await part('Run the runtime script').locator('.tl-call-head').click();
     assert.match(await part('Run the runtime script').locator('.tl-table').textContent(), /loadState/);
     assert.match(await part('Run the runtime script').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /window\.agentOS = \{/);
@@ -416,73 +461,54 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await page.textContent('#tl-pos'), /^First enter: block 1 of 4/);
     await page.waitForFunction(() => /^First enter: block 4 of 4/.test(document.querySelector('#tl-pos').textContent), null, { timeout: 8000 });
     await page.waitForFunction(() => !window.agentOS.state.extension.views['timeline-view']['ui-data'].playing);
-    assert.equal(await page.textContent('#st-title .tl-kind'), 'Start the page');
+    assert.match(await shownBlock(), /^Block \d+: Start the page/);
 
-    // Track the timeline: what you do in the timeline is added as blocks
-    await page.click('#tl-track');
-    await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].track_timeline === true);
+    // Track state: what you do in the state view and the timeline is added as blocks
+    await page.click('#sv-track');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].track_state === true);
     assert.ok((await blockNames()).includes('local.toggle-tracking'));
     await page.locator('#tl-strip .tl-step').first().click();
     await page.waitForFunction(() => Array.from(document.querySelectorAll('#tl-strip .tl-step-name')).some(x => x.textContent === 'local.select'));
-    await page.click('#tl-track');
-    await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].track_timeline === false);
+    await page.click('#sv-track');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].track_state === false);
     assert.equal((await blockNames()).includes('local.select'), false);
 
-    // the block of the Timeline click: State changes shows the state cut down to what it changed, and who changed it
-    if (!(await tl()).show_changes) await page.click('#tl-changes');
-    await page.locator('#tl-strip .tl-step', { has: page.locator('.tl-step-name', { hasText: 'local.open.timeline-view' }) }).last().click();
-    await page.click('#st-tab-state');
+    // the block of the State button click: Changes shows the state cut down to what it changed, and who changed it
+    await page.locator('#tl-strip .tl-step', { has: page.locator('.tl-step-name', { hasText: 'local.open.state-view' }) }).last().click();
+    await page.waitForFunction(() => /local\.open\.state-view/.test(document.querySelector('#sv-block').textContent));
+    await page.click('#changes');
     await page.waitForSelector('#tl-detail .st-legend');
-    assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"timeline_open": true/);
+    assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"state_open": true/);
     assert.ok(await page.locator('#tl-detail .tl-code .chg-updated').count() > 0);
-    assert.match(await page.locator('#tl-detail .tl-table').textContent(), /extension\.views\.header-view\.ui-data\.timeline_openfalse {2}→ {2}truelocal\.open\.timeline-view/);
+    assert.match(await page.locator('#tl-detail .tl-table').textContent(), /extension\.views\.header-view\.ui-data\.state_openfalse {2}→ {2}truelocal\.open\.state-view/);
     // its Details: each call says what it does and why it ran, its name opens its code, and what it changed
-    await page.click('#st-tab-details');
+    await page.click('#details');
     await page.locator('#tl-detail .tl-call').first().waitFor();
-    assert.deepEqual((await page.locator('#tl-detail .tl-call .tl-name').allTextContents()).slice(0, 2), ['local.open.timeline-view', 'extension.functions.render']);
+    assert.deepEqual((await page.locator('#tl-detail .tl-call .tl-name').allTextContents()).slice(0, 2), ['local.open.state-view', 'extension.functions.render']);
     assert.match(await page.locator('#tl-detail .tl-call').first().textContent(), /Why it ran You clicked a button of header-view/);
     await page.locator('#tl-detail .tl-call').first().locator('.tl-call-head').first().click();
-    assert.match(await page.locator('#tl-detail .tl-call').first().locator('.tl-code').first().evaluate(e => e.cm.getValue()), /async function openTimelineView/);
-    assert.ok((await page.locator('#tl-detail .tl-change').allTextContents()).includes('extension.views.header-view.ui-data.timeline_open' + 'false  →  true'));
-    await page.click('#tl-changes');
-    await page.waitForFunction(() => !document.querySelector('#tl-detail .tl-change'));
-    assert.equal((await tl()).show_changes, false);
-    await page.click('#tl-changes');
-    await page.locator('#tl-detail .tl-change').first().waitFor();
-    // closing the timeline closes the block's view too
+    assert.match(await page.locator('#tl-detail .tl-call').first().locator('.tl-code').first().evaluate(e => e.cm.getValue()), /async function openStateView/);
+    assert.ok((await page.locator('#tl-detail .tl-change').allTextContents()).includes('extension.views.header-view.ui-data.state_open' + 'false  →  true'));
+    // the Timeline button hides the timeline; the state view keeps the block
     await page.click('#timeline-button');
-    assert.equal(await page.isHidden('#timeline-view'), true);
-    assert.equal(await page.isHidden('#step-view'), true);
+    await page.waitForFunction(() => document.querySelector('#timeline-view').hidden);
+    assert.equal((await svd()).timeline_open, false);
+    assert.match(await shownBlock(), /local\.open\.state-view/);
+    // back to the editor: Details and Changes off
+    await page.click('#details');
+    await page.waitForFunction(() => !window.agentOS.state.extension.views['state-view']['ui-data'].details);
+    await page.click('#changes');
+    await page.waitForFunction(() => !window.agentOS.state.extension.views['state-view']['ui-data'].changes);
+    assert.equal(await page.isHidden('#tl-detail'), true);
+    assert.equal(await page.isVisible('#sv-editor'), true);
 
-    // open the state view from the header: icon buttons, the view path, the version time as "ago"
-    await page.click('#state-button');
-    await page.waitForSelector('#state-view .CodeMirror');
-    assert.equal(await page.getAttribute('#state-button', 'aria-pressed'), 'true');
-    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].state_open), true);
-    assert.equal(await page.textContent('#path'), 'extension/views/state-view');
-    assert.match(await page.textContent('#pos'), /^v1 (just now|\d+ min ago)$/);
-    // the top bar: the kind buttons and Changes on the left, the filter and Show empty, then icon buttons, older and newer at the end
-    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-switches button', els => els.map(b => b.textContent.trim())), ['All', 'Files', 'Views', 'Functions', 'Changes']);
-    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-right button', els => els.map(b => b.id)), ['collapse', 'save', 'older', 'newer']);
-    assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar #sv-right button')].filter(b => b.textContent.trim()).length), 0);
-    assert.equal(await page.locator('#state-view .sv-foot #pos').count(), 1);
-    assert.equal(await page.locator('#state-view .sv-bar #path').count(), 0);
-    // the filter shows only the paths that have the text; a switch hides files, views or functions
+    // the filter shows only the paths that have the text
     const shownText = () => page.evaluate(() => [...document.querySelectorAll('#sv-editor .CodeMirror-line')].map(l => l.textContent).join('\n'));
     const hiddenMarks = () => page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().filter(m => m.replacedWith && m.replacedWith.classList.contains('sv-hidden')).length);
-    const svd = () => page.evaluate(() => window.agentOS.state.extension.views['state-view']['ui-data']);
-    // (the state tests left another kind on, and Show empty off)
-    if ((await svd()).filter_kind !== 'all') {
-      await page.click('#sv-switches [data-input*="all"]');
-      await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kind === 'all');
-    }
     if (!(await svd()).show_empty) {
       await page.click('#sv-empty');
       await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].show_empty);
     }
-    // (and the filter text)
-    await page.fill('#sv-filter-input', '');
-    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter === '');
     assert.equal(await page.locator('#sv-results').count(), 0);
     assert.equal(await hiddenMarks(), 0);
     await page.fill('#sv-filter-input', 'docs/render-steps');
@@ -493,32 +519,38 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(shown, /"render-steps\.md"/);
     assert.doesNotMatch(shown, /"extension"/);
     assert.match(await page.textContent('#sv-editor .sv-hidden'), /^⋯ \d+ lines?$/);
-    // Functions: only functions show, so the match in a file hides
+    // Functions: a tree of the functions; the text is in no function
     await page.click('#sv-switches [data-input*="functions"]');
     await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kind === 'functions');
     assert.equal(await page.getAttribute('#sv-switches [data-input*="functions"]', 'aria-pressed'), 'true');
     assert.equal(await page.getAttribute('#sv-switches [data-input*="all"]', 'aria-pressed'), 'false');
-    assert.doesNotMatch(await shownText(), /render-steps/);
+    assert.equal(await page.isHidden('#sv-editor'), true);
+    assert.match(await page.textContent('#tl-detail'), /No functions have the filter text/);
     await page.press('#sv-filter-input', 'Escape');
     await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter === '');
-    // without text, Functions shows only the functions objects; Files only the files
-    shown = await shownText();
-    assert.match(shown, /"local\.init"/);
-    assert.doesNotMatch(shown, /^ {8}"ui-data": \{|"render-steps\.md"/m);
+    await page.waitForSelector('#tl-detail .kv-tree .kv-item');
+    assert.match(await page.textContent('#tl-detail > .tl-text'), /^\d+ functions in the state of v1\. Choose one on the left\.$/);
+    assert.ok((await page.$$eval('#tl-detail .kv-item', els => els.map(x => x.textContent))).includes('get-state'));
+    // Files: the files in their folders, a tree; a click shows the file on the right
     await page.click('#sv-switches [data-input*="files"]');
     await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kind === 'files');
-    shown = await shownText();
-    assert.match(shown, /"render-steps\.md"/);
-    assert.doesNotMatch(shown, /"local\.init"/);
+    await page.waitForSelector('#tl-detail .kv-tree summary');
+    assert.equal(await page.locator('#tl-detail .kv-tree summary', { hasText: /^docs\/$/ }).count(), 1);
+    await page.locator('#tl-detail .kv-item', { hasText: /^render-steps\.md$/ }).click();
+    await page.waitForSelector('#tl-detail .fv.fv-md .md-page');
+    assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['File']);
     await page.click('#sv-switches [data-input*="all"]');
     await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kind === 'all');
+    assert.equal(await page.isVisible('#sv-editor'), true);
     assert.equal(await hiddenMarks(), 0);
-    // Show empty off hides the entries with an empty value ({} here)
+    // Show empty off hides the entries with an empty value ({} here), with no "⋯ N lines" mark
     assert.match(await shownText(), /"connection": \{\}/);
     await page.click('#sv-empty');
     await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].show_empty === false);
     assert.equal(await page.isChecked('#sv-empty'), false);
     assert.doesNotMatch(await shownText(), /"connection": \{\}/);
+    assert.equal(await hiddenMarks(), 0);
+    assert.equal(await page.locator('#sv-editor .sv-hidden').count(), 0);
     await page.click('#sv-empty');
     await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].show_empty);
     assert.equal(await hiddenMarks(), 0);
@@ -531,10 +563,15 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // long strings show "…"; html opens in the html viewer, rendered with the view's ui-data
     const marks = await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().filter(m => m.replacedWith).map(m => m.replacedWith.title));
     assert.ok(marks.includes('agents/agent-oss/files/.claude/settings.json') && marks.includes('agents/agent-oss/files/.claude/CLAUDE.md') && marks.includes('agents/agent-oss/files/docs/how-it-works.md'), marks.join(' | '));
-    // the pointer on "..." shows the start of the text
+    // the pointer on "..." shows the start of the text, in the colors of its kind (md here)
     await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().find(m => m.replacedWith && m.replacedWith.title === 'agents/agent-oss/files/.claude/CLAUDE.md')
       .replacedWith.dispatchEvent(new MouseEvent('mouseenter')));
-    assert.match(await page.textContent('.long-tip:not([hidden])'), /^# Agent OS/);
+    await page.waitForSelector('.long-tip:not([hidden]) .CodeMirror');
+    assert.match(await page.evaluate(() => document.querySelector('.long-tip .CodeMirror').CodeMirror.getValue()), /^# Agent OS/);
+    assert.ok(await page.locator('.long-tip .cm-header').count() > 0);
+    await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().find(m => m.replacedWith && m.replacedWith.title === 'agents/agent-oss/files/.claude/CLAUDE.md')
+      .replacedWith.dispatchEvent(new MouseEvent('mouseleave')));
+    assert.ok(await page.evaluate(() => document.querySelector('.long-tip').hidden));
     assert.ok(await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getAllMarks().filter(m => m.replacedWith).every(m => m.replacedWith.textContent === '"..."')));
 
     // code opens in the viewer on its own
@@ -616,9 +653,11 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(JSON.parse(commit.state).extension.views['state-view']['ui-data'].current_state_version, 2);
     assert.match(await page.textContent('#pos'), /^v2 just now$/);
 
-    // changes view and history steps
+    // changes view and history steps: after a save, Changes shows what the new version changed
     await page.click('#changes');
-    const added = await page.evaluate(() => { const cm = document.querySelector('.CodeMirror').CodeMirror; let n = 0; cm.eachLine(l => { if (/chg-added/.test(l.bgClass || '')) n++; }); return n; });
+    await page.waitForSelector('#tl-detail .st-legend');
+    assert.match(await page.textContent('#tl-detail > .tl-text'), /in the state from v1 to v2\./);
+    const added = await page.evaluate(() => { const cm = document.querySelector('#tl-detail .tl-code').cm; let n = 0; cm.eachLine(l => { if (/chg-added/.test(l.bgClass || '')) n++; }); return n; });
     assert.ok(added >= 1, 'added lines marked');
     await page.focus('#changes');
     await page.keyboard.press('ArrowLeft');
@@ -654,7 +693,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getValue()), /^[ \t]*\/\/ shared by all apps[ \t]*$/m);
 
     // a newer version saved somewhere else runs here without a reload; the open views stay open
-    if (!(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].timeline_open))) await page.click('#timeline-button');
+    if (!(await svd()).timeline_open) await page.click('#timeline-button');
     await page.waitForSelector('#tl-strip .tl-step');
     await page.evaluate(() => {
       const head = window.agentOS.history.commits[window.agentOS.history.commits.length - 1];
@@ -662,7 +701,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
       st.extension.data.from_elsewhere = true;
       st.agents['agent-oss'].files.docs['state-view.md'] += '\nA new line from main.';
       // as saved: the views closed
-      st.extension.views['header-view']['ui-data'].timeline_open = false;
+      st.extension.views['state-view']['ui-data'].timeline_open = false;
       const source = { git: '0123456789abcdef', branch: 'main', message: 'Add a line', request: 'add a line', session: 'https://claude.ai/code/test',
         explain: [{ part: 'state-view.md', before: 'It had no last line.', now: 'It has a last line.' }] };
       window.__docs['commits/c000004'] = { n: 4, parent: 3, at: new Date().toISOString(), state: JSON.stringify(st, null, 2), summary: { added: 1, updated: 1, deleted: 0 }, paths: ['added extension.data.from_elsewhere'], source };
@@ -671,14 +710,16 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForFunction(() => window.agentOS.state.extension.data.from_elsewhere === true);
     await page.waitForFunction(() => /^v4 /.test(document.querySelector('#pos') && document.querySelector('#pos').textContent));
     assert.equal(await page.evaluate(() => window.agentOS.history.commits.length), 4);
-    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].timeline_open), true);
+    assert.equal((await svd()).timeline_open, true);
     // the timeline shows a New version block: State changes from v3 to v4, then where it came from, before and now, and the file side by side
     const newer = page.locator('#tl-strip .tl-step', { has: page.locator('.tl-step-name', { hasText: /^loadNewerVersion$/ }) }).last();
     await newer.waitFor();
     assert.match(await newer.textContent(), /New version.*\d+ changes?/);
     await newer.click();
-    await page.waitForFunction(() => (document.querySelector('#st-title .tl-kind') || {}).textContent === 'New version');
-    assert.equal((await stv()).tab, 'state');
+    await page.waitForFunction(() => / New version /.test(document.querySelector('#sv-block').textContent));
+    // (the state view goes to the version it brought)
+    assert.match(await page.textContent('#pos'), /^v4 /);
+    if (!(await svd()).changes) await page.click('#changes');
     await page.waitForSelector('#tl-detail .st-legend');
     assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"from_elsewhere": true/);
     assert.match(await page.textContent('#tl-detail'), /from v3 to v4/);
@@ -691,8 +732,19 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await page.textContent('.tl-viewer .fv-title span'), /\d+ lines? · [\d.]+ KB/);
     await page.keyboard.press('Escape');
     await page.waitForSelector('.tl-viewer', { state: 'detached' });
+    // an updated text: the pointer on it (or on its "was "..."") shows its changes, the new line green
+    const upd = page.locator('#tl-detail .tl-code .long[title$="docs/state-view.md"]').first();
+    await upd.dispatchEvent('mouseenter');
+    await page.waitForSelector('.long-tip:not([hidden]) .CodeMirror');
+    assert.ok(await page.locator('.long-tip .chg-added').count() >= 1);
+    assert.match(await page.evaluate(() => document.querySelector('.long-tip .CodeMirror').CodeMirror.getValue()), /A new line from main\./);
+    await upd.dispatchEvent('mouseleave');
+    const was = page.locator('#tl-detail .tl-code .was', { hasText: 'was "..."' }).first();
+    await was.dispatchEvent('mouseenter');
+    await page.waitForSelector('.long-tip:not([hidden]) .chg-added');
+    await was.dispatchEvent('mouseleave');
     // Files: the tree of all the files on the left; the changed file opens first, with File and Changes tabs
-    await page.click('#st-switches [data-input*="files"]');
+    await page.click('#sv-switches [data-input*="files"]');
     await page.waitForSelector('#tl-detail .kv-tree');
     assert.ok(await page.locator('#tl-detail .kv-tree summary', { hasText: /^docs\/$/ }).count() === 1);
     assert.equal(await page.textContent('#tl-detail .kv-item.on'), 'state-view.md');
@@ -723,7 +775,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.ok(await page.locator('#tl-detail .kv').count() === 1, 'Escape leaves the step open');
     await page.click('#tl-detail .kv-tabs button:has-text("Changes")');
     await page.waitForSelector('#tl-detail .kv-main .tl-files');
-    assert.ok(await page.locator('#tl-detail .kv-main .tl-files .tl-file').nth(1).locator('.chg-added').count() > 0);
+    await page.locator('#tl-detail .kv-main .tl-files .tl-file').nth(1).locator('.chg-added').first().waitFor();
     // a file the block did not change has only its File tab
     await page.locator('#tl-detail .kv-item', { hasText: /^index\.html$/ }).click();
     assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['File']);
@@ -740,7 +792,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForSelector('#tl-detail .fv.fv-json .jv-row');
     assert.ok(await page.locator('#tl-detail .jv-key').count() > 3);
     // a function has the tab Pseudo code: its docs, then numbered lines with keywords
-    await page.click('#st-switches [data-input*="functions"]');
+    await page.click('#sv-switches [data-input*="functions"]');
     await page.locator('#tl-detail .kv-item', { hasText: /^get-state$/ }).click();
     assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['Function', 'Pseudo code']);
     await page.click('#tl-detail .kv-tabs button:has-text("Pseudo code")');
@@ -749,9 +801,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.deepEqual(await page.$$eval('#tl-detail .ps-kw', els => els.map(x => x.textContent)), ['READ', 'IF', 'THROW', 'RETURN']);
     assert.equal(await page.locator('#tl-detail .ps-line').nth(2).locator('.ps-guide').count(), 1);
     assert.match(await page.textContent('#tl-detail .ps-docs'), /Returns the JSON state/);
-    await page.click('#st-switches [data-input*="all"]');
+    await page.click('#sv-switches [data-input*="all"]');
     await page.waitForSelector('#tl-detail .st-legend');
-    await page.click('#st-tab-details');
+    await page.click('#details');
     await page.waitForSelector('#tl-detail .tl-explain');
     assert.match(await page.textContent('#tl-detail .tl-part'), /git commit 0123456 \(Add a line\)/);
     assert.match(await page.textContent('#tl-detail .tl-explain'), /state-view\.mdIt had no last line\.It has a last line\./);
@@ -759,8 +811,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await filePart.textContent(), /This file was updated/);
     await filePart.locator('.tl-call-head').click();
     await filePart.locator('.tl-files .tl-code').nth(1).waitFor();
-    assert.ok(await filePart.locator('.tl-files .tl-code').nth(1).locator('.chg-added').count() > 0);
-    await page.click('#st-close');
+    await filePart.locator('.tl-files .tl-code').nth(1).locator('.chg-added').first().waitFor();
+    await page.click('#details');
 
     // every call, with its parent, is in the stored call log
     await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].items.some(i => i.name === 'loadNewerVersion')), null, { timeout: 5000 });
@@ -780,16 +832,15 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // (the timeline stayed open after the new version)
     assert.equal(await page.isHidden('#timeline-view'), false);
     await Promise.all([page.waitForNavigation(), page.click('#tl-reload')]);
-    await page.waitForSelector('#tl-strip .tl-step.on');
-    const replay = await page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data']);
-    await page.waitForSelector('#step-view #st-title .tl-kind');
-    assert.equal(replay.playing, true);
-    assert.match(replay.selected, /^run:runs\//);
-    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].timeline_open), true);
+    await page.waitForFunction(() => window.agentOS && window.agentOS.state && window.agentOS.state.extension.views['timeline-view']['ui-data'].playing);
+    await page.waitForSelector('#sv-block b');
+    // (the replay started at the last agent run)
+    assert.deepEqual(await page.evaluate(() => window.agentOS.calls.filter(c => c.name === 'local.select').map(c => c.input.input.id).slice(0, 1).map(id => /^run:runs\//.test(id))), [true]);
+    assert.equal((await svd()).timeline_open, true);
     assert.equal(await page.evaluate(() => sessionStorage.getItem('agent-os.timeline-replay')), null);
     await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].selected === 'runtime', null, { timeout: 6000 });
     // the replay goes on past the blocks that were there when it started (the page was still starting)
-    await page.waitForFunction(() => (document.querySelector('#st-title .tl-kind') || {}).textContent === 'Start the page', null, { timeout: 8000 });
+    await page.waitForFunction(() => /^Block \d+: Start the page/.test(document.querySelector('#sv-block').textContent), null, { timeout: 8000 });
     assert.deepEqual(errors, []);
   } finally {
     await browser.close();

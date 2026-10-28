@@ -97,12 +97,11 @@ import ctx from 'ctx';
 async function init() {
   // Views that ui-data says are open are opened again.
   const d = os.get('extension.views.header-view.ui-data');
-  // After the Reload button of the timeline, the timeline opens again.
+  // After the Reload button of the timeline, the state view opens again with the timeline.
   let replay = location.hash === '#timeline-replay';
   try { replay = replay || sessionStorage.getItem('agent-os.timeline-replay') === '1'; } catch (e) {}
-  if (replay) d.timeline_open = true;
+  if (replay) { d.state_open = true; os.get('extension.views.state-view.ui-data').timeline_open = true; }
   if (d.docs_open && !os.mounted('extension.views.docs-view')) await ctx.call('extension.functions.render', { view_path: 'extension.views.docs-view' });
-  if (d.timeline_open && !os.mounted('extension.views.timeline-view')) await ctx.call('extension.functions.render', { view_path: 'extension.views.timeline-view' });
   if (d.state_open && !os.mounted('extension.views.state-view')) await ctx.call('extension.functions.render', { view_path: 'extension.views.state-view' });
 }
 ```
@@ -147,9 +146,11 @@ The left arrow button of the state view has data-input. The input goes to the pa
 import os from 'os';
 
 async function step({ delta }) {
+  // Older and Newer go through the versions: the view leaves the chosen block.
   const d = os.get('extension.views.state-view.ui-data'), R = os.refs['state-view'], H = os.history.commits;
   const last = H.length - (R.draft === null ? 1 : 0);
   d.position = Math.max(0, Math.min(last, d.position + (+delta || 0)));
+  R.onBlock = false;
 }
 ```
 The expected-state-change of local.step is { "extension.views.state-view.ui-data.position": "may change" }. After the run, local.refresh shows the version at the new position.

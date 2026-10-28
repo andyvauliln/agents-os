@@ -125,7 +125,7 @@ test('brief keeps logs small', () => {
 test('state.json runs from index-view and every function is complete', () => {
   const s = JSON.parse(seed);
   const views = s.extension.views;
-  assert.deepEqual(Object.keys(views), ['index-view', 'header-view', 'docs-view', 'timeline-view', 'step-view', 'state-view', 'recorder-view']);
+  assert.deepEqual(Object.keys(views), ['index-view', 'header-view', 'docs-view', 'timeline-view', 'state-view', 'recorder-view', 'notes-view']);
   core.walk(s, [], (v, p) => {
     if (p[p.length - 2] !== 'functions') return;
     for (const k of ['input', 'output', 'imports', 'tests', 'expected-state-change', 'docs', 'performance', 'code', 'calls']) assert.ok(k in v, `${p.join('.')} has ${k}`);
@@ -228,4 +228,10 @@ test('filterLines shows one kind only, and can hide empty values', () => {
   s = shown(core.filterLines(text, null, '', 'all', { hideEmpty: true }));
   assert.doesNotMatch(s, /"connection"|"html"|"f"/);
   assert.match(s, /"x\.md"/);
+  // (lines hidden only for an empty value say so: they hide without a mark)
+  assert.ok(core.filterLines(text, null, '', 'all', { hideEmpty: true }).every(r => r[2] === 'empty'));
+  // with a text, the lines the text hides keep their mark
+  const both = core.filterLines(text, null, 'x.md', 'all', { hideEmpty: true });
+  assert.ok(both.some(r => r[2] === 'empty') || both.every(r => r.length === 2));
+  assert.ok(both.some(r => r.length === 2));
 });

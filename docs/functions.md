@@ -88,15 +88,18 @@ import CodeMirror from 'codemirror';
 ```json
 {
   "turns the changes view on": {
-    "before": { "extension.functions.render": { "view_path": "extension.views.state-view" } },
+    "before": {
+      "extension.functions.render": { "view_path": "extension.views.state-view" },
+      "local.filter-kind": { "kind": "all" }
+    },
     "input": {},
     "expect": {
       "state": { "extension.views.state-view.ui-data.changes": true },
-      "dom": ["#changes[aria-pressed=\"true\"]"]
+      "dom": ["#changes[aria-pressed=\"true\"]", "#tl-detail:not([hidden]) .st-legend, #tl-detail:not([hidden]) .tl-text"]
     }
   }
 }
 ```
-1. before renders the state view. Then ui-data.changes is false.
+1. before renders the state view and pushes All. Then ui-data.changes is false.
 2. The runtime runs local.toggle-changes with the input {}.
-3. The runtime checks that ui-data.changes is true and that the Changes button is pressed.
+3. The runtime checks that ui-data.changes is true, that the Changes button is pressed, and that the pane shows the changes.

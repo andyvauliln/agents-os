@@ -56,7 +56,9 @@
       text.forEach(function (t, i) {
         lines.push((i === 0 ? indent + prefix : indent) + t + (i === text.length - 1 ? suffix : ''));
       });
-      marks.push({ type: type, path: path, from: from, to: lines.length - 1, before: before });
+      var mark = { type: type, path: path, from: from, to: lines.length - 1, before: before };
+      if (type === 'updated') mark.after = value;
+      marks.push(mark);
     }
     function emitObject(b, a, indent, path) {
       var keys = keysOf(b, a).filter(function (k) { return changed(b[k], a[k]) || !(k in a) || !(k in b); });
@@ -180,7 +182,8 @@
   // The filter of a JSON text: with q, only the entries whose path has q show, with the first and last lines of the
   // objects around them. kinds is an object (a kind that is off, kinds[kind] === false, hides its entries) or the name of
   // one kind: then only the entries of that kind show ('all' shows all). opts.hideEmpty hides the entries with an empty
-  // value ({}, [], "" or null). Returns the hidden lines as [from, to].
+  // value ({}, [], "" or null). Returns the hidden lines as [from, to]; lines hidden only for an empty value are
+  // [from, to, 'empty'] (the state view hides them without a "⋯ N lines" mark).
   function filterLines(text, map, q, kinds, opts) {
     map = map || spans(text);
     q = String(q || '').trim().toLowerCase(); opts = opts || {};
@@ -208,11 +211,13 @@
       keep(p, r);
     });
     else if (kept) kept.forEach(function (e) { keep(e[0], e[1]); });
-    off.concat(empty).forEach(function (o) { for (var l = line(o.from); l <= line(o.end - 1); l++) show[l] = false; });
+    off.forEach(function (o) { for (var l = line(o.from); l <= line(o.end - 1); l++) show[l] = false; });
+    var quiet = [];
+    empty.forEach(function (o) { for (var l = line(o.from); l <= line(o.end - 1); l++) { if (show[l]) quiet[l] = true; show[l] = false; } });
     var out = [], from = -1;
     for (var l = 0; l <= show.length; l++) {
-      if (l < show.length && !show[l]) { if (from < 0) from = l; }
-      else if (from >= 0) { out.push([from, l - 1]); from = -1; }
+      if (from >= 0 && (l === show.length || show[l] || !quiet[l] !== !quiet[from])) { out.push(quiet[from] ? [from, l - 1, 'empty'] : [from, l - 1]); from = -1; }
+      if (l < show.length && !show[l] && from < 0) from = l;
     }
     return out;
   }

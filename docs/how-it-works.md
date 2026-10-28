@@ -55,18 +55,19 @@
 - A version is a saved copy of the state. The page keeps all versions in its database.
 
 ## The timeline
-1. Click the Timeline button in the header. The timeline opens at the top of the page, above the header.
+1. Open the state view (the State button in the header). Click the Timeline button at the left of its bar. The timeline shows at the top of the page, above the header. Click the button again to hide it.
 2. It shows what happened since the page opened, as blocks in a row from left to right. The first block is the last agent run (if the state has one). Then: Network (every request and the environment), index.html runs, the runtime loads the state, the page starts.
 3. Each next block is one call that nothing else called, for example a click on a button.
 4. Each block shows its number, the time since the page opened, the function, its time in ms and how many state changes it made.
-5. What you do in the timeline (clicks on blocks, the replay, its buttons) is not a block. Turn on the Track the timeline checkbox to add it as blocks too.
+5. What you do in the state view and in the timeline (clicks on blocks, the replay, the buttons) is not a block. Turn on Track state (in the bar of the state view) to add it as blocks too.
+6. When the row of blocks scrolls, the last agent run stays at the left and the newest block stays at the right.
 
 ### A block
-1. Click a block. It opens under the header, in step-view, with two tabs. It opens on State changes, or on Details when the block changed nothing in the state.
-   Click the block again, or the close button (×), to hide it.
-2. State changes: the state cut down to what this block changed, in the same editor as the state view: green is added, yellow is updated (with the old value), red is deleted. Under it, a table says which function changed what.
-   A long text, or a text of more than one line, shows as "...", as in the state view. Put the pointer on it to see its start. Click it to open the whole text in the viewer. Press Escape or × to close the viewer.
-   Type in Filter paths to see only the paths that have the text. The table shows only the paths that the filter shows.
+1. Click a block. The state view shows it, and its bottom bar names it (for example "Block 3: Run index.html"). When no block is chosen, the state view shows the last agent run.
+   The state view goes to the version of the block: the version that an agent run made, or that a New version brought. For the other blocks, it is the newest version.
+2. Changes (the button in the bar of the state view): the state cut down to what this block changed: green is added, yellow is updated (with the old value), red is deleted. Under it, a table says which function changed what.
+   A long text, or a text of more than one line, shows as "...", as in the state view. Put the pointer on it to see its start. An updated text (and its "was "..."") shows its changes: red lines are removed, green lines are added. Click it to open the whole text in the viewer. Press Escape or × to close the viewer.
+   Type in Filter paths (the filter of the state view) to see only the paths that have the text. The table shows only the paths that the filter shows.
    The buttons All, Files, Views, Functions, Network and Environment choose what shows. All shows the changes as above. Each other button shows only that kind, in its own view:
    - On the left: a tree of all of them in the state after the block (for example all the files, in their folders). A changed one has the color of its change: green added, yellow updated, red deleted. A folder that holds a change is yellow.
    - On the right: the one that you click, in tabs. The first tab is its content: File (the text of the file), View (its html and ui-data), Function (its code and its other fields), Request (a request of network) or Value (a part of environment).
@@ -79,7 +80,7 @@
      - json: a tree. Click an object or a list to open or close it. The first two levels are open. Find opens the parts that have the text and marks them. Open all, Close all. Source shows the text.
      - Code (js, html, css, python and more): the outline on the left (functions, classes and constants; ids, scripts and styles; selectors), each with its line. Click one to go to the line. Find marks every match: Enter goes to the next one, Shift+Enter to the one before. Wrap wraps long lines.
    - A click on "..." opens the text in the same file viewer.
-3. Details: what happens inside the block. The function, then each function it called, in the order they started, with their input and time.
+3. Details (the button after Changes): what happens inside the block. The function, then each function it called, in the order they started, with their input and time.
    Each function says what it does (its docs), why it ran (a click, a watch, or the function that called it) and what it changed in the state. Click its name to see its code.
    The first blocks happen before any function runs, so they show their parts instead:
    - Run index.html: the runtime script runs. What it did, with times, the start time (os.started), the session id of the call log, the call tracker, and the functions in os.
@@ -90,19 +91,18 @@
    - Download state.json shows state.json. Connect to the database shows where the versions and the call log are. Read the saved versions lists the versions. Parse the newest version shows the parts of the state and their sizes.
 ### The buttons of the timeline
 1. The arrow buttons show the block before and the next block.
-2. The Replay button shows the next block every 1.6 seconds. From the last block, it starts again at the first. It goes on to the newest block. With Track the timeline on, each move adds a block, so it stops at the block that was the newest when it started. It also stops when you click it again, or when you click a block.
+2. The Replay button shows the next block every 1.6 seconds. From the last block, it starts again at the first. It goes on to the newest block. With Track state on, each move adds a block, so it stops at the block that was the newest when it started. It also stops when you click it again, or when you click a block.
 3. The Reload button reloads the page, so the history starts again at block 1. The timeline opens again and replays the blocks from the first one: the last agent run, then the page start. If the state has unsaved changes, it does not reload: save them first.
-4. The State changes button (±) hides or shows what each function changed, in the Details.
-5. The blocks button hides or shows the row of blocks.
-6. The Flows button opens the list of saved flows. Click the play button of a flow to replay only its blocks. First enter is the page opening: its first 4 blocks (index.html, runtime, loadState, the render of index-view).
-7. Closing the timeline closes the view of the block too.
+4. The blocks button hides or shows the row of blocks.
+5. The Flows button opens the list of saved flows. Click the play button of a flow to replay only its blocks. First enter is the page opening: its first 4 blocks (index.html, runtime, loadState, the render of index-view).
+6. The timeline is part of the state view: when you close the state view, the timeline hides too.
 
 ### A new version
 1. A Claude Code session changes the files of main. It commits the change, pushes it and saves a new version of the state.
 2. An open page gets the new version and runs it immediately. You do not reload the page.
 3. Each view keeps its ui-data. The views that were open stay open.
 4. The timeline adds a New version block.
-5. State changes: the differences between the version that ran before and the new version. Long texts are cut.
+5. Changes: the differences between the version that ran before and the new version. Long texts are cut.
 6. Details: where the version came from (the git commit, the request and the session), how each part worked before and how it works now, side by side, and each changed file side by side. Red lines are only in the old version. Green lines are only in the new version.
 
 ### Agent runs
@@ -112,7 +112,7 @@
    - The run-recorder subagent (.claude/agents/run-recorder.md) reads the raw data. It groups the tool uses into steps and writes why for each step, use and file. It does not copy secrets or the content of files.
    - The release puts the files of main into the state, so the run is in agents.agent-oss.files.runs.
 3. The timeline shows the last run of the state as block 1, before the page start. A new version that comes with new runs gets an Agent run block after the New version block, for each new run.
-4. Click an Agent run block. It opens on Details:
+4. Click an Agent run block, then Details:
    - The chips: the agent, the session, the run, the start and end time, the version that the run made, the context at the start and at the end, the cached part of the context, and whether the session was compacted.
    - Timeline (Agent run): the start card, then each step from left to right. Each step is in the lane of the agent that did it. The first lane is the main agent. A subagent is a helper agent with its own context, which the main agent started (for example run-recorder, which writes the record of the run). A subagent lane starts with a dashed line that tells what the subagent is and which steps are its own; its steps are short cards. A main agent step shows what it did (for example "read index.html", "create scripts/run-log.js"), why, its time and the context at its end. An MCP, skill, subagent or workflow use in a step is bold, with a color.
    - Click a step. Under the timeline, you see only this step: its lane, its time, its context, what it did (each item with its kind), and why. Click the step again to see the whole run.
@@ -120,7 +120,7 @@
    - The buttons show only what one source did: All, Main agent, Subagents, MCP, Skills or Workflows. Each source has its color, and each item in the tree has a chip for its source.
    - On the left, the tree: the files under Files/, in their folders, with the color of their change (green created, yellow updated, red deleted), then the other items in groups (MCP calls, Commands and tests, Searches, Subagents). On the right, the item that you click, in tabs: File (the file viewer, with the text from the version that the run made), Changes (side by side: the version before the run and the version that the run made) and Why (what, by who, in which steps, why, the size in tokens). A file that is not in the state (it is not a file of the repo) has only Why.
    - Details: what started the session, the run, the workflow, the subagents and the skills; MCP use, Skill use, Subagents and Workflow, each with how many times and why; then the context sizes.
-5. State changes of an Agent run: the differences between the version before the run and the version that the run made, if this page has both versions.
+5. Changes of an Agent run: the differences between the version before the run and the version that the run made, if this page has both versions.
 
 ### Network and environment
 1. The state has two parts that the runtime fills: network and environment.
@@ -136,13 +136,13 @@
    - devices: how many cameras, microphones and speakers, the battery, gamepads, and which device APIs the browser has.
    - permissions: the state of each permission (granted, denied or prompt).
    The runtime finds listeners, timers, observers and connections because it wraps the browser functions that add them, before other code of the page runs. Code that ran before the runtime (the scripts of claude.ai) is not in these lists.
-7. Each call writes network and environment into the state when it starts and when it ends. So the State changes of a block show what the block loaded and what changed around the page. expected-state-change does not check network and environment.
+7. Each call writes network and environment into the state when it starts and when it ends. So the Changes of a block show what the block loaded and what changed around the page. expected-state-change does not check network and environment.
 8. Block 1, Network, shows every request in its group: the url, the size, the time (in the version that this page loaded, now, and the difference), what downloaded in parallel, expected and used for. Click a request to see its code. A file on another address (cdnjs, Google Fonts) runs on the page, but the browser can stop the page from downloading it as text. Then the request shows why, and a link that opens the file. Environment is next to it. A yellow value is not the same as in the version that this page loaded.
 9. When you save a version, it keeps network and environment as they are. The next page load shows the difference.
 
 ### Where it comes from
 1. The timeline comes from the call log of the runtime (os.calls), not from the state. If the state kept the timeline, each call would change the state again.
-2. The ui-data of timeline-view keeps the chosen block (selected), whether the replay runs (playing), show_changes, track_timeline, show_blocks, flows_open, and the saved flows (flows: each has a name and the names of its blocks). The ui-data of step-view keeps its tab (state or details).
+2. The ui-data of timeline-view keeps the chosen block (selected; null is the last agent run), whether the replay runs (playing), show_blocks, flows_open, and the saved flows (flows: each has a name and the names of its blocks). The ui-data of state-view keeps timeline_open (the Timeline button), track_state (Track state), changes and details.
 
 ## Record
 The red button at the bottom right of the page records (recorder-view).
@@ -153,7 +153,8 @@ The red button at the bottom right of the page records (recorder-view).
 5. To stop, click the button, push the same keys again, or stop the sharing of the browser.
 6. The card above the button plays the recording and lists the elements that you selected, with their time. Save file saves it (webm). On claude.ai, you confirm the download. The close button forgets the recording. The recording is in the memory of the page only, not in the state.
 7. The browser asks you to let the page use the microphone or the screen. If it does not let the page record, a red note above the button tells why.
-8. The ui-data of recorder-view keeps: recording ("", audio or video), started_at, selected (the last path), selections (each {at, path}), result (kind, time, size, type) and error. The calls of the record button are timeline blocks only when Track the timeline is on.
+8. The ui-data of recorder-view keeps: recording ("", audio or video), started_at, selected (the last path), selections (each {at, path}), result (kind, time, size, type) and error. The calls of the record button are timeline blocks only when Track state is on.
+9. Hold the button for 4 seconds to open the Notes page (notes-view). It covers the page. It is empty for now. Click × to close it. When you release the button after the 4 seconds, it does not record.
 
 ## Where the parts are
 - Views: extension.views.

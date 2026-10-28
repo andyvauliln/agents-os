@@ -2,7 +2,8 @@
 
 ## Open the state view
 1. Click the State button in the header.
-2. The editor shows the live state of the newest version.
+2. The state view shows the chosen block of the timeline. When no block is chosen, it is the last agent run. The editor shows the state at the version of the block.
+3. The state view is the one view for the state and its changes. Its bar has, from the left: the Timeline button, the kind buttons, Changes and Details, the filter with Show empty and Track state, then Collapse all, Save, Older and Newer.
 
 ## Edit and save the state
 1. Edit the JSON in the editor. You can write comments with // and /* */.
@@ -14,20 +15,21 @@
 1. Type in the filter at the top of the state view.
 2. The editor shows only the entries whose path has the text, with the first and last lines of the objects around them.
 3. The other lines fold into "⋯ N lines". You can still edit the lines that show.
-4. Click Files, Views or Functions to see only that kind. Click All to see all. This works with or without text.
-5. Click Changes to see only what changed in the version on the screen.
-6. Clear Show empty to hide the entries with an empty value: {}, [], "" or null.
-7. Push Escape to clear the filter.
+4. Click Files, Views, Functions, Network or Environment to see only that kind, as a tree: for example, Files shows the files in their folders. Click one in the tree to see it on the right. Click All to see the editor again. This works with or without text.
+5. Click Changes to see only what the chosen block changed. After Older or Newer, it is what the version on the screen changed. Click Details to see what happens inside the block.
+6. Clear Show empty to hide the entries with an empty value: {}, [], "" or null. They hide with no "⋯" mark.
+7. Turn on Track state to add what you do in the state view and the timeline as blocks of the timeline.
+8. Push Escape to clear the filter.
 - Older and newer (the arrows) are at the right end of the bar.
 - The version, the path and the status are in the bar at the bottom of the state view.
 
 ## Look at older versions
-1. Click the left arrow button, or push the left arrow key.
+1. Click the left arrow button, or push the left arrow key. The state view leaves the chosen block.
 2. You cannot edit an older version.
 3. Click the Changes button to see only the changes of that version. Green is added, yellow is updated, red is deleted.
 
 ## Long text
-- Long text, and text that has more than one line, shows as "...". Put the pointer on it to see the start of the text.
+- Long text, and text that has more than one line, shows as "...". Put the pointer on it to see the start of the text, in the colors of its kind (md, js, html, css or json).
 - Click the "..." to open the text in the viewer. You can edit it there.
 - When you close the viewer, your changes go into the editor. Then save them.
 

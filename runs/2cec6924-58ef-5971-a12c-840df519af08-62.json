@@ -22,7 +22,7 @@
    "who": "Andrei (a message)",
    "words": "address last notes",
    "at": "2026-10-28T11:28:56.755Z",
-   "why": "Andrei left 4 new comments on the page. He asked the agent to address them. Note 1: an updated md file in read mode must show its changes, and the pointer must show why the run changed it. Note 2: the agent run block must show only the time ago. Note 3: the pinned blocks must start with Last, and the session must show 3 characters. Note 4: settings.local.json is {} but showed as \"...\"."
+   "why": "Andrei left 4 new comments on the page. They asked the agent to address them. Note 1: an updated md file in read mode must show its changes, and the pointer must show why the run changed it. Note 2: the agent run block must show only the time ago. Note 3: the pinned blocks must start with Last, and the session must show 3 characters. Note 4: settings.local.json is {} but showed as \"...\"."
   },
   "workflow": null,
   "subagents": [
@@ -66,7 +66,7 @@
      "kind": "mcp"
     }
    ],
-   "why": "Andrei asked the agent to address his last notes. The notes are comments on the page artifact.",
+   "why": "Andrei asked the agent to address their last notes. The notes are comments on the page artifact.",
    "context_tokens": 177483,
    "cached_tokens": 169046,
    "files": []
@@ -514,7 +514,7 @@
    {
     "name": "hearthbot / post_message",
     "count": 1,
-    "why": "It told Andrei that the agent reads his new comments."
+    "why": "It told Andrei that the agent reads their new comments."
    },
    {
     "name": "hearthbot / update_progress_checklist",

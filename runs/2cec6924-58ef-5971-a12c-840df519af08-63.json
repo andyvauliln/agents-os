@@ -22,7 +22,7 @@
    "who": "Andrei (a message)",
    "words": "let's load this files from sdn from our files system and not minimazed, also include all files everything what you mention and whatever includes to the project now in a files that i can see it in a filee tree",
    "at": "2026-10-28T12:43:22.395Z",
-   "why": "Before this message, Andrei asked why the Files tree does not show all files. He also asked where the files that the Network block downloads are. Now he wants the libraries (CodeMirror and js-beautify) to come from the files of the project, not minified. He wants to see every file of the project in the Files tree."
+   "why": "Before this message, Andrei asked why the Files tree does not show all files. They also asked where the files that the Network block downloads are. Now they want the libraries (CodeMirror and js-beautify) to come from the files of the project, not minified. They want to see every file of the project in the Files tree."
   },
   "workflow": null,
   "subagents": [
@@ -99,7 +99,7 @@
      "kind": "create"
     }
    ],
-   "why": "Andrei wants the libraries to come from the files of the project, not from the CDN. He wants them not minified.",
+   "why": "Andrei wants the libraries to come from the files of the project, not from the CDN. They want them not minified.",
    "context_tokens": 267668,
    "cached_tokens": 265639,
    "files": [

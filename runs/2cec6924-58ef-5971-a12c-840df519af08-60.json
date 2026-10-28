@@ -22,7 +22,7 @@
    "who": "Andrei (a message)",
    "words": "if i long time press on recording button like 4 second open new page window notes, for now just empty, and addreess last comments",
    "at": "2026-10-28T08:07:36.783Z",
-   "why": "Andrei asked that a 4 s hold on the record button opens an empty Notes page. He also asked the agent to address the last 3 page comments. Comment 1: with Show empty off, empty values hide without the \"⋯ N lines\" mark. Comment 2: the \"...\" preview has the colors of its file kind, and an updated text shows a line diff. Comment 3: one state view for the state and its changes, with the Timeline button, Details and Track state in its bar. The run had to make this in version 36."
+   "why": "Andrei asked that a 4 s hold on the record button opens an empty Notes page. They also asked the agent to address the last 3 page comments. Comment 1: with Show empty off, empty values hide without the \"⋯ N lines\" mark. Comment 2: the \"...\" preview has the colors of its file kind, and an updated text shows a line diff. Comment 3: one state view for the state and its changes, with the Timeline button, Details and Track state in its bar. The run had to make this in version 36."
   },
   "workflow": null,
   "subagents": [

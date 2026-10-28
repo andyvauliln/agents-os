@@ -538,6 +538,7 @@ def svg(paths):
 I_DOCS = svg('<path d="M4 1.5h5.5L12.5 4.5v10h-8.5z"/><path d="M9.5 1.5v3h3M6 8h4.5M6 10.5h4.5"/>')
 I_TIMELINE = svg('<path d="M4 2v12"/><circle cx="4" cy="4" r="1.6"/><circle cx="4" cy="8.5" r="1.6"/><circle cx="4" cy="13" r="1.1"/><path d="M7.5 4h6M7.5 8.5h4.5"/>')
 I_STATE = svg('<path d="M6 2.5C4 2.5 4.5 5 4.5 6.5S3 8 3 8s1.5 0 1.5 1.5S4 13.5 6 13.5M10 2.5c2 0 1.5 2.5 1.5 4S13 8 13 8s-1.5 0-1.5 1.5.5 4-1.5 4"/>')
+I_DEVICE = svg('<rect x="1.5" y="2.5" width="9.5" height="7" rx="1"/><path d="M4 12.5h4M6 9.5v3"/><rect x="10" y="5.5" width="4.5" height="8" rx="1"/>')
 I_RELOAD = svg('<path d="M13 8a5 5 0 1 1-1.5-3.5"/><path d="M12 1.8v3h-3"/>')
 I_PLAY = svg('<path d="M5 3.2v9.6L12.5 8z" fill="currentColor"/>')
 I_PAUSE = svg('<path d="M5.5 3.5v9M10.5 3.5v9"/>')
@@ -568,6 +569,34 @@ FV_ICONS_JS = "{ " + ", ".join(k + ": '" + v + "'" for k, v in FV_ICONS.items())
 I_REC = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="currentColor"/></svg>'
 I_STOP = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="currentColor"/></svg>'
 
+# The Device button: all the views show at the width of a phone or a tablet. index-view is then the screen of the
+# device: its fixed parts (the record button, Notes, a full screen file) stay in it, and each @media (max-width)
+# rule also works at that width, as an @container rule.
+STYLE = STYLE.replace("button{font:inherit}", """button{font:inherit}
+#index-view[data-device]{container-type:inline-size;transform:translateZ(0);margin-inline:auto;max-width:100%;overflow:auto;background:var(--bg);box-shadow:0 0 0 1px var(--line),0 12px 40px rgba(0,0,0,.14)}
+#index-view[data-device="mobile"]{width:390px}
+#index-view[data-device="tablet"]{width:820px}
+body:has(#index-view[data-device]){background:var(--gutter)}
+.dev-pick{position:relative;display:inline-flex}
+.dev-menu{position:absolute;top:calc(100% + 6px);right:0;z-index:70;min-width:170px;display:flex;flex-direction:column;gap:2px;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.dev-menu button{display:flex;gap:10px;align-items:center;border:0;background:none;color:var(--fg);font:13px var(--sans);padding:8px 12px;border-radius:8px;cursor:pointer;text-align:left}
+.dev-menu button:hover,.dev-menu button:focus-visible{background:var(--sel);outline:none}
+.dev-menu button[aria-checked="true"]{color:var(--accent);font-weight:600}
+.dev-menu small{margin-left:auto;font:11px var(--mono);color:var(--muted)}""", 1)
+def with_container(css):
+    out, i = [], 0
+    while True:
+        j = css.find("@media (max-width:", i)
+        if j < 0: out.append(css[i:]); return "".join(out)
+        k, depth = css.index("{", j), 0
+        for m in range(k, len(css)):
+            depth += {"{": 1, "}": -1}.get(css[m], 0)
+            if depth == 0: break
+        block = css[j:m + 1]
+        out.append(css[i:m + 1] + "\n@container " + block[len("@media "):])
+        i = m + 1
+STYLE = with_container(STYLE)
+
 # ---------- html of the views ----------
 index_html = """<div id="index-view">
 """ + STYLE + """
@@ -580,6 +609,17 @@ index_html = """<div id="index-view">
 </div>"""
 
 header_html = """<header id="header-view">
+  <span class="dev-pick">
+    <button class="btn" id="device-button"
+            data-call="local.toggle-device-menu"
+            aria-pressed="${d.device !== 'desktop'}" aria-expanded="${d.device_open}" aria-haspopup="menu"
+            aria-label="Device: ${d.device}" title="Device: ${d.device}">
+      """ + I_DEVICE + """
+    </button>
+    ${d.device_open ? `<div class="dev-menu" id="device-menu" role="menu" aria-label="Device">
+      ${[['mobile', 'Mobile', '390 px'], ['tablet', 'Tablet', '820 px'], ['desktop', 'Desktop', 'full']].map(x => `<button role="menuitemradio" aria-checked="${d.device === x[0]}" data-call="local.set-device" data-input='{"device":"${x[0]}"}'>${x[1]}<small>${x[2]}</small></button>`).join('')}
+    </div>` : ''}
+  </span>
   <button class="btn" id="docs-button"
           data-call="local.open.docs-view"
           aria-pressed="${d.docs_open}" aria-label="Docs" title="Docs">
@@ -3740,12 +3780,44 @@ d.error = '';
 HEADER_INIT = sig("init", [], r"""
 // Views that ui-data says are open are opened again.
 const d = os.get('extension.views.header-view.ui-data');
+// All the views show at the width of the device in ui-data: Mobile 390 px, Tablet 820 px, Desktop the full page.
+const root = document.getElementById('index-view');
+if (d.device && d.device !== 'desktop') root.dataset.device = d.device;
+else delete root.dataset.device;
+// While the device menu is open, a click out of it or Escape closes it. A new init takes the place of the old listeners.
+const old = os.refs['header-view'];
+if (old && old.off) old.off();
+const close = () => os.call('local.toggle-device-menu', { open: false }, 'extension.views.header-view').catch(console.error);
+const onDown = e => { if (d.device_open && !e.target.closest('.dev-pick')) close(); };
+const onKey = e => { if (d.device_open && e.key === 'Escape') close(); };
+document.addEventListener('pointerdown', onDown, true);
+document.addEventListener('keydown', onKey);
+os.refs['header-view'] = { off: () => { document.removeEventListener('pointerdown', onDown, true); document.removeEventListener('keydown', onKey); } };
 // After the Reload button of the timeline, the state view opens again with the timeline.
 let replay = location.hash === '#timeline-replay';
 try { replay = replay || sessionStorage.getItem('agent-os.timeline-replay') === '1'; } catch (e) {}
 if (replay) { d.state_open = true; os.get('extension.views.state-view.ui-data').timeline_open = true; }
 if (d.docs_open && !os.mounted('extension.views.docs-view')) await ctx.call('extension.functions.render', { view_path: 'extension.views.docs-view' });
 if (d.state_open && !os.mounted('extension.views.state-view')) await ctx.call('extension.functions.render', { view_path: 'extension.views.state-view' });
+""")
+
+HEADER_DEVICE_MENU = sig("toggleDeviceMenu", ["open"], r"""
+// The Device button: the menu Mobile, Tablet, Desktop. open: true or false; no open: the other.
+const d = os.get('extension.views.header-view.ui-data');
+const next = typeof open === 'boolean' ? open : !d.device_open;
+if (next === d.device_open) return;
+d.device_open = next;
+await ctx.call('extension.functions.render', { view_path: 'extension.views.header-view' });
+""")
+
+HEADER_SET_DEVICE = sig("setDevice", ["device"], r"""
+// A device of the menu: all the views show at its width (local.init of header-view sets it on index-view).
+if (!['mobile', 'tablet', 'desktop'].includes(device)) throw new Error('device is mobile, tablet or desktop, not ' + device);
+const d = os.get('extension.views.header-view.ui-data');
+d.device = device;
+d.device_open = false;
+await ctx.call('extension.functions.render', { view_path: 'extension.views.header-view' });
+return { device };
 """)
 
 INDEX_INIT = sig("init", [], r"""
@@ -3903,11 +3975,23 @@ state = {
       },
       "header-view": {
         "html": header_html,
-        "ui-data": {"docs_open": False, "state_open": False},
+        "ui-data": {"docs_open": False, "state_open": False, "device": "desktop", "device_open": False},
         "functions": {
-          "local.init": fn("Runs after header-view is rendered: opens docs-view and state-view again when ui-data says they are open. After the Reload button of the timeline, it opens the state view with the timeline.",
+          "local.init": fn("Runs after header-view is rendered: shows all the views at the width of ui-data.device, and opens docs-view and state-view again when ui-data says they are open. After the Reload button of the timeline, it opens the state view with the timeline.",
                            code=HEADER_INIT, expected={HV + ".ui-data.state_open": MAY, P + ".timeline_open": MAY},
                            calls={"extension.functions.render": {"input": V(SV), "output": None}}),
+          "local.toggle-device-menu": fn("The Device button: opens the menu Mobile, Tablet, Desktop, or closes it. A click out of the menu, or Escape, closes it.",
+                           code=HEADER_DEVICE_MENU, input_={"open": True}, expected={HV + ".ui-data.device_open": MAY},
+                           calls={"extension.functions.render": {"input": V(HV), "output": None}},
+                           tests={"opens, then closes": {"before": {"local.toggle-device-menu": {"open": True}}, "input": {"open": False},
+                                                         "expect": {"state": {HV + ".ui-data.device_open": False}, "dom-absent": ["#device-menu"]}}}),
+          "local.set-device": fn("A device of the Device menu: all the views show at its width. Mobile is 390 px, Tablet is 820 px, Desktop is the full page.",
+                           code=HEADER_SET_DEVICE, input_={"device": "mobile"}, expected={HV + ".ui-data.device": "input.device", HV + ".ui-data.device_open": MAY},
+                           calls={"extension.functions.render": {"input": V(HV), "output": None}},
+                           tests={"shows tablet": {"input": {"device": "tablet"},
+                                                   "expect": {"state": {HV + ".ui-data.device": "tablet"}, "dom": ["#index-view[data-device=\"tablet\"]"]}},
+                                  "shows mobile, then desktop": {"before": {"local.set-device": {"device": "mobile"}}, "input": {"device": "desktop"},
+                                                                 "expect": {"state": {HV + ".ui-data.device": "desktop"}, "dom-absent": ["#index-view[data-device]", "#device-menu"]}}}),
           "local.open.docs-view": fn(
             "The Docs button: renders docs-view, or closes it when it is open, and keeps ui-data.docs_open in step.",
             code=open_view("docs-view", "docs_open"),

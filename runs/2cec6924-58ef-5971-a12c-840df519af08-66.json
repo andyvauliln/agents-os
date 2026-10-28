@@ -26,7 +26,7 @@
       "who": "Andrei (a message)",
       "words": "make ai block view like this call it ai run notification",
       "at": "2026-10-28T15:58:34.451Z",
-      "why": "Andrei sent a picture of an AI RUN block. It has two tabs: Index (the summary of the run and the actions he must do) and Details (the state filtered by the changes and reads of the run, marked by who did each part). He also asked for a third tab that shows the steps one by one. Andrei wants the block to tell him first what the run did and what he must do, then the state that the run touched, then the steps."
+      "why": "Andrei sent a picture of an AI RUN block. It has two tabs: Index (the summary of the run and the actions they must do) and Details (the state filtered by the changes and reads of the run, marked by who did each part). They also asked for a third tab that shows the steps one by one. Andrei wants the block to tell them first what the run did and what they must do, then the state that the run touched, then the steps."
     },
     "workflow": null,
     "subagents": [
@@ -74,7 +74,7 @@
           "kind": "read"
         }
       ],
-      "why": "Andrei sent a picture of the new block. The agent told him the plan. Then it read the code and the test of the block that it had to change.",
+      "why": "Andrei sent a picture of the new block. The agent told them the plan. Then it read the code and the test of the block that it had to change.",
       "context_tokens": 332959,
       "cached_tokens": 328894,
       "files": [
@@ -160,7 +160,7 @@
           "kind": "edit"
         }
       ],
-      "why": "This is the change that Andrei asked for. He wants to see first what the run did and what he must do.",
+      "why": "This is the change that Andrei asked for. They want to see first what the run did and what they must do.",
       "context_tokens": 351476,
       "cached_tokens": 341920,
       "files": [

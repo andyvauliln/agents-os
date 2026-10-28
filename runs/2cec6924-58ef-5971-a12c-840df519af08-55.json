@@ -22,7 +22,7 @@
       "who": "Andrei (a message)",
       "words": "why if we supposely should use state view, when i in a agent run in a state changes for files not applied same same rules like \"...\" with a preview, also make on this state view better button not check boxes if file we ll show only files and in a file tree view with a left side map of all files and on the right tabs with the first one is File if it change mode should have tab changes where i can see changes, so iya make custome view for all of this filters",
       "at": "2026-10-27T13:16:37.020Z",
-      "why": "Andrei was not satisfied with the State changes of an Agent run. They cut long texts. They did not use the \"...\" rule and the preview of the state view. Andrei wants buttons, not switches, for the filters. He wants a custom view for each filter. In the Files view, a file tree is on the left. Tabs are on the right: File first, then Changes when the file changed. The run had to make these changes in version 31."
+      "why": "Andrei was not satisfied with the State changes of an Agent run. They cut long texts. They did not use the \"...\" rule and the preview of the state view. Andrei wants buttons, not switches, for the filters. They want a custom view for each filter. In the Files view, a file tree is on the left. Tabs are on the right: File first, then Changes when the file changed. The run had to make these changes in version 31."
     },
     "workflow": null,
     "subagents": [

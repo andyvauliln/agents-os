@@ -22,7 +22,7 @@
    "who": "Andrei (a message)",
    "words": "yes agents-os",
    "at": "2026-10-28T10:08:34.963Z",
-   "why": "At 10:03:57 Andrei asked how to continue this project in his own Claude Code on another server. The agent said: push the repo to GitHub and clone it there. The generator of state.json was only in the scratch folder of the agent. The agent asked if it must go into the repo under gen/. Andrei said yes. He named the repo agents-os. The run had to put the generator into the repo and push the repo to GitHub."
+   "why": "At 10:03:57 Andrei asked how to continue this project in their own Claude Code on another server. The agent said: push the repo to GitHub and clone it there. The generator of state.json was only in the scratch folder of the agent. The agent asked if it must go into the repo under gen/. Andrei said yes. They named the repo agents-os. The run had to put the generator into the repo and push the repo to GitHub."
   },
   "workflow": null,
   "subagents": [

@@ -27,7 +27,7 @@
       "who": "Andrei (a message)",
       "words": "double click on a record butt on should show option so first record audio second record video 3rd notes as on a picture and there settings for transcriptions with a deafult browser transcribe option, and add there option to add manually by text also some notes.,",
       "at": "2026-10-28T14:25:19.603Z",
-      "why": "Andrei wants to record audio, video or notes from one menu. He sent a picture of the Notes page: a list of notes, each with its text or recording, Transcribe, Send now, Send now new session, Delete, the view path with Show state, and Send selected. He also asked for transcription settings (the browser by default) and for notes that he writes. The notes go to Claude with the context of their view."
+      "why": "Andrei wants to record audio, video or notes from one menu. They sent a picture of the Notes page: a list of notes, each with its text or recording, Transcribe, Send now, Send now new session, Delete, the view path with Show state, and Send selected. They also asked for transcription settings (the browser by default) and for notes that they write. The notes go to Claude with the context of their view."
     },
     "workflow": null,
     "subagents": [
@@ -76,7 +76,7 @@
           "kind": "read"
         }
       ],
-      "why": "Andrei asked for a menu on two clicks and a Notes page as in his picture. The agent told him the plan. Then it read the code that it had to change.",
+      "why": "Andrei asked for a menu on two clicks and a Notes page as in their picture. The agent told them the plan. Then it read the code that it had to change.",
       "context_tokens": 180752,
       "cached_tokens": 174974,
       "files": [

@@ -22,7 +22,7 @@
       "who": "Andrei (a message)",
       "words": "add button full screen for views of files i still want to see different styles on md files like we had before, that i can pick how it looks like, also for functions i want additional view, where click on a function but can see pseudo code that we make and added as additonal metadata for this function",
       "at": "2026-10-27T14:21:34.352Z",
-      "why": "Andrei wants a Full screen button for the file views. He wants the md styles again, so that he can pick how an md file looks. He wants a second view for each function: the pseudo code of the function, kept as metadata of the function. The run had to make these changes in version 33."
+      "why": "Andrei wants a Full screen button for the file views. They want the md styles again, so that they can pick how an md file looks. They want a second view for each function: the pseudo code of the function, kept as metadata of the function. The run had to make these changes in version 33."
     },
     "workflow": null,
     "subagents": [

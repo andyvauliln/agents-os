@@ -58,7 +58,7 @@ async function render({ view_path }) {
 ```
 2. The ui-data of header-view is:
 ```json
-{ "docs_open": false, "state_open": false }
+{ "docs_open": false, "state_open": false, "device": "desktop", "device_open": false }
 ```
 3. render replaces ${d.state_open} with the value from ui-data. The page gets this button:
 ```html
@@ -97,6 +97,19 @@ import ctx from 'ctx';
 async function init() {
   // Views that ui-data says are open are opened again.
   const d = os.get('extension.views.header-view.ui-data');
+  // All the views show at the width of the device in ui-data: Mobile 390 px, Tablet 820 px, Desktop the full page.
+  const root = document.getElementById('index-view');
+  if (d.device && d.device !== 'desktop') root.dataset.device = d.device;
+  else delete root.dataset.device;
+  // While the device menu is open, a click out of it or Escape closes it. A new init takes the place of the old listeners.
+  const old = os.refs['header-view'];
+  if (old && old.off) old.off();
+  const close = () => os.call('local.toggle-device-menu', { open: false }, 'extension.views.header-view').catch(console.error);
+  const onDown = e => { if (d.device_open && !e.target.closest('.dev-pick')) close(); };
+  const onKey = e => { if (d.device_open && e.key === 'Escape') close(); };
+  document.addEventListener('pointerdown', onDown, true);
+  document.addEventListener('keydown', onKey);
+  os.refs['header-view'] = { off: () => { document.removeEventListener('pointerdown', onDown, true); document.removeEventListener('keydown', onKey); } };
   // After the Reload button of the timeline, the state view opens again with the timeline.
   let replay = location.hash === '#timeline-replay';
   try { replay = replay || sessionStorage.getItem('agent-os.timeline-replay') === '1'; } catch (e) {}

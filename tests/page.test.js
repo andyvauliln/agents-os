@@ -103,7 +103,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.evaluate(() => window.__docs['commits/c000001'].state), undefined);
     assert.equal((await commitDoc('c000001')).state, await page.evaluate(() => window.agentOS.history.commits[0].state));
     // (the Timeline button is in the bar of the state view)
-    assert.equal(await page.locator('#header-view button').count(), 2);
+    assert.equal(await page.locator('#header-view button').count(), 3);
+    assert.ok(await page.isVisible('#device-button[aria-label="Device: desktop"] svg'));
     assert.ok(await page.isVisible('#docs-button[aria-label="Docs"] svg'));
     assert.ok(await page.isVisible('#state-button[aria-label="State view"] svg'));
     assert.equal(await page.isHidden('#state-view'), true);
@@ -140,6 +141,38 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     });
     for (const v of ['state-view', 'docs-view', 'timeline-view', 'notes-view'])
       await page.evaluate(v => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.' + v }), v);
+
+    // the Device button: Mobile, Tablet, Desktop. All the views show at that width, with the layout of that width.
+    assert.equal(await page.evaluate(() => document.getElementById('index-view').dataset.device), undefined);
+    await page.click('#device-button');
+    assert.deepEqual(await page.$$eval('#device-menu button', b => b.map(x => x.firstChild.textContent + ':' + x.getAttribute('aria-checked'))),
+      ['Mobile:false', 'Tablet:false', 'Desktop:true']);
+    await page.click('#device-menu button:has-text("Mobile")');
+    assert.equal(await page.isVisible('#device-menu'), false);
+    const box = async s => page.locator(s).boundingBox();
+    const vpw = page.viewportSize().width;
+    assert.equal(Math.round((await box('#index-view')).width), 390);
+    assert.equal(Math.round((await box('#header-view')).width), 390);
+    // (the record button stays in the phone: its bottom right corner)
+    const ivb = await box('#index-view'), rbm = await box('#rec-button');
+    assert.ok(rbm.x + rbm.width <= ivb.x + ivb.width && rbm.x + rbm.width > ivb.x + ivb.width - 40, 'record button in the phone');
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].device), 'mobile');
+    // (a narrow layout rule works at the width of the phone: the docs list is above the doc, not at its left)
+    await page.click('#docs-button');
+    await page.waitForSelector('#docs-view .docs');
+    assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('#docs-view .docs')).gridTemplateColumns.split(' ').length), 1);
+    await page.click('#docs-button');
+    await page.click('#device-button');
+    await page.click('#device-menu button:has-text("Tablet")');
+    assert.equal(Math.round((await box('#index-view')).width), Math.min(820, vpw));
+    // (a click out of the menu closes it)
+    await page.click('#device-button');
+    await page.mouse.click(5, 300);
+    await page.waitForSelector('#device-menu', { state: 'detached' });
+    await page.click('#device-button');
+    await page.click('#device-menu button:has-text("Desktop")');
+    assert.equal(await page.evaluate(() => document.getElementById('index-view').dataset.device), undefined);
+    assert.equal(Math.round((await box('#index-view')).width), vpw);
 
     // the record button, at the bottom right: one click records audio, two clicks record video
     const rec = () => page.evaluate(() => window.agentOS.state.extension.views['recorder-view']['ui-data']);
@@ -700,7 +733,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await frame.locator('#state-button').click();
     await frame.locator('#state-button[aria-pressed="false"]').waitFor();
     await page.waitForFunction(() => /after local\.open\.state-view/.test(document.getElementById('sv-viewer-state-head').textContent));
-    assert.equal(await page.textContent('#sv-viewer-state .chg-updated'), '  "state_open": false');
+    assert.equal(await page.textContent('#sv-viewer-state .chg-updated'), '  "state_open": false,');
     await frame.locator('#docs-button').click();
     await frame.locator('#docs-view .doc-link').first().waitFor();
     // the copy changed, the live state did not

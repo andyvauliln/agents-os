@@ -163,6 +163,12 @@ The red button at the bottom right of the page records (recorder-view).
 8. The ui-data of recorder-view keeps: recording ("", audio or video), started_at, selected (the last path), selections (each {at, path}), result (kind, time, size, type), error and menu_open. The calls of the record button are timeline blocks only when Track state is on.
 9. Hold the button for 4 seconds to open the Notes page (notes-view), or click Notes in the menu. It covers the page. Click × to close it. When you release the button after the 4 seconds, it does not record.
 
+## Device
+1. Click the Device button in the header (at the left of the Docs button). Its menu shows Mobile (390 px), Tablet (820 px) and Desktop (the full page). The device that shows now is blue.
+2. Click a device. All the views show at its width, in the middle of the page: the header, the timeline, the docs, the state view, Notes and the record button. The views use the layout of that width, as on a phone or a tablet.
+3. Desktop shows the views on the full page again. A click out of the menu, or Escape, closes the menu.
+4. The ui-data of header-view keeps device (mobile, tablet or desktop) and device_open (the menu is open). The page shows the same device when it opens again.
+
 ## Notes
 1. Each recording is a note when it stops. You can also write a note: type it in "Write a note" and click Add note.
 2. A note shows its text (a note that you wrote, or a recording after Transcribe) in a box where you can change it. A recording without text shows its player.
@@ -222,7 +228,7 @@ This is the code of extension.functions.render. The import lines at the start na
 1. The html of header-view starts with its root element. It has this button:
 """ + code('<header id="header-view">\n  <button class="btn" id="state-button"\n          data-call="local.open.state-view"\n          aria-pressed="${d.state_open}" aria-label="State view" title="State view">', "html") + """
 2. The ui-data of header-view is:
-""" + code('{ "docs_open": false, "state_open": false }', "json") + """
+""" + code('{ "docs_open": false, "state_open": false, "device": "desktop", "device_open": false }', "json") + """
 3. render replaces ${d.state_open} with the value from ui-data. The page gets this button:
 """ + code('<header id="header-view">\n  <button class="btn" id="state-button"\n          data-call="local.open.state-view"\n          aria-pressed="false" aria-label="State view" title="State view">', "html") + """
 ## Example 4: local.init of index-view (step 13)

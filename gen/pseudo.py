@@ -195,10 +195,25 @@ SET result = null, selections = [], selected = "", error = """"",
 
 "header-view/local.init": """\
 READ ui-data of header-view
+IF device is mobile or tablet: SET data-device of index-view = device (all views show at its width)
+ELSE: REMOVE data-device of index-view
+STOP the old listeners; LISTEN: a click out of the device menu, or Escape, CALL local.toggle-device-menu {open: false}
 IF the page reloads from the Reload button of the timeline
   SET state_open = true, and timeline_open of state-view = true
 IF docs_open and docs-view is not mounted: CALL render docs-view
 IF state_open and state-view is not mounted: CALL render state-view""",
+
+"header-view/local.toggle-device-menu": """\
+SET next = open, or NOT device_open when open is not given
+IF next = device_open: STOP
+SET device_open = next
+CALL render header-view (the menu shows or goes)""",
+
+"header-view/local.set-device": """\
+IF device is not mobile, tablet or desktop: THROW
+SET device = device, device_open = false
+CALL render header-view (its local.init sets the width of the views)
+RETURN {device}""",
 
 "header-view/local.open.docs-view": """\
 SET docs_open = NOT (docs-view is mounted)

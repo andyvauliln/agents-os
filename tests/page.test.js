@@ -142,6 +142,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     for (const v of ['state-view', 'docs-view', 'timeline-view', 'notes-view'])
       await page.evaluate(v => window.agentOS.os.call('extension.functions.unmount', { view_path: 'extension.views.' + v }), v);
 
+    // (with no view open, the footer with the record button is still at the bottom of the page)
+    assert.equal(await page.$eval('#recorder-view', e => Math.round(e.getBoundingClientRect().bottom)), await page.evaluate(() => innerHeight));
     // the Device button: Mobile, Tablet, Desktop. All the views show at that width, with the layout of that width.
     assert.equal(await page.evaluate(() => document.getElementById('index-view').dataset.device), undefined);
     await page.click('#device-button');
@@ -237,7 +239,13 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.mouse.up();
     await page.waitForTimeout(450);
     assert.equal((await rec()).recording, '');
-    assert.deepEqual(await page.$eval('#notes-view', e => { const r = e.getBoundingClientRect(); return [r.left, r.top, r.width, r.height]; }), await page.evaluate(() => [0, 0, innerWidth, innerHeight]));
+    // (Notes is between the header and the footer with the record button, as all the views)
+    const edge = sel => page.$eval(sel, e => { const r = e.getBoundingClientRect(); return [Math.round(r.top), Math.round(r.bottom), Math.round(r.width)]; });
+    const [, headBottom] = await edge('#header-view'), [footTop, footBottom] = await edge('#recorder-view'), [nTop, nBottom, nWidth] = await edge('#notes-view');
+    assert.equal(nTop, headBottom);
+    assert.equal(nBottom, footTop);
+    assert.equal(footBottom, await page.evaluate(() => innerHeight));
+    assert.equal(nWidth, await page.evaluate(() => innerWidth));
     await page.click('#notes-close');
     await page.waitForFunction(() => document.querySelector('#notes-view').hidden);
     // Notes: each recording is a note (the newest first); Notes in the menu opens the page

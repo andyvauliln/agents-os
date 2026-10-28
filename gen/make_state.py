@@ -122,7 +122,7 @@ STYLE = STYLE.replace("#sv-viewer-code,#sv-viewer-view{", """#docs-view{flex:1;m
 @media (max-width:640px){.sv-filter{flex-wrap:wrap}.sv-checks{flex-wrap:wrap}}
 #st-filter{order:0;flex-basis:auto}
 #st-filter .st-kinds{flex-wrap:wrap;flex:1 1 auto;min-width:0}
-#timeline-view{flex:none;display:flex;flex-direction:column;gap:6px;padding-block:10px 8px;border-bottom:1px solid var(--line);background:var(--gutter);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#timeline-view{flex:0 1 auto;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:6px;padding-block:10px 8px;border-bottom:1px solid var(--line);background:var(--gutter);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .sv-checks{display:flex;gap:12px;align-items:center;flex:none}
 #state-view > #tl-detail{min-height:240px}
 .sv-block{font:12px var(--sans);color:var(--muted)}
@@ -131,7 +131,7 @@ STYLE = STYLE.replace("#sv-viewer-code,#sv-viewer-view{", """#docs-view{flex:1;m
 .tl-step.pin-right{position:sticky;right:0;z-index:2;opacity:1}
 .tl-step.pin-left,.tl-step.pin-right{box-shadow:0 2px 10px rgba(0,0,0,.14)}
 .tl-step.pin-left.on,.tl-step.pin-right.on{box-shadow:0 0 0 3px var(--sel),0 2px 10px rgba(0,0,0,.14)}
-#notes-view{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;background:var(--bg);padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#notes-view{flex:1;min-height:0;display:flex;flex-direction:column;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .notes-bar{display:flex;align-items:center;gap:8px;font:600 16px var(--sans)}
 .notes-bar b{margin-right:auto}
 .notes-bar .btn{width:36px;padding:0;display:inline-grid;place-items:center}
@@ -157,7 +157,7 @@ STYLE = STYLE.replace("#sv-viewer-code,#sv-viewer-view{", """#docs-view{flex:1;m
 .note-view code{font:12px var(--mono)}
 .note-meta{margin-left:auto;color:var(--muted);font:11px var(--mono)}
 .note-state{margin:8px 0 0 26px;max-height:260px;overflow:auto;padding:8px 10px;border-radius:8px;background:var(--gutter);font:12px/1.5 var(--mono);white-space:pre}
-.notes-foot{display:flex;justify-content:flex-end;padding-right:72px}
+.notes-foot{display:flex;justify-content:flex-end}
 .rec-menu{display:flex;flex-direction:column;gap:2px;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
 .rec-menu button{display:flex;gap:10px;align-items:center;border:0;background:none;color:var(--fg);font:13px var(--sans);padding:8px 12px;border-radius:8px;cursor:pointer;text-align:left}
 .rec-menu button:hover,.rec-menu button:focus-visible{background:var(--sel);outline:none}
@@ -212,8 +212,9 @@ STYLE = STYLE.replace("#sv-viewer-code,#sv-viewer-view{", """#docs-view{flex:1;m
 @media (prefers-color-scheme:dark){.tl-chip.src-mcp{background:#172554;color:#93c5fd}.tl-chip.src-skill{background:#052e16;color:#86efac}.tl-chip.src-workflow{background:#431407;color:#fdba74}.tl-chip.src-subagent{background:#2e1065;color:#c4b5fd}}
 .st-kind.src-mcp{border-left:4px solid #2563eb}.st-kind.src-skill{border-left:4px solid #15803d}.st-kind.src-workflow{border-left:4px solid #c2410c}.st-kind.src-subagent{border-left:4px solid #7c3aed}.st-kind.src-main{border-left:4px solid var(--accent)}
 .ar-tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin:10px 0}
-#recorder-view{position:fixed;right:20px;bottom:20px;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:10px;pointer-events:none}
-#recorder-view>*{pointer-events:auto}
+#recorder-view{flex:none;margin-top:auto;position:relative;z-index:60;display:flex;justify-content:flex-end;align-items:center;padding-block:6px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:max(6px,env(safe-area-inset-bottom,0px));background:var(--panel);border-top:1px solid var(--line)}
+.rec-pop{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(100% + 8px);display:flex;flex-direction:column;align-items:flex-end;gap:10px;pointer-events:none}
+.rec-pop>*{pointer-events:auto}
 .rec-btn{width:52px;height:52px;border-radius:50%;border:0;background:#dc2626;color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 .rec-btn:hover{background:#b91c1c}
 .rec-btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
@@ -569,10 +570,13 @@ FV_ICONS_JS = "{ " + ", ".join(k + ": '" + v + "'" for k, v in FV_ICONS.items())
 I_REC = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="currentColor"/></svg>'
 I_STOP = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="currentColor"/></svg>'
 
+# Each view is between the header (and the timeline when it is open) and the footer with the record button
+# (recorder-view): it scrolls in that space.
 # The Device button: all the views show at the width of a phone or a tablet. index-view is then the screen of the
 # device: its fixed parts (the record button, Notes, a full screen file) stay in it, and each @media (max-width)
 # rule also works at that width, as an @container rule.
 STYLE = STYLE.replace("button{font:inherit}", """button{font:inherit}
+#docs-view,#state-view,#notes-view{overflow:auto}
 #index-view[data-device]{container-type:inline-size;transform:translateZ(0);margin-inline:auto;max-width:100%;overflow:auto;background:var(--bg);box-shadow:0 0 0 1px var(--line),0 12px 40px rgba(0,0,0,.14)}
 #index-view[data-device="mobile"]{width:390px}
 #index-view[data-device="tablet"]{width:820px}
@@ -605,7 +609,7 @@ index_html = """<div id="index-view">
 <main id="docs-view" hidden></main>
 <main id="state-view" hidden></main>
 <main id="notes-view" hidden></main>
-<div id="recorder-view"></div>
+<footer id="recorder-view"></footer>
 </div>"""
 
 header_html = """<header id="header-view">
@@ -633,8 +637,9 @@ header_html = """<header id="header-view">
   <span class="rec-timer" id="rec-timer" role="timer" hidden></span>
 </header>"""
 
-# The record button, fixed at the bottom right of the page, and the card of the last recording.
-recorder_html = """<div id="recorder-view">
+# The footer of the page: the record button at its right, and above it the card of the last recording and the menu.
+recorder_html = """<footer id="recorder-view">
+  <div class="rec-pop">
   ${d.error ? `<div class="rec-error" id="rec-error" role="alert">${e(d.error)}</div>` : ''}
   ${d.result ? `<section class="rec-card" id="rec-card" aria-label="Last recording">
     <div class="rec-card-head">
@@ -650,14 +655,15 @@ recorder_html = """<div id="recorder-view">
     <button role="menuitem" data-call="local.start" data-input='{"mode":"video"}'><span>2</span>Record video</button>
     <button role="menuitem" data-call="local.open-notes"><span>3</span>Notes</button>
   </div>` : ''}
+  </div>
   <button class="rec-btn" id="rec-button" aria-pressed="${!!d.recording}"
           aria-label="${d.recording ? 'Stop recording' : 'Record'}"
           title="${d.recording ? 'Stop' : 'Click: record audio. Double-click: the menu (audio, video, notes). Keys: Arrow Up two times (audio), Arrow Up and Arrow Down together (video). Hold 4 s: Notes.'}">
     ${d.recording ? '""" + I_STOP + """' : '""" + I_REC + """'}
   </button>
-</div>"""
+</footer>"""
 
-# The Notes page: it covers the page. Each recording is a note; you can also write one. A note can go to Claude.
+# The Notes page: a view between the header and the footer. Each recording is a note; you can also write one. A note can go to Claude.
 # (d.picked and d.shown come from local.refresh: the notes that are checked, and the notes that show their view state.)
 notes_html = """<main id="notes-view">
   <div class="notes-bar">

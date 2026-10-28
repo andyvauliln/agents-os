@@ -152,7 +152,7 @@ DOCS = {
 2. The ui-data of timeline-view keeps the chosen block (selected; null is the last agent run), whether the replay runs (playing), show_blocks, flows_open, and the saved flows (flows: each has a name and the names of its blocks). The ui-data of state-view keeps timeline_open (the Timeline button), track_state (Track state), changes and details.
 
 ## Record
-The red button at the bottom right of the page records (recorder-view).
+The footer at the bottom of the page is recorder-view. The red button at its right records.
 1. Click it one time to record audio (the microphone). Click it two times to open its menu: 1 Record audio, 2 Record video (a screen, a window or a tab that you choose, with its sound and the microphone), 3 Notes. A click on the button or out of the menu, or Escape, closes the menu.
 2. Or use the keys (not while you type in a field or an editor): push Arrow Up two times to record audio. Push Arrow Up and Arrow Down at the same time to record video.
 3. While it records, the button is a stop button, and the header shows the kind and the time (for example "Audio 00:12").
@@ -161,7 +161,7 @@ The red button at the bottom right of the page records (recorder-view).
 6. The card above the button plays the recording and lists the elements that you selected, with their time. Save file saves it (webm). On claude.ai, you confirm the download. The close button forgets the recording. The recording is in the memory of the page only, not in the state.
 7. The browser asks you to let the page use the microphone or the screen. If it does not let the page record, a red note above the button tells why.
 8. The ui-data of recorder-view keeps: recording ("", audio or video), started_at, selected (the last path), selections (each {at, path}), result (kind, time, size, type), error and menu_open. The calls of the record button are timeline blocks only when Track state is on.
-9. Hold the button for 4 seconds to open the Notes page (notes-view), or click Notes in the menu. It covers the page. Click × to close it. When you release the button after the 4 seconds, it does not record.
+9. Hold the button for 4 seconds to open the Notes page (notes-view), or click Notes in the menu. It shows between the header and the footer, as the other views do. Click × to close it. When you release the button after the 4 seconds, it does not record.
 
 ## Device
 1. Click the Device button in the header (at the left of the Docs button). Its menu shows Mobile (390 px), Tablet (820 px) and Desktop (the full page). The device that shows now is blue.
@@ -184,6 +184,7 @@ The red button at the bottom right of the page records (recorder-view).
 8. The ui-data of notes-view keeps notes (each {id, kind, at, time, text, view_path, selections, file}), settings ({transcribe, lang, new_session_task}), settings_open and message. The recordings and the heard texts are in the memory of the page (os.refs.notes); on claude.ai a recording is also a file of the page (file, served at /_blob/<file>). The notes stay when you save the state.
 
 ## Where the parts are
+- On the page, from the top: the timeline (when it is open), the header, the views that are open (docs, state, Notes), then the footer with the record button. Each view uses only the space between the header and the footer. If its content is longer, it scrolls in that space.
 - Views: extension.views.
 - Shared functions: extension.functions.
 - Files of the agent: agents.agent-oss.files. These are the files of main, except state.json (state.json is the state).

@@ -242,6 +242,37 @@ html.rec-select #recorder-view,html.rec-select #recorder-view *{cursor:pointer!i
 .ar-tabs button{font:600 13px var(--sans);border:0;border-bottom:2px solid transparent;background:none;color:var(--muted);padding:6px 14px;cursor:pointer;margin-bottom:-1px}
 .ar-tabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
 .ar-by{margin-bottom:10px}
+.ar-views{margin:2px 0 12px}
+.ar-views button{font-size:14px;padding:8px 18px}
+.ar-index{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:14px 16px;margin-bottom:12px}
+.ar-index h3{margin:0 0 6px;font:600 16px var(--sans)}
+.ar-summary{margin:0 0 10px;font:14px/1.55 var(--sans);max-width:900px}
+.ar-actions{border-radius:10px;padding:8px 12px;background:var(--add-bg);font:13px/1.5 var(--sans);margin-bottom:10px}
+.ar-actions.need{background:#fef3c7;color:#78350f}
+.ar-actions ol{margin:4px 0 0;padding-left:20px}
+@media (prefers-color-scheme:dark){.ar-actions.need{background:#422006;color:#fde68a}}
+.ar-scope{display:flex;align-items:center;gap:10px}
+.ar-scope .btn,.ar-to-details{height:26px;width:auto;padding:0 10px;font:12px var(--sans)}
+.ar-legend{display:flex;gap:12px;margin:4px 0 8px;font:12px var(--mono)}
+.ar-key::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px;background:currentColor}
+.ar-key.added{color:#15803d}.ar-key.updated{color:#b45309}.ar-key.deleted{color:#b91c1c}.ar-key.read{color:#2563eb}
+.kv-item.read{color:#2563eb;background:color-mix(in srgb,#2563eb 7%,transparent)}
+.kv-item.on.read{color:#fff;background:var(--accent)}
+.tl-chip.read{background:#dbeafe;color:#1d4ed8}
+.ar-flow{list-style:none;margin:14px 0 0;padding:0 0 0 6px}
+.ar-flow-step{position:relative;padding:0 0 14px 34px;border-left:2px solid var(--line);margin-left:12px}
+.ar-flow-step:last-child{border-left-color:transparent}
+.ar-flow-step.sub{border-left-style:dashed;border-left-color:#a78bfa}
+.ar-flow-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%;border:0;background:none;color:var(--fg);text-align:left;padding:0;cursor:pointer;font:13px var(--sans)}
+.ar-flow-head b{font-weight:600}
+.ar-flow-num{position:absolute;left:-14px;top:-2px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#fff;font:700 12px var(--mono)}
+.ar-flow-step.sub .ar-flow-num{background:#7c3aed}
+.ar-flow-step.on .ar-flow-num{box-shadow:0 0 0 4px var(--sel)}
+.ar-flow-meta{margin-left:auto;color:var(--muted);font:11px var(--mono)}
+.ar-flow-why{margin:4px 0 0;color:var(--muted);font:13px/1.45 var(--sans);max-width:900px}
+.ar-flow-step.on{background:linear-gradient(90deg,var(--sel),transparent 70%);border-radius:0 10px 10px 0}
+.ar-flow-files{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.tl-chip.ar-file.added{background:var(--add-bg)}.tl-chip.ar-file.updated{background:var(--upd-bg)}.tl-chip.ar-file.deleted{background:var(--del-bg)}.tl-chip.ar-file.read{background:#dbeafe;color:#1d4ed8}
 .kv-item.ar-item{display:flex;align-items:center;gap:6px}
 .ar-item-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
 .ar-srcs{display:flex;gap:3px;flex:none}
@@ -2084,7 +2115,7 @@ const runsOf = st => {
   });
   return out.sort((x, y) => String(x.started) < String(y.started) ? -1 : 1);
 };
-const runStep = (run, ms) => ({ id: 'run:' + run.file, label: 'Agent run', name: 'session ' + String(run.session).slice(0, 3) + ' · run ' + run.run,
+const runStep = (run, ms) => ({ id: 'run:' + run.file, label: 'AI run notification', name: 'session ' + String(run.session).slice(0, 3) + ' · run ' + run.run,
   text: (run.title ? run.title + '. ' : '') + 'Asked by ' + ((run.started_by && run.started_by.run && run.started_by.run.who) || 'someone') + ': "' + ((run.started_by && run.started_by.run && run.started_by.run.words) || '').slice(0, 160) + '"',
   ms, fixed: true, run, when: new Date(run.ended || run.started).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
   // the state changes from the version before the run to the version it made; without them, the files it changed
@@ -2092,84 +2123,21 @@ const runStep = (run, ms) => ({ id: 'run:' + run.file, label: 'Agent run', name:
 const tok = n => typeof n === 'number' ? (n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(n)) + ' tokens' : '';
 // Who did a part of an agent run: the main agent, a subagent, an MCP call, a skill or a workflow. Each has its color.
 const SOURCES = { main: { one: 'main agent', many: 'Main agent' }, subagent: { one: 'subagent', many: 'Subagents' }, mcp: { one: 'MCP', many: 'MCP' }, skill: { one: 'skill', many: 'Skills' }, workflow: { one: 'workflow', many: 'Workflows' } };
-// The agent timeline: the start, then each step in its lane (main, or a subagent). The MCP, skill, subagent and workflow
-// uses are in the Details.
+// An AI run notification (a run of the agent): three tabs. Index: the summary of the run and the actions for you.
+// Details: what the run changed and read, as one tree, marked by who did it. Steps: the agent timeline in lanes, then
+// the steps one by one. The tab and the chosen step are in os.refs.timeline-view (runView, runPick).
 const runDetails = (run, box) => {
-  const head = el('div', 'ar-head'), c = run.context || {};
-  [[run.agent || 'Agent'], ['session ' + String(run.session).slice(0, 8)], ['run ' + run.run + (run.runs_in_session ? ' of ' + run.runs_in_session : '')],
-   [new Date(run.started).toLocaleString() + ' → ' + new Date(run.ended).toLocaleTimeString()], [run.version ? 'made v' + run.version : 'no version'],
-   ['context ' + tok(c.at_start) + ' → ' + tok(c.at_end)], ['cached ' + tok(c.cached_at_end)], [c.compacted ? 'compacted in this run' : 'not compacted']]
-    .forEach(([t]) => head.appendChild(el('span', 'tl-chip', t)));
-  box.appendChild(head);
-  box.appendChild(el('div', 'tl-detail-sub', 'Timeline (Agent run)'));
-  const lanesBox = el('div', 'ar-lanes'), steps = run.steps || [];
-  const lanes = Array.from(new Set(['main'].concat(steps.map(x => x.lane || 'main'))));
-  const subs = [].concat((run.started_by || {}).subagents || []).filter(Boolean);
-  const laneOf = x => x.lane || 'main';
-  lanes.forEach((name, li) => {
-    // The main agent is the first lane. A subagent (a helper agent that the main agent started) has its own lane.
-    const lane = el('div', 'ar-lane' + (li ? ' sub' : '')), mine = steps.map((x, i) => laneOf(x) === name ? i : -1).filter(i => i >= 0);
-    const ln = el('div', 'ar-lane-name');
-    ln.appendChild(el('span', '', li ? 'Subagent' : 'Main agent'));
-    if (li) ln.appendChild(el('b', '', name));
-    lane.appendChild(ln);
-    if (li === 0) {
-      const st = el('div', 'ar-card start');
-      st.appendChild(el('b', '', (run.agent || 'Agent') + ' start'));
-      st.appendChild(el('div', '', 'Session ' + String(run.session).slice(0, 8) + ' · Run ' + run.run));
-      lane.appendChild(st);
-    } else {
-      // A step sits in the column of its order. Before the first step of a subagent, a line tells what the subagent is.
-      const sub = subs.find(x => String(x.name || '').includes(name)), line = el('div', 'ar-branch');
-      line.style.width = 170 + mine[0] * 240 + 'px';
-      line.appendChild(el('span', '', name + ' is a subagent: a helper agent with its own context, which the main agent started.' + (sub && sub.why ? ' ' + sub.why : '') +
-        ' Its steps: ' + mine.map(i => 'Step ' + (i + 1)).join(', ') + ' →'));
-      lane.appendChild(line);
-    }
-    steps.forEach((x, i) => {
-      // (no empty columns before the first step of a subagent, or after the last step of a lane)
-      if ((li && i < mine[0]) || i > mine[mine.length - 1]) return;
-      if (laneOf(x) !== name) { lane.appendChild(el('div', 'ar-gap')).style.width = '230px'; return; }
-      // A click on a step shows what it did, what it changed and what it read under the board; a click again shows the whole run.
-      const card = el('div', 'ar-card step' + (li ? ' sub' : '') + (R.runPick === i ? ' on' : ''));
-      card.dataset.step = i;
-      card.tabIndex = 0;
-      card.addEventListener('click', () => {
-        R.runPick = R.runPick === i ? null : i;
-        lanesBox.querySelectorAll('.ar-card.step').forEach(k => k.classList.toggle('on', +k.dataset.step === R.runPick));
-        drawPick();
-      });
-      card.appendChild(el('b', '', 'Step ' + (i + 1) + ': ' + x.title));
-      // (a subagent step is short in its lane, so the lane stays low; a click shows all of it under the board)
-      const ul = el('ul');
-      (x.items || []).forEach(it => {
-        const li2 = el('li', '', typeof it === 'string' ? it : it.text);
-        if (it && SOURCES[it.kind]) li2.className = 'src-' + it.kind;
-        ul.appendChild(li2);
-      });
-      if (!li) card.appendChild(ul);
-      else card.appendChild(el('div', 'tl-used', (x.items || []).length + ' actions · click to see them'));
-      if (x.why && !li) card.appendChild(el('div', 'tl-used', 'Why: ' + x.why));
-      const meta = [x.from && x.to ? Math.round((Date.parse(x.to) - Date.parse(x.from)) / 1000) + ' s' : '', x.context_tokens ? 'context ' + tok(x.context_tokens) : '', x.cached_tokens ? 'cached ' + tok(x.cached_tokens) : ''].filter(Boolean).join(' · ');
-      if (meta) card.appendChild(el('div', 'tl-used', meta));
-      lane.appendChild(card);
-    });
-    lanesBox.appendChild(lane);
-  });
-  box.appendChild(lanesBox);
-  // The chosen step (or the whole run): what it did and why. Then, in two tabs, what it changed and what it read
-  // (files, the output of commands and searches, the data of MCP calls: what came into the context), by who.
-  const pick = el('div', 'ar-files');
-  box.appendChild(pick);
+  const c = run.context || {}, steps = run.steps || [], laneOf = x => x.lane || 'main';
+  const chip = (t, cls) => el('span', 'tl-chip' + (cls ? ' ' + cls : ''), t);
+  if (!steps[R.runPick]) R.runPick = null;
+  R.runView = ['index', 'details', 'steps'].includes(R.runView) ? R.runView : 'index';
+  R.runBy = R.runBy || 'all';
   const byPath = {};
   (run.files || []).forEach(f => { byPath[f.path] = f; });
-  if (!steps[R.runPick]) R.runPick = null;
-  R.runTab = R.runTab || 'changes';
-  R.runBy = R.runBy || 'all';
   // the text of a file before the run and after it, when the file is in the state (the files of the repo)
   const vv = run.version && versionsOf({ input: { head: run.version, from: run.version - 1 } });
   const textBefore = vv ? filesOf(vv.before) : {}, textAfter = vv ? filesOf(vv.after) : {};
-  const GROUP = { mcp: 'MCP calls', skill: 'Skills', subagent: 'Subagents', workflow: 'Workflows', run: 'Commands and tests', test: 'Commands and tests', search: 'Searches', publish: 'Publishes' };
+  const GROUP = { mcp: 'MCP calls', skill: 'Skills', subagent: 'Subagents', workflow: 'Workflows', run: 'Commands and scripts', test: 'Commands and scripts', search: 'Searches', publish: 'Publishes' };
   // An MCP call that sends or writes something is a change; one that gets data is a read.
   const WRITES = /\b(post|send|set|write|update|create|delete|publish|edit|rename|resolve|react|commit|push|save|merge)/i;
   const entriesOf = list => {
@@ -2177,65 +2145,110 @@ const runDetails = (run, box) => {
     list.forEach(i => {
       const x = steps[i], lane = laneOf(x) === 'main' ? null : laneOf(x), by = lane ? 'subagent' : 'main';
       (x.files || []).forEach(f => {
-        const tab = f.action === 'read' ? 'reads' : 'changes', key = tab + ':' + f.path, info = byPath[f.path] || {};
-        const e = out[key] = out[key] || { key, tab, type: 'file', path: f.path, tree: ['Files'].concat(String(f.path).split('/')), action: f.action, steps: [], src: new Set(), lanes: new Set(), tokens: info.tokens, cached: info.cached, why: f.why || info.why };
-        // (created, then updated in a later step: it is created; deleted at the end: it is deleted)
-        e.action = e.action === 'created' && f.action !== 'deleted' ? 'created' : f.action;
+        const key = 'file:' + f.path, info = byPath[f.path] || {};
+        const e = out[key] = out[key] || { key, type: 'file', path: f.path, tree: ['Files'].concat(String(f.path).split('/')), action: f.action, steps: [], src: new Set(), lanes: new Set(), tokens: info.tokens, cached: info.cached, why: f.why || info.why };
+        // (read, then changed: it is changed; created, then updated in a later step: it is created; deleted at the end: it is deleted)
+        if (f.action !== 'read') e.action = e.action === 'created' && f.action !== 'deleted' ? 'created' : f.action;
         if (!e.steps.includes(i)) e.steps.push(i);
         e.src.add(by);
         if (lane) e.lanes.add(lane);
       });
       (x.items || []).forEach((it, k) => {
         if (!it || typeof it !== 'object' || !GROUP[it.kind]) return;
-        const tab = it.kind === 'publish' || (it.kind === 'mcp' && WRITES.test(it.text)) ? 'changes' : 'reads', key = tab + ':item:' + i + ':' + k;
-        out[key] = { key, tab, type: 'item', kind: it.kind, text: it.text, tree: [GROUP[it.kind], it.text], steps: [i], src: new Set([by].concat(SOURCES[it.kind] && it.kind !== 'main' ? [it.kind] : [])), lanes: new Set(lane ? [lane] : []) };
+        const changes = it.kind === 'publish' || (it.kind === 'mcp' && WRITES.test(it.text)), key = 'item:' + i + ':' + k;
+        out[key] = { key, type: 'item', kind: it.kind, text: it.text, action: changes ? 'changed' : 'read', tree: [GROUP[it.kind], it.text], steps: [i], src: new Set([by].concat(SOURCES[it.kind] && it.kind !== 'main' ? [it.kind] : [])), lanes: new Set(lane ? [lane] : []) };
       });
     });
     return Object.values(out);
   };
-  const chip = (t, cls) => el('span', 'tl-chip' + (cls ? ' ' + cls : ''), t);
   const srcChips = e => {
-    const c = el('span', 'ar-srcs');
-    e.lanes.forEach(l => c.appendChild(chip(l, 'src src-subagent')));
-    ['mcp', 'skill', 'workflow'].forEach(k => { if (e.src.has(k)) c.appendChild(chip(SOURCES[k].one, 'src src-' + k)); });
-    if (e.type === 'item' && e.kind === 'subagent' && !e.lanes.size) c.appendChild(chip('subagent', 'src src-subagent'));
-    return c;
+    const c2 = el('span', 'ar-srcs');
+    e.lanes.forEach(l => c2.appendChild(chip(l, 'src src-subagent')));
+    ['mcp', 'skill', 'workflow'].forEach(k => { if (e.src.has(k)) c2.appendChild(chip(SOURCES[k].one, 'src src-' + k)); });
+    if (e.type === 'item' && e.kind === 'subagent' && !e.lanes.size) c2.appendChild(chip('subagent', 'src src-subagent'));
+    return c2;
   };
-  const drawPick = () => {
-    pick.textContent = '';
-    const x = steps[R.runPick];
-    pick.appendChild(el('div', 'tl-detail-sub', x ? 'Step ' + (R.runPick + 1) + ': ' + x.title : 'The whole run (click a step to see only its part)'));
-    if (x) {
-      const chips = el('div', 'ar-head');
-      [laneOf(x) === 'main' ? 'main agent' : 'subagent ' + x.lane, x.from ? new Date(x.from).toLocaleTimeString() + ' → ' + new Date(x.to).toLocaleTimeString() : '',
-       x.from && x.to ? Math.round((Date.parse(x.to) - Date.parse(x.from)) / 1000) + ' s' : '', x.context_tokens ? 'context ' + tok(x.context_tokens) : '', x.cached_tokens ? 'cached ' + tok(x.cached_tokens) : '']
-        .filter(Boolean).forEach(t => chips.appendChild(chip(t)));
-      pick.appendChild(chips);
-      const ul = el('ul', 'ar-items');
-      (x.items || []).forEach(it => {
-        const li = el('li');
-        if (it.kind) li.appendChild(chip(it.kind, SOURCES[it.kind] ? 'src src-' + it.kind : 'quiet'));
-        li.appendChild(document.createTextNode(' ' + (typeof it === 'string' ? it : it.text)));
-        ul.appendChild(li);
-      });
-      pick.appendChild(ul);
-      if (x.why) pick.appendChild(el('p', 'tl-text', 'Why: ' + x.why));
+  const all = entriesOf(steps.map((_, i) => i)), changed = all.filter(e => e.action !== 'read'), read = all.filter(e => e.action === 'read');
+  const views = el('div', 'ar-tabs ar-views'), body = el('div', 'ar-view');
+  views.setAttribute('role', 'tablist');
+  [['index', 'Index'], ['details', 'Details'], ['steps', 'Steps']].forEach(([t, label]) => {
+    const b = el('button', '', label);
+    b.dataset.view = t;
+    b.setAttribute('role', 'tab');
+    b.addEventListener('click', () => { R.runView = t; show(); });
+    views.appendChild(b);
+  });
+  box.appendChild(views);
+  box.appendChild(body);
+
+  // Index: the summary of the run and what you need to do, then where it came from, what it used and its context.
+  const drawIndex = () => {
+    const card = el('section', 'ar-index');
+    card.appendChild(el('h3', '', run.title || 'Agent run'));
+    const words = (run.started_by && run.started_by.run && run.started_by.run.words) || '';
+    card.appendChild(el('p', 'ar-summary', run.summary || ((words ? 'Asked: "' + words.slice(0, 240) + (words.length > 240 ? '…' : '') + '". ' : '') +
+      steps.length + ' steps, ' + changed.filter(e => e.type === 'file').length + ' files changed, ' + read.filter(e => e.type === 'file').length + ' files read' + (run.version ? ', made v' + run.version : '') + '.')));
+    const acts = el('div', 'ar-actions' + (run.actions && run.actions.length ? ' need' : ''));
+    acts.appendChild(el('b', '', run.actions && run.actions.length ? 'Actions for you' : 'No action needed'));
+    if (!run.actions) acts.appendChild(el('span', 'tl-used', ' (this run did not record its actions)'));
+    if (run.actions && run.actions.length) {
+      const ol = el('ol');
+      run.actions.forEach(x => ol.appendChild(el('li', '', typeof x === 'string' ? x : x.text)));
+      acts.appendChild(ol);
     }
-    const all = entriesOf(x ? [R.runPick] : steps.map((_, i) => i));
-    const tabs = el('div', 'ar-tabs');
-    tabs.setAttribute('role', 'tablist');
-    [['changes', 'Changes', 'What the agent changed: files, and MCP calls that send or write'], ['reads', 'Reads', 'What came into the context: files it read, the output of commands and searches, the data of MCP calls, skills and subagents']].forEach(([t, label, tip]) => {
-      const b = el('button', '', label + ' (' + all.filter(e => e.tab === t).length + ')');
-      b.dataset.tab = t;
-      b.title = tip;
-      b.setAttribute('role', 'tab');
-      b.setAttribute('aria-selected', String(R.runTab === t));
-      b.addEventListener('click', () => { R.runTab = t; drawPick(); });
-      tabs.appendChild(b);
+    card.appendChild(acts);
+    const head = el('div', 'ar-head');
+    [run.agent || 'Agent', 'session ' + String(run.session).slice(0, 8), 'run ' + run.run + (run.runs_in_session ? ' of ' + run.runs_in_session : ''),
+     new Date(run.started).toLocaleString() + ' → ' + new Date(run.ended).toLocaleTimeString(), run.version ? 'made v' + run.version : 'no version',
+     'context ' + tok(c.at_start) + ' → ' + tok(c.at_end), 'cached ' + tok(c.cached_at_end), c.compacted ? 'compacted in this run' : 'not compacted']
+      .forEach(t => head.appendChild(chip(t)));
+    card.appendChild(head);
+    body.appendChild(card);
+    // What started each part, and why.
+    const dl = el('dl', 'ar-why'), sb = run.started_by || {};
+    const row = (t, x) => {
+      dl.appendChild(el('dt', '', t));
+      const dd = el('dd');
+      if (!x || (Array.isArray(x) && !x.length)) dd.textContent = 'Nothing.';
+      else [].concat(x).forEach(y => dd.appendChild(el('div', '', typeof y === 'string' ? y : [y.name, y.who, y.words ? '"' + y.words + '"' : '', y.why].filter(Boolean).join(' · '))));
+      dl.appendChild(dd);
+    };
+    row('What started this session', sb.session);
+    row('What started this run', sb.run);
+    row('What started this workflow', sb.workflow);
+    row('What started the subagents', sb.subagents);
+    row('What started the skills', sb.skills);
+    // uses: {mcp, skills, subagents, workflows}, each a list of {name, count, why} (or counts by name: the raw data);
+    // a flat list has a kind on each use
+    const u = {};
+    if (Array.isArray(run.uses)) run.uses.forEach(x => { const k = { mcp: 'mcp', skill: 'skills', subagent: 'subagents', workflow: 'workflows' }[x.kind] || x.kind; (u[k] = u[k] || []).push(x); });
+    else Object.assign(u, run.uses);
+    [['mcp', 'MCP use'], ['skills', 'Skill use'], ['subagents', 'Subagents'], ['workflows', 'Workflow']].forEach(([k, t]) => {
+      const list = Array.isArray(u[k]) ? u[k] : Object.keys(u[k] || {}).map(n => ({ name: n, count: u[k][n] }));
+      row(t, list.map(x => x.name + (x.count ? ' × ' + x.count : '') + (x.why ? ' · ' + x.why : '')));
     });
-    pick.appendChild(tabs);
+    row('Context', ['At the start ' + tok(c.at_start) + ', at the end ' + tok(c.at_end) + ', the most ' + tok(c.peak) + '.',
+      tok(c.cached_at_end) + ' of the context at the end was cached (read from the cache, not sent again).', tok(c.output_tokens) + ' written by the agent in ' + (c.requests || 0) + ' requests.']);
+    body.appendChild(dl);
+  };
+
+  // Details: the state as the run touched it. Files it changed (green added, yellow updated, red deleted) and what it
+  // read (blue: files, commands and scripts, searches, the data of MCP calls, skills), with who did it. A chosen step
+  // (Steps) shows only its part.
+  const drawDetails = () => {
+    const x = steps[R.runPick], list = x ? entriesOf([R.runPick]) : all;
+    const sub = el('div', 'tl-detail-sub ar-scope', x ? 'Step ' + (R.runPick + 1) + ': ' + x.title : 'The whole run');
+    if (x) {
+      const wb = el('button', 'btn ar-whole', 'Whole run');
+      wb.addEventListener('click', () => { R.runPick = null; show(); });
+      sub.appendChild(wb);
+    }
+    body.appendChild(sub);
+    const legend = el('div', 'ar-legend');
+    [['added', 'added'], ['updated', 'updated'], ['deleted', 'deleted'], ['read', 'read']].forEach(([cls, t]) => legend.appendChild(el('span', 'ar-key ' + cls, t + ' ' + list.filter(e => (e.action === 'created' ? 'added' : e.action === 'changed' ? 'updated' : e.action) === cls).length)));
+    body.appendChild(legend);
     // By who: the main agent, the subagents, or the MCP calls, skills and workflows. Each has its color.
-    const inTab = all.filter(e => e.tab === R.runTab), count = k => k === 'all' ? inTab.length : inTab.filter(e => e.src.has(k)).length;
+    const count = k => k === 'all' ? list.length : list.filter(e => e.src.has(k)).length;
     if (R.runBy !== 'all' && !count(R.runBy)) R.runBy = 'all';
     const bys = el('div', 'st-kinds ar-by');
     bys.setAttribute('aria-label', 'By');
@@ -2244,13 +2257,13 @@ const runDetails = (run, box) => {
       const b = el('button', 'st-kind' + (k === 'all' ? '' : ' src-' + k), (k === 'all' ? 'All' : SOURCES[k].many) + ' ' + count(k));
       b.dataset.by = k;
       b.setAttribute('aria-pressed', String(R.runBy === k));
-      b.addEventListener('click', () => { R.runBy = k; drawPick(); });
+      b.addEventListener('click', () => { R.runBy = k; show(); });
       bys.appendChild(b);
     });
-    pick.appendChild(bys);
-    const shown = inTab.filter(e => R.runBy === 'all' || e.src.has(R.runBy));
-    if (!shown.length) { pick.appendChild(el('p', 'tl-text', R.runTab === 'changes' ? 'Nothing changed here.' : 'Nothing was read here.')); return; }
-    let sel = shown.find(e => e.key === R.runSel) || shown.find(e => e.type === 'file' && textAfter[e.path] !== undefined) || shown[0];
+    body.appendChild(bys);
+    const shown = list.filter(e => R.runBy === 'all' || e.src.has(R.runBy));
+    if (!shown.length) { body.appendChild(el('p', 'tl-text', 'Nothing here.')); return; }
+    let sel = shown.find(e => e.key === R.runSel) || shown.find(e => e.type === 'file' && e.action !== 'read' && textAfter[e.path] !== undefined) || shown[0];
     const grid = el('div', 'kv ar-kv'), tree = el('div', 'kv-tree'), main = el('div', 'kv-main');
     const root = {};
     shown.forEach(e => {
@@ -2258,7 +2271,7 @@ const runDetails = (run, box) => {
       e.tree.slice(0, -1).forEach(d => { node = node[d + '/'] = node[d + '/'] || {}; });
       node[e.tree[e.tree.length - 1]] = e;
     });
-    const buttons = [], CH = { created: 'added', updated: 'updated', deleted: 'deleted' };
+    const buttons = [], CH = { created: 'added', updated: 'updated', deleted: 'deleted', changed: 'updated', read: 'read' };
     const draw = (node, into, depth) => Object.keys(node).sort((a, b) => (b.endsWith('/') - a.endsWith('/')) || (a < b ? -1 : 1)).forEach(k => {
       const e = node[k];
       if (!e.key) {
@@ -2269,9 +2282,9 @@ const runDetails = (run, box) => {
         into.appendChild(d);
         return;
       }
-      const b = el('button', 'kv-item ar-item' + (CH[e.action] ? ' ' + CH[e.action] : '') + (e === sel ? ' on' : ''));
+      const b = el('button', 'kv-item ar-item ' + CH[e.action] + (e === sel ? ' on' : ''));
       b.style.paddingLeft = depth * 14 + 4 + 'px';
-      b.title = (e.path || e.text) + (e.action ? ' (' + e.action + ')' : '');
+      b.title = (e.path || e.text) + ' (' + e.action + ')';
       b.appendChild(el('span', 'ar-item-name', k));
       b.appendChild(srcChips(e));
       b.addEventListener('click', () => { sel = e; R.runSel = e.key; buttons.forEach(y => y.classList.toggle('on', y === b)); drawMain(); });
@@ -2281,16 +2294,17 @@ const runDetails = (run, box) => {
     draw(root, tree, 0);
     grid.appendChild(tree);
     grid.appendChild(main);
-    pick.appendChild(grid);
+    body.appendChild(grid);
     const drawMain = () => {
       main.textContent = '';
       const e = sel, before = e.type === 'file' ? textBefore[e.path] : undefined, after = e.type === 'file' ? textAfter[e.path] : undefined;
-      const tabs = (e.type === 'file' && (after !== undefined || before !== undefined) ? ['File'] : []).concat(e.tab === 'changes' && e.type === 'file' && (after !== undefined || before !== undefined) && before !== after ? ['Changes'] : [], ['Why']);
+      const has = e.type === 'file' && (after !== undefined || before !== undefined);
+      const tabs = (has ? ['File'] : []).concat(has && e.action !== 'read' && before !== after ? ['Changes'] : [], ['Why']);
       let tab = R.runSelTab;
       if (!tabs.includes(tab)) tab = tabs[0];
       const head = el('div', 'kv-head');
       head.appendChild(el('span', '', e.path || e.text));
-      if (e.action) head.appendChild(chip(e.action, e.action === 'created' ? 'good' : e.action === 'deleted' ? 'bad' : ''));
+      head.appendChild(chip(e.action, e.action === 'created' ? 'good' : e.action === 'deleted' ? 'bad' : e.action === 'read' ? 'read' : ''));
       if (e.kind && !SOURCES[e.kind]) head.appendChild(chip(e.kind, 'quiet'));
       head.appendChild(srcChips(e));
       main.appendChild(head);
@@ -2319,39 +2333,109 @@ const runDetails = (run, box) => {
       row('Why', e.why || e.steps.map(i => steps[i].why).filter(Boolean).join(' '));
       row('Size', e.tokens ? '≈ ' + tok(e.tokens) + (e.cached ? ', in the cached context at the end' : '') : '');
       main.appendChild(dl);
-      if (e.type === 'file' && after === undefined && before === undefined) main.appendChild(el('p', 'tl-used', 'This file is not in the state (it is not a file of the repo), so its text is not here.'));
+      if (e.type === 'file' && !has) main.appendChild(el('p', 'tl-used', 'This file is not in the state (it is not a file of the repo), so its text is not here.'));
     };
     drawMain();
     setTimeout(() => { const on = tree.querySelector('.kv-item.on'); if (on) tree.scrollTop = on.offsetTop - tree.offsetTop - 60; });
   };
-  drawPick();
-  // What started each part, and why.
-  box.appendChild(el('div', 'tl-detail-sub', 'Details'));
-  const dl = el('dl', 'ar-why'), sb = run.started_by || {};
-  const row = (t, x) => {
-    dl.appendChild(el('dt', '', t));
-    const dd = el('dd');
-    if (!x || (Array.isArray(x) && !x.length)) dd.textContent = 'Nothing.';
-    else [].concat(x).forEach(y => dd.appendChild(el('div', '', typeof y === 'string' ? y : [y.name, y.who, y.words ? '"' + y.words + '"' : '', y.why].filter(Boolean).join(' · '))));
-    dl.appendChild(dd);
+
+  // Steps: the agent timeline (the start, then each step in its lane: main, or a subagent), then the steps one by one.
+  // A click on a step opens it (what it did, why, its files) and chooses it for Details; a click again closes it.
+  const drawSteps = () => {
+    const lanesBox = el('div', 'ar-lanes');
+    const lanes = Array.from(new Set(['main'].concat(steps.map(laneOf))));
+    const subs = [].concat((run.started_by || {}).subagents || []).filter(Boolean);
+    const pickStep = i => { R.runPick = R.runPick === i ? null : i; show(); };
+    lanes.forEach((name, li) => {
+      // The main agent is the first lane. A subagent (a helper agent that the main agent started) has its own lane.
+      const lane = el('div', 'ar-lane' + (li ? ' sub' : '')), mine = steps.map((x, i) => laneOf(x) === name ? i : -1).filter(i => i >= 0);
+      const ln = el('div', 'ar-lane-name');
+      ln.appendChild(el('span', '', li ? 'Subagent' : 'Main agent'));
+      if (li) ln.appendChild(el('b', '', name));
+      lane.appendChild(ln);
+      if (li === 0) {
+        const st = el('div', 'ar-card start');
+        st.appendChild(el('b', '', (run.agent || 'Agent') + ' start'));
+        st.appendChild(el('div', '', 'Session ' + String(run.session).slice(0, 8) + ' · Run ' + run.run));
+        lane.appendChild(st);
+      } else {
+        // A step sits in the column of its order. Before the first step of a subagent, a line tells what the subagent is.
+        const sb = subs.find(x => String(x.name || '').includes(name)), line = el('div', 'ar-branch');
+        line.style.width = 170 + mine[0] * 240 + 'px';
+        line.appendChild(el('span', '', name + ' is a subagent: a helper agent with its own context, which the main agent started.' + (sb && sb.why ? ' ' + sb.why : '') +
+          ' Its steps: ' + mine.map(i => 'Step ' + (i + 1)).join(', ') + ' →'));
+        lane.appendChild(line);
+      }
+      steps.forEach((x, i) => {
+        // (no empty columns before the first step of a subagent, or after the last step of a lane)
+        if ((li && i < mine[0]) || i > mine[mine.length - 1]) return;
+        if (laneOf(x) !== name) { lane.appendChild(el('div', 'ar-gap')).style.width = '230px'; return; }
+        const card = el('div', 'ar-card step' + (li ? ' sub' : '') + (R.runPick === i ? ' on' : ''));
+        card.dataset.step = i;
+        card.tabIndex = 0;
+        card.addEventListener('click', () => pickStep(i));
+        card.appendChild(el('b', '', 'Step ' + (i + 1) + ': ' + x.title));
+        // (a subagent step is short in its lane, so the lane stays low)
+        const ul = el('ul');
+        (x.items || []).forEach(it => {
+          const li2 = el('li', '', typeof it === 'string' ? it : it.text);
+          if (it && SOURCES[it.kind]) li2.className = 'src-' + it.kind;
+          ul.appendChild(li2);
+        });
+        if (!li) card.appendChild(ul);
+        else card.appendChild(el('div', 'tl-used', (x.items || []).length + ' actions · click to see them'));
+        const meta = [x.from && x.to ? Math.round((Date.parse(x.to) - Date.parse(x.from)) / 1000) + ' s' : '', x.context_tokens ? 'context ' + tok(x.context_tokens) : ''].filter(Boolean).join(' · ');
+        if (meta) card.appendChild(el('div', 'tl-used', meta));
+        lane.appendChild(card);
+      });
+      lanesBox.appendChild(lane);
+    });
+    body.appendChild(lanesBox);
+    // the steps one by one: a number on a line, the title, who did it, the time and the context; the open step shows
+    // what it did, why, and the files it changed and read
+    const flow = el('ol', 'ar-flow');
+    steps.forEach((x, i) => {
+      const on = R.runPick === i, li = el('li', 'ar-flow-step' + (laneOf(x) === 'main' ? '' : ' sub') + (on ? ' on' : ''));
+      li.dataset.step = i;
+      const top = el('button', 'ar-flow-head');
+      top.appendChild(el('span', 'ar-flow-num', String(i + 1)));
+      top.appendChild(el('b', '', x.title));
+      top.appendChild(chip(laneOf(x) === 'main' ? 'main agent' : x.lane, laneOf(x) === 'main' ? 'src src-main' : 'src src-subagent'));
+      const kinds = new Set((x.items || []).map(it => it && it.kind).filter(k => SOURCES[k]));
+      kinds.forEach(k => top.appendChild(chip(SOURCES[k].one, 'src src-' + k)));
+      top.appendChild(el('span', 'ar-flow-meta', [x.from ? new Date(x.from).toLocaleTimeString() : '', x.from && x.to ? Math.round((Date.parse(x.to) - Date.parse(x.from)) / 1000) + ' s' : '', x.context_tokens ? 'context ' + tok(x.context_tokens) : ''].filter(Boolean).join(' · ')));
+      top.addEventListener('click', () => pickStep(i));
+      li.appendChild(top);
+      if (x.why) li.appendChild(el('p', 'ar-flow-why', x.why));
+      if (on) {
+        const ul = el('ul', 'ar-items');
+        (x.items || []).forEach(it => {
+          const r = el('li');
+          if (it.kind) r.appendChild(chip(it.kind, SOURCES[it.kind] ? 'src src-' + it.kind : 'quiet'));
+          r.appendChild(document.createTextNode(' ' + (typeof it === 'string' ? it : it.text)));
+          ul.appendChild(r);
+        });
+        li.appendChild(ul);
+        const files = el('div', 'ar-flow-files');
+        entriesOf([i]).filter(e => e.type === 'file').forEach(e => files.appendChild(chip((e.action === 'read' ? 'read ' : e.action + ' ') + e.path, 'ar-file ' + CH2[e.action])));
+        if (files.children.length) li.appendChild(files);
+        const go = el('button', 'btn ar-to-details', 'See it in Details');
+        go.addEventListener('click', () => { R.runView = 'details'; show(); });
+        li.appendChild(go);
+      }
+      flow.appendChild(li);
+    });
+    body.appendChild(flow);
   };
-  row('What started this session', sb.session);
-  row('What started this run', sb.run);
-  row('What started this workflow', sb.workflow);
-  row('What started the subagents', sb.subagents);
-  row('What started the skills', sb.skills);
-  // uses: {mcp, skills, subagents, workflows}, each a list of {name, count, why} (or counts by name: the raw data);
-  // a flat list has a kind on each use
-  const u = {};
-  if (Array.isArray(run.uses)) run.uses.forEach(x => { const k = { mcp: 'mcp', skill: 'skills', subagent: 'subagents', workflow: 'workflows' }[x.kind] || x.kind; (u[k] = u[k] || []).push(x); });
-  else Object.assign(u, run.uses);
-  [['mcp', 'MCP use'], ['skills', 'Skill use'], ['subagents', 'Subagents'], ['workflows', 'Workflow']].forEach(([k, t]) => {
-    const list = Array.isArray(u[k]) ? u[k] : Object.keys(u[k] || {}).map(n => ({ name: n, count: u[k][n] }));
-    row(t, list.map(x => x.name + (x.count ? ' × ' + x.count : '') + (x.why ? ' · ' + x.why : '')));
-  });
-  row('Context', ['At the start ' + tok(c.at_start) + ', at the end ' + tok(c.at_end) + ', the most ' + tok(c.peak) + '.',
-    tok(c.cached_at_end) + ' of the context at the end was cached (read from the cache, not sent again).', tok(c.output_tokens) + ' written by the agent in ' + (c.requests || 0) + ' requests.']);
-  box.appendChild(dl);
+  const CH2 = { created: 'added', updated: 'updated', deleted: 'deleted', read: 'read' };
+  const show = () => {
+    body.textContent = '';
+    views.querySelectorAll('button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.view === R.runView)));
+    if (R.runView === 'index') drawIndex();
+    else if (R.runView === 'details') drawDetails();
+    else drawSteps();
+  };
+  show();
 };
 const details = (s, box) => {
   if (s.run) { runDetails(s.run, box); return; }
@@ -2413,7 +2497,7 @@ steps.forEach((s, i) => {
   top.appendChild(el('span', 'tl-time', s.run ? core.ago(s.run.ended || s.run.started) : s.when || since(s.ms)));
   b.appendChild(top);
   // the two pinned blocks: Last agent run, and the newest block (Last click, ...)
-  b.appendChild(el('span', 'tl-kind', pin ? 'Last ' + s.label.toLowerCase() : s.label));
+  b.appendChild(el('span', 'tl-kind', pin ? 'Last ' + (s.run ? s.label : s.label.toLowerCase()) : s.label));
   b.appendChild(el('span', 'tl-step-name', s.name));
   const meta = el('span', 'tl-step-meta');
   if (s.took !== undefined) meta.appendChild(el('span', '', s.took + ' ms'));

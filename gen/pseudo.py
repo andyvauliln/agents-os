@@ -253,7 +253,7 @@ SET blocks =
   Network (requests and environment)
   Run index.html
   each top call (Load the state, Start the page, clicks, new versions)
-  after a New version: an Agent run block for each new run
+  after a New version: an AI run notification block for each new run
 FOR EACH block: count its state changes
 SET the chosen block = selected, or the newest agent run block when nothing is chosen (the newest block when there is no run)
 DRAW the row of blocks (number, time, name, changes); the chosen block is on
@@ -278,7 +278,8 @@ GIVE the state view what it needs:
       an updated md file in read mode: new lines green, removed lines red; the pointer on them shows why the run changed the file
   drawDetails(box) = what happens inside the block
     Network: the requests by group and the environment
-    Agent run: the steps in lanes, the uses, what started it, the files as a tree
+    AI run notification: tabs Index (summary, actions for you, chips, what started it, uses, context),
+      Details (one tree of what it changed and read, by who; a chosen step shows only its part), Steps (lanes, then the steps one by one)
     a call: its parts, then each call inside it with what, why and its changes
 IF playing and no timer: START a timer that CALLs local.next every 1.6 s
 IF not playing and a timer runs: STOP it""",

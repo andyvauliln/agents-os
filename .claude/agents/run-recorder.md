@@ -1,6 +1,6 @@
 ---
 name: run-recorder
-description: After each agent run in this repo, makes runs/<session>-<run>.json from the session log. It groups the tool uses into steps and writes why for each step, use and file. The timeline of the page shows it as an Agent run block.
+description: After each agent run in this repo, makes runs/<session>-<run>.json from the session log. It groups the tool uses into steps and writes why for each step, use and file. The timeline of the page shows it as an AI run notification block.
 tools: Bash, Read, Write
 ---
 
@@ -14,6 +14,8 @@ You record one agent run. A run is one request to the agent: from a message (a p
 2. Read the raw data. Then write `runs/<session>-<run>.json` with these fields. Use ASD-STE100: short sentences, one instruction or fact in each sentence.
    - All the raw fields, but not `events` (put what is important into the steps).
    - `title`: the goal of the run in 3 to 8 words.
+   - `summary`: 2 to 4 sentences for the person who asked: what the run did and what the result is. The Index tab of the AI run notification shows it.
+   - `actions`: a list of what the person must do now (for example "Answer the decision card about the mic", "Put the id of the task into Settings"). Each is a short sentence. Use `[]` when nothing is needed.
    - `started_by`: keep `session` and `run` (who, words, at) and add `why` to each: why the session started, and what the run had to do. Add `workflow`, `subagents` and `skills`: for each one that started in this run, `{name, why}` (what started it and why). Use `[]` or `null` when there is none.
    - `steps`: 3 to 12 steps, in order. Each step: `{title, lane, from, to, items, why, context_tokens, cached_tokens, files}`.
      - `title`: what the step did, for example "Find how the timeline draws blocks".

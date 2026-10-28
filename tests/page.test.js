@@ -329,7 +329,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.locator('#state-view .sv-bar #path').count(), 0);
     assert.equal(await page.isChecked('#sv-track'), false);
     // no block chosen: the state view shows the last agent run (block 1)
-    await page.waitForFunction(() => /^Block 1: Agent run session /.test(document.querySelector('#sv-block').textContent));
+    await page.waitForFunction(() => /^Block 1: AI run notification session /.test(document.querySelector('#sv-block').textContent));
 
     // the timeline: hidden until its button; then its blocks at the top of the page, above the header
     assert.equal(await page.isHidden('#timeline-view'), true);
@@ -340,7 +340,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.ok(await page.evaluate(() => document.querySelector('#timeline-view').compareDocumentPosition(document.querySelector('#header-view')) & Node.DOCUMENT_POSITION_FOLLOWING));
     const stepKinds = await page.$$eval('#tl-strip .tl-step .tl-kind', els => els.map(x => x.textContent));
     // the last agent run comes first (runs/ of the repo), then the page start
-    assert.deepEqual(stepKinds.slice(0, 5), ['Last agent run', 'Network', 'Run index.html', 'Load the state', 'Start the page']);
+    assert.deepEqual(stepKinds.slice(0, 5), ['Last AI run notification', 'Network', 'Run index.html', 'Load the state', 'Start the page']);
     // the newest block is the last one: Last click, ...; the agent run block shows only the time ago
     assert.match(stepKinds[stepKinds.length - 1], /^Last [a-z]/);
     assert.match(await page.textContent('#tl-strip .tl-step.pin-left .tl-time'), /^(just now|\d+ (min|h|d) ago)$/);
@@ -357,36 +357,42 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     });
     assert.deepEqual(inSight, [true, true, true]);
 
-    // the Agent run block: Details shows the timeline of the agent, what started each part, the context, the files
+    // the AI run notification block: Details has three tabs, Index, Details and Steps
     const runs = await page.evaluate(() => Object.keys(window.agentOS.state.agents['agent-oss'].files.runs).sort());
     const lastRun = await page.evaluate(n => JSON.parse(window.agentOS.state.agents['agent-oss'].files.runs[n]), runs[runs.length - 1]);
     await page.locator('#tl-strip .tl-step').first().click();
     assert.equal((await tl()).selected, 'run:runs/' + runs[runs.length - 1]);
     await page.click('#details');
-    await page.waitForSelector('#tl-detail .ar-lanes');
+    await page.waitForSelector('#tl-detail .ar-views');
     assert.equal((await svd()).details, true);
     assert.equal(await page.getAttribute('#details', 'aria-pressed'), 'true');
     assert.equal(await page.isHidden('#sv-editor'), true);
-    assert.match(await shownBlock(), new RegExp('^Block 1: Agent run session ' + lastRun.session.slice(0, 3) + ' · run ' + lastRun.run + ' · '));
-    assert.match(await page.textContent('#tl-detail .ar-card.start'), new RegExp('Run ' + lastRun.run));
-    assert.equal(await page.locator('#tl-detail .ar-card:not(.start)').count(), lastRun.steps.length);
-    // a subagent has its own lane: its name, and a line that tells what it is and which steps are its own
-    const subLanes = [...new Set(lastRun.steps.map(x => x.lane || 'main'))].filter(l => l !== 'main');
-    assert.equal(await page.locator('#tl-detail .ar-lane.sub').count(), subLanes.length);
-    if (subLanes.length) assert.match(await page.textContent('#tl-detail .ar-lane.sub .ar-branch'), new RegExp('^' + subLanes[0] + ' is a subagent'));
-    // the MCP, skill, subagent and workflow uses are in the Details
+    assert.match(await shownBlock(), new RegExp('^Block 1: AI run notification session ' + lastRun.session.slice(0, 3) + ' · run ' + lastRun.run + ' · '));
+    assert.deepEqual(await page.$$eval('#tl-detail .ar-views button', els => els.map(x => x.textContent)), ['Index', 'Details', 'Steps']);
+    // Index: the title, the summary, the actions for you, the chips, what started each part, the uses and the context
+    assert.equal(await page.getAttribute('#tl-detail .ar-views [data-view="index"]', 'aria-selected'), 'true');
+    assert.equal(await page.textContent('#tl-detail .ar-index h3'), lastRun.title);
+    if (lastRun.summary) assert.equal(await page.textContent('#tl-detail .ar-summary'), lastRun.summary);
+    if (lastRun.actions && lastRun.actions.length) assert.deepEqual(await page.$$eval('#tl-detail .ar-actions li', els => els.map(x => x.textContent)), lastRun.actions);
+    else assert.match(await page.textContent('#tl-detail .ar-actions'), /^No action needed/);
+    assert.ok(await page.locator('#tl-detail .ar-index .ar-head .tl-chip', { hasText: 'run ' + lastRun.run }).count() === 1);
     assert.deepEqual(await page.$$eval('#tl-detail .ar-why:not(.ar-info) dt', els => els.map(x => x.textContent)),
       ['What started this session', 'What started this run', 'What started this workflow', 'What started the subagents', 'What started the skills', 'MCP use', 'Skill use', 'Subagents', 'Workflow', 'Context']);
-    // no step chosen: the whole run, in two tabs: Changes and Reads
-    assert.match(await page.textContent('#tl-detail .ar-files .tl-detail-sub'), /^The whole run/);
-    const changed = lastRun.files.filter(f => f.action !== 'read'), read = lastRun.files.filter(f => f.action === 'read');
-    assert.match(await page.textContent('#tl-detail .ar-tabs [data-tab="changes"]'), /^Changes \(\d+\)$/);
-    assert.equal(await page.getAttribute('#tl-detail .ar-tabs [data-tab="changes"]', 'aria-selected'), 'true');
-    // the changed files are a tree of folders under Files/
+    // Details: one tree of what the run changed (green, yellow, red) and read (blue), with who did it
+    await page.click('#tl-detail .ar-views [data-view="details"]');
+    await page.waitForSelector('#tl-detail .ar-kv');
+    assert.match(await page.textContent('#tl-detail .ar-scope'), /^The whole run/);
+    const changed = lastRun.files.filter(f => f.action !== 'read'), read = lastRun.files.filter(f => f.action === 'read' && !changed.some(c => c.path === f.path));
+    assert.match(await page.textContent('#tl-detail .ar-legend'), /^added \d+updated \d+deleted \d+read \d+$/);
+    // the files are a tree of folders under Files/
     const top = changed.find(f => /^[^/]+\//.test(f.path)).path.split('/')[0];
     assert.equal(await page.locator('#tl-detail .ar-kv .kv-tree summary', { hasText: new RegExp('^' + top.replace('.', '\\.') + '/$') }).count(), 1);
-    assert.ok(await page.locator('#tl-detail .ar-kv .kv-item.ar-item').count() >= new Set(changed.map(f => f.path)).size);
+    const titles = await page.$$eval('#tl-detail .ar-kv .kv-item', els => els.map(x => x.title));
+    for (const f of changed.slice(0, 3)) assert.ok(titles.some(t => t.startsWith(f.path + ' (') && !t.endsWith('(read)')), f.path);
+    for (const f of read.slice(0, 3)) assert.ok(titles.some(t => t === f.path + ' (read)'), f.path);
+    assert.ok(await page.locator('#tl-detail .ar-kv .kv-item.read').count() >= 1);
     // the buttons show only what the main agent, a subagent or an MCP call did
+    const subLanes = [...new Set(lastRun.steps.map(x => x.lane || 'main'))].filter(l => l !== 'main');
     assert.equal(await page.getAttribute('#tl-detail .ar-by [data-by="all"]', 'aria-pressed'), 'true');
     if (subLanes.length) {
       await page.click('#tl-detail .ar-by [data-by="subagent"]');
@@ -394,25 +400,32 @@ test('page: boots from state, renders the header, runs state tests, saves and st
       assert.ok((await page.$$eval('#tl-detail .ar-kv .kv-item', els => els.map(x => x.querySelector('.src') ? 1 : 0))).every(Boolean));
       await page.click('#tl-detail .ar-by [data-by="all"]');
     }
-    // Reads: the files it read, and what came into its context
-    await page.click('#tl-detail .ar-tabs [data-tab="reads"]');
-    assert.equal(await page.getAttribute('#tl-detail .ar-tabs [data-tab="reads"]', 'aria-selected'), 'true');
-    for (const f of read.slice(0, 3)) assert.ok((await page.$$eval('#tl-detail .ar-kv .kv-item', els => els.map(x => x.title))).some(t => t.startsWith(f.path)), f.path);
     // a click on an item shows why: who did it, in which steps
     await page.locator('#tl-detail .ar-kv .kv-item').first().click();
     await page.click('#tl-detail .ar-kv .kv-tabs button:has-text("Why")');
     assert.match(await page.textContent('#tl-detail .ar-kv .kv-main .ar-info'), /By.*Steps/s);
-    await page.click('#tl-detail .ar-tabs [data-tab="changes"]');
-    // a click on a step shows only that step: what it did, why, and its own files; a click again shows the whole run
+    // Steps: the lanes (the start card, a card for each step; a subagent has its own lane), then the steps one by one
+    await page.click('#tl-detail .ar-views [data-view="steps"]');
+    await page.waitForSelector('#tl-detail .ar-lanes');
+    assert.match(await page.textContent('#tl-detail .ar-card.start'), new RegExp('Run ' + lastRun.run));
+    assert.equal(await page.locator('#tl-detail .ar-card:not(.start)').count(), lastRun.steps.length);
+    assert.equal(await page.locator('#tl-detail .ar-lane.sub').count(), subLanes.length);
+    if (subLanes.length) assert.match(await page.textContent('#tl-detail .ar-lane.sub .ar-branch'), new RegExp('^' + subLanes[0] + ' is a subagent'));
+    assert.deepEqual(await page.$$eval('#tl-detail .ar-flow-step b', els => els.map(x => x.textContent)), lastRun.steps.map(x => x.title));
+    // a click on a step opens it: what it did, and its files; Details then shows only that step
     const k = lastRun.steps.findIndex(x => (x.files || []).filter(f => f.action !== 'read').length > 1);
     await page.click('#tl-detail .ar-card.step[data-step="' + k + '"]');
-    assert.equal(await page.textContent('#tl-detail .ar-files .tl-detail-sub'), 'Step ' + (k + 1) + ': ' + lastRun.steps[k].title);
     assert.equal(await page.locator('#tl-detail .ar-card.step.on').count(), 1);
-    assert.equal(await page.locator('#tl-detail .ar-items li').count(), lastRun.steps[k].items.length);
+    assert.equal(await page.locator('#tl-detail .ar-flow-step.on').count(), 1);
+    assert.equal(await page.locator('#tl-detail .ar-flow-step.on .ar-items li').count(), lastRun.steps[k].items.length);
+    await page.click('#tl-detail .ar-flow-step.on .ar-to-details');
+    await page.waitForSelector('#tl-detail .ar-kv');
+    assert.match(await page.textContent('#tl-detail .ar-scope'), new RegExp('^Step ' + (k + 1) + ': '));
     const own = lastRun.steps[k].files.filter(f => f.action !== 'read');
     assert.deepEqual((await page.$$eval('#tl-detail .ar-kv .kv-item', els => els.map(x => x.title))).filter(t => !t.startsWith('mcp ') && / \((created|updated|deleted)\)$/.test(t)).map(t => t.replace(/ \(\w+\)$/, '')).sort(), [...new Set(own.map(f => f.path))].sort());
-    await page.click('#tl-detail .ar-card.step[data-step="' + k + '"]');
-    assert.match(await page.textContent('#tl-detail .ar-files .tl-detail-sub'), /^The whole run/);
+    await page.click('#tl-detail .ar-scope .ar-whole');
+    assert.match(await page.textContent('#tl-detail .ar-scope'), /^The whole run/);
+    await page.click('#tl-detail .ar-views [data-view="index"]');
     // its Changes: from the version before the run to the version it made (this page has only v1)
     await page.click('#changes');
     await page.waitForFunction(() => /The run made v\d+\./.test(document.querySelector('#tl-detail').textContent));
@@ -426,7 +439,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.deepEqual(await blockNames(), before);
     // (no block chosen again: the last agent run)
     await page.evaluate(() => window.agentOS.os.call('extension.views.timeline-view.functions.local.select', { id: null }));
-    await page.waitForFunction(() => /^Block 1: Agent run/.test(document.querySelector('#sv-block').textContent));
+    await page.waitForFunction(() => /^Block 1: AI run notification/.test(document.querySelector('#sv-block').textContent));
     await page.locator('#tl-strip .tl-step').nth(1).click();
     await page.waitForFunction(() => /^Block 2: Network/.test(document.querySelector('#sv-block').textContent));
 
@@ -940,9 +953,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForFunction(() => window.agentOS.history.commits.length === 5);
     await page.evaluate(() => window.agentOS.os.call('extension.views.timeline-view.functions.local.select', { id: null }));
     await page.waitForFunction(() => /session zzz · run 99/.test(document.querySelector('#tl-strip .tl-step.on') && document.querySelector('#tl-strip .tl-step.on').textContent));
-    assert.equal(await page.textContent('#tl-strip .tl-step.on .tl-kind'), 'Last agent run');
+    assert.equal(await page.textContent('#tl-strip .tl-step.on .tl-kind'), 'Last AI run notification');
     assert.equal(await page.locator('#tl-strip .tl-step.on.pin-left, #tl-strip .tl-step.on.pin-right').count(), 1);
-    assert.equal(await page.textContent('#tl-strip .tl-step .tl-kind'), 'Agent run');
+    assert.equal(await page.textContent('#tl-strip .tl-step .tl-kind'), 'AI run notification');
     assert.match(await page.textContent('#pos'), /^v5 /);
     await page.click('#sv-switches [data-input*="files"]');
     await page.waitForSelector('#tl-detail .kv-tree');

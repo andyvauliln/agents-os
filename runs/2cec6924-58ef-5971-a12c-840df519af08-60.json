@@ -715,6 +715,11 @@
     {
      "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-60.json",
      "action": "created"
+    },
+    {
+     "path": "/root/.claude/projects/-home-claude-agents-os/2cec6924-58ef-5971-a12c-840df519af08.jsonl",
+     "action": "read",
+     "why": "The session log. The run-log script and the run-recorder read it."
     }
    ]
   }
@@ -763,20 +768,6 @@
    "tokens": 198,
    "cached": true,
    "why": "The session log. The run-log script and the run-recorder read it."
-  },
-  {
-   "path": "codemirror.min.js",
-   "action": "read",
-   "tokens": 65,
-   "cached": false,
-   "why": "The script found this name in a test command. The page test loads it from the local CodeMirror package."
-  },
-  {
-   "path": "xml.min.js",
-   "action": "read",
-   "tokens": 65,
-   "cached": false,
-   "why": "The script found this name in a test command. The page test loads it from the local CodeMirror package."
   },
   {
    "path": "docs/functions.md",

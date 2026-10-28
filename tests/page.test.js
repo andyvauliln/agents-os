@@ -973,7 +973,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.deepEqual(await page.evaluate(() => window.agentOS.calls.filter(c => c.name === 'local.select').map(c => c.input.input.id).slice(0, 1).map(id => /^run:runs\//.test(id))), [true]);
     assert.equal((await svd()).timeline_open, true);
     assert.equal(await page.evaluate(() => sessionStorage.getItem('agent-os.timeline-replay')), null);
-    await page.waitForFunction(() => window.agentOS.state.extension.views['timeline-view']['ui-data'].selected === 'runtime', null, { timeout: 6000 });
+    // (the first draw of the state view with the 2 MB state takes about 6 s: the replay goes on after it)
+    await page.waitForFunction(() => ['runtime', 'open'].includes(window.agentOS.state.extension.views['timeline-view']['ui-data'].selected) || /^Block [3-9]/.test(document.querySelector('#sv-block').textContent), null, { timeout: 15000 });
     // the replay goes on past the blocks that were there when it started (the page was still starting)
     await page.waitForFunction(() => /^Block \d+: Start the page/.test(document.querySelector('#sv-block').textContent), null, { timeout: 8000 });
     assert.deepEqual(errors, []);

@@ -174,7 +174,8 @@ SET blocks =
 FOR EACH block: count its state changes
 SET the chosen block = selected, or the last agent run when nothing is chosen (the newest block when there is no run)
 DRAW the row of blocks (number, time, name, changes); the chosen block is on
-  the last agent run stays at the left, and the newest block at the right, when the row scrolls
+  the agent run block: its time ago and the first 3 characters of its session
+  the last agent run stays at the left, and the newest block at the right, when the row scrolls; their names start with Last
 DRAW the position and the progress line
 GIVE the state view what it needs:
   current = the chosen block, number = its place
@@ -190,6 +191,7 @@ GIVE the state view what it needs:
       a tree of all of them on the left
       tabs on the right: the content (File / View / Function / Request / Value), Pseudo code, Changes
       a file shows in the file viewer (md page, json tree, code with outline)
+      an updated md file in read mode: new lines green, removed lines red; the pointer on them shows why the run changed the file
   drawDetails(box) = what happens inside the block
     Network: the requests by group and the environment
     Agent run: the steps in lanes, the uses, what started it, the files as a tree
@@ -266,7 +268,7 @@ IF the text is not the text in the editor
   SET the text in the editor, and fold again the objects that were folded
 SET the editor to read only IF it shows an older version
 MARK a bad line IF the JSON has an error
-SHOW each long text as "..." (the pointer shows its start in the colors of its kind, a click CALLs local.open-viewer)
+SHOW each long text as "..." (a text of only {} or [] shows as it is; the pointer shows its start in the colors of its kind, a click CALLs local.open-viewer)
 HIDE the lines that the filter text does not show ("... N lines")
 IF show_empty is false: HIDE the entries with an empty value ({}, [], "" or null), with no mark
 DRAW the buttons, the kind buttons, Show empty, Track state and the bottom bar again from ui-data

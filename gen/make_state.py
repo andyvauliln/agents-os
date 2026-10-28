@@ -460,6 +460,9 @@ p.md-step{display:flex;gap:12px;margin-bottom:8px}
 .long-tip .CodeMirror{height:auto;background:transparent;font:11px/1.5 var(--mono)}
 .long-tip .CodeMirror-lines{padding:0}
 .long-tip .CodeMirror pre.CodeMirror-line{padding:0 10px}
+.why-tip{position:fixed;z-index:20;max-width:min(440px,calc(100vw - 32px));padding:8px 12px;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.18);font:12px/1.5 var(--sans);white-space:pre-wrap;pointer-events:none}
+.md-page .chg-added,.md-page .chg-deleted{margin-left:-12px;padding-left:12px;border-radius:2px}
+.md-page .chg-deleted{text-decoration:line-through;text-decoration-color:var(--del)}
 .long-tip .tip-more{padding:2px 10px 0;font:11px var(--sans);color:var(--muted)}
 #sv-viewer-code,#sv-viewer-view{""")
 assert "\\" not in STYLE.replace("\\u2022", ""), "no backslashes in a template"
@@ -827,7 +830,7 @@ if (d.error && at) {
   cm.addLineClass(R.bad, 'background', 'bad-line');
 }
 
-// Long strings, and strings of more than one line, show as "...". A click opens the text in the viewer;
+// Long strings, and strings of more than one line, show as "..." (a text of only {} or [] shows as it is). A click opens the text in the viewer;
 // the pointer on it shows its start, in the colors of its kind (the preview of the timeline).
 R.long.forEach(m => m.clear());
 R.long = [];
@@ -835,7 +838,7 @@ let spans = {};
 try { spans = core.spans(text); } catch (e) {}
 Object.keys(spans).forEach(k => {
   const r = spans[k], p = JSON.parse(k).join('/');
-  if (r.obj || text[r.start] !== '"' || (r.end - r.start < 90 && !text.slice(r.start, r.end).includes('\\n'))) return;
+  if (r.obj || text[r.start] !== '"' || (r.end - r.start < 90 && !text.slice(r.start, r.end).includes('\\n')) || core.emptyText(text.slice(r.start, r.end))) return;
   const w = document.createElement('span');
   w.className = 'long';
   w.textContent = '"..."';
@@ -1529,13 +1532,13 @@ R.showTip = (anchor, value, path, before) => {
   R.tip.style.left = Math.max(8, Math.min(b.left, innerWidth - t.width - 8)) + 'px';
   R.tip.style.top = (b.bottom + 6 + t.height < innerHeight ? b.bottom + 6 : Math.max(8, b.top - 6 - t.height)) + 'px';
 };
-R.hideTip = () => { const t = document.querySelector('body > .long-tip'); if (t) t.hidden = true; };
+R.hideTip = () => document.querySelectorAll('body > .long-tip, body > .why-tip').forEach(t => { t.hidden = true; });
 const longTexts = (cm, text, marks) => {
   let spans = {};
   try { spans = core.spans(text); } catch (e) { return; }
   Object.keys(spans).forEach(k => {
     const r = spans[k], p = JSON.parse(k).join('/');
-    if (r.obj || text[r.start] !== '"' || (r.end - r.start < 90 && !text.slice(r.start, r.end).includes('\\n'))) return;
+    if (r.obj || text[r.start] !== '"' || (r.end - r.start < 90 && !text.slice(r.start, r.end).includes('\\n')) || core.emptyText(text.slice(r.start, r.end))) return;
     let value = '';
     try { value = JSON.parse(text.slice(r.start, r.end)); } catch (e) {}
     // an updated text: the old text, for its changes
@@ -1987,7 +1990,7 @@ const runsOf = st => {
   });
   return out.sort((x, y) => String(x.started) < String(y.started) ? -1 : 1);
 };
-const runStep = (run, ms) => ({ id: 'run:' + run.file, label: 'Agent run', name: 'session ' + String(run.session).slice(0, 8) + ' · run ' + run.run,
+const runStep = (run, ms) => ({ id: 'run:' + run.file, label: 'Agent run', name: 'session ' + String(run.session).slice(0, 3) + ' · run ' + run.run,
   text: (run.title ? run.title + '. ' : '') + 'Asked by ' + ((run.started_by && run.started_by.run && run.started_by.run.who) || 'someone') + ': "' + ((run.started_by && run.started_by.run && run.started_by.run.words) || '').slice(0, 160) + '"',
   ms, fixed: true, run, when: new Date(run.ended || run.started).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
   // the state changes from the version before the run to the version it made; without them, the files it changed
@@ -2311,9 +2314,10 @@ steps.forEach((s, i) => {
   b.setAttribute('aria-current', String(on));
   const top = el('span', 'tl-step-top');
   top.appendChild(el('span', 'tl-step-n', String(i + 1)));
-  top.appendChild(el('span', 'tl-time', s.when || since(s.ms)));
+  top.appendChild(el('span', 'tl-time', s.run ? core.ago(s.run.ended || s.run.started) : s.when || since(s.ms)));
   b.appendChild(top);
-  b.appendChild(el('span', 'tl-kind', s.label));
+  // the two pinned blocks: Last agent run, and the newest block (Last click, ...)
+  b.appendChild(el('span', 'tl-kind', pin ? 'Last ' + s.label.toLowerCase() : s.label));
   b.appendChild(el('span', 'tl-step-name', s.name));
   const meta = el('span', 'tl-step-meta');
   if (s.took !== undefined) meta.appendChild(el('span', '', s.took + ' ms'));
@@ -2373,7 +2377,7 @@ R.drawChanges = (box, kind) => {
     p = { before: vv.before, after: vv.after, full: vv.after, fullBefore: vv.before, from: vv.from.n, head: vv.head.n, count: vv.changes.length, what: cur.run ? 'this run' : 'this version',
       intro: ' in the state from v' + vv.from.n + ' to v' + vv.head.n + (cur.run ? ', the version this run made.' : '.'),
       label: cur.run ? 'The state, only what the run changed' : 'The state, only what changed from v' + vv.from.n + ' to v' + vv.head.n,
-      sub: 'What changed', cols: ['path', 'change'], rows: vv.changes.map(c => ({ keys: c.path, type: c.type, row: [c.path.join('.'), c.type] })) };
+      sub: 'What changed', cols: ['path', 'change'], rows: vv.changes.map(c => ({ keys: c.path, type: c.type, row: [c.path.join('.'), c.type] })), run: cur.run };
   } else {
     const list = [];
     if (cur.id === 'open') {
@@ -2555,27 +2559,81 @@ const inlineMd = (into, text) => {
   }
   if (last < text.length) into.appendChild(document.createTextNode(text.slice(last)));
 };
-const mdPane = (text, outline) => {
+// The lines of a text before and now: the new lines (add), and the lines taken out before each line of now (gone).
+const mdMarks = (before, now) => {
+  const A = before.split('\n'), B = now.split('\n'), ld = lineDiff(before, now), gone = {};
+  let i = 0, j = 0, wait = [];
+  const put = () => { if (wait.length) { gone[j] = wait; wait = []; } };
+  while (i < A.length || j < B.length) {
+    if (i < A.length && ld.del.has(i)) wait.push(A[i++]);
+    else if (j < B.length && ld.add.has(j)) { put(); j++; }
+    else if (i < A.length && j < B.length) { put(); i++; j++; }
+    else break;
+  }
+  put();
+  return { add: ld.add, gone };
+};
+// The pointer on a changed part of a page: why it changed (one box on the page).
+const whyTip = (row, why) => {
+  if (!why) return;
+  row.addEventListener('mouseenter', () => {
+    let t = document.querySelector('body > .why-tip');
+    if (!t) { t = el('div', 'why-tip'); document.body.appendChild(t); }
+    t.textContent = why;
+    t.hidden = false;
+    const b = row.getBoundingClientRect(), r = t.getBoundingClientRect();
+    t.style.left = Math.max(8, Math.min(b.left, innerWidth - r.width - 8)) + 'px';
+    t.style.top = (b.bottom + 6 + r.height < innerHeight ? b.bottom + 6 : Math.max(8, b.top - 6 - r.height)) + 'px';
+  });
+  row.addEventListener('mouseleave', () => { const t = document.querySelector('body > .why-tip'); if (t) t.hidden = true; });
+};
+// ch (Changes): {before, why}. Then green rows are new or changed and red rows were taken out; the pointer on them shows why.
+const mdPane = (text, outline, ch) => {
   const body = el('div', 'fv-body fv-md' + (outline.length ? '' : ' no-side'));
   const side = el('nav', 'fv-side'), doc = el('div', 'fv-doc');
   doc.dataset.mdTheme = os.get('extension.views.state-view.ui-data.md_theme') || 'reader';
   const page = el('article', 'md-page');
   const heads = [];
-  core.mdParse(text).forEach(part => {
-    if (part.kind === 'svg') { const f = el('figure', 'diagram'); f.innerHTML = part.text; page.appendChild(f); return; }
-    if (part.kind === 'code') { page.appendChild(el('pre', 'code', part.text)); return; }
-    part.lines.forEach(raw => {
-      const line = core.mdLine(raw);
-      if (line.type === 'blank') return;
-      const heading = line.type[0] === 'h', row = el(heading ? 'h' + (+line.type[1] + 1) : 'p', 'md-' + line.type);
-      if (line.type === 'step') row.appendChild(el('span', 'md-num', line.mark.trim()));
-      const t = el('span', 'md-t');
-      inlineMd(t, line.text);
-      row.appendChild(t);
-      if (heading) heads.push(row);
+  const marks = ch ? mdMarks(ch.before, text) : { add: new Set(), gone: {} };
+  const mark = (row, cls) => { row.classList.add(cls); whyTip(row, ch && ch.why); };
+  const mdRow = raw => {
+    const line = core.mdLine(raw);
+    if (line.type === 'blank') return null;
+    const heading = line.type[0] === 'h', row = el(heading ? 'h' + (+line.type[1] + 1) : 'p', 'md-' + line.type);
+    if (line.type === 'step') row.appendChild(el('span', 'md-num', line.mark.trim()));
+    const t = el('span', 'md-t');
+    inlineMd(t, line.text);
+    row.appendChild(t);
+    return row;
+  };
+  const goneAt = j => (marks.gone[j] || []).forEach(raw => { const row = mdRow(raw); if (row) { mark(row, 'chg-deleted'); page.appendChild(row); } });
+  // the line of the text where each part starts (``` is in a line)
+  let at = 0;
+  const raws = String(text).split('```'), starts = raws.map(r => { const s = at; at += r.split('\n').length - 1; return s; });
+  core.mdParse(text).forEach((part, n) => {
+    if (part.kind !== 'lines') {
+      const from = starts[n], to = from + raws[n].split('\n').length - 1;
+      let changed = false;
+      for (let j = from; j <= to; j++) if (marks.add.has(j) || (marks.gone[j] && j > from)) changed = true;
+      goneAt(from);
+      const box = part.kind === 'svg' ? el('figure', 'diagram') : el('pre', 'code', part.text);
+      if (part.kind === 'svg') box.innerHTML = part.text;
+      if (changed) mark(box, 'chg-added');
+      page.appendChild(box);
+      return;
+    }
+    part.lines.forEach((raw, k) => {
+      const j = starts[n] + k;
+      // (the first and last lines of a part between two ``` are the lines of the ```: the code shows their changes)
+      if ((k || !n) && (k < part.lines.length - 1 || n === raws.length - 1)) goneAt(j);
+      const row = mdRow(raw);
+      if (!row) return;
+      if (marks.add.has(j)) mark(row, 'chg-added');
+      if (row.tagName[0] === 'H') heads.push(row);
       page.appendChild(row);
     });
   });
+  goneAt(text.split('\n').length);
   doc.appendChild(page);
   if (outline.length) {
     side.appendChild(el('div', 'fv-side-head', 'Contents'));
@@ -2601,7 +2659,7 @@ const jsonPane = (value, tools) => {
   const val = v => {
     if (v === null) return el('span', 'jv-null', 'null');
     if (typeof v === 'string') {
-      if (v.length > 90 || v.includes('\n')) {
+      if ((v.length > 90 || v.includes('\n')) && !core.emptyText(JSON.stringify(v))) {
         const w = el('span', 'long jv-str', '"..."');
         w.title = v.slice(0, 300);
         w.addEventListener('click', () => preview('text', v));
@@ -2654,7 +2712,7 @@ const jsonPane = (value, tools) => {
   tools.appendChild(co);
   return body;
 };
-const fileView = (name, text) => {
+const fileView = (name, text, ch) => {
   const fk = fileKind(name), box = el('div', 'fv fv-' + fk.kind);
   const head = el('div', 'fv-head'), tools = el('div', 'fv-tools');
   head.appendChild(el('span', 'fv-badge fv-badge-' + fk.ext.toLowerCase(), fk.ext.toUpperCase()));
@@ -2678,7 +2736,7 @@ const fileView = (name, text) => {
   modes.forEach(m => {
     const b = el('button', '', m);
     b.setAttribute('aria-pressed', String(m === mode()));
-    b.addEventListener('click', () => { R.fileMode[fk.kind] = m; box.replaceWith(fileView(name, text)); });
+    b.addEventListener('click', () => { R.fileMode[fk.kind] = m; box.replaceWith(fileView(name, text, ch)); });
     seg.appendChild(b);
   });
   if (modes.length) head.appendChild(seg);
@@ -2722,7 +2780,7 @@ const fileView = (name, text) => {
   head.appendChild(full);
   box.appendChild(head);
   if (R.fileFull) { box.classList.add('fv-full'); setTimeout(() => box.focus()); }
-  if (fk.kind === 'md' && m === 'Read') box.appendChild(mdPane(text, outlineOf(text, 'md', fk.ext)));
+  if (fk.kind === 'md' && m === 'Read') box.appendChild(mdPane(text, outlineOf(text, 'md', fk.ext), ch && typeof ch.before === 'string' && ch.before !== text ? ch : null));
   else if (fk.kind === 'json' && m === 'Tree') box.appendChild(jsonPane(parsed, tools));
   else box.appendChild(codePane(text, fk.kind === 'md' ? 'code' : fk.kind, fk.kind === 'md' ? outlineOf(text, 'md', fk.ext) : outlineOf(text, fk.kind, fk.ext), tools));
   return box;
@@ -2761,6 +2819,13 @@ const pseudoView = (f, name) => {
   body.appendChild(list);
   box.appendChild(body);
   return box;
+};
+// Why a run changed a file: the why of the file, then each step that changed it.
+const whyOf = (run, path) => {
+  if (!run) return '';
+  const changes = x => x.path === path && x.action !== 'read', f = (run.files || []).find(changes);
+  const steps = (run.steps || []).map((s, i) => (s.files || []).some(changes) ? 'Step ' + (i + 1) + ': ' + s.title + (s.why ? '. ' + s.why : '') : '').filter(Boolean);
+  return [f && f.why].concat(steps).filter(Boolean).join('\n');
 };
 const KIND_TAB = { files: 'File', views: 'View', functions: 'Function', network: 'Request', environment: 'Value' };
 const has = (o, keys) => keys.every(k => { if (!o || typeof o !== 'object' || !(k in o)) return false; o = o[k]; return true; });
@@ -2868,7 +2933,9 @@ const kindView = (box, kind, p) => {
     if (tab === 'Pseudo code') { main.appendChild(pseudoView(value || {}, it.tree[it.tree.length - 1])); return; }
     if (tab !== 'Changes') {
       if (now === undefined) main.appendChild(el('p', 'tl-text', 'This block deleted it. This is how it was.'));
-      if (kind === 'files') main.appendChild(typeof value === 'string' ? fileView(name, value) : json(name, value));
+      // an updated file: the text before it, and why the run changed it (the read mode of md shows the changes)
+      const old = it.change === 'updated' ? (has(p.before, it.keys) ? atKeys(p.before, it.keys) : atKeys(p.fullBefore, it.keys)) : undefined;
+      if (kind === 'files') main.appendChild(typeof value === 'string' ? fileView(name, value, typeof old === 'string' ? { before: old, why: whyOf(p.run, it.keys.slice(3).join('/')) } : null) : json(name, value));
       else if (kind === 'views') {
         const v = value || {};
         if (typeof v.html === 'string') main.appendChild(code('html', v.html, 'html', 1));

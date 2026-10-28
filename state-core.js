@@ -179,10 +179,15 @@
     return null;
   }
 
+  // A text that holds only {} or [] (and spaces or line ends), as JSON text: "{}\n" is the text of an empty json file.
+  var W = '(?:\\s|\\\\[nrt])*';
+  var EMPTY_TEXT = new RegExp('^"' + W + '(?:\\{' + W + '\\}|\\[' + W + '\\])' + W + '"');
+  function emptyText(json) { return EMPTY_TEXT.test(json) && json.length === json.match(EMPTY_TEXT)[0].length; }
+
   // The filter of a JSON text: with q, only the entries whose path has q show, with the first and last lines of the
   // objects around them. kinds is an object (a kind that is off, kinds[kind] === false, hides its entries) or the name of
   // one kind: then only the entries of that kind show ('all' shows all). opts.hideEmpty hides the entries with an empty
-  // value ({}, [], "" or null). Returns the hidden lines as [from, to]; lines hidden only for an empty value are
+  // value ({}, [], "", null or a text of {} or []). Returns the hidden lines as [from, to]; lines hidden only for an empty value are
   // [from, to, 'empty'] (the state view hides them without a "⋯ N lines" mark).
   function filterLines(text, map, q, kinds, opts) {
     map = map || spans(text);
@@ -194,7 +199,7 @@
     function line(at) { var lo = 0, hi = starts.length - 1; while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (starts[mid] <= at) lo = mid; else hi = mid - 1; } return lo; }
     var entries = Object.keys(map).map(function (k) { return [JSON.parse(k), map[k]]; });
     var off = entries.filter(function (e) { var k = kindOf(e[0]); return k && kinds[k] === false; }).map(function (e) { return e[1]; });
-    var empty = opts.hideEmpty ? entries.filter(function (e) { return e[0].length && /^(\{\s*\}|\[\s*\]|""|null)$/.test(text.slice(e[1].start, e[1].end)); }).map(function (e) { return e[1]; }) : [];
+    var empty = opts.hideEmpty ? entries.filter(function (e) { var v = text.slice(e[1].start, e[1].end); return e[0].length && (/^(\{\s*\}|\[\s*\]|""|null)$/.test(v) || emptyText(v)); }).map(function (e) { return e[1]; }) : [];
     var kept = only ? entries.filter(function (e) { return kindOf(e[0]) === only; }) : null;
     var root = map['[]'];
     if (!entries.length || !root || (!q && !off.length && !only && !empty.length)) return [];
@@ -222,10 +227,12 @@
     return out;
   }
 
-  // The colors of a JSON editor (a CodeMirror overlay): keys, empty keys and {}.
+  // The colors of a JSON editor (a CodeMirror overlay): keys, empty keys, {} and a text of {} or [].
+  var EMPTY_AFTER = new RegExp('^"(?:[^"\\\\]|\\\\.)*"(?=\\s*:\\s*(?:\\{\\s*\\}|' + EMPTY_TEXT.source.slice(1) + '))');
   var keyOverlay = {
     token: function (s) {
-      if (s.match(/^"(?:[^"\\]|\\.)*"(?=\s*:\s*\{\s*\})/)) return 'key emptykey';
+      if (s.match(EMPTY_AFTER)) return 'key emptykey';
+      if (s.match(EMPTY_TEXT)) return 'emptyobj';
       if (s.match(/^"(?:[^"\\]|\\.)*"(?=\s*:)/)) return 'key';
       if (s.match(/^\{\s*\}/)) return 'emptyobj';
       while (s.next() != null && !s.match(/^(?=["{])/, false)) {}
@@ -461,7 +468,7 @@
     clone: clone, walk: walk, getPath: getPath, setPath: setPath, stripRuntime: stripRuntime,
     parseJsonc: parseJsonc, stripComments: stripComments, autofix: autofix,
     mdParse: mdParse, mdText: mdText, mdLine: mdLine,
-    spans: spans, kindOf: kindOf, filterLines: filterLines, keyOverlay: keyOverlay, pathAt: pathAt, patchText: patchText, ago: ago,
+    spans: spans, kindOf: kindOf, filterLines: filterLines, keyOverlay: keyOverlay, pathAt: pathAt, patchText: patchText, ago: ago, emptyText: emptyText,
     brief: brief, template: template, esc: esc, checkExpect: checkExpect, checkStateChange: checkStateChange,
     diff: diff, summarize: summarize, changesView: changesView,
     makeCommit: makeCommit, commitId: commitId,

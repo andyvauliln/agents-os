@@ -249,7 +249,10 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.ok(await page.evaluate(() => document.querySelector('#timeline-view').compareDocumentPosition(document.querySelector('#header-view')) & Node.DOCUMENT_POSITION_FOLLOWING));
     const stepKinds = await page.$$eval('#tl-strip .tl-step .tl-kind', els => els.map(x => x.textContent));
     // the last agent run comes first (runs/ of the repo), then the page start
-    assert.deepEqual(stepKinds.slice(0, 5), ['Agent run', 'Network', 'Run index.html', 'Load the state', 'Start the page']);
+    assert.deepEqual(stepKinds.slice(0, 5), ['Last agent run', 'Network', 'Run index.html', 'Load the state', 'Start the page']);
+    // the newest block is the last one: Last click, ...; the agent run block shows only the time ago
+    assert.match(stepKinds[stepKinds.length - 1], /^Last [a-z]/);
+    assert.match(await page.textContent('#tl-strip .tl-step.pin-left .tl-time'), /^(just now|\d+ (min|h|d) ago)$/);
     // (no Changes button and no Track box in the timeline)
     assert.equal(await page.locator('#tl-changes, #tl-track').count(), 0);
     assert.equal(await page.locator('#tl-strip .tl-step.on.pin-left').count(), 1);
@@ -273,7 +276,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal((await svd()).details, true);
     assert.equal(await page.getAttribute('#details', 'aria-pressed'), 'true');
     assert.equal(await page.isHidden('#sv-editor'), true);
-    assert.match(await shownBlock(), new RegExp('^Block 1: Agent run session ' + lastRun.session.slice(0, 8) + ' · run ' + lastRun.run + ' · '));
+    assert.match(await shownBlock(), new RegExp('^Block 1: Agent run session ' + lastRun.session.slice(0, 3) + ' · run ' + lastRun.run + ' · '));
     assert.match(await page.textContent('#tl-detail .ar-card.start'), new RegExp('Run ' + lastRun.run));
     assert.equal(await page.locator('#tl-detail .ar-card:not(.start)').count(), lastRun.steps.length);
     // a subagent has its own lane: its name, and a line that tells what it is and which steps are its own
@@ -545,10 +548,13 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await hiddenMarks(), 0);
     // Show empty off hides the entries with an empty value ({} here), with no "⋯ N lines" mark
     assert.match(await shownText(), /"connection": \{\}/);
+    // a text of only {} (an empty json file) shows as it is, not as "...", and it is empty too
+    assert.match(await shownText(), /"settings\.local\.json": "\{\}\\n"/);
     await page.click('#sv-empty');
     await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].show_empty === false);
     assert.equal(await page.isChecked('#sv-empty'), false);
     assert.doesNotMatch(await shownText(), /"connection": \{\}/);
+    assert.doesNotMatch(await shownText(), /settings\.local\.json/);
     assert.equal(await hiddenMarks(), 0);
     assert.equal(await page.locator('#sv-editor .sv-hidden').count(), 0);
     await page.click('#sv-empty');
@@ -752,6 +758,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // the file viewer: an md file reads as a page with its contents on the left; Source shows its text
     await page.waitForSelector('#tl-detail .fv.fv-md .md-page');
     assert.match(await page.textContent('#tl-detail .fv .md-page'), /A new line from main\./);
+    // with Changes, the read mode of an updated md file shows its changes: the new line is green
+    assert.deepEqual(await page.$$eval('#tl-detail .md-page .chg-added', els => els.map(x => x.textContent)), ['A new line from main.']);
     assert.equal(await page.textContent('#tl-detail .fv-badge'), 'MD');
     assert.ok(await page.locator('#tl-detail .fv-side .fv-sym').count() >= 3);
     await page.click('#tl-detail .fv-seg button:has-text("Source")');

@@ -15,7 +15,7 @@
 1. Type in the filter at the top of the state view.
 2. The editor shows only the entries whose path has the text, with the first and last lines of the objects around them.
 3. The other lines fold into "⋯ N lines". You can still edit the lines that show.
-4. Click Files, Views, Functions, Network or Environment to see only that kind, as a tree: for example, Files shows the files in their folders. Click one in the tree to see it on the right. Click All to see the editor again. This works with or without text.
+4. Click Files, Views, Functions, Network or Environment to see only that kind, as a tree: for example, Files shows the files in their folders. Click one in the tree to see it on the right. With Changes, an updated md file in read mode shows its changes: green lines are new or changed, red lines are removed. Put the pointer on a green or red line to see why the run changed the file. Click All to see the editor again. This works with or without text.
 5. Click Changes to see only what the chosen block changed. After Older or Newer, it is what the version on the screen changed. Click Details to see what happens inside the block.
 6. Clear Show empty to hide the entries with an empty value: {}, [], "" or null. They hide with no "⋯" mark.
 7. Turn on Track state to add what you do in the state view and the timeline as blocks of the timeline.
@@ -29,7 +29,7 @@
 3. Click the Changes button to see only the changes of that version. Green is added, yellow is updated, red is deleted.
 
 ## Long text
-- Long text, and text that has more than one line, shows as "...". Put the pointer on it to see the start of the text, in the colors of its kind (md, js, html, css or json).
+- Long text, and text that has more than one line, shows as "...". A text of only {} or [] (an empty json file) shows as it is, in grey, and Show empty off hides it. Put the pointer on it to see the start of the text, in the colors of its kind (md, js, html, css or json).
 - Click the "..." to open the text in the viewer. You can edit it there.
 - When you close the viewer, your changes go into the editor. Then save them.
 

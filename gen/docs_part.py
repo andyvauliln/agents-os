@@ -121,7 +121,7 @@ DOCS = {
    - scripts/run-log.js reads the session log (the .jsonl file of Claude Code). It makes the raw data: the requests, the context sizes, each tool use and the files.
    - The run-recorder subagent (.claude/agents/run-recorder.md) reads the raw data. It groups the tool uses into steps and writes why for each step, use and file. It does not copy secrets or the content of files.
    - The release puts the files of main into the state, so the run is in agents.agent-oss.files.runs.
-3. The timeline shows the last run of the state as block 1, before the page start. A new version that comes with new runs gets an Agent run block after the New version block, for each new run.
+3. The timeline shows the last run of the state as block 1, before the page start. Its name is Last agent run, its time is the time ago, and it shows the first 3 characters of the session. The newest block at the right also starts with Last (for example Last click). A new version that comes with new runs gets an Agent run block after the New version block, for each new run.
 4. Click an Agent run block, then Details:
    - The chips: the agent, the session, the run, the start and end time, the version that the run made, the context at the start and at the end, the cached part of the context, and whether the session was compacted.
    - Timeline (Agent run): the start card, then each step from left to right. Each step is in the lane of the agent that did it. The first lane is the main agent. A subagent is a helper agent with its own context, which the main agent started (for example run-recorder, which writes the record of the run). A subagent lane starts with a dashed line that tells what the subagent is and which steps are its own; its steps are short cards. A main agent step shows what it did (for example "read index.html", "create scripts/run-log.js"), why, its time and the context at its end. An MCP, skill, subagent or workflow use in a step is bold, with a color.
@@ -360,7 +360,7 @@ import CodeMirror from 'codemirror';""") + """
 1. Type in the filter at the top of the state view.
 2. The editor shows only the entries whose path has the text, with the first and last lines of the objects around them.
 3. The other lines fold into "⋯ N lines". You can still edit the lines that show.
-4. Click Files, Views, Functions, Network or Environment to see only that kind, as a tree: for example, Files shows the files in their folders. Click one in the tree to see it on the right. Click All to see the editor again. This works with or without text.
+4. Click Files, Views, Functions, Network or Environment to see only that kind, as a tree: for example, Files shows the files in their folders. Click one in the tree to see it on the right. With Changes, an updated md file in read mode shows its changes: green lines are new or changed, red lines are removed. Put the pointer on a green or red line to see why the run changed the file. Click All to see the editor again. This works with or without text.
 5. Click Changes to see only what the chosen block changed. After Older or Newer, it is what the version on the screen changed. Click Details to see what happens inside the block.
 6. Clear Show empty to hide the entries with an empty value: {}, [], "" or null. They hide with no "⋯" mark.
 7. Turn on Track state to add what you do in the state view and the timeline as blocks of the timeline.
@@ -374,7 +374,7 @@ import CodeMirror from 'codemirror';""") + """
 3. Click the Changes button to see only the changes of that version. Green is added, yellow is updated, red is deleted.
 
 ## Long text
-- Long text, and text that has more than one line, shows as "...". Put the pointer on it to see the start of the text, in the colors of its kind (md, js, html, css or json).
+- Long text, and text that has more than one line, shows as "...". A text of only {} or [] (an empty json file) shows as it is, in grey, and Show empty off hides it. Put the pointer on it to see the start of the text, in the colors of its kind (md, js, html, css or json).
 - Click the "..." to open the text in the viewer. You can edit it there.
 - When you close the viewer, your changes go into the editor. Then save them.
 

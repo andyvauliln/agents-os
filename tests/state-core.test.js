@@ -235,3 +235,12 @@ test('filterLines shows one kind only, and can hide empty values', () => {
   assert.ok(both.some(r => r[2] === 'empty') || both.every(r => r.length === 2));
   assert.ok(both.some(r => r.length === 2));
 });
+
+test('a text of only {} or [] is empty: Show empty off hides it, the editor shows it grey', () => {
+  assert.equal(core.emptyText('"{}\\n"'), true);
+  assert.equal(core.emptyText('"[ ]"'), true);
+  assert.equal(core.emptyText('"{}\\nx"'), false);
+  assert.equal(core.emptyText('""'), false);
+  const text = JSON.stringify({ a: { 's.json': '{}\n', 'b.json': '{"x":1}\n' } }, null, 2);
+  assert.deepEqual(core.filterLines(text, null, '', {}, { hideEmpty: true }), [[2, 2, 'empty']]);
+});

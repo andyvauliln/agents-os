@@ -228,12 +228,16 @@
   }
 
   // The colors of a JSON editor (a CodeMirror overlay): keys, empty keys, {} and a text of {} or [].
-  var EMPTY_AFTER = new RegExp('^"(?:[^"\\\\]|\\\\.)*"(?=\\s*:\\s*(?:\\{\\s*\\}|' + EMPTY_TEXT.source.slice(1) + '))');
+  // (a string is read once, as a whole: a long text in a line stays fast)
   var keyOverlay = {
     token: function (s) {
-      if (s.match(EMPTY_AFTER)) return 'key emptykey';
-      if (s.match(EMPTY_TEXT)) return 'emptyobj';
-      if (s.match(/^"(?:[^"\\]|\\.)*"(?=\s*:)/)) return 'key';
+      if (s.peek() === '"') {
+        var m = s.match(/^"(?:[^"\\]|\\.)*"/);
+        if (!m) { s.skipToEnd(); return null; }
+        var rest = s.string.slice(s.pos), colon = /^\s*:\s*/.exec(rest);
+        if (colon) { var v = rest.slice(colon[0].length); return /^\{\s*\}/.test(v) || EMPTY_TEXT.test(v) ? 'key emptykey' : 'key'; }
+        return emptyText(m[0]) ? 'emptyobj' : null;
+      }
       if (s.match(/^\{\s*\}/)) return 'emptyobj';
       while (s.next() != null && !s.match(/^(?=["{])/, false)) {}
       return null;

@@ -96,9 +96,20 @@ function dbStore(db){return{kind:'db',
   list:function(){return apiCall('read the versions',"db.collection('commits').orderBy('n').get()",db.collection('commits').orderBy('n').get().then(function(s){return s.docs.map(function(d){return d.data()})}))
     .then(function(list){return Promise.all(list.map(unpackCommit))})},
   put:function(c){return packCommit(c).then(function(doc){return apiCall('save a version',"db.collection('commits').doc('"+core.commitId(c.n)+"').set(version)",db.collection('commits').doc(core.commitId(c.n)).set(doc).then(function(){return doc}))})}}}
-// A database document holds at most 256 KB. A bigger version keeps its state gzipped, in base64 (stateGz, not state).
+// A database document holds at most 256 KB. A bigger version keeps its state in a file of the page (state_file: the id
+// of an asset, served at /_blob/<id>; only an editor can save one), else gzipped, in base64 (stateGz, not state).
 function packCommit(c){
-  if(JSON.stringify(c).length<=200000||!window.CompressionStream)return Promise.resolve(c);
+  if(JSON.stringify(c).length<=200000)return Promise.resolve(c);
+  var assets=window.claude&&claude.use?claude.use('assets'):Promise.resolve(null);
+  return assets.then(function(a){
+    if(!a)return gzipCommit(c);
+    return apiCall('save a version file',"assets.upload(state)",a.upload(new Blob([c.state],{type:'application/json'}))).then(function(f){
+      var doc=Object.assign({},c);delete doc.state;doc.state_file=f.id;return doc;
+    });
+  });
+}
+function gzipCommit(c){
+  if(!window.CompressionStream)return Promise.resolve(c);
   return new Response(new Blob([c.state]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer().then(function(b){
     var u=new Uint8Array(b),bin='';
     for(var i=0;i<u.length;i+=0x8000)bin+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));
@@ -106,6 +117,10 @@ function packCommit(c){
   });
 }
 function unpackCommit(c){
+  if(c&&typeof c.state!=='string'&&typeof c.state_file==='string')
+    return fetch('/_blob/'+encodeURIComponent(c.state_file)).then(function(r){if(!r.ok)throw new Error('The state of v'+c.n+' (file '+c.state_file+'): HTTP '+r.status);return r.text()}).then(function(t){
+      var x=Object.assign({},c);x.state=t;return x;
+    });
   if(!c||typeof c.state==='string'||typeof c.stateGz!=='string')return Promise.resolve(c);
   var bin=atob(c.stateGz),u=new Uint8Array(bin.length);
   for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
@@ -150,6 +165,7 @@ function groupOf(e){
   var u=e.name.split('#')[0].split('?')[0],same=u.indexOf(location.origin)===0;
   if(e.entryType==='navigation')return 'html';
   if(same&&/\/state\.json$/.test(u))return 'state';
+  if(same&&/\/_blob\//.test(u))return 'state';
   // The scripts of the claude.ai artifact page (the database, comments and others), not of this page.
   if(same&&/\/_runtime\//.test(u))return 'claude.ai';
   // The libraries (vendor/ of the repo) are packages, though the page loads them from its own files.
@@ -163,6 +179,7 @@ function groupOf(e){
 function keyOf(e,g){
   var u=e.name.split('#')[0].split('?')[0];
   if(g==='html'||u===page)return 'index.html';
+  if(g==='state'&&/\/_blob\//.test(u))return 'version files';
   if(/fonts\.gstatic\.com/.test(u))return 'font files (fonts.gstatic.com)';
   var last=u.split('/').pop();
   // db.zFlAA4qL.js -> db.js: the hash changes with each version of claude.ai.

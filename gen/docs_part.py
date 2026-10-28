@@ -94,7 +94,7 @@ DOCS = {
    Each function says what it does (its docs), why it ran (a click, a watch, or the function that called it) and what it changed in the state. Click its name to see its code.
    The first blocks happen before any function runs, so they show their parts instead:
    - Run index.html: the runtime script runs. What it did, with times, the start time (os.started), the session id of the call log, the call tracker, and the functions in os.
-   - Load the state: state.json downloads, the page connects to the database, reads the saved versions and parses the newest one.
+   - Load the state: state.json downloads, the page connects to the database, reads the saved versions and parses the newest one. A version that is too big for one database document (256 KB) keeps its state in a file of the page (state_file), and the page downloads that file.
    Each part says what happens and why it is needed. Click a part to open it: it shows the lines of index.html that do it (with their line numbers), then what it made:
    - Run the runtime script shows what the runtime did, with times, and the code of the runtime script.
    - Note the start time shows the browser's timings. Make a session id shows the first record of the call log. Create the call tracker counts the calls by name. Build os lists what is in os: click one to see what it is for, which functions use it, how often they ran, and its code.

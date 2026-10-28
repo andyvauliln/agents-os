@@ -40,7 +40,12 @@ function fakeDb() {
     };
     return q;
   };
-  window.claude = { use: async name => (name === 'db' ? { doc, collection } : null) };
+  // and the assets capability: a file of the page is served at /_blob/<id>
+  window.__blobs = {};
+  const assets = { upload: async blob => { const id = 'a' + Object.keys(window.__blobs).length; window.__blobs[id] = await blob.text(); return { id, url: '/_blob/' + id, sizeBytes: blob.size, contentType: blob.type }; } };
+  const fetch0 = window.fetch;
+  window.fetch = (u, o) => { const m = /^\/_blob\/(\w+)$/.exec(String(u)); return m ? Promise.resolve(window.__blobs[m[1]] === undefined ? new Response('', { status: 404 }) : new Response(window.__blobs[m[1]])) : fetch0(u, o); };
+  window.claude = { use: async name => (name === 'db' ? { doc, collection } : name === 'assets' ? assets : null) };
 }
 
 // Fake media for the record button: a tone for the microphone, a canvas that changes color for the screen.
@@ -70,10 +75,11 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.goto(`http://localhost:${server.address().port}/`);
     await page.evaluate(() => window.agentOS.ready);
 
-    // a saved version as the page reads it: a big state is kept gzipped (stateGz)
+    // a saved version as the page reads it: a big state is kept in a file of the page (state_file), or gzipped (stateGz)
     const commitDoc = id => page.evaluate(async id => {
       const c = window.__docs['commits/' + id];
       if (!c || typeof c.state === 'string') return c;
+      if (c.state_file) return Object.assign({}, c, { state: window.__blobs[c.state_file] });
       const bin = atob(c.stateGz), u = Uint8Array.from(bin, ch => ch.charCodeAt(0));
       const state = await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
       return Object.assign({}, c, { state, stateGz: undefined });
@@ -81,8 +87,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
 
     // boot: version 1 from state.json, index-view rendered (page html and styles from the state), then header-view: only the State view button
     assert.ok(await page.evaluate(() => !!window.__docs['commits/c000001']));
-    // (the state is bigger than a database document can hold: it is saved gzipped, and reads back the same)
-    assert.equal(typeof (await page.evaluate(() => window.__docs['commits/c000001'].stateGz)), 'string');
+    // (the state is bigger than a database document can hold: it is saved as a file of the page, and reads back the same)
+    assert.equal(typeof (await page.evaluate(() => window.__docs['commits/c000001'].state_file)), 'string');
+    assert.equal(await page.evaluate(() => window.__docs['commits/c000001'].state), undefined);
     assert.equal((await commitDoc('c000001')).state, await page.evaluate(() => window.agentOS.history.commits[0].state));
     // (the Timeline button is in the bar of the state view)
     assert.equal(await page.locator('#header-view button').count(), 2);
@@ -697,7 +704,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
       st.extension.views['state-view']['ui-data'].timeline_open = false;
       const source = { git: '0123456789abcdef', branch: 'main', message: 'Add a line', request: 'add a line', session: 'https://claude.ai/code/test',
         explain: [{ part: 'state-view.md', before: 'It had no last line.', now: 'It has a last line.' }] };
-      window.__docs['commits/c000004'] = { n: 4, parent: 3, at: new Date().toISOString(), state: JSON.stringify(st, null, 2), summary: { added: 1, updated: 1, deleted: 0 }, paths: ['added extension.data.from_elsewhere'], source };
+      // (a release keeps the state in a file of the page: state_file)
+      window.__blobs.v4 = JSON.stringify(st, null, 2);
+      window.__docs['commits/c000004'] = { n: 4, parent: 3, at: new Date().toISOString(), state_file: 'v4', summary: { added: 1, updated: 1, deleted: 0 }, paths: ['added extension.data.from_elsewhere'], source };
       window.__listeners.forEach(f => f());
     });
     await page.waitForFunction(() => window.agentOS.state.extension.data.from_elsewhere === true);

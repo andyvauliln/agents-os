@@ -3411,7 +3411,7 @@ def TREE(path):
     if os.path.basename(path) == 'docs': names = [n for n in DOCS] + [n for n in names if n not in DOCS]
     for n in names:
         full = path + '/' + n
-        if n in ('.git', '.gitkeep', 'node_modules') or full in (REPO + '/state.json', REPO + '/gen', REPO + '/vendor'): continue
+        if n in ('.git', '.gitkeep', 'node_modules') or full == REPO + '/state.json': continue
         out[n] = TREE(full) if os.path.isdir(full) else open(full).read()
     return out
 render_sv = {"extension.functions.render": V(SV)}
@@ -3449,8 +3449,10 @@ NETWORK = {
     "read the versions": {"what": "db.collection('commits').orderBy('n').get()", "used_for": "Reads all saved versions when the page opens. The newest is the live state.", "expected": True},
     "follow new versions": {"what": "db.collection('commits').orderBy('n').onSnapshot(...)", "used_for": "Gets a new version as soon as it is saved, so an open page runs it.", "expected": True},
     "save the call log": {"what": "db.doc('calls/<session>').set(log)", "used_for": "Saves the newest 400 calls of this page load, 1.2 s after a call.", "expected": True},
-    "save a version": {"what": "db.collection('commits').doc('cNNNNNN').set(version)", "used_for": "Saves the state as a new version when you click Save in the state view.", "expected": True}},
-  "state": {"state.json": REQ("state.json", "The first version of the state. The page uses it only when the database has no versions.")},
+    "save a version": {"what": "db.collection('commits').doc('cNNNNNN').set(version)", "used_for": "Saves the state as a new version when you click Save in the state view.", "expected": True},
+    "save a version file": {"what": "assets.upload(state)", "used_for": "Saves the state of a new version as a file of the page when it is too big for one database document (256 KB). The version gets state_file, the id of the file.", "expected": True}},
+  "state": {"state.json": REQ("state.json", "The first version of the state. The page uses it only when the database has no versions."),
+            "version files": REQ("/_blob/", "The state of each version that has state_file: a file of the page, too big for one database document.")},
   "file code": {"index.html": REQ("index.html", "The timeline downloads index.html as text to show its code."),
                 "state-core.js": REQ("state-core.js", "The timeline downloads state-core.js as text to show its code.")},
   "packages": dict([(p.split("/")[-1], REQ(CM + p, CM_FILES[p.split("/")[-1]])) for p in CM_SCRIPTS]

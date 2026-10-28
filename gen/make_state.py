@@ -132,8 +132,36 @@ STYLE = STYLE.replace("#sv-viewer-code,#sv-viewer-view{", """#docs-view{flex:1;m
 .tl-step.pin-left,.tl-step.pin-right{box-shadow:0 2px 10px rgba(0,0,0,.14)}
 .tl-step.pin-left.on,.tl-step.pin-right.on{box-shadow:0 0 0 3px var(--sel),0 2px 10px rgba(0,0,0,.14)}
 #notes-view{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;background:var(--bg);padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.notes-bar{display:flex;align-items:center;gap:12px;font:600 16px var(--sans)}
-.notes-bar #notes-close{margin-left:auto}
+.notes-bar{display:flex;align-items:center;gap:8px;font:600 16px var(--sans)}
+.notes-bar b{margin-right:auto}
+.notes-bar .btn{width:36px;padding:0;display:inline-grid;place-items:center}
+.notes-settings{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin:10px 0 0;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);font:13px var(--sans)}
+.notes-settings label{display:flex;gap:8px;align-items:center}
+.notes-settings select,.notes-settings input{height:30px;padding:0 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);font:13px var(--sans)}
+.notes-settings p{flex-basis:100%;margin:0;color:var(--muted);font-size:12px}
+.notes-add{display:flex;gap:8px;align-items:flex-end;margin:10px 0 0}
+.notes-add textarea{flex:1;min-height:44px;max-height:30vh;resize:vertical;box-sizing:border-box;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--fg);font:14px/1.45 var(--sans)}
+.notes-msg{margin:8px 0 0;padding:6px 10px;border-radius:8px;background:var(--sel);font:13px var(--sans)}
+.notes-list{flex:1;min-height:0;overflow:auto;margin:10px 0;padding:10px;border:1.5px solid var(--line);border-radius:16px;display:flex;flex-direction:column;gap:10px}
+.notes-empty{margin:auto;color:var(--muted);font:14px var(--sans)}
+.note{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--panel)}
+.note-top{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.note-body{flex:1 1 280px;min-width:0}
+.note-text{width:100%;min-height:72px;resize:vertical;box-sizing:border-box;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font:14px/1.45 var(--sans)}
+.note-media audio,.note-media video{display:block;width:100%;max-height:240px;border-radius:8px}
+.note-gone{color:var(--muted);font:13px var(--sans)}
+.note-actions{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.note-actions .btn,.note-view .btn,.notes-foot .btn,.notes-add .btn{height:30px;padding:0 12px;font:13px var(--sans);white-space:nowrap;width:auto}
+.note-view{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px;font:13px var(--sans)}
+.note-view label{display:flex;gap:8px;align-items:center}
+.note-view code{font:12px var(--mono)}
+.note-meta{margin-left:auto;color:var(--muted);font:11px var(--mono)}
+.note-state{margin:8px 0 0 26px;max-height:260px;overflow:auto;padding:8px 10px;border-radius:8px;background:var(--gutter);font:12px/1.5 var(--mono);white-space:pre}
+.notes-foot{display:flex;justify-content:flex-end;padding-right:72px}
+.rec-menu{display:flex;flex-direction:column;gap:2px;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.rec-menu button{display:flex;gap:10px;align-items:center;border:0;background:none;color:var(--fg);font:13px var(--sans);padding:8px 12px;border-radius:8px;cursor:pointer;text-align:left}
+.rec-menu button:hover,.rec-menu button:focus-visible{background:var(--sel);outline:none}
+.rec-menu button span{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font:700 10px var(--mono);background:var(--gutter);color:var(--muted)}
 .tl-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:relative}
 .tl-flows{position:absolute;top:calc(100% + 6px);right:0;z-index:8;width:min(420px,100%);background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.16);padding:6px}
 .tl-flows-head{font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:6px 8px}
@@ -489,6 +517,7 @@ I_SAVE = svg('<path d="M3 2.5h8l2.5 2.5v8.5h-10.5z"/><path d="M5.5 2.5v3h4.5v-3M
 I_FLOWS = svg('<circle cx="3" cy="4" r="1.3"/><path d="M4.5 4h2.5a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h2.5"/><path d="m12 10 2 2-2 2"/>')
 I_BLOCKS = svg('<rect x="1.5" y="4.5" width="3.6" height="7" rx="1"/><rect x="6.2" y="4.5" width="3.6" height="7" rx="1"/><rect x="10.9" y="4.5" width="3.6" height="7" rx="1"/>')
 I_CLOSE = svg('<path d="m4 4 8 8M12 4l-8 8"/>')
+I_GEAR = svg('<circle cx="8" cy="8" r="2.2"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4"/>')
 # the buttons of the file viewer
 FV_ICONS = {
     "read": svg('<path d="M2 3.5c2-.8 4-.8 6 .5v9.5c-2-1.3-4-1.3-6-.5zM14 3.5c-2-.8-4-.8-6 .5v9.5c2-1.3 4-1.3 6-.5z"/>'),
@@ -545,18 +574,63 @@ recorder_html = """<div id="recorder-view">
     <div id="rec-media"></div>
     ${d.selections.length ? `<ol class="rec-sel">${d.selections.map(x => `<li><span>${e(x.at)}</span><code>${e(x.path)}</code></li>`).join('')}</ol>` : ''}
   </section>` : ''}
+  ${d.menu_open && !d.recording ? `<div class="rec-menu" id="rec-menu" role="menu" aria-label="Record">
+    <button role="menuitem" data-call="local.start" data-input='{"mode":"audio"}'><span>1</span>Record audio</button>
+    <button role="menuitem" data-call="local.start" data-input='{"mode":"video"}'><span>2</span>Record video</button>
+    <button role="menuitem" data-call="local.open-notes"><span>3</span>Notes</button>
+  </div>` : ''}
   <button class="rec-btn" id="rec-button" aria-pressed="${!!d.recording}"
           aria-label="${d.recording ? 'Stop recording' : 'Record'}"
-          title="${d.recording ? 'Stop' : 'Click: record audio. Double-click: record video. Keys: Arrow Up two times (audio), Arrow Up and Arrow Down together (video). Hold 4 s: Notes.'}">
+          title="${d.recording ? 'Stop' : 'Click: record audio. Double-click: the menu (audio, video, notes). Keys: Arrow Up two times (audio), Arrow Up and Arrow Down together (video). Hold 4 s: Notes.'}">
     ${d.recording ? '""" + I_STOP + """' : '""" + I_REC + """'}
   </button>
 </div>"""
 
-# The Notes page: it covers the page; it is empty for now. Hold the record button 4 s to open it.
+# The Notes page: it covers the page. Each recording is a note; you can also write one. A note can go to Claude.
+# (d.picked and d.shown come from local.refresh: the notes that are checked, and the notes that show their view state.)
 notes_html = """<main id="notes-view">
   <div class="notes-bar">
     <b>Notes</b>
+    <button class="btn" id="notes-settings-button" data-call="local.toggle-settings" aria-pressed="${!!d.settings_open}" aria-label="Settings" title="Settings">""" + I_GEAR + """</button>
     <button class="btn" id="notes-close" data-call="local.close" aria-label="Close" title="Close">""" + I_CLOSE + """</button>
+  </div>
+  ${d.settings_open ? `<section class="notes-settings" id="notes-settings" aria-label="Settings">
+    <label>Transcription
+      <select id="notes-transcribe">
+        <option value="browser" ${d.settings.transcribe === 'browser' ? 'selected' : ''}>Browser (default)</option>
+        <option value="off" ${d.settings.transcribe === 'off' ? 'selected' : ''}>Off</option>
+      </select>
+    </label>
+    <label>Language <input id="notes-lang" value="${e(d.settings.lang)}" placeholder="browser language" size="16"></label>
+    <label>New session task <input id="notes-task" value="${e(d.settings.new_session_task)}" placeholder="trig_..." size="22"></label>
+    <p>Browser: while you record, the browser turns what the microphone hears into text (Chrome sends the sound to its speech service). Transcribe puts the text into the note. New session task: the id of the scheduled task that Send now new session starts (it starts a new session at each run).</p>
+  </section>` : ''}
+  <div class="notes-add">
+    <textarea id="notes-new" placeholder="Write a note" aria-label="A new note"></textarea>
+    <button class="btn" id="notes-add">Add note</button>
+  </div>
+  ${d.message ? `<div class="notes-msg" id="notes-msg" role="status">${e(d.message)}</div>` : ''}
+  <div class="notes-list" id="notes-list">
+    ${d.notes.length ? d.notes.map(n => `<article class="note" data-id="${e(n.id)}">
+      <div class="note-top">
+        <div class="note-body">${n.kind === 'text' || n.text ? `<textarea class="note-text" data-id="${e(n.id)}" aria-label="The text of the note">${e(n.text)}</textarea>` : `<div class="note-media" data-id="${e(n.id)}"></div>`}</div>
+        <div class="note-actions">
+          ${n.kind === 'text' ? '' : `<button class="btn" data-call="local.transcribe" data-input='${e(JSON.stringify({ id: n.id }))}'>Transcribe</button>`}
+          <button class="btn" data-call="local.send" data-input='${e(JSON.stringify({ ids: [n.id] }))}'>Send now</button>
+          <button class="btn" data-call="local.send" data-input='${e(JSON.stringify({ ids: [n.id], new_session: true }))}'>Send now new session</button>
+          <button class="btn" data-call="local.delete" data-input='${e(JSON.stringify({ id: n.id }))}'>Delete</button>
+        </div>
+      </div>
+      <div class="note-view">
+        <label><input type="checkbox" class="note-pick" data-call="local.pick" data-input='${e(JSON.stringify({ id: n.id }))}' ${(d.picked || []).includes(n.id) ? 'checked' : ''}> view path: <code>${e(n.view_path.split('.').join('/'))}</code></label>
+        <button class="btn" data-call="local.show-state" data-input='${e(JSON.stringify({ id: n.id }))}' aria-pressed="${(d.shown || []).includes(n.id)}">${(d.shown || []).includes(n.id) ? 'Hide state' : 'Show state'}</button>
+        <span class="note-meta">${n.kind === 'text' ? 'text' : e(n.kind + ' ' + n.time)} · ${e(new Date(n.at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }))}</span>
+      </div>
+      ${(d.shown || []).includes(n.id) ? `<pre class="note-state" data-id="${e(n.id)}"></pre>` : ''}
+    </article>`).join('') : '<p class="notes-empty">No notes yet. Record, or write a note above.</p>'}
+  </div>
+  <div class="notes-foot">
+    <button class="btn" id="notes-send-selected" data-call="local.send" data-input='${e(JSON.stringify({ ids: d.picked || [] }))}' ${(d.picked || []).length ? '' : 'disabled'}>Send selected</button>
   </div>
 </main>"""
 
@@ -3104,19 +3178,26 @@ R.drawTimer = () => {
   const s = Math.max(0, Math.floor((Date.now() - d.started_at) / 1000));
   t.textContent = (d.recording === 'video' ? 'Video ' : 'Audio ') + String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
 };
-// The button: one click records audio, two clicks record video. While it records, a click stops it.
+// The button: one click records audio, two clicks open the menu (audio, video, notes). While it records, a click stops
+// it. While the menu is open, a click on the button or out of the menu closes it.
+const menuOpen = () => !!os.get(v + '.ui-data.menu_open');
 const onClick = e => {
-  if (!e.target.closest || !e.target.closest('#rec-button')) return;
+  if (!e.target.closest) return;
+  if (!e.target.closest('#rec-button')) {
+    if (menuOpen() && !e.target.closest('#rec-menu')) call('local.toggle-menu', { open: false });
+    return;
+  }
   // (the click after a hold of 4 s does nothing)
   if (R.held) { R.held = false; return; }
   if (recording()) { clearTimeout(R.clickTimer); R.clickTimer = null; call('local.stop'); return; }
-  if (R.clickTimer) { clearTimeout(R.clickTimer); R.clickTimer = null; call('local.start', { mode: 'video' }); return; }
-  R.clickTimer = setTimeout(() => { R.clickTimer = null; call('local.start', { mode: 'audio' }); }, 300);
+  if (R.clickTimer) { clearTimeout(R.clickTimer); R.clickTimer = null; call('local.toggle-menu', { open: true }); return; }
+  R.clickTimer = setTimeout(() => { R.clickTimer = null; call(menuOpen() ? 'local.toggle-menu' : 'local.start', menuOpen() ? { open: false } : { mode: 'audio' }); }, 300);
 };
 // The keys: Arrow Up two times records audio; Arrow Up and Arrow Down at the same time record video. The same keys
 // stop it. Not while you type in a field or an editor.
 const typing = t => t && t.closest && t.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"], .CodeMirror');
 const onKeyDown = e => {
+  if (e.key === 'Escape' && menuOpen()) { call('local.toggle-menu', { open: false }); return; }
   if ((e.key !== 'ArrowUp' && e.key !== 'ArrowDown') || typing(e.target)) return;
   R.keys[e.key] = true;
   if (e.repeat) return;
@@ -3246,6 +3327,7 @@ if (mode !== 'audio' && mode !== 'video') throw new Error('No mode ' + mode);
 if (d.recording) throw new Error('It records already');
 const md = navigator.mediaDevices, what = mode === 'audio' ? 'the microphone' : 'the screen';
 d.error = '';
+d.menu_open = false;
 if (!md || !window.MediaRecorder || !(mode === 'audio' ? md.getUserMedia : md.getDisplayMedia)) {
   d.error = 'This browser cannot record ' + what + ' on this page.';
   return { recording: false, error: d.error };
@@ -3274,6 +3356,20 @@ try {
   d.error = 'The browser did not let the page record ' + what + ': ' + (e && e.message || e);
   return { recording: false, error: d.error };
 }
+// Transcription (Settings of Notes): the browser turns what the microphone hears into text while it records.
+const set = os.get('extension.views.notes-view.ui-data.settings') || {}, SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+R.heard = '';
+R.heardError = set.transcribe === 'off' ? 'off' : SR ? '' : 'unsupported';
+if (set.transcribe !== 'off' && SR) {
+  const sr = R.sr = new SR();
+  sr.lang = set.lang || navigator.language;
+  sr.continuous = true;
+  sr.onresult = ev => { for (let i = ev.resultIndex; i < ev.results.length; i++) if (ev.results[i].isFinal) R.heard += ev.results[i][0].transcript.trim() + ' '; };
+  sr.onerror = ev => { R.heardError = ev.error; };
+  // (the browser stops after a silence: it starts again while it records)
+  sr.onend = () => { if (R.sr === sr && !/not-allowed|service-not-allowed/.test(R.heardError)) try { sr.start(); } catch (e) {} };
+  try { sr.start(); } catch (e) { R.heardError = e.message; }
+}
 R.chunks = [];
 R.rec = new MediaRecorder(stream);
 R.rec.ondataavailable = x => { if (x.data && x.data.size) R.chunks.push(x.data); };
@@ -3298,6 +3394,9 @@ const rec = R.rec;
 if (rec && rec.state !== 'inactive') await new Promise(done => { rec.onstop = done; rec.stop(); });
 (R.inputs || []).forEach(x => x.getTracks().forEach(t => t.stop()));
 if (R.ac) { R.ac.close(); R.ac = null; }
+const sr = R.sr;
+R.sr = null;
+if (sr) { await new Promise(done => { sr.onend = done; try { sr.stop(); } catch (e) { done(); } setTimeout(done, 1500); }); }
 clearInterval(R.tick);
 const type = ((rec && rec.mimeType) || (d.recording === 'video' ? 'video/webm' : 'audio/webm')).split(';')[0];
 R.blob = new Blob(R.chunks || [], { type });
@@ -3305,6 +3404,21 @@ R.url = URL.createObjectURL(R.blob);
 const s = Math.round((Date.now() - d.started_at) / 1000);
 d.result = { kind: d.recording, time: String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'),
   size: R.blob.size >= 1048576 ? (R.blob.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(R.blob.size / 1024)) + ' KB', type };
+// The recording is a note too (Notes). Its view: the view of the first element that you selected, or the open view.
+// (the recordings of the notes stay in os.refs.notes: the memory of a view goes when the view closes)
+const notes = os.get('extension.views.notes-view.ui-data'), N = os.refs.notes = os.refs.notes || {};
+N.files = N.files || {};
+N.heard = N.heard || {};
+const first = d.selections.map(x => x.path.split(' ')[0]).find(p => /^extension\.views\./.test(p));
+const note = { id: 'n' + Date.now().toString(36), kind: d.recording, at: new Date(d.started_at).toISOString(), time: d.result.time, text: '',
+  view_path: first || ['extension.views.state-view', 'extension.views.docs-view'].find(x => os.mounted(x)) || 'extension.views.header-view',
+  selections: d.selections.slice(), file: '' };
+N.files[note.id] = { blob: R.blob, url: URL.createObjectURL(R.blob) };
+N.heard[note.id] = { text: R.heard.trim(), error: R.heardError };
+// (on claude.ai the file goes into the files of the page, so the note keeps it after a reload)
+const assets = window.claude && window.claude.use ? await window.claude.use('assets').catch(() => null) : null;
+if (assets) try { note.file = (await assets.upload(R.blob)).id; } catch (e) {}
+notes.notes.unshift(note);
 d.recording = '';
 return d.result;
 """)
@@ -3336,9 +3450,192 @@ a.remove();
 return { saved: name };
 """)
 
+REC_TOGGLE_MENU = sig("toggleMenu", ["open"], r"""
+// Two clicks on the record button: the menu (Record audio, Record video, Notes). open: true or false; no open: the other.
+const d = os.get('extension.views.recorder-view.ui-data');
+d.menu_open = typeof open === 'boolean' ? open : !d.menu_open;
+""")
+
 REC_OPEN_NOTES = sig("openNotes", [], r"""
-// Hold the record button 4 s: the Notes page opens (it is empty for now).
+// The menu of the record button, or hold the record button 4 s: the Notes page opens.
+os.get('extension.views.recorder-view.ui-data').menu_open = false;
 if (!os.mounted('extension.views.notes-view')) await ctx.call('extension.functions.render', { view_path: 'extension.views.notes-view' });
+""")
+
+NOTES_INIT = sig("init", [], r"""
+// The Notes page: what you type goes to the state (Add note, the text of a note, Settings); the page draws again
+// after each call.
+const v = 'extension.views.notes-view', R = os.refs['notes-view'] = os.refs['notes-view'] || {};
+R.picked = R.picked || [];
+R.shown = R.shown || [];
+const call = (name, input) => os.call(name, input, v).catch(console.error);
+ctx.root.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'notes-new') R.draft = t.value;
+  // (the text of a note is kept 400 ms after you stop typing)
+  if (t.classList.contains('note-text')) { clearTimeout(R.editTimer); R.editTimer = setTimeout(() => call('local.edit', { id: t.dataset.id, text: t.value }), 400); }
+});
+ctx.root.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'notes-transcribe') call('local.set-settings', { transcribe: t.value });
+  if (t.id === 'notes-lang') call('local.set-settings', { lang: t.value.trim() });
+  if (t.id === 'notes-task') call('local.set-settings', { new_session_task: t.value.trim() });
+});
+ctx.root.addEventListener('click', e => {
+  if (!e.target.closest || !e.target.closest('#notes-add')) return;
+  const t = ctx.root.querySelector('#notes-new');
+  if (t && t.value.trim()) call('local.add-text', { text: t.value });
+});
+os.watch(v, 'local.refresh');
+await ctx.call('local.refresh', { after: 'local.init' });
+""")
+
+NOTES_REFRESH = sig("refresh", ["after"], r"""
+// Draws the notes from ui-data. A recording plays in its note; Show state shows the ui-data of the note's view.
+const v = 'extension.views.notes-view', d = os.get(v + '.ui-data'), R = os.refs['notes-view'] || {};
+// (while you type the text of a note, the page does not draw again: the text box keeps its place)
+if (after === 'local.edit') return;
+const ids = d.notes.map(n => n.id);
+R.picked = (R.picked || []).filter(id => ids.includes(id));
+R.shown = (R.shown || []).filter(id => ids.includes(id));
+const t = document.createElement('template');
+t.innerHTML = os.template(os.get(v + '.html'), Object.assign({}, d, { picked: R.picked, shown: R.shown }));
+ctx.root.innerHTML = t.content.firstElementChild.innerHTML;
+os.bind(ctx.root, v);
+const draft = ctx.root.querySelector('#notes-new');
+if (draft && R.draft) draft.value = R.draft;
+ctx.root.querySelectorAll('.note-media').forEach(box => {
+  const n = d.notes.find(x => x.id === box.dataset.id), f = ((os.refs.notes || {}).files || {})[n.id], url = f ? f.url : n.file ? '/_blob/' + n.file : '';
+  if (!url) { box.appendChild(Object.assign(document.createElement('p'), { className: 'note-gone', textContent: 'The recording was only in the memory of the page; it is not here after a reload.' })); return; }
+  const m = document.createElement(n.kind === 'video' ? 'video' : 'audio');
+  m.controls = true;
+  m.src = url;
+  box.appendChild(m);
+});
+ctx.root.querySelectorAll('.note-state').forEach(pre => {
+  const n = d.notes.find(x => x.id === pre.dataset.id);
+  pre.textContent = JSON.stringify(os.get(n.view_path + '.ui-data'), null, 2) || 'This view has no ui-data.';
+});
+""")
+
+NOTES_TOGGLE_SETTINGS = sig("toggleSettings", [], r"""
+const d = os.get('extension.views.notes-view.ui-data');
+d.settings_open = !d.settings_open;
+""")
+
+NOTES_SET_SETTINGS = sig("setSettings", ["transcribe", "lang", "new_session_task"], r"""
+// transcribe: browser (the default) or off. lang: the language to hear (for example en-US); empty: the language of
+// the browser. new_session_task: the id of the scheduled task that Send now new session starts.
+const d = os.get('extension.views.notes-view.ui-data');
+if (transcribe !== undefined) {
+  if (transcribe !== 'browser' && transcribe !== 'off') throw new Error('No transcription ' + transcribe);
+  d.settings.transcribe = transcribe;
+}
+if (lang !== undefined) d.settings.lang = String(lang);
+if (new_session_task !== undefined) d.settings.new_session_task = String(new_session_task);
+return d.settings;
+""")
+
+NOTES_ADD_TEXT = sig("addText", ["text"], r"""
+// Add note: a note that you write. Its view is the view that is open under the Notes page.
+const d = os.get('extension.views.notes-view.ui-data'), R = os.refs['notes-view'] || {};
+if (!String(text || '').trim()) throw new Error('The note has no text');
+const note = { id: 'n' + Date.now().toString(36), kind: 'text', at: new Date().toISOString(), time: '', text: String(text),
+  view_path: ['extension.views.state-view', 'extension.views.docs-view'].find(x => os.mounted(x)) || 'extension.views.header-view', selections: [], file: '' };
+d.notes.unshift(note);
+d.message = '';
+R.draft = '';
+return { id: note.id };
+""")
+
+NOTES_EDIT = sig("edit", ["id", "text"], r"""
+// The text of a note, as you changed it.
+const n = os.get('extension.views.notes-view.ui-data').notes.find(x => x.id === id);
+if (!n) throw new Error('No note ' + id);
+n.text = String(text);
+""")
+
+NOTES_TRANSCRIBE = sig("transcribe", ["id"], r"""
+// Transcribe: the text that the browser heard while it recorded goes into the note, where you can change it.
+const d = os.get('extension.views.notes-view.ui-data'), n = d.notes.find(x => x.id === id);
+if (!n || n.kind === 'text') throw new Error('No recording ' + id);
+const h = ((os.refs.notes || {}).heard || {})[id] || { text: '', error: 'gone' };
+if (h.text) { n.text = h.text; d.message = ''; return { text: n.text }; }
+d.message = {
+  off: 'Transcription was off when you recorded (Settings).',
+  unsupported: 'This browser cannot transcribe. Chrome and Edge can.',
+  'not-allowed': 'The browser did not let the page use the microphone for the text.',
+  'service-not-allowed': 'The browser did not let the page use its speech service.',
+  gone: 'The text of this recording is not here any more: the browser keeps it only until the page reloads.'
+}[h.error] || 'The browser heard no words in this recording' + (h.error ? ' (' + h.error + ')' : '') + '.';
+return { text: '' };
+""")
+
+NOTES_SEND = sig("send", ["ids", "new_session"], r"""
+// Send now: the notes go to Claude, in this Claude session (a comment of the page, sent to Claude). Send now new session:
+// they start a new Claude Code session (the task in settings.new_session_task, through the Claude Code Remote connector).
+const d = os.get('extension.views.notes-view.ui-data');
+const list = (ids || []).map(id => d.notes.find(n => n.id === id)).filter(Boolean);
+if (!list.length) throw new Error('No note to send');
+const one = n => [(n.kind === 'text' ? 'Note' : (n.kind === 'video' ? 'Video note' : 'Audio note') + ' (' + n.time + ')') + ', ' + n.at,
+  n.text || '(no text)', 'View: ' + n.view_path].concat(n.selections.map(x => 'Selected at ' + x.at + ': ' + x.path)).join('\n');
+let text = (list.length > 1 ? list.length + ' notes' : 'A note') + ' from the Notes page of Agent OS:\n\n' + list.map(one).join('\n\n');
+// (a comment holds at most 4 KB)
+while (new TextEncoder().encode(text).length > 4000) text = text.slice(0, -200);
+const use = async name => window.claude && window.claude.use ? await window.claude.use(name).catch(() => null) : null;
+try {
+  if (new_session) {
+    const mcp = await use('mcp');
+    if (!mcp) { d.message = 'Send now new session works on claude.ai, with the Claude Code Remote connector.'; return { sent: false }; }
+    if (!d.settings.new_session_task) { d.message = 'No task for new sessions is set: put its id in Settings, New session task.'; return { sent: false }; }
+    await mcp.callTool('Claude Code Remote', 'fire_trigger', { trigger_id: d.settings.new_session_task, text });
+    d.message = list.length > 1 ? list.length + ' notes went to a new Claude session.' : 'The note went to a new Claude session.';
+  } else {
+    const c = await use('comments');
+    if (!c) { d.message = 'Send now works on claude.ai.'; return { sent: false }; }
+    const can = await c.canSendToClaude().catch(() => 'off');
+    if (can !== 'available') {
+      d.message = { writers_only: 'Only editors of the page can send to Claude.', no_session: 'No Claude session can get it now.' }[can] || 'Sending to Claude is off here.';
+      return { sent: false };
+    }
+    const at = document.querySelector('#notes-view .note[data-id="' + list[0].id + '"]') || document.querySelector('#notes-view');
+    await c.sendToClaude({ anchor: await c.anchorFor(at), text });
+    d.message = list.length > 1 ? list.length + ' notes went to Claude.' : 'The note went to Claude.';
+  }
+} catch (e) {
+  d.message = 'Not sent: ' + (e && (e.message || e.code) || e);
+  return { sent: false };
+}
+return { sent: list.length };
+""")
+
+NOTES_DELETE = sig("deleteNote", ["id"], r"""
+// Delete: the note goes, with its recording.
+const d = os.get('extension.views.notes-view.ui-data'), N = os.refs.notes || {};
+const n = d.notes.find(x => x.id === id);
+if (!n) throw new Error('No note ' + id);
+d.notes.splice(d.notes.indexOf(n), 1);
+const f = (N.files || {})[id];
+if (f) { URL.revokeObjectURL(f.url); delete N.files[id]; }
+if (N.heard) delete N.heard[id];
+if (n.file && window.claude && window.claude.use) {
+  const assets = await window.claude.use('assets').catch(() => null);
+  if (assets) try { await assets.delete(n.file); } catch (e) {}
+}
+""")
+
+NOTES_PICK = sig("pick", ["id"], r"""
+// The box of a note: checked notes go with Send selected. (The page keeps which, not the state.)
+const R = os.refs['notes-view'];
+R.picked = R.picked.includes(id) ? R.picked.filter(x => x !== id) : R.picked.concat(id);
+return { picked: R.picked };
+""")
+
+NOTES_SHOW_STATE = sig("showState", ["id"], r"""
+// Show state: the ui-data of the note's view shows under the note; again hides it. (The page keeps which, not the state.)
+const R = os.refs['notes-view'];
+R.shown = R.shown.includes(id) ? R.shown.filter(x => x !== id) : R.shown.concat(id);
+return { shown: R.shown };
 """)
 
 NOTES_CLOSE = sig("close", [], r"""
@@ -3707,18 +4004,18 @@ state = {
       },
       "recorder-view": {
         "html": recorder_html,
-        "ui-data": {"recording": "", "started_at": 0, "selected": "", "selections": [], "result": None, "error": ""},
+        "ui-data": {"recording": "", "started_at": 0, "selected": "", "selections": [], "result": None, "error": "", "menu_open": False},
         "functions": {
-          "local.init": fn("Runs after recorder-view is rendered: the record button (one click: audio, two clicks: video), the keys (Arrow Up two times: audio; Arrow Up and Arrow Down together: video), the timer in the header and the select mode.",
+          "local.init": fn("Runs after recorder-view is rendered: the record button (one click: audio, two clicks: the menu), the keys (Arrow Up two times: audio; Arrow Up and Arrow Down together: video), the timer in the header and the select mode.",
                            code=REC_INIT, calls={"local.refresh": {"input": {"after": "local.init"}, "output": None}},
                            tests={"draws the record button": {"before": render_rv, "input": {}, "expect": {"dom": ["#recorder-view #rec-button[aria-pressed=\"false\"]"]}}}),
           "local.refresh": fn("Draws the record button (a stop button while it records), the error and the card of the last recording from ui-data; the select mode is on while it records. Runs after every call.",
                               code=REC_REFRESH, input_={"after": "local.select"},
                               tests={"draws the button": {"before": render_rv, "input": {"after": "test"}, "expect": {"dom": ["#rec-button[aria-label=\"Record\"]"]}}}),
-          "local.start": fn("Starts a recording: audio (the microphone) or video (a screen, a window or a tab, with sound). The button becomes a stop button, the timer shows in the header, and the select mode is on.",
+          "local.start": fn("Starts a recording: audio (the microphone) or video (a screen, a window or a tab, with sound). The button becomes a stop button, the timer shows in the header, and the select mode is on. With Transcription on (Settings of Notes), the browser turns what the microphone hears into text.",
                             code=REC_START, input_={"mode": "audio"}, expected={RP: MAY}),
-          "local.stop": fn("Stops the recording. The card shows it, with the elements that you selected and Save file.",
-                           code=REC_STOP, expected={RP: MAY},
+          "local.stop": fn("Stops the recording. The card shows it, with the elements that you selected and Save file. The recording is also a new note of the Notes page.",
+                           code=REC_STOP, expected={RP: MAY, NV + ".ui-data.notes": MAY},
                            tests={"does nothing when it does not record": {"before": render_rv, "input": {}, "expect": {"state": {RP + ".recording": ""}}}}),
           "local.select": fn("Select mode: keeps the path of the element that you clicked (its view, the elements down to it, and its block of the timeline), with the time in the recording.",
                              code=REC_SELECT, input_={"path": "extension.views.header-view › #docs-button"},
@@ -3726,8 +4023,12 @@ state = {
                              tests={"keeps the path": {"before": render_rv, "input": {"path": "extension.views.header-view › #docs-button"},
                                                        "expect": {"state": {RP + ".selected": "extension.views.header-view › #docs-button"}}}}),
           "local.save": fn("Saves the last recording as a file (webm or mp4). On claude.ai, you confirm the download.", code=REC_SAVE),
-          "local.open-notes": fn("Hold the record button 4 seconds: opens the Notes page (empty for now).",
-                                 code=REC_OPEN_NOTES, calls={"extension.functions.render": {"input": V(NV), "output": None}},
+          "local.toggle-menu": fn("Two clicks on the record button: opens the menu (1 Record audio, 2 Record video, 3 Notes). A click on the button or out of the menu, or Escape, closes it.",
+                                  code=REC_TOGGLE_MENU, input_={"open": True}, expected={RP + ".menu_open": MAY},
+                                  tests={"opens, then closes": {"before": dict(render_rv, **{"local.toggle-menu": {"open": True}}), "input": {"open": False},
+                                                                "expect": {"state": {RP + ".menu_open": False}, "dom-absent": ["#rec-menu"]}}}),
+          "local.open-notes": fn("Notes in the menu of the record button, or hold the record button 4 seconds: opens the Notes page.",
+                                 code=REC_OPEN_NOTES, expected={RP + ".menu_open": MAY}, calls={"extension.functions.render": {"input": V(NV), "output": None}},
                                  tests={"opens Notes": {"before": render_rv, "input": {}, "expect": {"dom": ["#notes-view .notes-bar"]}}}),
           "local.clear": fn("Closes the card of the last recording, and forgets the recording.",
                             code=REC_CLEAR, expected={RP: MAY},
@@ -3736,8 +4037,30 @@ state = {
       },
       "notes-view": {
         "html": notes_html,
-        "ui-data": {},
+        "ui-data": {"notes": [], "settings": {"transcribe": "browser", "lang": "", "new_session_task": ""}, "settings_open": False, "message": ""},
         "functions": {
+          "local.init": fn("Runs after notes-view is rendered: Add note, the text of a note and Settings send what you type; the page draws again after each call.",
+                           code=NOTES_INIT, calls={"local.refresh": {"input": {"after": "local.init"}, "output": None}},
+                           tests={"draws the Notes page": {"before": render_nv, "input": {}, "expect": {"dom": ["#notes-view #notes-add", "#notes-view #notes-send-selected[disabled]"]}}}),
+          "local.refresh": fn("Draws the notes from ui-data: a recording plays in its note (or its text shows), Show state shows the ui-data of the note's view. Runs after every call, but not while you type the text of a note.",
+                              code=NOTES_REFRESH, input_={"after": "local.pick"}),
+          "local.toggle-settings": fn("The Settings button: shows or hides the settings of transcription (Browser, the default, or Off; the language).",
+                                      code=NOTES_TOGGLE_SETTINGS, expected={NV + ".ui-data.settings_open": "toggles"},
+                                      tests={"opens, then closes": {"before": dict(render_nv, **{"local.toggle-settings": {}}), "input": {},
+                                                                    "expect": {"state": {NV + ".ui-data.settings_open": False}, "dom-absent": ["#notes-settings"]}}}),
+          "local.set-settings": fn("Changes the settings: transcribe (browser or off), lang (empty: the language of the browser) and new_session_task (the scheduled task of Send now new session).",
+                                   code=NOTES_SET_SETTINGS, input_={"transcribe": "browser"}, expected={NV + ".ui-data.settings": MAY},
+                                   tests={"keeps browser": {"before": render_nv, "input": {"transcribe": "browser"}, "expect": {"state": {NV + ".ui-data.settings.transcribe": "browser"}}}}),
+          "local.add-text": fn("Add note: a note that you write, with the view that is open under the Notes page.",
+                               code=NOTES_ADD_TEXT, input_={"text": "The Save button is too far."}, expected={NV + ".ui-data.notes": MAY, NV + ".ui-data.message": MAY}),
+          "local.edit": fn("Keeps the text of a note as you change it.", code=NOTES_EDIT, input_={"id": "n1", "text": "A note"}, expected={NV + ".ui-data.notes": MAY}),
+          "local.transcribe": fn("Transcribe: the text that the browser heard while it recorded goes into the note; you can change it. When there is no text, a message tells why.",
+                                 code=NOTES_TRANSCRIBE, input_={"id": "n1"}, expected={NV + ".ui-data.notes": MAY, NV + ".ui-data.message": MAY}),
+          "local.send": fn("Send now: the notes go to Claude in this Claude session, as a comment of the page sent to Claude. Send now new session (new_session: true): they start a new Claude Code session, through the task in settings.new_session_task. Send selected sends the checked notes.",
+                           code=NOTES_SEND, input_={"ids": ["n1"]}, expected={NV + ".ui-data.message": MAY}),
+          "local.delete": fn("Delete: the note goes, with its recording.", code=NOTES_DELETE, input_={"id": "n1"}, expected={NV + ".ui-data.notes": MAY}),
+          "local.pick": fn("The box of a note: checks it for Send selected, or unchecks it.", code=NOTES_PICK, input_={"id": "n1"}),
+          "local.show-state": fn("Show state: shows the ui-data of the note's view under the note; again hides it.", code=NOTES_SHOW_STATE, input_={"id": "n1"}),
           "local.close": fn("The close button: closes the Notes page.",
                             code=NOTES_CLOSE, calls={"extension.functions.unmount": {"input": V(NV), "output": None}},
                             tests={"closes": {"before": render_nv, "input": {}, "expect": {"dom-absent": ["#notes-view .notes-bar"]}}})

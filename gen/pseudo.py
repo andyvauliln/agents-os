@@ -39,8 +39,10 @@ SET os.refs.recorder-view = a new memory
 WHEN you hold the record button 4 s: CALL local.open-notes (the click after it does nothing)
 WHEN you click the record button
   IF it records: CALL local.stop
-  ELSE IF a second click comes in 300 ms: CALL local.start with video
+  ELSE IF a second click comes in 300 ms: CALL local.toggle-menu with open = true
+  ELSE IF the menu is open: CALL local.toggle-menu with open = false
   ELSE: CALL local.start with audio
+WHEN you click out of the menu, or push Escape, while it is open: CALL local.toggle-menu with open = false
 WHEN you push Arrow Up two times in 400 ms (not in a field or an editor)
   IF it records: CALL local.stop
   ELSE: CALL local.start with audio
@@ -65,6 +67,7 @@ DRAW the timer in the header""",
 "recorder-view/local.start": """\
 IF mode is not audio or video: THROW
 IF it records: THROW
+SET menu_open = false
 IF the browser cannot record: SET error and RETURN
 TRY
   IF audio: READ the microphone
@@ -74,6 +77,10 @@ TRY
     PUT the sounds into one track
     WHEN you stop sharing: CALL local.stop
 IF it fails: SET error = why, and RETURN
+IF transcription (Settings of Notes) is not off and the browser can hear words
+  START speech recognition in the language of the settings (or of the browser)
+  WHEN it hears words: ADD them to the heard text in memory
+  WHEN it stops after a silence: START it again
 START the recorder
 SET recording = mode, started_at = now, selected = "", selections = [], result = null
 START the timer of the header""",
@@ -82,9 +89,14 @@ START the timer of the header""",
 IF it does not record: RETURN
 STOP the recorder and WAIT for its last data
 STOP the microphone and the screen
+STOP the speech recognition
 STOP the timer
 SET the file = the data, in the memory of the page
 SET result = { kind, time, size, type }
+ADD a note to the top of notes-view notes: { id, kind, at, time, text: "", view_path, selections, file }
+  view_path = the view of the first selected element, or the open view (state-view, docs-view, header-view)
+  the file and the heard text stay in the memory of the page (os.refs.notes: it stays when Notes closes)
+  IF the assets capability is there: UPLOAD the file and SET file = its id
 SET recording = """"",
 
 "recorder-view/local.select": """\
@@ -100,8 +112,79 @@ ELSE
   the browser downloads the file
 RETURN { saved: name }""",
 
+"recorder-view/local.toggle-menu": """\
+SET menu_open = open, or NOT menu_open when there is no open
+(the menu: 1 Record audio, 2 Record video, 3 Notes)""",
+
 "recorder-view/local.open-notes": """\
-IF notes-view is not mounted: CALL render notes-view (the Notes page, empty for now)""",
+SET menu_open = false
+IF notes-view is not mounted: CALL render notes-view (the Notes page)""",
+
+"notes-view/local.init": """\
+KEEP os.refs.notes-view (the checked and the shown notes); the recordings and the heard texts are in os.refs.notes
+WHEN you type a new note: REMEMBER the draft
+WHEN you type in the text of a note: after 400 ms, CALL local.edit
+WHEN you change Transcription, Language or New session task: CALL local.set-settings
+WHEN you click Add note and the new note has text: CALL local.add-text
+WATCH notes-view: after each call, CALL local.refresh
+CALL local.refresh""",
+
+"notes-view/local.refresh": """\
+IF after = local.edit: RETURN (the text box keeps its place)
+FORGET checked and shown notes that are gone
+DRAW the page from ui-data, with the checked and the shown notes
+PUT the draft back into the new note
+FOR EACH recording without text: SHOW its player (from memory, or /_blob/<file>), or say it is gone
+FOR EACH shown note: SHOW the ui-data of its view as JSON""",
+
+"notes-view/local.toggle-settings": """\
+SET settings_open = NOT settings_open""",
+
+"notes-view/local.set-settings": """\
+IF transcribe is given
+  IF it is not browser or off: THROW
+  SET settings.transcribe = transcribe
+IF lang is given: SET settings.lang = lang
+IF new_session_task is given: SET settings.new_session_task = new_session_task
+RETURN settings""",
+
+"notes-view/local.add-text": """\
+IF text is empty: THROW
+ADD a note to the top of notes: { id, kind: text, at: now, text, view_path: the open view, selections: [] }
+SET message = "", FORGET the draft
+RETURN { id }""",
+
+"notes-view/local.edit": """\
+FIND the note with id, or THROW
+SET its text = text""",
+
+"notes-view/local.transcribe": """\
+FIND the recording with id, or THROW
+IF the browser heard words in it: SET its text = the heard text and RETURN it
+SET message = why there is no text (transcription off, no speech service, no permission, a reload, no words)""",
+
+"notes-view/local.send": """\
+FIND the notes with ids, or THROW
+SET text = each note: its kind and time, its text, its view, the elements selected in it (at most 4 KB)
+IF new_session
+  IF there is no mcp capability or no settings.new_session_task: SET message and RETURN
+  CALL fire_trigger of Claude Code Remote with the task and the text (a new Claude Code session starts)
+ELSE
+  IF there is no comments capability, or Claude cannot get it now: SET message and RETURN
+  CALL sendToClaude: a comment at the first note, sent to Claude (this Claude session gets it)
+SET message = sent, or "Not sent: " and why""",
+
+"notes-view/local.delete": """\
+FIND the note with id, or THROW
+REMOVE it from notes
+FORGET its recording and its heard text in memory
+IF it has a file of the page: DELETE the file""",
+
+"notes-view/local.pick": """\
+CHECK or UNCHECK the note in os.refs.notes-view.picked (for Send selected)""",
+
+"notes-view/local.show-state": """\
+SHOW or HIDE the ui-data of the note's view (os.refs.notes-view.shown)""",
 
 "notes-view/local.close": """\
 CALL unmount notes-view""",

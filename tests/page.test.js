@@ -42,10 +42,16 @@ function fakeDb() {
   };
   // and the assets capability: a file of the page is served at /_blob/<id>
   window.__blobs = {};
-  const assets = { upload: async blob => { const id = 'a' + Object.keys(window.__blobs).length; window.__blobs[id] = await blob.text(); return { id, url: '/_blob/' + id, sizeBytes: blob.size, contentType: blob.type }; } };
+  const assets = { upload: async blob => { const id = 'a' + Object.keys(window.__blobs).length; window.__blobs[id] = await blob.text(); return { id, url: '/_blob/' + id, sizeBytes: blob.size, contentType: blob.type }; },
+    delete: async id => { delete window.__blobs[id]; } };
   const fetch0 = window.fetch;
   window.fetch = (u, o) => { const m = /^\/_blob\/(\w+)$/.exec(String(u)); return m ? Promise.resolve(window.__blobs[m[1]] === undefined ? new Response('', { status: 404 }) : new Response(window.__blobs[m[1]])) : fetch0(u, o); };
-  window.claude = { use: async name => (name === 'db' ? { doc, collection } : name === 'assets' ? assets : null) };
+  // comments (Send now: a comment sent to Claude) and mcp (Send now new session) keep what was sent in window.__sent
+  window.__sent = [];
+  const comments = { canSendToClaude: async () => 'available', anchorFor: async () => ({ path: 'main', x: 0, y: 0 }),
+    sendToClaude: async t => { window.__sent.push({ to: 'claude', text: t.text }); return { threadId: 't1', commentId: 'c1' }; } };
+  const mcp = { callTool: async (server, tool, input) => { window.__sent.push({ to: server, tool, input }); return { payload: {} }; } };
+  window.claude = { use: async name => ({ db: { doc, collection }, assets, comments, mcp })[name] || null };
 }
 
 // Fake media for the record button: a tone for the microphone, a canvas that changes color for the screen.
@@ -58,6 +64,11 @@ function fakeMedia() {
     let i = 0;
     setInterval(() => { g.fillStyle = 'hsl(' + (i++ * 20 % 360) + ',70%,50%)'; g.fillRect(0, 0, 160, 100); }, 50);
     return c.captureStream(20);
+  };
+  // the speech service of the browser: it hears "move the save button"
+  window.SpeechRecognition = class {
+    start() { this.t = setTimeout(() => this.onresult && this.onresult({ resultIndex: 0, results: [Object.assign([{ transcript: 'move the save button' }], { isFinal: true })] }), 200); }
+    stop() { clearTimeout(this.t); setTimeout(() => this.onend && this.onend(), 10); }
   };
 }
 
@@ -166,9 +177,17 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await upDown();
     await recording('');
     await page.waitForSelector('#rec-card video');
-    // two clicks: video
+    // two clicks: the menu (1 Record audio, 2 Record video, 3 Notes); a click out of it closes it
     await page.dblclick('#rec-button');
+    await page.waitForSelector('#rec-menu');
+    assert.deepEqual(await page.$$eval('#rec-menu button', els => els.map(x => x.textContent)), ['1Record audio', '2Record video', '3Notes']);
+    assert.equal((await rec()).recording, '');
+    await page.mouse.click(200, 300);
+    await page.waitForSelector('#rec-menu', { state: 'detached' });
+    await page.dblclick('#rec-button');
+    await page.click('#rec-menu button:has-text("Record video")');
     await recording('video');
+    assert.equal((await rec()).menu_open, false);
     await page.waitForFunction(() => /^Video /.test(document.querySelector('#rec-timer').textContent));
     await page.click('#rec-button');
     await recording('');
@@ -186,6 +205,84 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForTimeout(450);
     assert.equal((await rec()).recording, '');
     assert.deepEqual(await page.$eval('#notes-view', e => { const r = e.getBoundingClientRect(); return [r.left, r.top, r.width, r.height]; }), await page.evaluate(() => [0, 0, innerWidth, innerHeight]));
+    await page.click('#notes-close');
+    await page.waitForFunction(() => document.querySelector('#notes-view').hidden);
+    // Notes: each recording is a note (the newest first); Notes in the menu opens the page
+    const nv = () => page.evaluate(() => window.agentOS.state.extension.views['notes-view']['ui-data']);
+    assert.deepEqual((await nv()).notes.map(n => n.kind), ['video', 'video', 'audio', 'audio']);
+    assert.equal((await nv()).notes[3].view_path, 'extension.views.header-view');
+    assert.deepEqual((await nv()).notes[3].selections.map(x => x.path), ['extension.views.header-view › #docs-button']);
+    await page.dblclick('#rec-button');
+    await page.click('#rec-menu button:has-text("Notes")');
+    await page.waitForSelector('#notes-view .note');
+    assert.equal(await page.locator('#notes-view .note').count(), 4);
+    assert.equal(await page.locator('#notes-view .note >> nth=3').locator('.note-media audio').count(), 1);
+    assert.deepEqual(await page.locator('#notes-view .note >> nth=3').locator('.note-actions button').allTextContents(), ['Transcribe', 'Send now', 'Send now new session', 'Delete']);
+    assert.equal(await page.textContent('#notes-view .note >> nth=3 >> .note-view code'), 'extension/views/header-view');
+    // Transcribe: the text that the browser heard goes into the note, where you can change it
+    await page.locator('#notes-view .note >> nth=3').locator('button:has-text("Transcribe")').click();
+    await page.waitForSelector('#notes-view .note >> nth=3 >> .note-text');
+    assert.equal(await page.inputValue('#notes-view .note >> nth=3 >> .note-text'), 'move the save button');
+    await page.fill('#notes-view .note >> nth=3 >> .note-text', 'Move the Save button');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['notes-view']['ui-data'].notes[3].text === 'Move the Save button');
+    // a note that you write: it has no Transcribe
+    await page.fill('#notes-new', 'The docs need a search');
+    await page.click('#notes-add');
+    await page.waitForFunction(() => document.querySelectorAll('#notes-view .note').length === 5);
+    assert.equal(await page.inputValue('#notes-view .note >> nth=0 >> .note-text'), 'The docs need a search');
+    assert.equal(await page.locator('#notes-view .note >> nth=0').locator('button:has-text("Transcribe")').count(), 0);
+    assert.equal(await page.inputValue('#notes-new'), '');
+    // Show state: the ui-data of the note's view
+    await page.locator('#notes-view .note >> nth=0').locator('button:has-text("Show state")').click();
+    await page.waitForSelector('#notes-view .note-state');
+    assert.deepEqual(JSON.parse(await page.textContent('#notes-view .note-state')), await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data']));
+    await page.locator('#notes-view .note >> nth=0').locator('button:has-text("Hide state")').click();
+    await page.waitForSelector('#notes-view .note-state', { state: 'detached' });
+    // Send now: a comment sent to Claude; Send selected: the checked notes together
+    await page.locator('#notes-view .note >> nth=0').locator('button:has-text("Send now")').first().click();
+    await page.waitForFunction(() => window.__sent.length === 1);
+    assert.match(await page.evaluate(() => window.__sent[0].text), /^A note from the Notes page of Agent OS:\n\nNote, .*\nThe docs need a search\nView: extension\.views\.header-view$/);
+    assert.equal(await page.textContent('#notes-msg'), 'The note went to Claude.');
+    assert.equal(await page.isDisabled('#notes-send-selected'), true);
+    await page.locator('#notes-view .note >> nth=0').locator('.note-pick').check();
+    // (the note that you wrote is the first one now: the recording with its text is the fifth)
+    await page.locator('#notes-view .note >> nth=4').locator('.note-pick').check();
+    await page.click('#notes-send-selected');
+    await page.waitForFunction(() => window.__sent.length === 2);
+    assert.match(await page.evaluate(() => window.__sent[1].text), /^2 notes .*The docs need a search.*Move the Save button\nView: extension\.views\.header-view\nSelected at \d\d:\d\d: extension\.views\.header-view › #docs-button$/s);
+    // Send now new session: the task of the settings, through Claude Code Remote
+    await page.locator('#notes-view .note >> nth=0').locator('button:has-text("Send now new session")').click();
+    await page.waitForFunction(() => /No task for new sessions/.test(document.querySelector('#notes-msg').textContent));
+    await page.click('#notes-settings-button');
+    await page.fill('#notes-task', 'trig_test');
+    await page.press('#notes-task', 'Tab');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['notes-view']['ui-data'].settings.new_session_task === 'trig_test');
+    await page.click('#notes-settings-button');
+    await page.locator('#notes-view .note >> nth=0').locator('button:has-text("Send now new session")').click();
+    await page.waitForFunction(() => window.__sent.length === 3);
+    assert.deepEqual(await page.evaluate(() => [window.__sent[2].to, window.__sent[2].tool, window.__sent[2].input.trigger_id]), ['Claude Code Remote', 'fire_trigger', 'trig_test']);
+    // Settings: Transcription is Browser by default; Off and the language go to the state
+    await page.click('#notes-settings-button');
+    await page.waitForSelector('#notes-settings');
+    assert.equal(await page.inputValue('#notes-transcribe'), 'browser');
+    await page.selectOption('#notes-transcribe', 'off');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['notes-view']['ui-data'].settings.transcribe === 'off');
+    await page.fill('#notes-lang', 'ru-RU');
+    await page.press('#notes-lang', 'Tab');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['notes-view']['ui-data'].settings.lang === 'ru-RU');
+    await page.selectOption('#notes-transcribe', 'browser');
+    await page.fill('#notes-lang', '');
+    await page.press('#notes-lang', 'Tab');
+    await page.click('#notes-settings-button');
+    // Delete: all the notes go
+    while (await page.locator('#notes-view .note').count()) {
+      const n = await page.locator('#notes-view .note').count();
+      await page.locator('#notes-view .note >> nth=0').locator('button:has-text("Delete")').click();
+      await page.waitForFunction(n => document.querySelectorAll('#notes-view .note').length === n - 1, n);
+    }
+    await page.evaluate(() => { window.agentOS.state.extension.views['notes-view']['ui-data'].message = ''; });
+    await page.evaluate(() => window.agentOS.os.call('extension.views.notes-view.functions.local.set-settings', { new_session_task: '' }));
+    await page.waitForSelector('#notes-view .notes-empty');
     await page.click('#notes-close');
     await page.waitForFunction(() => document.querySelector('#notes-view').hidden);
     // a short press is still a click: audio

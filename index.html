@@ -152,6 +152,8 @@ function groupOf(e){
   if(same&&/\/state\.json$/.test(u))return 'state';
   // The scripts of the claude.ai artifact page (the database, comments and others), not of this page.
   if(same&&/\/_runtime\//.test(u))return 'claude.ai';
+  // The libraries (vendor/ of the repo) are packages, though the page loads them from its own files.
+  if(same&&/\/vendor\//.test(u))return 'packages';
   if(same&&e.initiatorType==='script')return 'scripts';
   if(same)return 'file code';
   if(/fonts\.(googleapis|gstatic)\.com/.test(u)||/\.css$/.test(u)||e.initiatorType==='css'||e.initiatorType==='link')return 'styles';

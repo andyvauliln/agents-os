@@ -1,6 +1,5 @@
 // Drives index.html in Chromium with Playwright, against a fake db, and checks each tracked call.
-// Run: node --test tests/  (set CM_DIR to a local codemirror@5.65.16 package to work offline,
-// and JSB_DIR to a local js-beautify@1.15.1 package: by default <CM_DIR>/../../jsb/package)
+// Run: node --test tests/  (the libraries load from vendor/ of the repo; the fonts are left out)
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('node:http');
@@ -64,20 +63,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const page = await browser.newPage();
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
-    if (process.env.CM_DIR) {
-      // claude.ai's page policy lets scripts load from cdnjs but not stylesheets, so stylesheets fail here too.
-      await page.route('https://cdnjs.cloudflare.com/**', route => {
-        if (route.request().url().endsWith('.css')) return route.abort();
-        if (route.request().url().includes('/js-beautify/1.15.1/')) {
-          const jsb = process.env.JSB_DIR || path.join(process.env.CM_DIR, '..', '..', 'jsb', 'package');
-          return route.fulfill({ body: fs.readFileSync(path.join(jsb, 'js', 'lib', route.request().url().split('1.15.1/')[1].replace('.min.js', '.js'))), contentType: 'application/javascript' });
-        }
-        const f = route.request().url().split('5.65.16/')[1];
-        const local = f === 'codemirror.min.js' ? 'lib/codemirror.js' : f === 'codemirror.min.css' ? 'lib/codemirror.css' : f.replace('.min.js', '.js');
-        route.fulfill({ body: fs.readFileSync(path.join(process.env.CM_DIR, local)), contentType: f.endsWith('.css') ? 'text/css' : 'application/javascript' });
-      });
-      await page.route('https://fonts.googleapis.com/**', route => route.fulfill({ body: '' }));
-    }
+    // the libraries load from vendor/ of the repo; the fonts come from Google, not here
+    await page.route('https://fonts.googleapis.com/**', route => route.fulfill({ body: '' }));
     await page.addInitScript(fakeDb);
     await page.addInitScript(fakeMedia);
     await page.goto(`http://localhost:${server.address().port}/`);
@@ -345,7 +332,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(typeof st0.network.scripts['state-core.js'].ms, 'number');
     assert.ok(st0.network.scripts['state-core.js'].size > 1000);
     assert.equal(st0.network.api['read the versions'].count, 1);
-    assert.ok(st0.network.packages['codemirror.min.js'].count >= 1);
+    assert.ok(st0.network.packages['codemirror.js'].count >= 1);
     assert.equal(st0.environment['browser data'].storages['local storage'].limit, 'about 5 MB (the usual limit of a browser)');
     assert.equal(typeof st0.environment.browser.viewport, 'string');
     assert.equal(st0.environment['browser data'].storages['claude.ai database']['versions (commits)'].documents, 1);
@@ -412,11 +399,11 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await req('state-core.js').locator('.tl-code').waitFor();
     assert.match(await req('state-core.js').locator('.tl-code').first().evaluate(e => e.cm.getValue()), /StateCore/);
     // a file the browser does not let the page download as text says why, with a link
-    await page.route('https://cdnjs.cloudflare.com/**/xml.min.js', route => route.request().resourceType() === 'fetch' ? route.abort() : route.fallback());
-    await req('xml.min.js').locator('.tl-req-top').click();
-    await req('xml.min.js').locator('.tl-error').waitFor();
-    assert.match(await req('xml.min.js').locator('.tl-error').textContent(), /did not let this page download this file as text.*cdnjs\.cloudflare\.com.*Open the file in a new tab/);
-    assert.match(await req('xml.min.js').locator('.tl-error a').getAttribute('href'), /^https:\/\/cdnjs\.cloudflare\.com\/.*xml\.min\.js$/);
+    await page.route('**/vendor/codemirror/5.65.16/mode/xml/xml.js', route => route.request().resourceType() === 'fetch' ? route.abort() : route.fallback());
+    await req('xml.js').locator('.tl-req-top').click();
+    await req('xml.js').locator('.tl-error').waitFor();
+    assert.match(await req('xml.js').locator('.tl-error').textContent(), /could not download this file as text.*Open the file in a new tab/);
+    assert.match(await req('xml.js').locator('.tl-error a').getAttribute('href'), /vendor\/codemirror\/5\.65\.16\/mode\/xml\/xml\.js$/);
     assert.match(await page.textContent('#tl-detail .tl-netenv .tl-panel:last-child'), /browser data \/ storages \/ local storage|storages \/ local storage \/ limit/);
     const part = name => page.locator('#tl-detail .tl-part', { has: page.locator('.tl-name', { hasText: name }) });
     await page.click('#tl-next');

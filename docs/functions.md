@@ -67,7 +67,7 @@ import CodeMirror from 'codemirror';
 - ctx.call(name, input): calls a different function and records the call.
 - ctx.root: the element of the view of the function.
 - state-core is a module. Its source is in the state one time, in local.init of state-view. The other functions point to it.
-- codemirror is the editor. Its scripts load from cdnjs. The name CodeMirror is the editor that the scripts give.
+- codemirror is the editor. Its scripts are files of the repo (vendor/codemirror/5.65.16/, not minified), and the page loads them from its own files. The name CodeMirror is the editor that the scripts give.
 
 ## The rules of expected-state-change
 - "changes": the value must change.

@@ -1,6 +1,6 @@
 STYLE = r"""<style>
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400&family=JetBrains+Mono:wght@400;500&display=swap");
-/* CodeMirror 5.65.16 base styles (MIT). Inline because the page may not load stylesheets from cdnjs. */
+/* CodeMirror 5.65.16 base styles (MIT), from vendor/codemirror/5.65.16/lib/codemirror.css. Inline: the page keeps its styles in index-view. */
 __CMCSS__
 :root{--bg:#f3f5f8;--panel:#ffffff;--gutter:#f7f8fa;--fg:#17202c;--muted:#6a7584;--line:#dde2e9;--accent:#3152d4;--on-accent:#ffffff;--sel:#dbe3fb;
   --key:#17202c;--key-empty:#8b95a5;--str:#18794e;--num:#b4530b;--atom:#7b3fc4;--warn:#a35a00;--bad:#c0322b;--ok:#1f9d55;

@@ -1,6 +1,6 @@
 import json, os, re
 
-# Run from the repo: python3 gen/make_state.py (CM_DIR = the folder of the codemirror@5.65.16 npm package).
+# Run from the repo: python3 gen/make_state.py.
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 exec(open(REPO + '/gen/style_part.py').read())          # STYLE: the page styles (index-view html)
 
@@ -33,7 +33,10 @@ def sig(name, params, body):
     head = '\n'.join(lines) + '\n\n' if lines else ''
     return head + 'async function ' + name + '(' + p + ') {\n' + '\n'.join(('  ' + l) if l else '' for l in body.strip('\n').split('\n')) + '\n}'
 
-CM = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/"
+# The libraries are files of the repo (vendor/), not minified; the page loads them from its own files.
+CM = "vendor/codemirror/5.65.16/"
+CM_SCRIPTS = ["lib/codemirror.js", "mode/javascript/javascript.js", "mode/xml/xml.js", "mode/css/css.js", "mode/htmlmixed/htmlmixed.js", "mode/markdown/markdown.js",
+              "addon/fold/foldcode.js", "addon/fold/foldgutter.js", "addon/fold/brace-fold.js", "addon/edit/matchbrackets.js", "addon/edit/closebrackets.js"]
 CORE_SRC = open(REPO + '/state-core.js').read()
 SV = "extension.views.state-view"
 DV = "extension.views.docs-view"
@@ -44,13 +47,13 @@ P = SV + ".ui-data"
 CORE = SV + ".functions.local.init.imports.state-core"   # the one copy of state-core's source
 CM_URLS = SV + ".functions.local.init.imports.codemirror" # the one list of CodeMirror's script URLs
 MODULE = {"os": "os", "ctx": "ctx", "core": "state-core", "CodeMirror": "codemirror", "js_beautify": "js-beautify", "html_beautify": "js-beautify"}
-# js-beautify formats code for reading: beautify.min.js gives js_beautify, beautify-html.min.js gives html_beautify (it uses the other two).
-JSB = "https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/"
+# js-beautify formats code for reading: beautify.js gives js_beautify, beautify-html.js gives html_beautify (it uses the other two).
+JSB = "vendor/js-beautify/1.15.1/"
 WHERE = {"os": "index.html", "ctx": "index.html", "state-core": CORE, "codemirror": CM_URLS,
-         "js-beautify": [JSB + "beautify.min.js", JSB + "beautify-css.min.js", JSB + "beautify-html.min.js"]}
+         "js-beautify": [JSB + "beautify.js", JSB + "beautify-css.js", JSB + "beautify-html.js"]}
 
-# ---------- styles: formatted to read, CodeMirror's base styles inline (claude.ai blocks stylesheets from cdnjs) ----------
-cm_css = re.sub(r"/\*.*?\*/", "", open(os.environ["CM_DIR"] + "/lib/codemirror.css").read(), flags=re.S)
+# ---------- styles: formatted to read, CodeMirror's base styles inline (from vendor/; the page keeps all its styles in index-view) ----------
+cm_css = re.sub(r"/\*.*?\*/", "", open(REPO + "/" + CM + "lib/codemirror.css").read(), flags=re.S)
 cm_css = re.sub(r"\}\s*", "}\n", re.sub(r"\s+", " ", cm_css)).strip()
 STYLE = STYLE.replace("__CMCSS__", cm_css)
 STYLE = STYLE.replace("[hidden]{display:none!important}", "[hidden]{display:none!important}\nhtml,body{height:100%;margin:0}")
@@ -3408,7 +3411,7 @@ def TREE(path):
     if os.path.basename(path) == 'docs': names = [n for n in DOCS] + [n for n in names if n not in DOCS]
     for n in names:
         full = path + '/' + n
-        if n in ('.git', '.gitkeep', 'node_modules') or full in (REPO + '/state.json', REPO + '/gen'): continue
+        if n in ('.git', '.gitkeep', 'node_modules') or full in (REPO + '/state.json', REPO + '/gen', REPO + '/vendor'): continue
         out[n] = TREE(full) if os.path.isdir(full) else open(full).read()
     return out
 render_sv = {"extension.functions.render": V(SV)}
@@ -3423,13 +3426,13 @@ uses_core = {"state-core": CORE}
 MAY = "may change"
 DP = DV + ".ui-data"
 
-CM_FILES = {"codemirror.min.js": "CodeMirror 5.65.16, the code editor: the state view and the code boxes of the timeline.",
-  "javascript.min.js": "CodeMirror: colors for js and json.", "xml.min.js": "CodeMirror: colors for xml, used by htmlmixed.",
-  "css.min.js": "CodeMirror: colors for css, used by htmlmixed.", "htmlmixed.min.js": "CodeMirror: colors for html (the html of the views).",
-  "markdown.min.js": "CodeMirror: colors for md, in the preview of a long text.",
-  "foldcode.min.js": "CodeMirror: folds objects in the state view.", "foldgutter.min.js": "CodeMirror: the fold arrows next to the line numbers.",
-  "brace-fold.min.js": "CodeMirror: finds where an object starts and ends, for folding.", "matchbrackets.min.js": "CodeMirror: marks the bracket that matches.",
-  "closebrackets.min.js": "CodeMirror: adds the closing bracket when you type one."}
+CM_FILES = {"codemirror.js": "CodeMirror 5.65.16, the code editor: the state view and the code boxes of the timeline.",
+  "javascript.js": "CodeMirror: colors for js and json.", "xml.js": "CodeMirror: colors for xml, used by htmlmixed.",
+  "css.js": "CodeMirror: colors for css, used by htmlmixed.", "htmlmixed.js": "CodeMirror: colors for html (the html of the views).",
+  "markdown.js": "CodeMirror: colors for md, in the preview of a long text.",
+  "foldcode.js": "CodeMirror: folds objects in the state view.", "foldgutter.js": "CodeMirror: the fold arrows next to the line numbers.",
+  "brace-fold.js": "CodeMirror: finds where an object starts and ends, for folding.", "matchbrackets.js": "CodeMirror: marks the bracket that matches.",
+  "closebrackets.js": "CodeMirror: adds the closing bracket when you type one."}
 def REQ(url, used_for): return {"url": url, "used_for": used_for, "expected": True}
 NETWORK = {
   "html": {"index.html": REQ("index.html", "The page itself: a title, a small base style, an empty <div id=\"index-view\"> and 2 scripts. The second script is the runtime.")},
@@ -3450,11 +3453,10 @@ NETWORK = {
   "state": {"state.json": REQ("state.json", "The first version of the state. The page uses it only when the database has no versions.")},
   "file code": {"index.html": REQ("index.html", "The timeline downloads index.html as text to show its code."),
                 "state-core.js": REQ("state-core.js", "The timeline downloads state-core.js as text to show its code.")},
-  "packages": dict([(f, REQ(CM + p, CM_FILES[f])) for p, f in [(p, p.split("/")[-1]) for p in ["codemirror.min.js", "mode/javascript/javascript.min.js", "mode/xml/xml.min.js", "mode/css/css.min.js", "mode/htmlmixed/htmlmixed.min.js", "mode/markdown/markdown.min.js",
-      "addon/fold/foldcode.min.js", "addon/fold/foldgutter.min.js", "addon/fold/brace-fold.min.js", "addon/edit/matchbrackets.min.js", "addon/edit/closebrackets.min.js"]]]
-    + [("beautify.min.js", REQ(JSB + "beautify.min.js", "js-beautify 1.15.1: formats js in the code boxes of the timeline.")),
-       ("beautify-css.min.js", REQ(JSB + "beautify-css.min.js", "js-beautify: formats css inside html.")),
-       ("beautify-html.min.js", REQ(JSB + "beautify-html.min.js", "js-beautify: formats html in the code boxes of the timeline."))]),
+  "packages": dict([(p.split("/")[-1], REQ(CM + p, CM_FILES[p.split("/")[-1]])) for p in CM_SCRIPTS]
+    + [("beautify.js", REQ(JSB + "beautify.js", "js-beautify 1.15.1: formats js in the code boxes of the timeline.")),
+       ("beautify-css.js", REQ(JSB + "beautify-css.js", "js-beautify: formats css inside html.")),
+       ("beautify-html.js", REQ(JSB + "beautify-html.js", "js-beautify: formats html in the code boxes of the timeline."))]),
   "styles": {"fonts.googleapis.com/css2": REQ("https://fonts.googleapis.com/css2", "The fonts of the page (Inter, Literata, JetBrains Mono). The @import in the style of index-view asks for it."),
              "font files (fonts.gstatic.com)": REQ("https://fonts.gstatic.com/", "The font files that css2 asks for.")}
 }
@@ -3601,8 +3603,7 @@ state = {
           "local.init": fn(
             "Runs after state-view is rendered: starts the editor at the newest version, renders the timeline (hidden until the Timeline button) and watches the state (local.refresh runs after each call).",
             code=INIT, calls={"extension.functions.render": {"input": V(TV), "output": None}},
-            imports={"codemirror": [CM + f for f in ["codemirror.min.js", "mode/javascript/javascript.min.js", "mode/xml/xml.min.js", "mode/css/css.min.js", "mode/htmlmixed/htmlmixed.min.js", "mode/markdown/markdown.min.js",
-                                                     "addon/fold/foldcode.min.js", "addon/fold/foldgutter.min.js", "addon/fold/brace-fold.min.js", "addon/edit/matchbrackets.min.js", "addon/edit/closebrackets.min.js"]],
+            imports={"codemirror": [CM + f for f in CM_SCRIPTS],
                      "state-core": CORE_SRC},
             expected={P: MAY},
             tests={"starts at the newest version": {"before": render_sv, "input": {}, "expect": {"state": {P + ".unsaved": False, P + ".changes": False, P + ".viewer_path": ""}, "dom": ["#state-view .CodeMirror"]}}}

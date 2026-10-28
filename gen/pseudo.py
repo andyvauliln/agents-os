@@ -172,10 +172,10 @@ SET blocks =
   each top call (Load the state, Start the page, clicks, new versions)
   after a New version: an Agent run block for each new run
 FOR EACH block: count its state changes
-SET the chosen block = selected, or the last agent run when nothing is chosen (the newest block when there is no run)
+SET the chosen block = selected, or the newest agent run block when nothing is chosen (the newest block when there is no run)
 DRAW the row of blocks (number, time, name, changes); the chosen block is on
   the agent run block: its time ago and the first 3 characters of its session
-  the last agent run stays at the left, and the newest block at the right, when the row scrolls; their names start with Last
+  the newest agent run block stays at the left, and the newest block at the right, when the row scrolls; their names start with Last
 DRAW the position and the progress line
 GIVE the state view what it needs:
   current = the chosen block, number = its place
@@ -190,7 +190,8 @@ GIVE the state view what it needs:
     ONE KIND (files, views, functions, network, environment):
       a tree of all of them on the left
       tabs on the right: the content (File / View / Function / Request / Value), Pseudo code, Changes
-      a file shows in the file viewer (md page, json tree, code with outline)
+      a file shows in the file viewer (md page, json tree, code): its kind, size and tokens, icon buttons, one Style select for md
+        Contents (md) and Functions (code) hidden until their button shows them (os.refs.timeline-view.fileSide)
       an updated md file in read mode: new lines green, removed lines red; the pointer on them shows why the run changed the file
   drawDetails(box) = what happens inside the block
     Network: the requests by group and the environment

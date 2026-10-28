@@ -731,7 +731,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await long.dispatchEvent('mousedown');
     // (the viewer is the file viewer: a file shows by its kind, with its size)
     await page.waitForSelector('.tl-viewer .fv .fv-body');
-    assert.match(await page.textContent('.tl-viewer .fv-title span'), /\d+ lines? · [\d.]+ KB/);
+    assert.match(await page.textContent('.tl-viewer .fv-size'), /^[\d.]+ KB · ≈ /);
     await page.keyboard.press('Escape');
     await page.waitForSelector('.tl-viewer', { state: 'detached' });
     // an updated text: the pointer on it (or on its "was "..."") shows its changes, the new line green
@@ -757,18 +757,26 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // with Changes, the read mode of an updated md file shows its changes: the new line is green
     assert.deepEqual(await page.$$eval('#tl-detail .md-page .chg-added', els => els.map(x => x.textContent)), ['A new line from main.']);
     assert.equal(await page.textContent('#tl-detail .fv-badge'), 'MD');
+    // the head: the kind, the size and the tokens (no name, no lines), and icon buttons with their names as titles
+    assert.match(await page.textContent('#tl-detail .fv-size'), /^[\d.]+ KB · ≈ [\d.]+k? tokens?$/);
+    assert.deepEqual(await page.$$eval('#tl-detail .fv-head button', els => els.map(x => [x.title, x.textContent.trim()])),
+      [['Read', ''], ['Source', ''], ['Contents', ''], ['Copy', ''], ['Full screen', '']]);
+    // Contents is hidden at first; its button shows it, and again hides it
+    assert.equal(await page.locator('#tl-detail .fv-side').count(), 0);
+    await page.click('#tl-detail .fv-side-btn');
     assert.ok(await page.locator('#tl-detail .fv-side .fv-sym').count() >= 3);
-    await page.click('#tl-detail .fv-seg button:has-text("Source")');
+    assert.equal(await page.getAttribute('#tl-detail .fv-side-btn', 'aria-pressed'), 'true');
+    await page.click('#tl-detail .fv-seg button[title="Source"]');
     assert.match(await page.locator('#tl-detail .fv .fv-code').evaluate(e => e.cm.getValue()), /A new line from main\./);
-    await page.click('#tl-detail .fv-seg button:has-text("Read")');
+    assert.equal(await page.getAttribute('#tl-detail .fv-side-btn', 'title'), 'Functions');
+    await page.click('#tl-detail .fv-seg button[title="Read"]');
     await page.waitForSelector('#tl-detail .fv .md-page');
-    // md: the six theme buttons of the state view; a click sets state-view ui-data.md_theme and the look of the page
-    assert.equal(await page.locator('#tl-detail .fv .md-theme').count(), 6);
-    await page.click('#tl-detail .fv .md-theme[data-md-theme="sepia"]');
+    // md: one Style select with the six themes of the state view; a choice sets state-view ui-data.md_theme and the look of the page
+    assert.deepEqual(await page.$$eval('#tl-detail .fv .fv-style option', els => els.map(x => x.value)), ['reader', 'white', 'black', 'sepia', 'night', 'mono']);
+    await page.selectOption('#tl-detail .fv .fv-style', 'sepia');
     await page.waitForFunction(() => document.querySelector('#tl-detail .fv-doc').dataset.mdTheme === 'sepia');
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['state-view']['ui-data'].md_theme), 'sepia');
-    assert.equal(await page.getAttribute('#tl-detail .fv .md-theme[data-md-theme="sepia"]', 'aria-pressed'), 'true');
-    await page.click('#tl-detail .fv .md-theme[data-md-theme="reader"]');
+    await page.selectOption('#tl-detail .fv .fv-style', 'reader');
     await page.waitForFunction(() => document.querySelector('#tl-detail .fv-doc').dataset.mdTheme === 'reader');
     // Full screen: the file viewer covers the page; Escape gives it back its place
     await page.click('#tl-detail .fv-full-btn');
@@ -817,6 +825,32 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await filePart.locator('.tl-files .tl-code').nth(1).waitFor();
     await filePart.locator('.tl-files .tl-code').nth(1).locator('.chg-added').first().waitFor();
     await page.click('#details');
+
+    // a newer version with a new agent run: an Agent run block after its New version block. With no block chosen, the
+    // timeline chooses that run (Last agent run, at the left), so the Files view shows the files of the new version
+    await page.evaluate(() => {
+      const os = window.agentOS, head = os.history.commits[os.history.commits.length - 1];
+      const st = JSON.parse(head.state.replace(/^[ \t]*\/\/ shared by all apps[ \t]*$/m, ''));
+      const files = st.agents['agent-oss'].files, runs = files.runs, run = JSON.parse(runs[Object.keys(runs).filter(k => /\.json$/.test(k)).sort().pop()]);
+      Object.assign(run, { session: 'zzztest', run: 99, started: new Date().toISOString(), ended: new Date().toISOString() });
+      runs['zzztest-99.json'] = JSON.stringify(run);
+      files['from-the-run.md'] = '# From the run';
+      window.__blobs.v5 = JSON.stringify(st, null, 2);
+      window.__docs['commits/c000005'] = { n: 5, parent: 4, at: new Date().toISOString(), state_file: 'v5', summary: { added: 2, updated: 0, deleted: 0 },
+        paths: ['added agents.agent-oss.files.runs.zzztest-99.json', 'added agents.agent-oss.files.from-the-run.md'], source: { git: 'fedcba9876543210', branch: 'main', message: 'A run', request: 'a run', session: 'https://claude.ai/code/test', explain: [] } };
+      window.__listeners.forEach(f => f());
+    });
+    await page.waitForFunction(() => window.agentOS.history.commits.length === 5);
+    await page.evaluate(() => window.agentOS.os.call('extension.views.timeline-view.functions.local.select', { id: null }));
+    await page.waitForFunction(() => /session zzz · run 99/.test(document.querySelector('#tl-strip .tl-step.on') && document.querySelector('#tl-strip .tl-step.on').textContent));
+    assert.equal(await page.textContent('#tl-strip .tl-step.on .tl-kind'), 'Last agent run');
+    assert.equal(await page.locator('#tl-strip .tl-step.on.pin-left, #tl-strip .tl-step.on.pin-right').count(), 1);
+    assert.equal(await page.textContent('#tl-strip .tl-step .tl-kind'), 'Agent run');
+    assert.match(await page.textContent('#pos'), /^v5 /);
+    await page.click('#sv-switches [data-input*="files"]');
+    await page.waitForSelector('#tl-detail .kv-tree');
+    assert.equal(await page.locator('#tl-detail .kv-item', { hasText: /^from-the-run\.md$/ }).count(), 1);
+    await page.click('#sv-switches [data-input*="all"]');
 
     // every call, with its parent, is in the stored call log
     await page.waitForFunction(() => Object.keys(window.__docs).some(k => k.startsWith('calls/') && window.__docs[k].items.some(i => i.name === 'loadNewerVersion')), null, { timeout: 5000 });

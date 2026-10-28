@@ -261,14 +261,15 @@ html.rec-select #recorder-view,html.rec-select #recorder-view *{cursor:pointer!i
 .ps-str{font:inherit;color:#15803d;background:none}
 .fv.fv-full{position:fixed;inset:0;z-index:40;border-radius:0;border:0}
 .fv.fv-full .fv-body{flex:1;height:auto;min-height:0}
-.fv-themes{margin:0}
 .fv-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--gutter)}
 .fv-badge{flex:none;display:grid;place-items:center;min-width:38px;height:28px;padding:0 6px;border-radius:7px;font:700 10px/1 var(--mono);letter-spacing:.04em;color:#fff;background:#64748b}
 .fv-badge-js,.fv-badge-mjs,.fv-badge-cjs{background:#d4a017;color:#1f1a00}.fv-badge-ts{background:#2f74c0}.fv-badge-html,.fv-badge-htm{background:#e4572e}
 .fv-badge-css{background:#2965f1}.fv-badge-json,.fv-badge-jsonc,.fv-badge-jsonl{background:#16a34a}.fv-badge-md{background:#7c3aed}.fv-badge-py{background:#3572a5}.fv-badge-sh{background:#334155}
-.fv-title{display:flex;flex-direction:column;min-width:0;flex:1 1 160px}
-.fv-title b{font:600 14px var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fv-title span{font:11px var(--mono);color:var(--muted)}
+.fv-size{flex:1 1 auto;min-width:0;font:11px var(--mono);color:var(--muted);white-space:nowrap}
+.fv-icon{width:30px;padding:0;display:inline-grid;place-items:center}
+.fv-seg button.fv-icon{width:32px;height:26px;padding:0;display:inline-grid;place-items:center}
+.fv-style{height:30px;padding:0 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg);font:12px var(--sans);cursor:pointer}
+.fv-style:hover{border-color:var(--accent)}
 .fv-seg{display:flex;padding:2px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}
 .fv-seg button{border:0;background:none;color:var(--muted);font:500 12px var(--sans);padding:5px 12px;border-radius:7px;cursor:pointer}
 .fv-seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
@@ -488,6 +489,22 @@ I_SAVE = svg('<path d="M3 2.5h8l2.5 2.5v8.5h-10.5z"/><path d="M5.5 2.5v3h4.5v-3M
 I_FLOWS = svg('<circle cx="3" cy="4" r="1.3"/><path d="M4.5 4h2.5a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h2.5"/><path d="m12 10 2 2-2 2"/>')
 I_BLOCKS = svg('<rect x="1.5" y="4.5" width="3.6" height="7" rx="1"/><rect x="6.2" y="4.5" width="3.6" height="7" rx="1"/><rect x="10.9" y="4.5" width="3.6" height="7" rx="1"/>')
 I_CLOSE = svg('<path d="m4 4 8 8M12 4l-8 8"/>')
+# the buttons of the file viewer
+FV_ICONS = {
+    "read": svg('<path d="M2 3.5c2-.8 4-.8 6 .5v9.5c-2-1.3-4-1.3-6-.5zM14 3.5c-2-.8-4-.8-6 .5v9.5c2-1.3 4-1.3 6-.5z"/>'),
+    "source": svg('<path d="m5.5 4.5-3.5 3.5 3.5 3.5M10.5 4.5l3.5 3.5-3.5 3.5"/>'),
+    "tree": svg('<path d="M3 2.5v9.5h3M3 6.5h3"/><rect x="6.5" y="4.8" width="7" height="3.4" rx="1"/><rect x="6.5" y="10.3" width="7" height="3.4" rx="1"/>'),
+    "side": svg('<rect x="2" y="2.5" width="12" height="11" rx="1.5"/><path d="M6 2.5v11M3.6 5.5h1M3.6 8h1"/>'),
+    "copy": svg('<rect x="5.5" y="5.5" width="8" height="8.5" rx="1.5"/><path d="M10.5 5.5V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v6.5a1 1 0 0 0 1 1h2.5"/>'),
+    "done": svg('<path d="m3 8.5 3 3 7-7"/>'),
+    "fail": svg('<path d="m4 4 8 8M12 4l-8 8"/>'),
+    "wrap": svg('<path d="M2 4h12M2 8h9.5a2.5 2.5 0 0 1 0 5H8M2 12h3"/><path d="m9.5 11-1.8 2 1.8 2"/>'),
+    "full": svg('<path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/>'),
+    "exit": svg('<path d="M6 2.5V6H2.5M13.5 6H10V2.5M10 13.5V10h3.5M2.5 10H6v3.5"/>'),
+    "open": svg('<path d="m4 6 4-4 4 4M4 10l4 4 4-4"/>'),
+    "close": svg('<path d="m4 2 4 4 4-4M4 14l4-4 4 4"/>'),
+}
+FV_ICONS_JS = "{ " + ", ".join(k + ": '" + v + "'" for k, v in FV_ICONS.items()) + " }"
 I_REC = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="currentColor"/></svg>'
 I_STOP = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="currentColor"/></svg>'
 
@@ -2293,9 +2310,11 @@ const steps = (lastRun ? [runStep(lastRun, 0)] : []).concat([
 R.steps = steps.map(s => s.id);
 R.names = steps.map(s => s.name);
 
-// No block chosen: the last agent run (the first block), or the newest block when the state has no run.
+// No block chosen: the last agent run (the first block, or the newest one that came with a new version), or the
+// newest block when the state has no run.
+const runAt = steps.map(s => !!s.run).lastIndexOf(true);
 let pos = steps.findIndex(s => s.id === d.selected);
-if (pos < 0) pos = lastRun ? 0 : steps.length - 1;
+if (pos < 0) pos = runAt >= 0 ? runAt : steps.length - 1;
 const cur = steps[pos], strip = ctx.root.querySelector('#tl-strip'), left = strip.scrollLeft;
 // How many state changes each block made: a block with none opens on its Details. An agent run opens on its
 // Details too: the timeline of the agent.
@@ -2308,9 +2327,9 @@ ctx.root.querySelector('#tl-progress').style.width = (steps.length > 1 ? pos / (
 ctx.root.querySelector('#tl-prev').disabled = pos === 0;
 ctx.root.querySelector('#tl-next').disabled = pos === steps.length - 1;
 strip.textContent = '';
-// The last agent run stays in sight at the left and the newest block at the right when the row scrolls.
+// The newest agent run stays in sight at the left and the newest block at the right when the row scrolls.
 steps.forEach((s, i) => {
-  const on = i === pos, pin = i === 0 && s.run ? ' pin-left' : i === steps.length - 1 && i > 0 ? ' pin-right' : '';
+  const on = i === pos, pin = i === runAt && i < steps.length - 1 ? ' pin-left' : i === steps.length - 1 && i > 0 ? ' pin-right' : '';
   const b = el('button', 'tl-step' + (s.fixed ? ' fixed' : '') + (s.ok === false ? ' bad' : '') + (on ? ' on' : '') + (i < pos ? ' past' : '') + pin);
   b.dataset.call = 'local.select';
   b.dataset.input = JSON.stringify({ id: s.id });
@@ -2468,11 +2487,19 @@ const outlineOf = (text, kind, ext) => {
   });
   return out;
 };
+// The buttons of the file viewer are icons; the name of a button is its title.
+const FV_I = __FV_ICONS__;
+const iconBtn = (cls, icon, label) => {
+  const b = el('button', 'fv-btn fv-icon' + (cls ? ' ' + cls : ''));
+  b.innerHTML = FV_I[icon];
+  b.title = label;
+  b.setAttribute('aria-label', label);
+  return b;
+};
 const copyButton = text => {
-  const b = el('button', 'fv-btn', 'Copy');
-  b.title = 'Copy the text';
+  const b = iconBtn('fv-copy', 'copy', 'Copy');
   b.addEventListener('click', () => {
-    const done = ok => { b.textContent = ok ? 'Copied' : 'Not copied'; setTimeout(() => { b.textContent = 'Copy'; }, 1400); };
+    const done = ok => { b.innerHTML = FV_I[ok ? 'done' : 'fail']; b.title = ok ? 'Copied' : 'Not copied'; setTimeout(() => { b.innerHTML = FV_I.copy; b.title = 'Copy'; }, 1400); };
     try { navigator.clipboard.writeText(text).then(() => done(true), () => done(false)); } catch (e) { done(false); }
   });
   return b;
@@ -2482,7 +2509,7 @@ const codePane = (text, kind, outline, tools) => {
   const body = el('div', 'fv-body' + (outline.length ? '' : ' no-side'));
   const side = el('nav', 'fv-side'), host = el('div', 'fv-code');
   if (outline.length) {
-    side.appendChild(el('div', 'fv-side-head', 'Outline · ' + outline.length));
+    side.appendChild(el('div', 'fv-side-head', 'Functions · ' + outline.length));
     body.appendChild(side);
   }
   body.appendChild(host);
@@ -2538,9 +2565,8 @@ const codePane = (text, kind, outline, tools) => {
   };
   find.addEventListener('input', mark);
   find.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); next(e.shiftKey); } });
-  const wrap = el('button', 'fv-btn', 'Wrap');
+  const wrap = iconBtn('fv-wrap', 'wrap', 'Wrap long lines');
   wrap.setAttribute('aria-pressed', String(!!R.fileWrap));
-  wrap.title = 'Wrap long lines';
   wrap.addEventListener('click', () => { R.fileWrap = !R.fileWrap; cm.setOption('lineWrapping', R.fileWrap); wrap.setAttribute('aria-pressed', String(R.fileWrap)); });
   tools.appendChild(find);
   tools.appendChild(count);
@@ -2707,7 +2733,7 @@ const jsonPane = (value, tools) => {
   find.setAttribute('aria-label', 'Find in the JSON');
   find.addEventListener('input', () => { clearTimeout(find.t); find.t = setTimeout(() => { q.text = find.value.trim().toLowerCase(); draw(); }, 150); });
   const all = on => { const walk = () => box.querySelectorAll('.jv-open').forEach(r => { const k = r.nextElementSibling; if (k && k.hidden === on) r.setAll(on); }); for (let i = 0; i < (on ? 6 : 1); i++) walk(); };
-  const ex = el('button', 'fv-btn', 'Open all'), co = el('button', 'fv-btn', 'Close all');
+  const ex = iconBtn('', 'open', 'Open all'), co = iconBtn('', 'close', 'Close all');
   ex.addEventListener('click', () => all(true));
   co.addEventListener('click', () => { draw(); box.querySelectorAll('.jv-open').forEach(r => { const k = r.nextElementSibling; if (k && !k.hidden && r !== box.querySelector('.jv-open')) r.setAll(false); }); });
   tools.appendChild(find);
@@ -2718,12 +2744,9 @@ const jsonPane = (value, tools) => {
 const fileView = (name, text, ch) => {
   const fk = fileKind(name), box = el('div', 'fv fv-' + fk.kind);
   const head = el('div', 'fv-head'), tools = el('div', 'fv-tools');
+  // the kind of the file, its size and its tokens (the name is in the path above the viewer)
   head.appendChild(el('span', 'fv-badge fv-badge-' + fk.ext.toLowerCase(), fk.ext.toUpperCase()));
-  const title = el('div', 'fv-title');
-  title.appendChild(el('b', '', name.split('/').pop()));
-  const lines = text.split('\n').length;
-  title.appendChild(el('span', '', fk.lang + ' · ' + lines + (lines === 1 ? ' line' : ' lines') + ' · ' + (kb(text.length) || '0 KB') + ' · ≈ ' + tok(Math.round(text.length / 4))));
-  head.appendChild(title);
+  head.appendChild(el('span', 'fv-size', (kb(text.length) || '0 KB') + ' · ≈ ' + tok(Math.round(text.length / 4))));
   // md and json have a second mode: their source
   R.fileMode = R.fileMode || {};
   let parsed;
@@ -2737,7 +2760,7 @@ const fileView = (name, text, ch) => {
   const seg = el('div', 'fv-seg');
   const mode = () => modes.includes(R.fileMode[fk.kind]) ? R.fileMode[fk.kind] : modes[0];
   modes.forEach(m => {
-    const b = el('button', '', m);
+    const b = iconBtn('', m.toLowerCase(), m);
     b.setAttribute('aria-pressed', String(m === mode()));
     b.addEventListener('click', () => { R.fileMode[fk.kind] = m; box.replaceWith(fileView(name, text, ch)); });
     seg.appendChild(b);
@@ -2745,34 +2768,45 @@ const fileView = (name, text, ch) => {
   if (modes.length) head.appendChild(seg);
   head.appendChild(tools);
   const m = mode();
-  // md: the styles of the md viewer of the state view; a click sets state-view ui-data.md_theme for both
+  // md: one select of the styles of the md viewer of the state view; a choice sets state-view ui-data.md_theme for both
   if (fk.kind === 'md' && m === 'Read') {
-    const themes = el('div', 'md-themes fv-themes');
+    const style = el('select', 'fv-style');
+    style.title = 'Style';
+    style.setAttribute('aria-label', 'Style of the page');
     ['reader', 'white', 'black', 'sepia', 'night', 'mono'].forEach(t => {
-      const b = el('button', 'md-theme', 'Aa');
-      b.dataset.mdTheme = t;
-      b.title = t[0].toUpperCase() + t.slice(1);
-      b.setAttribute('aria-label', t + ' theme');
-      b.setAttribute('aria-pressed', String(t === (os.get('extension.views.state-view.ui-data.md_theme') || 'reader')));
-      b.addEventListener('click', () => {
-        os.call('local.set-md-theme', { theme: t }, 'extension.views.state-view').then(() => {
-          themes.querySelectorAll('.md-theme').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-          const doc = box.querySelector('.fv-doc');
-          if (doc) doc.dataset.mdTheme = t;
-        }).catch(console.error);
-      });
-      themes.appendChild(b);
+      const o = el('option', '', t[0].toUpperCase() + t.slice(1));
+      o.value = t;
+      style.appendChild(o);
     });
-    head.appendChild(themes);
+    style.value = os.get('extension.views.state-view.ui-data.md_theme') || 'reader';
+    style.addEventListener('change', () => {
+      const t = style.value;
+      os.call('local.set-md-theme', { theme: t }, 'extension.views.state-view').then(() => {
+        const doc = box.querySelector('.fv-doc');
+        if (doc) doc.dataset.mdTheme = t;
+      }).catch(console.error);
+    });
+    head.appendChild(style);
   }
+  // Contents (md) and the functions (code): hidden until the button shows them
+  const outline = fk.kind === 'json' && m === 'Tree' ? [] : outlineOf(text, fk.kind === 'md' ? 'md' : fk.kind, fk.ext);
+  if (outline.length) {
+    const side = iconBtn('fv-side-btn', 'side', fk.kind === 'md' && m === 'Read' ? 'Contents' : 'Functions');
+    side.setAttribute('aria-pressed', String(!!R.fileSide));
+    side.addEventListener('click', () => { R.fileSide = !R.fileSide; box.replaceWith(fileView(name, text, ch)); });
+    head.appendChild(side);
+  }
+  const shown = R.fileSide ? outline : [];
   head.appendChild(copyButton(text));
   // Full screen: the viewer covers the page; the button or Escape gives it back its place.
-  const full = el('button', 'fv-btn fv-full-btn', R.fileFull ? 'Exit full screen' : 'Full screen');
+  const full = iconBtn('fv-full-btn', R.fileFull ? 'exit' : 'full', R.fileFull ? 'Exit full screen' : 'Full screen');
   full.setAttribute('aria-pressed', String(!!R.fileFull));
   const setFull = on => {
     R.fileFull = on;
     box.classList.toggle('fv-full', on);
-    full.textContent = on ? 'Exit full screen' : 'Full screen';
+    full.innerHTML = FV_I[on ? 'exit' : 'full'];
+    full.title = on ? 'Exit full screen' : 'Full screen';
+    full.setAttribute('aria-label', full.title);
     full.setAttribute('aria-pressed', String(on));
     const cm = box.querySelector('.fv-code');
     if (cm && cm.cm) setTimeout(() => cm.cm.refresh());
@@ -2783,9 +2817,9 @@ const fileView = (name, text, ch) => {
   head.appendChild(full);
   box.appendChild(head);
   if (R.fileFull) { box.classList.add('fv-full'); setTimeout(() => box.focus()); }
-  if (fk.kind === 'md' && m === 'Read') box.appendChild(mdPane(text, outlineOf(text, 'md', fk.ext), ch && typeof ch.before === 'string' && ch.before !== text ? ch : null));
+  if (fk.kind === 'md' && m === 'Read') box.appendChild(mdPane(text, shown, ch && typeof ch.before === 'string' && ch.before !== text ? ch : null));
   else if (fk.kind === 'json' && m === 'Tree') box.appendChild(jsonPane(parsed, tools));
-  else box.appendChild(codePane(text, fk.kind === 'md' ? 'code' : fk.kind, fk.kind === 'md' ? outlineOf(text, 'md', fk.ext) : outlineOf(text, fk.kind, fk.ext), tools));
+  else box.appendChild(codePane(text, fk.kind === 'md' ? 'code' : fk.kind, shown, tools));
   return box;
 };
 // The pseudo code of a function (its field pseudo): what the code does, step by step. Each line has its number; the
@@ -2795,11 +2829,8 @@ const PSEUDO_WORDS = /^(ELSE IF|IF|ELSE|FOR EACH|WHEN|WHILE|CALL|SET|READ|DRAW|W
 const pseudoView = (f, name) => {
   const box = el('div', 'fv fv-pseudo'), head = el('div', 'fv-head');
   head.appendChild(el('span', 'fv-badge fv-badge-pseudo', 'ƒ'));
-  const title = el('div', 'fv-title');
-  title.appendChild(el('b', '', name));
   const text = typeof f.pseudo === 'string' ? f.pseudo : '';
-  title.appendChild(el('span', '', text ? 'Pseudo code · ' + text.split('\n').length + ' lines' : 'No pseudo code'));
-  head.appendChild(title);
+  head.appendChild(el('span', 'fv-size', text ? (kb(text.length) || '0 KB') + ' · ≈ ' + tok(Math.round(text.length / 4)) : ''));
   if (text) head.appendChild(copyButton(text));
   box.appendChild(head);
   const body = el('div', 'ps-body');
@@ -2976,7 +3007,7 @@ if (d.playing && !R.timer) R.timer = setInterval(() => {
   os.call('local.next', { delta: 1 }, v).catch(console.error);
 }, 1600);
 if (!d.playing && R.timer) { clearInterval(R.timer); R.timer = null; }
-""")
+""".replace("__FV_ICONS__", FV_ICONS_JS))
 
 TL_SELECT = sig("select", ["id"], r"""
 // Choosing a block stops the replay; the state view shows the block. id null chooses no block: the state view shows

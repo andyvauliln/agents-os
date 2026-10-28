@@ -1,0 +1,1090 @@
+{
+ "session": "2cec6924-58ef-5971-a12c-840df519af08",
+ "run": 60,
+ "runs_in_session": 60,
+ "agent": "Claude Code (main agent)",
+ "title": "Notes on hold and one state view",
+ "started": "2026-10-28T08:07:36.783Z",
+ "ended": "2026-10-28T08:59:14.522Z",
+ "version": 36,
+ "git": {
+  "from": "3f9e6ad",
+  "to": "b889881"
+ },
+ "started_by": {
+  "session": {
+   "who": "the coordinator (a relay)",
+   "words": "Reading of the ask: (1) set up a workspace with a git repo for this project's work. No repos are attached yet; check list_repos for a suitable one (e.g. agent_os/agents_os). If none exists, init a local git repo in the workspace and ask Andrei to create a GitHub repo so you can attach and push. (2) Publish an HTML artifact that's otherwise empty and holds the user's JSON, exactly as given in the m",
+   "at": "2026-10-24T18:17:55.197Z",
+   "why": "The session started on 2026-10-24. Its goal is to build the Agent OS page. The page is an artifact. It runs from its JSON state."
+  },
+  "run": {
+   "who": "Andrei (a message)",
+   "words": "if i long time press on recording button like 4 second open new page window notes, for now just empty, and addreess last comments",
+   "at": "2026-10-28T08:07:36.783Z",
+   "why": "Andrei asked that a 4 s hold on the record button opens an empty Notes page. He also asked the agent to address the last 3 page comments. Comment 1: with Show empty off, empty values hide without the \"⋯ N lines\" mark. Comment 2: the \"...\" preview has the colors of its file kind, and an updated text shows a line diff. Comment 3: one state view for the state and its changes, with the Timeline button, Details and Track state in its bar. The run had to make this in version 36."
+  },
+  "workflow": null,
+  "subagents": [
+   {
+    "name": "run-recorder (general-purpose)",
+    "why": "The main agent started it at the end of the run. It records this run in runs/<session>-<run>.json from the session log. The timeline shows this file as an Agent run block."
+   }
+  ],
+  "skills": []
+ },
+ "context": {
+  "at_start": 380191,
+  "at_end": 84454,
+  "peak": 382262,
+  "cached_at_end": 83771,
+  "output_tokens": 137588,
+  "requests": 97,
+  "compacted": true
+ },
+ "steps": [
+  {
+   "title": "Answer Andrei and read the page comments",
+   "lane": "main",
+   "from": "2026-10-28T08:07:36.783Z",
+   "to": "2026-10-28T08:08:57.895Z",
+   "items": [
+    {
+     "text": "mcp hearthbot post_message: a short first answer to Andrei",
+     "kind": "mcp"
+    },
+    {
+     "text": "read the comments of the Agent OS page (ArtifactComments): 3 new comments",
+     "kind": "read"
+    },
+    {
+     "text": "the context was full: the conversation was compacted",
+     "kind": "run"
+    },
+    {
+     "text": "mcp hearthbot update_progress_checklist: the plan of v36",
+     "kind": "mcp"
+    }
+   ],
+   "why": "Andrei asked for a 4 s hold on the record button and for the last page comments. The agent had to read the comments to know what to change.",
+   "context_tokens": 83701,
+   "cached_tokens": 35562,
+   "files": []
+  },
+  {
+   "title": "Read the code of the state view and the timeline",
+   "lane": "main",
+   "from": "2026-10-28T08:08:59.178Z",
+   "to": "2026-10-28T08:13:24.680Z",
+   "items": [
+    {
+     "text": "read scratchpad/gen/make_state.py (html of the views, state view INIT, timeline TL_INIT, step-view, kindView, sideCode, long-tip)",
+     "kind": "read"
+    },
+    {
+     "text": "search make_state.py for step-view, show_changes, track_timeline and the last run",
+     "kind": "search"
+    },
+    {
+     "text": "read state-core.js (changesView, filterLines)",
+     "kind": "read"
+    },
+    {
+     "text": "read tests/page.test.js (all of it)",
+     "kind": "read"
+    },
+    {
+     "text": "search make_state.py for markdown and CM_FILES",
+     "kind": "search"
+    }
+   ],
+   "why": "The third comment changes many views. The agent had to know how step-view, the timeline and the state view work before it merged them into one view.",
+   "context_tokens": 192326,
+   "cached_tokens": 169690,
+   "files": [
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "read"
+    },
+    {
+     "path": "state-core.js",
+     "action": "read"
+    },
+    {
+     "path": "tests/page.test.js",
+     "action": "read"
+    }
+   ]
+  },
+  {
+   "title": "Start v36: Notes view and no step-view",
+   "lane": "main",
+   "from": "2026-10-28T08:15:10.295Z",
+   "to": "2026-10-28T08:16:06.737Z",
+   "items": [
+    {
+     "text": "copy make_state.py, pseudo.py and docs_part.py to the _v35 copies",
+     "kind": "create"
+    },
+    {
+     "text": "mcp hearthbot update_progress_checklist: the code is read",
+     "kind": "mcp"
+    },
+    {
+     "text": "read scratchpad/gen/pseudo.py (recorder-view, header-view)",
+     "kind": "read"
+    },
+    {
+     "text": "create scratchpad/gen/p36a.py: index-view gets notes-view and loses step-view; the header loses the Timeline button",
+     "kind": "create"
+    },
+    {
+     "text": "read the SAVE function and the styles of the state view bar",
+     "kind": "read"
+    }
+   ],
+   "why": "Step-view goes away and the state view shows the chosen block. A new notes-view is the empty Notes page.",
+   "context_tokens": 225360,
+   "cached_tokens": 223544,
+   "files": [
+    {
+     "path": "scratchpad/gen/make_state_v35.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/pseudo_v35.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/docs_part_v35.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/pseudo.py",
+     "action": "read"
+    },
+    {
+     "path": "scratchpad/gen/p36a.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "updated"
+    },
+    {
+     "path": "index.html",
+     "action": "read"
+    }
+   ]
+  },
+  {
+   "title": "Change state-core.js for Show empty and the diff",
+   "lane": "main",
+   "from": "2026-10-28T08:16:57.274Z",
+   "to": "2026-10-28T08:18:03.605Z",
+   "items": [
+    {
+     "text": "read pairAt and stripRuntime in state-core.js",
+     "kind": "read"
+    },
+    {
+     "text": "create scratchpad/gen/p36b.py: the timeline init without step-view",
+     "kind": "create"
+    },
+    {
+     "text": "edit state-core.js: changesView gives an updated mark an after field",
+     "kind": "edit"
+    },
+    {
+     "text": "edit state-core.js: filterLines returns the empty-only ranges as 'empty'",
+     "kind": "edit"
+    },
+    {
+     "text": "read tests/state-core.test.js (changesView, marks)",
+     "kind": "read"
+    },
+    {
+     "text": "run the state-core tests: 22 of 22 pass",
+     "kind": "test"
+    }
+   ],
+   "why": "Comment 1: with Show empty off, empty values must hide without the mark. Comment 2: the preview of an updated text must show a line diff, so the mark must keep the new value too.",
+   "context_tokens": 242810,
+   "cached_tokens": 241453,
+   "files": [
+    {
+     "path": "state-core.js",
+     "action": "updated"
+    },
+    {
+     "path": "tests/state-core.test.js",
+     "action": "read"
+    },
+    {
+     "path": "scratchpad/gen/p36b.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "updated"
+    }
+   ]
+  },
+  {
+   "title": "Make one state view, the timeline pins and the hold",
+   "lane": "main",
+   "from": "2026-10-28T08:18:26.028Z",
+   "to": "2026-10-28T08:21:15.898Z",
+   "items": [
+    {
+     "text": "create scratchpad/gen/p36c.py: the default block is the last agent run; the last run block is sticky at the left, the newest at the right",
+     "kind": "create"
+    },
+    {
+     "text": "create scratchpad/gen/p36d.py: remove the timeline Changes button (toggleChanges); select shows the block in the state view",
+     "kind": "create"
+    },
+    {
+     "text": "create scratchpad/gen/p36e.py: state view init renders the timeline; Timeline button, Changes, Details and Track state in its bar; kinds as trees",
+     "kind": "create"
+    },
+    {
+     "text": "edit make_state.py: a 4 s hold on the record button calls local.open-notes",
+     "kind": "edit"
+    },
+    {
+     "text": "create scratchpad/gen/p36f.py: notes-view (empty page with local.close), new test inputs",
+     "kind": "create"
+    },
+    {
+     "text": "edit make_state.py: remove the Changes icon; the collapse-all test",
+     "kind": "edit"
+    }
+   ],
+   "why": "Comment 3 asks for one view for the state and its changes. Andrei also asked that a 4 s hold opens an empty Notes page.",
+   "context_tokens": 275493,
+   "cached_tokens": 268268,
+   "files": [
+    {
+     "path": "scratchpad/gen/p36c.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/p36d.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/p36e.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/p36f.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "updated"
+    }
+   ]
+  },
+  {
+   "title": "Write the pseudo code, the docs and the guide",
+   "lane": "main",
+   "from": "2026-10-28T08:21:21.967Z",
+   "to": "2026-10-28T08:23:47.350Z",
+   "items": [
+    {
+     "text": "mcp hearthbot update_progress_checklist: the state view code is written",
+     "kind": "mcp"
+    },
+    {
+     "text": "create scratchpad/gen/p36g.py: pseudo code for local.open-notes, the new state view and the timeline",
+     "kind": "create"
+    },
+    {
+     "text": "edit make_state.py: add the markdown mode of CodeMirror (colors for md in the preview)",
+     "kind": "edit"
+    },
+    {
+     "text": "read scratchpad/gen/docs_part.py; create p36h.py: the docs tell of the Timeline button in the state view bar",
+     "kind": "edit"
+    },
+    {
+     "text": "edit .claude/CLAUDE.md: the timeline, the state view and notes-view",
+     "kind": "edit"
+    }
+   ],
+   "why": "Each function has pseudo code and the docs in the state tell how the page works. The preview of a md text needs the markdown mode for its colors.",
+   "context_tokens": 307583,
+   "cached_tokens": 304498,
+   "files": [
+    {
+     "path": "scratchpad/gen/p36g.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/pseudo.py",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/gen/p36h.py",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/docs_part.py",
+     "action": "updated"
+    },
+    {
+     "path": ".claude/CLAUDE.md",
+     "action": "updated"
+    }
+   ]
+  },
+  {
+   "title": "Run the function tests in a browser",
+   "lane": "main",
+   "from": "2026-10-28T08:23:55.826Z",
+   "to": "2026-10-28T08:25:44.974Z",
+   "items": [
+    {
+     "text": "create scratchpad/smoke36.js from the start of the page test",
+     "kind": "create"
+    },
+    {
+     "text": "run smoke36.js: 2 of 42 function tests fail (collapse-all, filter-kind tree)",
+     "kind": "test"
+    },
+    {
+     "text": "edit make_state.py: the collapse-all test does not toggle Changes; the tree test",
+     "kind": "edit"
+    },
+    {
+     "text": "run make_state.py and smoke36.js again: 42 of 42 pass",
+     "kind": "test"
+    }
+   ],
+   "why": "The state holds a test for each function. A fast check in a browser finds broken tests before the long page test.",
+   "context_tokens": 310887,
+   "cached_tokens": 309814,
+   "files": [
+    {
+     "path": "scratchpad/smoke36.js",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "updated"
+    },
+    {
+     "path": "state.json",
+     "action": "updated"
+    }
+   ]
+  },
+  {
+   "title": "Update the page test for the new state view",
+   "lane": "main",
+   "from": "2026-10-28T08:27:14.417Z",
+   "to": "2026-10-28T08:29:22.859Z",
+   "items": [
+    {
+     "text": "mcp hearthbot update_progress_checklist: the function tests pass",
+     "kind": "mcp"
+    },
+    {
+     "text": "copy tests/page.test.js to scratchpad/page.test.v35.js",
+     "kind": "create"
+    },
+    {
+     "text": "edit tests/page.test.js: the header has 2 buttons; the Timeline button is in the state view bar",
+     "kind": "edit"
+    },
+    {
+     "text": "create scratchpad/mid36.js and put it into the page test: the state view, the block, Details, Track state",
+     "kind": "edit"
+    },
+    {
+     "text": "edit tests/page.test.js: the preview has the colors of md; an updated text shows its changes",
+     "kind": "edit"
+    },
+    {
+     "text": "run all tests in the background (scratchpad/t36.log)",
+     "kind": "test"
+    }
+   ],
+   "why": "The page test clicked step-view and the header Timeline button. Both are gone, so the test must use the new state view.",
+   "context_tokens": 333129,
+   "cached_tokens": 329859,
+   "files": [
+    {
+     "path": "scratchpad/page.test.v35.js",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/mid36.js",
+     "action": "created"
+    },
+    {
+     "path": "tests/page.test.js",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/t36.log",
+     "action": "created"
+    }
+   ]
+  },
+  {
+   "title": "Fix the test failures",
+   "lane": "main",
+   "from": "2026-10-28T08:31:28.039Z",
+   "to": "2026-10-28T08:48:01.272Z",
+   "items": [
+    {
+     "text": "read scratchpad/t36.log: 2 tests fail",
+     "kind": "read"
+    },
+    {
+     "text": "edit make_state.py: the editor draws again when it shows (stale editor lines)",
+     "kind": "edit"
+    },
+    {
+     "text": "edit tests/state-core.test.js: the views list has notes-view, not step-view",
+     "kind": "edit"
+    },
+    {
+     "text": "create scratchpad/build36.js and shot36.js for the screenshots",
+     "kind": "create"
+    },
+    {
+     "text": "edit make_state.py: clear the leftover text of the pane; one .long-tip on the page",
+     "kind": "edit"
+    },
+    {
+     "text": "edit tests/page.test.js: wait for the replay (race); wait for .chg-added (flaky counts)",
+     "kind": "edit"
+    },
+    {
+     "text": "run all tests: 23 of 23 pass",
+     "kind": "test"
+    }
+   ],
+   "why": "The tests failed after the change. Some failures were bugs in the page. Others were tests that did not wait for the page.",
+   "context_tokens": 361070,
+   "cached_tokens": 359784,
+   "files": [
+    {
+     "path": "scratchpad/t36.log",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "updated"
+    },
+    {
+     "path": "tests/state-core.test.js",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/build36.js",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/shot36.js",
+     "action": "created"
+    },
+    {
+     "path": "tests/page.test.js",
+     "action": "updated"
+    },
+    {
+     "path": "state.json",
+     "action": "updated"
+    },
+    {
+     "path": "docs/how-it-works.md",
+     "action": "updated"
+    },
+    {
+     "path": "docs/render-steps.md",
+     "action": "updated"
+    },
+    {
+     "path": "docs/state-view.md",
+     "action": "updated"
+    },
+    {
+     "path": "docs/functions.md",
+     "action": "updated"
+    }
+   ]
+  },
+  {
+   "title": "Commit v36 and look at the screenshots",
+   "lane": "main",
+   "from": "2026-10-28T08:51:13.009Z",
+   "to": "2026-10-28T08:54:19.542Z",
+   "items": [
+    {
+     "text": "mcp hearthbot update_progress_checklist: the tests pass",
+     "kind": "mcp"
+    },
+    {
+     "text": "run git commit: 8d732d9",
+     "kind": "run"
+    },
+    {
+     "text": "run build36.js and shot36.js: screenshots s36-*.png",
+     "kind": "run"
+    },
+    {
+     "text": "read s36-state, s36-timeline, s36-files, s36-was-tip, s36-md-tip, s36-details and s36-phone",
+     "kind": "read"
+    },
+    {
+     "text": "edit make_state.py: the state view bar wraps at phone width",
+     "kind": "edit"
+    },
+    {
+     "text": "read s36-phone.png and s36-notes.png again",
+     "kind": "read"
+    }
+   ],
+   "why": "The screenshots show the new view as Andrei sees it. The phone screenshot showed that the state view bar was too wide.",
+   "context_tokens": 382262,
+   "cached_tokens": 380877,
+   "files": [
+    {
+     "path": "scratchpad/c000036.json",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/realdocs36.json",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/s36-state.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/s36-timeline.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/s36-files.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/s36-run-changes-files.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/s36-was-tip.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/s36-md-tip.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/s36-details.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/s36-phone.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/s36-notes.png",
+     "action": "created"
+    },
+    {
+     "path": "scratchpad/v35-phone.png",
+     "action": "read"
+    },
+    {
+     "path": "scratchpad/shot36.js",
+     "action": "updated"
+    },
+    {
+     "path": "scratchpad/gen/make_state.py",
+     "action": "updated"
+    },
+    {
+     "path": "state.json",
+     "action": "updated"
+    }
+   ]
+  },
+  {
+   "title": "Run the tests and commit the phone fix",
+   "lane": "main",
+   "from": "2026-10-28T08:55:34.350Z",
+   "to": "2026-10-28T08:59:14.522Z",
+   "items": [
+    {
+     "text": "the context was full: the conversation was compacted again",
+     "kind": "run"
+    },
+    {
+     "text": "run all tests: 23 of 23 pass",
+     "kind": "test"
+    },
+    {
+     "text": "mcp hearthbot update_progress_checklist: all lines done",
+     "kind": "mcp"
+    },
+    {
+     "text": "run git commit: b889881",
+     "kind": "run"
+    },
+    {
+     "text": "run node scripts/run-log.js for the run",
+     "kind": "run"
+    },
+    {
+     "text": "start the subagent run-recorder",
+     "kind": "subagent"
+    }
+   ],
+   "why": "The CSS fix changed state.json. The tests had to pass again before the commit.",
+   "context_tokens": 84454,
+   "cached_tokens": 83771,
+   "files": [
+    {
+     "path": "scratchpad/t36.log",
+     "action": "updated"
+    },
+    {
+     "path": ".claude/agents/run-recorder.md",
+     "action": "read"
+    },
+    {
+     "path": "scratchpad/run60raw_64.json",
+     "action": "created"
+    }
+   ]
+  },
+  {
+   "title": "Record the run",
+   "lane": "run-recorder",
+   "from": "2026-10-28T08:59:20.000Z",
+   "to": "2026-10-28T09:01:30.000Z",
+   "items": [
+    {
+     "text": "read .claude/agents/run-recorder.md",
+     "kind": "read"
+    },
+    {
+     "text": "read the raw run data and the record of run 59",
+     "kind": "read"
+    },
+    {
+     "text": "read the session log after 08:58: the run ends with the start of this subagent",
+     "kind": "read"
+    },
+    {
+     "text": "join the two parts of the run (before and after the context summaries)",
+     "kind": "edit"
+    },
+    {
+     "text": "create runs/2cec6924-58ef-5971-a12c-840df519af08-60.json",
+     "kind": "create"
+    }
+   ],
+   "why": "The timeline shows each run from its run file. The subagent groups the tool uses into steps and writes why for each item.",
+   "context_tokens": null,
+   "cached_tokens": null,
+   "files": [
+    {
+     "path": ".claude/agents/run-recorder.md",
+     "action": "read"
+    },
+    {
+     "path": "scratchpad/run60raw_64.json",
+     "action": "read"
+    },
+    {
+     "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-59.json",
+     "action": "read"
+    },
+    {
+     "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-60.json",
+     "action": "created"
+    }
+   ]
+  }
+ ],
+ "uses": {
+  "mcp": [
+   {
+    "name": "hearthbot / post_message",
+    "count": 1,
+    "why": "It gave Andrei a short first answer."
+   },
+   {
+    "name": "hearthbot / update_progress_checklist",
+    "count": 8,
+    "why": "It shows Andrei the progress checklist of version 36."
+   }
+  ],
+  "skills": [],
+  "subagents": [
+   {
+    "name": "general-purpose (run-recorder)",
+    "count": 1,
+    "why": "It records this run as runs/<session>-<run>.json for the timeline."
+   }
+  ],
+  "workflows": []
+ },
+ "files": [
+  {
+   "path": ".claude/CLAUDE.md",
+   "action": "updated",
+   "tokens": 1874,
+   "cached": false,
+   "why": "The repo guide. It now tells of the one state view, the timeline in its bar and notes-view."
+  },
+  {
+   "path": ".claude/agents/run-recorder.md",
+   "action": "read",
+   "tokens": 198,
+   "cached": true,
+   "why": "The instructions of the run-recorder. The agent read them before it started the subagent."
+  },
+  {
+   "path": "/root/.claude/projects/-home-claude-agents-os/2cec6924-58ef-5971-a12c-840df519af08.jsonl",
+   "action": "read",
+   "tokens": 198,
+   "cached": true,
+   "why": "The session log. The run-log script and the run-recorder read it."
+  },
+  {
+   "path": "codemirror.min.js",
+   "action": "read",
+   "tokens": 65,
+   "cached": false,
+   "why": "The script found this name in a test command. The page test loads it from the local CodeMirror package."
+  },
+  {
+   "path": "xml.min.js",
+   "action": "read",
+   "tokens": 65,
+   "cached": false,
+   "why": "The script found this name in a test command. The page test loads it from the local CodeMirror package."
+  },
+  {
+   "path": "docs/functions.md",
+   "action": "updated",
+   "tokens": 0,
+   "cached": false,
+   "why": "The generator made it again with the new functions of the state view and notes-view."
+  },
+  {
+   "path": "docs/how-it-works.md",
+   "action": "updated",
+   "tokens": 0,
+   "cached": false,
+   "why": "The generator made it again: the Timeline button is now in the state view bar."
+  },
+  {
+   "path": "docs/render-steps.md",
+   "action": "updated",
+   "tokens": 0,
+   "cached": false,
+   "why": "The generator made it again: step-view is gone and notes-view is new."
+  },
+  {
+   "path": "docs/state-view.md",
+   "action": "updated",
+   "tokens": 0,
+   "cached": false,
+   "why": "The generator made it again: the state view shows the chosen block, Changes and Details."
+  },
+  {
+   "path": "index.html",
+   "action": "read",
+   "tokens": 65,
+   "cached": false,
+   "why": "The page shell. The agent searched it for position styles. It did not change."
+  },
+  {
+   "path": "scratchpad/gen/make_state.py",
+   "action": "updated",
+   "tokens": 38732,
+   "cached": false,
+   "why": "The generator of state.json. It holds the new state view, timeline, notes-view and the record button hold."
+  },
+  {
+   "path": "scratchpad/gen/pseudo.py",
+   "action": "updated",
+   "tokens": 3896,
+   "cached": false,
+   "why": "The pseudo code of each function. It has the new and changed functions."
+  },
+  {
+   "path": "scratchpad/gen/docs_part.py",
+   "action": "updated",
+   "tokens": 6761,
+   "cached": false,
+   "why": "The docs of the state. They tell of the new state view and the timeline."
+  },
+  {
+   "path": "scratchpad/gen/make_state_v35.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "A copy of the generator of version 35, before the changes."
+  },
+  {
+   "path": "scratchpad/gen/pseudo_v35.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "A copy of the pseudo code of version 35."
+  },
+  {
+   "path": "scratchpad/gen/docs_part_v35.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "A copy of the docs of version 35."
+  },
+  {
+   "path": "scratchpad/gen/p36a.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "An edit script: notes-view in index-view, no step-view, no header Timeline button."
+  },
+  {
+   "path": "scratchpad/gen/p36b.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "An edit script: the timeline init without step-view."
+  },
+  {
+   "path": "scratchpad/gen/p36c.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "An edit script: the default block and the sticky run and newest blocks."
+  },
+  {
+   "path": "scratchpad/gen/p36d.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "An edit script: no timeline Changes button; select shows the block in the state view."
+  },
+  {
+   "path": "scratchpad/gen/p36e.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "An edit script: the state view bar, Details, Track state and kinds as trees."
+  },
+  {
+   "path": "scratchpad/gen/p36f.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "An edit script: notes-view and the new test inputs."
+  },
+  {
+   "path": "scratchpad/gen/p36g.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "An edit script for the pseudo code."
+  },
+  {
+   "path": "scratchpad/gen/p36h.py",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "An edit script for the docs."
+  },
+  {
+   "path": "scratchpad/smoke36.js",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "A fast check that runs the function tests of the state in a browser."
+  },
+  {
+   "path": "scratchpad/page.test.v35.js",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "A copy of the page test of version 35, before the changes."
+  },
+  {
+   "path": "scratchpad/mid36.js",
+   "action": "created",
+   "tokens": 65,
+   "cached": false,
+   "why": "The new middle part of the page test: the state view and the block."
+  },
+  {
+   "path": "scratchpad/t36.log",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "The output of the test runs. The last run: 23 of 23 pass."
+  },
+  {
+   "path": "scratchpad/build36.js",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "It makes the commit of version 36 and the docs for the screenshots."
+  },
+  {
+   "path": "scratchpad/shot36.js",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "It opens the page in a browser and takes the screenshots of version 36."
+  },
+  {
+   "path": "scratchpad/c000036.json",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "The commit of version 36 for the screenshots."
+  },
+  {
+   "path": "scratchpad/realdocs36.json",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "The fake db for the screenshots."
+  },
+  {
+   "path": "scratchpad/s36-state.png",
+   "action": "created",
+   "tokens": 1600,
+   "cached": false,
+   "why": "A screenshot: the state view with the chosen block."
+  },
+  {
+   "path": "scratchpad/s36-timeline.png",
+   "action": "created",
+   "tokens": 1600,
+   "cached": false,
+   "why": "A screenshot: the timeline above the header."
+  },
+  {
+   "path": "scratchpad/s36-files.png",
+   "action": "created",
+   "tokens": 1600,
+   "cached": false,
+   "why": "A screenshot: Files as a tree."
+  },
+  {
+   "path": "scratchpad/s36-run-changes-files.png",
+   "action": "created",
+   "tokens": 1600,
+   "cached": false,
+   "why": "A screenshot: the changed files of the agent run."
+  },
+  {
+   "path": "scratchpad/s36-was-tip.png",
+   "action": "created",
+   "tokens": 1600,
+   "cached": false,
+   "why": "A screenshot: the line diff of an updated text."
+  },
+  {
+   "path": "scratchpad/s36-md-tip.png",
+   "action": "created",
+   "tokens": 1600,
+   "cached": false,
+   "why": "A screenshot: the preview of a md text in its colors."
+  },
+  {
+   "path": "scratchpad/s36-details.png",
+   "action": "created",
+   "tokens": 1600,
+   "cached": false,
+   "why": "A screenshot: the Details of the block."
+  },
+  {
+   "path": "scratchpad/s36-phone.png",
+   "action": "created",
+   "tokens": 3200,
+   "cached": false,
+   "why": "A screenshot at phone width. The first one showed the bar was too wide."
+  },
+  {
+   "path": "scratchpad/s36-notes.png",
+   "action": "created",
+   "tokens": 1600,
+   "cached": false,
+   "why": "A screenshot: the empty Notes page after the 4 s hold."
+  },
+  {
+   "path": "scratchpad/v35-phone.png",
+   "action": "read",
+   "tokens": 1600,
+   "cached": false,
+   "why": "The phone screenshot of version 35. The agent compared it with version 36."
+  },
+  {
+   "path": "scratchpad/run60raw_64.json",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "The raw data of the run from scripts/run-log.js."
+  },
+  {
+   "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-59.json",
+   "action": "read",
+   "tokens": 0,
+   "cached": false,
+   "why": "The record of run 59. It is the model for the format of this file."
+  },
+  {
+   "path": "runs/2cec6924-58ef-5971-a12c-840df519af08-60.json",
+   "action": "created",
+   "tokens": 0,
+   "cached": false,
+   "why": "This record of the run."
+  },
+  {
+   "path": "state-core.js",
+   "action": "updated",
+   "tokens": 3259,
+   "cached": false,
+   "why": "The pure logic of the page. changesView keeps the new value of an update, and filterLines marks the empty-only ranges."
+  },
+  {
+   "path": "state.json",
+   "action": "updated",
+   "tokens": 0,
+   "cached": false,
+   "why": "The state of the page, made by the generator. It is version 36."
+  },
+  {
+   "path": "tests/page.test.js",
+   "action": "updated",
+   "tokens": 17223,
+   "cached": false,
+   "why": "The page test. It uses the one state view and checks the preview, the diff and the Notes hold."
+  },
+  {
+   "path": "tests/state-core.test.js",
+   "action": "updated",
+   "tokens": 587,
+   "cached": false,
+   "why": "The core tests. The views list has notes-view, not step-view."
+  }
+ ]
+}

@@ -452,7 +452,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await page.textContent('#tl-detail .ar-legend'), /^added \d+updated \d+deleted \d+read \d+$/);
     // the files are a tree of folders under Files/
     const top = changed.find(f => /^[^/]+\//.test(f.path)).path.split('/')[0];
-    assert.equal(await page.locator('#tl-detail .ar-kv .kv-tree summary', { hasText: new RegExp('^' + top.replace('.', '\\.') + '/$') }).count(), 1);
+    // (a read outside the repo, such as /root/.claude/..., can have a folder of the same name)
+    assert.ok(await page.locator('#tl-detail .ar-kv .kv-tree summary', { hasText: new RegExp('^' + top.replace('.', '\\.') + '/$') }).count() >= 1);
     const titles = await page.$$eval('#tl-detail .ar-kv .kv-item', els => els.map(x => x.title));
     for (const f of changed.slice(0, 3)) assert.ok(titles.some(t => t.startsWith(f.path + ' (') && !t.endsWith('(read)')), f.path);
     for (const f of read.slice(0, 3)) assert.ok(titles.some(t => t === f.path + ' (read)'), f.path);

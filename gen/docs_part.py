@@ -816,7 +816,7 @@ This report tells what the review of v48 found: what was removed, the bugs, the 
 ## Summary
 - Removed: 35 lines of style rules that no element uses, 1 variable that no code uses, and the old long notes in .claude/CLAUDE.md (the docs hold them now).
 - Fixed: 4 bugs (a save could undo a new version, the test times mixed whole tests with functions, the docs view showed ### and indented items as plain text, and a save error said "Invalid JSON").
-- Found, not fixed: 3 problems of the runtime (speed, and a new version that waits after a draft).
+- Found, not fixed: 4 problems (3 of speed, and a new version that waits after a draft).
 - Proposals: 6 changes of the architecture. The biggest gain is a smaller state.
 
 ## What was removed
@@ -839,10 +839,11 @@ Nothing in the state shape was removed: no field and no function.
 4. Save with an error that is not a JSON error showed "Invalid JSON: ...". Now local.edit adds "Invalid JSON:" to its own message, and the bar shows each error as it is.
 
 ## Problems that were found, not fixed
-These need a change of the runtime (index.html), so a new publish of the runtime. They are proposals B and C below.
+Problems 1 to 3 need a change of the runtime (index.html), so a new publish of the runtime. They are proposals B and C below. Problem 4 is in the state view and in state-core.js.
 1. Each call copies the whole state two times (before and after) and compares the copies. With a state of 2.5 MB this takes about 150 ms for each call, also for a call that does almost nothing (recorder-view local.refresh: 19 calls, 3 s in total in one test).
 2. After each top-level call, each view that watches runs local.refresh, also when nothing that it shows changed. A click is 4 calls: the click, then state-view, timeline-view and recorder-view refresh. A tab click takes about 1 s.
 3. A new version that comes during a draft stays in the history, but the page does not run it after the draft ends. You must reload. (The fix above stops the data loss. It does not load the version.)
+4. When the state view shows the newest version, each refresh writes the live state into the editor text again (patchText), and then parses that text and compares it with the state, to check it. With a state of 2.7 MB this takes about 0.9 s to 1.5 s for each refresh. The last AI run of v48 made v48, so the state view opens on the newest version, and this cost is in each click. The page test now waits longer for the replay (20 s) and notes the green border of a save with a watcher. To fix it: patchText can keep the tokens of the last text, or the refresh can patch only the paths that the call changed (proposal B).
 
 ## Unused, but kept
 - state-core.js exports esc, historyLength, kindOf and stripComments. No code outside state-core.js uses them. state-core.js uses them itself. To remove them from the exports needs a new publish of the runtime and gives nothing.
@@ -856,7 +857,7 @@ These need a change of the runtime (index.html), so a new publish of the runtime
 - Open the timeline: 4.3 s.
 - Click a tab of the state view: 1.0 to 1.4 s.
 - Only changes on: 1.5 s.
-- state-view local.refresh: 0.4 s for each run (max 1.1 s).
+- state-view local.refresh: 0.4 s for each run (max 1.1 s) on an older version; 1.4 s (max 6 s) on the newest version (problem 4).
 - A call that does almost nothing: about 0.15 s.
 The state is 2.5 MB: agents.agent-oss.files is 2.1 MB of it. vendor/ is 926 KB (37 %), runs/ 484 KB (19 %), gen/ 413 KB, tests/ 111 KB. The views and functions are 406 KB.
 

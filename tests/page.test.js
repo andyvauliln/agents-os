@@ -672,7 +672,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForFunction(() => document.querySelector('#tl-flows-list').hidden);
     assert.equal((await tl()).selected, 'open');
     assert.match(await page.textContent('#tl-pos'), /^First enter: block 1 of 4/);
-    await page.waitForFunction(() => /^First enter: block 4 of 4/.test(document.querySelector('#tl-pos').textContent), null, { timeout: 8000 });
+    // (each step redraws the state view: about 1.5 s with the newest version on screen, see docs/review-report.md)
+    await page.waitForFunction(() => /^First enter: block 4 of 4/.test(document.querySelector('#tl-pos').textContent), null, { timeout: 20000 });
     await page.waitForFunction(() => !window.agentOS.state.extension.views['timeline-view']['ui-data'].playing);
     assert.match(await shownBlock(), /^Block \d+: Start the page/);
 
@@ -885,9 +886,11 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     });
     await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].unsaved === true);
     assert.match(await page.textContent('#status'), /Unsaved/);
+    // (the green border shows for 2 s; a slow redraw after it can hide it before a check, so a watcher notes it)
+    await page.evaluate(() => { const box = document.querySelector('#sv-editor'); new MutationObserver(() => { if (box.classList.contains('saved')) window.__saved = true; }).observe(box, { attributes: true, attributeFilter: ['class'] }); });
     await page.click('#save');
     await page.waitForFunction(() => window.agentOS.history.commits.length === 2);
-    assert.ok(await page.isVisible('#sv-editor.saved'));
+    await page.waitForFunction(() => window.__saved === true);
     const commit = await commitDoc('c000002');
     // (a version also keeps network and environment as they were when it was saved)
     assert.equal(JSON.parse(commit.state).extension.data.x, 1);

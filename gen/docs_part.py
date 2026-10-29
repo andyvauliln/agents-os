@@ -81,15 +81,17 @@ DOCS = {
    A long text, or a text of more than one line, shows as "...", as in the state view. Put the pointer on it to see its start. An updated text (and its "was "..."") shows its changes: red lines are removed, green lines are added. Click it to open the whole text in the viewer. Press Escape or × to close the viewer.
    Type in Filter paths (the filter of the state view) to see only the paths that have the text. The table shows only the paths that the filter shows.
    The buttons All, Files, Views, Functions, Network and Environment choose what shows. All shows the changes as above. Each other button shows only that kind, in its own view:
-   - On the left: a tree of all of them in the state after the block (for example all the files, in their folders). A changed one has the color of its change: green added, yellow updated, red deleted. A folder that holds a change is yellow.
-   - On the right: the one that you click, in tabs. The first tab is its content: File (the text of the file), View (its html and ui-data), Function (its code and its other fields), Request (a request of network) or Value (a part of environment).
+   - On the left: a tree of only what the block changed (for example the changed files, in their folders). A changed one has a dot and the color of its change: green added, yellow updated, red deleted. A folder that holds a change is yellow. For an AI run, the tree also has the files that the run read or ran, and tags after each one: who (main or sub agent) and what (read, changed, run, default context).
+   - A tab with no changes in the block hides. The tab that is open stays.
+   - On the right: the one that you click, in tabs. The first tab is its content: File (the text of the file), Page (a view as the page shows it), Function (its code and its other fields), Request (a request of network) or Value (a part of environment).
+   - A view has the tabs Page, Source (its html, ui-data and functions) and Changes. Page shows the view with the style of the page. Its buttons do nothing: it is a picture. When the block changed the view, Page shows it before and after the block, side by side. index-view is the page: it shows with the views that are on the page now.
    - A function also has the Pseudo code tab: its docs, then what its code does, step by step. Each line has a number. The keywords have colors: IF, ELSE and FOR EACH (the flow) are purple, CALL is blue, SET, READ, DRAW and the other actions are green, RETURN and THROW are red. A line inside a step is indented, with a guide line.
    - When the block changed it, the Changes tab shows the change. A text (a file, html, code) shows side by side: red lines are only before, green lines are only after. An object shows cut down to what changed.
    - The filter text keeps only the items whose path has it.
-   - A file shows in the file viewer for its kind. The head has a badge for the kind (JS, HTML, CSS, JSON, MD, PY), the size and the tokens (about). The name is in the path above the viewer. The buttons are icons: put the pointer on one to see its name (Read, Source, Tree, Contents, Functions, Copy, Wrap, Open all, Close all, Full screen).
+   - A file shows in the file viewer for its kind. The head has the size and the tokens (about). The name and the kind are in the path above the viewer. The buttons are icons: put the pointer on one to see its name (Read, Source, Tree, Contents, Functions, Copy, Wrap, Open all, Close all, Full screen).
      - Contents (md) and Functions (code) are hidden at first. Click the button with the side panel icon to show them on the left, and again to hide them.
      - Full screen: the file viewer covers the page. Click Exit full screen or push Escape to go back.
-     - md: reads as a page, with the look and the theme of the md viewer of the state view. Contents lists the headings: click one to go to it. The Style select chooses the theme: Reader, White, Black, Sepia, Night or Mono. The theme stays in state-view ui-data.md_theme, so the md viewer of the state view uses it too. Source shows the text.
+     - md: reads as a page, with the look and the theme of the md viewer of the state view. Each theme has its own colors for the changes, so that you can read them in a light and in a dark theme. Contents lists the headings: click one to go to it. The Style select chooses the theme: Reader, White, Black, Sepia, Night or Mono. The theme stays in state-view ui-data.md_theme, so the md viewer of the state view uses it too. Source shows the text.
      - json: a tree. Click an object or a list to open or close it. The first two levels are open. Find opens the parts that have the text and marks them. Open all, Close all. Source shows the text.
      - Code (js, html, css, python and more): Functions lists the functions, classes and constants (ids, scripts and styles in html; selectors in css), each with its line. Click one to go to the line. Find marks every match: Enter goes to the next one, Shift+Enter to the one before. Wrap wraps long lines.
    - A click on "..." opens the text in the same file viewer.
@@ -376,10 +378,12 @@ import CodeMirror from 'codemirror';""") + """
    - The tabs: Full State, Files, Views, Functions, Network, Environment, Performance, Improvements, Flow, Video, Docs and Agent Run.
 4. Full State is the whole JSON of the state. The other tabs are parts or views of the same state:
    - Files, Views, Functions, Network and Environment: only that kind, as a tree on the left and the chosen one on the right.
+   - Environment has two tabs: Browser (what the page finds in the browser) and Server (the machine where the agent works and makes the state: environment.server).
    - Flow: what happens inside the chosen block (its parts and its calls; an AI run shows its notification).
    - Agent Run: the AI run notification of the chosen AI run block, or of the last AI run.
-   - Docs: only the docs folder of the agent.
-   - Performance, Improvements and Video are empty for now.
+   - Docs: only the docs folder of the agent. With Only changes: only the docs that the block changed.
+   - Performance: the time of each function. The page test measures each version in a browser. The generator puts the times in performance.tests of each function (count, avg and max, in ms). The table shows the version on the screen, the version before it, the change (red is slower, green is faster) and the times of this page. Under it: the AI runs, with their time, steps and tokens.
+   - Improvements and Video are empty for now.
 
 ## Edit and save the state
 1. Edit the JSON in the editor. You can write comments with // and /* */.
@@ -392,7 +396,7 @@ import CodeMirror from 'codemirror';""") + """
 2. The editor shows only the entries whose path has the text, with the first and last lines of the objects around them.
 3. The other lines fold into "⋯ N lines". You can still edit the lines that show.
 4. Click the Files, Views, Functions, Network or Environment tab to see only that kind, as a tree: for example, Files shows the files in their folders. Click one in the tree to see it on the right. With Changes, an updated md file in read mode shows its changes: green lines are new or changed, red lines are removed. Put the pointer on a green or red line to see why the run changed the file. Click Full State to see the editor again. This works with or without text.
-5. Click Only changes to see only what the chosen block changed. After Older or Newer, it is what the version on the screen changed. On a tab that is not a part of the state (Flow, Agent Run, Docs, Performance, Improvements, Video), Only changes goes to Full State.
+5. Click Only changes to see only what the chosen block changed. After Older or Newer, it is what the version on the screen changed. On a tab that is not a part of the state (Flow, Agent Run, Performance, Improvements, Video), Only changes goes to Full State. Each tab shows only its changes, and a tab with no changes hides.
    For an AI run, Full State also keeps the files that the run read or ran, and its default context (.claude/CLAUDE.md for the main agent, .claude/agents/<name>.md for a sub agent). Badges after the line of a file tell who (main or sub agent) and what (read, changed, run, default context).
 6. Click Show empty to hide the entries with an empty value: {}, [], "" or null. They hide with no "⋯" mark. Click it again to show them.
 7. Click Track this view to add what you do in the state view and the timeline as blocks of the timeline.

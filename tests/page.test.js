@@ -493,12 +493,11 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#changes');
     await page.waitForFunction(() => /The run made v\d+\./.test(document.querySelector('#tl-detail').textContent));
     assert.deepEqual([(await svd()).changes, (await svd()).filter_kind], [true, 'all']);
-    // Agent Run: the notification of the run; Docs: only the docs folder; Video: empty for now
+    // Agent Run: the notification of the run; Docs with Only changes: the changes of the run in the docs; Video: empty for now
     await page.click('#sv-switches [data-input*="agent-run"]');
     await page.waitForSelector('#tl-detail .ar-views');
     await page.click('#sv-switches [data-input*="docs"]');
-    await page.waitForSelector('#tl-detail .kv-tree');
-    assert.deepEqual(await page.$$eval('#tl-detail .kv-tree .kv-item', els => els.map(x => x.textContent.trim()).sort()), ['functions.md', 'how-it-works.md', 'render-steps.md', 'state-view.md']);
+    await page.waitForFunction(() => /The run made v\d+\./.test(document.querySelector('#tl-detail').textContent));
     await page.click('#sv-switches [data-input*="video"]');
     await page.waitForSelector('#tl-detail .sv-soon');
     // (Only changes on a tab that is not a part of the state goes to Full State)
@@ -749,6 +748,32 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.locator('#tl-detail .kv-item', { hasText: /^render-steps\.md$/ }).click();
     await page.waitForSelector('#tl-detail .fv.fv-md .md-page');
     assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['File']);
+    // Docs: only the docs folder
+    await page.click('#sv-switches [data-input*="docs"]');
+    await page.waitForFunction(() => document.querySelectorAll('#tl-detail .kv-tree .kv-item').length === 4);
+    assert.deepEqual(await page.$$eval('#tl-detail .kv-tree .kv-item', els => els.map(x => x.textContent.trim()).sort()), ['functions.md', 'how-it-works.md', 'render-steps.md', 'state-view.md']);
+    // Views: a view shows as the page shows it (Page), then its Source
+    await page.click('#sv-switches [data-input*="views"]');
+    await page.locator('#tl-detail .kv-item', { hasText: /^header-view$/ }).click();
+    assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['Page', 'Source']);
+    await page.waitForFunction(() => { const h = document.querySelector('#tl-detail .vp-host'); return !!(h && h.shadowRoot && h.shadowRoot.querySelector('#header-view #state-button')); });
+    assert.equal(await page.evaluate(() => document.querySelectorAll('#state-button').length), 1);
+    await page.click('#tl-detail .kv-tabs button:has-text("Source")');
+    await page.waitForSelector('#tl-detail .kv-main .tl-code');
+    // Environment: Browser and Server; the server is where the agent works
+    await page.click('#sv-switches [data-input*="environment"]');
+    assert.deepEqual(await page.$$eval('#tl-detail .kv-sides button', els => els.map(x => x.textContent)), ['Browser', 'Server']);
+    await page.click('#tl-detail .kv-sides button:has-text("Server")');
+    await page.waitForFunction(() => [...document.querySelectorAll('#tl-detail .kv-item')].map(x => x.textContent).join() === 'agent,machine,repo,runtimes');
+    await page.locator('#tl-detail .kv-item', { hasText: /^runtimes$/ }).click();
+    assert.match(await page.textContent('#tl-detail .kv-head'), /^environment\.server\.runtimes/);
+    await page.click('#tl-detail .kv-sides button:has-text("Browser")');
+    await page.waitForFunction(() => [...document.querySelectorAll('#tl-detail .kv-item')].some(x => x.textContent === 'event listeners'));
+    // Performance: the time of each function (the tests of each version, and this page), then the AI runs
+    await page.click('#sv-switches [data-input*="performance"]');
+    await page.waitForSelector('#tl-detail .tl-table');
+    assert.deepEqual((await page.$eval('#tl-detail .tl-table', t => [...t.rows[0].cells].map(x => x.textContent))).slice(3), ['change', 'this page']);
+    assert.ok(await page.locator('#tl-detail .tl-table tr', { hasText: 'header-view local.init' }).count() === 1);
     await page.click('#sv-switches [data-input*="all"]');
     await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kind === 'all');
     assert.equal(await page.isVisible('#sv-editor'), true);
@@ -969,7 +994,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await page.textContent('#tl-detail .fv .md-page'), /A new line from main\./);
     // with Changes, the read mode of an updated md file shows its changes: the new line is green
     assert.deepEqual(await page.$$eval('#tl-detail .md-page .chg-added', els => els.map(x => x.textContent)), ['A new line from main.']);
-    assert.equal(await page.textContent('#tl-detail .fv-badge'), 'MD');
+    assert.equal(await page.locator('#tl-detail .fv .fv-badge').count(), 0);
     // the head: the kind, the size and the tokens (no name, no lines), and icon buttons with their names as titles
     assert.match(await page.textContent('#tl-detail .fv-size'), /^[\d.]+ KB · ≈ [\d.]+k? tokens?$/);
     assert.deepEqual(await page.$$eval('#tl-detail .fv-head button', els => els.map(x => [x.title, x.textContent.trim()])),
@@ -1001,7 +1026,14 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#tl-detail .kv-tabs button:has-text("Changes")');
     await page.waitForSelector('#tl-detail .kv-main .tl-files');
     await page.locator('#tl-detail .kv-main .tl-files .tl-file').nth(1).locator('.chg-added').first().waitFor();
-    // a file the block did not change has only its File tab
+    // with Only changes the tree has only what changed
+    assert.equal(await page.locator('#tl-detail .kv-tree .kv-item:not(.added):not(.updated):not(.deleted)').count(), 0);
+    // a tab with no changes hides (the Views tab: this version changed no view)
+    assert.equal(await page.isHidden('#sv-switches [data-input*="views"]'), true);
+    // without Only changes: all the files; a file the block did not change has only its File tab
+    await page.click('#changes');
+    await page.waitForFunction(() => !window.agentOS.state.extension.views['state-view']['ui-data'].changes);
+    assert.equal(await page.isHidden('#sv-switches [data-input*="views"]'), false);
     await page.locator('#tl-detail .kv-item', { hasText: /^index\.html$/ }).click();
     assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['File']);
     // code has its outline (here the ids and scripts of index.html); a click on it goes to the line; Find marks the matches
@@ -1026,6 +1058,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.deepEqual(await page.$$eval('#tl-detail .ps-kw', els => els.map(x => x.textContent)), ['READ', 'IF', 'THROW', 'RETURN']);
     assert.equal(await page.locator('#tl-detail .ps-line').nth(2).locator('.ps-guide').count(), 1);
     assert.match(await page.textContent('#tl-detail .ps-docs'), /Returns the JSON state/);
+    await page.click('#changes');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].changes);
     await page.click('#sv-switches [data-input*="all"]');
     await page.waitForSelector('#tl-detail .st-legend');
     await page.click('#sv-switches [data-input*="flow"]');
@@ -1078,6 +1112,20 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     for (const n of ['loadNewerVersion', 'extension.functions.render', 'local.refresh']) assert.ok(names.has(n), n);
     assert.ok(log.items.every(i => i.ok && i.at && typeof i.ms === 'number'), JSON.stringify(log.items.filter(i => !i.ok).slice(0, 3)));
 
+    // the time of each function in this test: gen/performance.json (the generator puts it in performance.tests)
+    const perf = await page.evaluate(() => {
+      const out = {};
+      window.agentOS.calls.forEach(c => {
+        const fn = c.related && c.related.fn;
+        if (!fn || typeof c.ms !== 'number') return;
+        const x = out[fn] = out[fn] || { count: 0, total: 0, max: 0 };
+        x.count++; x.total += c.ms; x.max = Math.max(x.max, c.ms);
+      });
+      Object.values(out).forEach(x => { x.avg = Math.round(x.total / x.count * 10) / 10; x.max = Math.round(x.max * 10) / 10; delete x.total; });
+      return out;
+    });
+    assert.ok(Object.keys(perf).length > 20);
+    fs.writeFileSync(path.join(__dirname, '..', 'gen', 'performance.json'), JSON.stringify(perf, Object.keys(perf).sort().concat(['count', 'avg', 'max']), 1) + '\n');
     // the Restart button of the timeline: the page loads again, the timeline opens on the last AI run notification
     // (the timeline stayed open after the new version)
     assert.equal(await page.isHidden('#timeline-view'), false);

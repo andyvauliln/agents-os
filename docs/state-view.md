@@ -8,10 +8,12 @@
    - The tabs: Full State, Files, Views, Functions, Network, Environment, Performance, Improvements, Flow, Video, Docs and Agent Run.
 4. Full State is the whole JSON of the state. The other tabs are parts or views of the same state:
    - Files, Views, Functions, Network and Environment: only that kind, as a tree on the left and the chosen one on the right.
+   - Environment has two tabs: Browser (what the page finds in the browser) and Server (the machine where the agent works and makes the state: environment.server).
    - Flow: what happens inside the chosen block (its parts and its calls; an AI run shows its notification).
    - Agent Run: the AI run notification of the chosen AI run block, or of the last AI run.
-   - Docs: only the docs folder of the agent.
-   - Performance, Improvements and Video are empty for now.
+   - Docs: only the docs folder of the agent. With Only changes: only the docs that the block changed.
+   - Performance: the time of each function. The page test measures each version in a browser. The generator puts the times in performance.tests of each function (count, avg and max, in ms). The table shows the version on the screen, the version before it, the change (red is slower, green is faster) and the times of this page. Under it: the AI runs, with their time, steps and tokens.
+   - Improvements and Video are empty for now.
 
 ## Edit and save the state
 1. Edit the JSON in the editor. You can write comments with // and /* */.
@@ -24,7 +26,7 @@
 2. The editor shows only the entries whose path has the text, with the first and last lines of the objects around them.
 3. The other lines fold into "⋯ N lines". You can still edit the lines that show.
 4. Click the Files, Views, Functions, Network or Environment tab to see only that kind, as a tree: for example, Files shows the files in their folders. Click one in the tree to see it on the right. With Changes, an updated md file in read mode shows its changes: green lines are new or changed, red lines are removed. Put the pointer on a green or red line to see why the run changed the file. Click Full State to see the editor again. This works with or without text.
-5. Click Only changes to see only what the chosen block changed. After Older or Newer, it is what the version on the screen changed. On a tab that is not a part of the state (Flow, Agent Run, Docs, Performance, Improvements, Video), Only changes goes to Full State.
+5. Click Only changes to see only what the chosen block changed. After Older or Newer, it is what the version on the screen changed. On a tab that is not a part of the state (Flow, Agent Run, Performance, Improvements, Video), Only changes goes to Full State. Each tab shows only its changes, and a tab with no changes hides.
    For an AI run, Full State also keeps the files that the run read or ran, and its default context (.claude/CLAUDE.md for the main agent, .claude/agents/<name>.md for a sub agent). Badges after the line of a file tell who (main or sub agent) and what (read, changed, run, default context).
 6. Click Show empty to hide the entries with an empty value: {}, [], "" or null. They hide with no "⋯" mark. Click it again to show them.
 7. Click Track this view to add what you do in the state view and the timeline as blocks of the timeline.

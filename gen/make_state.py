@@ -1,4 +1,4 @@
-import json, os, re
+import json, os, re, platform, subprocess
 
 # Run from the repo: python3 gen/make_state.py.
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -285,20 +285,33 @@ html.rec-select #recorder-view,html.rec-select #recorder-view *{cursor:pointer!i
 .st-kind{font:13px var(--sans);border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:9px;height:34px;padding:0 12px;cursor:pointer}
 .st-kind:hover{border-color:var(--accent)}
 .st-kind[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
-.kv{display:grid;grid-template-columns:minmax(200px,300px) minmax(0,1fr);gap:12px;align-items:start}
+.kv{display:grid;grid-template-columns:minmax(220px,360px) minmax(0,1fr);gap:12px;align-items:start}
 @media (max-width:760px){.kv{grid-template-columns:1fr}}
 .kv-tree{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:8px 6px;max-height:620px;overflow:auto;font:12px/1.5 var(--mono)}
 .kv-tree summary{cursor:pointer;padding:2px 4px;font-weight:600;white-space:nowrap}
-.kv-item{display:block;width:100%;text-align:left;border:0;background:none;color:var(--fg);font:12px/1.5 var(--mono);padding:2px 4px;border-radius:6px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kv-item{display:flex;align-items:center;gap:6px;width:100%;text-align:left;border:0;background:none;color:var(--fg);font:12px/1.5 var(--mono);padding:2px 4px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.kv-name{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.kv-dot{flex:none;width:7px;height:7px;border-radius:50%;background:transparent}
+.kv-item.added .kv-dot{background:var(--add)}.kv-item.updated .kv-dot{background:var(--upd)}.kv-item.deleted .kv-dot{background:var(--del)}
+.kv-tags{display:inline-flex;gap:3px;margin-left:auto;flex:none}
+.kv-tags .ln-badge{font-size:10px;line-height:14px;padding:0 5px}
+.kv-item.on .ln-badge{color:#fff;border-color:rgba(255,255,255,.65)}
 .kv-item:hover{background:var(--sel)}
 .kv-item.on{background:var(--accent);color:#fff}
-.kv-item.added,.kv-tree summary.added{color:#15803d}.kv-item.updated,.kv-tree summary.updated{color:#b45309}.kv-item.deleted{color:#b91c1c;text-decoration:line-through}
+.kv-item.added,.kv-tree summary.added{color:var(--add)}.kv-item.updated,.kv-tree summary.updated{color:var(--upd)}.kv-item.deleted{color:var(--del)}.kv-item.deleted .kv-name{text-decoration:line-through}
 .kv-item.on.added,.kv-item.on.updated,.kv-item.on.deleted{color:#fff}
 .kv-main{min-width:0;display:flex;flex-direction:column;gap:8px}
 .kv-head{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font:12px var(--mono);overflow-wrap:anywhere}
-.kv-tabs{display:flex;gap:4px}
-.kv-tabs button{font:13px var(--sans);border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:8px;padding:4px 12px;cursor:pointer}
-.kv-tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.kv-tabs,.kv-sides{display:flex;gap:2px;border-bottom:1px solid var(--line);overflow-x:auto}
+.kv-tabs button,.kv-sides button{flex:none;font:500 13px var(--sans);border:0;border-bottom:2px solid transparent;background:none;color:var(--muted);padding:6px 12px;margin-bottom:-1px;cursor:pointer}
+.kv-tabs button:hover,.kv-sides button:hover{color:var(--fg)}
+.kv-tabs button[aria-selected="true"],.kv-sides button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.kv-sides{margin-bottom:10px}
+.vp-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.vp{display:flex;flex-direction:column;gap:4px;min-width:0}
+.vp-head{font:12px var(--mono);color:var(--muted)}
+.vp-host{height:440px;overflow:auto;resize:vertical;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.pf-up{color:var(--del)}.pf-down{color:var(--add)}
 .tl-viewer{position:fixed;inset:24px;z-index:30;display:flex;flex-direction:column;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.25);padding:12px}
 .tl-viewer-bar{display:flex;gap:8px;align-items:center;font:12px var(--mono);overflow-wrap:anywhere}
 .tl-viewer-bar span{flex:1}
@@ -482,6 +495,13 @@ button.tl-call-head{width:100%;border:0;background:none;color:inherit;font:12px 
   --md-font:"Literata",Georgia,serif;--md-head:"Literata",Georgia,serif;--md-size:19px;--md-lh:1.7;--md-measure:64ch}
 [data-md-theme="mono"]{--panel:#f7f7f1;--gutter:#ecece4;--fg:#222222;--muted:#777777;--line:#dcdcd2;--accent:#c2410c;--sel:#fde5cc;--bg:#f0f0e8;
   --md-font:var(--mono);--md-head:var(--mono);--md-size:15px;--md-lh:1.75;--md-measure:74ch}
+/* the colors of the changes, for each style of the md viewer */
+[data-md-theme="reader"]{--add:#2b7a4b;--add-bg:#e3eedb;--upd:#94570f;--upd-bg:#f4e4c4;--del:#b03a2a;--del-bg:#f5ddd4}
+[data-md-theme="white"]{--add:#18794e;--add-bg:#e3f4ea;--upd:#a35a00;--upd-bg:#fbefd6;--del:#c0322b;--del-bg:#fbe4e2}
+[data-md-theme="black"]{--add:#4ade80;--add-bg:#0d2a19;--upd:#fbbf24;--upd-bg:#2b2108;--del:#f87171;--del-bg:#2e1010}
+[data-md-theme="sepia"]{--add:#46743a;--add-bg:#e2e3c2;--upd:#93560f;--upd-bg:#ecd7ab;--del:#a3402d;--del-bg:#eed2bf}
+[data-md-theme="night"]{--add:#7fd1a0;--add-bg:#1c3227;--upd:#e9b96b;--upd-bg:#372e1d;--del:#f08c84;--del-bg:#3b2124}
+[data-md-theme="mono"]{--add:#2f6f3e;--add-bg:#e0edd9;--upd:#984a0b;--upd-bg:#f4e1c8;--del:#b0281f;--del-bg:#f4d9d4}
 .md-page{max-width:var(--md-measure,68ch);margin:0 auto;padding:52px 32px 120px 44px;font-family:var(--md-font,var(--read));font-size:var(--md-size,17px);line-height:var(--md-lh,1.7);color:var(--fg);font-feature-settings:"kern","liga";text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;hyphens:auto;overflow-wrap:break-word}
 .md-page h2{font-family:var(--md-head,var(--read));font-size:1.85em;line-height:1.2;font-weight:700;letter-spacing:-.02em;margin:0 0 1.1em;text-wrap:balance}
 .md-page h3,.md-page h4{position:relative;font-family:var(--md-head,var(--read));font-size:1.22em;line-height:1.35;font-weight:650;letter-spacing:-.01em;margin:2.1em 0 .6em;text-wrap:balance}
@@ -524,7 +544,7 @@ p.md-step{display:flex;gap:12px;margin-bottom:8px}
 .long-tip .CodeMirror pre.CodeMirror-line{padding:0 10px}
 .why-tip{position:fixed;z-index:20;max-width:min(440px,calc(100vw - 32px));padding:8px 12px;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.18);font:12px/1.5 var(--sans);white-space:pre-wrap;pointer-events:none}
 .md-page .chg-added,.md-page .chg-deleted{margin-left:-12px;padding-left:12px;border-radius:2px}
-.md-page .chg-deleted{text-decoration:line-through;text-decoration-color:var(--del)}
+.md-page .chg-deleted{text-decoration:line-through;text-decoration-thickness:1px;text-decoration-color:color-mix(in srgb,var(--del) 60%,transparent)}
 .long-tip .tip-more{padding:2px 10px 0;font:11px var(--sans);color:var(--muted)}
 #sv-viewer-code,#sv-viewer-view{""")
 assert "\\" not in STYLE.replace("\\u2022", ""), "no backslashes in a template"
@@ -1162,6 +1182,7 @@ pane.hidden = !inPane;
 if (wasHidden && !inPane) cm.refresh();
 if (!inPane) { R.paneKey = null; pane.textContent = ''; return; }
 const key = [cur && cur.id, R.onBlock, d.position, d.changes, kind].join(':'), keep = R.paneKey === key ? pane.scrollTop : 0;
+if (T) T.changedKinds = null;
 pane.textContent = '';
 // A newly chosen block shows its calls one after the other.
 pane.classList.toggle('anim', R.paneKey !== key);
@@ -1175,12 +1196,12 @@ else if (kind === 'flow') {
   T.drawDetails(inside);
   pane.appendChild(inside);
 } else if (kind === 'agent-run') T.drawAgentRun(pane);
-else if (kind === 'performance' || kind === 'improvements' || kind === 'video') {
+else if (kind === 'performance') T.drawPerformance(pane, d.position);
+else if (kind === 'improvements' || kind === 'video') {
   pane.appendChild(el('p', 'tl-text sv-soon', {
-    performance: 'Performance: the speed, memory and cost of each function, flow, agent, skill and workflow. It comes in a next version.',
     improvements: 'Improvements: what an agent run can do better, from the analysis of the run. It comes in a next version.',
     video: 'Video: empty for now.' }[kind]));
-} else if (kind === 'docs') {
+} else if (kind === 'docs' && !d.changes) {
   // Docs: only the docs folder of the agent, in the file tree and the file viewer.
   let full = os.get();
   try { if (atDraft) full = core.parseJsonc(R.draft); else if (!editable) full = core.parseJsonc(H[d.position].state); } catch (e) {}
@@ -1198,6 +1219,12 @@ else if (d.changes) {
   T.kindView(pane, kind, { before: {}, after: {}, full, fullBefore: null, rows: [], head: d.version, state: true });
 }
 pane.scrollTop = keep;
+// Only changes: a tab of a part of the state that has no change hides (the open tab stays).
+const ck = d.changes && T && T.changedKinds;
+ctx.root.querySelectorAll('#sv-switches .sv-tab').forEach(b => {
+  const k = JSON.parse(b.dataset.input).kind;
+  b.hidden = !!(ck && k in ck && !ck[k] && k !== kind);
+});
 """)
 
 EDIT = sig("edit", [], r"""
@@ -1230,9 +1257,9 @@ R.onBlock = false;
 
 TOGGLE = sig("toggleChanges", [], r"""
 // Only changes: what the chosen block changed or touched (or the version on screen, after Older or Newer). On a tab
-// that is not a part of the state (Flow, Agent Run, Docs, Performance, Improvements, Video), it goes to Full State.
+// that is not a part of the state (Flow, Agent Run, Performance, Improvements, Video), it goes to Full State.
 const d = os.get('extension.views.state-view.ui-data');
-const parts = ['all', 'files', 'views', 'functions', 'network', 'environment'];
+const parts = ['all', 'files', 'views', 'functions', 'network', 'environment', 'docs'];
 if (!parts.includes(d.filter_kind)) { d.filter_kind = 'all'; d.changes = true; }
 else d.changes = !d.changes;
 """)
@@ -2734,6 +2761,8 @@ const touchedView = (before, after, touched) => {
   return { text: lines.join('\n'), marks, at, empty: lines.length <= 2 };
 };
 R.drawPair = (box, kind, p) => {
+  R.changedKinds = changedKinds(p);
+  if (kind === 'docs') { kindView(box, 'files', p, { docs: true }); return; }
   if (kind !== 'all') { kindView(box, kind, p); return; }
   if (p.run) {
     // Full State of an AI run: what it changed, and what it read and ran, with badges after the lines of the files.
@@ -2762,7 +2791,54 @@ R.drawPair = (box, kind, p) => {
   box.appendChild(table([p.cols].concat(p.rows.filter(r => passes(r.keys)).map(r => r.row))));
 };
 // One kind of the state as it is (no changes): its tree, from the state on screen.
-R.kindView = (box, kind, p) => kindView(box, kind, p);
+R.kindView = (box, kind, p, opts) => kindView(box, kind, p, opts);
+// Performance: the time of each function, as the tests of the version on screen measured it (performance.tests in
+// the state of the version), the version before it and the change; and as this page measured it. Then the AI runs:
+// how long each took, its steps and its context tokens.
+R.drawPerformance = (box, position) => {
+  const H = os.history.commits || [], at = Math.min(position, H.length - 1);
+  const stateAt = i => { try { return i >= 0 && H[i] ? core.parseJsonc(H[i].state) : null; } catch (e) { return null; } };
+  const fnsOf = st => {
+    const out = {}, ext = (st && st.extension) || {};
+    Object.keys(ext.functions || {}).forEach(f => { out['shared ' + f] = ext.functions[f]; });
+    Object.keys(ext.views || {}).forEach(v => Object.keys((ext.views[v] || {}).functions || {}).forEach(f => { out[v + ' ' + f] = ext.views[v].functions[f]; }));
+    return out;
+  };
+  const now = fnsOf(at >= 0 ? stateAt(at) : null), was = fnsOf(stateAt(at - 1)), live = fnsOf(os.get());
+  const vNow = H[at] ? 'v' + H[at].n : 'now', vWas = H[at - 1] ? 'v' + H[at - 1].n : 'the version before';
+  const tms = f => f && f.performance && f.performance.tests ? f.performance.tests : null, ms = x => x === undefined || x === null ? '' : x + ' ms';
+  const names = Object.keys(Object.assign({}, live, now, was)).sort();
+  const measured = names.filter(n => tms(now[n]) || tms(was[n]) || (live[n] && live[n].performance && live[n].performance.count));
+  box.appendChild(el('p', 'tl-text', 'The time of each function (average of its runs, and the slowest run). The tests measure each version in a browser; '
+    + 'the state keeps it in performance.tests of the function. This page: the runs since the page opened. Up (red) is slower, down (green) is faster.'
+    + (measured.length ? '' : ' No version on this page has times from the tests yet.')));
+  const tb = el('table', 'tl-table'), head = el('tr');
+  ['function', vWas + ' (tests)', vNow + ' (tests)', 'change', 'this page'].forEach(h => head.appendChild(el('th', '', h)));
+  tb.appendChild(head);
+  const avg = x => x && typeof x.avg === 'number' ? x.avg : null;
+  names.forEach(n => {
+    const a = tms(was[n]), b = tms(now[n]), l = live[n] && live[n].performance && live[n].performance.count ? live[n].performance : null;
+    if (!a && !b && !l) return;
+    const tr = el('tr');
+    tr.appendChild(el('td', '', n));
+    tr.appendChild(el('td', '', a ? ms(avg(a)) + ' · max ' + ms(a.max) + ' · ' + a.count + 'x' : ''));
+    tr.appendChild(el('td', '', b ? ms(avg(b)) + ' · max ' + ms(b.max) + ' · ' + b.count + 'x' : ''));
+    const dlt = a && b ? Math.round((avg(b) - avg(a)) * 10) / 10 : null;
+    tr.appendChild(el('td', dlt > 0 ? 'pf-up' : dlt < 0 ? 'pf-down' : '', dlt === null ? '' : (dlt > 0 ? '+' : '') + dlt + ' ms'));
+    tr.appendChild(el('td', '', l ? ms(l.last) + ' last · ' + l.count + (l.count === 1 ? ' run' : ' runs') : ''));
+    tb.appendChild(tr);
+  });
+  box.appendChild(tb);
+  const runs = runsOf(os.get()).reverse();
+  if (runs.length) {
+    box.appendChild(el('div', 'tl-detail-sub', 'AI runs'));
+    const min = r => r.started && r.ended ? Math.round((Date.parse(r.ended) - Date.parse(r.started)) / 6000) / 10 + ' min' : '';
+    const k = x => typeof x === 'number' ? Math.round(x / 1000) + 'k' : '';
+    box.appendChild(table([['run', 'version', 'time', 'steps', 'context (peak)', 'output tokens']].concat(runs.map(r => [
+      'session ' + String(r.session).slice(0, 3) + ' · run ' + r.run + (r.title ? ': ' + r.title : ''), r.version ? 'v' + r.version : '', min(r), (r.steps || []).length,
+      k((r.context || {}).peak), k((r.context || {}).output_tokens)]))));
+  }
+};
 // The changes of the chosen block.
 R.drawChanges = (box, kind) => {
   // Each block gives: the state before and after it (only what changed), the whole state after it (and before it,
@@ -2796,6 +2872,7 @@ R.drawChanges = (box, kind) => {
         : cur.rec && cur.rec.name === 'loadState' ? 'This block loaded the state: v' + cur.rec.related.head + '. Before it, there was no state.'
         : 'This block changed nothing in the state.';
       box.appendChild(el('p', 'tl-text', why));
+      R.changedKinds = { files: false, views: false, functions: false, network: false, environment: false, docs: false };
       return;
     }
     // A path is dotted and keys can hold dots ("local.init"): the keys are found in the live state.
@@ -3123,8 +3200,7 @@ const jsonPane = (value, tools) => {
 const fileView = (name, text, ch) => {
   const fk = fileKind(name), box = el('div', 'fv fv-' + fk.kind);
   const head = el('div', 'fv-head'), tools = el('div', 'fv-tools');
-  // the kind of the file, its size and its tokens (the name is in the path above the viewer)
-  head.appendChild(el('span', 'fv-badge fv-badge-' + fk.ext.toLowerCase(), fk.ext.toUpperCase()));
+  // its size and its tokens (the name and the kind are in the path above the viewer)
   head.appendChild(el('span', 'fv-size', (kb(text.length) || '0 KB') + ' · ≈ ' + tok(Math.round(text.length / 4))));
   // md and json have a second mode: their source
   R.fileMode = R.fileMode || {};
@@ -3240,10 +3316,10 @@ const whyOf = (run, path) => {
   const steps = (run.steps || []).map((s, i) => (s.files || []).some(changes) ? 'Step ' + (i + 1) + ': ' + s.title + (s.why ? '. ' + s.why : '') : '').filter(Boolean);
   return [f && f.why].concat(steps).filter(Boolean).join('\n');
 };
-const KIND_TAB = { files: 'File', views: 'View', functions: 'Function', network: 'Request', environment: 'Value' };
+const KIND_TAB = { files: 'File', views: 'Page', functions: 'Function', network: 'Request', environment: 'Value' };
 const has = (o, keys) => keys.every(k => { if (!o || typeof o !== 'object' || !(k in o)) return false; o = o[k]; return true; });
 const atKeys = (o, keys) => keys.reduce((x, k) => x && typeof x === 'object' ? x[k] : undefined, o);
-const itemsOf = (o, kind) => {
+const itemsOf = (o, kind, side) => {
   const out = [], x = o || {}, ext = x.extension || {};
   if (kind === 'files') Object.keys(x.agents || {}).forEach(a => {
     const walk = (dir, keys) => Object.keys(dir || {}).forEach(k => {
@@ -3257,15 +3333,22 @@ const itemsOf = (o, kind) => {
     Object.keys(ext.views || {}).forEach(v => Object.keys((ext.views[v] || {}).functions || {}).forEach(f => out.push({ tree: [v, f], keys: ['extension', 'views', v, 'functions', f] })));
   }
   if (kind === 'network') Object.keys(x.network || {}).forEach(g => Object.keys(x.network[g] || {}).forEach(n => out.push({ tree: [g, n], keys: ['network', g, n] })));
-  if (kind === 'environment') Object.keys(x.environment || {}).forEach(k => out.push({ tree: [k], keys: ['environment', k] }));
+  // the environment: of the browser (what the page senses), and of the server (where the agent works); side picks one
+  if (kind === 'environment') {
+    const e = x.environment || {};
+    if (side !== 'server') Object.keys(e).filter(k => k !== 'server').forEach(k => out.push({ tree: [k], keys: ['environment', k] }));
+    if (side !== 'browser') Object.keys(e.server || {}).forEach(k => out.push({ tree: side ? [k] : ['server', k], keys: ['environment', 'server', k] }));
+  }
   return out;
 };
-const kindView = (box, kind, p) => {
-  const q = String(svd.filter || '').trim().toLowerCase();
-  // All the items: in the state after the block, and the ones it deleted.
+// The items of one kind in the states of p, each with its change (added, updated, deleted or none) and, for an AI
+// run, its tags: who (main, sub agent) and what (read, changed, run, default context). opts.docs: only the docs.
+const changedItems = (kind, p, opts, side) => {
+  opts = opts || {};
   const seen = {}, items = [];
-  [p.full, p.fullBefore, p.before].forEach(o => itemsOf(o, kind).forEach(it => {
+  [p.full, p.fullBefore, p.before].forEach(o => itemsOf(o, kind, side).forEach(it => {
     const k = it.keys.join('\u0000');
+    if (opts.docs && !(it.tree[1] === 'docs' && it.tree.length === 3)) return;
     if (!seen[k]) { seen[k] = true; items.push(it); }
   }));
   // The change of an item: a change of the item itself, or of something in it (updated), or of what holds it.
@@ -3277,11 +3360,77 @@ const kindView = (box, kind, p) => {
     it.change = own ? own.type : inner ? 'updated' : outer ? (outer.type === 'updated' ? (has(p.after, it.keys) && !has(p.before, it.keys) ? 'added' : !has(p.after, it.keys) && has(p.before, it.keys) ? 'deleted' : 'updated') : outer.type) : null;
     if (it.change === 'updated' && p.fullBefore && JSON.stringify(atKeys(p.fullBefore, it.keys)) === JSON.stringify(atKeys(p.full, it.keys))) it.change = null;
   });
-  const shown = items.filter(it => !q || it.keys.join('/').toLowerCase().includes(q) || it.tree.join('/').toLowerCase().includes(q));
-  const changed = items.filter(it => it.change).length;
-  box.appendChild(el('p', 'tl-text', p.state ? items.length + ' ' + kind + ' in the state of ' + p.head + '. Choose one on the left.'
-    : items.length + ' ' + kind + ' in the state' + (p.fullBefore ? ' of v' + p.head : ' now') + '; ' + (p.what || 'this block') + ' changed ' + changed + '. Choose one on the left.'));
-  if (!shown.length) { box.appendChild(el('p', 'tl-text', items.length ? 'No ' + kind + ' have the filter text.' : 'The state has no ' + kind + '.')); return; }
+  const touched = p.run ? touchesOf(p.run) : null;
+  items.forEach(it => {
+    const t = touched && touched[JSON.stringify(it.keys)];
+    it.tags = !t ? [] : t.what.has('default context') ? Array.from(t.who).concat(['default context'])
+      : Array.from(t.what).concat(t.who.has('sub agent') && !t.who.has('main') ? ['sub agent'] : t.who.has('main') ? ['main'] : []);
+  });
+  return items;
+};
+// Which tabs have a change in p (Only changes hides the others).
+const changedKinds = p => {
+  const out = {};
+  ['files', 'views', 'functions', 'network', 'environment'].forEach(k => { out[k] = changedItems(k, p).some(it => it.change || it.tags.length); });
+  out.docs = changedItems('files', p, { docs: true }).some(it => it.change || it.tags.length);
+  return out;
+};
+// A view as the page shows it: its html with its ui-data, with the style of index-view, in a shadow root (its ids and
+// its style stay inside). It is a picture: its buttons do nothing.
+const viewPage = (full, name, view, label) => {
+  const wrap = el('div', 'vp'), host = el('div', 'vp-host');
+  wrap.appendChild(el('div', 'vp-head', label));
+  wrap.appendChild(host);
+  if (!view || typeof view.html !== 'string') { host.appendChild(el('p', 'tl-text', 'No view here.')); return wrap; }
+  const iv = (((full || {}).extension || {}).views || {})['index-view'] || os.get('extension.views.index-view') || {};
+  const m = /<style>([\s\S]*?)<\/style>/.exec(iv.html || ''), css = (m ? m[1] : '').replace(/@import[^;]*;/g, '').replace(/:root/g, ':host');
+  const views = (((full || {}).extension || {}).views) || {};
+  const htmlOf = v => { try { return os.template(v.html || '', v['ui-data'] || {}); } catch (e) { return '<p class="tl-text">The html of this view has an error: ' + String(e.message).replace(/</g, '&lt;') + '</p>'; } };
+  host.inert = true;
+  if (document.documentElement.dataset.theme) host.dataset.theme = document.documentElement.dataset.theme;
+  const root = host.attachShadow({ mode: 'open' }), fix = '<style>:host{display:block}#index-view{min-height:0;height:auto}</style>';
+  // index-view is the page: its html has the style; the views that show on the page now go into their places
+  if (name === 'index-view') root.innerHTML = fix + htmlOf(view);
+  else root.innerHTML = '<style>' + css + '</style>' + fix + '<div id="index-view" data-device="desktop">' + htmlOf(view) + '</div>';
+  const t = document.createElement('template');
+  for (let pass = 0; pass < 3; pass++) Object.keys(views).forEach(n => {
+    const spot = root.getElementById(n);
+    if (n === name || !spot || spot.childElementCount || !os.mounted('extension.views.' + n)) return;
+    t.innerHTML = htmlOf(views[n]);
+    if (t.content.firstElementChild) spot.replaceWith(t.content.firstElementChild);
+  });
+  const own = root.getElementById(name);
+  if (own) own.hidden = false;
+  return wrap;
+};
+const kindView = (box, kind, p, opts) => {
+  opts = opts || {};
+  const q = String(svd.filter || '').trim().toLowerCase(), what = opts.docs ? 'docs' : kind;
+  // Environment: two tabs, Browser and Server
+  let side;
+  if (kind === 'environment') {
+    side = R.envSide === 'server' ? 'server' : 'browser';
+    const sides = el('div', 'kv-sides');
+    sides.setAttribute('role', 'tablist');
+    [['browser', 'Browser'], ['server', 'Server']].forEach(([k, label]) => {
+      const b = el('button', '', label);
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', String(k === side));
+      b.addEventListener('click', () => { R.envSide = k; box.textContent = ''; kindView(box, kind, p, opts); });
+      sides.appendChild(b);
+    });
+    box.appendChild(sides);
+  }
+  // All the items: in the state after the block, and the ones it deleted. With Only changes: only what the block
+  // changed, and (an AI run) what it read or ran.
+  const items = changedItems(kind, p, opts, side), only = !p.state;
+  const list = only ? items.filter(it => it.change || it.tags.length) : items;
+  const shown = list.filter(it => !q || it.keys.join('/').toLowerCase().includes(q) || it.tree.join('/').toLowerCase().includes(q));
+  const changed = items.filter(it => it.change).length, touched = items.filter(it => !it.change && it.tags.length).length;
+  const where = side ? ' (' + side + ')' : '';
+  box.appendChild(el('p', 'tl-text', p.state ? items.length + ' ' + what + where + ' in the state of ' + p.head + '. Choose one on the left.'
+    : (p.what || 'This block').replace(/^./, c => c.toUpperCase()) + ' changed ' + changed + ' of the ' + items.length + ' ' + what + where + (p.fullBefore ? ' of v' + p.head : '') + (touched ? ', and read or ran ' + touched + ' more' : '') + '.' + (list.length ? ' Choose one on the left.' : '')));
+  if (!shown.length) { if (list.length || !only) box.appendChild(el('p', 'tl-text', items.length ? 'No ' + what + ' have the filter text.' : 'The state has no ' + what + '.')); return; }
   R.pick = R.pick || {};
   const key = it => it.keys.join('\u0000');
   let pick = shown.find(it => key(it) === (R.pick[kind] || {}).key) || shown.find(it => it.change) || shown[0];
@@ -3308,9 +3457,16 @@ const kindView = (box, kind, p) => {
       into.appendChild(d);
       return;
     }
-    const b = el('button', 'kv-item' + (x.change ? ' ' + x.change : '') + (x === pick ? ' on' : ''), k);
+    const b = el('button', 'kv-item' + (x.change ? ' ' + x.change : '') + (x === pick ? ' on' : ''));
+    b.appendChild(el('span', 'kv-dot'));
+    b.appendChild(el('span', 'kv-name', k));
+    if (x.tags.length) {
+      const tags = el('span', 'kv-tags');
+      x.tags.forEach(t => tags.appendChild(el('span', 'ln-badge b-' + ({ 'main': 'who', 'sub agent': 'who', 'default context': 'context' }[t] || t), t)));
+      b.appendChild(tags);
+    }
     b.style.paddingLeft = depth * 14 + 4 + 'px';
-    b.title = x.keys.join('.') + (x.change ? ' (' + x.change + ')' : '');
+    b.title = x.keys.join('.') + (x.change ? ' (' + x.change + ')' : '') + (x.tags.length ? ': ' + x.tags.join(', ') : '');
     b.addEventListener('click', () => { pick = x; R.pick[kind] = { key: key(x), tab: (R.pick[kind] || {}).tab }; buttons.forEach(y => y.classList.toggle('on', y === b)); drawMain(); });
     buttons.push(b);
     into.appendChild(b);
@@ -3324,7 +3480,7 @@ const kindView = (box, kind, p) => {
   const drawMain = () => {
     main.textContent = '';
     const it = pick, now = atKeys(p.full, it.keys), was = has(p.fullBefore, it.keys) ? atKeys(p.fullBefore, it.keys) : atKeys(p.before, it.keys);
-    const value = now !== undefined ? now : was, tabs = [KIND_TAB[kind]].concat(kind === 'functions' ? ['Pseudo code'] : [], it.change ? ['Changes'] : []);
+    const value = now !== undefined ? now : was, tabs = [KIND_TAB[kind]].concat(kind === 'functions' ? ['Pseudo code'] : kind === 'views' ? ['Source'] : [], it.change ? ['Changes'] : []);
     let tab = (R.pick[kind] || {}).tab;
     if (!tabs.includes(tab)) tab = tabs[0];
     const head = el('div', 'kv-head');
@@ -3344,12 +3500,32 @@ const kindView = (box, kind, p) => {
     const name = it.tree.join('/'), modeOf = path => /\.html$/.test(path) ? 'html' : /\.js$/.test(path) ? 'js' : /\.jsonc?$/.test(path) ? 'json' : 'text';
     const json = (label, v) => stateBox(label, { text: JSON.stringify(v === undefined ? null : v, null, 2), marks: [] }, { all: true });
     if (tab === 'Pseudo code') { main.appendChild(pseudoView(value || {}, it.tree[it.tree.length - 1])); return; }
+    if (tab === 'Page') {
+      // the view as the page shows it; a changed view: before and after, side by side
+      const vname = it.keys[2], L = x => typeof x === 'number' ? 'v' + x : x, pair = el('div', 'vp-pair');
+      const before = () => {
+        if (p.fullBefore) return atKeys(p.fullBefore, it.keys);
+        // (a block of the page: the view now, with the values it had before the block)
+        const v = JSON.parse(JSON.stringify(now || {}));
+        p.rows.filter(r => r.keys.length > it.keys.length && it.keys.every((k, i) => k === r.keys[i])).forEach(r => {
+          const sub = r.keys.slice(it.keys.length), last = sub.pop(), o = sub.reduce((x, k) => x && typeof x === 'object' ? (x[k] = x[k] && typeof x[k] === 'object' ? x[k] : {}) : x, v);
+          if (!o || typeof o !== 'object') return;
+          if (r.type === 'added') delete o[last]; else o[last] = atKeys(p.before, r.keys);
+        });
+        return v;
+      };
+      if (it.change && it.change !== 'added') pair.appendChild(viewPage(p.fullBefore || p.full, vname, before(), p.fullBefore ? 'Before (' + L(p.from) + ')' : 'Before this block'));
+      if (now !== undefined) pair.appendChild(viewPage(p.full, vname, now, it.change ? (p.fullBefore ? 'After (' + L(p.head) + ')' : 'After this block') : vname));
+      main.appendChild(pair);
+      return;
+    }
     if (tab !== 'Changes') {
       if (now === undefined) main.appendChild(el('p', 'tl-text', 'This block deleted it. This is how it was.'));
       // an updated file: the text before it, and why the run changed it (the read mode of md shows the changes)
       const old = it.change === 'updated' ? (has(p.before, it.keys) ? atKeys(p.before, it.keys) : atKeys(p.fullBefore, it.keys)) : undefined;
       if (kind === 'files') main.appendChild(typeof value === 'string' ? fileView(name, value, typeof old === 'string' ? { before: old, why: whyOf(p.run, it.keys.slice(3).join('/')) } : null) : json(name, value));
       else if (kind === 'views') {
+        // Source: its html, ui-data and functions
         const v = value || {};
         if (typeof v.html === 'string') main.appendChild(code('html', v.html, 'html', 1));
         main.appendChild(json('ui-data', v['ui-data']));
@@ -4100,19 +4276,32 @@ os.setMounted(view_path, false);
 exec(open(REPO + '/gen/docs_part.py').read())           # DOCS: the docs folder in agents (shows the code above)
 
 def V(path): return {"view_path": path}
+# The environment of the server: the machine where the agent works and makes this state (no secrets: no addresses,
+# no keys, no paths of the user).
+def _out(cmd):
+    try: return subprocess.run(cmd, capture_output=True, text=True, timeout=10).stdout.strip().split('\n')[0]
+    except Exception: return ''
+SERVER = {
+  "machine": {"os": platform.system() + ' ' + platform.release().split('-')[0], "arch": platform.machine(), "cpu_cores": os.cpu_count(),
+              "memory_gb": round(os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES') / 2 ** 30, 1)},
+  "runtimes": {"python": platform.python_version(), "node": _out(['node', '--version']), "git": _out(['git', '--version']).replace('git version ', '')},
+  "repo": {"branch": _out(['git', '-C', REPO, 'rev-parse', '--abbrev-ref', 'HEAD']), "pushed to": "the agent-os branch of the GitHub repo"},
+  "agent": {"name": "Claude Code", "where": "a cloud container of claude.ai/code", "makes the state with": "python3 gen/make_state.py"},
+}
 # The docs are files of the repo too.
 os.makedirs(REPO + '/docs', exist_ok=True)
 for name, text in DOCS.items():
     open(REPO + '/docs/' + name, 'w').write(text)
 def TREE(path):
     # The files of main, as a folder tree: a folder is an object, a file is its text. state.json is the state
-    # itself, so it is not in it; a folder that holds only .gitkeep is an empty object.
+    # itself, so it is not in it (gen/performance.json neither: it is in performance.tests of the functions); a folder
+    # that holds only .gitkeep is an empty object.
     out = {}
     names = sorted(os.listdir(path), key=lambda n: (not n.startswith('.'), n.lower()))
     if os.path.basename(path) == 'docs': names = [n for n in DOCS] + [n for n in names if n not in DOCS]
     for n in names:
         full = path + '/' + n
-        if n in ('.git', '.gitkeep', 'node_modules') or full == REPO + '/state.json': continue
+        if n in ('.git', '.gitkeep', 'node_modules') or full in (REPO + '/state.json', REPO + '/gen/performance.json'): continue
         out[n] = TREE(full) if os.path.isdir(full) else open(full).read()
     return out
 render_sv = {"extension.functions.render": V(SV)}
@@ -4172,7 +4361,8 @@ state = {
     }
   },
   "network": NETWORK,
-  "environment": {"browser": {}, "browser data": {}, "browser api": {}, "document": {}, "window": {}, "event listeners": {}, "timers": {}, "observers": {}, "connections": [], "devices": {}, "permissions": {}, "subscriptions": {}, "background services": {}, "other": {}},
+  "environment": {"browser": {}, "browser data": {}, "browser api": {}, "document": {}, "window": {}, "event listeners": {}, "timers": {}, "observers": {}, "connections": [], "devices": {}, "permissions": {}, "subscriptions": {}, "background services": {}, "other": {},
+                  "server": SERVER},
   "extension": {
     "views": {
       "index-view": {
@@ -4488,6 +4678,16 @@ with_pseudo(state['extension']['functions'], '')
 for vname, view in state['extension']['views'].items():
     with_pseudo(view.get('functions', {}), vname + '/')
 assert len(PSEUDO) == len(state['extension']['functions']) + sum(len(v.get('functions', {})) for v in state['extension']['views'].values()), 'pseudo code for a function that is not there'
+
+# The time of each function, as the page test measured it (gen/performance.json, written by tests/page.test.js):
+# performance.tests {count, avg, max} in ms. The runtime writes its own times over performance when the function runs.
+PERF = json.load(open(REPO + '/gen/performance.json')) if os.path.exists(REPO + '/gen/performance.json') else {}
+for fname, f in state['extension']['functions'].items():
+    if 'extension.functions.' + fname in PERF: f['performance'] = {"tests": PERF['extension.functions.' + fname]}
+for vname, view in state['extension']['views'].items():
+    for fname, f in view.get('functions', {}).items():
+        key = 'extension.views.' + vname + '.functions.' + fname
+        if key in PERF: f['performance'] = {"tests": PERF[key]}
 
 text = json.dumps(state, indent=2, ensure_ascii=False)
 open(REPO + '/state.json', 'w').write(text + "\n")

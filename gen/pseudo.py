@@ -295,9 +295,14 @@ GIVE the state view what it needs:
   kindView(box, kind, state) = one kind of the state as a tree
   drawChanges(box, kind) = the state changes of the block
     ALL: the state cut down to the changes, long texts as "...", a table of who changed what
-    ONE KIND (files, views, functions, network, environment):
-      a tree of all of them on the left
-      tabs on the right: the content (File / View / Function / Request / Value), Pseudo code, Changes
+    ONE KIND (files, views, functions, network, environment, docs):
+      a tree of only what changed on the left (an AI run: and what it read or ran, with tags who and what)
+      tabs on the right: the content (File / Page / Function / Request / Value), Pseudo code, Source, Changes
+      a view: Page = the view as the page shows it, in a shadow root; a changed view: before and after
+      environment: the tabs Browser and Server
+    SET changedKinds = the tabs that have a change (the state view hides the others)
+  drawPerformance(box, position) = the time of each function: the tests of the version and of the version before
+    (performance.tests), the change, and this page; then the AI runs (time, steps, tokens)
       a file shows in the file viewer (md page, json tree, code): its kind, size and tokens, icon buttons, one Style select for md
         Contents (md) and Functions (code) hidden until their button shows them (os.refs.timeline-view.fileSide)
       an updated md file in read mode: new lines green, removed lines red; the pointer on them shows why the run changed the file
@@ -409,12 +414,14 @@ IF changes or a tab (not all)
   HIDE the editor and SHOW the pane
   IF flow: the text of the block, then CALL drawDetails of the timeline
   ELSE IF agent-run: CALL drawAgentRun of the timeline (the chosen AI run, or the last one)
-  ELSE IF performance, improvements or video: a line that it is empty for now
-  ELSE IF docs: CALL kindView files with only the docs folder
+  ELSE IF performance: CALL drawPerformance of the timeline with the position
+  ELSE IF improvements or video: a line that it is empty for now
+  ELSE IF docs and not changes: CALL kindView files with only the docs folder
   ELSE IF changes and the view is on the block: CALL drawChanges of the timeline with the kind
   ELSE IF changes: CALL drawPair with the version before and the version on screen (or the draft)
   ELSE: CALL kindView with the state on screen (a tree of the kind)
   KEEP the scroll IF it shows the same thing
+  IF changes: HIDE each tab of a part of the state that has no change (not the open tab)
 ELSE
   SHOW the editor and HIDE the pane""",
 
@@ -436,7 +443,7 @@ SET position = position + delta, not past the first or the last
 the view leaves the chosen block (Changes shows the changes of the version)""",
 
 "state-view/local.toggle-changes": """\
-IF the tab is not a part of the state (flow, agent-run, docs, performance, improvements, video)
+IF the tab is not a part of the state (flow, agent-run, performance, improvements, video)
   SET filter_kind = all, changes = true
 ELSE: SET changes = NOT changes""",
 

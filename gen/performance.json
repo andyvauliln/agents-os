@@ -1,0 +1,447 @@
+{
+ "extension.functions.get-state": {
+  "count": 6,
+  "avg": 182.2,
+  "max": 420
+ },
+ "extension.functions.render": {
+  "count": 107,
+  "avg": 437,
+  "max": 2217
+ },
+ "extension.functions.unmount": {
+  "count": 21,
+  "avg": 152.8,
+  "max": 278
+ },
+ "extension.views.docs-view.functions.local.close": {
+  "count": 2,
+  "avg": 637,
+  "max": 688
+ },
+ "extension.views.docs-view.functions.local.init": {
+  "count": 11,
+  "avg": 176.8,
+  "max": 216
+ },
+ "extension.views.docs-view.functions.local.open-doc": {
+  "count": 4,
+  "avg": 166.3,
+  "max": 183
+ },
+ "extension.views.header-view.functions.local.init": {
+  "count": 37,
+  "avg": 189.7,
+  "max": 1165
+ },
+ "extension.views.header-view.functions.local.open.docs-view": {
+  "count": 7,
+  "avg": 730,
+  "max": 892
+ },
+ "extension.views.header-view.functions.local.open.state-view": {
+  "count": 4,
+  "avg": 912.8,
+  "max": 1283
+ },
+ "extension.views.header-view.functions.local.set-device": {
+  "count": 6,
+  "avg": 400.5,
+  "max": 461
+ },
+ "extension.views.header-view.functions.local.toggle-device-menu": {
+  "count": 7,
+  "avg": 412.6,
+  "max": 510
+ },
+ "extension.views.index-view.functions.local.init": {
+  "count": 4,
+  "avg": 1455.3,
+  "max": 2021
+ },
+ "extension.views.notes-view.functions.local.add-text": {
+  "count": 1,
+  "avg": 152,
+  "max": 152
+ },
+ "extension.views.notes-view.functions.local.close": {
+  "count": 4,
+  "avg": 280.3,
+  "max": 313
+ },
+ "extension.views.notes-view.functions.local.delete": {
+  "count": 5,
+  "avg": 145.4,
+  "max": 167
+ },
+ "extension.views.notes-view.functions.local.edit": {
+  "count": 1,
+  "avg": 145,
+  "max": 145
+ },
+ "extension.views.notes-view.functions.local.init": {
+  "count": 9,
+  "avg": 379.1,
+  "max": 547
+ },
+ "extension.views.notes-view.functions.local.pick": {
+  "count": 2,
+  "avg": 145,
+  "max": 149
+ },
+ "extension.views.notes-view.functions.local.refresh": {
+  "count": 49,
+  "avg": 159.5,
+  "max": 383
+ },
+ "extension.views.notes-view.functions.local.send": {
+  "count": 4,
+  "avg": 142.3,
+  "max": 153
+ },
+ "extension.views.notes-view.functions.local.set-settings": {
+  "count": 7,
+  "avg": 148.4,
+  "max": 164
+ },
+ "extension.views.notes-view.functions.local.show-state": {
+  "count": 2,
+  "avg": 162.5,
+  "max": 168
+ },
+ "extension.views.notes-view.functions.local.toggle-settings": {
+  "count": 6,
+  "avg": 153.3,
+  "max": 191
+ },
+ "extension.views.notes-view.functions.local.transcribe": {
+  "count": 1,
+  "avg": 156,
+  "max": 156
+ },
+ "extension.views.recorder-view.functions.local.clear": {
+  "count": 3,
+  "avg": 146,
+  "max": 162
+ },
+ "extension.views.recorder-view.functions.local.init": {
+  "count": 12,
+  "avg": 299.5,
+  "max": 387
+ },
+ "extension.views.recorder-view.functions.local.open-notes": {
+  "count": 4,
+  "avg": 1004.8,
+  "max": 1624
+ },
+ "extension.views.recorder-view.functions.local.refresh": {
+  "count": 301,
+  "avg": 146.1,
+  "max": 251
+ },
+ "extension.views.recorder-view.functions.local.select": {
+  "count": 2,
+  "avg": 117.5,
+  "max": 124
+ },
+ "extension.views.recorder-view.functions.local.start": {
+  "count": 5,
+  "avg": 151,
+  "max": 186
+ },
+ "extension.views.recorder-view.functions.local.stop": {
+  "count": 6,
+  "avg": 161.8,
+  "max": 179
+ },
+ "extension.views.recorder-view.functions.local.toggle-menu": {
+  "count": 6,
+  "avg": 149,
+  "max": 205
+ },
+ "extension.views.state-view.functions.local.close": {
+  "count": 2,
+  "avg": 591,
+  "max": 608
+ },
+ "extension.views.state-view.functions.local.close-viewer": {
+  "count": 4,
+  "avg": 252.5,
+  "max": 344
+ },
+ "extension.views.state-view.functions.local.collapse-all": {
+  "count": 1,
+  "avg": 255,
+  "max": 255
+ },
+ "extension.views.state-view.functions.local.edit": {
+  "count": 4,
+  "avg": 187.8,
+  "max": 250
+ },
+ "extension.views.state-view.functions.local.filter": {
+  "count": 9,
+  "avg": 138.8,
+  "max": 151
+ },
+ "extension.views.state-view.functions.local.filter-kind": {
+  "count": 28,
+  "avg": 151.8,
+  "max": 191
+ },
+ "extension.views.state-view.functions.local.init": {
+  "count": 23,
+  "avg": 237.4,
+  "max": 863
+ },
+ "extension.views.state-view.functions.local.open-viewer": {
+  "count": 5,
+  "avg": 189.4,
+  "max": 212
+ },
+ "extension.views.state-view.functions.local.refresh": {
+  "count": 146,
+  "avg": 1895.4,
+  "max": 10702
+ },
+ "extension.views.state-view.functions.local.save": {
+  "count": 2,
+  "avg": 1142,
+  "max": 1242
+ },
+ "extension.views.state-view.functions.local.set-md-theme": {
+  "count": 6,
+  "avg": 156,
+  "max": 194
+ },
+ "extension.views.state-view.functions.local.step": {
+  "count": 3,
+  "avg": 147,
+  "max": 174
+ },
+ "extension.views.state-view.functions.local.toggle-changes": {
+  "count": 10,
+  "avg": 145.7,
+  "max": 213
+ },
+ "extension.views.state-view.functions.local.toggle-empty": {
+  "count": 4,
+  "avg": 160.3,
+  "max": 174
+ },
+ "extension.views.state-view.functions.local.toggle-timeline": {
+  "count": 6,
+  "avg": 157.8,
+  "max": 195
+ },
+ "extension.views.state-view.functions.local.toggle-tracking": {
+  "count": 4,
+  "avg": 163.5,
+  "max": 194
+ },
+ "extension.views.timeline-view.functions.local.close": {
+  "count": 2,
+  "avg": 123.5,
+  "max": 128
+ },
+ "extension.views.timeline-view.functions.local.init": {
+  "count": 16,
+  "avg": 331.6,
+  "max": 563
+ },
+ "extension.views.timeline-view.functions.local.next": {
+  "count": 10,
+  "avg": 159.2,
+  "max": 187
+ },
+ "extension.views.timeline-view.functions.local.play": {
+  "count": 4,
+  "avg": 151.3,
+  "max": 165
+ },
+ "extension.views.timeline-view.functions.local.play-flow": {
+  "count": 2,
+  "avg": 153.5,
+  "max": 196
+ },
+ "extension.views.timeline-view.functions.local.refresh": {
+  "count": 231,
+  "avg": 158.5,
+  "max": 422
+ },
+ "extension.views.timeline-view.functions.local.select": {
+  "count": 22,
+  "avg": 144,
+  "max": 174
+ },
+ "extension.views.timeline-view.functions.local.show": {
+  "count": 6,
+  "avg": 152.2,
+  "max": 188
+ },
+ "extension.views.timeline-view.functions.local.toggle-flows": {
+  "count": 3,
+  "avg": 130,
+  "max": 154
+ },
+ "local.clear": {
+  "count": 1,
+  "avg": 1878,
+  "max": 1878
+ },
+ "local.close": {
+  "count": 4,
+  "avg": 3363.8,
+  "max": 9032
+ },
+ "local.close-viewer": {
+  "count": 1,
+  "avg": 13122,
+  "max": 13122
+ },
+ "local.collapse-all": {
+  "count": 1,
+  "avg": 11358,
+  "max": 11358
+ },
+ "local.edit": {
+  "count": 1,
+  "avg": 8418,
+  "max": 8418
+ },
+ "local.filter": {
+  "count": 1,
+  "avg": 9529,
+  "max": 9529
+ },
+ "local.filter-kind": {
+  "count": 2,
+  "avg": 10238,
+  "max": 10696
+ },
+ "local.init": {
+  "count": 6,
+  "avg": 3707.5,
+  "max": 14191
+ },
+ "local.next": {
+  "count": 1,
+  "avg": 2245,
+  "max": 2245
+ },
+ "local.open-doc": {
+  "count": 2,
+  "avg": 1085.5,
+  "max": 1139
+ },
+ "local.open-notes": {
+  "count": 1,
+  "avg": 3853,
+  "max": 3853
+ },
+ "local.open-viewer": {
+  "count": 1,
+  "avg": 10399,
+  "max": 10399
+ },
+ "local.open.docs-view": {
+  "count": 2,
+  "avg": 1328.5,
+  "max": 1343
+ },
+ "local.open.state-view": {
+  "count": 2,
+  "avg": 7709.5,
+  "max": 7853
+ },
+ "local.play": {
+  "count": 1,
+  "avg": 2406,
+  "max": 2406
+ },
+ "local.play-flow": {
+  "count": 1,
+  "avg": 1487,
+  "max": 1487
+ },
+ "local.refresh": {
+  "count": 3,
+  "avg": 3594.7,
+  "max": 8063
+ },
+ "local.select": {
+  "count": 3,
+  "avg": 1836.7,
+  "max": 2107
+ },
+ "local.set-device": {
+  "count": 2,
+  "avg": 848.5,
+  "max": 1141
+ },
+ "local.set-md-theme": {
+  "count": 1,
+  "avg": 10420,
+  "max": 10420
+ },
+ "local.set-settings": {
+  "count": 1,
+  "avg": 1791,
+  "max": 1791
+ },
+ "local.show": {
+  "count": 2,
+  "avg": 1531.5,
+  "max": 1853
+ },
+ "local.step": {
+  "count": 1,
+  "avg": 8158,
+  "max": 8158
+ },
+ "local.stop": {
+  "count": 1,
+  "avg": 2090,
+  "max": 2090
+ },
+ "local.toggle-changes": {
+  "count": 1,
+  "avg": 8717,
+  "max": 8717
+ },
+ "local.toggle-device-menu": {
+  "count": 1,
+  "avg": 1092,
+  "max": 1092
+ },
+ "local.toggle-empty": {
+  "count": 1,
+  "avg": 10289,
+  "max": 10289
+ },
+ "local.toggle-flows": {
+  "count": 1,
+  "avg": 1438,
+  "max": 1438
+ },
+ "local.toggle-menu": {
+  "count": 1,
+  "avg": 3785,
+  "max": 3785
+ },
+ "local.toggle-settings": {
+  "count": 1,
+  "avg": 2884,
+  "max": 2884
+ },
+ "local.toggle-timeline": {
+  "count": 1,
+  "avg": 8616,
+  "max": 8616
+ },
+ "local.toggle-tracking": {
+  "count": 1,
+  "avg": 9638,
+  "max": 9638
+ }
+}

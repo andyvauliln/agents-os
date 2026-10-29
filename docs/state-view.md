@@ -3,7 +3,15 @@
 ## Open the state view
 1. Click the State button in the header.
 2. The state view shows the chosen block of the timeline. When no block is chosen, it is the last agent run. The editor shows the state at the version of the block.
-3. The state view is the one view for the state and its changes. Its bar has, from the left: the Timeline button, the kind buttons, Changes and Details, the filter with Show empty and Track state, then Collapse all, Save, Older and Newer.
+3. The state view is the one view for the state and its changes. It has two rows at the top.
+   - The bar, from the left: the State icon with Agent or UI (the kind of the chosen block of the timeline: an agent run or a UI block; some logic of the UI is different for each), the filter, Only changes, Show empty, then Track this view, Timeline, Collapse all, Save and close (×). Put the pointer on an icon to see its name.
+   - The tabs: Full State, Files, Views, Functions, Network, Environment, Performance, Improvements, Flow, Video, Docs and Agent Run.
+4. Full State is the whole JSON of the state. The other tabs are parts or views of the same state:
+   - Files, Views, Functions, Network and Environment: only that kind, as a tree on the left and the chosen one on the right.
+   - Flow: what happens inside the chosen block (its parts and its calls; an AI run shows its notification).
+   - Agent Run: the AI run notification of the chosen AI run block, or of the last AI run.
+   - Docs: only the docs folder of the agent.
+   - Performance, Improvements and Video are empty for now.
 
 ## Edit and save the state
 1. Edit the JSON in the editor. You can write comments with // and /* */.
@@ -15,18 +23,19 @@
 1. Type in the filter at the top of the state view.
 2. The editor shows only the entries whose path has the text, with the first and last lines of the objects around them.
 3. The other lines fold into "⋯ N lines". You can still edit the lines that show.
-4. Click Files, Views, Functions, Network or Environment to see only that kind, as a tree: for example, Files shows the files in their folders. Click one in the tree to see it on the right. With Changes, an updated md file in read mode shows its changes: green lines are new or changed, red lines are removed. Put the pointer on a green or red line to see why the run changed the file. Click All to see the editor again. This works with or without text.
-5. Click Changes to see only what the chosen block changed. After Older or Newer, it is what the version on the screen changed. Click Details to see what happens inside the block.
-6. Clear Show empty to hide the entries with an empty value: {}, [], "" or null. They hide with no "⋯" mark.
-7. Turn on Track state to add what you do in the state view and the timeline as blocks of the timeline.
+4. Click the Files, Views, Functions, Network or Environment tab to see only that kind, as a tree: for example, Files shows the files in their folders. Click one in the tree to see it on the right. With Changes, an updated md file in read mode shows its changes: green lines are new or changed, red lines are removed. Put the pointer on a green or red line to see why the run changed the file. Click Full State to see the editor again. This works with or without text.
+5. Click Only changes to see only what the chosen block changed. After Older or Newer, it is what the version on the screen changed. On a tab that is not a part of the state (Flow, Agent Run, Docs, Performance, Improvements, Video), Only changes goes to Full State.
+   For an AI run, Full State also keeps the files that the run read or ran, and its default context (.claude/CLAUDE.md for the main agent, .claude/agents/<name>.md for a sub agent). Badges after the line of a file tell who (main or sub agent) and what (read, changed, run, default context).
+6. Click Show empty to hide the entries with an empty value: {}, [], "" or null. They hide with no "⋯" mark. Click it again to show them.
+7. Click Track this view to add what you do in the state view and the timeline as blocks of the timeline.
 8. Push Escape to clear the filter.
-- Older and newer (the arrows) are at the right end of the bar.
+- Older and Newer (the arrows with the version between them) are in the bar of the timeline. The arrow keys do the same. On a touch screen, swipe the timeline: right for older, left for newer.
 - The version, the path and the status are in the bar at the bottom of the state view.
 
 ## Look at older versions
-1. Click the left arrow button, or push the left arrow key. The state view leaves the chosen block.
+1. Open the timeline. Click its Older arrow, or push the left arrow key (or swipe the timeline to the right). The state view leaves the chosen block.
 2. You cannot edit an older version.
-3. Click the Changes button to see only the changes of that version. Green is added, yellow is updated, red is deleted.
+3. Click Only changes to see only the changes of that version. Green is added, yellow is updated, red is deleted.
 
 ## Long text
 - Long text, and text that has more than one line, shows as "...". A text of only {} or [] (an empty json file) shows as it is, in grey, and Show empty off hides it. Put the pointer on it to see the start of the text, in the colors of its kind (md, js, html, css or json).

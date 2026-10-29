@@ -377,16 +377,20 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].state_open), true);
     assert.equal(await page.textContent('#path'), 'extension/views/state-view');
     assert.match(await page.textContent('#pos'), /^v1 (just now|\d+ min ago)$/);
-    // the bar: the Timeline button, the kind buttons, Changes and Details; the filter with Show empty and Track state;
-    // then icon buttons, older and newer at the end
-    assert.equal(await page.locator('#state-view .sv-bar #sv-switches > #timeline-button:first-child svg').count(), 1);
-    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-switches .st-kind', els => els.map(b => b.textContent.trim())), ['All', 'Files', 'Views', 'Functions', 'Network', 'Environment', 'Changes', 'Details']);
-    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-checks label', els => els.map(b => b.textContent.trim())), ['Show empty', 'Track state']);
-    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-right button', els => els.map(b => b.id)), ['collapse', 'save', 'older', 'newer', 'sv-close']);
-    assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar #sv-right button')].filter(b => b.textContent.trim()).length), 0);
+    // the bar: the State icon with Agent and UI, the filter, Only changes and Show empty, then Track this view, Timeline,
+    // Collapse all, Save and close (icons); under it the tabs, from Full State to Agent Run
+    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-left .sv-who-k', els => els.map(b => b.textContent.trim())), ['Agent', 'UI']);
+    assert.equal(await page.locator('#state-view .sv-bar #sv-left button').count(), 0);
+    assert.equal(await page.locator('#state-view .sv-bar #sv-left .sv-state-icon svg').count(), 1);
+    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-mid button', els => els.map(b => b.id)), ['changes', 'sv-empty']);
+    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-right button', els => els.map(b => b.id)), ['sv-track', 'timeline-button', 'collapse', 'save', 'sv-close']);
+    assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar #sv-mid button, #state-view .sv-bar #sv-right button')].filter(b => b.textContent.trim()).length), 0);
+    assert.deepEqual(await page.$$eval('#state-view #sv-switches .sv-tab', els => els.map(b => b.textContent.trim())), ['Full State', 'Files', 'Views', 'Functions', 'Network', 'Environment', 'Performance', 'Improvements', 'Flow', 'Video', 'Docs', 'Agent Run']);
+    // (Older and Newer are in the timeline)
+    assert.equal(await page.locator('#state-view #older, #state-view #newer').count(), 0);
     assert.equal(await page.locator('#state-view .sv-foot #pos').count(), 1);
     assert.equal(await page.locator('#state-view .sv-bar #path').count(), 0);
-    assert.equal(await page.isChecked('#sv-track'), false);
+    assert.equal(await page.getAttribute('#sv-track', 'aria-pressed'), 'false');
     // no block chosen: the state view shows the last agent run (block 1)
     await page.waitForFunction(() => /^Block 1: AI run notification session /.test(document.querySelector('#sv-block').textContent));
 
@@ -421,10 +425,10 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const lastRun = await page.evaluate(n => JSON.parse(window.agentOS.state.agents['agent-oss'].files.runs[n]), runs[runs.length - 1]);
     await page.locator('#tl-strip .tl-step').first().click();
     assert.equal((await tl()).selected, 'run:runs/' + runs[runs.length - 1]);
-    await page.click('#details');
+    await page.click('#sv-switches [data-input*="flow"]');
     await page.waitForSelector('#tl-detail .ar-views');
-    assert.equal((await svd()).details, true);
-    assert.equal(await page.getAttribute('#details', 'aria-pressed'), 'true');
+    assert.equal((await svd()).filter_kind, 'flow');
+    assert.equal(await page.getAttribute('#sv-switches [data-input*="flow"]', 'aria-pressed'), 'true');
     assert.equal(await page.isHidden('#sv-editor'), true);
     assert.match(await shownBlock(), new RegExp('^Block 1: AI run notification session ' + lastRun.session.slice(0, 3) + ' · run ' + lastRun.run + ' · '));
     assert.deepEqual(await page.$$eval('#tl-detail .ar-views button', els => els.map(x => x.textContent)), ['Index', 'Details', 'Steps']);
@@ -488,7 +492,19 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     // its Changes: from the version before the run to the version it made (this page has only v1)
     await page.click('#changes');
     await page.waitForFunction(() => /The run made v\d+\./.test(document.querySelector('#tl-detail').textContent));
-    assert.deepEqual([(await svd()).changes, (await svd()).details], [true, false]);
+    assert.deepEqual([(await svd()).changes, (await svd()).filter_kind], [true, 'all']);
+    // Agent Run: the notification of the run; Docs: only the docs folder; Video: empty for now
+    await page.click('#sv-switches [data-input*="agent-run"]');
+    await page.waitForSelector('#tl-detail .ar-views');
+    await page.click('#sv-switches [data-input*="docs"]');
+    await page.waitForSelector('#tl-detail .kv-tree');
+    assert.deepEqual(await page.$$eval('#tl-detail .kv-tree .kv-item', els => els.map(x => x.textContent.trim()).sort()), ['functions.md', 'how-it-works.md', 'render-steps.md', 'state-view.md']);
+    await page.click('#sv-switches [data-input*="video"]');
+    await page.waitForSelector('#tl-detail .sv-soon');
+    // (Only changes on a tab that is not a part of the state goes to Full State)
+    await page.click('#changes');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kind === 'all');
+    assert.equal((await svd()).changes, true);
 
     // a click on a block: the state view shows it; with Track state off the click is not a block
     const before = await blockNames();
@@ -561,9 +577,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.ok(await page.$('#tl-detail .tl-code .was'));
 
     // its Details: Network (all requests, in groups) next to Environment
-    await page.click('#details');
+    await page.click('#sv-switches [data-input*="flow"]');
     await page.waitForSelector('#tl-detail .tl-netenv .tl-panel');
-    assert.equal((await svd()).details, true);
+    assert.equal((await svd()).filter_kind, 'flow');
     assert.deepEqual(await page.$$eval('#tl-detail .tl-netenv .tl-panel h3', els => els.map(x => x.textContent)), ['Network (all requests)', 'Environment']);
     const groups = await page.$$eval('#tl-detail .tl-netenv .tl-panel:first-child h4', els => els.map(x => x.textContent.split(' · ')[0]));
     for (const g of ['Html', 'Our scripts', 'API', 'State', 'Packages']) assert.ok(groups.includes(g), groups.join(' | '));
@@ -631,6 +647,14 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#tl-strip .tl-step:nth-child(3)');
     assert.equal(await page.$eval('#tl-strip .tl-step.pin-left', b => getComputedStyle(b).opacity), '1');
     assert.ok(await page.$eval('#tl-strip .tl-step.pin-left', b => b.offsetWidth) > await page.$eval('#tl-strip .tl-step:nth-child(3)', b => b.offsetWidth));
+    // Older and Newer of the state view are in the timeline, with the version between them
+    assert.match(await page.textContent('#tl-ver-pos'), /^v\d+$/);
+    assert.equal(await page.locator('#timeline-view .tl-bar #older').count(), 1);
+    // Agent or UI in the state view: the kind of the chosen block
+    await page.click('#tl-strip .tl-step.ui');
+    await page.waitForFunction(() => document.querySelector('#sv-who').dataset.kind === 'ui');
+    await page.click('#tl-strip .tl-step.ai');
+    await page.waitForFunction(() => document.querySelector('#sv-who').dataset.kind === 'agent');
     // the close button closes the timeline; the Timeline button opens it again
     await page.click('#tl-close');
     await page.waitForFunction(() => document.querySelector('#timeline-view').hidden);
@@ -667,8 +691,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await page.locator('#tl-detail .tl-code').first().evaluate(e => e.cm.getValue()), /"state_open": true/);
     assert.ok(await page.locator('#tl-detail .tl-code .chg-updated').count() > 0);
     assert.match(await page.locator('#tl-detail .tl-table').textContent(), /extension\.views\.header-view\.ui-data\.state_openfalse {2}→ {2}truelocal\.open\.state-view/);
-    // its Details: each call says what it does and why it ran, its name opens its code, and what it changed
-    await page.click('#details');
+    // its Flow: each call says what it does and why it ran, its name opens its code, and what it changed
+    await page.click('#sv-switches [data-input*="flow"]');
     await page.locator('#tl-detail .tl-call').first().waitFor();
     assert.deepEqual((await page.locator('#tl-detail .tl-call .tl-name').allTextContents()).slice(0, 2), ['local.open.state-view', 'extension.functions.render']);
     assert.match(await page.locator('#tl-detail .tl-call').first().textContent(), /Why it ran You clicked a button of header-view/);
@@ -680,9 +704,9 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForFunction(() => document.querySelector('#timeline-view').hidden);
     assert.equal((await svd()).timeline_open, false);
     assert.match(await shownBlock(), /local\.open\.state-view/);
-    // back to the editor: Details and Changes off
-    await page.click('#details');
-    await page.waitForFunction(() => !window.agentOS.state.extension.views['state-view']['ui-data'].details);
+    // back to the editor: Full State, Only changes off
+    await page.click('#sv-switches [data-input*="all"]');
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].filter_kind === 'all');
     await page.click('#changes');
     await page.waitForFunction(() => !window.agentOS.state.extension.views['state-view']['ui-data'].changes);
     assert.equal(await page.isHidden('#tl-detail'), true);
@@ -735,7 +759,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await shownText(), /"settings\.local\.json": "\{\}\\n"/);
     await page.click('#sv-empty');
     await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].show_empty === false);
-    assert.equal(await page.isChecked('#sv-empty'), false);
+    assert.equal(await page.getAttribute('#sv-empty', 'aria-pressed'), 'false');
     assert.doesNotMatch(await shownText(), /"connection": \{\}/);
     assert.doesNotMatch(await shownText(), /settings\.local\.json/);
     assert.equal(await hiddenMarks(), 0);
@@ -1004,7 +1028,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.match(await page.textContent('#tl-detail .ps-docs'), /Returns the JSON state/);
     await page.click('#sv-switches [data-input*="all"]');
     await page.waitForSelector('#tl-detail .st-legend');
-    await page.click('#details');
+    await page.click('#sv-switches [data-input*="flow"]');
     await page.waitForSelector('#tl-detail .tl-explain');
     assert.match(await page.textContent('#tl-detail .tl-part'), /git commit 0123456 \(Add a line\)/);
     assert.match(await page.textContent('#tl-detail .tl-explain'), /state-view\.mdIt had no last line\.It has a last line\./);
@@ -1013,7 +1037,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await filePart.locator('.tl-call-head').click();
     await filePart.locator('.tl-files .tl-code').nth(1).waitFor();
     await filePart.locator('.tl-files .tl-code').nth(1).locator('.chg-added').first().waitFor();
-    await page.click('#details');
+    await page.click('#sv-switches [data-input*="all"]');
 
     // a newer version with a new agent run: an Agent run block after its New version block. With no block chosen, the
     // timeline chooses that run (Last agent run, at the left), so the Files view shows the files of the new version

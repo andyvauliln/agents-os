@@ -69,15 +69,15 @@ DOCS = {
 2. It shows what happened since the page opened, as blocks in a row from left to right. The first block is the last AI run notification: the last agent run (if the state has one). Then: Network (every request and the environment), index.html runs, the runtime loads the state, the page starts.
 3. Each next block is one call that nothing else called, for example a click on a button.
 4. Each block shows its number, the time since the page opened, the function, its time in ms and how many state changes it made.
-5. What you do in the state view and in the timeline (clicks on blocks, the replay, the buttons) is not a block. Turn on Track state (in the bar of the state view) to add it as blocks too.
-6. When the row of blocks scrolls, the last agent run stays at the left and the newest block stays at the right. These two pinned blocks are a bit bigger, with a thicker border.
-7. Each AI run block has a purple line at its left. Each other block (a UI block: the page, the network, a click) has a blue line.
+5. What you do in the state view and in the timeline (clicks on blocks, the replay, the buttons) is not a block. Turn on Track this view (in the bar of the state view) to add it as blocks too.
+6. When the row of blocks scrolls, the last agent run stays at the left and the newest block stays at the right. These two pinned blocks are bigger than the others (wider and taller), with a thicker border.
+7. Each AI run block is purple (its border and a light purple color). Each other block (a UI block: the page, the network, a click) is blue.
 8. On a narrow screen (a phone), the blocks are smaller and show only their number and name, so that you can see at least 4 blocks.
 
 ### A block
 1. Click a block. The state view shows it, and its bottom bar names it (for example "Block 3: Run index.html"). When no block is chosen, the state view shows the last agent run.
    The state view goes to the version of the block: the version that an agent run made, or that a New version brought. For the other blocks, it is the newest version.
-2. Changes (the button in the bar of the state view): the state cut down to what this block changed: green is added, yellow is updated (with the old value), red is deleted. Under it, a table says which function changed what.
+2. Only changes (the button in the bar of the state view): the state cut down to what this block changed: green is added, yellow is updated (with the old value), red is deleted. Under it, a table says which function changed what.
    A long text, or a text of more than one line, shows as "...", as in the state view. Put the pointer on it to see its start. An updated text (and its "was "..."") shows its changes: red lines are removed, green lines are added. Click it to open the whole text in the viewer. Press Escape or × to close the viewer.
    Type in Filter paths (the filter of the state view) to see only the paths that have the text. The table shows only the paths that the filter shows.
    The buttons All, Files, Views, Functions, Network and Environment choose what shows. All shows the changes as above. Each other button shows only that kind, in its own view:
@@ -93,7 +93,7 @@ DOCS = {
      - json: a tree. Click an object or a list to open or close it. The first two levels are open. Find opens the parts that have the text and marks them. Open all, Close all. Source shows the text.
      - Code (js, html, css, python and more): Functions lists the functions, classes and constants (ids, scripts and styles in html; selectors in css), each with its line. Click one to go to the line. Find marks every match: Enter goes to the next one, Shift+Enter to the one before. Wrap wraps long lines.
    - A click on "..." opens the text in the same file viewer.
-3. Details (the button after Changes): what happens inside the block. The function, then each function it called, in the order they started, with their input and time.
+3. Flow (a tab of the state view): what happens inside the block. The function, then each function it called, in the order they started, with their input and time.
    Each function says what it does (its docs), why it ran (a click, a watch, or the function that called it) and what it changed in the state. Click its name to see its code.
    The first blocks happen before any function runs, so they show their parts instead:
    - Run index.html: the runtime script runs. What it did, with times, the start time (os.started), the session id of the call log, the call tracker, and the functions in os.
@@ -105,20 +105,21 @@ DOCS = {
 ### The buttons of the timeline
 The buttons are above the blocks.
 1. The arrow buttons show the block before and the next block.
-2. The Replay button shows the next block every 1.6 seconds. From the last block, it starts again at the first. It goes on to the newest block. With Track state on, each move adds a block, so it stops at the block that was the newest when it started. It also stops when you click it again, or when you click a block.
-3. AI runs shows only the AI run blocks. UI shows only the other blocks. Click the pressed button again to show all the blocks.
-4. The Restart button reloads the page, so the history starts again. The timeline opens again on the last AI run notification. If the state has unsaved changes, it does not reload: save them first.
-5. The Flows button opens the list of saved flows. Click the play button of a flow to replay only its blocks. First enter is the page opening: its first 4 blocks (index.html, runtime, loadState, the render of index-view).
-6. The close button (×, at the right) closes the timeline. The Timeline button of the state view opens it again.
-7. The timeline is part of the state view: when you close the state view, the timeline hides too.
+2. The Replay button shows the next block every 1.6 seconds. From the last block, it starts again at the first. It goes on to the newest block. With Track this view on, each move adds a block, so it stops at the block that was the newest when it started. It also stops when you click it again, or when you click a block.
+3. Older and Newer (with the version between them) go through the versions of the state view, as the arrow keys do. On a touch screen, swipe the timeline: right for older, left for newer.
+4. AI runs shows only the AI run blocks. UI shows only the other blocks. Click the pressed button again to show all the blocks.
+5. The Restart button reloads the page, so the history starts again. The timeline opens again on the last AI run notification. If the state has unsaved changes, it does not reload: save them first.
+6. The Flows button opens the list of saved flows. Click the play button of a flow to replay only its blocks. First enter is the page opening: its first 4 blocks (index.html, runtime, loadState, the render of index-view).
+7. The close button (×, at the right) closes the timeline. The Timeline button of the state view opens it again.
+8. The timeline is part of the state view: when you close the state view, the timeline hides too.
 
 ### A new version
 1. A Claude Code session changes the files of main. It commits the change, pushes it and saves a new version of the state.
 2. An open page gets the new version and runs it immediately. You do not reload the page.
 3. Each view keeps its ui-data. The views that were open stay open.
 4. The timeline adds a New version block.
-5. Changes: the differences between the version that ran before and the new version. Long texts are cut.
-6. Details: where the version came from (the git commit, the request and the session), how each part worked before and how it works now, side by side, and each changed file side by side. Red lines are only in the old version. Green lines are only in the new version.
+5. Only changes: the differences between the version that ran before and the new version. Long texts are cut.
+6. Flow: where the version came from (the git commit, the request and the session), how each part worked before and how it works now, side by side, and each changed file side by side. Red lines are only in the old version. Green lines are only in the new version.
 
 ### Agent runs
 1. An agent run is one request to an agent (Claude Code): from a message (of a person, the coordinator or a notification) to the next message.
@@ -127,7 +128,7 @@ The buttons are above the blocks.
    - The run-recorder subagent (.claude/agents/run-recorder.md) reads the raw data. It groups the tool uses into steps and writes why for each step, use and file. It does not copy secrets or the content of files.
    - The release puts the files of main into the state, so the run is in agents.agent-oss.files.runs.
 3. The timeline shows the last run of the state as block 1, before the page start. Its name is Last AI run notification, its time is the time ago, and it shows the first 3 characters of the session. The newest block at the right also starts with Last (for example Last click). A new version that comes with new runs gets an AI run notification block after the New version block, for each new run. Then the newest AI run notification has the name Last AI run notification, and the state view shows it when no block is chosen: so the files of the new version show without a click.
-4. Click an AI run notification block, then Details. It has three tabs:
+4. Click an AI run notification block, then the Flow tab or the Agent Run tab of the state view. It has three tabs:
    - Index: the title and the summary of the run (summary in the run file; an older run without it shows the request and the counts), then Actions for you (actions in the run file) or No action needed. Then the chips: the agent, the session, the run, the start and end time, the version that the run made, the context at the start and at the end, the cached part of the context, and whether the session was compacted. Then what started the session, the run, the workflow, the subagents and the skills; MCP use, Skill use, Subagents and Workflow, each with how many times and why; then the context sizes.
    - Details: the state as the run touched it, in one tree. The files are under Files/, in their folders, with the color of what the run did: green added, yellow updated, red deleted, blue read. Then the other items in groups (MCP calls, Commands and scripts, Searches, Skills, Subagents): an MCP call that sent or wrote something is yellow, the others are blue. The counts of each color are above the tree. The buttons show only what one source did: All, Main agent, Subagents, MCP, Skills or Workflows. Each source has its color, and each item has a chip for its source. On the right, the item that you click, in tabs: File (the file viewer, with the text from the version that the run made), Changes (side by side: the version before the run and the version that the run made) and Why (what, by who, in which steps, why, the size in tokens). A file that is not in the state (it is not a file of the repo) has only Why. When a step is chosen (in Steps), Details shows only that step; Whole run shows all of it again.
    - Steps: the agent timeline, then the steps one by one. The timeline: the start card, then each step from left to right, in the lane of the agent that did it. The first lane is the main agent. A subagent is a helper agent with its own context, which the main agent started (for example run-recorder, which writes the record of the run). A subagent lane starts with a dashed line that tells what the subagent is and which steps are its own; its steps are short cards. Under it, each step has its number on a line, its title, who did it (with the MCP, skill, subagent or workflow chips), its start, its time, its context and why. Click a step (a card or a row) to open it: what it did (each item with its kind), and the files that it changed and read. Click it again to close it. See it in Details shows the step in Details.
@@ -153,7 +154,7 @@ The buttons are above the blocks.
 
 ### Where it comes from
 1. The timeline comes from the call log of the runtime (os.calls), not from the state. If the state kept the timeline, each call would change the state again.
-2. The ui-data of timeline-view keeps the chosen block (selected; null is the last agent run), whether the replay runs (playing), show (all, runs or ui: the AI runs and UI buttons), flows_open, and the saved flows (flows: each has a name and the names of its blocks). The ui-data of state-view keeps timeline_open (the Timeline button), track_state (Track state), changes and details.
+2. The ui-data of timeline-view keeps the chosen block (selected; null is the last agent run), whether the replay runs (playing), show (all, runs or ui: the AI runs and UI buttons), flows_open, and the saved flows (flows: each has a name and the names of its blocks). The ui-data of state-view keeps timeline_open (the Timeline button), track_state (Track this view), changes (Only changes) and filter_kind (the tab).
 
 ## Record
 The footer at the bottom of the page is recorder-view. The red button at its right records.
@@ -370,7 +371,15 @@ import CodeMirror from 'codemirror';""") + """
 ## Open the state view
 1. Click the State button in the header.
 2. The state view shows the chosen block of the timeline. When no block is chosen, it is the last agent run. The editor shows the state at the version of the block.
-3. The state view is the one view for the state and its changes. Its bar has, from the left: the Timeline button, the kind buttons, Changes and Details, the filter with Show empty and Track state, then Collapse all, Save, Older and Newer.
+3. The state view is the one view for the state and its changes. It has two rows at the top.
+   - The bar, from the left: the State icon with Agent or UI (the kind of the chosen block of the timeline: an agent run or a UI block; some logic of the UI is different for each), the filter, Only changes, Show empty, then Track this view, Timeline, Collapse all, Save and close (×). Put the pointer on an icon to see its name.
+   - The tabs: Full State, Files, Views, Functions, Network, Environment, Performance, Improvements, Flow, Video, Docs and Agent Run.
+4. Full State is the whole JSON of the state. The other tabs are parts or views of the same state:
+   - Files, Views, Functions, Network and Environment: only that kind, as a tree on the left and the chosen one on the right.
+   - Flow: what happens inside the chosen block (its parts and its calls; an AI run shows its notification).
+   - Agent Run: the AI run notification of the chosen AI run block, or of the last AI run.
+   - Docs: only the docs folder of the agent.
+   - Performance, Improvements and Video are empty for now.
 
 ## Edit and save the state
 1. Edit the JSON in the editor. You can write comments with // and /* */.
@@ -382,18 +391,19 @@ import CodeMirror from 'codemirror';""") + """
 1. Type in the filter at the top of the state view.
 2. The editor shows only the entries whose path has the text, with the first and last lines of the objects around them.
 3. The other lines fold into "⋯ N lines". You can still edit the lines that show.
-4. Click Files, Views, Functions, Network or Environment to see only that kind, as a tree: for example, Files shows the files in their folders. Click one in the tree to see it on the right. With Changes, an updated md file in read mode shows its changes: green lines are new or changed, red lines are removed. Put the pointer on a green or red line to see why the run changed the file. Click All to see the editor again. This works with or without text.
-5. Click Changes to see only what the chosen block changed. After Older or Newer, it is what the version on the screen changed. Click Details to see what happens inside the block.
-6. Clear Show empty to hide the entries with an empty value: {}, [], "" or null. They hide with no "⋯" mark.
-7. Turn on Track state to add what you do in the state view and the timeline as blocks of the timeline.
+4. Click the Files, Views, Functions, Network or Environment tab to see only that kind, as a tree: for example, Files shows the files in their folders. Click one in the tree to see it on the right. With Changes, an updated md file in read mode shows its changes: green lines are new or changed, red lines are removed. Put the pointer on a green or red line to see why the run changed the file. Click Full State to see the editor again. This works with or without text.
+5. Click Only changes to see only what the chosen block changed. After Older or Newer, it is what the version on the screen changed. On a tab that is not a part of the state (Flow, Agent Run, Docs, Performance, Improvements, Video), Only changes goes to Full State.
+   For an AI run, Full State also keeps the files that the run read or ran, and its default context (.claude/CLAUDE.md for the main agent, .claude/agents/<name>.md for a sub agent). Badges after the line of a file tell who (main or sub agent) and what (read, changed, run, default context).
+6. Click Show empty to hide the entries with an empty value: {}, [], "" or null. They hide with no "⋯" mark. Click it again to show them.
+7. Click Track this view to add what you do in the state view and the timeline as blocks of the timeline.
 8. Push Escape to clear the filter.
-- Older and newer (the arrows) are at the right end of the bar.
+- Older and Newer (the arrows with the version between them) are in the bar of the timeline. The arrow keys do the same. On a touch screen, swipe the timeline: right for older, left for newer.
 - The version, the path and the status are in the bar at the bottom of the state view.
 
 ## Look at older versions
-1. Click the left arrow button, or push the left arrow key. The state view leaves the chosen block.
+1. Open the timeline. Click its Older arrow, or push the left arrow key (or swipe the timeline to the right). The state view leaves the chosen block.
 2. You cannot edit an older version.
-3. Click the Changes button to see only the changes of that version. Green is added, yellow is updated, red is deleted.
+3. Click Only changes to see only the changes of that version. Green is added, yellow is updated, red is deleted.
 
 ## Long text
 - Long text, and text that has more than one line, shows as "...". A text of only {} or [] (an empty json file) shows as it is, in grey, and Show empty off hides it. Put the pointer on it to see the start of the text, in the colors of its kind (md, js, html, css or json).

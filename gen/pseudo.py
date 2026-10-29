@@ -257,6 +257,7 @@ BIND its buttons""",
 IF an older timeline has a replay timer: STOP it
 SET os.refs.timeline-view = a new empty memory (steps, parts, files)
 WATCH timeline-view: after each call, CALL local.refresh
+LISTEN: a swipe on the timeline (not on the row) CALLs local.step of state-view: right -1 (older), left 1 (newer)
 CALL local.refresh
 IF the page reloads from the Restart button
   CALL local.select {id: null} (the last AI run notification)""",
@@ -276,6 +277,8 @@ SET blocks =
   each top call (Load the state, Start the page, clicks, new versions)
   after a New version: an AI run notification block for each new run
 IF show is runs: KEEP only the AI run blocks; IF show is ui: KEEP only the other blocks (IF none is left: KEEP all)
+SET the version, Older and Newer of the bar from state-view (position, current_state_version)
+MARK Agent or UI of the state view (IF it is drawn): the kind of the chosen block
 FOR EACH block: count its state changes
 SET the chosen block = selected, or the newest agent run block when nothing is chosen (the newest block when there is no run)
 DRAW the row of blocks (number, time, name, changes); the chosen block is on; an AI run block is purple, a UI block blue
@@ -298,6 +301,9 @@ GIVE the state view what it needs:
       a file shows in the file viewer (md page, json tree, code): its kind, size and tokens, icon buttons, one Style select for md
         Contents (md) and Functions (code) hidden until their button shows them (os.refs.timeline-view.fileSide)
       an updated md file in read mode: new lines green, removed lines red; the pointer on them shows why the run changed the file
+  drawPair(box, all, pair) of an AI run = the state cut down to what it changed and touched (read, run, default context),
+    with badges after the lines of the files: who (main, sub agent) and what (read, changed, run, default context)
+  drawAgentRun(box) = the AI run notification of the chosen AI run, or of the last one
   drawDetails(box) = what happens inside the block
     Network: the requests by group and the environment
     AI run notification: tabs Index (summary, actions for you, chips, what started it, uses, context),
@@ -393,13 +399,18 @@ MARK a bad line IF the JSON has an error
 SHOW each long text as "..." (a text of only {} or [] shows as it is; the pointer shows its start in the colors of its kind, a click CALLs local.open-viewer)
 HIDE the lines that the filter text does not show ("... N lines")
 IF show_empty is false: HIDE the entries with an empty value ({}, [], "" or null), with no mark
-DRAW the buttons, the kind buttons, Show empty, Track state and the bottom bar again from ui-data
+DRAW the bar (Agent / UI, Only changes, Show empty, Track this view, ...), the tabs and the bottom bar again from ui-data
+MARK Agent or UI: the kind of the chosen block of the timeline
+SET the version, Older and Newer of the timeline (IF it is drawn)
 OPEN or CLOSE the viewer as viewer_path says
 SET the md theme of the viewer
 DRAW the chosen block in the bottom bar (IF the view is on it)
-IF details, changes or a kind (not all)
+IF changes or a tab (not all)
   HIDE the editor and SHOW the pane
-  IF details: the text of the block, then CALL drawDetails of the timeline
+  IF flow: the text of the block, then CALL drawDetails of the timeline
+  ELSE IF agent-run: CALL drawAgentRun of the timeline (the chosen AI run, or the last one)
+  ELSE IF performance, improvements or video: a line that it is empty for now
+  ELSE IF docs: CALL kindView files with only the docs folder
   ELSE IF changes and the view is on the block: CALL drawChanges of the timeline with the kind
   ELSE IF changes: CALL drawPair with the version before and the version on screen (or the draft)
   ELSE: CALL kindView with the state on screen (a tree of the kind)
@@ -425,12 +436,9 @@ SET position = position + delta, not past the first or the last
 the view leaves the chosen block (Changes shows the changes of the version)""",
 
 "state-view/local.toggle-changes": """\
-IF details is on: SET changes = true
-ELSE: SET changes = NOT changes
-SET details = false""",
-
-"state-view/local.toggle-details": """\
-SET details = NOT details""",
+IF the tab is not a part of the state (flow, agent-run, docs, performance, improvements, video)
+  SET filter_kind = all, changes = true
+ELSE: SET changes = NOT changes""",
 
 "state-view/local.toggle-timeline": """\
 SET timeline_open = NOT timeline_open
@@ -464,9 +472,9 @@ SHOW the viewer""",
 SET filter = text (empty text shows all)""",
 
 "state-view/local.filter-kind": """\
-IF kind is not all, files, views, functions, network or environment: THROW
-SET filter_kind = kind
-SET details = false""",
+IF kind is not one of the tabs (all, files, views, functions, network, environment, performance,
+  improvements, flow, video, docs, agent-run): THROW
+SET filter_kind = kind""",
 
 "state-view/local.toggle-empty": """\
 SET show_empty = NOT show_empty""",

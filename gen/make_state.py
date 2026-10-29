@@ -544,6 +544,18 @@ I_PAUSE = svg('<path d="M5.5 3.5v9M10.5 3.5v9"/>')
 I_OLDER = svg('<path d="M10 3 5 8l5 5"/>')
 I_NEWER = svg('<path d="m6 3 5 5-5 5"/>')
 I_COLLAPSE = svg('<path d="m4 2 4 4 4-4M4 14l4-4 4 4"/>')
+I_CHANGES = svg('<path d="M8 2.5 13.5 12.5h-11z"/><path d="M8 6.5v3"/>')
+I_EMPTY = svg('<path d="M5.5 2.5c-2 0-1.5 2.5-1.5 4S2.5 8 2.5 8s1.5 0 1.5 1.5-.5 4 1.5 4M10.5 2.5c2 0 1.5 2.5 1.5 4s1.5 1.5 1.5 1.5-1.5 0-1.5 1.5.5 4-1.5 4"/><circle cx="8" cy="8" r=".9" fill="currentColor"/>')
+I_TRACK = svg('<circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2.2" fill="currentColor"/>')
+I_FILES = svg('<path d="M1.5 4.5v8h13v-6.5h-6.5l-1.5-1.5z"/>')
+I_VIEWS = svg('<rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M1.5 5.5h13M6 5.5v8"/>')
+I_FUNCS = svg('<path d="M10.5 2.5c-2 0-2.5 1-2.8 3L6.5 12c-.3 1.3-1 1.5-2 1.5M5 6.5h5.5"/>')
+I_NET = svg('<circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c2 2 2 10 0 12M8 2c-2 2-2 10 0 12"/>')
+I_ENV = svg('<rect x="4" y="4" width="8" height="8" rx="1"/><path d="M6 1.5v2.5M10 1.5v2.5M6 12v2.5M10 12v2.5M1.5 6H4M1.5 10H4M12 6h2.5M12 10h2.5"/>')
+I_PERF = svg('<path d="M2 12a6 6 0 1 1 12 0"/><path d="m8 12 3-4"/>')
+I_IDEA = svg('<path d="M6 12.5h4M6.5 14.5h3M5 9.5a4 4 0 1 1 6 0c-.7.7-1 1.4-1 2.5H6c0-1.1-.3-1.8-1-2.5z"/>')
+I_VIDEO = svg('<rect x="1.5" y="4" width="9" height="8" rx="1.5"/><path d="m10.5 7 4-2.5v7l-4-2.5"/>')
+I_AGENT = svg('<rect x="3" y="5" width="10" height="8" rx="2"/><path d="M8 2.5V5M6 9h.01M10 9h.01M6 11.5h4"/><circle cx="8" cy="2.2" r=".7"/>')
 I_SAVE = svg('<path d="M3 2.5h8l2.5 2.5v8.5h-10.5z"/><path d="M5.5 2.5v3h4.5v-3M5.5 13.5v-4h5v4"/>')
 I_FLOWS = svg('<circle cx="3" cy="4" r="1.3"/><path d="M4.5 4h2.5a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h2.5"/><path d="m12 10 2 2-2 2"/>')
 I_CLOSE = svg('<path d="m4 4 8 8M12 4l-8 8"/>')
@@ -580,14 +592,52 @@ STYLE = STYLE.replace("button{font:inherit}", """button{font:inherit}
 .tl-pos{margin-right:auto}
 .tl-only{display:inline-flex;gap:6px}
 .tl-only .st-kind::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
-.tl-only-ai::before{background:#7c3aed}
-.tl-only-ui::before{background:#0284c7}
-#tl-strip .tl-step.ai{border-left:4px solid #7c3aed}
-#tl-strip .tl-step.ui{border-left:4px solid #0284c7}
-#tl-strip .tl-step.pin-left,#tl-strip .tl-step.pin-right{width:196px;padding:12px 14px;border-width:2px 2px 2px 5px;opacity:1;box-shadow:0 4px 16px rgba(0,0,0,.2)}
-#tl-strip .tl-step.pin-left.on,#tl-strip .tl-step.pin-right.on{box-shadow:0 0 0 3px var(--sel),0 4px 16px rgba(0,0,0,.2)}
-#tl-strip .tl-step.pin-left .tl-kind,#tl-strip .tl-step.pin-right .tl-kind{font-size:14px;font-weight:600}
-@media (max-width:640px){#tl-strip{gap:8px}#tl-strip .tl-step{width:70px;padding:6px 7px;gap:2px}#tl-strip .tl-step::after{right:-9px;width:8px}#tl-strip .tl-step.pin-left,#tl-strip .tl-step.pin-right{width:84px;padding:7px 8px}#tl-strip .tl-time,#tl-strip .tl-step-name,#tl-strip .tl-step-meta{display:none}#tl-strip .tl-step .tl-kind{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#tl-strip .tl-step.pin-left .tl-kind,#tl-strip .tl-step.pin-right .tl-kind{font-size:12px}}
+.tl-only-ai::before{background:var(--ai)}
+.tl-only-ui::before{background:var(--ui)}
+:root{--ai:#7c3aed;--ai-bg:#f5f1ff;--ai-line:#cdbcfb;--ui:#0284c7;--ui-bg:#eef7fd;--ui-line:#b6dcf3}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ai:#a78bfa;--ai-bg:#1d1730;--ai-line:#4c3a86;--ui:#38bdf8;--ui-bg:#0f1d2a;--ui-line:#1f4d6b}}
+:root[data-theme="dark"]{--ai:#a78bfa;--ai-bg:#1d1730;--ai-line:#4c3a86;--ui:#38bdf8;--ui-bg:#0f1d2a;--ui-line:#1f4d6b}
+#tl-strip{align-items:center}
+#tl-strip .tl-step.ai{border:1.5px solid var(--ai-line);background:var(--ai-bg)}
+#tl-strip .tl-step.ui{border:1.5px solid var(--ui-line);background:var(--ui-bg)}
+#tl-strip .tl-step.ai .tl-step-name{color:var(--ai)}
+#tl-strip .tl-step.ui .tl-step-name{color:var(--ui)}
+#tl-strip .tl-step.ai.on{border-color:var(--ai);box-shadow:0 0 0 3px var(--ai-line)}
+#tl-strip .tl-step.ui.on{border-color:var(--ui);box-shadow:0 0 0 3px var(--ui-line)}
+#tl-strip .tl-step.ai.on .tl-step-n{background:var(--ai);border-color:var(--ai)}
+#tl-strip .tl-step.ui.on .tl-step-n{background:var(--ui);border-color:var(--ui)}
+#tl-strip .tl-step.bad{border-color:var(--bad)}
+#tl-strip .tl-step.pin-left,#tl-strip .tl-step.pin-right{width:228px;padding:16px 18px;gap:5px;border-width:2px;opacity:1;box-shadow:0 6px 20px rgba(0,0,0,.16)}
+#tl-strip .tl-step.pin-left.ai{border-color:var(--ai)}
+#tl-strip .tl-step.pin-left.ui,#tl-strip .tl-step.pin-right.ui{border-color:var(--ui)}
+#tl-strip .tl-step.pin-right.ai{border-color:var(--ai)}
+#tl-strip .tl-step.pin-left.on,#tl-strip .tl-step.pin-right.on{box-shadow:0 0 0 3px var(--sel),0 6px 20px rgba(0,0,0,.16)}
+#tl-strip .tl-step.pin-left .tl-kind,#tl-strip .tl-step.pin-right .tl-kind{font-size:15px;font-weight:600}
+#tl-strip .tl-step.pin-left .tl-step-n,#tl-strip .tl-step.pin-right .tl-step-n{min-width:24px;height:24px;border-radius:12px;font-size:11px}
+@media (max-width:640px){#tl-strip{gap:8px}#tl-strip .tl-step{width:66px;padding:6px 7px;gap:2px}#tl-strip .tl-step::after{right:-9px;width:8px}#tl-strip .tl-step.pin-left,#tl-strip .tl-step.pin-right{width:96px;padding:10px 9px}#tl-strip .tl-time,#tl-strip .tl-step-name,#tl-strip .tl-step-meta{display:none}#tl-strip .tl-step .tl-kind{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#tl-strip .tl-step.pin-left .tl-kind,#tl-strip .tl-step.pin-right .tl-kind{font-size:12px;white-space:normal;line-height:1.25}}
+.tl-ver{display:inline-flex;align-items:center;gap:4px}
+.tl-ver-pos{font:12px var(--mono);color:var(--muted);min-width:34px;text-align:center}
+#state-view .sv-bar{flex-wrap:nowrap;gap:8px;align-items:center}
+.sv-state-icon{display:inline-grid;place-items:center;width:28px;height:32px;color:var(--accent)}
+.sv-who{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.sv-who-k{padding:5px 10px;font-size:12px;color:var(--muted)}
+.sv-who[data-kind="agent"] .sv-who-k[data-kind="agent"]{background:var(--ai-bg);color:var(--ai);font-weight:600}
+.sv-who[data-kind="ui"] .sv-who-k[data-kind="ui"]{background:var(--ui-bg);color:var(--ui);font-weight:600}
+#state-view .sv-filter{flex:1;max-width:none;margin:0;order:0;flex-basis:auto}
+.sv-tabs{display:flex;gap:2px;overflow-x:auto;border-bottom:1px solid var(--line);flex:none;scrollbar-width:thin}
+.sv-tab{display:inline-flex;align-items:center;gap:6px;flex:none;height:36px;padding:0 10px;border:0;border-bottom:2px solid transparent;background:none;color:var(--muted);font:13px var(--sans);cursor:pointer;white-space:nowrap}
+.sv-tab:hover{color:var(--fg)}
+.sv-tab[aria-pressed="true"]{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.sv-soon{color:var(--muted)}
+.ln-badges{display:inline-flex;gap:4px;margin-left:10px;vertical-align:1px}
+.ln-badge{font:11px/16px var(--sans);padding:0 7px;border-radius:8px;border:1px solid var(--ok);color:var(--ok);background:transparent;white-space:nowrap}
+.ln-badge.b-changed{border-color:var(--upd);color:var(--upd)}
+.ln-badge.b-deleted{border-color:var(--del);color:var(--del)}
+.ln-badge.b-read{border-color:var(--ui);color:var(--ui)}
+.ln-badge.b-run{border-color:var(--warn);color:var(--warn)}
+.ln-badge.b-who{border-color:var(--ai);color:var(--ai)}
+.ln-badge.b-context{border-color:var(--muted);color:var(--muted)}
+@media (max-width:640px){#state-view .sv-bar{flex-wrap:wrap}#state-view .sv-filter{order:3;flex-basis:100%}.sv-tab span{display:none}.sv-tab{padding:0 10px}}
 #index-view[data-device]{container-type:inline-size;transform:translateZ(0);margin-inline:auto;max-width:100%;overflow:auto;background:var(--bg);box-shadow:0 0 0 1px var(--line),0 12px 40px rgba(0,0,0,.14)}
 #index-view[data-device="mobile"]{width:390px}
 #index-view[data-device="tablet"]{width:820px}
@@ -770,6 +820,13 @@ timeline_html = """<section id="timeline-view">
       <button class="st-kind tl-only-ui" id="tl-ui" data-call="local.show" data-input='{"only":"ui"}'
               aria-pressed="${d.show === 'ui'}" title="${d.show === 'ui' ? 'Show all the blocks' : 'Show only the UI blocks'}">UI</button>
     </span>
+    <span class="tl-ver" role="group" aria-label="Versions">
+      <button class="btn" id="older" data-call="extension.views.state-view.functions.local.step" data-input='{"delta":-1}'
+              aria-label="Older version" title="Older version (&larr;, or swipe right)">""" + I_OLDER + """</button>
+      <span class="tl-ver-pos" id="tl-ver-pos"></span>
+      <button class="btn" id="newer" data-call="extension.views.state-view.functions.local.step" data-input='{"delta":1}'
+              aria-label="Newer version" title="Newer version (&rarr;, or swipe left)">""" + I_NEWER + """</button>
+    </span>
     <button class="btn" id="tl-reload" data-call="local.reload" aria-label="Restart" title="Restart: reload the page and show the last AI run notification">
       """ + I_RELOAD + """
     </button>
@@ -794,37 +851,30 @@ timeline_html = """<section id="timeline-view">
 
 state_html = """<main id="state-view">
 <div class="sv-bar">
-  <div class="st-kinds" id="sv-switches" role="group" aria-label="Show">
+  <div class="sv-group" id="sv-left">
+    <span class="sv-state-icon" title="State">""" + I_STATE + """</span>
+    <span class="sv-who" id="sv-who" title="The chosen block of the timeline: an agent run or a UI block">
+      <span class="sv-who-k" data-kind="agent">Agent</span><span class="sv-who-k" data-kind="ui">UI</span>
+    </span>
+  </div>
+  <div class="sv-filter">
+    <input id="sv-filter-input" type="search" value="${e(d.filter)}" placeholder="Filter paths"
+           autocomplete="off" spellcheck="false" aria-label="Filter">
+  </div>
+  <div class="sv-group" id="sv-mid">
+  <button class="btn" id="changes" data-call="local.toggle-changes" aria-pressed="${d.changes}"
+          aria-label="Only changes" title="Only changes: only what the chosen block changed or touched (or the version, after Older or Newer)">""" + I_CHANGES + """</button>
+  <button class="btn" id="sv-empty" data-call="local.toggle-empty" aria-pressed="${d.show_empty}"
+          aria-label="Show empty" title="Show empty: the entries with an empty value ({}, [], &quot;&quot; or null)">""" + I_EMPTY + """</button>
+  </div>
+  <div class="sv-group" id="sv-right">
+    <button class="btn" id="sv-track" data-call="local.toggle-tracking" aria-pressed="${d.track_state}"
+            aria-label="Track this view" title="Track this view: add what you do in the state view and the timeline as blocks">""" + I_TRACK + """</button>
     <button class="btn" id="timeline-button"
             data-call="local.toggle-timeline"
             aria-pressed="${d.timeline_open}" aria-label="Timeline" title="Show or hide the timeline">
       """ + I_TIMELINE + """
     </button>
-    <span class="sv-sep"></span>
-    ${[['all', 'All'], ['files', 'Files'], ['views', 'Views'], ['functions', 'Functions'], ['network', 'Network'], ['environment', 'Environment']].map(([kind, label]) => `
-    <button class="st-kind" aria-pressed="${d.filter_kind === kind}" data-call="local.filter-kind" data-input='{"kind":"${kind}"}'
-            title="${kind === 'all' ? 'Show all' : 'Show only ' + kind + ', as a tree'}">${label}</button>`).join('')}
-    <span class="sv-sep"></span>
-    <button class="st-kind" id="changes"
-            data-call="local.toggle-changes"
-            aria-pressed="${d.changes && !d.details}" title="Show only what the chosen block changed (or the version, after Older or Newer)">Changes</button>
-    <button class="st-kind" id="details"
-            data-call="local.toggle-details"
-            aria-pressed="${d.details}" title="What happens inside the chosen block">Details</button>
-  </div>
-  <div class="sv-filter">
-    <input id="sv-filter-input" type="search" value="${e(d.filter)}" placeholder="Filter paths"
-           autocomplete="off" spellcheck="false" aria-label="Filter">
-    <span class="sv-checks" id="sv-checks">
-      <label class="sv-check" title="Show the entries with an empty value: {}, [], &quot;&quot; or null">
-        <input type="checkbox" id="sv-empty" data-call="local.toggle-empty" ${d.show_empty ? 'checked' : ''}> Show empty
-      </label>
-      <label class="sv-check" title="Add what you do in the state view and the timeline as blocks of the timeline">
-        <input type="checkbox" id="sv-track" data-call="local.toggle-tracking" ${d.track_state ? 'checked' : ''}> Track state
-      </label>
-    </span>
-  </div>
-  <div class="sv-group" id="sv-right">
     <button class="btn" id="collapse"
             data-call="local.collapse-all"
             aria-label="Collapse all" title="Collapse all">
@@ -837,21 +887,16 @@ state_html = """<main id="state-view">
       """ + I_SAVE + """
     </button>
     <span class="sv-sep"></span>
-    <button class="btn" id="older"
-            data-call="local.step" data-input='{"delta":-1}'
-            ${d.position <= 0 ? 'disabled' : ''}
-            aria-label="Older version" title="Older version (&larr;)">
-      """ + I_OLDER + """
-    </button>
-    <button class="btn" id="newer"
-            data-call="local.step" data-input='{"delta":1}'
-            ${d.position >= d.current_state_version - (d.unsaved ? 0 : 1) ? 'disabled' : ''}
-            aria-label="Newer version" title="Newer version (&rarr;)">
-      """ + I_NEWER + """
-    </button>
-    <span class="sv-sep"></span>
     <button class="btn" id="sv-close" data-call="local.close" aria-label="Close" title="Close">""" + I_CLOSE + """</button>
   </div>
+</div>
+<div class="sv-tabs" id="sv-switches" role="tablist" aria-label="Show">
+  ${[['all', 'Full State', '""" + I_STATE + """'], ['files', 'Files', '""" + I_FILES + """'], ['views', 'Views', '""" + I_VIEWS + """'],
+     ['functions', 'Functions', '""" + I_FUNCS + """'], ['network', 'Network', '""" + I_NET + """'], ['environment', 'Environment', '""" + I_ENV + """'],
+     ['performance', 'Performance', '""" + I_PERF + """'], ['improvements', 'Improvements', '""" + I_IDEA + """'], ['flow', 'Flow', '""" + I_FLOWS + """'],
+     ['video', 'Video', '""" + I_VIDEO + """'], ['docs', 'Docs', '""" + I_DOCS + """'], ['agent-run', 'Agent Run', '""" + I_AGENT + """']].map(([kind, label, icon]) => `
+  <button class="sv-tab" role="tab" aria-pressed="${d.filter_kind === kind}" aria-selected="${d.filter_kind === kind}"
+          data-call="local.filter-kind" data-input='{"kind":"${kind}"}' title="${label}">${icon}<span>${label}</span></button>`).join('')}
 </div>
 <div id="sv-editor"></div>
 <div class="tl-detail" id="tl-detail" hidden></div>
@@ -1075,11 +1120,20 @@ core.filterLines(text, spans, d.filter, 'all', { hideEmpty: d.show_empty === fal
 // typing goes on); the viewer opens and closes with ui-data.viewer_path.
 const tmp = document.createElement('div');
 tmp.innerHTML = os.template(view.html, d);
-['#sv-switches', '#sv-checks', '#sv-right', '#sv-foot'].forEach(sel => {
+['#sv-switches', '#sv-left', '#sv-mid', '#sv-right', '#sv-foot'].forEach(sel => {
   const el = tmp.querySelector(sel);
   ctx.root.querySelector(sel).replaceWith(el);
   os.bind(el, v);
 });
+// Agent or UI: the kind of the chosen block of the timeline (some logic of the UI is different for each).
+ctx.root.querySelector('#sv-who').dataset.kind = cur ? (cur.run ? 'agent' : 'ui') : '';
+// Older and Newer are in the timeline: they follow the version on screen.
+const verPos = document.getElementById('tl-ver-pos');
+if (verPos) {
+  verPos.textContent = d.version;
+  document.getElementById('older').disabled = !(d.position > 0);
+  document.getElementById('newer').disabled = !(d.position < d.current_state_version - (d.unsaved ? 0 : 1));
+}
 const input = ctx.root.querySelector('#sv-filter-input');
 if (document.activeElement !== input && input.value !== d.filter) input.value = d.filter;
 ctx.root.querySelector('#sv-viewer').hidden = !d.viewer_path;
@@ -1100,25 +1154,39 @@ if (cur && R.onBlock) {
 }
 // The pane under the bar: Details of the chosen block, the changes (of the block, or of the version after Older or
 // Newer), or one kind as a tree. All without Changes is the editor.
-const kind = d.filter_kind || 'all', inPane = !!(d.details || d.changes || kind !== 'all'), pane = ctx.root.querySelector('#tl-detail');
+const kind = d.filter_kind || 'all', inPane = !!(d.changes || kind !== 'all'), pane = ctx.root.querySelector('#tl-detail');
 const editorEl = ctx.root.querySelector('#sv-editor'), wasHidden = editorEl.hidden;
 editorEl.hidden = inPane;
 pane.hidden = !inPane;
 // (the editor does not draw while it is hidden: it draws again when it shows)
 if (wasHidden && !inPane) cm.refresh();
 if (!inPane) { R.paneKey = null; pane.textContent = ''; return; }
-const key = [cur && cur.id, R.onBlock, d.position, d.details, d.changes, kind].join(':'), keep = R.paneKey === key ? pane.scrollTop : 0;
+const key = [cur && cur.id, R.onBlock, d.position, d.changes, kind].join(':'), keep = R.paneKey === key ? pane.scrollTop : 0;
 pane.textContent = '';
 // A newly chosen block shows its calls one after the other.
 pane.classList.toggle('anim', R.paneKey !== key);
 R.paneKey = key;
 if (!T || !cur) pane.appendChild(el('p', 'tl-text', 'The timeline has no blocks yet.'));
-else if (d.details) {
+else if (kind === 'flow') {
+  // Flow: what happens inside the chosen block (its parts, its calls; an AI run: its notification).
   pane.appendChild(el('p', 'tl-text', cur.text));
   pane.appendChild(el('div', 'tl-detail-sub', 'What happens inside this block'));
   const inside = el('div', 'tl-inside');
   T.drawDetails(inside);
   pane.appendChild(inside);
+} else if (kind === 'agent-run') T.drawAgentRun(pane);
+else if (kind === 'performance' || kind === 'improvements' || kind === 'video') {
+  pane.appendChild(el('p', 'tl-text sv-soon', {
+    performance: 'Performance: the speed, memory and cost of each function, flow, agent, skill and workflow. It comes in a next version.',
+    improvements: 'Improvements: what an agent run can do better, from the analysis of the run. It comes in a next version.',
+    video: 'Video: empty for now.' }[kind]));
+} else if (kind === 'docs') {
+  // Docs: only the docs folder of the agent, in the file tree and the file viewer.
+  let full = os.get();
+  try { if (atDraft) full = core.parseJsonc(R.draft); else if (!editable) full = core.parseJsonc(H[d.position].state); } catch (e) {}
+  const files = ((full.agents || {})['agent-oss'] || {}).files || {};
+  const only = Object.assign({}, full, { agents: { 'agent-oss': { files: { docs: files.docs || {} } } } });
+  T.kindView(pane, 'files', { before: {}, after: {}, full: only, fullBefore: null, rows: [], head: d.version, state: true });
 } else if (d.changes && R.onBlock) T.drawChanges(pane, kind);
 else if (d.changes) {
   const p = core.pairAt(d.position, H, R.draft), at = x => x >= H.length ? 'the draft' : H[x].n;
@@ -1161,16 +1229,12 @@ R.onBlock = false;
 """)
 
 TOGGLE = sig("toggleChanges", [], r"""
-// Changes: what the chosen block changed (or the version on screen, after Older or Newer). It leaves Details.
+// Only changes: what the chosen block changed or touched (or the version on screen, after Older or Newer). On a tab
+// that is not a part of the state (Flow, Agent Run, Docs, Performance, Improvements, Video), it goes to Full State.
 const d = os.get('extension.views.state-view.ui-data');
-d.changes = d.details ? true : !d.changes;
-d.details = false;
-""")
-
-TOGGLE_DETAILS = sig("toggleDetails", [], r"""
-// Details: what happens inside the chosen block (its parts, its calls, an agent run in lanes).
-const d = os.get('extension.views.state-view.ui-data');
-d.details = !d.details;
+const parts = ['all', 'files', 'views', 'functions', 'network', 'environment'];
+if (!parts.includes(d.filter_kind)) { d.filter_kind = 'all'; d.changes = true; }
+else d.changes = !d.changes;
 """)
 
 TOGGLE_TIMELINE = sig("toggleTimeline", [], r"""
@@ -1469,11 +1533,10 @@ d.filter = String(text || '');
 """)
 
 FILTER_KIND = sig("filterKind", ["kind"], r"""
-// local.refresh shows only this kind, as a tree (all shows the editor). It leaves Details.
+// The tabs: local.refresh shows only this kind, as a tree (all, Full State, shows the editor), or the tab's own view.
 const d = os.get('extension.views.state-view.ui-data');
-if (!['all', 'files', 'views', 'functions', 'network', 'environment'].includes(kind)) throw new Error('No kind ' + kind);
+if (!['all', 'files', 'views', 'functions', 'network', 'environment', 'performance', 'improvements', 'flow', 'video', 'docs', 'agent-run'].includes(kind)) throw new Error('No kind ' + kind);
 d.filter_kind = kind;
-d.details = false;
 """)
 
 TOGGLE_EMPTY = sig("toggleEmpty", [], r"""
@@ -1495,6 +1558,16 @@ const old = os.refs['timeline-view'];
 if (old && old.timer) clearInterval(old.timer);
 os.refs['timeline-view'] = { parts: new Set(), files: {}, steps: [], end: null, timer: null, shown: undefined };
 os.watch('extension.views.timeline-view', 'local.refresh');
+// On a touch screen, a swipe on the timeline (not on its row of blocks, which scrolls) goes to the older version
+// (right) or the newer version (left), as the arrow keys do.
+let x0 = null;
+ctx.root.addEventListener('touchstart', e => { x0 = e.target.closest('#tl-strip') || e.touches.length !== 1 ? null : [e.touches[0].clientX, e.touches[0].clientY]; }, { passive: true });
+ctx.root.addEventListener('touchend', e => {
+  if (!x0) return;
+  const t = e.changedTouches[0], dx = t.clientX - x0[0], dy = t.clientY - x0[1];
+  x0 = null;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > 2 * Math.abs(dy)) os.call('extension.views.state-view.functions.local.step', { delta: dx > 0 ? -1 : 1 }, 'extension.views.timeline-view').catch(console.error);
+});
 await ctx.call('local.refresh', { after: 'local.init' });
 // After the Restart button: the state view shows the last AI run notification (no block chosen).
 let replay = location.hash === '#timeline-replay';
@@ -1771,6 +1844,12 @@ const stateBox = (label, cv, opts) => {
   core.filterLines(cv.text, null, sd.filter, {}).forEach(([a, b]) => {
     hidden += b - a;
     cm.markText(CodeMirror.Pos(a, 0), CodeMirror.Pos(b, cm.getLine(b).length), { replacedWith: el('span', 'sv-hidden', '⋯ ' + (b - a + 1) + (b > a ? ' lines' : ' line')) });
+  });
+  // badges after lines: { line: [label, ...] } (who and what, for the files that an AI run touched)
+  Object.keys((opts && opts.badges) || {}).forEach(l => {
+    const w = el('span', 'ln-badges');
+    opts.badges[l].forEach(b => w.appendChild(el('span', 'ln-badge b-' + ({ 'main': 'who', 'sub agent': 'who', 'default context': 'context' }[b] || b), b)));
+    cm.setBookmark(CodeMirror.Pos(+l, cm.getLine(+l).length), { widget: w });
   });
   cm.setSize(null, Math.min(520, (cm.lineCount() - hidden) * 19 + 10));
   host.cm = cm;
@@ -2546,7 +2625,15 @@ steps.forEach(s => { R.changes[s.id] = s.run ? 0 : s.changes || 0; });
 const flowAt = R.flow ? R.flow.ids.indexOf(cur.id) : -1;
 ctx.root.querySelector('#tl-pos').textContent = (flowAt >= 0 ? R.flow.name + ': block ' + (flowAt + 1) + ' of ' + R.flow.ids.length : 'Block ' + (pos + 1) + ' of ' + steps.length) + '  ' + (cur.when || since(cur.ms));
 ctx.root.querySelector('#tl-prev').disabled = pos === 0;
+// The versions of the state view: Older and Newer, with the version on screen.
+const svp = os.get(sv + '.ui-data') || {};
+ctx.root.querySelector('#tl-ver-pos').textContent = svp.version || '';
+ctx.root.querySelector('#older').disabled = !(svp.position > 0);
+ctx.root.querySelector('#newer').disabled = !(svp.position < svp.current_state_version - (svp.unsaved ? 0 : 1));
 ctx.root.querySelector('#tl-next').disabled = pos === steps.length - 1;
+// Agent or UI in the state view: the kind of the chosen block.
+const who = document.getElementById('sv-who');
+if (who) who.dataset.kind = cur.run ? 'agent' : 'ui';
 strip.textContent = '';
 // The newest agent run stays in sight at the left and the newest block at the right when the row scrolls.
 steps.forEach((s, i) => {
@@ -2584,6 +2671,12 @@ R.versionOf = s => s.run ? s.run.version : s.rec && s.rec.name === 'loadNewerVer
   : s.rec && s.rec.name === 'loadState' ? s.rec.related.head : (((os.history && os.history.commits) || []).slice(-1)[0] || {}).n;
 // Details: the parts of the block, then its call with the calls inside it.
 R.drawDetails = box => details(cur, box);
+// Agent Run: the AI run notification of the chosen block, or of the last AI run.
+R.drawAgentRun = box => {
+  const s = cur && cur.run ? cur : lastRun ? { run: lastRun } : null;
+  if (s) runDetails(s.run, box);
+  else box.appendChild(el('p', 'tl-text', 'The state has no AI run yet.'));
+};
 // Two states as the changes view needs them: before, after, and the rows of the table (path, change).
 R.pairFrom = (before, after, from, head) => {
   const changes = core.diff(before, after), L = x => typeof x === 'number' ? 'v' + x : x;
@@ -2593,8 +2686,73 @@ R.pairFrom = (before, after, from, head) => {
 };
 // Changes of the state view: kind 'all' shows the state cut down to the changes, with a table; one kind (files,
 // views, functions, network, environment) shows in its own view (kindView), a tree on the left.
+// What an AI run touched, by file of the agent: who (main, sub agent) and what (read, changed, run, deleted, default
+// context). The default context of the main agent is .claude/CLAUDE.md; of a sub agent, .claude/agents/<lane>.md.
+const fileKey = f => JSON.stringify(['agents', 'agent-oss', 'files'].concat(String(f).split('/')));
+const touchesOf = run => {
+  const t = {};
+  const add = (f, who, what) => { const k = fileKey(f); t[k] = t[k] || { who: new Set(), what: new Set() }; t[k].who.add(who); t[k].what.add(what); };
+  const what = a => a === 'read' ? 'read' : a === 'run' ? 'run' : a === 'deleted' ? 'deleted' : 'changed';
+  const lanes = new Set();
+  (run.steps || []).forEach(st => {
+    if (st.lane && st.lane !== 'main') lanes.add(st.lane);
+    (st.files || []).forEach(f => add(f.path, st.lane && st.lane !== 'main' ? 'sub agent' : 'main', what(f.action)));
+  });
+  add('.claude/CLAUDE.md', 'main', 'default context');
+  lanes.forEach(l => add('.claude/agents/' + l + '.md', 'sub agent', 'default context'));
+  return t;
+};
+// The state cut down to what changed and to what the run touched (kept with no color), and the line of each path.
+const touchedView = (before, after, touched) => {
+  const keep = new Set();
+  Object.keys(touched).forEach(k => { const p = JSON.parse(k); for (let i = 1; i <= p.length; i++) keep.add(JSON.stringify(p.slice(0, i))); });
+  const lines = [], marks = [], at = {};
+  const isObj = x => x && typeof x === 'object' && !Array.isArray(x), same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  const value = (v, indent, prefix, suffix, type, path, was) => {
+    const t = JSON.stringify(v, null, 2).split('\n'), from = lines.length;
+    at[JSON.stringify(path)] = from;
+    t.forEach((x, i) => lines.push((i ? indent : indent + prefix) + x + (i === t.length - 1 ? suffix : '')));
+    if (type) { const m = { type, path, from, to: lines.length - 1, before: was }; if (type === 'updated') m.after = v; marks.push(m); }
+  };
+  const obj = (b, a, indent, path) => {
+    const keys = Array.from(new Set(Object.keys(a).concat(Object.keys(b)))).filter(k => !same(b[k], a[k]) || keep.has(JSON.stringify(path.concat(k))));
+    keys.forEach((k, i) => {
+      const comma = i < keys.length - 1 ? ',' : '', prefix = JSON.stringify(k) + ': ', p = path.concat(k);
+      if (!(k in b)) value(a[k], indent, prefix, comma, 'added', p);
+      else if (!(k in a)) value(b[k], indent, prefix, comma, 'deleted', p);
+      else if (isObj(b[k]) && isObj(a[k]) && !touched[JSON.stringify(p)]) {
+        at[JSON.stringify(p)] = lines.length;
+        lines.push(indent + prefix + '{');
+        obj(b[k], a[k], indent + '  ', p);
+        lines.push(indent + '}' + comma);
+      } else value(a[k], indent, prefix, comma, same(b[k], a[k]) ? null : 'updated', p, b[k]);
+    });
+  };
+  lines.push('{');
+  obj(isObj(before) ? before : {}, isObj(after) ? after : {}, '  ', []);
+  lines.push('}');
+  return { text: lines.join('\n'), marks, at, empty: lines.length <= 2 };
+};
 R.drawPair = (box, kind, p) => {
   if (kind !== 'all') { kindView(box, kind, p); return; }
+  if (p.run) {
+    // Full State of an AI run: what it changed, and what it read and ran, with badges after the lines of the files.
+    const t = touchesOf(p.run), cv = touchedView(p.before, p.after, t), badges = {};
+    Object.keys(t).forEach(k => {
+      if (cv.at[k] === undefined) return;
+      const x = t[k], ctxFile = x.what.has('default context');
+      const list = ctxFile ? Array.from(x.who).concat(['default context']) : Array.from(x.what).concat(x.who.has('sub agent') && !x.who.has('main') ? ['sub agent'] : []);
+      badges[cv.at[k]] = list;
+    });
+    box.appendChild(el('p', 'tl-text', p.count + (p.count === 1 ? ' change' : ' changes') + p.intro + ' The files that the run read or ran, and its default context, show too: the badges after a file tell who (main or sub agent) and what (read, changed, run, default context).'));
+    const legend = el('div', 'st-legend');
+    ['added', 'updated', 'deleted'].forEach(k => legend.appendChild(el('span', k, k)));
+    box.appendChild(legend);
+    box.appendChild(stateBox(p.label + ', and what it touched', cv, { badges }));
+    box.appendChild(el('div', 'tl-detail-sub', p.sub));
+    box.appendChild(table([p.cols].concat(p.rows.filter(r => passes(r.keys)).map(r => r.row))));
+    return;
+  }
   box.appendChild(el('p', 'tl-text', p.count + (p.count === 1 ? ' change' : ' changes') + p.intro + ' A long text shows as "...": the pointer on it shows its start (an updated text: its changes), a click opens it.'));
   const legend = el('div', 'st-legend');
   ['added', 'updated', 'deleted'].forEach(k => legend.appendChild(el('span', k, k)));
@@ -4154,7 +4312,6 @@ state = {
           "version": "v1",
           "version_ago": "",
           "changes": False,
-          "details": False,
           "timeline_open": False,
           "track_state": False,
           "unsaved": False,
@@ -4185,14 +4342,10 @@ state = {
                            tests={"nothing typed, nothing unsaved": {"before": render_sv, "input": {}, "expect": {"state": {P + ".unsaved": False, P + ".error": ""}}}}),
           "local.step": fn("Older and Newer: moves delta versions back (-1) or forward (1) in the history, and leaves the chosen block (Changes shows the changes of the version). Also runs on the arrow keys.",
                            code=STEP, input_={"delta": -1}, expected={P + ".position": MAY},
-                           tests={"stops at the newest version": {"before": render_sv, "input": {"delta": 1}, "expect": {"state": {P + ".unsaved": False}, "dom": ["#newer[disabled]"]}}}),
-          "local.toggle-changes": fn("Changes: shows only what the chosen block changed (or the version on screen, after Older or Newer): added green, updated yellow, deleted red, with a table of what changed. One kind shows as a tree. It leaves Details.",
-                                     code=TOGGLE, expected={P + ".changes": "toggles", P + ".details": MAY},
+                           tests={"stops at the newest version": {"before": render_sv, "input": {"delta": 1}, "expect": {"state": {P + ".unsaved": False}}}}),
+          "local.toggle-changes": fn("Only changes: shows only what the chosen block changed (or the version on screen, after Older or Newer): added green, updated yellow, deleted red, with a table of what changed. For an AI run, Full State also keeps what the run read and its default context, with badges of who and what. One kind shows as a tree. On a tab that is not a part of the state (Flow, Agent Run, Docs, Performance, Improvements, Video), it goes to Full State.",
+                                     code=TOGGLE, expected={P + ".changes": MAY, P + ".filter_kind": MAY},
                                      tests={"turns the changes view on": {"before": dict(render_sv, **{"local.filter-kind": {"kind": "all"}}), "input": {}, "expect": {"state": {P + ".changes": True}, "dom": ["#changes[aria-pressed=\"true\"]", "#tl-detail:not([hidden]) .st-legend, #tl-detail:not([hidden]) .tl-text"]}}}),
-          "local.toggle-details": fn("Details: shows what happens inside the chosen block of the timeline (its parts, its calls, an agent run in lanes).",
-                                     code=TOGGLE_DETAILS, expected={P + ".details": "toggles"},
-                                     tests={"shows the details": {"before": dict(render_sv, **{TV + ".functions.local.select": {"id": "open"}}), "input": {},
-                                                                  "expect": {"state": {P + ".details": True}, "dom": ["#details[aria-pressed=\"true\"]", "#tl-detail .tl-netenv .tl-panel"]}}}),
           "local.close": fn("The close button of the state view: closes state-view. The State button of the header is not pressed.",
                             code=close_view("state-view", "state_open"), expected={HV + ".ui-data.state_open": False},
                             calls={"extension.functions.unmount": {"input": V(SV), "output": None}, "extension.functions.render": {"input": V(HV), "output": None}},
@@ -4202,10 +4355,10 @@ state = {
                                       calls={"extension.functions.render": {"input": V(TV), "output": None}},
                                       tests={"shows the timeline": {"before": render_sv, "input": {},
                                                                     "expect": {"dom": ["#timeline-button[aria-pressed]", "#timeline-view .tl-step"]}}}),
-          "local.toggle-tracking": fn("The Track state box: turns on or off that what you do in the state view and the timeline (clicks, the replay) is added as blocks of the timeline.",
+          "local.toggle-tracking": fn("The Track this view button: turns on or off that what you do in the state view and the timeline (clicks, the replay) is added as blocks of the timeline.",
                                       code=TOGGLE_TRACK, expected={P + ".track_state": "toggles"},
                                       tests={"tracks, then stops": {"before": dict(render_sv, **{"local.toggle-tracking": {}}), "input": {},
-                                                                    "expect": {"state": {P + ".track_state": False}, "dom": ["#sv-track:not(:checked)"]}}}),
+                                                                    "expect": {"state": {P + ".track_state": False}, "dom": ["#sv-track[aria-pressed=\"false\"]"]}}}),
           "local.collapse-all": fn("Folds every object in the editor.", code=COLLAPSE,
                                    tests={"folds the editor": {"before": dict(render_sv, **{"local.filter-kind": {"kind": "all"}}), "input": {},
                                                                "expect": {"dom": [".CodeMirror-foldmarker"]}}}),
@@ -4217,16 +4370,16 @@ state = {
                               code=FILTER, input_={"text": "header"}, expected={P + ".filter": "input.text"},
                               tests={"keeps header paths": {"before": render_sv, "input": {"text": "header-view"},
                                                             "expect": {"state": {P + ".filter": "header-view"}, "dom": ["#sv-editor .sv-hidden"]}}}),
-          "local.filter-kind": fn("Shows only one kind: files, views, functions, network or environment, as a tree on the left and the chosen one on the right (File, View, Function, Request or Value; Pseudo code; Changes). all shows the editor. It leaves Details.",
+          "local.filter-kind": fn("The tabs under the bar. all (Full State) shows the editor. files, views, functions, network or environment shows only that kind, as a tree on the left and the chosen one on the right (File, View, Function, Request or Value; Pseudo code; Changes). flow shows what happens inside the chosen block, agent-run the AI run notification, docs only the docs folder. performance, improvements and video are empty for now.",
                                    code=FILTER_KIND, input_={"kind": "functions"},
-                                   expected={P + ".filter_kind": "input.kind", P + ".details": MAY},
+                                   expected={P + ".filter_kind": "input.kind"},
                                    tests={"shows only functions": {"before": render_sv, "input": {"kind": "functions"},
                                                                    "expect": {"state": {P + ".filter_kind": "functions"}, "dom": ["#sv-switches [data-input*=\"functions\"][aria-pressed=\"true\"]", "#tl-detail .kv .kv-tree .kv-item"]}},
                                           "shows the files as a tree": {"before": dict(render_sv, **{"local.filter": {"text": ""}}), "input": {"kind": "files"},
                                                                         "expect": {"state": {P + ".filter_kind": "files"}, "dom": ["#tl-detail .kv .kv-tree summary", "#sv-editor[hidden]"]}}}),
           "local.toggle-empty": fn("Shows or hides the entries with an empty value: {}, [], \"\" or null (the Show empty box).",
                                    code=TOGGLE_EMPTY, expected={P + ".show_empty": "toggles"},
-                                   tests={"hides empty values": {"before": render_sv, "input": {}, "expect": {"state": {P + ".show_empty": False}, "dom": ["#sv-empty:not(:checked)"]}}}),
+                                   tests={"hides empty values": {"before": render_sv, "input": {}, "expect": {"state": {P + ".show_empty": False}, "dom": ["#sv-empty[aria-pressed=\"false\"]"]}}}),
           "local.set-md-theme": fn("Sets the theme that md files show in: reader (the default, for long reading), white, black, sepia, night or mono.",
                                    code=SET_MD_THEME, input_={"theme": "black"}, expected={P + ".md_theme": "input.theme"},
                                    tests={"switches to black": {"before": render_sv, "input": {"theme": "black"},

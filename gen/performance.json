@@ -1,447 +1,447 @@
 {
  "extension.functions.get-state": {
   "count": 6,
-  "avg": 182.2,
-  "max": 420
+  "avg": 226.3,
+  "max": 569
  },
  "extension.functions.render": {
   "count": 107,
-  "avg": 437,
-  "max": 2217
+  "avg": 466.4,
+  "max": 2523
  },
  "extension.functions.unmount": {
   "count": 21,
-  "avg": 152.8,
-  "max": 278
+  "avg": 141.4,
+  "max": 176
  },
  "extension.views.docs-view.functions.local.close": {
   "count": 2,
-  "avg": 637,
-  "max": 688
+  "avg": 527.5,
+  "max": 547
  },
  "extension.views.docs-view.functions.local.init": {
   "count": 11,
-  "avg": 176.8,
-  "max": 216
+  "avg": 162.8,
+  "max": 206
  },
  "extension.views.docs-view.functions.local.open-doc": {
   "count": 4,
-  "avg": 166.3,
-  "max": 183
+  "avg": 154.3,
+  "max": 175
  },
  "extension.views.header-view.functions.local.init": {
   "count": 37,
-  "avg": 189.7,
-  "max": 1165
+  "avg": 207.1,
+  "max": 1219
  },
  "extension.views.header-view.functions.local.open.docs-view": {
   "count": 7,
-  "avg": 730,
-  "max": 892
+  "avg": 720,
+  "max": 838
  },
  "extension.views.header-view.functions.local.open.state-view": {
   "count": 4,
-  "avg": 912.8,
-  "max": 1283
+  "avg": 1042.3,
+  "max": 1578
  },
  "extension.views.header-view.functions.local.set-device": {
   "count": 6,
-  "avg": 400.5,
-  "max": 461
+  "avg": 489.3,
+  "max": 617
  },
  "extension.views.header-view.functions.local.toggle-device-menu": {
   "count": 7,
-  "avg": 412.6,
-  "max": 510
+  "avg": 478.1,
+  "max": 596
  },
  "extension.views.index-view.functions.local.init": {
   "count": 4,
-  "avg": 1455.3,
-  "max": 2021
+  "avg": 1693.8,
+  "max": 2257
  },
  "extension.views.notes-view.functions.local.add-text": {
   "count": 1,
-  "avg": 152,
-  "max": 152
+  "avg": 167,
+  "max": 167
  },
  "extension.views.notes-view.functions.local.close": {
   "count": 4,
-  "avg": 280.3,
-  "max": 313
+  "avg": 294.3,
+  "max": 323
  },
  "extension.views.notes-view.functions.local.delete": {
   "count": 5,
-  "avg": 145.4,
-  "max": 167
+  "avg": 153.8,
+  "max": 158
  },
  "extension.views.notes-view.functions.local.edit": {
   "count": 1,
-  "avg": 145,
-  "max": 145
+  "avg": 149,
+  "max": 149
  },
  "extension.views.notes-view.functions.local.init": {
   "count": 9,
-  "avg": 379.1,
-  "max": 547
+  "avg": 319.9,
+  "max": 567
  },
  "extension.views.notes-view.functions.local.pick": {
   "count": 2,
-  "avg": 145,
-  "max": 149
+  "avg": 171,
+  "max": 175
  },
  "extension.views.notes-view.functions.local.refresh": {
   "count": 49,
-  "avg": 159.5,
-  "max": 383
+  "avg": 156.4,
+  "max": 362
  },
  "extension.views.notes-view.functions.local.send": {
   "count": 4,
-  "avg": 142.3,
-  "max": 153
+  "avg": 147.3,
+  "max": 182
  },
  "extension.views.notes-view.functions.local.set-settings": {
   "count": 7,
-  "avg": 148.4,
-  "max": 164
+  "avg": 180.4,
+  "max": 352
  },
  "extension.views.notes-view.functions.local.show-state": {
   "count": 2,
-  "avg": 162.5,
-  "max": 168
+  "avg": 150,
+  "max": 159
  },
  "extension.views.notes-view.functions.local.toggle-settings": {
   "count": 6,
-  "avg": 153.3,
-  "max": 191
+  "avg": 138,
+  "max": 149
  },
  "extension.views.notes-view.functions.local.transcribe": {
   "count": 1,
-  "avg": 156,
-  "max": 156
+  "avg": 147,
+  "max": 147
  },
  "extension.views.recorder-view.functions.local.clear": {
   "count": 3,
-  "avg": 146,
-  "max": 162
+  "avg": 137,
+  "max": 154
  },
  "extension.views.recorder-view.functions.local.init": {
   "count": 12,
-  "avg": 299.5,
-  "max": 387
+  "avg": 318.4,
+  "max": 420
  },
  "extension.views.recorder-view.functions.local.open-notes": {
   "count": 4,
-  "avg": 1004.8,
-  "max": 1624
+  "avg": 965.8,
+  "max": 1239
  },
  "extension.views.recorder-view.functions.local.refresh": {
-  "count": 301,
-  "avg": 146.1,
-  "max": 251
+  "count": 300,
+  "avg": 152.3,
+  "max": 280
  },
  "extension.views.recorder-view.functions.local.select": {
   "count": 2,
-  "avg": 117.5,
-  "max": 124
+  "avg": 190.5,
+  "max": 243
  },
  "extension.views.recorder-view.functions.local.start": {
   "count": 5,
-  "avg": 151,
-  "max": 186
+  "avg": 172,
+  "max": 213
  },
  "extension.views.recorder-view.functions.local.stop": {
   "count": 6,
-  "avg": 161.8,
-  "max": 179
+  "avg": 202.3,
+  "max": 244
  },
  "extension.views.recorder-view.functions.local.toggle-menu": {
   "count": 6,
-  "avg": 149,
-  "max": 205
+  "avg": 173.7,
+  "max": 202
  },
  "extension.views.state-view.functions.local.close": {
   "count": 2,
-  "avg": 591,
-  "max": 608
+  "avg": 600.5,
+  "max": 621
  },
  "extension.views.state-view.functions.local.close-viewer": {
   "count": 4,
-  "avg": 252.5,
-  "max": 344
+  "avg": 285.5,
+  "max": 437
  },
  "extension.views.state-view.functions.local.collapse-all": {
   "count": 1,
-  "avg": 255,
-  "max": 255
+  "avg": 337,
+  "max": 337
  },
  "extension.views.state-view.functions.local.edit": {
   "count": 4,
-  "avg": 187.8,
-  "max": 250
+  "avg": 191.8,
+  "max": 220
  },
  "extension.views.state-view.functions.local.filter": {
   "count": 9,
-  "avg": 138.8,
-  "max": 151
+  "avg": 162.8,
+  "max": 196
  },
  "extension.views.state-view.functions.local.filter-kind": {
   "count": 28,
-  "avg": 151.8,
-  "max": 191
+  "avg": 154.9,
+  "max": 193
  },
  "extension.views.state-view.functions.local.init": {
   "count": 23,
-  "avg": 237.4,
-  "max": 863
+  "avg": 254.6,
+  "max": 838
  },
  "extension.views.state-view.functions.local.open-viewer": {
   "count": 5,
   "avg": 189.4,
-  "max": 212
+  "max": 230
  },
  "extension.views.state-view.functions.local.refresh": {
-  "count": 146,
-  "avg": 1895.4,
-  "max": 10702
+  "count": 145,
+  "avg": 2084.1,
+  "max": 13028
  },
  "extension.views.state-view.functions.local.save": {
   "count": 2,
-  "avg": 1142,
-  "max": 1242
+  "avg": 1319,
+  "max": 1434
  },
  "extension.views.state-view.functions.local.set-md-theme": {
   "count": 6,
-  "avg": 156,
-  "max": 194
+  "avg": 159,
+  "max": 189
  },
  "extension.views.state-view.functions.local.step": {
   "count": 3,
-  "avg": 147,
-  "max": 174
+  "avg": 148,
+  "max": 169
  },
  "extension.views.state-view.functions.local.toggle-changes": {
   "count": 10,
-  "avg": 145.7,
-  "max": 213
+  "avg": 155.3,
+  "max": 179
  },
  "extension.views.state-view.functions.local.toggle-empty": {
   "count": 4,
-  "avg": 160.3,
-  "max": 174
+  "avg": 133.5,
+  "max": 145
  },
  "extension.views.state-view.functions.local.toggle-timeline": {
   "count": 6,
-  "avg": 157.8,
-  "max": 195
+  "avg": 159.3,
+  "max": 176
  },
  "extension.views.state-view.functions.local.toggle-tracking": {
   "count": 4,
-  "avg": 163.5,
-  "max": 194
+  "avg": 162.8,
+  "max": 185
  },
  "extension.views.timeline-view.functions.local.close": {
   "count": 2,
-  "avg": 123.5,
-  "max": 128
+  "avg": 134,
+  "max": 138
  },
  "extension.views.timeline-view.functions.local.init": {
   "count": 16,
-  "avg": 331.6,
-  "max": 563
+  "avg": 344.8,
+  "max": 541
  },
  "extension.views.timeline-view.functions.local.next": {
-  "count": 10,
-  "avg": 159.2,
-  "max": 187
+  "count": 9,
+  "avg": 160.9,
+  "max": 194
  },
  "extension.views.timeline-view.functions.local.play": {
   "count": 4,
-  "avg": 151.3,
-  "max": 165
+  "avg": 150.3,
+  "max": 192
  },
  "extension.views.timeline-view.functions.local.play-flow": {
   "count": 2,
-  "avg": 153.5,
-  "max": 196
+  "avg": 137.5,
+  "max": 140
  },
  "extension.views.timeline-view.functions.local.refresh": {
-  "count": 231,
-  "avg": 158.5,
-  "max": 422
+  "count": 230,
+  "avg": 161.4,
+  "max": 383
  },
  "extension.views.timeline-view.functions.local.select": {
   "count": 22,
-  "avg": 144,
-  "max": 174
+  "avg": 147,
+  "max": 179
  },
  "extension.views.timeline-view.functions.local.show": {
   "count": 6,
-  "avg": 152.2,
-  "max": 188
+  "avg": 151,
+  "max": 183
  },
  "extension.views.timeline-view.functions.local.toggle-flows": {
   "count": 3,
-  "avg": 130,
-  "max": 154
+  "avg": 136,
+  "max": 143
  },
  "local.clear": {
   "count": 1,
-  "avg": 1878,
-  "max": 1878
+  "avg": 1632,
+  "max": 1632
  },
  "local.close": {
   "count": 4,
-  "avg": 3363.8,
-  "max": 9032
+  "avg": 3607.8,
+  "max": 10349
  },
  "local.close-viewer": {
   "count": 1,
-  "avg": 13122,
-  "max": 13122
+  "avg": 12660,
+  "max": 12660
  },
  "local.collapse-all": {
   "count": 1,
-  "avg": 11358,
-  "max": 11358
+  "avg": 12485,
+  "max": 12485
  },
  "local.edit": {
   "count": 1,
-  "avg": 8418,
-  "max": 8418
+  "avg": 9168,
+  "max": 9168
  },
  "local.filter": {
   "count": 1,
-  "avg": 9529,
-  "max": 9529
+  "avg": 10633,
+  "max": 10633
  },
  "local.filter-kind": {
   "count": 2,
-  "avg": 10238,
-  "max": 10696
+  "avg": 12642.5,
+  "max": 13574
  },
  "local.init": {
   "count": 6,
-  "avg": 3707.5,
-  "max": 14191
+  "avg": 4247.3,
+  "max": 17401
  },
  "local.next": {
   "count": 1,
-  "avg": 2245,
-  "max": 2245
+  "avg": 2086,
+  "max": 2086
  },
  "local.open-doc": {
   "count": 2,
-  "avg": 1085.5,
-  "max": 1139
+  "avg": 1139.5,
+  "max": 1206
  },
  "local.open-notes": {
   "count": 1,
-  "avg": 3853,
-  "max": 3853
+  "avg": 3067,
+  "max": 3067
  },
  "local.open-viewer": {
   "count": 1,
-  "avg": 10399,
-  "max": 10399
+  "avg": 12064,
+  "max": 12064
  },
  "local.open.docs-view": {
   "count": 2,
-  "avg": 1328.5,
-  "max": 1343
+  "avg": 1424,
+  "max": 1494
  },
  "local.open.state-view": {
   "count": 2,
-  "avg": 7709.5,
-  "max": 7853
+  "avg": 8468,
+  "max": 8837
  },
  "local.play": {
   "count": 1,
-  "avg": 2406,
-  "max": 2406
+  "avg": 2651,
+  "max": 2651
  },
  "local.play-flow": {
   "count": 1,
-  "avg": 1487,
-  "max": 1487
+  "avg": 1617,
+  "max": 1617
  },
  "local.refresh": {
   "count": 3,
-  "avg": 3594.7,
-  "max": 8063
+  "avg": 4277.3,
+  "max": 9847
  },
  "local.select": {
   "count": 3,
-  "avg": 1836.7,
-  "max": 2107
+  "avg": 2036.7,
+  "max": 2306
  },
  "local.set-device": {
   "count": 2,
-  "avg": 848.5,
-  "max": 1141
+  "avg": 1003.5,
+  "max": 1389
  },
  "local.set-md-theme": {
   "count": 1,
-  "avg": 10420,
-  "max": 10420
+  "avg": 11318,
+  "max": 11318
  },
  "local.set-settings": {
   "count": 1,
-  "avg": 1791,
-  "max": 1791
+  "avg": 1506,
+  "max": 1506
  },
  "local.show": {
   "count": 2,
-  "avg": 1531.5,
-  "max": 1853
+  "avg": 1514,
+  "max": 1815
  },
  "local.step": {
   "count": 1,
-  "avg": 8158,
-  "max": 8158
+  "avg": 8897,
+  "max": 8897
  },
  "local.stop": {
   "count": 1,
-  "avg": 2090,
-  "max": 2090
+  "avg": 2463,
+  "max": 2463
  },
  "local.toggle-changes": {
   "count": 1,
-  "avg": 8717,
-  "max": 8717
+  "avg": 11092,
+  "max": 11092
  },
  "local.toggle-device-menu": {
   "count": 1,
-  "avg": 1092,
-  "max": 1092
+  "avg": 1364,
+  "max": 1364
  },
  "local.toggle-empty": {
   "count": 1,
-  "avg": 10289,
-  "max": 10289
+  "avg": 10087,
+  "max": 10087
  },
  "local.toggle-flows": {
   "count": 1,
-  "avg": 1438,
-  "max": 1438
+  "avg": 1776,
+  "max": 1776
  },
  "local.toggle-menu": {
   "count": 1,
-  "avg": 3785,
-  "max": 3785
+  "avg": 3573,
+  "max": 3573
  },
  "local.toggle-settings": {
   "count": 1,
-  "avg": 2884,
-  "max": 2884
+  "avg": 2175,
+  "max": 2175
  },
  "local.toggle-timeline": {
   "count": 1,
-  "avg": 8616,
-  "max": 8616
+  "avg": 9689,
+  "max": 9689
  },
  "local.toggle-tracking": {
   "count": 1,
-  "avg": 9638,
-  "max": 9638
+  "avg": 10276,
+  "max": 10276
  }
 }

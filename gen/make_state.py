@@ -78,6 +78,8 @@ STYLE = STYLE.replace("#sv-viewer-code,#sv-viewer-view{", """#docs-view{flex:1;m
 .doc{overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 20px;line-height:1.55;font-size:14px}
 .doc h2{margin:0 0 12px;font-size:18px}
 .doc h3{margin:18px 0 8px;font-size:15px}
+.doc h4{margin:14px 0 6px;font-size:14px}
+.doc .item.sub{margin-left:18px}
 .doc p{margin:0 0 6px}
 .doc .item{padding-left:14px;position:relative}
 .doc .item::before{content:"•";position:absolute;left:2px;color:var(--muted)}
@@ -97,33 +99,19 @@ STYLE = STYLE.replace("#sv-viewer-code,#sv-viewer-view{", """#docs-view{flex:1;m
 .sv-bar{flex-wrap:nowrap;gap:12px}
 .sv-bar .st-kinds{flex:none;flex-wrap:nowrap}
 .sv-sep{width:1px;height:22px;background:var(--line);margin:0 2px;flex:none}
-.sv-check{display:flex;align-items:center;gap:6px;flex:none;font:13px var(--sans);color:var(--fg);cursor:pointer;white-space:nowrap}
-.sv-check input{width:15px;height:15px;margin:0;accent-color:var(--accent);cursor:pointer}
 .sv-group{display:flex;gap:8px;align-items:center;flex:none}
 .sv-filter{position:relative;flex:1;min-width:120px;max-width:560px;margin:0 auto}
-#sv-filter-input,#st-filter-input{width:100%;box-sizing:border-box;height:34px;padding:0 12px 0 32px;border:1px solid var(--line);border-radius:9px;background:var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238b95a5' stroke-width='1.6' stroke-linecap='round'%3E%3Ccircle cx='7' cy='7' r='4.5'/%3E%3Cpath d='m10.5 10.5 3 3'/%3E%3C/svg%3E") no-repeat 10px 50%;color:var(--fg);font:13px var(--sans);outline:none}
-#sv-filter-input:focus,#st-filter-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--sel)}
+#sv-filter-input{width:100%;box-sizing:border-box;height:34px;padding:0 12px 0 32px;border:1px solid var(--line);border-radius:9px;background:var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238b95a5' stroke-width='1.6' stroke-linecap='round'%3E%3Ccircle cx='7' cy='7' r='4.5'/%3E%3Cpath d='m10.5 10.5 3 3'/%3E%3C/svg%3E") no-repeat 10px 50%;color:var(--fg);font:13px var(--sans);outline:none}
+#sv-filter-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--sel)}
 .sv-filter{display:flex;gap:12px;align-items:center}
-#sv-filter-input,#st-filter-input{flex:1;min-width:80px}
-.st-filter{flex:none;max-width:none;margin:10px 0 0;flex-wrap:wrap}
-.sv-switches{display:flex;gap:10px;flex:none}
-.sv-switch{display:flex;align-items:center;gap:6px;border:0;background:none;padding:0;color:var(--muted);font:12px var(--sans);cursor:pointer}
-.sv-switch[aria-checked="true"]{color:var(--fg)}
-.sv-track{position:relative;width:26px;height:15px;border-radius:8px;background:var(--line);transition:background .15s}
-.sv-track::after{content:"";position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background:#fff;transition:transform .15s}
-.sv-switch[aria-checked="true"] .sv-track{background:var(--accent)}
-.sv-switch[aria-checked="true"] .sv-track::after{transform:translateX(11px)}
-.sv-switch:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+#sv-filter-input{flex:1;min-width:80px}
 .sv-hidden{color:var(--muted);font:11px var(--sans);background:var(--gutter);border-radius:4px;padding:0 6px}
 .sv-foot{display:flex;align-items:center;gap:12px;min-height:22px;padding-top:2px;flex-wrap:wrap}
 .sv-foot .status{margin-left:auto}
 @media (max-width:1100px){.sv-bar{flex-wrap:wrap}.sv-filter{order:3;flex-basis:100%;max-width:none}.sv-bar .st-kinds{flex-wrap:wrap}.sv-group#sv-right{margin-left:auto}}
 @media (max-width:1100px){.sv-bar .st-kinds{flex:1 1 0;min-width:0}}
-@media (max-width:640px){.sv-filter{flex-wrap:wrap}.sv-checks{flex-wrap:wrap}}
-#st-filter{order:0;flex-basis:auto}
-#st-filter .st-kinds{flex-wrap:wrap;flex:1 1 auto;min-width:0}
+@media (max-width:640px){.sv-filter{flex-wrap:wrap}}
 #timeline-view{flex:0 1 auto;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:6px;padding-block:10px 8px;border-bottom:1px solid var(--line);background:var(--gutter);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.sv-checks{display:flex;gap:12px;align-items:center;flex:none}
 #state-view > #tl-detail{min-height:240px}
 .sv-block{font:12px var(--sans);color:var(--muted)}
 .sv-block b{color:var(--fg);font-weight:600}
@@ -170,7 +158,6 @@ STYLE = STYLE.replace("#sv-viewer-code,#sv-viewer-view{", """#docs-view{flex:1;m
 .tl-flow-text{display:flex;flex-direction:column;gap:2px;min-width:0;font:13px var(--sans)}
 .tl-flow-text span{font:11px var(--mono);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tl-none{padding:10px 8px;color:var(--muted);font-size:13px}
-.st-bar .st-close{margin-left:auto}
 .tl-explain{display:grid;grid-template-columns:minmax(110px,.55fr) 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:8px 0 4px}
 .tl-explain>div{background:var(--panel);padding:8px 10px;font:13px/1.45 var(--sans)}
 .tl-explain>.tl-side-head{font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:var(--gutter)}
@@ -336,8 +323,6 @@ html.rec-select #recorder-view,html.rec-select #recorder-view *{cursor:pointer!i
 .fv.fv-full .fv-body{flex:1;height:auto;min-height:0}
 .fv-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--gutter)}
 .fv-badge{flex:none;display:grid;place-items:center;min-width:38px;height:28px;padding:0 6px;border-radius:7px;font:700 10px/1 var(--mono);letter-spacing:.04em;color:#fff;background:#64748b}
-.fv-badge-js,.fv-badge-mjs,.fv-badge-cjs{background:#d4a017;color:#1f1a00}.fv-badge-ts{background:#2f74c0}.fv-badge-html,.fv-badge-htm{background:#e4572e}
-.fv-badge-css{background:#2965f1}.fv-badge-json,.fv-badge-jsonc,.fv-badge-jsonl{background:#16a34a}.fv-badge-md{background:#7c3aed}.fv-badge-py{background:#3572a5}.fv-badge-sh{background:#334155}
 .fv-size{flex:1 1 auto;min-width:0;font:11px var(--mono);color:var(--muted);white-space:nowrap}
 .fv-icon{width:30px;padding:0;display:inline-grid;place-items:center}
 .fv-seg button.fv-icon{width:32px;height:26px;padding:0;display:inline-grid;place-items:center}
@@ -396,16 +381,9 @@ html.rec-select #recorder-view,html.rec-select #recorder-view *{cursor:pointer!i
 .ar-why{display:grid;grid-template-columns:minmax(120px,210px) minmax(0,1fr);gap:4px 12px;font:13px/1.45 var(--sans);margin:6px 0 4px}
 .ar-why>dt{color:var(--accent);font-weight:600}
 .ar-why>dd{margin:0}
-.ar-files{border:1px solid var(--accent);border-radius:12px;padding:10px 12px;margin-top:10px}
 @media (max-width:640px){.ar-why{grid-template-columns:1fr}.ar-lane-name{width:64px}}
 .tl-files>*{min-width:0}
 @media (max-width:640px){.tl-explain,.tl-files{grid-template-columns:1fr}.tl-explain>.tl-side-head{display:none}.tl-explain>.tl-side-before::before{content:"Before: ";font-weight:600}.tl-explain>.tl-side-now::before{content:"Now: ";font-weight:600}}
-.tl-check{display:flex;align-items:center;gap:6px;font:12px var(--sans);color:var(--muted);cursor:pointer;white-space:nowrap}
-.tl-check input{margin:0;accent-color:var(--accent)}
-.st-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.st-title{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-width:0;flex:1}
-.st-title .tl-kind{font-size:16px}
-.st-title .tl-name{font:12px var(--mono);color:var(--accent)}
 .st-legend{display:flex;gap:12px;font:11px var(--mono);color:var(--muted);margin:8px 0 0}
 .st-legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
 .st-legend .added::before{background:var(--add)}.st-legend .updated::before{background:var(--upd)}.st-legend .deleted::before{background:var(--del)}
@@ -426,9 +404,6 @@ html.rec-select #recorder-view,html.rec-select #recorder-view *{cursor:pointer!i
 .tl-change.added{background:var(--add-bg)}.tl-change.updated{background:var(--upd-bg)}.tl-change.deleted{background:var(--del-bg)}
 .tl-path{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tl-val{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tl-tabs{display:flex;gap:2px;padding:3px;border-radius:9px;background:var(--gutter);border:1px solid var(--line)}
-.tl-tab{border:0;background:none;color:var(--muted);font:500 12px var(--sans);padding:5px 12px;border-radius:6px;cursor:pointer}
-.tl-tab[aria-selected="true"]{background:var(--panel);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .tl-pos{font:12px var(--mono);color:var(--muted);white-space:nowrap}
 .tl-strip{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 6px;position:relative;scroll-snap-type:x proximity;flex:none}
 .tl-step{position:relative;flex:none;width:168px;display:flex;flex-direction:column;gap:3px;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--fg);cursor:pointer;font:12px var(--sans);scroll-snap-align:center;transition:border-color .15s,box-shadow .15s,transform .15s}
@@ -446,10 +421,6 @@ html.rec-select #recorder-view,html.rec-select #recorder-view *{cursor:pointer!i
 .tl-step-name{font:11px var(--mono);color:var(--accent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tl-step-meta{display:flex;gap:8px;font:11px var(--mono);color:var(--muted)}
 .tl-detail{flex:1;min-height:0;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
-.tl-detail-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.tl-detail-head .tl-kind{font-size:16px}
-.tl-detail-head .tl-name{font:12px var(--mono);color:var(--accent)}
-.tl-detail-head .tl-time{margin-left:auto}
 .tl-detail .tl-text{margin:4px 0 12px}
 .tl-detail-sub{font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
 .tl-inside{display:flex;flex-direction:column;gap:6px;border-left:2px solid var(--sel);padding-left:10px}
@@ -805,14 +776,16 @@ docs_html = """<main id="docs-view">
             aria-current="${name === d.selected}">${e(name)}</button>`).join('')}
   </nav>
   <article class="doc">
-    ${d.content.split('```').map((part, i) => i % 2
+    ${!/[.]md$/.test(d.selected) ? `<h2>${e(d.selected)}</h2><pre class="code">${e(d.content)}</pre>` : d.content.split('```').map((part, i) => i % 2
       ? (part.startsWith('svg')
           ? `<figure class="diagram">${part.slice(3)}</figure>`
           : `<pre class="code">${e(part.replace(/^[a-z]*\\n/, '').replace(/\\n$/, ''))}</pre>`)
       : part.split('\\n').map(line =>
           line.startsWith('# ') ? `<h2>${e(line.slice(2))}</h2>` :
           line.startsWith('## ') ? `<h3>${e(line.slice(3))}</h3>` :
+          line.startsWith('### ') ? `<h4>${e(line.slice(4))}</h4>` :
           line.startsWith('- ') ? `<p class="item">${e(line.slice(2))}</p>` :
+          /^ +- /.test(line) ? `<p class="item sub">${e(line.replace(/^ +- /, ''))}</p>` :
           /^[0-9]+[.] /.test(line) ? `<p class="step">${e(line)}</p>` :
           line.trim() ? `<p>${e(line)}</p>` : '').join('')).join('')}
   </article>
@@ -925,7 +898,7 @@ state_html = """<main id="state-view">
   <span class="sv-block" id="sv-block"></span>
   <span class="path" id="path">${e(d.path)}</span>
   <span class="status ${d.error && !d.fixable ? 'bad' : ''}" id="status" role="status">
-    ${d.error ? (d.fixable ? 'JSON has slips, save fixes them' : 'Invalid JSON: ' + e(d.error)) : d.unsaved ? 'Unsaved' : ''}
+    ${d.error ? (d.fixable ? 'JSON has slips, save fixes them' : e(d.error)) : d.unsaved ? 'Unsaved' : ''}
   </span>
 </div>
 <div id="sv-viewer" class="sv-viewer" hidden>
@@ -1233,6 +1206,8 @@ clearTimeout(R.timer);
 const text = R.cm.getValue();
 // Text back to what was saved is no draft (a comment counts as a change).
 R.draft = text === R.base ? null : text;
+// The version the draft starts from: a newer version that comes during the draft does not run (see local.save).
+R.draftFrom = R.draft === null ? null : R.draftFrom == null ? H[H.length - 1].n : R.draftFrom;
 // (a draft is no block: Changes shows what the draft changes)
 if (R.draft !== null) R.onBlock = false;
 d.unsaved = R.draft !== null;
@@ -1242,7 +1217,7 @@ d.fixable = false;
 try {
   core.parseJsonc(text);
 } catch (e) {
-  d.error = e.message;
+  d.error = 'Invalid JSON: ' + e.message;
   try { core.parseJsonc(core.autofix(text)); d.fixable = true; } catch (_) {}
 }
 """)
@@ -1528,6 +1503,11 @@ try {
   fixed = true;
 }
 const head = H.commits[H.commits.length - 1];
+// A newer version came during the draft (the page does not run it while you edit): a save would undo its changes.
+if (R.draftFrom != null && head.n !== R.draftFrom) {
+  os.get(v + '.ui-data').error = 'v' + head.n + ' came while you edited v' + R.draftFrom + '. Copy your edit, reload the page, then edit again.';
+  throw new Error('v' + head.n + ' came during the draft');
+}
 // The new version records this view as it is after saving (the text may hold older ui-data).
 const d = core.getPath(next, v + '.ui-data');
 if (d) {
@@ -1537,6 +1517,7 @@ if (d) {
 const c = await H.put(core.makeCommit(head, text, new Date().toISOString()));
 os.replace(next);
 R.draft = null;
+R.draftFrom = null;
 // (the new version is on screen: Changes shows what it changed)
 R.onBlock = false;
 R.base = text;
@@ -1737,7 +1718,7 @@ const res = end => performance.getEntriesByType('resource').filter(e => e.name.s
 const nav = performance.getEntriesByType('navigation')[0];
 const load = tops.find(r => r.name === 'loadState');
 const runtime = Array.from(document.scripts).find(s => !s.src && s.textContent.indexOf('agentOS') >= 0);
-const coreFile = res('/state-core.js'), seed = res('/state.json');
+const seed = res('/state.json');
 const session = (load && load.input && load.input.session) || '?';
 // What a part shows when it opens: a file, a table, or the runtime's run.
 const getText = url => R.files[url] || (R.files[url] = fetch(url).then(r => { if (!r.ok) throw new Error(url + ': HTTP ' + r.status); return r.text(); }));

@@ -336,12 +336,15 @@ test('page: boots from state, renders the header, runs state tests, saves and st
 
     // the docs button lists the docs folder of the agent; a click shows a doc
     await page.click('#docs-button');
-    assert.equal(await page.locator('#docs-view .doc-link').count(), 4);
+    const docNames = fs.readdirSync(path.join(__dirname, '..', 'docs')).sort();
+    assert.equal(await page.locator('#docs-view .doc-link').count(), docNames.length);
     await page.click('#docs-view .doc-link:has-text("render-steps.md")');
     assert.equal(await page.textContent('#docs-view .doc h2'), 'How the page renders from the state');
     assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['docs-view']['ui-data'].selected), 'render-steps.md');
     assert.ok(await page.locator('#docs-view .doc pre.code').count() >= 5);
     assert.match(await page.textContent('#docs-view .doc pre.code >> nth=1'), /^import os from 'os';\nimport ctx from 'ctx';\n\nasync function render\(\{ view_path \}\) \{/);
+    await page.click('#docs-view .doc-link:has-text("inputs.json")');
+    assert.match(await page.textContent('#docs-view .doc pre.code'), /^\{\n "about": /);
     await page.click('#docs-view .doc-link:has-text("how-it-works.md")');
     assert.ok(await page.isVisible('#docs-view .doc .diagram svg'));
     assert.equal(await page.locator('#docs-view .doc .diagram svg text.num').count(), 7);
@@ -750,8 +753,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.deepEqual(await page.$$eval('#tl-detail .kv-tabs button', els => els.map(x => x.textContent)), ['File']);
     // Docs: only the docs folder
     await page.click('#sv-switches [data-input*="docs"]');
-    await page.waitForFunction(() => document.querySelectorAll('#tl-detail .kv-tree .kv-item').length === 4);
-    assert.deepEqual(await page.$$eval('#tl-detail .kv-tree .kv-item', els => els.map(x => x.textContent.trim()).sort()), ['functions.md', 'how-it-works.md', 'render-steps.md', 'state-view.md']);
+    await page.waitForFunction(n => document.querySelectorAll('#tl-detail .kv-tree .kv-item').length === n, docNames.length);
+    assert.deepEqual(await page.$$eval('#tl-detail .kv-tree .kv-item', els => els.map(x => x.textContent.trim()).sort()), docNames);
     // Views: a view shows as the page shows it (Page), then its Source
     await page.click('#sv-switches [data-input*="views"]');
     await page.locator('#tl-detail .kv-item', { hasText: /^header-view$/ }).click();
@@ -1116,7 +1119,8 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     const perf = await page.evaluate(() => {
       const out = {};
       window.agentOS.calls.forEach(c => {
-        const fn = c.related && c.related.fn;
+        // a runTest record names the function by its short name and times the whole test: not counted
+        const fn = c.name !== 'runTest' && c.related && c.related.fn;
         if (!fn || typeof c.ms !== 'number') return;
         const x = out[fn] = out[fn] || { count: 0, total: 0, max: 0 };
         x.count++; x.total += c.ms; x.max = Math.max(x.max, c.ms);
@@ -1138,6 +1142,20 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.evaluate(() => sessionStorage.getItem('agent-os.timeline-replay')), null);
     await page.waitForFunction(() => /^Block \d+: AI run notification/.test(document.querySelector('#sv-block').textContent), null, { timeout: 15000 });
     assert.equal(await page.locator('#tl-strip .tl-step.on.pin-left.ai').count(), 1);
+
+    // a newer version that comes during a draft does not run, and Save does not undo it: the bar tells why
+    const nDraft = await page.evaluate(() => window.agentOS.history.commits.length);
+    await page.evaluate(() => document.querySelector('#sv-editor .CodeMirror').CodeMirror.replaceRange('// a draft\n', { line: 0, ch: 0 }));
+    await page.waitForFunction(() => window.agentOS.state.extension.views['state-view']['ui-data'].unsaved === true);
+    await page.evaluate(() => {
+      const H = window.agentOS.history.commits, head = H[H.length - 1], n = head.n + 1;
+      window.__docs['commits/c' + String(n).padStart(6, '0')] = { n, parent: head.n, at: new Date().toISOString(), state: head.state, summary: { added: 0, updated: 0, deleted: 0 }, paths: [] };
+      window.__listeners.forEach(f => f());
+    });
+    await page.waitForFunction(n => window.agentOS.history.commits.length === n + 1, nDraft);
+    await page.click('#save');
+    await page.waitForFunction(() => / came while you edited /.test(document.querySelector('#status').textContent));
+    assert.equal(await page.evaluate(() => window.agentOS.history.commits.length), nDraft + 1);
     assert.deepEqual(errors, []);
   } finally {
     await browser.close();

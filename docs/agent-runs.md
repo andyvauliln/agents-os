@@ -1,0 +1,27 @@
+# Agent runs
+
+## What an agent run is
+1. An agent run is one request to an agent (Claude Code): from a message (of a person, the coordinator or a notification) to the next message.
+2. After each run that changes the files of main, the agent records the run in runs/<session>-<run>.json:
+   - scripts/run-log.js reads the session log (the .jsonl file of Claude Code). It makes the raw data: the requests, the context sizes, each tool use and the files.
+   - The run-recorder subagent (.claude/agents/run-recorder.md) reads the raw data. It groups the tool uses into steps and writes why for each step, use and file. It does not copy secrets or the content of files.
+   - The release puts the files of main into the state, so the run is in agents.agent-oss.files.runs.
+3. The timeline shows the last run of the state as block 1, before the page start. Its name is Last AI run notification, its time is the time ago, and it shows the first 3 characters of the session. The newest block at the right also starts with Last (for example Last click). A new version that comes with new runs gets an AI run notification block after the New version block, for each new run. Then the newest AI run notification has the name Last AI run notification, and the state view shows it when no block is chosen: so the files of the new version show without a click.
+4. Click an AI run notification block, then the Flow tab or the Agent Run tab of the state view. It has three tabs:
+   - Index: the title and the summary of the run (summary in the run file; an older run without it shows the request and the counts), then Actions for you (actions in the run file) or No action needed. Then the chips: the agent, the session, the run, the start and end time, the version that the run made, the context at the start and at the end, the cached part of the context, and whether the session was compacted. Then what started the session, the run, the workflow, the subagents and the skills; MCP use, Skill use, Subagents and Workflow, each with how many times and why; then the context sizes.
+   - Details: the state as the run touched it, in one tree. The files are under Files/, in their folders, with the color of what the run did: green added, yellow updated, red deleted, blue read. Then the other items in groups (MCP calls, Commands and scripts, Searches, Skills, Subagents): an MCP call that sent or wrote something is yellow, the others are blue. The counts of each color are above the tree. The buttons show only what one source did: All, Main agent, Subagents, MCP, Skills or Workflows. Each source has its color, and each item has a chip for its source. On the right, the item that you click, in tabs: File (the file viewer, with the text from the version that the run made), Changes (side by side: the version before the run and the version that the run made) and Why (what, by who, in which steps, why, the size in tokens). A file that is not in the state (it is not a file of the repo) has only Why. When a step is chosen (in Steps), Details shows only that step; Whole run shows all of it again.
+   - Steps: the agent timeline, then the steps one by one. The timeline: the start card, then each step from left to right, in the lane of the agent that did it. The first lane is the main agent. A subagent is a helper agent with its own context, which the main agent started (for example run-recorder, which writes the record of the run). A subagent lane starts with a dashed line that tells what the subagent is and which steps are its own; its steps are short cards. Under it, each step has its number on a line, its title, who did it (with the MCP, skill, subagent or workflow chips), its start, its time, its context and why. Click a step (a card or a row) to open it: what it did (each item with its kind), and the files that it changed and read. Click it again to close it. See it in Details shows the step in Details.
+5. Changes of an AI run notification: the differences between the version before the run and the version that the run made, if this page has both versions.
+
+## How a run is recorded
+1. scripts/run-log.js reads the session log of Claude Code (~/.claude/projects/<folder>/<session>.jsonl):
+```sh
+node scripts/run-log.js <session>.jsonl --repo . --run 72 --from <commit before> --to <new commit>
+```
+2. It prints the raw data of the run: started_by, context (tokens: input + cache read + cache write), uses (MCP, skills, subagents, workflows), events (each tool use) and files (read, created, updated, deleted; git wins).
+3. The run-recorder subagent (.claude/agents/run-recorder.md) turns it into the run file. It removes events and adds title, summary, actions (what the owner must do), steps ({title, lane, from, to, items, why, context_tokens, cached_tokens, files}) and why for each use and file.
+4. A run file has no secrets, no tokens, no passwords and no file contents: only paths and sizes.
+5. The agent commits runs/<session>-<run>.json. The next state has it in agents.agent-oss.files.runs.
+
+## Where the timeline gets it
+runsOf, runStep and runDetails (in timeline-view local.refresh) read the run files of the loaded state. The last run is block 1. A New version block that brings new runs gets an AI run notification block for each new run.

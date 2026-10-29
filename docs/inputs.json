@@ -1,0 +1,1020 @@
+{
+ "about": "Andrei's inputs to Agent OS (messages in the thread and comments on the page), from 2026-10-24 to 2026-10-29. Kept inputs have their own words and metadata: topic, status (done, partly, open, rule) and result. Inputs that say the same thing are merged. Chatter and inputs about parts that work in a different way now are removed (only their ids stay). knowledge is the useful summary of all inputs, by topic.",
+ "made": "2026-10-29",
+ "counts": {
+  "messages": 78,
+  "page comments": 51,
+  "kept": 71,
+  "merged": 20,
+  "removed": 38
+ },
+ "status": {
+  "done": "it works now",
+  "partly": "a part works, a part is in open-ideas",
+  "open": "not done",
+  "rule": "a rule for how to work"
+ },
+ "knowledge": [
+  {
+   "id": "working-rules",
+   "topic": "Working rules",
+   "summary": "Do only what Andrei asks. Do not add fields, buttons or text that Andrei did not ask for. When a new field is necessary, name it and tell why before you add it. Print the file tree of the workspace in each report. Test the page before you report. Write the docs in ASD-STE100. Ask before you merge into main.",
+   "status": "rule",
+   "from": [
+    "m02",
+    "m03",
+    "m07",
+    "m10",
+    "m16",
+    "c19"
+   ]
+  },
+  {
+   "id": "everything-is-state",
+   "topic": "Everything is state",
+   "summary": "The page is one JSON state: agents (the files of the agent), network, environment and extension (views, functions, data, apps). The page renders only from the state. Each view keeps all the data that it shows in its ui-data. A file, a folder and a function can have metadata in the state, and can have their own views.",
+   "status": "partly",
+   "from": [
+    "m00",
+    "m01",
+    "m04",
+    "m06",
+    "c06",
+    "c50"
+   ]
+  },
+  {
+   "id": "tracked-calls",
+   "topic": "Every call is tracked and tested",
+   "summary": "Each function has input, output, imports, tests, expected-state-change, docs, pseudo, performance, code and calls. The code looks as it does in a code file, with its import lines and signature. After each run the runtime writes output, errors and performance. A function that changes nothing has an empty expected-state-change.",
+   "status": "done",
+   "from": [
+    "m04",
+    "c05",
+    "c06",
+    "c10",
+    "c14",
+    "c16",
+    "c17",
+    "c21",
+    "c24",
+    "c26"
+   ]
+  },
+  {
+   "id": "versions",
+   "topic": "Versions and new versions",
+   "summary": "Each save is a new version (commit) in the page database. The arrows go through the versions. Only changes shows added (green), updated (yellow) and deleted (red). A Claude Code session commits, pushes and saves a new version; an open page runs it at once and the timeline shows a New version block with how each part worked before and now.",
+   "status": "done",
+   "from": [
+    "m04",
+    "m08",
+    "m40",
+    "c01",
+    "c02"
+   ]
+  },
+  {
+   "id": "state-view",
+   "topic": "One state view, tabs are representations",
+   "summary": "The state view is the main view for the state and its changes. Full State is the whole JSON. Each other tab (Files, Views, Functions, Network, Environment, Performance, Improvements, Flow, Video, Docs, Agent Run) is a filter or a view of the same state. With Only changes, each tab shows only what the chosen block changed or touched, and a tab with no change hides.",
+   "status": "partly",
+   "from": [
+    "m48",
+    "m69",
+    "m70",
+    "c25",
+    "c31",
+    "c32",
+    "c37",
+    "c48"
+   ]
+  },
+  {
+   "id": "timeline",
+   "topic": "Timeline",
+   "summary": "The timeline shows what happened since the page opened, as blocks: the last AI run notification, network, index.html, the state load, then each call. You can replay it, restart it, play saved flows, and show only AI runs or only UI blocks. A click on a block shows it in the state view.",
+   "status": "done",
+   "from": [
+    "m24",
+    "m25",
+    "m26",
+    "m36",
+    "m38",
+    "m68",
+    "c28",
+    "c40",
+    "c41"
+   ]
+  },
+  {
+   "id": "readable-ui",
+   "topic": "Readable UI",
+   "summary": "Buttons are icons with a title. Times show as time ago. A long text shows as \"...\": the pointer shows a preview in the colors of its kind, a click opens it. Code is formatted and colored. md files read as a page, with themes (Reader, White, Black, Sepia, Night, Mono) that each have their own change colors. Each file kind has its own viewer.",
+   "status": "done",
+   "from": [
+    "m03",
+    "m21",
+    "m22",
+    "m23",
+    "m49",
+    "m50",
+    "c00",
+    "c03",
+    "c08",
+    "c09",
+    "c13",
+    "c18",
+    "c20",
+    "c22",
+    "c29",
+    "c36",
+    "c38",
+    "c43",
+    "c45",
+    "c46"
+   ]
+  },
+  {
+   "id": "layout",
+   "topic": "Layout",
+   "summary": "From the top: the timeline (when open), the header, one main view, the footer with the record button. Only one main view (docs, state, notes) is open at a time, and each has a close button. A view uses only the space between the header and the footer. The Device button shows all views at mobile, tablet or desktop width.",
+   "status": "done",
+   "from": [
+    "m65",
+    "m67",
+    "m68",
+    "c44"
+   ]
+  },
+  {
+   "id": "recorder-notes",
+   "topic": "Recorder and notes",
+   "summary": "The record button records audio (one click) or opens a menu (two clicks): audio, video, notes. Keys: Arrow Up two times, or Arrow Up and Arrow Down. While it records you can select elements; their paths go into the note. A 4 second hold opens Notes. Notes have browser transcription, text notes and Send to Claude. On claude.ai the frame blocks the microphone.",
+   "status": "partly",
+   "from": [
+    "m52",
+    "m53",
+    "m54",
+    "m62",
+    "m72",
+    "m73"
+   ]
+  },
+  {
+   "id": "network-environment",
+   "topic": "Network and environment from code",
+   "summary": "network and environment are parts of the state that the runtime fills from code: each request (with used_for and expected), browser data (also the claude.ai database), listeners, timers, observers, connections, devices and permissions. Environment has a Browser and a Server side. Libraries load from the files of the repo, not from a CDN, and not minified.",
+   "status": "partly",
+   "from": [
+    "m43",
+    "m45",
+    "m59",
+    "m60",
+    "c49"
+   ]
+  },
+  {
+   "id": "files-are-main",
+   "topic": "The files are the files of main",
+   "summary": "agents.agent-oss.files always holds the files of main (all files of the repo except state.json). The Files tab shows all of them as a tree.",
+   "status": "done",
+   "from": [
+    "m40",
+    "m58",
+    "m60",
+    "m61"
+   ]
+  },
+  {
+   "id": "agent-runs",
+   "topic": "Agent runs",
+   "summary": "Each agent run that changes files gets a run file (runs/<session>-<run>.json): steps, lanes of the main agent and subagents, uses of MCP, skills and workflows, files read and changed, and why. The timeline shows it as an AI run notification block with Index, Details and Steps.",
+   "status": "done",
+   "from": [
+    "m47",
+    "m63",
+    "c33",
+    "c34",
+    "c35",
+    "c42"
+   ]
+  },
+  {
+   "id": "portability",
+   "topic": "Portability",
+   "summary": "The repo (andyvauliln/agents-os, branch agent-os) has everything to start the agent and the page on another server: clone it, run python3 -m http.server in the folder and open the page. Without claude.ai there is no database: saves stay only until reload.",
+   "status": "partly",
+   "from": [
+    "m55",
+    "m56",
+    "m76"
+   ]
+  },
+  {
+   "id": "lessons",
+   "topic": "Lessons",
+   "summary": "The Claude app can keep an old copy of the page: reload it to see the newest version. claude.ai blocks stylesheets from a CDN, so styles are inline. Page comments reach Claude only with Send to Claude. The artifact frame on claude.ai cannot use the microphone.",
+   "status": "rule",
+   "from": [
+    "m11",
+    "m12",
+    "m13",
+    "m14",
+    "m18",
+    "m53",
+    "m72",
+    "m73"
+   ]
+  },
+  {
+   "id": "open-ideas",
+   "topic": "Open ideas",
+   "summary": "Not done yet: the Slide brand header with connections (apps, agent, MCP, storage), model chip, notifications, apps and theme buttons (m00); extension data, common_app_storage and apps; the Improvements and Video tabs; network of the server, the agent and MCP; memory and cost in Performance; the Functions tree split into agent and extension with local and public marks; Views tabs html, data, functions, state and requests; views for each file kind and folder from metadata; an interactive Page tab.",
+   "status": "open",
+   "from": [
+    "m00",
+    "m20",
+    "m69",
+    "c47",
+    "c50"
+   ]
+  }
+ ],
+ "inputs": [
+  {
+   "id": "m00",
+   "kind": "message",
+   "at": "2026-10-24T18:17:44Z",
+   "text": "make workspace and git from where this claude will working, make empty html artifact and insert there editable json, {  \"agents\": {    \"agent-oss\": {      \"connection\": {},      \"files\": {        \".claude\": {          \"CLAUDE.md\": {},          \"settings.json\": {},          \"settings.local.json\": {},          \"agents\": {},          \"commands\": {},          \"skills\": {},          \"hooks\": {},          \"output-styles\": {}        }      }    }  },  \"extension\": {    \"view\": {      \"header-view\": {        \"rundown_button\": { \"shown_on\": \"tablet and phone\", \"open\": false },        \"brand\": { \"name\": \"Slide\", \"recording_lamp\": false },        \"connections\": {          \"apps\":    { \"label\": \"Profiles and apps\", \"state\": \"ok\",   \"detail\": \"3 profiles · 3 apps · now Profile 2, Instagram Slide app\" },          \"agent\":   { \"label\": \"Agent\",             \"state\": \"mock\", \"detail\": \"agent-oss on This Claude project (cloud session) · Test flow uses the mock agent\" },          \"mcp\":     { \"label\": \"MCP\",               \"state\": \"off\",  \"detail\": \"Agent → extension over MCP. Off in this test.\" },          \"storage\": { \"label\": \"Storage\",           \"state\": \"mock\", \"detail\": \"Shared state: not connected, so this browser only.\" }        },        \"model_chip\": { \"text\": \"opus 5.5 · f2a63aba\", \"shown_on\": \"desktop\" },        \"docs_button\": { \"pressed\": false },        \"notifications_button\": { \"pressed\": false, \"count\": 2 },        \"apps_button\": { \"pressed\": false, \"profile_badge\": \"2\" },        \"back_button\": {},        \"theme_button\": { \"theme\": \"system\" },        \"state_button\": { \"pressed\": false }      }    },    \"data\": {},    \"common_app_storage\": {},    \"apps\": {}  }}",
+   "topic": "everything-is-state",
+   "status": "partly",
+   "result": "The state shape (agents, extension with views, functions, data, common_app_storage, apps) is the base of the state. The Slide header items are not done: see open-ideas."
+  },
+  {
+   "id": "m01",
+   "kind": "message",
+   "at": "2026-10-24T18:28:25Z",
+   "text": "no we need create new one so the project for right now should have index.html then state-view page, than state.json and then button to toggle state view with editable json i can collapse object, buttons collapse all, save, and folder for you .claude with a deafult files, html should have good looking view theme that i can easly orientate and recognise everything",
+   "topic": "everything-is-state",
+   "status": "done",
+   "result": "index.html, state.json, the state view with an editable JSON that folds, Collapse all and Save; .claude folder with the default files."
+  },
+  {
+   "id": "m04",
+   "kind": "message",
+   "at": "2026-10-25T09:13:52Z",
+   "text": "after we change state i want that we commit it and have change history when if press arrow left or right we move history, also i want button changes it ll filter json only to what changed, if added green, if updated yellow, if deleted. and so finish views, and i want when page loaded we take our state and render by it just empty header with a button open state-view, all calls should be trackable testable and filled related data if they have",
+   "topic": "versions",
+   "status": "done",
+   "result": "Versions with arrows, Only changes colors, the page renders from the state, tracked and tested calls."
+  },
+  {
+   "id": "m06",
+   "kind": "message",
+   "at": "2026-10-25T11:34:49Z",
+   "text": "i mean something likу this so we need render current html base on this state, so when page just load it's should load index, render header with all what we right now have, add all data to the objects and what we miss. {\n  \"agents\": {\n    \"agent-oss\": {\n      \"connection\": {},\n      \"files\": {\n        \".claude\": {\n          \"CLAUDE.md\": {},\n          \"settings.json\": {},\n          \"settings.local.json\": {},\n          \"agents\": {},\n          \"commands\": {},\n          \"skills\": {},\n          \"hooks\": {},\n          \"output-styles\": {}\n        }\n      }\n    }\n  },\n  \"extension\": {\n    \"views\": {\n      \"index-view\": {\n        \"html\": \"\",\n        \"ui-data\": {},\n        \"functions\": {\n          \"local.init\":{\n            \"input\": {},\n            \"output\": {},\n            \"imports\": {},\n            \"tests\":{},\n            \"expected-state-change\":{},\n            \"docs\": {},\n            \"perfomance\": {},\n            \"code\": \"\",\n            \"calls\":{\n              \"extension.functions.get-state\":{\"input\":\"extention.views.header-view\", \"output\": null},\n            \t\"extension.functions.render\":{\"input\":\"extention.views.header-view\", \"output\": null}\n          \t},\n          }\n        }\n     },\n     \"header-view\": {\n  \t\t\t\"html\": \"\",\n        \"ui-data\": {},\n        \"functions\": {\n          \"local.init\":{\n            \"input\": {},\n            \"output\": {},\n            \"tests\":{},\n            \"expected-state-change\":{},\n            \"docs\": {},\n            \"perfomance\": {}, // last minimum and maximum\n            \"code\": \"\"\n            \"calls\":{\n          \t}\n          },\n       \t\t\"local.open.state-view\": {\n          \t\"extension.functions.render\":{\"input\":\"extention.views.state-view\", \"output\": null},\n          }\n        }\n\n      }\n     \"state-view\": {\n    \n\t   }\n    },\n\t\t\"functions\": {} \n    \"data\": {},\n    \"common_app_storage\": {},\n    \"apps\": {}\n  }\n}",
+   "topic": "everything-is-state",
+   "status": "done",
+   "result": "index-view renders header-view from the state; each function has the fields of this example."
+  },
+  {
+   "id": "m08",
+   "kind": "message",
+   "at": "2026-10-25T12:14:33Z",
+   "text": "allow comments and autofix json, also add cmd+с for save state",
+   "topic": "versions",
+   "status": "done",
+   "result": "JSON with comments, autofix on save, Cmd+S / Ctrl+S."
+  },
+  {
+   "id": "m16",
+   "kind": "message",
+   "at": "2026-10-25T18:17:34Z",
+   "text": "still many things in correct and just maybe not sure you understand what i want to from you, first of all address last commets, and after make icon docs in a header with list of docs that represent folder docs in a agents so you put there explanation in asd ste 100 how doest this all things works and step by step what is happening how we render current html from state",
+   "topic": "working-rules",
+   "status": "done",
+   "result": "Docs button in the header, docs in ASD-STE100 (docs/)."
+  },
+  {
+   "id": "m19",
+   "kind": "message",
+   "at": "2026-10-26T09:33:48Z",
+   "text": "provide in the same docs step by step with examples with a functions and draw some arhitectural diagram",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "render-steps.md with examples, the diagram in how-it-works.md."
+  },
+  {
+   "id": "m20",
+   "kind": "message",
+   "at": "2026-10-26T10:27:29Z",
+   "text": "adress last nots and address this: when i press html view it shows me html but i cant press any button, i want see also there state for this view and see how it changes if i clicking on this view or do any actions",
+   "topic": "open-ideas",
+   "status": "partly",
+   "result": "The viewer runs a view with a copy of the state and shows its ui-data changes (state-view.md, Try a view). The Views Page tab is still a picture."
+  },
+  {
+   "id": "m21",
+   "kind": "message",
+   "at": "2026-10-26T10:57:01Z",
+   "text": "readme view should looks like view mode but still editable also should looks really with a cool design and ux like font readability, no need sidebar. collapsable sections",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "md files read as a page and stay editable, collapsible sections.",
+   "merged": [
+    "m22"
+   ]
+  },
+  {
+   "id": "m23",
+   "kind": "message",
+   "at": "2026-10-26T11:15:44Z",
+   "text": "let's add  black and white themes for md files also add some additional themes buttons should change different styles add by default best format on earth for reading documents with own styles",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "md themes: Reader (default), White, Black, Sepia, Night, Mono."
+  },
+  {
+   "id": "m24",
+   "kind": "message",
+   "at": "2026-10-26T12:01:37Z",
+   "text": "address last comments and add button timline it should show what is hapenning start from page reload for now just with high level blocks and our functions, and i need see how state changed after every function exections make as a new view also i can hide show there state change view",
+   "topic": "timeline",
+   "status": "done",
+   "result": "The timeline with blocks and the state changes of each function."
+  },
+  {
+   "id": "m25",
+   "kind": "message",
+   "at": "2026-10-26T12:23:47Z",
+   "text": "let's do horisontal blocks view timline where i can replay, when i click on a block it should show me details what is happening in inside this step, this view for now leave as a second tab first will be this timline things view",
+   "topic": "timeline",
+   "status": "done",
+   "result": "Horizontal blocks with replay; a click shows the block."
+  },
+  {
+   "id": "m26",
+   "kind": "message",
+   "at": "2026-10-26T12:47:51Z",
+   "text": "on timline i want have button reload and see history from 0 again",
+   "topic": "timeline",
+   "status": "done",
+   "result": "Restart button."
+  },
+  {
+   "id": "m36",
+   "kind": "message",
+   "at": "2026-10-26T17:37:54Z",
+   "text": "add check box on a timeline include timline view tracking, also show timline first then header, only blocks, by click we show first state-view filtered by changes base on this block and if click on another tab we show details view of this block, and add check box include or not timline actions clicks or whatever for tracking and adding them in a timline blocks",
+   "topic": "timeline",
+   "status": "done",
+   "result": "Track state (now in the state view), timeline above the header, a block opens the state view on its changes."
+  },
+  {
+   "id": "m38",
+   "kind": "message",
+   "at": "2026-10-26T20:14:21Z",
+   "text": "when i click on a block it show details and change tabs if i click again it should hide or if i close the window, also add in time line button hide this this block types icon, also wanted to ask if the file tree we see in a state is it real file tree we use for current agent and related to app files? add also in a a timline icon flow it ll show saved flows list which i can play, and first one flow it's first enter flow,so basicly for nor it's first 4 steps, also if state change empty show first details, also first step i this should just include everything we load scripts html etc, second yes run  index.html",
+   "topic": "timeline",
+   "status": "done",
+   "result": "Flows list (First enter), block 1 Network with all loads, block 2 index.html."
+  },
+  {
+   "id": "m40",
+   "kind": "message",
+   "at": "2026-10-27T06:21:53Z",
+   "text": "the files should always represent the last main files, if they changed in a claud code sesssion they should have commit and push and new version of state get ui on a next time ui detect new  version it's update changes, so on ui on timline i would see added block new state version update, where i can see chanages in a state and details what was happen, from what input and what concreate part of it came, asd-sde 100 explanation how it works before and how it works now.",
+   "topic": "versions",
+   "status": "done",
+   "result": "Files = main; commit, push, new version; New version block with explain before and now."
+  },
+  {
+   "id": "m41",
+   "kind": "message",
+   "at": "2026-10-27T08:15:24Z",
+   "text": "address this things i draft here some change of some ideas https://prnt.sc/FtgaBu7Mv-Zw",
+   "topic": "state-view",
+   "status": "done",
+   "result": "The sketch (picture) of changes to the timeline and the state view.",
+   "merged": [
+    "m42"
+   ]
+  },
+  {
+   "id": "m43",
+   "kind": "message",
+   "at": "2026-10-27T08:50:18Z",
+   "text": "when i click on a file it says failed to fetch in a networks details, state changes should same view we use so show state changes, and i am pretty sure it's not available data we can take from the code about the browser, also we use storage claude.ai but you not show it",
+   "topic": "network-environment",
+   "status": "done",
+   "result": "Files open from the network block; environment from code only; the claude.ai database in browser data."
+  },
+  {
+   "id": "m45",
+   "kind": "message",
+   "at": "2026-10-27T11:59:11Z",
+   "text": "also by all state i mean state of all available from the code things that i can do and states like for example i added event listenter in a code i want to see that state change and registered this listener etc, like really all documents, window networks devices permission like what ever we have there from code",
+   "topic": "network-environment",
+   "status": "done",
+   "result": "Listeners, timers, observers, connections, devices, permissions and more in environment."
+  },
+  {
+   "id": "m47",
+   "kind": "message",
+   "at": "2026-10-27T12:53:13Z",
+   "text": "for every block when i click i should see specific for this block detials and what is changed, read and etc in a file tree view why you not listen me",
+   "topic": "agent-runs",
+   "status": "done",
+   "result": "Each block shows its own details, changes and reads as a file tree."
+  },
+  {
+   "id": "m48",
+   "kind": "message",
+   "at": "2026-10-27T13:16:36Z",
+   "text": "why if we supposely should use state view, when i in a agent run in a state changes for files not applied same same rules like \"...\" with a preview, also make on this state view better button not check boxes if file we ll show only files and in a file tree view with a left side map of all files and on the right tabs with the first one is File if it change mode should have tab changes where i can see changes, so iya make custome view for all of this filters",
+   "topic": "state-view",
+   "status": "done",
+   "result": "Buttons (now tabs) instead of check boxes; a tree on the left, tabs on the right, Changes tab; the \"...\" rules in all views.",
+   "merged": [
+    "m44"
+   ]
+  },
+  {
+   "id": "m49",
+   "kind": "message",
+   "at": "2026-10-27T13:46:14Z",
+   "text": "for every type of file add custom view for json and md current md for code figure it something beatiful and awesome with amazing ui ux",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "File viewers for json (tree), md (page) and code (outline, find, wrap)."
+  },
+  {
+   "id": "m50",
+   "kind": "message",
+   "at": "2026-10-27T14:21:33Z",
+   "text": "add button full screen for views of files i still want to see different styles on md files like we had before, that i can pick how it looks like, also for functions i want additional view, where click on a function but can see pseudo code that we make and added as additonal metadata for this function",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "Full screen, md Style select, Pseudo code tab for functions."
+  },
+  {
+   "id": "m52",
+   "kind": "message",
+   "at": "2026-10-27T20:31:34Z",
+   "text": "add on the screen fixed bottom right recoding button bottom one click recording, two click video recording, two times arrow up also start recoring and two arrow up and arrouw down at the same time video recording, when recording started show change this icon to stop and show timer somewhere in a header, also when recording start i am in a select mode and can select any block and view when selected show this element path",
+   "topic": "recorder-notes",
+   "status": "done",
+   "result": "Record button, keys, timer in the header, select mode with element paths."
+  },
+  {
+   "id": "m54",
+   "kind": "message",
+   "at": "2026-10-28T08:07:35Z",
+   "text": "if i long time press on recording button like 4 second open new page window notes, for now just empty, and addreess last comments",
+   "topic": "recorder-notes",
+   "status": "done",
+   "result": "A 4 second hold opens Notes."
+  },
+  {
+   "id": "m58",
+   "kind": "message",
+   "at": "2026-10-28T12:33:55Z",
+   "text": "why in a files and files tree view  i don't see all files? what you not puting there?",
+   "topic": "files-are-main",
+   "status": "done",
+   "result": "All files of main are in the Files tree."
+  },
+  {
+   "id": "m59",
+   "kind": "message",
+   "at": "2026-10-28T12:38:50Z",
+   "text": "but on index networks we dowload a lot of file including how we handling rendering etc where is it?",
+   "topic": "network-environment",
+   "status": "done",
+   "result": "The files that index.html loads are in network and in files."
+  },
+  {
+   "id": "m60",
+   "kind": "message",
+   "at": "2026-10-28T12:43:22Z",
+   "text": "let's load this files from sdn from our files system and not minimazed, also include all files everything what you mention and whatever includes to the project now in a files that i can see it in a filee tree",
+   "topic": "network-environment",
+   "status": "done",
+   "result": "Libraries from vendor/ (CodeMirror 5.65.16, js-beautify 1.15.1), not minified, in the files."
+  },
+  {
+   "id": "m61",
+   "kind": "message",
+   "at": "2026-10-28T13:42:44Z",
+   "text": "address last comments, so now all what we commit in github it's in a files state object i can see files and packages in a state but cant see them in a files view?",
+   "topic": "files-are-main",
+   "status": "done",
+   "result": "Files and packages show in the Files view."
+  },
+  {
+   "id": "m62",
+   "kind": "message",
+   "at": "2026-10-28T14:25:18Z",
+   "text": "double click on a record butt on should show option so first record audio second record video 3rd notes as on a picture and there settings for transcriptions with a deafult browser transcribe option, and add there option to add manually by text also some notes.,",
+   "topic": "recorder-notes",
+   "status": "done",
+   "result": "Two clicks open the menu: audio, video, notes; transcription settings (browser default); text notes."
+  },
+  {
+   "id": "m63",
+   "kind": "message",
+   "at": "2026-10-28T15:58:33Z",
+   "text": "make ai block view like this call it ai run notification",
+   "topic": "agent-runs",
+   "status": "done",
+   "result": "AI run notification block (Index, Details, Steps)."
+  },
+  {
+   "id": "m65",
+   "kind": "message",
+   "at": "2026-10-28T17:21:27Z",
+   "text": "add button on a header device that show to select mobile tablet desktop and we need show all views base on that",
+   "topic": "layout",
+   "status": "done",
+   "result": "Device button: mobile, tablet, desktop."
+  },
+  {
+   "id": "m67",
+   "kind": "message",
+   "at": "2026-10-28T19:17:12Z",
+   "text": "i was on a notes view and i want make this changes but it related to another views as well check it \n\n\"so every view that we add should be bellow header and timline if it not closed, and views also should be finish before a footer let's consider where is recording button we have there footer, relates to all views\"",
+   "topic": "layout",
+   "status": "done",
+   "result": "All views between the header (and timeline) and the footer.",
+   "merged": [
+    "c44"
+   ]
+  },
+  {
+   "id": "m68",
+   "kind": "message",
+   "at": "2026-10-29T06:19:27Z",
+   "text": "we shoud now alllow open more then one view on a main, so if docs open and i open state docs should be close also all main views should have close button, timline should now have 2 button to show only runs or show only ui or all, ai should have one color ui another, pinned left and right should be a bit bigger and border more, also when i click next bloks after last ai run it became transparent so the last one should not it just stick to left always, you can remove process bar, and move controls from timline footer up to header also also hide block lets just make close button, on a mobile view make block less that i can see at least 4 blocks, restart back us to the last agent notification and rerender",
+   "topic": "layout",
+   "status": "done",
+   "result": "One main view at a time, close buttons, AI runs / UI buttons, colors, bigger pins, controls at the top, close button, 4 blocks on mobile, Restart to the last AI run notification."
+  },
+  {
+   "id": "m69",
+   "kind": "message",
+   "at": "2026-10-29T10:15:18Z",
+   "text": "i have new full view on a state and state view, so here is new view and mine notes what everything is mean, we might need change some concept , also restyle timline colors looks terribale, last blocks also not bigger as i asked, only one right side colored, last blocks looks off too,",
+   "topic": "state-view",
+   "status": "partly",
+   "result": "The new state view: two-row bar, 12 tabs, Agent/UI indicator. Improvements and Video are empty. See open-ideas."
+  },
+  {
+   "id": "m70",
+   "kind": "message",
+   "at": "2026-10-29T10:35:23Z",
+   "text": "1 yes as some logic on ui depends is it agent run or is it ui run we need some indicator in a what block state we are, no need filter  and second question yes details can go away",
+   "topic": "state-view",
+   "status": "done",
+   "result": "Agent/UI is an indicator of the chosen block kind; Details went into the Flow tab."
+  },
+  {
+   "id": "m72",
+   "kind": "message",
+   "at": "2026-10-29T11:55:03Z",
+   "text": "and this The browser did not let the page record the microphone: Permission denied, how we can ask user? i opened in browser so if i can't dictate i need to be asked",
+   "topic": "recorder-notes",
+   "status": "open",
+   "result": "The claude.ai frame blocks the microphone and the browser does not ask. A choice is waiting: Dictation box, Only a clear message, or Keep it as it is.",
+   "merged": [
+    "m53",
+    "m73"
+   ]
+  },
+  {
+   "id": "m76",
+   "kind": "message",
+   "at": "2026-10-29T12:57:23Z",
+   "text": "is everything in hithub that i can start this agent and ui on another server by cloned and start it?",
+   "topic": "portability",
+   "status": "done",
+   "result": "A fresh clone starts with python3 -m http.server. No database outside claude.ai.",
+   "merged": [
+    "m55",
+    "m56"
+   ]
+  },
+  {
+   "id": "m77",
+   "kind": "message",
+   "at": "2026-10-29T13:12:49Z",
+   "text": "i want that you make documentation in a docs, split it how it works all overview of the project and how it works and it main parts, all parts should have own documentation, for example state, extention, flow, put also in a file json all mine inputs and related metadata to it but handle it first remove what we no really need what already changed and works another way, some you can summarise in one, like usefull knowledge from inputs, make after that just base on that inputs vision doc, also make refactoring and bug finding or rethink archetecture and remove anything what we no need or not use make report about this in docs as well that i can see,",
+   "topic": "working-rules",
+   "status": "done",
+   "result": "These docs, this file, vision.md and review-report.md (v48)."
+  },
+  {
+   "id": "c00",
+   "kind": "page comment",
+   "at": "2026-10-25T12:18",
+   "on": "button \"State view\"",
+   "text": "make all buttons as only icons in a state viewer also",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "Icon buttons in the state view."
+  },
+  {
+   "id": "c01",
+   "kind": "page comment",
+   "at": "2026-10-25T12:19",
+   "on": "text \"Version 3 of 3 · Oct 25, 03:09 PM\"",
+   "text": "make only ago",
+   "topic": "versions",
+   "status": "done",
+   "result": "The version shows as time ago."
+  },
+  {
+   "id": "c02",
+   "kind": "page comment",
+   "at": "2026-10-25T12:20",
+   "on": "text \"Saved\"",
+   "text": "when saved just make border of json editor for few seconds green",
+   "topic": "versions",
+   "status": "done",
+   "result": "Saved = a green border on the editor for a short time."
+  },
+  {
+   "id": "c03",
+   "kind": "page comment",
+   "at": "2026-10-25T12:24",
+   "on": "#sv-editor > div:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(22) > pre:nth-of-type(1)",
+   "text": "here i would expect i think full index html code also we can just show at first view for long text as a \"...\", and specificly for html if i click it ll open window html viewer from the left code from the right rendered with current state this html",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "Long text as \"...\"; html opens in a viewer: code on the left, the rendered view with the state on the right.",
+   "merged": [
+    "c08",
+    "c22"
+   ]
+  },
+  {
+   "id": "c04",
+   "kind": "page comment",
+   "at": "2026-10-25T12:43",
+   "on": "#sv-editor > div:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(12) > pre:nth-of-type(1)",
+   "text": "for now i think at least we need show current view path for example extention/state-view",
+   "topic": "state-view",
+   "status": "done",
+   "result": "The view path shows (now in the bottom bar)."
+  },
+  {
+   "id": "c05",
+   "kind": "page comment",
+   "at": "2026-10-25T12:54",
+   "on": "div:nth-of-type(6) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(31) > pre:nth-of-type(1) > span:nth-of-type(1) > span:nth-of-type(2)",
+   "text": "for everywhere as i told should be \"...\" and here should be full code of function from out code, for imported function",
+   "topic": "tracked-calls",
+   "status": "done",
+   "result": "Functions show as \"...\" with their full code.",
+   "merged": [
+    "c09"
+   ]
+  },
+  {
+   "id": "c06",
+   "kind": "page comment",
+   "at": "2026-10-25T13:01",
+   "on": "#sv-editor > div:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(28) > pre:nth-of-type(1)",
+   "text": "it should change some state for shure so at least ui_data for example it ll be current_state_version etc all data that we now use should be present in a state for when we render some view everything that this view need shoud be inside, also when we do any action on ui it ll do something we need test on what after this changed so it's expected change of states, and in a test we should check if after this function run state updated correctly so after each run, and if it was errors in this function and it's perfomance so after each run this data should be update",
+   "topic": "tracked-calls",
+   "status": "done",
+   "result": "ui-data holds all data of a view; tests check the expected state change; output, errors and performance after each run."
+  },
+  {
+   "id": "c10",
+   "kind": "page comment",
+   "at": "2026-10-25T14:00",
+   "on": "#sv-editor > div:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(40) > pre:nth-of-type(1)",
+   "text": "if this function not change state no need add anything",
+   "topic": "tracked-calls",
+   "status": "done",
+   "result": "A function that changes no state has an empty expected-state-change."
+  },
+  {
+   "id": "c11",
+   "kind": "page comment",
+   "at": "2026-10-25T18:01",
+   "on": "text \"Rendered html\"",
+   "text": "i don't see here any view, and here suppose to be how it looks in browser not a json state",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "The viewer shows the view as the browser shows it."
+  },
+  {
+   "id": "c14",
+   "kind": "page comment",
+   "at": "2026-10-25T18:04",
+   "on": "body:nth-of-type(1)",
+   "text": "function should be same as they would look in a code with a signature etc",
+   "topic": "tracked-calls",
+   "status": "done",
+   "result": "Code as in a code file, with the signature.",
+   "merged": [
+    "c13",
+    "c18",
+    "c29"
+   ]
+  },
+  {
+   "id": "c16",
+   "kind": "page comment",
+   "at": "2026-10-25T18:07",
+   "on": "#sv-editor > div:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(19) > pre:nth-of-type(1)",
+   "text": "here same like input like what is returned from this object if notthing then nothing",
+   "topic": "tracked-calls",
+   "status": "done",
+   "result": "output is what the function returned; nothing = {}."
+  },
+  {
+   "id": "c17",
+   "kind": "page comment",
+   "at": "2026-10-25T18:07",
+   "on": "div:nth-of-type(6) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(18) > pre:nth-of-type(1) > span:nth-of-type(1) > span:nth-of-type(2)",
+   "text": "here also in input we store like parameter, for this case suppose to be view path, apply to all",
+   "topic": "tracked-calls",
+   "status": "done",
+   "result": "input holds the parameters, for example view_path."
+  },
+  {
+   "id": "c20",
+   "kind": "page comment",
+   "at": "2026-10-26T09:28",
+   "on": "div:nth-of-type(6) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(17) > pre:nth-of-type(1) > span:nth-of-type(1) > span:nth-of-type(2)",
+   "text": "here i can see it in editable file reader on a click on a code also, on hover i want to see small preview of the document or code",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "Hover preview of a document or code; click opens the editable viewer."
+  },
+  {
+   "id": "c21",
+   "kind": "page comment",
+   "at": "2026-10-26T09:54",
+   "on": "#sv-viewer-code > div:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(3) > pre:nth-of-type(1)",
+   "text": "what is os, if we import it from somewhere from our code it should be in a imports and probably in a code as well",
+   "topic": "tracked-calls",
+   "status": "done",
+   "result": "os comes from index.html and is in imports and in the import lines."
+  },
+  {
+   "id": "c24",
+   "kind": "page comment",
+   "at": "2026-10-26T10:26",
+   "on": "text \"v8 48 min ago extension/views/state-view\"",
+   "text": "why i am not see any imports not in html not in a functions",
+   "topic": "tracked-calls",
+   "status": "done",
+   "result": "Imports in functions (and html)."
+  },
+  {
+   "id": "c26",
+   "kind": "page comment",
+   "at": "2026-10-26T15:02",
+   "on": "button \"4 Build os\"",
+   "text": "here for functions i woulв love to see what is it for and when by whom it used and how it wors if i click on a function i can see full code of the function",
+   "topic": "tracked-calls",
+   "status": "done",
+   "result": "Build os: each os function with what it is for, who uses it and its code."
+  },
+  {
+   "id": "c27",
+   "kind": "page comment",
+   "at": "2026-10-26T15:03",
+   "on": "text \"claude.use('db') gives the page's datab…\"",
+   "text": "explain it more here what is claude.use here",
+   "topic": "network-environment",
+   "status": "done",
+   "result": "claude.use is explained in the docs of the block."
+  },
+  {
+   "id": "c28",
+   "kind": "page comment",
+   "at": "2026-10-26T15:13",
+   "on": "text \"Run index.html runtime +0.70s The runti…\"",
+   "text": "for me still hard to understand step by step what is happening, can we work more on how we represent data for the blocks, also when i am in a timline and when i click in a history it not add new step in a history why? do we not track everything?",
+   "topic": "timeline",
+   "status": "done",
+   "result": "Block details made clearer; Track state adds the timeline clicks as blocks."
+  },
+  {
+   "id": "c35",
+   "kind": "page comment",
+   "at": "2026-10-27T16:20",
+   "on": "text \"The whole run (click a step to see only…\"",
+   "text": "this should have save state changes view we have with view Files Functin and etc, but so here we also show read files or data or any context that we got in this block and hightlit mcp skill or workflow or subagent even split changes or reads by tabs and show by the skill agent or mcp",
+   "topic": "agent-runs",
+   "status": "done",
+   "result": "Run Details: one tree of changes and reads, by source (main, subagents, MCP, skills, workflows)."
+  },
+  {
+   "id": "c36",
+   "kind": "page comment",
+   "at": "2026-10-28T07:27",
+   "on": "#sv-editor > div:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(11) > pre:nth-of-type(1)",
+   "text": "when i uncheck empty it shows me this ... 3 lines, no need",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "Show empty off hides empty values with no \"⋯\" mark."
+  },
+  {
+   "id": "c37",
+   "kind": "page comment",
+   "at": "2026-10-28T07:52",
+   "on": "Show › button \"Files\"",
+   "text": "why files on a state view still show json and not a file tree view, also i think that we have 2 views for view state and changes on a blocks and on  a state view button clicks. suppose to be one and let's rething a bit flow. so we remove button to open/hide timline from the header to the json state view, now it's main view for wathcing state and changes. by default state view open state of the last run block in timline, block details right now just a new tab after changes, check box track timline move also to state view header and rename to track state and it ll tack or not track this view and timline. On a timline when we scroll we always should see from the right last block and from left last run block. from timline also remove then button for changes",
+   "topic": "state-view",
+   "status": "done",
+   "result": "The state view is the main view; the Timeline button is in it; Track state; Files shows a tree.",
+   "merged": [
+    "c25",
+    "c31",
+    "c32"
+   ]
+  },
+  {
+   "id": "c38",
+   "kind": "page comment",
+   "at": "2026-10-28T08:07",
+   "on": "#sv-editor > div:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(28) > pre:nth-of-type(1)",
+   "text": "on a preview\"...\" i want see match better colors and on a changes when we do was \"...\" on this preview i mant to see highlited changes",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "Better colors in the preview; an updated text shows its changes."
+  },
+  {
+   "id": "c40",
+   "kind": "page comment",
+   "at": "2026-10-28T09:45",
+   "on": "button \"1 Oct 28, 11:59 AM Agent run session 2c…\"",
+   "text": "should have Last in a name and Last click, also meake 3 char for session  string in a block",
+   "topic": "timeline",
+   "status": "done",
+   "result": "Last in the block name (Last click), 3 characters of the session."
+  },
+  {
+   "id": "c41",
+   "kind": "page comment",
+   "at": "2026-10-28T09:46",
+   "on": "button \"1 Oct 28, 11:59 AM Agent run session 2c…\"",
+   "text": "here show me only time ago",
+   "topic": "timeline",
+   "status": "done",
+   "result": "Blocks show only the time ago."
+  },
+  {
+   "id": "c42",
+   "kind": "page comment",
+   "at": "2026-10-28T11:07",
+   "on": "Agent OS",
+   "text": "when i am on a files view with changes when i clicked on a changed md file in a read mode i also want to see changes and on hove i want to see explanation why i changed,",
+   "topic": "agent-runs",
+   "status": "done",
+   "result": "A changed md file shows its changes in Read mode; the pointer shows why."
+  },
+  {
+   "id": "c43",
+   "kind": "page comment",
+   "at": "2026-10-28T13:12",
+   "on": "text \"Contents\"",
+   "text": "contents for md and function for files should be by default hide, and make much better header view for files and files, for md for example put styles in one  select button make everything icon,  tokens and kb you can leave all another information no need name also no need i can see it in a path",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "Contents and Functions hidden at first; icon header; Style select; tokens and KB."
+  },
+  {
+   "id": "c45",
+   "kind": "page comment",
+   "at": "2026-10-29T11:11",
+   "on": "text \"MD\"",
+   "text": "remove this md block from here, and make tabs looks more nice and colors of changes in file tree add also tags like mcp agent whatever",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "v47: MD badge removed, underline tabs, change colors and tags in the tree."
+  },
+  {
+   "id": "c46",
+   "kind": "page comment",
+   "at": "2026-10-29T11:12",
+   "on": "The buttons of the timeline › text \"The Flows button opens the list of save…\"",
+   "text": "the colors is fucked i barrely can't see anything i think for every theme also shouse own then when we switched it stil would nice",
+   "topic": "readable-ui",
+   "status": "done",
+   "result": "v47: each md theme has its own change colors."
+  },
+  {
+   "id": "c47",
+   "kind": "page comment",
+   "at": "2026-10-29T11:17",
+   "on": "button \"recorder-view\"",
+   "text": "views stil can't see rendered by default as a normal page, then should be tab source and changes, on a changed view i want see then 2 views rendered on old and on new",
+   "topic": "state-view",
+   "status": "done",
+   "result": "v47: Views tab Page (rendered), Source, Changes; before and after."
+  },
+  {
+   "id": "c48",
+   "kind": "page comment",
+   "at": "2026-10-29T11:23",
+   "on": "button \"header-view\"",
+   "text": "when changed mode should filtered 1 tabs by changes in this tabs if not changes no need show, if yes then we show only them, or in case of agent additional adding reads runs and tags  metadata data on all views, same for function, and another",
+   "topic": "state-view",
+   "status": "done",
+   "result": "v47: Only changes filters each tab, hides tabs with no change, adds AI run tags."
+  },
+  {
+   "id": "c49",
+   "kind": "page comment",
+   "at": "2026-10-29T11:25",
+   "on": "text \"14 environment in the state of v46; thi…\"",
+   "text": "i want see here 2 tabs browser and server and make for server also same state kind of view",
+   "topic": "network-environment",
+   "status": "done",
+   "result": "v47: Environment has Browser and Server tabs."
+  },
+  {
+   "id": "c50",
+   "kind": "page comment",
+   "at": "2026-10-29T11:26",
+   "on": "text \"Performance: the speed, memory and cost…\"",
+   "text": "why i don't have here somethings, should be perfomance or changes of it between versions\nso for every function server or ui we have metadata in a state about it perfomance so think of it like this , we have our project files it's a state all function have  also representions in a state with added metadata, and any files have additional metadata or folder etc, every file or type of files or folder can have own views as well",
+   "topic": "everything-is-state",
+   "status": "partly",
+   "result": "v47: Performance between versions. Metadata and views for each file and folder: open-ideas."
+  }
+ ],
+ "merged": {
+  "m02": "working-rules",
+  "m03": "working-rules",
+  "m07": "working-rules",
+  "m22": "m21",
+  "m42": "m41",
+  "m44": "m48",
+  "m53": "m72",
+  "m55": "m76",
+  "m56": "m76",
+  "m73": "m72",
+  "c08": "c03",
+  "c09": "c05",
+  "c13": "c14",
+  "c18": "c14",
+  "c22": "c03",
+  "c25": "c37",
+  "c29": "c14",
+  "c31": "c37",
+  "c32": "c37",
+  "c44": "m67"
+ },
+ "removed": {
+  "chatter, a short follow-up or a question that has its answer": [
+   "m05",
+   "m09",
+   "m10",
+   "m11",
+   "m12",
+   "m13",
+   "m14",
+   "m15",
+   "m17",
+   "m18",
+   "m27",
+   "m28",
+   "m29",
+   "m30",
+   "m31",
+   "m32",
+   "m33",
+   "m34",
+   "m35",
+   "m37",
+   "m39",
+   "m46",
+   "m51",
+   "m57",
+   "m64",
+   "m66",
+   "m71",
+   "m74",
+   "m75"
+  ],
+  "fixed, and the part it was about works in a different way now": [
+   "c07",
+   "c12",
+   "c15",
+   "c19",
+   "c23",
+   "c30",
+   "c33",
+   "c34",
+   "c39"
+  ]
+ }
+}

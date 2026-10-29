@@ -428,6 +428,7 @@ ELSE
 "state-view/local.edit": """\
 READ the text of the editor
 SET draft = the text, or null IF it is the same as the saved text
+SET draftFrom = the newest version when the draft starts (null with no draft)
 IF there is a draft: the view leaves the chosen block
 SET unsaved = there is a draft
 SET position = the newest (the draft is after the last version)
@@ -503,10 +504,11 @@ READ the text of the editor
 IF it is the same as the saved text: THROW "Nothing to save"
 TRY to parse the text
 IF it fails: SET the text = autofix(text), parse it again, SET fixed = true
+IF a newer version came during the draft: SET error = "vN came while you edited...", THROW
 SET the ui-data of state-view in the text to the new version (version, position, no draft)
 WAIT for the database to save the new version (commit n + 1)
 SET the live state = the new state
-SET the base text = the text; there is no draft; the view leaves the chosen block
+SET the base text = the text; there is no draft (draftFrom = null); the view leaves the chosen block
 SET the editor text IF it is not the same
 SHOW a green border for 2 seconds
 CALL render header-view

@@ -1,447 +1,287 @@
 {
  "extension.functions.get-state": {
-  "count": 6,
-  "avg": 226.3,
-  "max": 569
+  "count": 5,
+  "avg": 158,
+  "max": 177
  },
  "extension.functions.render": {
-  "count": 107,
-  "avg": 466.4,
-  "max": 2523
+  "count": 106,
+  "avg": 452.9,
+  "max": 2332
  },
  "extension.functions.unmount": {
   "count": 21,
-  "avg": 141.4,
-  "max": 176
+  "avg": 140.3,
+  "max": 196
  },
  "extension.views.docs-view.functions.local.close": {
   "count": 2,
-  "avg": 527.5,
-  "max": 547
+  "avg": 599.5,
+  "max": 646
  },
  "extension.views.docs-view.functions.local.init": {
   "count": 11,
-  "avg": 162.8,
-  "max": 206
+  "avg": 153.3,
+  "max": 186
  },
  "extension.views.docs-view.functions.local.open-doc": {
-  "count": 4,
-  "avg": 154.3,
-  "max": 175
+  "count": 5,
+  "avg": 133,
+  "max": 162
  },
  "extension.views.header-view.functions.local.init": {
   "count": 37,
-  "avg": 207.1,
-  "max": 1219
+  "avg": 193.9,
+  "max": 1064
  },
  "extension.views.header-view.functions.local.open.docs-view": {
   "count": 7,
-  "avg": 720,
-  "max": 838
+  "avg": 698.9,
+  "max": 878
  },
  "extension.views.header-view.functions.local.open.state-view": {
   "count": 4,
-  "avg": 1042.3,
-  "max": 1578
+  "avg": 1018,
+  "max": 1351
  },
  "extension.views.header-view.functions.local.set-device": {
   "count": 6,
-  "avg": 489.3,
-  "max": 617
+  "avg": 429.8,
+  "max": 477
  },
  "extension.views.header-view.functions.local.toggle-device-menu": {
   "count": 7,
-  "avg": 478.1,
-  "max": 596
+  "avg": 474,
+  "max": 708
  },
  "extension.views.index-view.functions.local.init": {
   "count": 4,
-  "avg": 1693.8,
-  "max": 2257
+  "avg": 1547,
+  "max": 2094
  },
  "extension.views.notes-view.functions.local.add-text": {
   "count": 1,
-  "avg": 167,
-  "max": 167
+  "avg": 126,
+  "max": 126
  },
  "extension.views.notes-view.functions.local.close": {
   "count": 4,
-  "avg": 294.3,
-  "max": 323
+  "avg": 262.3,
+  "max": 281
  },
  "extension.views.notes-view.functions.local.delete": {
   "count": 5,
-  "avg": 153.8,
-  "max": 158
+  "avg": 153.2,
+  "max": 174
  },
  "extension.views.notes-view.functions.local.edit": {
   "count": 1,
-  "avg": 149,
-  "max": 149
+  "avg": 128,
+  "max": 128
  },
  "extension.views.notes-view.functions.local.init": {
   "count": 9,
-  "avg": 319.9,
-  "max": 567
+  "avg": 305.6,
+  "max": 508
  },
  "extension.views.notes-view.functions.local.pick": {
   "count": 2,
-  "avg": 171,
-  "max": 175
+  "avg": 150.5,
+  "max": 158
  },
  "extension.views.notes-view.functions.local.refresh": {
   "count": 49,
-  "avg": 156.4,
-  "max": 362
+  "avg": 154.6,
+  "max": 330
  },
  "extension.views.notes-view.functions.local.send": {
   "count": 4,
-  "avg": 147.3,
-  "max": 182
+  "avg": 152,
+  "max": 166
  },
  "extension.views.notes-view.functions.local.set-settings": {
   "count": 7,
-  "avg": 180.4,
-  "max": 352
+  "avg": 153.3,
+  "max": 185
  },
  "extension.views.notes-view.functions.local.show-state": {
   "count": 2,
-  "avg": 150,
-  "max": 159
+  "avg": 165.5,
+  "max": 201
  },
  "extension.views.notes-view.functions.local.toggle-settings": {
   "count": 6,
-  "avg": 138,
-  "max": 149
+  "avg": 150,
+  "max": 194
  },
  "extension.views.notes-view.functions.local.transcribe": {
   "count": 1,
-  "avg": 147,
-  "max": 147
+  "avg": 133,
+  "max": 133
  },
  "extension.views.recorder-view.functions.local.clear": {
   "count": 3,
-  "avg": 137,
-  "max": 154
+  "avg": 147.3,
+  "max": 164
  },
  "extension.views.recorder-view.functions.local.init": {
   "count": 12,
-  "avg": 318.4,
-  "max": 420
+  "avg": 375,
+  "max": 579
  },
  "extension.views.recorder-view.functions.local.open-notes": {
   "count": 4,
-  "avg": 965.8,
-  "max": 1239
+  "avg": 868.8,
+  "max": 1037
  },
  "extension.views.recorder-view.functions.local.refresh": {
   "count": 300,
-  "avg": 152.3,
-  "max": 280
+  "avg": 153.9,
+  "max": 330
  },
  "extension.views.recorder-view.functions.local.select": {
   "count": 2,
-  "avg": 190.5,
-  "max": 243
+  "avg": 148,
+  "max": 176
  },
  "extension.views.recorder-view.functions.local.start": {
   "count": 5,
-  "avg": 172,
-  "max": 213
+  "avg": 148.8,
+  "max": 175
  },
  "extension.views.recorder-view.functions.local.stop": {
   "count": 6,
-  "avg": 202.3,
-  "max": 244
+  "avg": 170.8,
+  "max": 206
  },
  "extension.views.recorder-view.functions.local.toggle-menu": {
   "count": 6,
-  "avg": 173.7,
-  "max": 202
+  "avg": 146.8,
+  "max": 179
  },
  "extension.views.state-view.functions.local.close": {
   "count": 2,
-  "avg": 600.5,
-  "max": 621
+  "avg": 663,
+  "max": 730
  },
  "extension.views.state-view.functions.local.close-viewer": {
   "count": 4,
-  "avg": 285.5,
-  "max": 437
+  "avg": 241,
+  "max": 354
  },
  "extension.views.state-view.functions.local.collapse-all": {
   "count": 1,
-  "avg": 337,
-  "max": 337
+  "avg": 384,
+  "max": 384
  },
  "extension.views.state-view.functions.local.edit": {
   "count": 4,
-  "avg": 191.8,
-  "max": 220
+  "avg": 179.5,
+  "max": 232
  },
  "extension.views.state-view.functions.local.filter": {
   "count": 9,
-  "avg": 162.8,
-  "max": 196
+  "avg": 160.8,
+  "max": 207
  },
  "extension.views.state-view.functions.local.filter-kind": {
   "count": 28,
-  "avg": 154.9,
-  "max": 193
+  "avg": 164.3,
+  "max": 210
  },
  "extension.views.state-view.functions.local.init": {
   "count": 23,
-  "avg": 254.6,
-  "max": 838
+  "avg": 250.9,
+  "max": 732
  },
  "extension.views.state-view.functions.local.open-viewer": {
   "count": 5,
-  "avg": 189.4,
-  "max": 230
+  "avg": 194.4,
+  "max": 229
  },
  "extension.views.state-view.functions.local.refresh": {
-  "count": 145,
-  "avg": 2084.1,
-  "max": 13028
+  "count": 144,
+  "avg": 2224.8,
+  "max": 13284
  },
  "extension.views.state-view.functions.local.save": {
   "count": 2,
-  "avg": 1319,
-  "max": 1434
+  "avg": 1047,
+  "max": 1117
  },
  "extension.views.state-view.functions.local.set-md-theme": {
   "count": 6,
-  "avg": 159,
-  "max": 189
+  "avg": 160.8,
+  "max": 199
  },
  "extension.views.state-view.functions.local.step": {
   "count": 3,
   "avg": 148,
-  "max": 169
+  "max": 176
  },
  "extension.views.state-view.functions.local.toggle-changes": {
   "count": 10,
-  "avg": 155.3,
-  "max": 179
+  "avg": 159.3,
+  "max": 198
  },
  "extension.views.state-view.functions.local.toggle-empty": {
   "count": 4,
-  "avg": 133.5,
-  "max": 145
+  "avg": 157,
+  "max": 173
  },
  "extension.views.state-view.functions.local.toggle-timeline": {
   "count": 6,
-  "avg": 159.3,
-  "max": 176
+  "avg": 170.3,
+  "max": 207
  },
  "extension.views.state-view.functions.local.toggle-tracking": {
   "count": 4,
-  "avg": 162.8,
-  "max": 185
+  "avg": 148.3,
+  "max": 181
  },
  "extension.views.timeline-view.functions.local.close": {
   "count": 2,
-  "avg": 134,
-  "max": 138
+  "avg": 193.5,
+  "max": 237
  },
  "extension.views.timeline-view.functions.local.init": {
   "count": 16,
-  "avg": 344.8,
-  "max": 541
+  "avg": 345.6,
+  "max": 458
  },
  "extension.views.timeline-view.functions.local.next": {
-  "count": 9,
-  "avg": 160.9,
-  "max": 194
+  "count": 8,
+  "avg": 160.6,
+  "max": 185
  },
  "extension.views.timeline-view.functions.local.play": {
   "count": 4,
-  "avg": 150.3,
-  "max": 192
+  "avg": 141.3,
+  "max": 180
  },
  "extension.views.timeline-view.functions.local.play-flow": {
   "count": 2,
-  "avg": 137.5,
-  "max": 140
+  "avg": 157,
+  "max": 174
  },
  "extension.views.timeline-view.functions.local.refresh": {
-  "count": 230,
-  "avg": 161.4,
-  "max": 383
+  "count": 229,
+  "avg": 164.7,
+  "max": 294
  },
  "extension.views.timeline-view.functions.local.select": {
   "count": 22,
-  "avg": 147,
-  "max": 179
+  "avg": 151,
+  "max": 266
  },
  "extension.views.timeline-view.functions.local.show": {
   "count": 6,
-  "avg": 151,
-  "max": 183
+  "avg": 167.5,
+  "max": 180
  },
  "extension.views.timeline-view.functions.local.toggle-flows": {
   "count": 3,
-  "avg": 136,
-  "max": 143
- },
- "local.clear": {
-  "count": 1,
-  "avg": 1632,
-  "max": 1632
- },
- "local.close": {
-  "count": 4,
-  "avg": 3607.8,
-  "max": 10349
- },
- "local.close-viewer": {
-  "count": 1,
-  "avg": 12660,
-  "max": 12660
- },
- "local.collapse-all": {
-  "count": 1,
-  "avg": 12485,
-  "max": 12485
- },
- "local.edit": {
-  "count": 1,
-  "avg": 9168,
-  "max": 9168
- },
- "local.filter": {
-  "count": 1,
-  "avg": 10633,
-  "max": 10633
- },
- "local.filter-kind": {
-  "count": 2,
-  "avg": 12642.5,
-  "max": 13574
- },
- "local.init": {
-  "count": 6,
-  "avg": 4247.3,
-  "max": 17401
- },
- "local.next": {
-  "count": 1,
-  "avg": 2086,
-  "max": 2086
- },
- "local.open-doc": {
-  "count": 2,
-  "avg": 1139.5,
-  "max": 1206
- },
- "local.open-notes": {
-  "count": 1,
-  "avg": 3067,
-  "max": 3067
- },
- "local.open-viewer": {
-  "count": 1,
-  "avg": 12064,
-  "max": 12064
- },
- "local.open.docs-view": {
-  "count": 2,
-  "avg": 1424,
-  "max": 1494
- },
- "local.open.state-view": {
-  "count": 2,
-  "avg": 8468,
-  "max": 8837
- },
- "local.play": {
-  "count": 1,
-  "avg": 2651,
-  "max": 2651
- },
- "local.play-flow": {
-  "count": 1,
-  "avg": 1617,
-  "max": 1617
- },
- "local.refresh": {
-  "count": 3,
-  "avg": 4277.3,
-  "max": 9847
- },
- "local.select": {
-  "count": 3,
-  "avg": 2036.7,
-  "max": 2306
- },
- "local.set-device": {
-  "count": 2,
-  "avg": 1003.5,
-  "max": 1389
- },
- "local.set-md-theme": {
-  "count": 1,
-  "avg": 11318,
-  "max": 11318
- },
- "local.set-settings": {
-  "count": 1,
-  "avg": 1506,
-  "max": 1506
- },
- "local.show": {
-  "count": 2,
-  "avg": 1514,
-  "max": 1815
- },
- "local.step": {
-  "count": 1,
-  "avg": 8897,
-  "max": 8897
- },
- "local.stop": {
-  "count": 1,
-  "avg": 2463,
-  "max": 2463
- },
- "local.toggle-changes": {
-  "count": 1,
-  "avg": 11092,
-  "max": 11092
- },
- "local.toggle-device-menu": {
-  "count": 1,
-  "avg": 1364,
-  "max": 1364
- },
- "local.toggle-empty": {
-  "count": 1,
-  "avg": 10087,
-  "max": 10087
- },
- "local.toggle-flows": {
-  "count": 1,
-  "avg": 1776,
-  "max": 1776
- },
- "local.toggle-menu": {
-  "count": 1,
-  "avg": 3573,
-  "max": 3573
- },
- "local.toggle-settings": {
-  "count": 1,
-  "avg": 2175,
-  "max": 2175
- },
- "local.toggle-timeline": {
-  "count": 1,
-  "avg": 9689,
-  "max": 9689
- },
- "local.toggle-tracking": {
-  "count": 1,
-  "avg": 10276,
-  "max": 10276
+  "avg": 126.7,
+  "max": 158
  }
 }

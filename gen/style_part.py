@@ -33,10 +33,6 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .path{font:12px var(--mono);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .status{font-size:12px;color:var(--warn);margin-left:auto}
 .status.bad{color:var(--bad)}
-.legend{display:flex;gap:10px;font:11px var(--mono);color:var(--muted)}
-.legend span{display:inline-flex;align-items:center;gap:4px}
-.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
-.lg-add{background:var(--add)}.lg-upd{background:var(--upd)}.lg-del{background:var(--del)}
 .long{color:var(--str);cursor:pointer;border-bottom:1px dotted currentColor}
 .sv-viewer{position:absolute;inset:12px max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px));z-index:4;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
 .sv-viewer-bar{display:flex;align-items:center;gap:8px;justify-content:space-between}

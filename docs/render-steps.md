@@ -114,6 +114,8 @@ async function init() {
   let replay = location.hash === '#timeline-replay';
   try { replay = replay || sessionStorage.getItem('agent-os.timeline-replay') === '1'; } catch (e) {}
   if (replay) { d.state_open = true; os.get('extension.views.state-view.ui-data').timeline_open = true; }
+  // (one main view at a time: the state view, when both say open)
+  if (d.docs_open && d.state_open) d.docs_open = false;
   if (d.docs_open && !os.mounted('extension.views.docs-view')) await ctx.call('extension.functions.render', { view_path: 'extension.views.docs-view' });
   if (d.state_open && !os.mounted('extension.views.state-view')) await ctx.call('extension.functions.render', { view_path: 'extension.views.state-view' });
 }
@@ -135,6 +137,11 @@ import ctx from 'ctx';
 async function openStateView() {
   const d = os.get('extension.views.header-view.ui-data');
   d.state_open = !os.mounted('extension.views.state-view');
+  // One main view at a time: the one that is open closes.
+  if (d.state_open) for (const o of ["docs-view", "notes-view"])
+    if (os.mounted('extension.views.' + o)) await ctx.call('extension.functions.unmount', { view_path: 'extension.views.' + o });
+  d.docs_open = d.state_open ? false : d.docs_open;
+  d.state_open = d.state_open ? true : d.state_open;
   if (d.state_open) await ctx.call('extension.functions.render', { view_path: 'extension.views.state-view' });
   else await ctx.call('extension.functions.unmount', { view_path: 'extension.views.state-view' });
   await ctx.call('extension.functions.render', { view_path: 'extension.views.header-view' });

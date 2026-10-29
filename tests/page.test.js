@@ -345,8 +345,26 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.click('#docs-view .doc-link:has-text("how-it-works.md")');
     assert.ok(await page.isVisible('#docs-view .doc .diagram svg'));
     assert.equal(await page.locator('#docs-view .doc .diagram svg text.num').count(), 7);
-    await page.click('#docs-button');
+    // one main view at a time: the State button closes the docs, Notes closes the docs; each main view has a close button
+    await page.click('#state-button');
+    await page.waitForSelector('#state-view .CodeMirror');
     assert.equal(await page.isHidden('#docs-view'), true);
+    assert.equal(await page.getAttribute('#docs-button', 'aria-pressed'), 'false');
+    await page.click('#sv-close');
+    await page.waitForFunction(() => document.querySelector('#state-view').hidden);
+    assert.equal(await page.getAttribute('#state-button', 'aria-pressed'), 'false');
+    await page.click('#docs-button');
+    await page.waitForSelector('#docs-view .doc-link');
+    await page.evaluate(() => window.agentOS.os.call('extension.views.recorder-view.functions.local.open-notes', {}));
+    await page.waitForSelector('#notes-view .notes-bar');
+    assert.equal(await page.isHidden('#docs-view'), true);
+    assert.equal(await page.getAttribute('#docs-button', 'aria-pressed'), 'false');
+    await page.click('#notes-close');
+    await page.click('#docs-button');
+    await page.waitForSelector('#docs-view .doc-link');
+    await page.click('#docs-close');
+    assert.equal(await page.isHidden('#docs-view'), true);
+    assert.equal(await page.evaluate(() => window.agentOS.state.extension.views['header-view']['ui-data'].docs_open), false);
 
     // the state view: the one view for the state and its changes; the Timeline button is at the left of its bar
     const tl = () => page.evaluate(() => window.agentOS.state.extension.views['timeline-view']['ui-data']);
@@ -364,7 +382,7 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     assert.equal(await page.locator('#state-view .sv-bar #sv-switches > #timeline-button:first-child svg').count(), 1);
     assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-switches .st-kind', els => els.map(b => b.textContent.trim())), ['All', 'Files', 'Views', 'Functions', 'Network', 'Environment', 'Changes', 'Details']);
     assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-checks label', els => els.map(b => b.textContent.trim())), ['Show empty', 'Track state']);
-    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-right button', els => els.map(b => b.id)), ['collapse', 'save', 'older', 'newer']);
+    assert.deepEqual(await page.$$eval('#state-view .sv-bar #sv-right button', els => els.map(b => b.id)), ['collapse', 'save', 'older', 'newer', 'sv-close']);
     assert.equal(await page.evaluate(() => [...document.querySelectorAll('#state-view .sv-bar #sv-right button')].filter(b => b.textContent.trim()).length), 0);
     assert.equal(await page.locator('#state-view .sv-foot #pos').count(), 1);
     assert.equal(await page.locator('#state-view .sv-bar #path').count(), 0);
@@ -594,11 +612,31 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     await page.waitForFunction(() => !window.agentOS.state.extension.views['timeline-view']['ui-data'].playing);
     assert.deepEqual(await blockNames(), before);
 
-    // the blocks button hides the row of blocks
-    await page.click('#tl-blocks');
-    await page.waitForFunction(() => document.querySelector('#tl-strip').hidden);
-    await page.click('#tl-blocks');
-    await page.waitForFunction(() => !document.querySelector('#tl-strip').hidden);
+    // the controls are above the blocks; there is no progress line
+    assert.ok(await page.$eval('#timeline-view .tl-bar', b => b.nextElementSibling && b.nextElementSibling.id === 'tl-strip'));
+    assert.equal(await page.locator('#tl-progress').count(), 0);
+    // AI runs / UI: only the AI run blocks (purple), only the UI blocks (blue), or all (the pressed button again)
+    const n0 = await page.locator('#tl-strip .tl-step').count();
+    await page.click('#tl-runs');
+    await page.waitForFunction(() => !document.querySelector('#tl-strip .tl-step.ui'));
+    assert.ok(await page.locator('#tl-strip .tl-step.ai').count() >= 1);
+    assert.equal((await tl()).show, 'runs');
+    await page.click('#tl-ui');
+    await page.waitForFunction(() => !document.querySelector('#tl-strip .tl-step.ai'));
+    await page.click('#tl-ui');
+    await page.waitForFunction(n => document.querySelectorAll('#tl-strip .tl-step').length === n, n0);
+    assert.equal((await tl()).show, 'all');
+    assert.notEqual(await page.$eval('#tl-strip .tl-step.ai', b => getComputedStyle(b).borderLeftColor), await page.$eval('#tl-strip .tl-step.ui', b => getComputedStyle(b).borderLeftColor));
+    // the last AI run stays solid at the left when a later block is chosen; the pinned blocks are bigger
+    await page.click('#tl-strip .tl-step:nth-child(3)');
+    assert.equal(await page.$eval('#tl-strip .tl-step.pin-left', b => getComputedStyle(b).opacity), '1');
+    assert.ok(await page.$eval('#tl-strip .tl-step.pin-left', b => b.offsetWidth) > await page.$eval('#tl-strip .tl-step:nth-child(3)', b => b.offsetWidth));
+    // the close button closes the timeline; the Timeline button opens it again
+    await page.click('#tl-close');
+    await page.waitForFunction(() => document.querySelector('#timeline-view').hidden);
+    assert.equal((await svd()).timeline_open, false);
+    await page.click('#timeline-button');
+    await page.waitForFunction(() => !document.querySelector('#timeline-view').hidden);
     // Flows: the saved flows; First enter plays the first 4 blocks and stops
     await page.click('#tl-flows');
     await page.waitForSelector('#tl-flows-list:not([hidden]) .tl-flow');
@@ -1016,21 +1054,18 @@ test('page: boots from state, renders the header, runs state tests, saves and st
     for (const n of ['loadNewerVersion', 'extension.functions.render', 'local.refresh']) assert.ok(names.has(n), n);
     assert.ok(log.items.every(i => i.ok && i.at && typeof i.ms === 'number'), JSON.stringify(log.items.filter(i => !i.ok).slice(0, 3)));
 
-    // the Reload button of the timeline: the page loads again, the timeline opens and replays from the first step,
-    // the last agent run
+    // the Restart button of the timeline: the page loads again, the timeline opens on the last AI run notification
     // (the timeline stayed open after the new version)
     assert.equal(await page.isHidden('#timeline-view'), false);
     await Promise.all([page.waitForNavigation(), page.click('#tl-reload')]);
-    await page.waitForFunction(() => window.agentOS && window.agentOS.state && window.agentOS.state.extension.views['timeline-view']['ui-data'].playing);
-    await page.waitForSelector('#sv-block b');
-    // (the replay started at the last agent run)
-    assert.deepEqual(await page.evaluate(() => window.agentOS.calls.filter(c => c.name === 'local.select').map(c => c.input.input.id).slice(0, 1).map(id => /^run:runs\//.test(id))), [true]);
+    // (the first draw of the state view with the 2 MB state takes about 6 s)
+    await page.waitForFunction(() => window.agentOS && window.agentOS.state && document.querySelector('#sv-block b'), null, { timeout: 20000 });
+    assert.deepEqual(await page.evaluate(() => window.agentOS.calls.filter(c => c.name === 'local.select').map(c => c.input.input.id)), [null]);
+    assert.equal((await tl()).playing, false);
     assert.equal((await svd()).timeline_open, true);
     assert.equal(await page.evaluate(() => sessionStorage.getItem('agent-os.timeline-replay')), null);
-    // (the first draw of the state view with the 2 MB state takes about 6 s: the replay goes on after it)
-    await page.waitForFunction(() => ['runtime', 'open'].includes(window.agentOS.state.extension.views['timeline-view']['ui-data'].selected) || /^Block [3-9]/.test(document.querySelector('#sv-block').textContent), null, { timeout: 15000 });
-    // the replay goes on past the blocks that were there when it started (the page was still starting)
-    await page.waitForFunction(() => /^Block \d+: Start the page/.test(document.querySelector('#sv-block').textContent), null, { timeout: 8000 });
+    await page.waitForFunction(() => /^Block \d+: AI run notification/.test(document.querySelector('#sv-block').textContent), null, { timeout: 15000 });
+    assert.equal(await page.locator('#tl-strip .tl-step.on.pin-left.ai').count(), 1);
     assert.deepEqual(errors, []);
   } finally {
     await browser.close();

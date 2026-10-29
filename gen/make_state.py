@@ -417,8 +417,6 @@ html.rec-select #recorder-view,html.rec-select #recorder-view *{cursor:pointer!i
 .tl-tab{border:0;background:none;color:var(--muted);font:500 12px var(--sans);padding:5px 12px;border-radius:6px;cursor:pointer}
 .tl-tab[aria-selected="true"]{background:var(--panel);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .tl-pos{font:12px var(--mono);color:var(--muted);white-space:nowrap}
-.tl-progress{flex:1;height:4px;border-radius:2px;background:var(--line);overflow:hidden;min-width:40px}
-.tl-progress i{display:block;height:100%;background:var(--accent);transition:width .3s}
 .tl-strip{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 6px;position:relative;scroll-snap-type:x proximity;flex:none}
 .tl-step{position:relative;flex:none;width:168px;display:flex;flex-direction:column;gap:3px;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--fg);cursor:pointer;font:12px var(--sans);scroll-snap-align:center;transition:border-color .15s,box-shadow .15s,transform .15s}
 .tl-step:hover{border-color:var(--accent);transform:translateY(-1px)}
@@ -548,7 +546,6 @@ I_NEWER = svg('<path d="m6 3 5 5-5 5"/>')
 I_COLLAPSE = svg('<path d="m4 2 4 4 4-4M4 14l4-4 4 4"/>')
 I_SAVE = svg('<path d="M3 2.5h8l2.5 2.5v8.5h-10.5z"/><path d="M5.5 2.5v3h4.5v-3M5.5 13.5v-4h5v4"/>')
 I_FLOWS = svg('<circle cx="3" cy="4" r="1.3"/><path d="M4.5 4h2.5a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h2.5"/><path d="m12 10 2 2-2 2"/>')
-I_BLOCKS = svg('<rect x="1.5" y="4.5" width="3.6" height="7" rx="1"/><rect x="6.2" y="4.5" width="3.6" height="7" rx="1"/><rect x="10.9" y="4.5" width="3.6" height="7" rx="1"/>')
 I_CLOSE = svg('<path d="m4 4 8 8M12 4l-8 8"/>')
 I_GEAR = svg('<circle cx="8" cy="8" r="2.2"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4"/>')
 # the buttons of the file viewer
@@ -577,6 +574,20 @@ I_STOP = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><re
 # rule also works at that width, as an @container rule.
 STYLE = STYLE.replace("button{font:inherit}", """button{font:inherit}
 #docs-view,#state-view,#notes-view{overflow:auto}
+#docs-view{display:flex;flex-direction:column;gap:8px}
+#docs-view .docs{flex:1;min-height:0;height:auto}
+.view-bar{display:flex;justify-content:flex-end}
+.tl-pos{margin-right:auto}
+.tl-only{display:inline-flex;gap:6px}
+.tl-only .st-kind::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.tl-only-ai::before{background:#7c3aed}
+.tl-only-ui::before{background:#0284c7}
+#tl-strip .tl-step.ai{border-left:4px solid #7c3aed}
+#tl-strip .tl-step.ui{border-left:4px solid #0284c7}
+#tl-strip .tl-step.pin-left,#tl-strip .tl-step.pin-right{width:196px;padding:12px 14px;border-width:2px 2px 2px 5px;opacity:1;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+#tl-strip .tl-step.pin-left.on,#tl-strip .tl-step.pin-right.on{box-shadow:0 0 0 3px var(--sel),0 4px 16px rgba(0,0,0,.2)}
+#tl-strip .tl-step.pin-left .tl-kind,#tl-strip .tl-step.pin-right .tl-kind{font-size:14px;font-weight:600}
+@media (max-width:640px){#tl-strip{gap:8px}#tl-strip .tl-step{width:70px;padding:6px 7px;gap:2px}#tl-strip .tl-step::after{right:-9px;width:8px}#tl-strip .tl-step.pin-left,#tl-strip .tl-step.pin-right{width:84px;padding:7px 8px}#tl-strip .tl-time,#tl-strip .tl-step-name,#tl-strip .tl-step-meta{display:none}#tl-strip .tl-step .tl-kind{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#tl-strip .tl-step.pin-left .tl-kind,#tl-strip .tl-step.pin-right .tl-kind{font-size:12px}}
 #index-view[data-device]{container-type:inline-size;transform:translateZ(0);margin-inline:auto;max-width:100%;overflow:auto;background:var(--bg);box-shadow:0 0 0 1px var(--line),0 12px 40px rgba(0,0,0,.14)}
 #index-view[data-device="mobile"]{width:390px}
 #index-view[data-device="tablet"]{width:820px}
@@ -712,6 +723,9 @@ notes_html = """<main id="notes-view">
 </main>"""
 
 docs_html = """<main id="docs-view">
+<div class="view-bar">
+  <button class="btn" id="docs-close" data-call="local.close" aria-label="Close" title="Close">""" + I_CLOSE + """</button>
+</div>
 <div class="docs">
   <nav class="docs-list">
     <div class="path">${e(d.path)}</div>
@@ -738,7 +752,6 @@ docs_html = """<main id="docs-view">
 # A doc is markdown: # and ## headings, - items, 1. steps, ``` code blocks, and ```svg blocks for diagrams.
 
 timeline_html = """<section id="timeline-view">
-  <div class="tl-strip" id="tl-strip"></div>
   <div class="tl-bar">
     <button class="btn" id="tl-prev" data-call="local.next" data-input='{"delta":-1}' aria-label="Block before" title="Block before">
       """ + I_OLDER + """
@@ -751,13 +764,14 @@ timeline_html = """<section id="timeline-view">
       """ + I_NEWER + """
     </button>
     <span class="tl-pos" id="tl-pos"></span>
-    <div class="tl-progress"><i id="tl-progress"></i></div>
-    <button class="btn" id="tl-reload" data-call="local.reload" aria-label="Reload" title="Reload the page and replay from the first block">
+    <span class="tl-only" role="group" aria-label="Show">
+      <button class="st-kind tl-only-ai" id="tl-runs" data-call="local.show" data-input='{"only":"runs"}'
+              aria-pressed="${d.show === 'runs'}" title="${d.show === 'runs' ? 'Show all the blocks' : 'Show only the AI runs'}">AI runs</button>
+      <button class="st-kind tl-only-ui" id="tl-ui" data-call="local.show" data-input='{"only":"ui"}'
+              aria-pressed="${d.show === 'ui'}" title="${d.show === 'ui' ? 'Show all the blocks' : 'Show only the UI blocks'}">UI</button>
+    </span>
+    <button class="btn" id="tl-reload" data-call="local.reload" aria-label="Restart" title="Restart: reload the page and show the last AI run notification">
       """ + I_RELOAD + """
-    </button>
-    <button class="btn" id="tl-blocks" data-call="local.toggle-blocks"
-            aria-pressed="${d.show_blocks}" aria-label="${d.show_blocks ? 'Hide' : 'Show'} the blocks" title="${d.show_blocks ? 'Hide' : 'Show'} the blocks">
-      """ + I_BLOCKS + """
     </button>
     <button class="btn" id="tl-flows" data-call="local.toggle-flows"
             aria-pressed="${d.flows_open}" aria-label="Flows" title="Saved flows">
@@ -773,7 +787,9 @@ timeline_html = """<section id="timeline-view">
         <div class="tl-flow-text"><b>${e(f.name)}</b><span>${f.steps.length} blocks: ${e(f.steps.join(', '))}</span></div>
       </div>`).join('') || '<div class="tl-none">No saved flows.</div>'}
     </div>
+    <button class="btn" id="tl-close" data-call="local.close" aria-label="Close" title="Close the timeline">""" + I_CLOSE + """</button>
   </div>
+  <div class="tl-strip" id="tl-strip"></div>
 </section>"""
 
 state_html = """<main id="state-view">
@@ -833,6 +849,8 @@ state_html = """<main id="state-view">
             aria-label="Newer version" title="Newer version (&rarr;)">
       """ + I_NEWER + """
     </button>
+    <span class="sv-sep"></span>
+    <button class="btn" id="sv-close" data-call="local.close" aria-label="Close" title="Close">""" + I_CLOSE + """</button>
   </div>
 </div>
 <div id="sv-editor"></div>
@@ -1478,18 +1496,15 @@ if (old && old.timer) clearInterval(old.timer);
 os.refs['timeline-view'] = { parts: new Set(), files: {}, steps: [], end: null, timer: null, shown: undefined };
 os.watch('extension.views.timeline-view', 'local.refresh');
 await ctx.call('local.refresh', { after: 'local.init' });
-// After the Reload button: replay from the first step (the last agent run, when the state has one).
+// After the Restart button: the state view shows the last AI run notification (no block chosen).
 let replay = location.hash === '#timeline-replay';
 try { replay = replay || sessionStorage.getItem('agent-os.timeline-replay') === '1'; sessionStorage.removeItem('agent-os.timeline-replay'); } catch (e) {}
 if (location.hash === '#timeline-replay') try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
-if (replay) {
-  await ctx.call('local.select', { id: os.refs['timeline-view'].steps[0] || 'open' });
-  await ctx.call('local.play', {});
-}
+if (replay) await ctx.call('local.select', { id: null });
 """)
 
 TL_RELOAD = sig("reload", [], r"""
-// Reloads the page, so the history starts again from the first step. The timeline opens again and replays it.
+// Restart: reloads the page, so the history starts again. The timeline opens again on the last AI run notification.
 if (os.get('extension.views.state-view.ui-data.unsaved')) throw new Error('The state has unsaved changes. Save them first.');
 try { sessionStorage.setItem('agent-os.timeline-replay', '1'); } catch (e) { location.hash = 'timeline-replay'; }
 location.reload();
@@ -2511,6 +2526,10 @@ const steps = (lastRun ? [runStep(lastRun, 0)] : []).concat([
   const had = new Set(runsOf(vv.before).map(x => x.file));
   return [block].concat(runsOf(vv.after).filter(x => !had.has(x.file)).map(x => runStep(x, ms)));
 }));
+// AI runs or UI: only the AI run blocks, or only the other blocks (ui-data.show; all shows both).
+// (when no block is of that kind, all show)
+const only = steps.filter(s => !!s.run === (d.show === 'runs'));
+if ((d.show === 'runs' || d.show === 'ui') && only.length) steps.splice(0, steps.length, ...only);
 R.steps = steps.map(s => s.id);
 R.names = steps.map(s => s.name);
 
@@ -2524,17 +2543,15 @@ const cur = steps[pos], strip = ctx.root.querySelector('#tl-strip'), left = stri
 // Details too: the timeline of the agent.
 R.changes = {};
 steps.forEach(s => { R.changes[s.id] = s.run ? 0 : s.changes || 0; });
-strip.hidden = !d.show_blocks;
 const flowAt = R.flow ? R.flow.ids.indexOf(cur.id) : -1;
 ctx.root.querySelector('#tl-pos').textContent = (flowAt >= 0 ? R.flow.name + ': block ' + (flowAt + 1) + ' of ' + R.flow.ids.length : 'Block ' + (pos + 1) + ' of ' + steps.length) + '  ' + (cur.when || since(cur.ms));
-ctx.root.querySelector('#tl-progress').style.width = (steps.length > 1 ? pos / (steps.length - 1) * 100 : 100) + '%';
 ctx.root.querySelector('#tl-prev').disabled = pos === 0;
 ctx.root.querySelector('#tl-next').disabled = pos === steps.length - 1;
 strip.textContent = '';
 // The newest agent run stays in sight at the left and the newest block at the right when the row scrolls.
 steps.forEach((s, i) => {
-  const on = i === pos, pin = i === runAt && i < steps.length - 1 ? ' pin-left' : i === steps.length - 1 && i > 0 ? ' pin-right' : '';
-  const b = el('button', 'tl-step' + (s.fixed ? ' fixed' : '') + (s.ok === false ? ' bad' : '') + (on ? ' on' : '') + (i < pos ? ' past' : '') + pin);
+  const on = i === pos, pin = i === runAt ? ' pin-left' : i === steps.length - 1 && i > 0 ? ' pin-right' : '';
+  const b = el('button', 'tl-step' + (s.run ? ' ai' : ' ui') + (s.fixed ? ' fixed' : '') + (s.ok === false ? ' bad' : '') + (on ? ' on' : '') + (i < pos ? ' past' : '') + pin);
   b.dataset.call = 'local.select';
   b.dataset.input = JSON.stringify({ id: s.id });
   b.setAttribute('aria-current', String(on));
@@ -3250,10 +3267,21 @@ if (d.playing && (at < 0 || at === ids.length - 1)) d.selected = ids[0];
 if (d.playing) R.end = os.get('extension.views.state-view.ui-data.track_state') && !R.flow ? ids[ids.length - 1] : null;
 """)
 
-TL_BLOCKS = sig("toggleBlocks", [], r"""
-// Hides or shows the row of blocks.
+TL_SHOW = sig("show", ["only"], r"""
+// The AI runs and UI buttons: only the AI run blocks (runs), or only the other blocks (ui). The pressed button
+// again shows all the blocks.
+if (only !== 'runs' && only !== 'ui') throw new Error('only is runs or ui, not ' + only);
 const d = os.get('extension.views.timeline-view.ui-data');
-d.show_blocks = !d.show_blocks;
+d.show = d.show === only ? 'all' : only;
+// (the chosen block can be one that does not show now: the last agent run, or the newest block, shows)
+d.selected = null;
+d.playing = false;
+os.refs['timeline-view'].flow = null;
+""")
+
+TL_CLOSE = sig("close", [], r"""
+// The close button: the timeline goes. The Timeline button of the state view shows it again.
+os.get('extension.views.state-view.ui-data').timeline_open = false;
 """)
 
 TL_FLOWS = sig("toggleFlows", [], r"""
@@ -3283,10 +3311,17 @@ d.playing = ids.length > 1;
 return { blocks: ids.length };
 """)
 
+MAIN_VIEWS = ["docs-view", "state-view", "notes-view"]   # the views between the header and the footer: one at a time
+
 def open_view(name, flag):
     return sig("open" + "".join(w.capitalize() for w in name.split("-")), [], f"""
 const d = os.get('extension.views.header-view.ui-data');
 d.{flag} = !os.mounted('extension.views.{name}');
+// One main view at a time: the one that is open closes.
+if (d.{flag}) for (const o of {json.dumps([m for m in MAIN_VIEWS if m != name])})
+  if (os.mounted('extension.views.' + o)) await ctx.call('extension.functions.unmount', {{ view_path: 'extension.views.' + o }});
+d.docs_open = d.{flag} ? {str(name == 'docs-view').lower()} : d.docs_open;
+d.state_open = d.{flag} ? {str(name == 'state-view').lower()} : d.state_open;
 if (d.{flag}) await ctx.call('extension.functions.render', {{ view_path: 'extension.views.{name}' }});
 else await ctx.call('extension.functions.unmount', {{ view_path: 'extension.views.{name}' }});
 await ctx.call('extension.functions.render', {{ view_path: 'extension.views.header-view' }});
@@ -3587,9 +3622,25 @@ d.menu_open = typeof open === 'boolean' ? open : !d.menu_open;
 """)
 
 REC_OPEN_NOTES = sig("openNotes", [], r"""
-// The menu of the record button, or hold the record button 4 s: the Notes page opens.
+// The menu of the record button, or hold the record button 4 s: the Notes page opens. One main view at a time:
+// docs-view or state-view closes.
 os.get('extension.views.recorder-view.ui-data').menu_open = false;
+const h = os.get('extension.views.header-view.ui-data');
+let closed = false;
+for (const o of ['docs-view', 'state-view'])
+  if (os.mounted('extension.views.' + o)) { await ctx.call('extension.functions.unmount', { view_path: 'extension.views.' + o }); closed = true; }
+h.docs_open = false;
+h.state_open = false;
+if (closed) await ctx.call('extension.functions.render', { view_path: 'extension.views.header-view' });
 if (!os.mounted('extension.views.notes-view')) await ctx.call('extension.functions.render', { view_path: 'extension.views.notes-view' });
+""")
+
+def close_view(name, flag):
+    return sig("close", [], f"""
+// The close button of the view: it closes, and the button of the header is not pressed.
+await ctx.call('extension.functions.unmount', {{ view_path: 'extension.views.{name}' }});
+os.get('extension.views.header-view.ui-data').{flag} = false;
+await ctx.call('extension.functions.render', {{ view_path: 'extension.views.header-view' }});
 """)
 
 NOTES_INIT = sig("init", [], r"""
@@ -3803,6 +3854,8 @@ os.refs['header-view'] = { off: () => { document.removeEventListener('pointerdow
 let replay = location.hash === '#timeline-replay';
 try { replay = replay || sessionStorage.getItem('agent-os.timeline-replay') === '1'; } catch (e) {}
 if (replay) { d.state_open = true; os.get('extension.views.state-view.ui-data').timeline_open = true; }
+// (one main view at a time: the state view, when both say open)
+if (d.docs_open && d.state_open) d.docs_open = false;
 if (d.docs_open && !os.mounted('extension.views.docs-view')) await ctx.call('extension.functions.render', { view_path: 'extension.views.docs-view' });
 if (d.state_open && !os.mounted('extension.views.state-view')) await ctx.call('extension.functions.render', { view_path: 'extension.views.state-view' });
 """)
@@ -3984,7 +4037,7 @@ state = {
         "ui-data": {"docs_open": False, "state_open": False, "device": "desktop", "device_open": False},
         "functions": {
           "local.init": fn("Runs after header-view is rendered: shows all the views at the width of ui-data.device, and opens docs-view and state-view again when ui-data says they are open. After the Reload button of the timeline, it opens the state view with the timeline.",
-                           code=HEADER_INIT, expected={HV + ".ui-data.state_open": MAY, P + ".timeline_open": MAY},
+                           code=HEADER_INIT, expected={HV + ".ui-data.state_open": MAY, HV + ".ui-data.docs_open": MAY, P + ".timeline_open": MAY},
                            calls={"extension.functions.render": {"input": V(SV), "output": None}}),
           "local.toggle-device-menu": fn("The Device button: opens the menu Mobile, Tablet, Desktop, or closes it. A click out of the menu, or Escape, closes it.",
                            code=HEADER_DEVICE_MENU, input_={"open": True}, expected={HV + ".ui-data.device_open": MAY},
@@ -3999,10 +4052,10 @@ state = {
                                   "shows mobile, then desktop": {"before": {"local.set-device": {"device": "mobile"}}, "input": {"device": "desktop"},
                                                                  "expect": {"state": {HV + ".ui-data.device": "desktop"}, "dom-absent": ["#index-view[data-device]", "#device-menu"]}}}),
           "local.open.docs-view": fn(
-            "The Docs button: renders docs-view, or closes it when it is open, and keeps ui-data.docs_open in step.",
+            "The Docs button: renders docs-view, or closes it when it is open, and keeps ui-data.docs_open in step. One main view at a time: the state view or Notes closes.",
             code=open_view("docs-view", "docs_open"),
             calls={"extension.functions.render": {"input": V(DV), "output": None}, "extension.functions.unmount": {"input": V(DV), "output": None}},
-            expected={HV + ".ui-data.docs_open": MAY},
+            expected={HV + ".ui-data.docs_open": MAY, HV + ".ui-data.state_open": MAY},
             tests={
               "opens the docs": {"before": {"extension.functions.unmount": V(DV)}, "input": {},
                                  "expect": {"state": {HV + ".ui-data.docs_open": True}, "dom": ["#docs-view .doc-link", "#docs-button[aria-pressed=\"true\"]"]}},
@@ -4010,10 +4063,10 @@ state = {
                                         "expect": {"state": {HV + ".ui-data.docs_open": False}, "dom-absent": ["#docs-view .doc-link"]}}
             }),
           "local.open.state-view": fn(
-            "The State button: renders state-view, or closes it when it is open, and keeps ui-data.state_open in step.",
+            "The State button: renders state-view, or closes it when it is open, and keeps ui-data.state_open in step. One main view at a time: the docs or Notes close.",
             code=open_view("state-view", "state_open"),
             calls={"extension.functions.render": {"input": V(SV), "output": None}, "extension.functions.unmount": {"input": V(SV), "output": None}},
-            expected={HV + ".ui-data.state_open": MAY},
+            expected={HV + ".ui-data.state_open": MAY, HV + ".ui-data.docs_open": MAY},
             tests={
               "opens the state view": {"before": {"extension.functions.unmount": V(SV)}, "input": {},
                                        "expect": {"state": {HV + ".ui-data.state_open": True}, "dom": ["#state-view .CodeMirror", "#state-button[aria-pressed=\"true\"]"]}},
@@ -4029,6 +4082,10 @@ state = {
           "local.init": fn("Runs after docs-view is rendered: lists the docs folder and shows the selected doc.",
                            code=DOCS_INIT, expected={DP + ".docs": MAY, DP + ".selected": MAY, DP + ".content": MAY},
                            tests={"lists the docs": {"before": render_dv, "input": {}, "expect": {"dom": ["#docs-view .doc-link[aria-current=\"true\"]", "#docs-view .doc h2"]}}}),
+          "local.close": fn("The close button of the docs: closes docs-view. The Docs button of the header is not pressed.",
+                            code=close_view("docs-view", "docs_open"), expected={HV + ".ui-data.docs_open": False},
+                            calls={"extension.functions.unmount": {"input": V(DV), "output": None}, "extension.functions.render": {"input": V(HV), "output": None}},
+                            tests={"closes the docs": {"before": render_dv, "input": {}, "expect": {"state": {HV + ".ui-data.docs_open": False}, "dom-absent": ["#docs-view .doc-link"]}}}),
           "local.open-doc": fn("Shows one doc of the folder.", code=OPEN_DOC, input_={"name": "render-steps.md"},
                                expected={DP + ".selected": "input.name", DP + ".content": MAY},
                                tests={"opens render-steps.md": {"before": render_dv, "input": {"name": "render-steps.md"},
@@ -4039,12 +4096,12 @@ state = {
       },
       "timeline-view": {
         "html": timeline_html,
-        "ui-data": {"selected": None, "playing": False, "show_blocks": True, "flows_open": False,
+        "ui-data": {"selected": None, "playing": False, "show": "all", "flows_open": False,
                     "flows": [{"name": "First enter", "steps": ["network", "runtime", "loadState", "extension.functions.render"]}]},
         "functions": {
-          "local.init": fn("Runs after timeline-view is rendered (the state view renders it): draws the timeline now and after every call. After the Reload button, it replays the blocks from the first one.",
+          "local.init": fn("Runs after timeline-view is rendered (the state view renders it): draws the timeline now and after every call. After the Restart button, it shows the last AI run notification.",
                            code=TL_INIT, calls={"local.refresh": {"input": {"after": "local.init"}, "output": None},
-                                                "local.select": {"input": {"id": "open"}, "output": None}, "local.play": {"input": {}, "output": None}},
+                                                "local.select": {"input": {"id": None}, "output": None}},
                            tests={"draws the blocks": {"before": {"extension.functions.render": V(TV)}, "input": {},
                                                        "expect": {"dom": ["#tl-strip .tl-step.fixed"]}}}),
           "local.refresh": fn("Draws the timeline from the runtime's call log: the page opening, index.html, then every call that nothing else called, as blocks in a row. What you do in the state view and the timeline is a block only when Track state is on. The last agent run stays at the left and the newest block at the right when the row scrolls. It shows only when the Timeline button of the state view is on. It keeps the chosen block for the state view, with how to draw its changes and its details. Runs after every call; after is the call that ran.",
@@ -4061,12 +4118,18 @@ state = {
                            code=TL_NEXT, input_={"delta": 1}, expected={TV + ".ui-data.selected": MAY, TV + ".ui-data.playing": MAY},
                            tests={"goes to the second block": {"before": dict(FRESH, **{"local.select": {"id": "open"}}), "input": {"delta": 1},
                                                                "expect": {"state": {TV + ".ui-data.selected": "runtime"}}}}),
-          "local.reload": fn("The Reload button: reloads the page, so the history starts again from the first block. Then the timeline opens and replays it. It stops when the state has unsaved changes.",
+          "local.reload": fn("The Restart button: reloads the page, so the history starts again. Then the timeline opens on the last AI run notification. It stops when the state has unsaved changes.",
                              code=TL_RELOAD),
-          "local.toggle-blocks": fn("Hides or shows the row of blocks.",
-                                    code=TL_BLOCKS, expected={TV + ".ui-data.show_blocks": "toggles"},
-                                    tests={"hides the blocks, then shows them": {"before": {"extension.functions.render": V(TV), "local.toggle-blocks": {}}, "input": {},
-                                                                                 "expect": {"state": {TV + ".ui-data.show_blocks": True}, "dom": ["#tl-strip:not([hidden])", "#tl-blocks[aria-pressed=\"true\"]"]}}}),
+          "local.show": fn("The AI runs and UI buttons: only runs shows only the AI run blocks, only ui shows only the other blocks. A click on the pressed button shows all the blocks again.",
+                           code=TL_SHOW, input_={"only": "runs"}, expected={TV + ".ui-data.show": MAY, TV + ".ui-data.selected": MAY, TV + ".ui-data.playing": MAY},
+                           tests={"shows only the UI blocks": {"before": {"extension.functions.render": V(TV)}, "input": {"only": "ui"},
+                                                               "expect": {"state": {TV + ".ui-data.show": "ui"}, "dom": ["#tl-ui[aria-pressed=\"true\"]", "#tl-strip .tl-step.ui"], "dom-absent": ["#tl-strip .tl-step.ai"]}},
+                                  "shows all again": {"before": {"extension.functions.render": V(TV), "local.show": {"only": "runs"}}, "input": {"only": "runs"},
+                                                      "expect": {"state": {TV + ".ui-data.show": "all"}, "dom": ["#tl-runs[aria-pressed=\"false\"]", "#tl-strip .tl-step.ui"]}}}),
+          "local.close": fn("The close button: closes the timeline. The Timeline button of the state view shows it again.",
+                            code=TL_CLOSE, expected={P + ".timeline_open": MAY},
+                            tests={"closes the timeline": {"before": {"extension.functions.render": V(TV)}, "input": {},
+                                                           "expect": {"state": {P + ".timeline_open": False}}}}),
           "local.toggle-flows": fn("The Flows button: opens or closes the list of saved flows.",
                                    code=TL_FLOWS, expected={TV + ".ui-data.flows_open": "toggles"},
                                    tests={"opens the list": {"before": {"extension.functions.render": V(TV), "local.toggle-flows": {}}, "input": {},
@@ -4130,6 +4193,10 @@ state = {
                                      code=TOGGLE_DETAILS, expected={P + ".details": "toggles"},
                                      tests={"shows the details": {"before": dict(render_sv, **{TV + ".functions.local.select": {"id": "open"}}), "input": {},
                                                                   "expect": {"state": {P + ".details": True}, "dom": ["#details[aria-pressed=\"true\"]", "#tl-detail .tl-netenv .tl-panel"]}}}),
+          "local.close": fn("The close button of the state view: closes state-view. The State button of the header is not pressed.",
+                            code=close_view("state-view", "state_open"), expected={HV + ".ui-data.state_open": False},
+                            calls={"extension.functions.unmount": {"input": V(SV), "output": None}, "extension.functions.render": {"input": V(HV), "output": None}},
+                            tests={"closes the state view": {"before": render_sv, "input": {}, "expect": {"state": {HV + ".ui-data.state_open": False}, "dom-absent": ["#state-view .CodeMirror"]}}}),
           "local.toggle-timeline": fn("The Timeline button: shows or hides the timeline above the header. Hidden, the timeline still keeps its blocks for the state view.",
                                       code=TOGGLE_TIMELINE, expected={P + ".timeline_open": "toggles"},
                                       calls={"extension.functions.render": {"input": V(TV), "output": None}},
@@ -4202,7 +4269,7 @@ state = {
                                   tests={"opens, then closes": {"before": dict(render_rv, **{"local.toggle-menu": {"open": True}}), "input": {"open": False},
                                                                 "expect": {"state": {RP + ".menu_open": False}, "dom-absent": ["#rec-menu"]}}}),
           "local.open-notes": fn("Notes in the menu of the record button, or hold the record button 4 seconds: opens the Notes page.",
-                                 code=REC_OPEN_NOTES, expected={RP + ".menu_open": MAY}, calls={"extension.functions.render": {"input": V(NV), "output": None}},
+                                 code=REC_OPEN_NOTES, expected={RP + ".menu_open": MAY, HV + ".ui-data.docs_open": MAY, HV + ".ui-data.state_open": MAY}, calls={"extension.functions.render": {"input": V(NV), "output": None}},
                                  tests={"opens Notes": {"before": render_rv, "input": {}, "expect": {"dom": ["#notes-view .notes-bar"]}}}),
           "local.clear": fn("Closes the card of the last recording, and forgets the recording.",
                             code=REC_CLEAR, expected={RP: MAY},

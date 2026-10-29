@@ -118,6 +118,8 @@ SET menu_open = open, or NOT menu_open when there is no open
 
 "recorder-view/local.open-notes": """\
 SET menu_open = false
+FOR EACH of docs-view and state-view that is mounted: CALL unmount it (one main view at a time)
+SET docs_open = false, state_open = false of header-view; CALL render header-view IF a view closed
 IF notes-view is not mounted: CALL render notes-view (the Notes page)""",
 
 "notes-view/local.init": """\
@@ -198,8 +200,9 @@ READ ui-data of header-view
 IF device is mobile or tablet: SET data-device of index-view = device (all views show at its width)
 ELSE: REMOVE data-device of index-view
 STOP the old listeners; LISTEN: a click out of the device menu, or Escape, CALL local.toggle-device-menu {open: false}
-IF the page reloads from the Reload button of the timeline
+IF the page reloads from the Restart button of the timeline
   SET state_open = true, and timeline_open of state-view = true
+IF docs_open and state_open: SET docs_open = false (one main view at a time)
 IF docs_open and docs-view is not mounted: CALL render docs-view
 IF state_open and state-view is not mounted: CALL render state-view""",
 
@@ -218,6 +221,8 @@ RETURN {device}""",
 "header-view/local.open.docs-view": """\
 SET docs_open = NOT (docs-view is mounted)
 IF docs_open
+  FOR EACH other main view (docs-view, state-view, notes-view) that is mounted: CALL unmount it (one main view at a time)
+  SET docs_open and state_open: true only for docs-view
   CALL render docs-view
 ELSE
   CALL unmount docs-view
@@ -226,6 +231,8 @@ CALL render header-view (the button shows pressed or not)""",
 "header-view/local.open.state-view": """\
 SET state_open = NOT (state-view is mounted)
 IF state_open
+  FOR EACH other main view (docs-view, state-view, notes-view) that is mounted: CALL unmount it (one main view at a time)
+  SET docs_open and state_open: true only for state-view
   CALL render state-view
 ELSE
   CALL unmount state-view
@@ -251,9 +258,8 @@ IF an older timeline has a replay timer: STOP it
 SET os.refs.timeline-view = a new empty memory (steps, parts, files)
 WATCH timeline-view: after each call, CALL local.refresh
 CALL local.refresh
-IF the page reloads from the Reload button
-  CALL local.select the first block (the last agent run)
-  CALL local.play""",
+IF the page reloads from the Restart button
+  CALL local.select {id: null} (the last AI run notification)""",
 
 "timeline-view/local.refresh": """\
 SHOW the timeline IF state-view is mounted and its timeline_open is true, ELSE HIDE it
@@ -269,12 +275,13 @@ SET blocks =
   Run index.html
   each top call (Load the state, Start the page, clicks, new versions)
   after a New version: an AI run notification block for each new run
+IF show is runs: KEEP only the AI run blocks; IF show is ui: KEEP only the other blocks (IF none is left: KEEP all)
 FOR EACH block: count its state changes
 SET the chosen block = selected, or the newest agent run block when nothing is chosen (the newest block when there is no run)
-DRAW the row of blocks (number, time, name, changes); the chosen block is on
+DRAW the row of blocks (number, time, name, changes); the chosen block is on; an AI run block is purple, a UI block blue
   the agent run block: its time ago and the first 3 characters of its session
   the newest agent run block stays at the left, and the newest block at the right, when the row scrolls; their names start with Last
-DRAW the position and the progress line
+DRAW the position
 GIVE the state view what it needs:
   current = the chosen block, number = its place
   versionOf(block) = the version the block made or brought (the newest version for the other blocks)
@@ -312,11 +319,26 @@ IF to is the last block, or the end of the replay: SET playing = false""",
 
 "timeline-view/local.reload": """\
 IF the state has unsaved changes: THROW "Save them first"
-REMEMBER "replay after the reload" (sessionStorage, or the address)
+REMEMBER "restart" (sessionStorage, or the address)
 RELOAD the page""",
 
-"timeline-view/local.toggle-blocks": """\
-SET show_blocks = NOT show_blocks""",
+"timeline-view/local.show": """\
+IF only is not runs or ui: THROW
+SET show = all IF show is only already, ELSE only
+SET selected = null, playing = false, and leave the flow""",
+
+"timeline-view/local.close": """\
+SET timeline_open of state-view = false (the timeline hides)""",
+
+"docs-view/local.close": """\
+CALL unmount docs-view
+SET docs_open of header-view = false
+CALL render header-view""",
+
+"state-view/local.close": """\
+CALL unmount state-view
+SET state_open of header-view = false
+CALL render header-view""",
 
 "timeline-view/local.toggle-flows": """\
 SET flows_open = NOT flows_open""",

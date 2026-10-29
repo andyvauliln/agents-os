@@ -70,7 +70,9 @@ DOCS = {
 3. Each next block is one call that nothing else called, for example a click on a button.
 4. Each block shows its number, the time since the page opened, the function, its time in ms and how many state changes it made.
 5. What you do in the state view and in the timeline (clicks on blocks, the replay, the buttons) is not a block. Turn on Track state (in the bar of the state view) to add it as blocks too.
-6. When the row of blocks scrolls, the last agent run stays at the left and the newest block stays at the right.
+6. When the row of blocks scrolls, the last agent run stays at the left and the newest block stays at the right. These two pinned blocks are a bit bigger, with a thicker border.
+7. Each AI run block has a purple line at its left. Each other block (a UI block: the page, the network, a click) has a blue line.
+8. On a narrow screen (a phone), the blocks are smaller and show only their number and name, so that you can see at least 4 blocks.
 
 ### A block
 1. Click a block. The state view shows it, and its bottom bar names it (for example "Block 3: Run index.html"). When no block is chosen, the state view shows the last agent run.
@@ -101,12 +103,14 @@ DOCS = {
    - Note the start time shows the browser's timings. Make a session id shows the first record of the call log. Create the call tracker counts the calls by name. Build os lists what is in os: click one to see what it is for, which functions use it, how often they ran, and its code.
    - Download state.json shows state.json. Connect to the database shows where the versions and the call log are. Read the saved versions lists the versions. Parse the newest version shows the parts of the state and their sizes.
 ### The buttons of the timeline
+The buttons are above the blocks.
 1. The arrow buttons show the block before and the next block.
 2. The Replay button shows the next block every 1.6 seconds. From the last block, it starts again at the first. It goes on to the newest block. With Track state on, each move adds a block, so it stops at the block that was the newest when it started. It also stops when you click it again, or when you click a block.
-3. The Reload button reloads the page, so the history starts again at block 1. The timeline opens again and replays the blocks from the first one: the last agent run, then the page start. If the state has unsaved changes, it does not reload: save them first.
-4. The blocks button hides or shows the row of blocks.
+3. AI runs shows only the AI run blocks. UI shows only the other blocks. Click the pressed button again to show all the blocks.
+4. The Restart button reloads the page, so the history starts again. The timeline opens again on the last AI run notification. If the state has unsaved changes, it does not reload: save them first.
 5. The Flows button opens the list of saved flows. Click the play button of a flow to replay only its blocks. First enter is the page opening: its first 4 blocks (index.html, runtime, loadState, the render of index-view).
-6. The timeline is part of the state view: when you close the state view, the timeline hides too.
+6. The close button (×, at the right) closes the timeline. The Timeline button of the state view opens it again.
+7. The timeline is part of the state view: when you close the state view, the timeline hides too.
 
 ### A new version
 1. A Claude Code session changes the files of main. It commits the change, pushes it and saves a new version of the state.
@@ -149,7 +153,7 @@ DOCS = {
 
 ### Where it comes from
 1. The timeline comes from the call log of the runtime (os.calls), not from the state. If the state kept the timeline, each call would change the state again.
-2. The ui-data of timeline-view keeps the chosen block (selected; null is the last agent run), whether the replay runs (playing), show_blocks, flows_open, and the saved flows (flows: each has a name and the names of its blocks). The ui-data of state-view keeps timeline_open (the Timeline button), track_state (Track state), changes and details.
+2. The ui-data of timeline-view keeps the chosen block (selected; null is the last agent run), whether the replay runs (playing), show (all, runs or ui: the AI runs and UI buttons), flows_open, and the saved flows (flows: each has a name and the names of its blocks). The ui-data of state-view keeps timeline_open (the Timeline button), track_state (Track state), changes and details.
 
 ## Record
 The footer at the bottom of the page is recorder-view. The red button at its right records.
@@ -184,7 +188,7 @@ The footer at the bottom of the page is recorder-view. The red button at its rig
 8. The ui-data of notes-view keeps notes (each {id, kind, at, time, text, view_path, selections, file}), settings ({transcribe, lang, new_session_task}), settings_open and message. The recordings and the heard texts are in the memory of the page (os.refs.notes); on claude.ai a recording is also a file of the page (file, served at /_blob/<file>). The notes stay when you save the state.
 
 ## Where the parts are
-- On the page, from the top: the timeline (when it is open), the header, the views that are open (docs, state, Notes), then the footer with the record button. Each view uses only the space between the header and the footer. If its content is longer, it scrolls in that space.
+- On the page, from the top: the timeline (when it is open), the header, one main view (docs, state or Notes), then the footer with the record button. Only one main view is open at a time: when you open one, the one that was open closes. Each main view has a close button (×). Each view uses only the space between the header and the footer. If its content is longer, it scrolls in that space.
 - Views: extension.views.
 - Shared functions: extension.functions.
 - Files of the agent: agents.agent-oss.files. These are the files of main, except state.json (state.json is the state).
